@@ -7,7 +7,7 @@ axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8"
 
 // Default back-end provider url.
 // PLEASE INCLUDE '/' at the end of URL.
-const base_url =  "https://" + localSettings.domain + "/";
+const base_url =  "https://" + localSettings.backend_url + "/";
 
 // Axios Instance.
 const request = axios.create({
