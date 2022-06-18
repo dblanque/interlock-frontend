@@ -1,11 +1,12 @@
 <template>
-  <div id="app">
+  <v-app id="app">
+    <title>{{ $t("indexTitle") }}</title>
     <nav>
       <router-link to="/">Home</router-link> |
       <router-link to="/login">Login</router-link>
     </nav>
     <router-view/>
-  </div>
+  </v-app>
 </template>
 
 <style lang="scss">

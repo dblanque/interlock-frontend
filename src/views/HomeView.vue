@@ -1,9 +1,19 @@
 <template>
   <div class="home">
     <!------------------>
-    <NavTabs class="" 
+    <v-toolbar 
+      :dense="!breakpointXS && !breakpointSM"
+      :dark="!isThemeDark()" :light="isThemeDark()" 
+      :class="'py-2 ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+      <v-row justify="space-between">
+        <LanguageSelector @updateTabSliders="refreshNavTabs"/>
+        <ThemeChanger/>
+      </v-row>
+    </v-toolbar>
+    <NavTabs
     :selectedTab="selectedTab" 
     @updateTab="updateSelectedTab"
+    ref="NavTabs"
     />
 
     <!------------------>
@@ -20,11 +30,57 @@
 <script>
 // @ is an alias to /src
 import NavTabs from '@/components/NavTabs.vue'
+import LanguageSelector from '@/components/LanguageSelector.vue'
+import ThemeChanger from '@/components/ThemeChanger.vue'
 
 export default {
   name: 'HomeView',
+  data () {
+    return {
+      snackbarMessage: "",
+      snackbarIcon: "",
+      snackbarColor: "",
+      snackbarClasses: "",
+      snackbar: false,
+      selectedTab: 0
+    }
+  },
   components: {
-    NavTabs
+    NavTabs,
+    LanguageSelector,
+    ThemeChanger
+  },
+  computed:{
+    breakpointXS() {
+        if (this.$vuetify.breakpoint.xs)
+            return true
+        else
+            return false
+    },
+    breakpointSM() {
+        if (this.$vuetify.breakpoint.sm)
+            return true
+        else
+            return false
+    },
+    breakpointMD() {
+        if (this.$vuetify.breakpoint.md)
+            return true
+        else
+            return false
+    },
+    breakpointLG() {
+        if (this.$vuetify.breakpoint.lg)
+            return true
+        else
+            return false
+    },
+    breakpointXL() {
+        if (this.$vuetify.breakpoint.xl)
+            return true
+        else
+            return false
+    },
   },
   methods: {
     isThemeDark(){
@@ -32,6 +88,9 @@ export default {
           return true
         }
         return false
+    },
+    refreshNavTabs() {
+      this.$refs.NavTabs.updateTabSliders();
     },
     updateSelectedTab(e) {
       if (this.selectedTab != e)
@@ -58,9 +117,6 @@ export default {
         console.log(this.$route.path)
         if (this.$route.path != '/' + routeToPush) {
           this.$router.push('/' + routeToPush)
-        }
-        if (this.selectedTab == 0) {
-          this.loadHeroImage()
         }
         setTimeout(() => {  this.displayBody = true }, 500);
     }

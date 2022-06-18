@@ -1,3 +1,11 @@
 {
-  "message": "Hola i18n!"
+  "category":{
+    "home":"Inicio",
+    "users":"Usuarios",
+    "dns":"DNS (Servidor de Nombre de Dominio)",
+    "gpo":"GPO (Objetos de Política de Grupo)",
+    "dns_short":"DNS",
+    "gpo_short":"GPO",
+    "server":"Servidor"
+  }
 }

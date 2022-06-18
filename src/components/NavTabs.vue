@@ -1,8 +1,7 @@
 <template>
-<div>
-    <!-- Tabs Bar -->
-    <v-toolbar :dense="!breakpointXS && !breakpointSM" elevation="1" id="tabs-nav-bar" :dark="!isThemeDark()" :light="isThemeDark()" 
-    :class="' ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+<!-- Tabs Bar -->
+<v-toolbar :dense="!breakpointXS && !breakpointSM" id="tabs-nav-bar" :dark="!isThemeDark()" :light="isThemeDark()" 
+:class="' ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
     <v-fade-transition>
     <v-tabs 
         v-model="active_tab"
@@ -23,8 +22,7 @@
         </v-tab>
     </v-tabs>
     </v-fade-transition>
-    </v-toolbar>
-</div>
+</v-toolbar>
 </template>
 
 <script>

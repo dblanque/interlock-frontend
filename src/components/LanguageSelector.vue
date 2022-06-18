@@ -7,6 +7,7 @@
     :hide-details="true"
     outlined
     dense
+    :style="breakpointSM || breakpointXS ? '' : 'max-width: 25ch;'"
     >
     <template slot="selection" slot-scope="data">
         <!-- HTML that describe how select should render selected items -->
