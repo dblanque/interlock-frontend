@@ -3,6 +3,7 @@
   "category":{
     "home":"Inicio",
     "users":"Usuarios",
+    "groups":"Grupos de Seguridad",
     "dns":"DNS (Servidor de Nombre de Dominio)",
     "gpo":"GPO (Objetos de Política de Grupo)",
     "dns_short":"DNS",

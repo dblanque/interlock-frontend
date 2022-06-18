@@ -3,6 +3,7 @@
   "category":{
     "home":"Home",
     "users":"Users",
+    "groups":"Security Groups",
     "dns":"DNS (Domain Name Server)",
     "gpo":"GPO (Group Policy Objects)",
     "dns_short":"DNS",

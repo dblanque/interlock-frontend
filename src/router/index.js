@@ -21,6 +21,11 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/groups',
+    name: 'home',
+    component: HomeView
+  },
+  {
     path: '/dns',
     name: 'home',
     component: HomeView

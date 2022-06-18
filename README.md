@@ -27,7 +27,7 @@
 
 ### User & Permissions Management
  - Create
- - Modify
+ - Modify (Add to group, Attributes, etc.)
  - Password Reset Screen for End-Users
  - Delete
 

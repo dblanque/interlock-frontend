@@ -17,13 +17,16 @@
         <v-spacer v-if="this.$vuetify.breakpoint.mdAndUp"/>
         <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp">
           <span class="text-normal">
-            Lastname, Firstname | USERNAME
+            Lastname, Firstname {{ realm.toUpperCase() + '@USERNAME' }}
+          </span>
+          <span>
+            
           </span>
         </v-col>
         <v-col class="ma-0 pa-0" cols="12" md="auto">
           <div class="mt-2">
             <span class="text-normal" v-if="this.$vuetify.breakpoint.mdAndUp">
-              Lastname, Firstname | USERNAME
+              Lastname, Firstname | {{ realm.toUpperCase() + '@USERNAME' }}
             </span>
             <v-btn :dark="!isThemeDark()" :light="isThemeDark()" @click="openLogoutDialog" icon class="mx-2">
               <v-icon>
@@ -141,6 +144,13 @@ export default {
         },
         {
           index: 2,
+          title: "category.groups",
+          enabled: true,
+          icon: "mdi-group",
+          route: "groups"
+        },
+        {
+          index: 3,
           title: "category.dns",
           enabled: true,
           enableShortName: true,
@@ -148,7 +158,7 @@ export default {
           route: "dns"
         },
         {
-          index: 3,
+          index: 4,
           title: "category.gpo",
           enabled: true,
           enableShortName: true,
@@ -156,7 +166,7 @@ export default {
           route: "gpo"
         },
         {
-          index: 4,
+          index: 5,
           title: "category.server",
           enabled: true,
           icon: "mdi-server",
