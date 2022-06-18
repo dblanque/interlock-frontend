@@ -1,5 +1,17 @@
 # vue-ldap-manager
 
+## LDAP Manager Checkpoints | ROAD-MAP
+
+### User & Permissions Management
+ - Create
+ - Modify
+ - Password Reset Screen for End-Users
+ - Delete
+
+### DNS Management
+
+### GPO Management
+
 ## Project setup
 ```
 yarn install
