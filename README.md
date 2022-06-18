@@ -1,5 +1,11 @@
 # VueJS LDAP Manager
 
+## Installation
+
+  #. Install the following dependencies
+  #. Clone the repository: git clone <[repository](https://example.com/repo)>
+  #. Change Directory onto the cloned repository
+
 ## LDAP Manager Checkpoints | ROAD-MAP
 
 ### User & Permissions Management
