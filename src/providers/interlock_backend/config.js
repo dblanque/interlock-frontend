@@ -1,12 +1,14 @@
 import axios from "axios";
 import router from "@/router/index.js"
+import localSettings from "@/providers/interlock_backend/local_settings.js";
 
 // Sets content type to json utf-8 default.
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
 
 // Default back-end provider url.
 // PLEASE INCLUDE '/' at the end of URL.
-const base_url =  "https://back-dev.brconsulting.info/";
+const base_url =  "https://" + localSettings.domain + "/";
+
 // Axios Instance.
 const request = axios.create({
     baseURL: base_url

@@ -1,6 +1,6 @@
 <template>
-  <div class="login">
-    <v-card :dark="isThemeDark()" :light="!isThemeDark()">
+  <v-container class="login ma-0 pa-0" fluid fill-height>
+    <v-card style="min-width:100%;" flat class="py-4 px-6" :dark="isThemeDark()" :light="!isThemeDark()">
       <h1>{{ $t("indexTitle") }}</h1>
       <v-row class="pa-0 ma-0" justify="center">
         <v-form
@@ -64,7 +64,7 @@
                 </v-btn>
                 <v-btn
                   :loading="submitted"
-                  :disabled="submitted || (this.email.length == 0 || this.password.length == 0)"
+                  :disabled="submitted || (this.email.length == 0 || this.password.length == 0) || !this.$refs.loginform.validate()"
                   @click="submit"
                   class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3"
                 >
@@ -76,7 +76,7 @@
         </v-form>
     </v-row>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -123,7 +123,7 @@ export default {
         this.error = true;
         this.errorMsg = "";
       }
-      else{
+      else {
         this.submitted = true;
         this.errorMsg = "";
         var user = new User({})

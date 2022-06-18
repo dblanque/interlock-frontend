@@ -1,29 +1,42 @@
 <template>
   <div class="home">
     <!------------------>
-    <v-toolbar 
+    <v-row justify="center"
+      :class="'ma-0 pa-2 py-4 text-normal ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
+    >
+      <h1>{{ domain + " | " + realm }}</h1>
+    </v-row>
+    <v-row 
       :dense="!breakpointXS && !breakpointSM"
       :dark="!isThemeDark()" :light="isThemeDark()" 
       :class="'ma-0 pa-2 ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
       style="height: fit-content;">
-      <v-row class="" justify="space-between">
-        <LanguageSelector class="" @updateTabSliders="refreshNavTabs"/>
-        <div class="mt-2">
-          <span>
+        <v-col cols="12" md="auto">
+          <LanguageSelector :dark="!isThemeDark()" :light="isThemeDark()" class="" @updateTabSliders="refreshNavTabs"/>
+        </v-col>
+        <v-spacer v-if="this.$vuetify.breakpoint.mdAndUp"/>
+        <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp">
+          <span class="text-normal">
             Lastname, Firstname | USERNAME
           </span>
-          <v-btn icon class="mx-2">
-            <v-icon>
-              mdi-logout
-            </v-icon>
-          </v-btn>
-          <ThemeChanger :buttonIsSmall="true"/>
-        </div>
+        </v-col>
+        <v-col class="ma-0 pa-0" cols="12" md="auto">
+          <div class="mt-2">
+            <span class="text-normal" v-if="this.$vuetify.breakpoint.mdAndUp">
+              Lastname, Firstname | USERNAME
+            </span>
+            <v-btn :dark="!isThemeDark()" :light="isThemeDark()" @click="openLogoutDialog" icon class="mx-2">
+              <v-icon>
+                mdi-logout
+              </v-icon>
+            </v-btn>
+            <ThemeChanger :dark="!isThemeDark()" :light="isThemeDark()" :buttonIsSmall="true"/>
+          </div>
+        </v-col>
       </v-row>
-    </v-toolbar>
     
     <!-- Tabs Bar -->
-    <v-toolbar :dense="!breakpointXS && !breakpointSM" id="tabs-nav-bar" :dark="!isThemeDark()" :light="isThemeDark()" 
+    <v-toolbar v-if="this.$vuetify.breakpoint.mdAndUp" :dense="!breakpointXS && !breakpointSM" id="tabs-nav-bar" :dark="!isThemeDark()" :light="isThemeDark()" 
     :class="' ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
         <v-fade-transition>
         <v-tabs 
@@ -47,13 +60,27 @@
         </v-fade-transition>
     </v-toolbar>
 
-    <v-tabs-items v-model="active_tab">
+    <v-tabs-items v-model="active_tab" class="transparent-body">
       <v-tab-item
          v-for="tab in navTabs"
          :key="tab.index">
-         <UsersView v-if="tab.title == 'category.users'"/>
+         <ModularViewContainer :viewTitle="tab.title" :viewIndex="tab.index"/>
       </v-tab-item>
     </v-tabs-items>
+
+    <v-dialog v-model="showLogoutDialog">
+      <v-card>
+        <v-card-title>
+          Logout
+        </v-card-title>
+        <v-card-actions>
+          <v-row class="ma-1 pa-0" justify="center">
+            <v-btn @click="logoutAction">Yes</v-btn>
+            <v-btn @click="showLogoutDialog = false">No</v-btn>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <!------------------>
     <v-footer padless id="home-footer" :dark="!isThemeDark()" :light="isThemeDark()" class="py-1">
@@ -68,24 +95,28 @@
 
 <script>
 // @ is an alias to /src
-import UsersView from '@/components/UsersView.vue'
+import LocalSettings from '@/providers/interlock_backend/local_settings'
+import ModularViewContainer from '@/components/ModularViewContainer.vue'
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    UsersView,
+    ModularViewContainer,
     LanguageSelector,
     ThemeChanger
   },
   data () {
     return {
+      domain: LocalSettings.domain,
+      realm: LocalSettings.realm,
       snackbarMessage: "",
       snackbarIcon: "",
       snackbarColor: "",
       snackbarClasses: "",
       snackbar: false,
+      showLogoutDialog: false,
       selectedTab: 0,
       showNavTabs: false,
       active_tab: 0,
@@ -176,6 +207,13 @@ export default {
     },
   },
   methods: {
+    openLogoutDialog(){
+      this.showLogoutDialog = true;
+    },
+    logoutAction(){
+      // TODO - Add logout stuff here
+      this.$router.push('/login')
+    },
     isThemeDark(){
         if (this.$vuetify.theme.dark == true) {
           return true
@@ -214,5 +252,9 @@ export default {
   position: fixed;
   bottom: 0;
   z-index: 2;
+}
+
+.transparent-body{
+  background: transparent !important;
 }
 </style>

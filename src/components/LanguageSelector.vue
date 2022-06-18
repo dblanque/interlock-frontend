@@ -1,13 +1,15 @@
 <template>
     <v-select
     append-icon="mdi-earth"
+    :dark="dark"
+    :light="light"
     :items="languages"
     v-model="language"
     @input="changeLanguage()"
     :hide-details="true"
     outlined
     dense
-    :style="breakpointSM || breakpointXS ? '' : 'max-width: 25ch;'"
+    :style="this.$vuetify.breakpoint.smAndDown ? '' : 'max-width: 25ch;'"
     >
     <template slot="selection" slot-scope="data">
         <!-- HTML that describe how select should render selected items -->
@@ -33,6 +35,10 @@
 
 <script>
 export default {
+    props:{
+        dark: Boolean,
+        light: Boolean,
+    },
     data() {
         return {
             languages: [

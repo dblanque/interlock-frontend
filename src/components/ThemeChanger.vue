@@ -2,6 +2,8 @@
 <v-btn v-if="!buttonIsSwitch"
     icon
     v-model="darkMode"
+    :dark="dark"
+    :light="light"
     @click="darkMode = !darkMode"
     class="ma-0 pa-0"
     :small="buttonIsSmall"
@@ -10,6 +12,8 @@
 </v-btn>
 <v-switch v-else
     v-model="darkMode"
+    :dark="dark"
+    :light="light"
     class="ma-0 pa-0"
     hide-details
     :label="$t('misc.darkMode')"
@@ -19,6 +23,8 @@
 <script>
 export default {
     props:{
+        dark: Boolean,
+        light: Boolean,
         buttonIsSmall: Boolean,
         buttonIsSwitch: Boolean
     },

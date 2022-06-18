@@ -1,10 +1,10 @@
 <template>
   <v-app id="app">
     <title>{{ $t("indexTitle") }}</title>
-    <nav>
+    <!-- <nav>
       <router-link to="/">Home</router-link> |
       <router-link to="/login">Login</router-link>
-    </nav>
+    </nav> -->
     <router-view/>
   </v-app>
 </template>
