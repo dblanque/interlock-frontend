@@ -1,10 +1,27 @@
-# VueJS LDAP Manager
+# Interlock LDAP Manager
 
 ## Installation
 
-  #. Install the following dependencies
-  #. Clone the repository: git clone <[repository](https://example.com/repo)>
-  #. Change Directory onto the cloned repository
+  1. Install the following dependencies
+  ```bash
+  apt-get install git nodejs nginx
+
+  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+  sudo apt update && sudo apt install yarn
+  ```
+
+  2. Clone the repository: git clone https://github.com/dblanque/interlock-ldap-manager /opt/interlock-ldap-manager
+  3. Change Directory onto the cloned repository
+  ```bash
+  cd /opt/interlock-ldap-manager
+  yarn install
+  ```
+  4. Once the required dependencies are installed you'll need to modify your local settings to match your domain:
+  ```bash
+  nano ./src/providers/interlock_backend/local_settings.js
+  ```
 
 ## LDAP Manager Checkpoints | ROAD-MAP
 
