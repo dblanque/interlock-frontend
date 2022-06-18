@@ -83,6 +83,10 @@
     </v-dialog>
 
     <!------------------>
+    <v-row id="home-footer-buttons" justify="end" class="pa-0 ma-0">
+      <v-btn small text class="mx-2">{{$t('footer.about')}}</v-btn>
+      <!-- <v-btn small text class="mx-2">DONATE</v-btn> -->
+    </v-row>
     <v-footer padless id="home-footer" :dark="!isThemeDark()" :light="isThemeDark()" class="py-1">
       <v-divider class="mx-4"></v-divider>
       <span :class="'mx-4 ' + (breakpointXS || breakpointSM ? '' : 'text-caption')">
@@ -251,6 +255,13 @@ export default {
   min-width: 100%;
   position: fixed;
   bottom: 0;
+  z-index: 2;
+}
+
+#home-footer-buttons{
+  min-width: 100%;
+  position: fixed;
+  bottom: 2.5rem;
   z-index: 2;
 }
 

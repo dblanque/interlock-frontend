@@ -115,7 +115,9 @@
       "featureNotAvailable": "This feature is not available"
   },
   "footer":{
-    "copyright":"Copyright (C) 2022 | BR Consulting S.R.L."
+    "copyright":"Copyright (C) 2022 | BR Consulting S.R.L.",
+    "about":"ABOUT",
+    "donate":"DONATE"
   },
   "misc":{
     "darkMode":"Enable Dark Mode"
