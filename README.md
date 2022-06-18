@@ -12,6 +12,15 @@
 
 ### GPO Management
 
+### Server Management
+ - Start Service
+ - Stop Service
+ - Restart Service
+ - Restart Server
+ - Update Server
+ - Add Secondary Domain Controller?
+ - Remove Domain Controller?
+
 ## Project setup
 ```
 yarn install

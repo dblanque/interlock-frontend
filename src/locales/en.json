@@ -1,5 +1,5 @@
 {
-  "indexTitle":"Interlock LDAP Manager",
+  "indexTitle":"Interlock - LDAP Manager",
   "category":{
     "home":"Home",
     "users":"Users",
@@ -9,7 +9,115 @@
     "gpo_short":"GPO",
     "server":"Server"
   },
+  "actions":{
+    "label": "Actions",
+    "yes": "Yes",
+    "no": "No",
+    "apply": "Apply",
+    "addF": "New",
+    "addM": "New",
+    "addN": "Add",
+    "back": "Go Back",
+    "confirm": "Confirm",
+    "edit": "Edit",
+    "view": "View",
+    "delete": "Delete",
+    "reset": "Reset",
+    "isRequired": "is required",
+    "isNotValid": "must be valid",
+    "Select": "Select",
+    "submit": "Submit",
+    "create": "Create",
+    "save": "Save",
+    "saveClose": "Save & Close",
+    "next": "Next",
+    "cancel": "Cancel",
+    "click": "Click",
+    "block": "Block",
+    "unblock": "Unblock",
+    "verify": "Verify",
+    "unverify": "Unverify",
+    "language": "Language",
+    "expires": "Expires",
+    "approve": "Approve",
+    "reject": "Reject",
+    "refresh": "Refresh",
+    "loading": "Loading",
+    "loading_long": "Loading, please wait",
+    "download":"Download",
+    "downloadLatest":"Download Latest"
+  },
+  "words":{
+      "today": "Today",
+      "filter": "Filter",
+      "export": "Export",
+      "maximum": "Maximum",
+      "minimum": "Minimum",
+      "expiration": "Expiration",
+      "expiration_ab": "Exp.",
+      "at": "At",
+      "of": "Of",
+      "details": "Details",
+      "list": "List",
+      "to": "To",
+      "currently": "Currently",
+      "notes": "Notes",
+      "secondaryM": "Secondary",
+      "secondaryF": "Secondary",
+      "others": "Others",
+      "processing": "Processing",
+      "date": "Date"
+  },
+  "section":{
+    "login":{
+      "title":"Log in to your LDAP Server",
+      "account":"Account / E-Mail",
+      "loginBtn":"Log-in",
+      "forgotMyPassword":"I forgot my password"
+    }
+  },
+  "attribute":{
+      "fname": "First Name",
+      "lname": "Last Name",
+      "name": "Name",
+      "fullName": "Full Name",
+      "email": "E-Mail",
+      "country": "Country",
+      "type": "Type",
+      "optional": "Optional",
+      "sexes": {
+          "female": "Female",
+          "male": "Male",
+          "other": "Other",
+          "unspecified": "Unspecified"
+      },
+      "users":{
+          "password": "Password",
+          "passwordConfirm": "Confirm Password",
+          "role": "Role"
+      },
+      "phone": "Phone",
+      "phoneNumber": "Phone Number",
+      "secondaryPhone": "Secondary Phone",
+      "address": "Address",
+      "addressStreet": "Street",
+      "addressNumber": "Street Number",
+      "betweenStreets": "Between Streets",
+      "addressVerified": "Verified Address",
+      "addressCity": "City",
+      "addressPostalCode": "Postal Code",
+      "addressFloor": "Floor",
+      "addressApartment": "Apartment",
+      "addressState": "State",
+      "role": "Role",
+      "featureWIP": "This feature being worked on",
+      "notEnoughPerms": "Insufficient permissions",
+      "featureNotAvailable": "This feature is not available"
+  },
   "footer":{
     "copyright":"Copyright (C) 2022 | Dylan Blanqué, BR Consulting S.R.L."
+  },
+  "misc":{
+    "darkMode":"Enable Dark Mode"
   }
 }

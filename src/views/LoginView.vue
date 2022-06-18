@@ -1,77 +1,79 @@
 <template>
   <div class="login">
-    <v-card>
+    <v-card :dark="isThemeDark()" :light="!isThemeDark()">
       <h1>{{ $t("indexTitle") }}</h1>
-      <h2>{{ $t("category.login") }}</h2>
       <v-row class="pa-0 ma-0" justify="center">
-    <v-form
-      id="login-form-container"
-      v-model="valid"
-      class=""
-      color="transparent"
-      ripple
-      ref="loginform"
-    >
-      <v-col align="center">
-        <!-- TITLE -->
-        <v-row class="text-md-h6 justify-center">
-          <span class="white--text">{{ $t("section.login.title") }}</span>
-        </v-row>
-        <!-- USER / EMAIL FIELD -->
-        <v-row justify="center">
-          <v-text-field
-            v-model="email"
-            prepend-inner-icon="mdi-account"
-            dark
-            :disabled="submitted"
-            validate-on-blur
-            :rules="emailRules"
-            :label="$t('section.login.account')"
-            class="login-email-field login-field my-2"
-            required
-            @keydown.enter="submit()"
-          ></v-text-field>
-        </v-row>
-        <!-- PASSWORD FIELD -->
-        <v-row justify="center">
-          <v-text-field
-            :type="value ? 'password' : 'text'"
-            prepend-inner-icon="mdi-lock"
-            dark
-            v-model="password"
-            :disabled="submitted"
-            :label="$t('Properties.users.password')"
-            @keydown.enter="submit()"
-            class="login-pwd-field login-field text-md-h6 my-2"
-            required
-            :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="() => (value = !value)"
-          ></v-text-field>
-        </v-row>
-        <!-- ERROR MESSAGE -->
-        <v-row
-          class="justify-center red accent-3 white--text ml-5 mr-5 rounded font-weight-bold"
-          >{{ this.errorMsg }}</v-row
+        <v-form
+          id="login-form-container"
+          v-model="valid"
+          class=""
+          color="transparent"
+          ripple
+          ref="loginform"
         >
-        <!-- LOGIN BUTTONS -->
-        <div>
-        <v-row justify="space-around" class="pa-2 mt-4">
-            <v-btn class="pa-0 ma-0 px-3 py-2 ma-3" v-on:click="gotoPasswRecovery" color="white" disabled>
-              <p class="text-md-body" style="margin-bottom: 0 !important;"> {{ $t("section.login.forgotMyPassword") }}</p>
-            </v-btn>
-            <v-btn
-              :loading="submitted"
-              :disabled="submitted || (this.email.length == 0 || this.password.length == 0)"
-              @click="submit"
-              class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3"
-              dark
+          <v-col align="center">
+            <!-- TITLE -->
+            <v-row class="text-md-h6 justify-center">
+              <span class="">{{ $t("section.login.title") }}</span>
+            </v-row>
+            <!-- USER / EMAIL FIELD -->
+            <v-row justify="center">
+              <v-text-field
+                v-model="email"
+                prepend-inner-icon="mdi-account"
+                :disabled="submitted"
+                validate-on-blur
+                :rules="emailRules"
+                :label="$t('section.login.account')"
+                class="login-email-field login-field font-weight-bold my-2"
+                required
+                @keydown.enter="submit()"
+              ></v-text-field>
+            </v-row>
+            <!-- PASSWORD FIELD -->
+            <v-row justify="center">
+              <v-text-field
+                :type="value ? 'password' : 'text'"
+                prepend-inner-icon="mdi-lock"
+                v-model="password"
+                :disabled="submitted"
+                :label="$t('attribute.users.password')"
+                @keydown.enter="submit()"
+                class="login-pwd-field login-field font-weight-bold my-2"
+                required
+                :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="() => (value = !value)"
+              ></v-text-field>
+            </v-row>
+            <v-row justify="center">
+              <LanguageSelector class="font-weight-medium"/>
+            </v-row>
+            <v-row justify="center">
+              <ThemeChanger class="font-weight-medium ma-6" :buttonIsSwitch="true"/>
+            </v-row>
+            <!-- ERROR MESSAGE -->
+            <v-row
+              class="justify-center red accent-3 ml-5 mr-5 rounded font-weight-bold"
+              >{{ this.errorMsg }}</v-row
             >
-              {{ $t("section.login.loginBtn") }}
-            </v-btn>
-        </v-row>
-        </div>
-      </v-col>
-    </v-form>
+            <!-- LOGIN BUTTONS -->
+            <div>
+            <v-row justify="space-around" class="pa-2 mt-4">
+                <v-btn class="pa-0 ma-0 px-3 py-2 ma-3" v-on:click="gotoPasswRecovery" disabled>
+                  <p class="text-md-body" style="margin-bottom: 0 !important;"> {{ $t("section.login.forgotMyPassword") }}</p>
+                </v-btn>
+                <v-btn
+                  :loading="submitted"
+                  :disabled="submitted || (this.email.length == 0 || this.password.length == 0)"
+                  @click="submit"
+                  class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3"
+                >
+                  {{ $t("section.login.loginBtn") }}
+                </v-btn>
+            </v-row>
+            </div>
+          </v-col>
+        </v-form>
     </v-row>
     </v-card>
   </div>
@@ -79,9 +81,15 @@
 
 <script>
 import User from '@/include/User'
+import LanguageSelector from '@/components/LanguageSelector.vue'
+import ThemeChanger from '@/components/ThemeChanger.vue';
 
 export default {
-  name: "Login",
+  name: "LoginView",
+  components: {
+    LanguageSelector,
+    ThemeChanger
+  },
   data() {
     return {
       valid: false,
@@ -137,6 +145,12 @@ export default {
       }
     },
     gotoPasswRecovery: function () {},
+    isThemeDark(){
+        if (this.$vuetify.theme.dark == true) {
+          return true
+        }
+        return false
+    },
   },
 };
 </script>

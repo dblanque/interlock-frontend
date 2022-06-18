@@ -1,5 +1,5 @@
 <template>
-<v-btn
+<v-btn v-if="!buttonIsSwitch"
     icon
     v-model="darkMode"
     @click="darkMode = !darkMode"
@@ -8,12 +8,19 @@
     >
     <v-icon id="toggler-input">mdi-contrast-circle</v-icon>
 </v-btn>
+<v-switch v-else
+    v-model="darkMode"
+    class="ma-0 pa-0"
+    hide-details
+    :label="$t('misc.darkMode')"
+></v-switch>
 </template>
 
 <script>
 export default {
     props:{
-        buttonIsSmall: Boolean
+        buttonIsSmall: Boolean,
+        buttonIsSwitch: Boolean
     },
     data() {
         return {
