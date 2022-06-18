@@ -1,4 +1,4 @@
-# vue-ldap-manager
+# VueJS LDAP Manager
 
 ## LDAP Manager Checkpoints | ROAD-MAP
 
