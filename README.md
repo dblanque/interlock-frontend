@@ -10,7 +10,24 @@
 
 ### DNS Management
 
+ - Create DNS Entries
+ - Modify DNS Entries
+ - Delete DNS Entries
+ - Supported Types should at least be:
+    * A
+    * AAAA
+    * CNAME
+    * TXT
+    * MX
+    * DS
+    * NS
+    * SOA
+    * SPF
+    * PTR
+
 ### GPO Management
+
+TBD
 
 ### Server Management
  - Start Service

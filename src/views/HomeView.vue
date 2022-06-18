@@ -4,7 +4,7 @@
     <v-row justify="center"
       :class="'ma-0 pa-2 py-4 text-normal ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
     >
-      <h1>{{ domain + " | " + realm }}</h1>
+      <h1>{{ domain.toUpperCase() + " | " + realm.toUpperCase() }}</h1>
     </v-row>
     <v-row 
       :dense="!breakpointXS && !breakpointSM"

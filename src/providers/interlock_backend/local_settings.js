@@ -1,4 +1,4 @@
 export default ({
-    domain: "examplebackend.com",
+    domain: "example.com",
     realm: "realm"
 })
