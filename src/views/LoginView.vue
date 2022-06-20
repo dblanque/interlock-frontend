@@ -19,13 +19,13 @@
             <!-- USER / EMAIL FIELD -->
             <v-row justify="center">
               <v-text-field
-                v-model="email"
+                v-model="username"
                 prepend-inner-icon="mdi-account"
                 :disabled="submitted"
                 validate-on-blur
-                :rules="emailRules"
+                :rules="[this.fieldRules(username, 'ge_name', true)]"
                 :label="$t('section.login.account')"
-                class="login-email-field login-field font-weight-bold my-2"
+                class="font-weight-bold my-2"
                 required
                 @keydown.enter="submit()"
               ></v-text-field>
@@ -64,7 +64,7 @@
                 </v-btn>
                 <v-btn
                   :loading="submitted"
-                  :disabled="submitted || (this.email.length == 0 || this.password.length == 0) || !this.$refs.loginform.validate()"
+                  :disabled="submitted || (this.username.length == 0 || this.password.length == 0) || !valid"
                   @click="submit"
                   class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3"
                 >
@@ -83,23 +83,31 @@
 import User from '@/include/User'
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue';
+import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
   name: "LoginView",
+  mixins: [ validationMixin ],
   components: {
     LanguageSelector,
     ThemeChanger
+  },
+  async created() {
+    var token = localStorage.getItem('token')
+    if (token && token != "null") {
+      if (!this.fromRoute.name) {
+        this.$router.push("/")
+      } else {
+        this.$router.back()
+      }
+    }
   },
   data() {
     return {
       valid: false,
       error: false,
       errorMsg: "",
-      email: "",
-      emailRules: [
-        (v) => !!v || "E-mail " + this.$t("actions.isRequired"),
-        (v) => /.+@.+/.test(v) || "E-mail " + this.$t("actions.invalid"),
-      ],
+      username: "",
       password: "",
       submitted: false,
       transitionInit: false,
@@ -110,16 +118,18 @@ export default {
     this.transitionInit = true;
   },
   watch: {
-    email: function () {
-      this.error = false;
-    },
-    password: function () {
-      this.error = false;
-    },
+    validateForm(){
+      if (!this.$refs.loginform.validate()) {
+        this.valid = false
+        return;
+      }
+      this.valid = true
+      return;
+    }
   },
   methods: {
     async submit() {
-      if (this.email == "" || this.password == "") {
+      if (this.username == "" || this.password == "") {
         this.error = true;
         this.errorMsg = "";
       }
@@ -127,7 +137,7 @@ export default {
         this.submitted = true;
         this.errorMsg = "";
         var user = new User({})
-        user.login(this.email, this.password)
+        user.login(this.username, this.password)
         .then(response =>{
             console.log(response)
             if(response.data.access != undefined)

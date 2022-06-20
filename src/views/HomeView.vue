@@ -4,7 +4,7 @@
     <v-row justify="center"
       :class="'ma-0 pa-2 py-4 text-normal ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
     >
-      <h1>{{ domain.toUpperCase() + " | " + realm.toUpperCase() }}</h1>
+      <h2 class="font-weight-medium">{{ domain.toUpperCase() }}</h2>
     </v-row>
     <v-row 
       :dense="!breakpointXS && !breakpointSM"
@@ -14,25 +14,42 @@
         <v-col cols="12" md="auto">
           <LanguageSelector :dark="!isThemeDark()" :light="isThemeDark()" class="" @updateTabSliders="refreshNavTabs"/>
         </v-col>
-        <v-spacer v-if="this.$vuetify.breakpoint.mdAndUp"/>
+        <v-divider light class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
         <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp">
-          <span class="text-normal">
-            Lastname, Firstname {{ realm.toUpperCase() + '@USERNAME' }}
+          <span class="text-normal" v-if="last_name && last_name != '' && first_name && first_name != ''">
+            {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}
           </span>
-          <span>
-            
+          <span class="text-normal" v-else>
+            {{ realm.toUpperCase() + '@' + username }}
           </span>
         </v-col>
         <v-col class="ma-0 pa-0" cols="12" md="auto">
           <div class="mt-2">
             <span class="text-normal" v-if="this.$vuetify.breakpoint.mdAndUp">
-              Lastname, Firstname | {{ realm.toUpperCase() + '@USERNAME' }}
+              <span class="text-normal" v-if="last_name && last_name != '' && first_name && first_name != ''">
+                {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}
+              </span>
+              <span class="text-normal" v-else>
+                {{ realm.toUpperCase() + '@' + username }}
+              </span>
             </span>
-            <v-btn :dark="!isThemeDark()" :light="isThemeDark()" @click="openLogoutDialog" icon class="mx-2">
-              <v-icon>
-                mdi-logout
-              </v-icon>
-            </v-btn>
+            <v-tooltip bottom color="primary">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                :dark="!isThemeDark()" :light="isThemeDark()"
+                @click="logoutAction"
+                icon
+                class="mx-2"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>
+                  mdi-logout
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>{{ $t("misc.logoutTooltip") }}</span>
+            </v-tooltip>
             <ThemeChanger :dark="!isThemeDark()" :light="isThemeDark()" :buttonIsSmall="true"/>
           </div>
         </v-col>
@@ -52,11 +69,11 @@
             show-arrows>
                 <v-tab class="px-4" v-for="tab in navTabs" :key="tab.index" @click="updateSelectedTab(tab.index)" :disabled="!tab.enabled">
                 <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
-                <span v-if="breakpointXS && tab.enableShortName == true">
-                    {{ $t(tab.title + "_short") }}
+                <span v-if="breakpointMD && tab.enableShortName == true">
+                    {{ $t("category." + tab.title + "_short") }}
                 </span>
                 <span v-else>
-                    {{ $t(tab.title) }}
+                    {{ $t("category." + tab.title) }}
                 </span>
             </v-tab>
         </v-tabs>
@@ -71,21 +88,27 @@
       </v-tab-item>
     </v-tabs-items>
 
-    <v-dialog v-model="showLogoutDialog">
-      <v-card>
+    <!-- LOGOUT DIALOG  -->
+    <v-dialog persistent content-class="rounded-dialog" max-width="40rem" v-model="showLogoutDialog">
+      <v-card class="pa-6">
         <v-card-title>
-          Logout
+          <v-row justify="center">
+            {{ $t('misc.logoutForbiddenMsg') }}
+          </v-row>
         </v-card-title>
-        <v-card-actions>
+        <v-card-text>
+          <v-icon class="mt-4" large>mdi-emoticon-sad</v-icon>
+        </v-card-text>
+        <v-card-actions class="">
           <v-row class="ma-1 pa-0" justify="center">
-            <v-btn @click="logoutAction">Yes</v-btn>
-            <v-btn @click="showLogoutDialog = false">No</v-btn>
+            <v-btn class="ma-2 clr-valid" rounded @click="logoutAction">{{ $t('actions.back') }}</v-btn>
+            <!-- <v-btn class="ma-2 clr-error" rounded @click="showLogoutDialog = false">{{ $t('actions.no') }}</v-btn> -->
           </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <!------------------>
+    <!----- ABOUT AND DONATE BUTTONS ------>
     <v-row id="home-footer-buttons" justify="end" class="pa-0 ma-0">
       <v-btn small text class="mx-2">{{$t('footer.about')}}</v-btn>
       <!-- <v-btn small text class="mx-2">DONATE</v-btn> -->
@@ -102,10 +125,11 @@
 
 <script>
 // @ is an alias to /src
-import LocalSettings from '@/providers/interlock_backend/local_settings'
 import ModularViewContainer from '@/components/ModularViewContainer.vue'
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue'
+import User from '@/include/User'
+import Domain from '@/include/Domain'
 
 export default {
   name: 'HomeView',
@@ -114,10 +138,43 @@ export default {
     LanguageSelector,
     ThemeChanger
   },
+  async created() {
+    await new User({}).getCurrentUserData().then(response => {
+      var responseStatus = response.status
+      // var token = localStorage.getItem('token')
+      response = response.data
+
+      // If response code is valid
+      if (/^20[0-8]|226/.test(responseStatus)) {
+        this.username = localStorage.getItem('username')
+        this.first_name = localStorage.getItem('first_name')
+        this.last_name = localStorage.getItem('last_name')
+      } 
+      // If response code is an HTTP error code
+      else {
+        this.showLogoutDialog = true;
+        localStorage.removeItem('username')
+        localStorage.removeItem('first_name')
+        localStorage.removeItem('last_name')
+        localStorage.removeItem('token')
+        localStorage.removeItem('refresh')
+      }
+    })
+
+    await new Domain({}).getDetails().then(response => {
+      this.domain = response.data.details.name
+      this.realm = response.data.details.realm
+      localStorage.setItem('domain',this.name)
+      localStorage.setItem('realm',this.realm)
+    })
+  },
   data () {
     return {
-      domain: LocalSettings.domain,
-      realm: LocalSettings.realm,
+      username: "",
+      first_name: "",
+      last_name: "",
+      domain: "",
+      realm: "",
       snackbarMessage: "",
       snackbarIcon: "",
       snackbarColor: "",
@@ -130,28 +187,28 @@ export default {
       navTabs: [
         {
           index: 0,
-          title: "category.home",
+          title: "home",
           enabled: true,
           icon: "mdi-home",
           route: "home"
         },
         {
           index: 1,
-          title: "category.users",
+          title: "users",
           enabled: true,
           icon: "mdi-account",
           route: "users"
         },
         {
           index: 2,
-          title: "category.groups",
+          title: "groups",
           enabled: true,
           icon: "mdi-group",
           route: "groups"
         },
         {
           index: 3,
-          title: "category.dns",
+          title: "dns",
           enabled: true,
           enableShortName: true,
           icon: "mdi-dns",
@@ -159,7 +216,7 @@ export default {
         },
         {
           index: 4,
-          title: "category.gpo",
+          title: "gpo",
           enabled: true,
           enableShortName: true,
           icon: "mdi-google-circles-extended",
@@ -167,7 +224,7 @@ export default {
         },
         {
           index: 5,
-          title: "category.server",
+          title: "server",
           enabled: true,
           icon: "mdi-server",
           route: "server"
@@ -227,6 +284,7 @@ export default {
     logoutAction(){
       // TODO - Add logout stuff here
       this.$router.push('/login')
+      new User({}).logout()
     },
     isThemeDark(){
         if (this.$vuetify.theme.dark == true) {
@@ -278,4 +336,9 @@ export default {
 .transparent-body{
   background: transparent !important;
 }
+
+.rounded-dialog{
+  border-radius: 40px !important;
+}
+
 </style>

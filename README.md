@@ -104,3 +104,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
 This is free software, and you are welcome to redistribute it
 under certain conditions; type `show c' for details.
+
+### Useful Links
+
+- https://ldap3.readthedocs.io/en/latest/tutorial_searches.html

@@ -8,7 +8,15 @@
     "gpo":"GPO (Group Policy Objects)",
     "dns_short":"DNS",
     "gpo_short":"GPO",
-    "server":"Server"
+    "server":"Server",
+    "header": {
+      "home":"Home",
+      "users":"Users",
+      "groups":"Security Groups",
+      "dns":"Domain Name Server",
+      "gpo":"Group Policy Objects",
+      "server":"Server Management"
+    }
   },
   "actions":{
     "label": "Actions",
@@ -69,6 +77,40 @@
       "processing": "Processing",
       "date": "Date"
   },
+  "error":{
+      "codes":{
+          "auth":{
+              "invalid_credetials": "Incorrect Email or Password.",
+              "verification_code": "Incorrect Code, Please try again.",
+              "verified_successfully": "Verified Successfully",
+              "verification_expired": "Verification codes have been exhausted. Contact an admin."
+          }
+      },
+      "validation":{
+          "fieldinvalid": "One or more fields are invalid",
+          "fieldRequired": "This field is required",
+          "alphabetic": "Must contain only letters",
+          "numeric": "Must contain only numbers",
+          "max4": "4 Characters Maximum",
+          "max6": "6 Characters Maximum",
+          "max8": "8 Characters Maximum",
+          "alphaNumeric": "Must be Alphanumeric.",
+          "alphaNumericSpaces": "Must be Alphanumeric (Spaces allowed)",
+          "alphaNumericSpecial": "Must be Alphanumeric (Spaces and hyphen/underscores allowed)",
+          "domain": "Must be a valid Top-Level Domain ( example.tld | domain.com )",
+          "cuitFormat": "Must be a valid CUIT ( 00-00000000-0 | 00000000000 )",
+          "dniNotInCuit": "Document ID Number is not in Fiscal Number",
+          "cuitVerifDigit": "CUIT Verifier Digit is invalid",
+          "email": "Must be a valid E-Mail (E.g.: john@domain.com)",
+          "phone": "Must be a valid Phone",
+          "date": "Date is invalid",
+          "dayDate":"Day Date is invalid"
+      },
+      "notDisplayedCorrectly": "Could not get error message to display",
+      "notFound": "not found",
+      "unknown_short": "An Unknown error has occurred",
+      "unknown": "An Unknown error has occurred, please try again or contact us"
+  },
   "section":{
     "login":{
       "title":"Log in to your LDAP Server",
@@ -121,6 +163,9 @@
     "donate":"DONATE"
   },
   "misc":{
-    "darkMode":"Enable Dark Mode"
+    "darkMode":"Enable Dark Mode",
+    "logoutMsg":"Are you sure you wish to Logout?",
+    "logoutForbiddenMsg":"Please Log in Again",
+    "logoutTooltip":"Logout"
   }
 }

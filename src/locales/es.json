@@ -1,16 +1,16 @@
 {
-  "indexTitle":"Interlock - Administrador de LDAP",
-  "category":{
-    "home":"Inicio",
-    "users":"Usuarios",
-    "groups":"Grupos de Seguridad",
-    "dns":"DNS (Servidor de Nombre de Dominio)",
-    "gpo":"GPO (Objetos de Política de Grupo)",
-    "dns_short":"DNS",
-    "gpo_short":"GPO",
-    "server":"Servidor"
+  "indexTitle": "Interlock - Administrador de LDAP",
+  "category": {
+    "home": "Inicio",
+    "users": "Usuarios",
+    "groups": "Grupos de Seguridad",
+    "dns": "DNS (Servidor de Nombre de Dominio)",
+    "gpo": "GPO (Objetos de Política de Grupo)",
+    "dns_short": "DNS",
+    "gpo_short": "GPO",
+    "server": "Servidor"
   },
-  "actions":{
+  "actions": {
     "label": "Acciones",
     "yes": "Si",
     "no": "No",
@@ -45,18 +45,18 @@
     "refresh": "Refrescar",
     "loading": "Cargando",
     "loading_long": "Cargando, por favor aguarde",
-    "download":"Descargar",
-    "downloadLatest":"Descargar Último",
-    "generateAndDownload":"Generar y Descargar"
+    "download": "Descargar",
+    "downloadLatest": "Descargar Último",
+    "generateAndDownload": "Generar y Descargar"
   },
-  "words":{
+  "words": {
     "today": "Hoy",
     "filter": "Filtro",
     "export": "Exportar",
     "maximum": "Máximo",
     "minimum": "Mínimo",
     "amount": "Monto",
-    "costs":"Costos",
+    "costs": "Costos",
     "expiration": "Vencimiento",
     "expiration_ab": "Vto.",
     "at": "El",
@@ -76,15 +76,49 @@
     "date": "Fecha",
     "total": "Total"
   },
-  "section":{
-    "login":{
-      "title":"Inicie Sesión en su Servidor LDAP",
-      "account":"Cuenta / E-Mail",
-      "loginBtn":"Iniciar Sesión",
-      "forgotMyPassword":"Olvidé mi Contraseña"
+  "error": {
+    "codes": {
+      "auth": {
+        "invalid_credetials": "Email o Contraseña Incorrectos.",
+        "verification_code": "Codigo Incorrecto, Intente nuevamente.",
+        "verified_successfully": "Verificado Exitosamente.",
+        "verification_expired": "Intentos de Verificación acabados. Contacte un administrador."
+      }
+    },
+    "validation": {
+      "fieldinvalid": "Uno o mas campos son invalidos",
+      "fieldRequired": "Este campo es requerido",
+      "alphabetic": "Debe contener solo letras",
+      "numeric": "Debe contener solo números",
+      "max4": "Máximo de 4 caracteres",
+      "max6": "Máximo de 6 caracteres",
+      "max8": "Máximo de 8 caracteres",
+      "alphaNumeric": "Debe ser alfanumérico.",
+      "alphaNumericSpaces": "Debe ser alfanumérico (Espacios permitidos)",
+      "alphaNumericSpecial": "Debe ser alfanumérico (Espacios y guiones permitidos)",
+      "domain": "Debe ser un Dominio de NSG válido ( ejemplo.tld | dominio.com )",
+      "cuitFormat": "Debe ser un CUIT válido ( 00-00000000-0 | 00000000000 )",
+      "dniNotInCuit": "El DNI debe estar incluido en el CUIT",
+      "cuitVerifDigit": "Dígito verificador de CUIT inválido",
+      "email": "Debe ser un E-Mail válido (Ej.: juan@dominio.com)",
+      "phone": "Debe ser un Teléfono válido",
+      "date": "Fecha inválida",
+      "dayDate": "Fecha de Día inválida"
+    },
+    "notDisplayedCorrectly": "No se pudo obtener un código de error",
+    "notFound": "no encontrado",
+    "unknown_short": "Un error desconocido ha ocurrido",
+    "unknown": "Un error desconocido ha ocurrido, por favor inténtelo nuevamente"
+  },
+  "section": {
+    "login": {
+      "title": "Inicie Sesión en su Servidor LDAP",
+      "account": "Cuenta / E-Mail",
+      "loginBtn": "Iniciar Sesión",
+      "forgotMyPassword": "Olvidé mi Contraseña"
     }
   },
-  "attribute":{
+  "attribute": {
     "fname": "Nombre",
     "lname": "Apellido",
     "name": "Nombre",
@@ -94,16 +128,16 @@
     "type": "Tipo",
     "optional": "Opcional",
     "sexes": {
-        "female": "Femenino",
-        "male": "Masculino",
-        "other": "Otro",
-        "unspecified": "No especificado"
+      "female": "Femenino",
+      "male": "Masculino",
+      "other": "Otro",
+      "unspecified": "No especificado"
     },
-    "users":{
-        "permissionsProfile": "Perfil de Permisos",
-        "password": "Contraseña",
-        "passwordConfirm": "Confirmar Contraseña",
-        "role": "Permisos"
+    "users": {
+      "permissionsProfile": "Perfil de Permisos",
+      "password": "Contraseña",
+      "passwordConfirm": "Confirmar Contraseña",
+      "role": "Permisos"
     },
     "phone": "Teléfono",
     "phoneNumber": "Número Telefónico",
@@ -123,12 +157,15 @@
     "notEnoughPerms": "Permisos insuficientes",
     "featureNotAvailable": "Característica no disponible"
   },
-  "footer":{
-    "copyright":"Copyright (C) 2022 | BR Consulting S.R.L.",
-    "about":"MÁS INFORMACIÓN",
-    "donate":"DONAR"
+  "footer": {
+    "copyright": "Copyright (C) 2022 | BR Consulting S.R.L.",
+    "about": "MÁS INFORMACIÓN",
+    "donate": "DONAR"
   },
-  "misc":{
-    "darkMode":"Activar Modo Oscuro"
+  "misc": {
+    "darkMode": "Activar Modo Oscuro",
+    "logoutMsg":"¿Está seguro de cerrar su sesión?",
+    "logoutForbiddenMsg":"Por favor Inicie Sesión nuevamente",
+    "logoutTooltip":"Cerrar Sesión"
   }
 }

@@ -5,7 +5,7 @@ class User extends ApiModel{
 
     first_name;
     last_name;
-    email;
+    username;
     password;
     last_login;
     role;
@@ -24,17 +24,28 @@ class User extends ApiModel{
 
     /**
      * Logins as User, Standard Call.
-     * @param {String} email 
+     * @param {String} username 
      * @param {String} password 
      * @returns Response Promise, Exception on Failure.
      */
-    login(email, password){
-        const params = {email: email,password: password}
+    login(username, password){
+        const params = {username: username,password: password}
         return interlock_backend.call('auth/login', params)
+    }
+
+    /**
+     * Logs out the current User, Standard Call.
+     */
+    logout(){
+        return interlock_backend.call('auth/logout')
     }
 
     list(){
         return interlock_backend.call('user/list')
+    }
+
+    getCurrentUserData(){
+        return interlock_backend.call('user/getCurrentUserData')
     }
 
     _validate(){
@@ -65,8 +76,6 @@ class User extends ApiModel{
      */
      save(){
         var linkString = "";
-        if(!this.role)
-            this.role = 'customer'
         if(!this.id )
             linkString = 'user/insert'
         else if (typeof this.id != "number" || this.id == 0)

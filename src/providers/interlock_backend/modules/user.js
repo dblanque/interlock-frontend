@@ -11,6 +11,17 @@ const actions = {
             })
         })
     },
+    getCurrentUserData: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.get(interlock_backend.urls.user + 'me', data)
+            .then(response => {
+                resolve(response);
+                localStorage.setItem("username", response.data.user.username)
+                localStorage.setItem("first_name", response.data.user.first_name)
+                localStorage.setItem("last_name", response.data.user.last_name)
+            }).catch((e) => reject(e))
+        })
+    },
     update: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.put(interlock_backend.urls.user + data.id + '/', data)

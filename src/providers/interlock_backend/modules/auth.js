@@ -9,13 +9,11 @@ const calls = {
                 backend.request.defaults.headers.common.Authorization = 'Bearer ' + response.data.access
                 localStorage.setItem("token", 'Bearer ' + response.data.access)
                 localStorage.setItem("refresh", 'Bearer ' + response.data.refresh)
-                localStorage.setItem("user_email", data.email)
+                localStorage.setItem("username", data.username)
                 resolve(response)
             }).catch((e) => {
                 localStorage.removeItem('token')
                 localStorage.removeItem('refresh')
-                localStorage.removeItem('user_initials')
-                localStorage.removeItem('user_fullname')
                 reject(e)
             })
         })
@@ -24,8 +22,9 @@ const calls = {
         return new Promise(resolve => {
             localStorage.removeItem('token')
             localStorage.removeItem('refresh')
-            localStorage.removeItem('user_initials')
-            localStorage.removeItem('user_fullname')
+            localStorage.removeItem("username")
+            localStorage.removeItem("first_name")
+            localStorage.removeItem("last_name")
             resolve()
         })
     }

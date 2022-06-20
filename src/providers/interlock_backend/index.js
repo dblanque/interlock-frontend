@@ -1,9 +1,11 @@
 import authCalls from '@/providers/interlock_backend/modules/auth.js'
 import userCalls from '@/providers/interlock_backend/modules/user.js'
+import domainCalls from '@/providers/interlock_backend/modules/domain.js'
 
 const modules = {
     auth: authCalls,
     user: userCalls,
+    domain: domainCalls,
 }
 
 const interlock_backend = {
