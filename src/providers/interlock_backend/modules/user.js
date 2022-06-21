@@ -30,9 +30,9 @@ const actions = {
             }).catch((e) => reject(e))
         })
     },
-    list: ()=>{
+    list: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.user, null).then(response => {
+            interlock_backend.request.get(interlock_backend.urls.user, data).then(response => {
                 resolve(response.data)
             }).catch((e) => {
                 reject(e)

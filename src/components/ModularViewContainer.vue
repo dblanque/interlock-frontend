@@ -4,15 +4,16 @@
   <!-- Users -->
   <v-container v-if="viewTitle == 'users'">
   <v-btn class="mb-4" @click="listUserItems">Test Endpoint</v-btn>
-    <v-data-table class="py-3 px-2">
+    <v-data-table 
+      :headers="tableData.headers"
+      :items="tableData.items"
+      :loading="false"
+      multi-sort
+      class="py-3 px-2">
       <template v-slot:top>
         <v-text-field
-          :headers="tableData.headers"
-          :items="tableData.items"
           v-model="search"
           label="Search"
-          :loading="false"
-          multi-sort
           class="mx-4"
         ></v-text-field>
       </template>
@@ -45,15 +46,27 @@ import User from '@/include/User'
     data () {
       return {
         tableData: {
-          headers: {},
-          items: {}
+          headers: [],
+          items: []
         }
       }
     },
     methods: {
       async listUserItems(){
         await new User({}).list().then(response => {
-          console.log(response)
+          var headers = response.headers
+          var users = response.users
+          this.tableData.headers = []
+          var headerDict = {}
+          headers.forEach(header => {
+            headerDict = {}
+            headerDict.text = header
+            headerDict.value = header
+            this.tableData.headers.push(headerDict)
+          });
+          this.tableData.items = users
+          console.log(this.tableData.headers)
+          console.log(this.tableData.items)
         })
       }
     }

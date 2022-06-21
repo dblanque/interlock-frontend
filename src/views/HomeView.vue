@@ -138,36 +138,6 @@ export default {
     LanguageSelector,
     ThemeChanger
   },
-  async created() {
-    await new User({}).getCurrentUserData().then(response => {
-      var responseStatus = response.status
-      // var token = localStorage.getItem('token')
-      response = response.data
-
-      // If response code is valid
-      if (/^20[0-8]|226/.test(responseStatus)) {
-        this.username = localStorage.getItem('username')
-        this.first_name = localStorage.getItem('first_name')
-        this.last_name = localStorage.getItem('last_name')
-      } 
-      // If response code is an HTTP error code
-      else {
-        this.showLogoutDialog = true;
-        localStorage.removeItem('username')
-        localStorage.removeItem('first_name')
-        localStorage.removeItem('last_name')
-        localStorage.removeItem('token')
-        localStorage.removeItem('refresh')
-      }
-    })
-
-    await new Domain({}).getDetails().then(response => {
-      this.domain = response.data.details.name
-      this.realm = response.data.details.realm
-      localStorage.setItem('domain',this.name)
-      localStorage.setItem('realm',this.realm)
-    })
-  },
   data () {
     return {
       username: "",
@@ -184,6 +154,8 @@ export default {
       selectedTab: 0,
       showNavTabs: false,
       active_tab: 0,
+      timeoutInMS: 3600000,
+      timeoutId: 0,
       navTabs: [
         {
           index: 0,
@@ -231,6 +203,38 @@ export default {
         }
       ],
     }
+  },
+  async created() {
+    await new User({}).getCurrentUserData().then(response => {
+      var responseStatus = response.status
+      // var token = localStorage.getItem('token')
+      response = response.data
+
+      // If response code is valid
+      if (/^20[0-8]|226/.test(responseStatus)) {
+        this.username = localStorage.getItem('username')
+        this.first_name = localStorage.getItem('first_name')
+        this.last_name = localStorage.getItem('last_name')
+      } 
+      // If response code is an HTTP error code
+      else {
+        localStorage.removeItem('username')
+        localStorage.removeItem('first_name')
+        localStorage.removeItem('last_name')
+        localStorage.removeItem('token')
+        localStorage.removeItem('refresh')
+        this.showLogoutDialog = true;
+      }
+    })
+
+    await new Domain({}).getDetails().then(response => {
+      this.domain = response.data.details.name
+      this.realm = response.data.details.realm
+      localStorage.setItem('domain',this.name)
+      localStorage.setItem('realm',this.realm)
+    })
+    
+    this.setupTimers();
   },
   mounted: function(){
     var currentPath = this.$route.path
@@ -313,6 +317,25 @@ export default {
         if (this.$route.path != '/' + routeToPush) {
           this.$router.push('/' + routeToPush)
         }
+    },
+    handleInactive() {
+      this.openLogoutDialog();
+    },
+    startTimer() { 
+        // setTimeout returns an ID (can be used to start or clear a timer)
+        this.timeoutId = setTimeout(this.handleInactive, this.timeoutInMS);
+    },
+    resetTimer() { 
+        clearTimeout(this.timeoutId);
+        this.startTimer();
+    },
+    setupTimers () {
+        document.addEventListener("keypress", this.resetTimer, false);
+        document.addEventListener("mousemove", this.resetTimer, false);
+        document.addEventListener("mousedown", this.resetTimer, false);
+        document.addEventListener("touchmove", this.resetTimer, false);
+        
+        this.startTimer();
     }
   }
 }
