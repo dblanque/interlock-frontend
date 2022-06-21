@@ -20,6 +20,7 @@
   },
   "actions":{
     "label": "Actions",
+    "search": "Search",
     "yes": "Yes",
     "no": "No",
     "apply": "Apply",
@@ -75,7 +76,25 @@
       "secondaryF": "Secondary",
       "others": "Others",
       "processing": "Processing",
-      "date": "Date"
+      "date": "Date",
+      "loaded": {
+        "single":{
+          "m":"Loaded",
+          "f":"Loaded",
+          "n":"Loaded"
+        },
+        "plural":{
+          "m":"Loaded",
+          "f":"Loaded",
+          "n":"Loaded"
+        }
+      }
+  },
+  "classes":{
+    "user":{
+      "single":"User",
+      "plural":"Users"
+    }
   },
   "error":{
       "codes":{
@@ -106,6 +125,7 @@
           "date": "Date is invalid",
           "dayDate":"Day Date is invalid"
       },
+      "unableToLoad":"Unable to load",
       "notDisplayedCorrectly": "Could not get error message to display",
       "notFound": "not found",
       "unknown_short": "An Unknown error has occurred",
@@ -124,7 +144,8 @@
         "givenName":"First Name",
         "sn":"Last Name",
         "mail":"Email",
-        "displayName":"Display Name"
+        "displayName":"Display Name",
+        "disabled":"Enabled"
       }
     }
   },

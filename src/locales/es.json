@@ -12,6 +12,7 @@
   },
   "actions": {
     "label": "Acciones",
+    "search": "Buscar",
     "yes": "Si",
     "no": "No",
     "apply": "Aplicar",
@@ -74,7 +75,25 @@
     "others": "Otros",
     "processing": "Procesando",
     "date": "Fecha",
-    "total": "Total"
+    "total": "Total",
+    "loaded": {
+      "single":{
+        "m":"Cargado",
+        "f":"Cargada",
+        "n":"Cargado"
+      },
+      "plural":{
+        "m":"Cargados",
+        "f":"Cargadas",
+        "n":"Cargado"
+      }
+    }
+  },
+  "classes":{
+    "user":{
+      "single":"Usuario",
+      "plural":"Usuarios"
+    }
   },
   "error": {
     "codes": {
@@ -105,6 +124,7 @@
       "date": "Fecha inválida",
       "dayDate": "Fecha de Día inválida"
     },
+    "unableToLoad":"No se pudo cargar la sección",
     "notDisplayedCorrectly": "No se pudo obtener un código de error",
     "notFound": "no encontrado",
     "unknown_short": "Un error desconocido ha ocurrido",
@@ -123,7 +143,8 @@
         "givenName":"Nombre",
         "sn":"Apellido",
         "mail":"Email",
-        "displayName":"Nombre a Mostrar"
+        "displayName":"Nombre a Mostrar",
+        "disabled":"Habilitado"
       }
     }
   },

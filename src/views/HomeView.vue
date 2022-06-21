@@ -6,9 +6,8 @@
     >
       <h2 class="font-weight-medium">{{ domain.toUpperCase() }}</h2>
     </v-row>
-    <v-row 
-      :dense="!breakpointXS && !breakpointSM"
-      :dark="!isThemeDark()" :light="isThemeDark()" 
+    <v-row
+      :dark="!isThemeDark()" :light="isThemeDark()" align="center"
       :class="'ma-0 pa-2 ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
       style="height: fit-content;">
         <v-col cols="12" md="auto">
@@ -56,7 +55,7 @@
       </v-row>
     
     <!-- Tabs Bar -->
-    <v-toolbar v-if="this.$vuetify.breakpoint.mdAndUp" :dense="!breakpointXS && !breakpointSM" id="tabs-nav-bar" :dark="!isThemeDark()" :light="isThemeDark()" 
+    <v-toolbar v-if="this.$vuetify.breakpoint.mdAndUp" dense id="tabs-nav-bar" :dark="!isThemeDark()" :light="isThemeDark()" 
     :class="' ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
         <v-fade-transition>
         <v-tabs 
@@ -69,7 +68,7 @@
             show-arrows>
                 <v-tab class="px-4" v-for="tab in navTabs" :key="tab.index" @click="updateSelectedTab(tab.index)" :disabled="!tab.enabled">
                 <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
-                <span v-if="breakpointMD && tab.enableShortName == true">
+                <span v-if="$vuetify.breakpoint.md && tab.enableShortName == true">
                     {{ $t("category." + tab.title + "_short") }}
                 </span>
                 <span v-else>
@@ -84,7 +83,12 @@
       <v-tab-item
          v-for="tab in navTabs"
          :key="tab.index">
-         <ModularViewContainer :viewTitle="tab.title" :viewIndex="tab.index"/>
+         <ModularViewContainer :viewTitle="tab.title" :viewIndex="tab.index" 
+         @refresh="loadData(selectedTabTitle)"
+         :refreshLoading="refreshLoading"
+         :tableDataHeaders="tableData.headers"
+         :tableDataItems="tableData.items"
+         />
       </v-tab-item>
     </v-tabs-items>
 
@@ -108,17 +112,42 @@
       </v-card>
     </v-dialog>
 
+    <!-- Snackbar -->
+    <v-snackbar
+      v-model="snackbar"
+      class="mb-12"
+      :color="snackbarColor"
+      text
+      :dark="!isThemeDark()" :light="isThemeDark()"
+    >
+      {{ snackbarMessage }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          icon
+          :color="snackbarColor"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
+
     <!----- ABOUT AND DONATE BUTTONS ------>
     <v-row id="home-footer-buttons" justify="end" class="pa-0 ma-0">
       <v-btn small text class="mx-2">{{$t('footer.about')}}</v-btn>
       <!-- <v-btn small text class="mx-2">DONATE</v-btn> -->
     </v-row>
     <v-footer padless id="home-footer" :dark="!isThemeDark()" :light="isThemeDark()" class="py-1">
-      <v-divider class="mx-4"></v-divider>
-      <span :class="'mx-4 ' + (breakpointXS || breakpointSM ? '' : 'text-caption')">
+      <v-row justify="center" :class="'mx-4 my-1 ' + ($vuetify.breakpoint.mdAndDown ? '' : 'text-caption')">
+        <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4 mt-2"></v-divider>
         {{ $t("footer.copyright") }}
-      </span>
-      <v-divider class="mx-4"></v-divider>
+        <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4 mt-2"></v-divider>
+      </v-row>
     </v-footer>
   </div>
 </template>
@@ -150,11 +179,18 @@ export default {
       snackbarColor: "",
       snackbarClasses: "",
       snackbar: false,
+      snackbarTimeout: 2500,
       showLogoutDialog: false,
       selectedTab: 0,
+      selectedTabTitle: '',
       showNavTabs: false,
+      refreshLoading: false,
       active_tab: 0,
-      timeoutInS: 5,
+      tableData: {
+        headers:[],
+        items:[]
+      },
+      timeoutInS: 3600,
       timeoutId: 0,
       navTabs: [
         {
@@ -248,40 +284,85 @@ export default {
     }
     setTimeout(() => {  this.showNavTabs = true; }, 250);
     this.active_tab = this.selectedTab;
-  },
-  computed:{
-    breakpointXS() {
-        if (this.$vuetify.breakpoint.xs)
-            return true
-        else
-            return false
-    },
-    breakpointSM() {
-        if (this.$vuetify.breakpoint.sm)
-            return true
-        else
-            return false
-    },
-    breakpointMD() {
-        if (this.$vuetify.breakpoint.md)
-            return true
-        else
-            return false
-    },
-    breakpointLG() {
-        if (this.$vuetify.breakpoint.lg)
-            return true
-        else
-            return false
-    },
-    breakpointXL() {
-        if (this.$vuetify.breakpoint.xl)
-            return true
-        else
-            return false
-    },
+    this.selectedTabTitle = this.navTabs[this.selectedTab].title
+    this.loadData(this.selectedTabTitle)
   },
   methods: {
+    // User Actions
+    async listUserItems(){
+      await new User({}).list()
+      .then(response => {
+        var userHeaders = response.headers
+        var users = response.users
+        // Reset Headers Array every time you list to avoid infinite header multiplication
+        this.resetDataTable()
+        var headerDict = {}
+        userHeaders.forEach(header => {
+          headerDict = {}
+          headerDict.text = this.$t('section.users.attributes.' + header)
+          headerDict.value = header
+          this.tableData.headers.push(headerDict)
+        });
+        this.tableData.items = users
+        this.error = false;
+        this.refreshLoading = false;
+        this.resetSnackbar();
+        this.createSnackbar('green', (this.$t("classes.user.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase() )
+        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+      })
+      .catch(error => {
+        console.log(error)
+        this.refreshLoading = false;
+        this.error = true;
+        this.resetSnackbar();
+        this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.selectedTabTitle.toUpperCase())
+        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+      })
+    },
+    createSnackbar(color, string){
+      if (!color) {
+        color = "primary"
+      }
+      this.snackbarColor = color;
+      this.snackbarMessage = string;
+      this.snackbar = true;
+    },
+    // Reset Snackbar values
+    resetSnackbar(){
+      this.snackbar = false
+      this.snackbarMessage = ""
+      this.snackbarIcon = ""
+      this.snackbarColor = ""
+      this.snackbarClasses = ""
+    },
+    // Reset Data Table variables
+    resetDataTable(){
+      this.tableData.headers = []
+      this.tableData.items = []
+    },
+    // Reload Data Table Header Labels
+    reloadDataTableHeaders(){
+      this.tableData.headers.forEach(tableHeader => {
+        switch (this.selectedTabTitle) {
+          case 'users':
+            tableHeader.text = this.$t('section.users.attributes.' + tableHeader.value)
+            break;
+          default:
+            break;
+        }
+      });
+    },
+    async loadData(viewTitle){
+      switch (viewTitle) {
+        case 'users':
+          this.refreshLoading = true;
+          this.listUserItems();
+          break;
+        default:
+          break;
+      }
+    },
+    // Logout Actions
     openLogoutDialog(){
       this.showLogoutDialog = true;
     },
@@ -290,6 +371,7 @@ export default {
       this.$router.push('/login')
       new User({}).logout()
     },
+    // Check if theme is dark
     isThemeDark(){
         if (this.$vuetify.theme.dark == true) {
           return true
@@ -299,11 +381,13 @@ export default {
     refreshNavTabs(){
       this.showNavTabs = false
       setTimeout(() => {  this.showNavTabs = true; }, 250);
+      this.reloadDataTableHeaders()
     },
     updateSelectedTab(index) {
       if (this.selectedTab != index)
-        this.displayBody = false
         this.selectedTab = index
+        this.selectedTabTitle = this.navTabs[this.selectedTab].title
+        this.loadData(this.selectedTabTitle)
         var routeToPush = ''
         this.navTabs.forEach(item => {
           if (item.index == index) {
@@ -318,8 +402,16 @@ export default {
           this.$router.push('/' + routeToPush)
         }
     },
+    // Refresh Token Timers
+    // What happens when the timer stops
     handleInactive() {
-      this.openLogoutDialog();
+      var refreshClock = Date.parse(localStorage.getItem('refreshClock'))
+      var refreshClockLimit = refreshClock + (this.timeoutInS * 1000)
+      if (Date.now() >= refreshClockLimit) {
+        this.openLogoutDialog();
+      } else {
+        this.resetTimer();
+      }
     },
     startTimer() { 
         // setTimeout returns an ID (can be used to start or clear a timer)
@@ -330,11 +422,6 @@ export default {
         this.startTimer();
     },
     setupTimers () {
-        document.addEventListener("keypress", this.resetTimer, false);
-        document.addEventListener("mousemove", this.resetTimer, false);
-        document.addEventListener("mousedown", this.resetTimer, false);
-        document.addEventListener("touchmove", this.resetTimer, false);
-        
         this.startTimer();
     }
   }
@@ -363,5 +450,4 @@ export default {
 .rounded-dialog{
   border-radius: 40px !important;
 }
-
 </style>
