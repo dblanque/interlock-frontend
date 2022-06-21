@@ -154,7 +154,7 @@ export default {
       selectedTab: 0,
       showNavTabs: false,
       active_tab: 0,
-      timeoutInMS: 3600000,
+      timeoutInS: 5,
       timeoutId: 0,
       navTabs: [
         {
@@ -323,7 +323,7 @@ export default {
     },
     startTimer() { 
         // setTimeout returns an ID (can be used to start or clear a timer)
-        this.timeoutId = setTimeout(this.handleInactive, this.timeoutInMS);
+        this.timeoutId = setTimeout(this.handleInactive, this.timeoutInS * 1000);
     },
     resetTimer() { 
         clearTimeout(this.timeoutId);

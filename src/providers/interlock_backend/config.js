@@ -6,9 +6,9 @@ import router from "@/router/index.js"
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
 
 // Default back-end provider url.
-// PLEASE INCLUDE '/' at the end of URL.
+// ! PLEASE INCLUDE '/' at the end of URL.
 // const base_url =  "https://" + localSettings.backend_url + "/";
-const base_url =  "http://127.0.0.1:8000";
+const base_url =  "http://127.0.0.1:8000/";
 
 // Axios Instance.
 const request = axios.create({
@@ -61,13 +61,15 @@ request.interceptors.response.use(
                 // Check flag for request being retried.
                 originalRequest._retry = true;
                 // Send refresh token request.
-                return axios.post(base_url+urls.auth.tokenRefresh,{refresh: refreshToken.substr(7)})
+                return axios.post(base_url+urls.auth.tokenRefresh,{refresh: refreshToken.slice(7)})
                 // then, if refresh request succeeds.
                 .then(res => {
                     if (res.data.access) {
+                        var date = new Date()
                         // 1) Set tokens on LocalStorage.
                         localStorage.setItem('token', 'Bearer ' + res.data.access)
                         localStorage.setItem('refresh', 'Bearer ' + res.data.refresh)
+                        localStorage.setItem('refreshClock', date.toISOString())
                         // 2) Change Authorization header.
                         originalRequest.headers.Authorization = 'Bearer ' + res.data.access;
                         request.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.access;

@@ -116,6 +116,15 @@
       "account": "Cuenta / E-Mail",
       "loginBtn": "Iniciar Sesión",
       "forgotMyPassword": "Olvidé mi Contraseña"
+    },
+    "users":{
+      "attributes":{
+        "sAMAccountName":"Nombre de Cuenta",
+        "givenName":"Nombre",
+        "sn":"Apellido",
+        "mail":"Email",
+        "displayName":"Nombre a Mostrar"
+      }
     }
   },
   "attribute": {

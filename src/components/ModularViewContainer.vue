@@ -54,13 +54,14 @@ import User from '@/include/User'
     methods: {
       async listUserItems(){
         await new User({}).list().then(response => {
-          var headers = response.headers
+          var userHeaders = response.headers
           var users = response.users
+          // Reset Headers Array every time you list to avoid infinite header multiplication
           this.tableData.headers = []
           var headerDict = {}
-          headers.forEach(header => {
+          userHeaders.forEach(header => {
             headerDict = {}
-            headerDict.text = header
+            headerDict.text = this.$t('section.users.' + header)
             headerDict.value = header
             this.tableData.headers.push(headerDict)
           });

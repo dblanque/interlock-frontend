@@ -7,8 +7,12 @@ const calls = {
                 if(!response || !response.data.access)
                         reject(response)
                 backend.request.defaults.headers.common.Authorization = 'Bearer ' + response.data.access
+
+                var date = new Date()
+
                 localStorage.setItem("token", 'Bearer ' + response.data.access)
                 localStorage.setItem("refresh", 'Bearer ' + response.data.refresh)
+                localStorage.setItem('refreshClock', date.toISOString())
                 localStorage.setItem("username", data.username)
                 resolve(response)
             }).catch((e) => {
