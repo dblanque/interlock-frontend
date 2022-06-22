@@ -251,9 +251,22 @@ export default {
         this.username = localStorage.getItem('username')
         this.first_name = localStorage.getItem('first_name')
         this.last_name = localStorage.getItem('last_name')
-      } 
+
+        new Domain({}).getDetails().then(response => {
+          this.domain = response.data.details.name
+          this.realm = response.data.details.realm
+          localStorage.setItem('domain',this.name)
+          localStorage.setItem('realm',this.realm)
+        })
+      }
       // If response code is an HTTP error code
       else {
+        var token = localStorage.getItem('token')
+        console.log(token)
+        if (!token || token == null || token == 'null') {
+          // console.log('login-null')
+          this.$router.push('/login')
+        }
         localStorage.removeItem('username')
         localStorage.removeItem('first_name')
         localStorage.removeItem('last_name')
@@ -263,13 +276,6 @@ export default {
       }
     })
 
-    await new Domain({}).getDetails().then(response => {
-      this.domain = response.data.details.name
-      this.realm = response.data.details.realm
-      localStorage.setItem('domain',this.name)
-      localStorage.setItem('realm',this.realm)
-    })
-    
     this.setupTimers();
   },
   mounted: function(){
@@ -375,10 +381,10 @@ export default {
     openLogoutDialog(){
       this.showLogoutDialog = true;
     },
-    logoutAction(){
-      // TODO - Add logout stuff here
+    async logoutAction(){
+      await new User({}).logout()
+      localStorage.setItem('logoutMessage', true)
       this.$router.push('/login')
-      new User({}).logout()
     },
     // Check if theme is dark
     isThemeDark(){

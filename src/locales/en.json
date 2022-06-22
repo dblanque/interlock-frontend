@@ -195,6 +195,7 @@
   "misc":{
     "darkMode":"Enable Dark Mode",
     "logoutMsg":"Are you sure you wish to Logout?",
+    "loggedOut":"Logout Successful",
     "logoutForbiddenMsg":"Please Log in Again",
     "logoutTooltip":"Logout",
     "themerTooltip":"Change Theme"

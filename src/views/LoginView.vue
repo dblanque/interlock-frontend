@@ -59,9 +59,9 @@
             <!-- LOGIN BUTTONS -->
             <div>
             <v-row justify="space-around" class="pa-2 mt-4">
-                <v-btn class="pa-0 ma-0 px-3 py-2 ma-3" v-on:click="gotoPasswRecovery" disabled>
+                <!-- <v-btn class="pa-0 ma-0 px-3 py-2 ma-3" v-on:click="gotoPasswRecovery" disabled>
                   <p class="text-md-body" style="margin-bottom: 0 !important;"> {{ $t("section.login.forgotMyPassword") }}</p>
-                </v-btn>
+                </v-btn> -->
                 <v-btn
                   :loading="submitted"
                   :disabled="submitted || (this.username.length == 0 || this.password.length == 0) || !valid"
@@ -76,6 +76,29 @@
         </v-form>
     </v-row>
     </v-card>
+
+      <!-- Snackbar -->
+      <v-snackbar
+        v-model="logoutSnackbar"
+        timeout="1500"
+        class="mb-12"
+        :dark="!isThemeDark()" :light="isThemeDark()"
+      >
+        {{ snackbarMessage }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            icon
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+          >
+            <v-icon>
+              mdi-close
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
   </v-container>
 </template>
 
@@ -93,14 +116,6 @@ export default {
     ThemeChanger
   },
   async created() {
-    var token = localStorage.getItem('token')
-    if (token && token != "null") {
-      if (!this.fromRoute.name) {
-        this.$router.push("/")
-      } else {
-        this.$router.back()
-      }
-    }
   },
   data() {
     return {
@@ -110,12 +125,28 @@ export default {
       username: "",
       password: "",
       submitted: false,
-      transitionInit: false,
+      logoutSnackbar: false,
+      snackbarMessage: "",
       value: String,
     };
   },
   mounted() {
-    this.transitionInit = true;
+    var userJustLoggedOut = localStorage.getItem('logoutMessage')
+    console.log(userJustLoggedOut)
+    if (userJustLoggedOut) {
+      this.snackbarMessage = this.$t("misc.loggedOut")
+      this.logoutSnackbar = true;
+      localStorage.removeItem('logoutMessage')
+    }
+
+    var token = localStorage.getItem('token')
+    if (token && token != null && token != 'null') {
+      if (this.fromRoute.name == "/" || this.fromRoute.name == "home") {
+        this.$router.push("/")
+      } else {
+        this.$router.back()
+      }
+    }
   },
   watch: {
     validateForm(){
@@ -139,7 +170,6 @@ export default {
         var user = new User({})
         user.login(this.username, this.password)
         .then(response =>{
-            console.log(response)
             if(response.data.access != undefined)
               this.$router.push("/home");
         })

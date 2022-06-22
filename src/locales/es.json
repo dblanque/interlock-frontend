@@ -195,6 +195,7 @@
   "misc": {
     "darkMode": "Activar Modo Oscuro",
     "logoutMsg":"¿Está seguro de cerrar su sesión?",
+    "loggedOut":"Sesión cerrada exitosamente",
     "logoutForbiddenMsg":"Por favor Inicie Sesión nuevamente",
     "logoutTooltip":"Cerrar Sesión",
     "themerTooltip":"Cambiar Tema"
