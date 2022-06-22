@@ -13,7 +13,7 @@ const actions = {
     },
     getCurrentUserData: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.user + 'me', data)
+            interlock_backend.request.get(interlock_backend.urls.user.base + 'me', data)
             .then(response => {
                 resolve(response);
                 localStorage.setItem("username", response.data.user.username)
@@ -32,7 +32,16 @@ const actions = {
     },
     list: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.user, data).then(response => {
+            interlock_backend.request.get(interlock_backend.urls.user.list, data).then(response => {
+                resolve(response.data)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+    fetch: (username)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.fetch, username).then(response => {
                 resolve(response.data)
             }).catch((e) => {
                 reject(e)

@@ -145,7 +145,7 @@
         "sn":"Last Name",
         "mail":"Email",
         "displayName":"Display Name",
-        "disabled":"Enabled"
+        "is_enabled":"Account is Enabled"
       }
     }
   },

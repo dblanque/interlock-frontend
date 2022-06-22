@@ -44,6 +44,10 @@ class User extends ApiModel{
         return interlock_backend.call('user/list')
     }
 
+    fetch(username){
+        return interlock_backend.call('user/fetch', username)
+    }
+
     getCurrentUserData(){
         return interlock_backend.call('user/getCurrentUserData')
     }

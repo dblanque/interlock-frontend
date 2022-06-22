@@ -14,7 +14,7 @@
           <LanguageSelector :dark="!isThemeDark()" :light="isThemeDark()" class="" @updateTabSliders="refreshNavTabs"/>
         </v-col>
         <v-divider light class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
-        <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp">
+        <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
           <span class="text-normal" v-if="last_name && last_name != '' && first_name && first_name != ''">
             {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}
           </span>
@@ -24,7 +24,7 @@
         </v-col>
         <v-col class="ma-0 pa-0" cols="12" md="auto">
           <div class="mt-2">
-            <span class="text-normal" v-if="this.$vuetify.breakpoint.mdAndUp">
+            <span class="text-normal" v-if="this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
               <span class="text-normal" v-if="last_name && last_name != '' && first_name && first_name != ''">
                 {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}
               </span>
@@ -301,8 +301,17 @@ export default {
           headerDict = {}
           headerDict.text = this.$t('section.users.attributes.' + header)
           headerDict.value = header
+          if (header == 'is_enabled') {
+            headerDict.align = 'center'
+          }
           this.tableData.headers.push(headerDict)
         });
+        headerDict = {}
+        headerDict.text = this.$t('actions.label')
+        headerDict.value = 'actions'
+        headerDict.align = 'center'
+        headerDict.sortable = false
+        this.tableData.headers.push(headerDict)
         this.tableData.items = users
         this.error = false;
         this.refreshLoading = false;

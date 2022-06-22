@@ -24,9 +24,13 @@ if(auth != null && auth != undefined && auth.length > 0)
 const urls = {
     auth: {
         token: 'api/token/',
-        tokenRefresh: 'api/token/refresh/',
+        tokenRefresh: 'api/token/refresh/'
     },
-    user: 'api/users/',
+    user: {
+        base: 'api/users/',
+        list: 'api/users/',
+        fetch: 'api/users/fetch/'
+    },
     domain: {
         details: "api/domain/details/"
     }

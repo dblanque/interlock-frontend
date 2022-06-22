@@ -144,7 +144,7 @@
         "sn":"Apellido",
         "mail":"Email",
         "displayName":"Nombre a Mostrar",
-        "disabled":"Habilitado"
+        "is_enabled":"Usuario Habilitado"
       }
     }
   },

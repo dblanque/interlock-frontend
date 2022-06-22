@@ -5,7 +5,8 @@
     <h1>{{ $t("category.header." + viewTitle) }}</h1>
     <v-divider class="mx-6"/>
   </v-row>
-  <!-- Users -->
+
+  <!-- USERS -->
   <v-container v-if="viewTitle == 'users'">
     <v-data-table
       :headers="this.tableDataHeaders"
@@ -15,6 +16,7 @@
       :search="searchString"
       sort-by="sn"
       class="py-3 px-2">
+      <!-- Table Header -->
       <template v-slot:top>
         <v-row align="center" class="px-2 mx-1 py-0 my-0">
           <v-text-field
@@ -45,24 +47,62 @@
           </v-btn>
         </v-row>
       </template>
+      <!-- USER IS ENABLED STATUS -->
+      <template v-slot:[`item.is_enabled`]="{ item }">
+        <v-btn elevation="0" icon rounded v-if="item.is_enabled">
+          <v-icon class="clr-primary">
+            mdi-check
+          </v-icon>
+        </v-btn>
+        <v-btn elevation="0" icon rounded v-else>
+          <v-icon class="clr-error">
+            mdi-close
+          </v-icon>
+        </v-btn>
+      </template>
+      <!-- USER ACTIONS -->
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-btn elevation="0" icon small @click="fetchUser(item.username)">
+          <v-icon class="clr-primary" small>
+            mdi-eye
+          </v-icon>
+        </v-btn>
+        <v-btn elevation="0" icon small>
+          <v-icon class="clr-primary" small>
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+        <v-btn elevation="0" icon small>
+          <v-icon class="clr-error" small>
+            mdi-delete
+          </v-icon>
+        </v-btn>
+      </template>
     </v-data-table>
   </v-container>
+
   <!-- Groups -->
   <v-container v-if="viewTitle == 'groups'">
   </v-container>
+
   <!-- DNS -->
   <v-container v-if="viewTitle == 'dns'">
   </v-container>
+
   <!-- GPO -->
   <v-container v-if="viewTitle == 'gpo'">
   </v-container>
+
   <!-- Server -->
   <v-container v-if="viewTitle == 'server'">
   </v-container>
+
 </v-container>
 </template>
 
 <script>
+import User from '@/include/User'
+
   export default {
     name: 'ModularViewContainer',
     props: {
@@ -75,11 +115,23 @@
     data () {
       return {
         searchString: "",
+        data:{
+          username: "",
+        }
       }
     },
     created() {
     },
     methods: {
+      async fetchUser(username){
+        this.data.username = username;
+        await new User({}).fetch(this.data).then(response => {
+          var responseStatus = response.status
+          response = response.data
+          console.log(response)
+          console.log(responseStatus)
+        })
+      },
       refreshAction() {
         this.$emit('refresh')
       },
