@@ -83,7 +83,6 @@ class User extends ApiModel{
                         throw Error("Error fetching user data. Provider returned: " + response);
                     else{
                         Object.keys(response.data).forEach(key => {
-                            console.log(key)
                             this[key] = response.data[key];
                         });
                     }
