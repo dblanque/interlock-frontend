@@ -23,7 +23,7 @@
           </span>
         </v-col>
         <v-col class="ma-0 pa-0" cols="12" md="auto">
-          <div class="mt-2">
+          <div class="mt-2 mr-4">
             <span class="text-normal" v-if="this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
               <span class="text-normal" v-if="last_name && last_name != '' && first_name && first_name != ''">
                 {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}

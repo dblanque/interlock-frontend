@@ -196,6 +196,7 @@
     "darkMode": "Activar Modo Oscuro",
     "logoutMsg":"¿Está seguro de cerrar su sesión?",
     "logoutForbiddenMsg":"Por favor Inicie Sesión nuevamente",
-    "logoutTooltip":"Cerrar Sesión"
+    "logoutTooltip":"Cerrar Sesión",
+    "themerTooltip":"Cambiar Tema"
   }
 }

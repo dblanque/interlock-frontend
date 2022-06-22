@@ -7,6 +7,14 @@
   </v-row>
 
   <!-- USERS -->
+  <v-dialog max-width="1200px" v-model="dialogs['user']" v-if="viewTitle == 'users'">
+    <UserView
+      :user="data.userdata"
+      :editFlag="false"
+      :viewKey="'user'"
+      @closeDialog="closeDialog"
+      />
+  </v-dialog>
   <v-container v-if="viewTitle == 'users'">
     <v-data-table
       :headers="this.tableDataHeaders"
@@ -25,10 +33,10 @@
             class="mx-2"
           ></v-text-field>
           <v-btn 
-            class="mx-2" 
-            color="primary" 
-            fab
-            small
+            class="mx-2 bg-primary" 
+            color="white" 
+            icon
+            elevation="0"
             :loading="refreshLoading"
             @click="refreshAction"
             >
@@ -102,9 +110,13 @@
 
 <script>
 import User from '@/include/User'
+import UserView from '@/components/User/UserView.vue'
 
   export default {
     name: 'ModularViewContainer',
+    components:{
+      UserView
+    },
     props: {
       viewTitle: String,
       viewIndex: Number,
@@ -116,21 +128,29 @@ import User from '@/include/User'
       return {
         searchString: "",
         data:{
-          username: "",
+          userdata: {}
+        },
+        dialogs: {
+          user: false,
+          group: false,
+          dns: false,
+          gpo: false
         }
       }
     },
     created() {
     },
     methods: {
+      openDialog(key){
+        this.dialogs[key] = true;
+      },
+      closeDialog(key){
+        this.dialogs[key] = false;
+      },
       async fetchUser(username){
-        this.data.username = username;
-        await new User({}).fetch(this.data).then(response => {
-          var responseStatus = response.status
-          response = response.data
-          console.log(response)
-          console.log(responseStatus)
-        })
+        this.data.userdata = await new User({})
+        await this.data.userdata.fetch(username)
+        this.openDialog('user')
       },
       refreshAction() {
         this.$emit('refresh')

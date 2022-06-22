@@ -196,6 +196,7 @@
     "darkMode":"Enable Dark Mode",
     "logoutMsg":"Are you sure you wish to Logout?",
     "logoutForbiddenMsg":"Please Log in Again",
-    "logoutTooltip":"Logout"
+    "logoutTooltip":"Logout",
+    "themerTooltip":"Change Theme"
   }
 }
