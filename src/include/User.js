@@ -10,8 +10,8 @@ class User extends ApiModel{
     last_login;
     role;
     is_staff;
-    givenName; 
-    sn; 
+    givenName;
+    sn;
     displayName;
     mail;
     telephoneNumber;

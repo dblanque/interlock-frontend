@@ -12,7 +12,9 @@
       :user="data.userdata"
       :editFlag="false"
       :viewKey="'user'"
+      :refreshLoading="userRefreshLoading"
       @closeDialog="closeDialog"
+      @refreshUser="fetchUser(data.selectedUser)"
       />
   </v-dialog>
   <v-container v-if="viewTitle == 'users'">
@@ -75,13 +77,13 @@
             mdi-eye
           </v-icon>
         </v-btn>
-        <v-btn elevation="0" icon small>
-          <v-icon class="clr-primary" small>
+        <v-btn disabled color="primary" elevation="0" icon small>
+          <v-icon small>
             mdi-pencil
           </v-icon>
         </v-btn>
-        <v-btn elevation="0" icon small>
-          <v-icon class="clr-error" small>
+        <v-btn disabled color="red" elevation="0" icon small>
+          <v-icon small>
             mdi-delete
           </v-icon>
         </v-btn>
@@ -127,7 +129,10 @@ import UserView from '@/components/User/UserView.vue'
     data () {
       return {
         searchString: "",
-        data:{
+        userRefreshLoading: true,
+        error: false,
+        data: {
+          selectedUser: "",
           userdata: {}
         },
         dialogs: {
@@ -146,11 +151,22 @@ import UserView from '@/components/User/UserView.vue'
       },
       closeDialog(key){
         this.dialogs[key] = false;
+        if (key == 'user') {
+          this.data.selectedUser = ""
+        }
       },
       async fetchUser(username){
+        this.userRefreshLoading = true;
+        this.data.selectedUser = username
         this.data.userdata = await new User({})
         await this.data.userdata.fetch(username)
+        .catch(error => {
+          console.log(error)
+          this.userRefreshLoading = false;
+          this.error = true;
+        })
         this.openDialog('user')
+        setTimeout(() => { this.userRefreshLoading = false }, 500);
       },
       refreshAction() {
         this.$emit('refresh')

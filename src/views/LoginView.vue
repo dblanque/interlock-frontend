@@ -132,7 +132,6 @@ export default {
   },
   mounted() {
     var userJustLoggedOut = localStorage.getItem('logoutMessage')
-    console.log(userJustLoggedOut)
     if (userJustLoggedOut) {
       this.snackbarMessage = this.$t("misc.loggedOut")
       this.logoutSnackbar = true;
@@ -141,11 +140,7 @@ export default {
 
     var token = localStorage.getItem('token')
     if (token && token != null && token != 'null') {
-      if (this.fromRoute.name == "/" || this.fromRoute.name == "home") {
-        this.$router.push("/")
-      } else {
-        this.$router.back()
-      }
+      this.$router.push("/")
     }
   },
   watch: {

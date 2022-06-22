@@ -210,14 +210,14 @@ export default {
         {
           index: 2,
           title: "groups",
-          enabled: true,
+          enabled: false,
           icon: "mdi-group",
           route: "groups"
         },
         {
           index: 3,
           title: "dns",
-          enabled: true,
+          enabled: false,
           enableShortName: true,
           icon: "mdi-dns",
           route: "dns"
@@ -225,7 +225,7 @@ export default {
         {
           index: 4,
           title: "gpo",
-          enabled: true,
+          enabled: false,
           enableShortName: true,
           icon: "mdi-google-circles-extended",
           route: "gpo"
@@ -233,7 +233,7 @@ export default {
         {
           index: 5,
           title: "server",
-          enabled: true,
+          enabled: false,
           icon: "mdi-server",
           route: "server"
         }
@@ -360,7 +360,11 @@ export default {
       this.tableData.headers.forEach(tableHeader => {
         switch (this.selectedTabTitle) {
           case 'users':
-            tableHeader.text = this.$t('section.users.attributes.' + tableHeader.value)
+            if (tableHeader.value == "actions") {
+              tableHeader.text = this.$t('actions.label')
+            } else {
+              tableHeader.text = this.$t('section.users.attributes.' + tableHeader.value)
+            }
             break;
           default:
             break;
