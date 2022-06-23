@@ -7,11 +7,12 @@
   </v-row>
 
   <!-- USERS -->
-  <v-dialog max-width="1200px" v-model="dialogs['user']" v-if="viewTitle == 'users'">
+  <v-dialog eager max-width="1200px" v-model="dialogs['user']" v-if="viewTitle == 'users'">
     <UserView
       :user="data.userdata"
       :editFlag="false"
       :viewKey="'user'"
+      ref="UserView"
       :refreshLoading="userRefreshLoading"
       @closeDialog="closeDialog"
       @refreshUser="fetchUser(data.selectedUser)"
@@ -59,16 +60,16 @@
       </template>
       <!-- USER IS ENABLED STATUS -->
       <template v-slot:[`item.is_enabled`]="{ item }">
-        <v-btn elevation="0" icon rounded v-if="item.is_enabled">
-          <v-icon class="clr-primary">
+        <div elevation="0" v-if="item.is_enabled">
+          <v-icon class="clr-valid">
             mdi-check
           </v-icon>
-        </v-btn>
-        <v-btn elevation="0" icon rounded v-else>
+        </div>
+        <div elevation="0" icon rounded v-else>
           <v-icon class="clr-error">
             mdi-close
           </v-icon>
-        </v-btn>
+        </div>
       </template>
       <!-- USER ACTIONS -->
       <template v-slot:[`item.actions`]="{ item }">
@@ -129,7 +130,7 @@ import UserView from '@/components/User/UserView.vue'
     data () {
       return {
         searchString: "",
-        userRefreshLoading: true,
+        userRefreshLoading: false,
         error: false,
         data: {
           selectedUser: "",
@@ -145,15 +146,48 @@ import UserView from '@/components/User/UserView.vue'
     },
     created() {
     },
+    watch:{
+      // Dialog Watcher
+      // We want to handle what happens when a dialog closes here as the user 
+      // might close it by clicking outside instead of clicking the close button
+      dialogs: {
+        handler: function (newValue) {
+            // For every dialog type
+            for (let key in newValue) {
+              // When dialog[key] CLOSES, the code below executes
+              if (newValue[key] == false) {
+                switch (key) {
+                  case 'user':
+                    this.data.selectedUser = ""
+                    this.data.userdata = new User({})
+                    break;
+                  default:
+                    break;
+                }
+              } 
+              // When dialog[key] OPENS, the code below executes
+              else {
+                switch (key) {
+                  case 'user':
+                    if (this.$refs.UserView != undefined)
+                      this.$refs.UserView.syncUser()
+                    break;
+                
+                  default:
+                    break;
+                }
+              }
+            }
+        },
+        deep: true
+      }
+    },
     methods: {
       openDialog(key){
         this.dialogs[key] = true;
       },
       closeDialog(key){
         this.dialogs[key] = false;
-        if (key == 'user') {
-          this.data.selectedUser = ""
-        }
       },
       async fetchUser(username){
         this.userRefreshLoading = true;
@@ -166,7 +200,8 @@ import UserView from '@/components/User/UserView.vue'
           this.error = true;
         })
         this.openDialog('user')
-        setTimeout(() => { this.userRefreshLoading = false }, 500);
+        setTimeout(() => { this.userRefreshLoading = false }, 200);
+        this.$refs.UserView.syncUser()
       },
       refreshAction() {
         this.$emit('refresh')
