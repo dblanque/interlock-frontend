@@ -61,7 +61,7 @@
       <!-- USER IS ENABLED STATUS -->
       <template v-slot:[`item.is_enabled`]="{ item }">
         <div elevation="0" v-if="item.is_enabled">
-          <v-icon class="clr-valid">
+          <v-icon class="clr-valid clr-lig-40">
             mdi-check
           </v-icon>
         </div>

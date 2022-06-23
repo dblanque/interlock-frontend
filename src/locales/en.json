@@ -20,6 +20,8 @@
   },
   "actions":{
     "label": "Actions",
+    "enable":"Enable",
+    "disable":"Disable",
     "goToLink": "Go to Link",
     "search": "Search",
     "yes": "Yes",
@@ -140,6 +142,8 @@
       "forgotMyPassword":"I forgot my password"
     },
     "users":{
+      "basicDetails":"Basic Details",
+      "location":"Location",
       "attributes":{
         "sAMAccountName":"Account Name",
         "givenName":"First Name",

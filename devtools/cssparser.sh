@@ -25,6 +25,8 @@ secondary
 valid
 error
 cancel
+white
+black
 )
 
 color_args=(
@@ -76,6 +78,12 @@ HAVE HIGHER SELECTOR SPECIFICITY THIS FILE IS LONG */
     --clr-valid-sat: 86.9%;
     --clr-valid-lig: 41.8%;
     --clr-valid: hsl(var(--clr-valid-hue), var(--clr-valid-sat), var(--clr-valid-lig));
+
+    /* WHITE */
+    --clr-white-hue: 0;
+    --clr-white-sat: 0%;
+    --clr-white-lig: 100%;
+    --clr-white: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-white-lig));
 
     --clr-blue-hue: 206.6;
     --clr-blue-sat: 89.7%;

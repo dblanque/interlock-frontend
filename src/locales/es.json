@@ -12,6 +12,8 @@
   },
   "actions": {
     "label": "Acciones",
+    "enable":"Habilitar",
+    "disable":"Des-habilitar",
     "goToLink": "Ir a Enlace",
     "search": "Buscar",
     "yes": "Si",
@@ -139,6 +141,8 @@
       "forgotMyPassword": "Olvidé mi Contraseña"
     },
     "users":{
+      "basicDetails":"Detalles Básicos",
+      "location":"Ubicación",
       "attributes":{
         "sAMAccountName":"Nombre de Cuenta",
         "givenName":"Nombre",

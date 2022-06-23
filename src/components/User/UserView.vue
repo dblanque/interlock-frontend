@@ -6,10 +6,10 @@
         <v-card-title class="ma-0 pa-0">
             <v-row class="ma-0 pa-0" align="center" justify="space-between">
                 <h3 v-if="!usercopy.givenName || usercopy.givenName == '' || !usercopy.sn || usercopy.sn == ''" class="pa-0 ma-0 ma-2">
-                    {{ usercopy.username ? usercopy.username.toUpperCase() : '' }}
+                    {{ usercopy.username ? $t('classes.user.single') + ': ' + usercopy.username.toUpperCase() : '' }}
                 </h3>
                 <h3 v-else class="pa-0 ma-0 ma-2">
-                    {{ usercopy.givenName + " " + usercopy.sn }}
+                    {{ $t('classes.user.single') + ': ' + usercopy.givenName + " " + usercopy.sn }}
                 </h3>
                 <v-divider class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
@@ -22,141 +22,153 @@
 
         <!-- Body -->
         <v-card-text class="my-3 py-4">
-            <v-row align="center">
+            <v-row align-content="center">
             <!-- User Basic Data Panel -->
-            <v-col cols="12" md="6">
-                <v-row class="font-weight-medium">
-                        <v-col cols="12" lg="6">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.givenName')"
-                            :readonly="editFlag"
-                            v-model="usercopy.givenName"
-                            :rules="[this.fieldRules(usercopy.givenName, 'ge_name')]"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" lg="6">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.sn')"
-                            :readonly="editFlag"
-                            v-model="usercopy.sn"
-                            :rules="[this.fieldRules(usercopy.sn, 'ge_name')]"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" lg="6" :class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.mail')"
-                            :readonly="editFlag"
-                            v-model="usercopy.mail"
-                            :rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" lg="6">
-                            <v-fade-transition>
-                                <v-card v-if="user.is_enabled != undefined" v-ripple outlined class="pa-1 py-2">
-                                    <span :class="user.is_enabled ? 'clr-valid' : 'clr-error'">
-                                        {{ user.is_enabled ? $t('section.users.attributes.is_enabled') : $t('section.users.attributes.is_disabled') }}
-                                    </span>
-                                    <div elevation="0" v-if="user.is_enabled">
-                                    <v-icon class="clr-valid">
-                                        mdi-check
-                                    </v-icon>
-                                    </div>
-                                    <div elevation="0" icon rounded v-else>
-                                    <v-icon class="clr-error">
-                                        mdi-close
-                                    </v-icon>
-                                    </div>
-                                </v-card>
-                            </v-fade-transition>
-                        </v-col>
-                        <v-col cols="12" v-if="user.last_login != undefined && user.last_login != ''">
-                            {{ $t('section.users.attributes.last_login') + ": " + user.last_login }}
-                        </v-col>
-                        <v-col cols="12" lg="6">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.telephoneNumber')"
-                            :readonly="editFlag"
-                            v-model="usercopy.telephoneNumber"
-                            :rules="[this.fieldRules(usercopy.telephoneNumber, 'ge_phone')]"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" lg="6">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.wWWHomePage')"
-                            :readonly="editFlag"
-                            v-model="usercopy.wWWHomePage"
-                            :rules="[this.fieldRules(usercopy.wWWHomePage, 'ge_website')]"
-                            ></v-text-field>
-                        </v-col>
-                </v-row>
+            <v-col class="ma-0 pa-0" cols="12" md="6">
+                <v-card elevation="1" outlined height="100%" class="ma-1 pa-4">
+                    <v-row :justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'start'" 
+                    class="pa-0 ma-0 text-h5 mx-4 mb-5">
+                        {{ $t('section.users.basicDetails') }}
+                    </v-row>
+                    <v-row class="pa-0 ma-0 font-weight-medium">
+                            <v-col cols="12" lg="6">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.givenName')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.givenName"
+                                :rules="[this.fieldRules(usercopy.givenName, 'ge_name')]"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.sn')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.sn"
+                                :rules="[this.fieldRules(usercopy.sn, 'ge_name')]"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6" :class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.mail')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.mail"
+                                :rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-fade-transition>
+                                    <v-card v-if="user.is_enabled != undefined" v-ripple outlined class="pa-1 py-2 mini-card">
+                                        <span :class="(user.is_enabled ? 'clr-valid' : 'clr-error') + ' clr-lig-40'">
+                                            {{ user.is_enabled ? $t('section.users.attributes.is_enabled') : $t('section.users.attributes.is_disabled') }}
+                                        </span>
+                                        <div elevation="0" v-if="user.is_enabled">
+                                        <v-icon class="clr-valid clr-lig-40">
+                                            mdi-check
+                                        </v-icon>
+                                        </div>
+                                        <div elevation="0" icon rounded v-else>
+                                        <v-icon class="clr-error clr-lig-40">
+                                            mdi-close
+                                        </v-icon>
+                                        </div>
+                                    </v-card>
+                                </v-fade-transition>
+                            </v-col>
+                            <v-col cols="12" v-if="user.last_login != undefined && user.last_login != ''">
+                                {{ $t('section.users.attributes.last_login') + ": " + user.last_login }}
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.telephoneNumber')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.telephoneNumber"
+                                :rules="[this.fieldRules(usercopy.telephoneNumber, 'ge_phone')]"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.wWWHomePage')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.wWWHomePage"
+                                :rules="[this.fieldRules(usercopy.wWWHomePage, 'ge_website')]"
+                                ></v-text-field>
+                            </v-col>
+                    </v-row>
+                </v-card>
             </v-col>
             <!-- Location Panel -->
-            <v-col cols="12" md="6">
-                <v-row class="font-weight-medium">
-                        <v-col cols="12" lg="6">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.streetAddress')"
-                            :readonly="editFlag"
-                            v-model="usercopy.streetAddress"
-                            :rules="[this.fieldRules(usercopy.streetAddress, 'ge_name')]"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" lg="6">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.postalCode')"
-                            :readonly="editFlag"
-                            v-model="usercopy.postalCode"
-                            :rules="[this.fieldRules(usercopy.postalCode, 'ge_address_postal_code')]"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" lg="6" 
-                        :class="this.$vuetify.breakpoint.smAndUp && user.countryCode != undefined && user.countryCode != '' && user.countryCode != 0 ? 'mt-3' : ''">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.l')"
-                            :readonly="editFlag"
-                            v-model="usercopy.l"
-                            :rules="[this.fieldRules(usercopy.l, 'ge_address_city')]"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" lg="6" v-if="user.countryCode != undefined && user.countryCode != '' && user.countryCode != 0">
-                            <v-card v-ripple outlined class="pa-1 py-2">
-                                {{ $t('section.users.attributes.countryCodeCombined') }}
-                                <div elevation="0">
-                                {{ user.countryCode }}
-                                {{ "(" + user.c + ")" }}
-                                </div>
-                            </v-card>
-                        </v-col>
-                        <v-col cols="12" v-if="user.last_login != undefined && user.last_login != ''">
-                            {{ $t('section.users.attributes.last_login') + ": " + user.last_login }}
-                        </v-col>
-                        <v-col cols="12" lg="6">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.st')"
-                            :readonly="editFlag"
-                            v-model="usercopy.st"
-                            :rules="[this.fieldRules(usercopy.st, 'ge_state')]"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" lg="6">
-                            <v-text-field
-                            dense
-                            :label="$t('section.users.attributes.co')"
-                            :readonly="editFlag"
-                            v-model="usercopy.co"
-                            :rules="[this.fieldRules(usercopy.co, 'ge_country')]"
-                            ></v-text-field>
-                        </v-col>
-                </v-row>
+            <v-col class="ma-0 pa-0" cols="12" md="6">
+                <v-card elevation="1" outlined height="100%" class="ma-1 pa-4">
+                    <v-row :justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'end'" 
+                    class="pa-0 ma-0 text-h5 mx-4 mb-5">
+                        {{ $t('section.users.location') }}
+                    </v-row>
+                    <v-row class="pa-0 ma-0 font-weight-medium">
+                            <v-col cols="12" lg="6">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.streetAddress')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.streetAddress"
+                                :rules="[this.fieldRules(usercopy.streetAddress, 'ge_name')]"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.postalCode')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.postalCode"
+                                :rules="[this.fieldRules(usercopy.postalCode, 'ge_address_postal_code')]"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6" 
+                            :class="this.$vuetify.breakpoint.smAndUp && user.countryCode != undefined && user.countryCode != '' && user.countryCode != 0 ? 'mt-3' : ''">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.l')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.l"
+                                :rules="[this.fieldRules(usercopy.l, 'ge_address_city')]"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6" v-if="user.countryCode != undefined && user.countryCode != '' && user.countryCode != 0">
+                                <v-card v-ripple outlined class="pa-1 py-2 mini-card">
+                                    {{ $t('section.users.attributes.countryCodeCombined') }}
+                                    <div elevation="0">
+                                    {{ user.countryCode }}
+                                    {{ "(" + user.c + ")" }}
+                                    </div>
+                                </v-card>
+                            </v-col>
+                            <v-col cols="12" v-if="user.last_login != undefined && user.last_login != ''">
+                                {{ $t('section.users.attributes.last_login') + ": " + user.last_login }}
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.st')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.st"
+                                :rules="[this.fieldRules(usercopy.st, 'ge_state')]"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" lg="6">
+                                <v-text-field
+                                dense
+                                :label="$t('section.users.attributes.co')"
+                                :readonly="this.editFlag != true"
+                                v-model="usercopy.co"
+                                :rules="[this.fieldRules(usercopy.co, 'ge_country')]"
+                                ></v-text-field>
+                            </v-col>
+                    </v-row>
+                </v-card>
             </v-col>
             </v-row>
         </v-card-text>
@@ -166,6 +178,20 @@
         <!-- Actions -->
         <v-card-actions class="">
             <v-row class="ma-1 pa-0" justify="end">
+                <v-slide-x-reverse-transition>
+                    <v-btn v-if="usercopy.is_enabled == true" @click="disableUser" class="ma-0 pa-0 pa-4 mx-1" rounded :disabled="!editFlag">
+                        <v-icon class="mr-1">
+                            mdi-close-circle-outline
+                        </v-icon>
+                        {{ $t("actions.disable") }}
+                    </v-btn>
+                    <v-btn v-else-if="usercopy.is_enabled == false" @click="enableUser" class="ma-0 pa-0 pa-4 mx-1" rounded :disabled="!editFlag">
+                        <v-icon class="mr-1">
+                            mdi-checkbox-marked-circle-outline
+                        </v-icon>
+                        {{ $t("actions.enable") }}
+                    </v-btn>
+                </v-slide-x-reverse-transition>
                 <v-btn class="ma-0 pa-0 pa-4 mx-1" rounded :disabled="!editFlag">
                     <v-icon class="mr-1">
                         mdi-content-save
@@ -254,6 +280,10 @@ export default {
         this.syncUser();
     },
     methods: {
+        disableUser(){
+        },
+        enableUser(){
+        },
         closeDialog(){
             this.$emit('closeDialog', this.viewKey);
         },
@@ -269,3 +299,8 @@ export default {
     }
 }
 </script>
+
+<style>
+.mini-card {
+}
+</style>
