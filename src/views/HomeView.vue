@@ -190,7 +190,7 @@ export default {
         headers:[],
         items:[]
       },
-      timeoutInS: 3600,
+      timeoutInS: 3599,
       timeoutId: 0,
       navTabs: [
         {
