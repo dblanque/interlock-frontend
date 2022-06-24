@@ -76,3 +76,15 @@ a {
         margin-top: 40vh !important;
     }
 }
+
+/* --------------------------- MISC ----------------------- */
+
+.sticky-top {
+    position: sticky !important;
+    top: 0 !important;
+}
+
+.sticky-bottom {
+    position: sticky !important;
+    bottom: 0 !important;
+}

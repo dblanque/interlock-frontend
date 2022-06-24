@@ -1,5 +1,6 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
+import { dateLdapToString, dateFromFiletime } from '@/include/utils'
 
 class User extends ApiModel{
 
@@ -83,7 +84,19 @@ class User extends ApiModel{
                         throw Error("Error fetching user data. Provider returned: " + response);
                     else{
                         Object.keys(response.data).forEach(key => {
-                            this[key] = response.data[key];
+                            switch (key) {
+                                case 'whenChanged':
+                                case 'whenCreated':
+                                    this[key] = dateLdapToString(response.data[key]);
+                                    break;
+                                case 'lastLogon':
+                                case 'pwdLastSet':
+                                    this[key] = dateFromFiletime(response.data[key]);
+                                    break;
+                                default:
+                                    this[key] = response.data[key];
+                                    break;
+                            }
                         });
                     }
             }

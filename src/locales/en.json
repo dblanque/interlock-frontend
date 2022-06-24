@@ -58,7 +58,9 @@
     "loading": "Loading",
     "loading_long": "Loading, please wait",
     "download":"Download",
-    "downloadLatest":"Download Latest"
+    "downloadLatest":"Download Latest",
+    "changeUserPerms": "Change Permissions",
+    "addObjectClass": "Add Object Class"
   },
   "words":{
       "today": "Today",
@@ -144,6 +146,7 @@
     "users":{
       "basicDetails":"Basic Details",
       "location":"Location",
+      "advancedDetails":"Advanced Details",
       "attributes":{
         "sAMAccountName":"Account Name",
         "givenName":"First Name",

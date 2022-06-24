@@ -130,6 +130,7 @@ HAVE HIGHER SELECTOR SPECIFICITY THIS FILE IS LONG */
     --bg-opa: 100%;
     --hint-opa: 100%;
 
+    --clr-lig-100:   100%;
     --clr-lig-95:   95%;
     --clr-lig-90:   90%;
     --clr-lig-85:   85%;
@@ -198,6 +199,7 @@ HAVE HIGHER SELECTOR SPECIFICITY THIS FILE IS LONG */
     --clr-bg-tp-75: hsla(213.6, 50.8%, 74.5%, 0.8) !important;
     --clr-bg-tp-90: hsla(211.5, 42.7%, 72%, 0.9) !important;
     
+    --clr-lig-100:   0%;
     --clr-lig-95:   5%;
     --clr-lig-90:   10%;
     --clr-lig-85:   15%;

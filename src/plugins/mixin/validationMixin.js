@@ -34,8 +34,10 @@ const validationMixin ={
       inputRulesAlphanumeric: (v) => !v || /^[üöñóúíáéa-zA-Z0-9]{0,}$/.test(v) || i18n.t("error.validation.alphaNumeric"),
       inputRulesalphaNumericSpaces: (v) => !v || /^[üöñóúíáéa-z0-9]+[üöñóúíáéa-z0-9\s]+$/i.test(v) || i18n.t("error.validation.alphaNumericSpaces"),
       inputRulesalphaNumericSpecial: (v) => !v || /^[üöñóúíáéa-z0-9]+[?¿!@üöñóúíáéa-z0-9,.\s_-]+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecial"),
+      inputRulesDN: (v) => !v || /^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:,(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/i.test(v) || i18n.t("error.validation.dn"),
       inputRulesDomain: (v) => !v || /^((?:http(?:s){0,5}(:\/\/){0,1}){0,1}(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+)?$/.test(v) || i18n.t("error.validation.domain"),
       inputRulesEmail: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+$/.test(v) || i18n.t("error.validation.email"),
+      inputRulesUSN: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@((?:[a-zA-Z0-9-\\.]){2,61})+$/.test(v) || i18n.t("error.validation.usn"),
 
       // Phone Regex Rules
       //inputRulesPhone: (v) => !v || /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(v) || /.+[0-9]{2}[0-9]{1,2}[0-9]{2}[0-9]{4}[0-9]{4}/.test(v) || i18n.t("error.validation.phone"),
@@ -145,8 +147,17 @@ const validationMixin ={
         // * ------------------------------ Add your rules here ------------------------------ * //
         switch (fieldName) {
           // Generic Field Rules
+          case "ge_numbers": // Generic INT Field
+              rules.push(this.inputRulesNumbers)
+            break;
           case "ge_name": // Generic Name Field
               rules.push(this.inputRulesalphaNumericSpaces)
+            break;
+          case "ldap_dn": // LDAP Distinguished Name validator
+              rules.push(this.inputRulesDN)
+            break;
+          case "ldap_usn": // LDAP User Principal Name validator
+              rules.push(this.inputRulesUSN)
             break;
           case "ge_message": // Generic Name Field
               rules.push(this.inputRulesalphaNumericSpecial)
