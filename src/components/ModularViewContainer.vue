@@ -23,7 +23,7 @@
       :headers="this.tableDataHeaders"
       :items="this.tableDataItems"
       :custom-sort="sortNullLast"
-      :loading="false"
+      :loading="refreshLoading"
       :search="searchString"
       sort-by="sn"
       class="py-3 px-2">
