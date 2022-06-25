@@ -440,6 +440,8 @@ export default {
             "pilotOrganization",
             "posixAccount",
             "posixGroup",
+            "top",
+            "user",
             "referral",
             "residentialPerson",
             "room",
