@@ -43,6 +43,7 @@ class User extends ApiModel{
     objectCategory;
     sAMAccountName;
     sAMAccountType;
+    permission_list;
 
     /**
      * Fetches model instance from API by id.

@@ -10,7 +10,7 @@
   <v-dialog eager max-width="1200px" v-model="dialogs['user']" v-if="viewTitle == 'users'">
     <UserView
       :user="data.userdata"
-      :editFlag="false"
+      :editFlag="this.editableForm"
       :viewKey="'user'"
       ref="UserView"
       :refreshLoading="userRefreshLoading"
@@ -78,7 +78,7 @@
             mdi-eye
           </v-icon>
         </v-btn>
-        <v-btn disabled color="primary" elevation="0" icon small>
+        <v-btn color="primary" elevation="0" icon small @click="fetchUser(item.username, true)">
           <v-icon small>
             mdi-pencil
           </v-icon>
@@ -132,6 +132,7 @@ import UserView from '@/components/User/UserView.vue'
         searchString: "",
         userRefreshLoading: false,
         error: false,
+        editableForm: false,
         data: {
           selectedUser: "",
           userdata: {}
@@ -160,6 +161,7 @@ import UserView from '@/components/User/UserView.vue'
                   case 'user':
                     this.data.selectedUser = ""
                     this.data.userdata = new User({})
+                    this.editableForm = false
                     break;
                   default:
                     break;
@@ -170,6 +172,7 @@ import UserView from '@/components/User/UserView.vue'
                 switch (key) {
                   case 'user':
                     if (this.$refs.UserView != undefined)
+                      this.$refs.UserView.goBackToDetails()
                       this.$refs.UserView.syncUser()
                     break;
                 
@@ -189,7 +192,7 @@ import UserView from '@/components/User/UserView.vue'
       closeDialog(key){
         this.dialogs[key] = false;
       },
-      async fetchUser(username){
+      async fetchUser(username, isView=false){
         this.userRefreshLoading = true;
         this.data.selectedUser = username
         this.data.userdata = await new User({})
@@ -200,7 +203,9 @@ import UserView from '@/components/User/UserView.vue'
           this.error = true;
         })
         this.openDialog('user')
-        setTimeout(() => { this.userRefreshLoading = false }, 200);
+        if (isView == true)
+          this.editableForm = true
+        setTimeout(() => { this.userRefreshLoading = false }, 300);
         this.$refs.UserView.syncUser()
       },
       refreshAction() {
