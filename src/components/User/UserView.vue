@@ -1,9 +1,9 @@
 <template>
     <v-card :loading="refreshLoading" class="pa-0 ma-0">
         <v-expand-transition>
-        <div v-show="!refreshLoading" class="ma-2">
+        <div v-show="!refreshLoading">
         <!-- Title Bar -->
-        <v-card-title class="ma-0 pa-0">
+        <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
                 <h3 v-if="!usercopy.givenName || usercopy.givenName == '' || !usercopy.sn || usercopy.sn == ''" class="pa-0 ma-0 ma-2">
                     {{ usercopy.username ? $t('classes.user.single') + ': ' + usercopy.username.toUpperCase() : '' }}
@@ -20,10 +20,22 @@
             </v-row>
         </v-card-title>
 
+        <v-expand-transition>
+            <v-row v-if="editFlag" justify="center" class="pa-0 ma-0">
+                <v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
+                    <v-icon class="mdso mr-2">warning</v-icon>
+                    {{ $t('section.users.editFlagWarning') }}
+                    <v-btn @click="viewUser" small class="ma-0 pa-0 ml-2 pr-2 pl-1">
+                        <v-icon color="orange" class="">mdi-chevron-left</v-icon>
+                        {{ $t('actions.back') }}
+                    </v-btn>
+                </v-alert>
+            </v-row>
+        </v-expand-transition>
         <!-- Body -->
         <v-tabs v-model="tab" height="0">
             <v-tab-item :key="0">
-                <v-card-text class="my-3 py-4">
+                <v-card-text class="ma-0 py-4">
                     <v-row align-content="center" class="mb-2">
                     <!-- User Basic Data Panel -->
                     <v-col class="ma-0 pa-0" cols="12" md="6">
@@ -139,12 +151,17 @@
                                         :rules="[this.fieldRules(usercopy.l, 'ge_address_city')]"
                                         ></v-text-field>
                                     </v-col>
-                                    <v-col cols="12" lg="6" v-if="user.countryCode != undefined && user.countryCode != '' && user.countryCode != 0">
+                                    <v-col cols="12" lg="6">
                                         <v-card v-ripple outlined class="pa-1 py-2 mini-card">
-                                            {{ $t('section.users.attributes.countryCodeCombined') }}
-                                            <div elevation="0">
-                                            {{ user.countryCode }}
-                                            {{ "(" + user.c + ")" }}
+                                            <div v-if="user.countryCode != undefined && user.countryCode != '' && user.countryCode != 0">
+                                                {{ $t('section.users.attributes.countryCodeCombined') }}
+                                                <div elevation="0">
+                                                {{ user.countryCode }}
+                                                {{ "(" + user.c + ")" }}
+                                                </div>
+                                            </div>
+                                            <div v-else>
+                                                {{ $t('section.users.attributes.countryCodeCombined') }}
                                             </div>
                                         </v-card>
                                     </v-col>
@@ -212,9 +229,9 @@
                                         </v-col>
                                         <v-col cols="" lg="3">
                                             <v-btn color="primary" @click="changePerms"
-                                            :disabled="this.editFlag != true"
                                             small class="">
                                                 {{ $t("actions.changeUserPerms") }}
+                                                <v-icon>mdi-chevron-right</v-icon>
                                             </v-btn>
                                         </v-col>
                                         <v-col cols="12" lg="3">
@@ -331,7 +348,7 @@
                                 <!-- Items -->
                                 <v-list-item
                                 two-line
-                                @click="permissions[key] = !permissions[key]"
+                                @click="onClickPermission(key)"
                                 :value="permissions[key]"
                                 v-for="(value, key) in permissions"
                                 :key="key">
@@ -345,7 +362,7 @@
                                         </v-list-item-subtitle>
                                     </v-list-item-content>
                                         <v-list-item-action>
-                                        <v-checkbox v-model="permissions[key]"></v-checkbox>
+                                        <v-checkbox :disabled="!editFlag" @click="onClickPermission(key)" v-model="permissions[key]"></v-checkbox>
                                         </v-list-item-action>
                                     </v-list-item>
                             </v-list>
@@ -393,8 +410,8 @@
             <v-row class="ma-1 pa-0" :justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
                 <!-- Go Back button (Permissions View) -->
                 <v-slide-x-reverse-transition>
-                        <v-btn v-if="changingPerms" @click="goBackToDetails" 
-                        :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
+                        <v-btn v-if="changingPerms" @click="goBackToDetails"
+                        class="text-normal ma-0 pa-0 pa-3 ma-1 bg-white bg-lig-25" 
                         rounded>
                             <v-icon class="mr-1">
                                 mdi-chevron-left
@@ -405,7 +422,7 @@
                 <!-- Enable/Disable Buttons -->
                 <v-slide-x-reverse-transition>
                         <v-btn color="green" v-if="!usercopy.is_enabled" @click="enableUser" 
-                        :class="(editFlag ? 'text-inverted ' : '' ) + 'ma-0 pa-0 pa-4 ma-1'" 
+                        :class="(editFlag ? 'text-inverted ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" 
                         rounded :disabled="!editFlag">
                             <v-icon class="mr-1">
                                 mdi-checkbox-marked-circle-outline
@@ -413,14 +430,28 @@
                             {{ $t("actions.enable") }}
                         </v-btn>
                         <v-btn color="red" v-else-if="usercopy.is_enabled == true" @click="disableUser" 
-                        :class="(editFlag ? 'text-inverted ' : '' ) + 'ma-0 pa-0 pa-4 ma-1'" rounded :disabled="!editFlag">
+                        :class="(editFlag ? 'text-inverted ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" rounded :disabled="!editFlag">
                             <v-icon class="mr-1">
                                 mdi-close-circle-outline
                             </v-icon>
                             {{ $t("actions.disable") }}
                         </v-btn>
                 </v-slide-x-reverse-transition>
-                <!-- Save User Changes -->
+                <!-- Edit User Button -->
+                <v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag != true" @click="editUser">
+                    <v-icon class="mr-1">
+                        mdi-pencil
+                    </v-icon>
+                    {{ $t("actions.edit") }}
+                </v-btn>
+                <!-- View User Button -->
+                <v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag == true" @click="viewUser">
+                    <v-icon class="mr-1">
+                        mdi-eye
+                    </v-icon>
+                    {{ $t("actions.view") }}
+                </v-btn>
+                <!-- Save User Changes Button -->
                 <v-btn :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" rounded :disabled="!editFlag">
                     <v-icon class="mr-1">
                         mdi-content-save
@@ -645,6 +676,13 @@ export default {
         },
     },
     methods: {
+        onClickPermission(key){
+            if (this.editFlag == true) {
+                this.permissions[key] = !this.permissions[key]
+                console.log(key)
+                console.log(this.permissions[key])
+            }
+        },
         goBackToDetails(){
             this.tab = 0
             this.changingPerms = false
@@ -666,6 +704,13 @@ export default {
         disableUser(){
         },
         enableUser(){
+        },
+        editUser(){
+            this.$emit('editToggle', true);
+        },
+        viewUser(){
+            this.$emit('editToggle', false);
+            this.refreshUser();
         },
         closeDialog(){
             this.$emit('closeDialog', this.viewKey);
@@ -690,6 +735,19 @@ export default {
 
 .outlined {
     border: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
+}
+
+.card-title {
+    border-radius: 4px;
+    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-100));
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100;
+    border-bottom: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
+}
+
+[theme=dark] .card-title {
+    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-85));
 }
 
 .card-actions {

@@ -59,7 +59,7 @@
     "loading_long": "Loading, please wait",
     "download":"Download",
     "downloadLatest":"Download Latest",
-    "changeUserPerms": "Change Permissions",
+    "changeUserPerms": "View Permissions",
     "addObjectClass": "Add Object Class"
   },
   "words":{
@@ -146,6 +146,7 @@
     "users":{
       "basicDetails":"Basic Details",
       "location":"Location",
+      "editFlagWarning":"You are now editing this user",
       "perms":"User Permissions",
       "permsRaw":"Raw Output",
       "permsRawHint":"Click here to open Microsoft Documentation on LDAP Permissions",

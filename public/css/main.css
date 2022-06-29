@@ -88,3 +88,8 @@ a {
     position: sticky !important;
     bottom: 0 !important;
 }
+
+.mdsi, .mdsi::after { font-family: "Material Icons" !important; }
+.mdso, .mdso::after { font-family: "Material Icons Outlined" !important; }
+.mdss, .mdss::after { font-family: "Material Icons Sharp" !important; }
+.mdsr, .mdsr::after { font-family: "Material Icons Rounded" !important; }

@@ -51,7 +51,7 @@
     "loading_long": "Cargando, por favor aguarde",
     "download": "Descargar",
     "downloadLatest": "Descargar Último",
-    "changeUserPerms": "Modificar Permisos",
+    "changeUserPerms": "Ver Permisos",
     "addObjectClass": "Añadir Clase de Objeto"
   },
   "words": {
@@ -145,6 +145,7 @@
       "basicDetails":"Detalles Básicos",
       "location":"Ubicación",
       "perms":"Permisos del Usuario",
+      "editFlagWarning":"Está editando el usuario",
       "permsRaw":"Salida en Crudo",
       "permsRawHint":"Clickee aquí para abrir documentación de Microsoft sobre Permisos de LDAP",
       "permsCalc":"Número Int. de Permisos Calculado",

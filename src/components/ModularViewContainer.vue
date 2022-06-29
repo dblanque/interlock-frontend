@@ -15,6 +15,7 @@
       ref="UserView"
       :refreshLoading="userRefreshLoading"
       @closeDialog="closeDialog"
+      @editToggle="setViewToEdit"
       @refreshUser="fetchUser(data.selectedUser)"
       />
   </v-dialog>
@@ -186,13 +187,16 @@ import UserView from '@/components/User/UserView.vue'
       }
     },
     methods: {
+      setViewToEdit(value){
+        this.editableForm = value;
+      },
       openDialog(key){
         this.dialogs[key] = true;
       },
       closeDialog(key){
         this.dialogs[key] = false;
       },
-      async fetchUser(username, isView=false){
+      async fetchUser(username, isEditable=false){
         this.userRefreshLoading = true;
         this.data.selectedUser = username
         this.data.userdata = await new User({})
@@ -203,7 +207,7 @@ import UserView from '@/components/User/UserView.vue'
           this.error = true;
         })
         this.openDialog('user')
-        if (isView == true)
+        if (isEditable == true)
           this.editableForm = true
         setTimeout(() => { this.userRefreshLoading = false }, 300);
         this.$refs.UserView.syncUser()

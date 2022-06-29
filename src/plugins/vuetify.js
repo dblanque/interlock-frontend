@@ -3,6 +3,10 @@ import Vuetify from 'vuetify/lib/framework';
 
 // MDI Pack Import
 import '@mdi/font/css/materialdesignicons.css';
+import "@fontsource/material-icons"
+import "@fontsource/material-icons-outlined"
+import "@fontsource/material-icons-rounded"
+import "@fontsource/material-icons-sharp"
 
 // Roboto Font Import
 import '@fontsource/roboto/index.css';
