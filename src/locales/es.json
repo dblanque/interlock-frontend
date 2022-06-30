@@ -109,6 +109,9 @@
         "verification_expired": "Intentos de Verificación acabados. Contacte un administrador."
       }
     },
+    "data":{
+      "noCountryCode":"Sin código configurado"
+    },
     "validation": {
       "fieldinvalid": "Uno o mas campos son invalidos",
       "fieldRequired": "Este campo es requerido",

@@ -111,6 +111,9 @@
               "verification_expired": "Verification codes have been exhausted. Contact an admin."
           }
       },
+      "data":{
+        "noCountryCode":"No country code set"
+      },
       "validation":{
           "fieldinvalid": "One or more fields are invalid",
           "fieldRequired": "This field is required",

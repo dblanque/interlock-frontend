@@ -163,6 +163,9 @@
                                             </div>
                                             <div v-else>
                                                 {{ $t('section.users.attributes.countryCodeCombined') }}
+                                                <div>
+                                                {{ $t('error.data.noCountryCode') }}
+                                                </div>
                                             </div>
                                         </v-card>
                                     </v-col>
