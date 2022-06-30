@@ -151,6 +151,7 @@
         "header":"Crear Usuario",
         "optionalsHeader":"Detalles Opcionales",
         "validationError":"Error de Validación",
+        "domainRealmError": "Error de parámetros de dominio, por favor re-abra este componente",
         "step1":"Detalles del Usuario",
         "step2":"Contraseña y Permisos",
         "step3":"Revisiones del Sistema"

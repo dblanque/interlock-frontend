@@ -21,7 +21,9 @@
                 <v-stepper-header class="px-16">
                     <!-- Basics -->
                     <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.users.createView.step1') }}</v-stepper-step>
+                    <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
                     <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.users.createView.step2') }}</v-stepper-step>
+                    <v-divider class="mx-3" :style="createStage > 2 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
                     <v-stepper-step :complete="createStage > 3" step="3">{{ $t('section.users.createView.step3') }}</v-stepper-step>
                 </v-stepper-header>
 
@@ -406,11 +408,14 @@ export default {
         }
     },
     methods: {
+        getDomainDetails(){
+            this.domain = localStorage.getItem('domain')
+            this.realm = localStorage.getItem('realm')
+        },
         prevStep(){
             switch (this.createStage) {
                 case 2:
-                    this.domain = localStorage.getItem('domain')
-                    this.realm = localStorage.getItem('realm')
+                    this.getDomainDetails()
                     this.createStage -= 1
                     break;
                 default:
@@ -448,8 +453,7 @@ export default {
             this.$refs.userCreateForm1.resetValidation()
             for (const [key] of Object.entries(this.permissions))
                 this.permissions[key].value = false
-            this.domain = localStorage.getItem('domain')
-            this.realm = localStorage.getItem('realm')
+            this.getDomainDetails()
         },
         onClickPermission(key){
             this.permissions[key].value = !this.permissions[key].value

@@ -153,6 +153,7 @@
         "header":"Create User",
         "optionalsHeader":"Optional Details",
         "validationError":"Validation Error",
+        "domainRealmError": "Domain Settings Error, please re-open this component",
         "step1":"User Details",
         "step2":"Password",
         "step3":"System Checks"
