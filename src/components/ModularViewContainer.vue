@@ -15,8 +15,16 @@
       ref="UserView"
       :refreshLoading="userRefreshLoading"
       @closeDialog="closeDialog"
+      @save="saveData"
       @editToggle="setViewToEdit"
       @refreshUser="fetchUser(data.selectedUser)"
+      />
+  </v-dialog>
+  <v-dialog eager max-width="1200px" v-model="dialogs['userCreate']" v-if="viewTitle == 'users'">
+    <UserCreate
+      :viewKey="'userCreate'"
+      ref="UserCreate"
+      @closeDialog="closeDialog"
       />
   </v-dialog>
   <v-container v-if="viewTitle == 'users'">
@@ -53,7 +61,7 @@
               </span>
             </template>
           </v-btn>
-          <v-btn disabled class="pa-2 mx-2" color="primary">
+          <v-btn class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
             {{ $t('actions.addN') + ' ' + $t('classes.user.single') }}
           </v-btn>
@@ -115,12 +123,14 @@
 <script>
 import User from '@/include/User'
 import UserView from '@/components/User/UserView.vue'
+import UserCreate from '@/components/User/UserCreate.vue'
 
   export default {
     name: 'ModularViewContainer',
     components:{
-      UserView
-    },
+    UserView,
+    UserCreate
+},
     props: {
       viewTitle: String,
       viewIndex: Number,
@@ -140,6 +150,7 @@ import UserView from '@/components/User/UserView.vue'
         },
         dialogs: {
           user: false,
+          userCreate: false,
           group: false,
           dns: false,
           gpo: false
@@ -164,6 +175,10 @@ import UserView from '@/components/User/UserView.vue'
                     this.data.userdata = new User({})
                     this.editableForm = false
                     break;
+                  case 'userCreate':
+                    if (this.$refs.UserCreate != undefined)
+                      this.$refs.UserCreate.newUser()
+                    break;
                   default:
                     break;
                 }
@@ -176,7 +191,10 @@ import UserView from '@/components/User/UserView.vue'
                       this.$refs.UserView.goBackToDetails()
                       this.$refs.UserView.syncUser()
                     break;
-                
+                  case 'userCreate':
+                    if (this.$refs.UserCreate != undefined)
+                      this.$refs.UserCreate.newUser()
+                    break;
                   default:
                     break;
                 }
@@ -195,6 +213,17 @@ import UserView from '@/components/User/UserView.vue'
       },
       closeDialog(key){
         this.dialogs[key] = false;
+      },
+      saveData(key, data){
+        switch (key) {
+          case 'user':
+            break;
+          default:
+            console.log(key)
+            console.log(data)
+            break;
+        }
+        this.closeDialog(key)
       },
       async fetchUser(username, isEditable=false){
         this.userRefreshLoading = true;

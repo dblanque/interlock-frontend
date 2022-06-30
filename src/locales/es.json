@@ -23,6 +23,7 @@
     "addM": "Nuevo",
     "addN": "Añadir",
     "back": "Volver",
+    "back_short": "Volver",
     "confirm": "Confirmar",
     "edit": "Editar",
     "view": "Ver",
@@ -117,6 +118,7 @@
       "max6": "Máximo de 6 caracteres",
       "max8": "Máximo de 8 caracteres",
       "alphaNumeric": "Debe ser alfanumérico.",
+      "alphaNumericSpecialUsername": "Debe contener solo letras (guiones permitidos)",
       "alphaNumericSpaces": "Debe ser alfanumérico (Espacios permitidos)",
       "alphaNumericSpecial": "Debe ser alfanumérico (Espacios y guiones permitidos)",
       "domain": "Debe ser un Dominio de NSG válido ( ejemplo.tld | dominio.com )",
@@ -142,6 +144,14 @@
       "forgotMyPassword": "Olvidé mi Contraseña"
     },
     "users":{
+      "createView":{
+        "header":"Crear Usuario",
+        "optionalsHeader":"Detalles Opcionales",
+        "validationError":"Error de Validación",
+        "step1":"Detalles del Usuario",
+        "step2":"Contraseña y Permisos",
+        "step3":"Revisiones del Sistema"
+      },
       "basicDetails":"Detalles Básicos",
       "location":"Ubicación",
       "perms":"Permisos del Usuario",
@@ -153,8 +163,12 @@
       "advancedDetails":"Detalles Avanzados",
       "attributes":{
         "sAMAccountName":"Nombre de Cuenta",
+        "username":"Nombre de Usuario",
         "givenName":"Nombre",
         "sn":"Apellido",
+        "password":"Contraseña",
+        "passwordConfirm":"Confirmar Contraseña",
+        "initials":"Initials",
         "mail":"Email",
         "displayName":"Nombre Completo",
         "is_enabled":"Usuario Habilitado",
@@ -174,6 +188,7 @@
         "wWWHomePage":"Página Web",
         "distinguishedName":"Nombre Distinguido (dn)",
         "userPrincipalName":"Nombre Principal del Usuario",
+        "userPrincipalName_pre2000":"Nombre del Usuario (pre-Windows 2000)",
         "userAccountControl":"Permisos del Usuario (INT Crudo)",
         "whenCreated":"Cuenta creada el",
         "whenChanged":"Cuenta modificada el",
@@ -232,6 +247,7 @@
     "donate": "DONAR"
   },
   "misc": {
+    "autocomputedField":"Campo con computado automático",
     "darkMode": "Activar Modo Oscuro",
     "logoutMsg":"¿Está seguro de cerrar su sesión?",
     "loggedOut":"Sesión cerrada exitosamente",

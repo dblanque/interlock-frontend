@@ -255,7 +255,7 @@ export default {
         new Domain({}).getDetails().then(response => {
           this.domain = response.data.details.name
           this.realm = response.data.details.realm
-          localStorage.setItem('domain',this.name)
+          localStorage.setItem('domain',this.domain)
           localStorage.setItem('realm',this.realm)
         })
       }

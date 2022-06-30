@@ -31,6 +31,7 @@
     "addM": "New",
     "addN": "Add",
     "back": "Go Back",
+    "back_short": "Back",
     "confirm": "Confirm",
     "edit": "Edit",
     "view": "View",
@@ -119,6 +120,7 @@
           "max6": "6 Characters Maximum",
           "max8": "8 Characters Maximum",
           "alphaNumeric": "Must be Alphanumeric.",
+          "alphaNumericSpecialUsername": "Must contain only letters (hyphen allowed)",
           "alphaNumericSpaces": "Must be Alphanumeric (Spaces allowed)",
           "alphaNumericSpecial": "Must be Alphanumeric (Spaces and hyphen/underscores allowed)",
           "domain": "Must be a valid Top-Level Domain ( example.tld | domain.com )",
@@ -144,6 +146,14 @@
       "forgotMyPassword":"I forgot my password"
     },
     "users":{
+      "createView":{
+        "header":"Create User",
+        "optionalsHeader":"Optional Details",
+        "validationError":"Validation Error",
+        "step1":"User Details",
+        "step2":"Password",
+        "step3":"System Checks"
+      },
       "basicDetails":"Basic Details",
       "location":"Location",
       "editFlagWarning":"You are now editing this user",
@@ -155,11 +165,11 @@
       "advancedDetails":"Advanced Details",
       "permissions":{
         "LDAP_UF_SCRIPT" : "Script Account",
-        "LDAP_UF_ACCOUNT_DISABLE" : "Disable Account",
+        "LDAP_UF_ACCOUNT_DISABLE" : "Disable User Account",
         "LDAP_UF_HOMEDIR_REQUIRED" : "Home Directory Required",
         "LDAP_UF_LOCKOUT" : "Account Locked Out",
-        "LDAP_UF_PASSWD_NOTREQD" : "Password not Required",
-        "LDAP_UF_PASSWD_CANT_CHANGE" : "Cannot change Password",
+        "LDAP_UF_PASSWD_NOTREQD" : "User does not require Password",
+        "LDAP_UF_PASSWD_CANT_CHANGE" : "User cannot change Password",
         "LDAP_UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED" : "Encrypted text in password allowed",
         "LDAP_UF_NORMAL_ACCOUNT" : "Normal Account",
         "LDAP_UF_INTERDOMAIN_TRUST_ACCOUNT" : "Trust Inter-domain Account",
@@ -179,8 +189,12 @@
       },
       "attributes":{
         "sAMAccountName":"Account Name",
+        "username":"User Name",
         "givenName":"First Name",
         "sn":"Last Name",
+        "password":"Password",
+        "passwordConfirm":"Confirm Password",
+        "initials":"Initials",
         "mail":"Email",
         "displayName":"Full Display Name",
         "is_enabled":"Account is Enabled",
@@ -200,6 +214,7 @@
         "wWWHomePage":"Web Page",
         "distinguishedName":"Distinguished Name",
         "userPrincipalName":"User Principal Name",
+        "userPrincipalName_pre2000":"User Logon Name (pre-Windows 2000)",
         "userAccountControl":"User Permissions (Raw INT)",
         "whenCreated":"Account created at",
         "whenChanged":"Account modified at",
@@ -257,6 +272,7 @@
     "donate":"DONATE"
   },
   "misc":{
+    "autocomputedField":"Autocomputed Field",
     "darkMode":"Enable Dark Mode",
     "logoutMsg":"Are you sure you wish to Logout?",
     "loggedOut":"Logout Successful",

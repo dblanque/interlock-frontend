@@ -36,6 +36,7 @@
         <v-tabs v-model="tab" height="0">
             <v-tab-item :key="0">
                 <v-card-text class="ma-0 py-4">
+                    <v-form>
                     <v-row align-content="center" class="mb-2">
                     <!-- User Basic Data Panel -->
                     <v-col class="ma-0 pa-0" cols="12" md="6">
@@ -129,7 +130,7 @@
                                         :label="$t('section.users.attributes.streetAddress')"
                                         :readonly="this.editFlag != true"
                                         v-model="usercopy.streetAddress"
-                                        :rules="[this.fieldRules(usercopy.streetAddress, 'ge_name')]"
+                                        :rules="[this.fieldRules(usercopy.streetAddress, 'ge_address_street')]"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6">
@@ -329,6 +330,7 @@
                             </v-expansion-panel>
                         </v-expansion-panels>
                     </v-row>
+                    </v-form>
                 </v-card-text>
             </v-tab-item>
             <v-tab-item :key="1">
@@ -349,7 +351,7 @@
                                 <v-list-item
                                 two-line
                                 @click="onClickPermission(key)"
-                                :value="permissions[key]"
+                                :value="permissions[key].value"
                                 v-for="(value, key) in permissions"
                                 :key="key">
                                     <v-list-item-content class="pl-10">
@@ -362,7 +364,7 @@
                                         </v-list-item-subtitle>
                                     </v-list-item-content>
                                         <v-list-item-action>
-                                        <v-checkbox :disabled="!editFlag" @click="onClickPermission(key)" v-model="permissions[key]"></v-checkbox>
+                                        <v-checkbox :disabled="!editFlag" @click="onClickPermission(key)" v-model="permissions[key].value"></v-checkbox>
                                         </v-list-item-action>
                                     </v-list-item>
                             </v-list>
@@ -422,7 +424,7 @@
                 <!-- Enable/Disable Buttons -->
                 <v-slide-x-reverse-transition>
                         <v-btn color="green" v-if="!usercopy.is_enabled" @click="enableUser" 
-                        :class="(editFlag ? 'text-inverted ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" 
+                        :class="(editFlag ? 'text-white ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" 
                         rounded :disabled="!editFlag">
                             <v-icon class="mr-1">
                                 mdi-checkbox-marked-circle-outline
@@ -430,7 +432,7 @@
                             {{ $t("actions.enable") }}
                         </v-btn>
                         <v-btn color="red" v-else-if="usercopy.is_enabled == true" @click="disableUser" 
-                        :class="(editFlag ? 'text-inverted ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" rounded :disabled="!editFlag">
+                        :class="(editFlag ? 'text-white ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" rounded :disabled="!editFlag">
                             <v-icon class="mr-1">
                                 mdi-close-circle-outline
                             </v-icon>
@@ -452,7 +454,10 @@
                     {{ $t("actions.view") }}
                 </v-btn>
                 <!-- Save User Changes Button -->
-                <v-btn :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" rounded :disabled="!editFlag">
+                <v-btn @click="saveUser"
+                :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
+                rounded 
+                :disabled="!editFlag">
                     <v-icon class="mr-1">
                         mdi-content-save
                     </v-icon>
@@ -559,52 +564,94 @@ export default {
             "strongAuthenticationUser"
         ],
         permissions: {
-            "LDAP_UF_SCRIPT" : false,
-            "LDAP_UF_ACCOUNT_DISABLE" : false,
-            "LDAP_UF_HOMEDIR_REQUIRED" : false,
-            "LDAP_UF_LOCKOUT" : false,
-            "LDAP_UF_PASSWD_NOTREQD" : false,
-            "LDAP_UF_PASSWD_CANT_CHANGE" : false,
-            "LDAP_UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED" : false,
-            "LDAP_UF_NORMAL_ACCOUNT" : false,
-            "LDAP_UF_INTERDOMAIN_TRUST_ACCOUNT" : false,
-            "LDAP_UF_WORKSTATION_TRUST_ACCOUNT" : false,
-            "LDAP_UF_SERVER_TRUST_ACCOUNT" : false,
-            "LDAP_UF_DONT_EXPIRE_PASSWD" : false,
-            "LDAP_UF_MNS_LOGON_ACCOUNT" : false,
-            "LDAP_UF_SMARTCARD_REQUIRED" : false,
-            "LDAP_UF_TRUSTED_FOR_DELEGATION" : false,
-            "LDAP_UF_NOT_DELEGATED" : false,
-            "LDAP_UF_USE_DES_KEY_ONLY" : false,
-            "LDAP_UF_DONT_REQUIRE_PREAUTH" : false,
-            "LDAP_UF_PASSWORD_EXPIRED" : false,
-            "LDAP_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION" : false,
-            "LDAP_UF_NO_AUTH_DATA_REQUIRED" : false,
-            "LDAP_UF_PARTIAL_SECRETS_ACCOUNT" : false
-        },
-        permission_values: {
-            "LDAP_UF_SCRIPT" : 1,
-            "LDAP_UF_ACCOUNT_DISABLE" : 2,
-            "LDAP_UF_HOMEDIR_REQUIRED" : 8,
-            "LDAP_UF_LOCKOUT" : 16,
-            "LDAP_UF_PASSWD_NOTREQD" : 32,
-            "LDAP_UF_PASSWD_CANT_CHANGE" : 64,
-            "LDAP_UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED" : 128,
-            "LDAP_UF_NORMAL_ACCOUNT" : 512,
-            "LDAP_UF_INTERDOMAIN_TRUST_ACCOUNT" : 2048,
-            "LDAP_UF_WORKSTATION_TRUST_ACCOUNT" : 4096,
-            "LDAP_UF_SERVER_TRUST_ACCOUNT" : 8192,
-            "LDAP_UF_DONT_EXPIRE_PASSWD" : 65536,
-            "LDAP_UF_MNS_LOGON_ACCOUNT" : 131072,
-            "LDAP_UF_SMARTCARD_REQUIRED" : 262144,
-            "LDAP_UF_TRUSTED_FOR_DELEGATION" : 524288,
-            "LDAP_UF_NOT_DELEGATED" : 1048576,
-            "LDAP_UF_USE_DES_KEY_ONLY" : 2097152,
-            "LDAP_UF_DONT_REQUIRE_PREAUTH" : 4194304,
-            "LDAP_UF_PASSWORD_EXPIRED" : 8388608,
-            "LDAP_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION" : 16777216,
-            "LDAP_UF_NO_AUTH_DATA_REQUIRED" : 33554432,
-            "LDAP_UF_PARTIAL_SECRETS_ACCOUNT" : 67108864
+            "LDAP_UF_SCRIPT" : {
+                value: false,
+                int: 1
+            },
+            "LDAP_UF_ACCOUNT_DISABLE" : {
+                value: false,
+                int: 2
+            },
+            "LDAP_UF_HOMEDIR_REQUIRED" : {
+                value: false,
+                int: 8
+            },
+            "LDAP_UF_LOCKOUT" : {
+                value: false,
+                int: 16
+            },
+            "LDAP_UF_PASSWD_NOTREQD" : {
+                value: false,
+                int: 32
+            },
+            "LDAP_UF_PASSWD_CANT_CHANGE" : {
+                value: false,
+                int: 64
+            },
+            "LDAP_UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED" : {
+                value: false,
+                int: 128
+            },
+            "LDAP_UF_NORMAL_ACCOUNT" : {
+                value: false,
+                int: 512
+            },
+            "LDAP_UF_INTERDOMAIN_TRUST_ACCOUNT" : {
+                value: false,
+                int: 2048
+            },
+            "LDAP_UF_WORKSTATION_TRUST_ACCOUNT" : {
+                value: false,
+                int: 4096
+            },
+            "LDAP_UF_SERVER_TRUST_ACCOUNT" : {
+                value: false,
+                int: 8192
+            },
+            "LDAP_UF_DONT_EXPIRE_PASSWD" : {
+                value: false,
+                int: 65536
+            },
+            "LDAP_UF_MNS_LOGON_ACCOUNT" : {
+                value: false,
+                int: 131072
+            },
+            "LDAP_UF_SMARTCARD_REQUIRED" : {
+                value: false,
+                int: 262144
+            },
+            "LDAP_UF_TRUSTED_FOR_DELEGATION" : {
+                value: false,
+                int: 524288
+            },
+            "LDAP_UF_NOT_DELEGATED" : {
+                value: false,
+                int: 1048576
+            },
+            "LDAP_UF_USE_DES_KEY_ONLY" : {
+                value: false,
+                int: 2097152
+            },
+            "LDAP_UF_DONT_REQUIRE_PREAUTH" : {
+                value: false,
+                int: 4194304
+            },
+            "LDAP_UF_PASSWORD_EXPIRED" : {
+                value: false,
+                int: 8388608
+            },
+            "LDAP_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION" : {
+                value: false,
+                int: 16777216
+            },
+            "LDAP_UF_NO_AUTH_DATA_REQUIRED" : {
+                value: false,
+                int: 33554432
+            },
+            "LDAP_UF_PARTIAL_SECRETS_ACCOUNT" : {
+                value: false,
+                int: 67108864
+            }
         },
         categories: {
             basic: [
@@ -659,44 +706,46 @@ export default {
     computed:{
         calcEnabledPerms() {
             var result = 0
-            for (const [key, value] of Object.entries(this.permissions)) {
-                if (value == true) {
-                    result += this.permission_values[key]
+            for (const [key] of Object.entries(this.permissions)) {
+                if (this.permissions[key].value == true) {
+                    result += this.permissions[key].int
                 }
             }
             return result
         },
         getEnabledPerms() {
             var array = []
-            for (const [key, value] of Object.entries(this.permissions)) {
-                if (value == true)
+            for (const [key] of Object.entries(this.permissions)) {
+                if (this.permissions[key].value == true)
                     array.push(key)
             }
             return array
         },
     },
     methods: {
+        // When a permission in the v-list changes this function is executed
         onClickPermission(key){
             if (this.editFlag == true) {
-                this.permissions[key] = !this.permissions[key]
-                console.log(key)
-                console.log(this.permissions[key])
+                this.permissions[key].value = !this.permissions[key].value
             }
         },
         goBackToDetails(){
             this.tab = 0
             this.changingPerms = false
         },
+        // This function sets the permissions each time the usercopy object is
+        // synced to the parent view user object
         setPermissions() {
             for (const [key] of Object.entries(this.permissions)) {
-                this.permissions[key] = false
+                this.permissions[key].value = false
             }
             if (this.usercopy['permission_list'] != undefined) {
                 this.usercopy['permission_list'].forEach(perm => {
-                    this.permissions[perm] = true
+                    this.permissions[perm].value = true
                 });
             }
         },
+        // changePerms(): Changes tab to the permissions section
         changePerms(){
             this.tab = 1
             this.changingPerms = true
@@ -715,6 +764,11 @@ export default {
         closeDialog(){
             this.$emit('closeDialog', this.viewKey);
         },
+        saveUser(){
+            this.$emit('save', this.viewKey, this.usercopy);
+        },
+        // Sync the usercopy object to the parent view user object on the
+        // next tick to avoid mutation errors
         syncUser(){
             this.usercopy = new User({})
             this.$nextTick(() => {
@@ -722,6 +776,7 @@ export default {
                 this.setPermissions()
             })
         },
+        // Tells the parent view to refresh/fetch the user again
         async refreshUser(){
             this.$emit('refreshUser');
         }
