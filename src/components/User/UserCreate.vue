@@ -36,6 +36,7 @@
                                 <v-col cols="12" lg="5">
                                     <v-text-field
                                     dense
+                                    @keydown.enter="nextStep"
                                     :label="$t('section.users.attributes.username')"
                                     v-model="userToCreate.username"
                                     :rules="[this.fieldRules(userToCreate.username, 'ge_username', true)]"
@@ -46,6 +47,7 @@
                                 <v-col cols="12" lg="4">
                                     <v-text-field
                                     dense
+                                    @keydown.enter="nextStep"
                                     :label="$t('section.users.attributes.givenName')"
                                     v-model="userToCreate.givenName"
                                     :rules="[this.fieldRules(userToCreate.givenName, 'ge_name', true)]"
@@ -54,6 +56,7 @@
                                 <v-col cols="12" lg="4">
                                     <v-text-field
                                     dense
+                                    @keydown.enter="nextStep"
                                     :label="$t('section.users.attributes.sn')"
                                     v-model="userToCreate.sn"
                                     :rules="[this.fieldRules(userToCreate.sn, 'ge_name')]"
@@ -64,6 +67,7 @@
                                 <v-col cols="12" lg="6">
                                     <v-text-field
                                     dense
+                                    @keydown.enter="nextStep"
                                     :label="$t('section.users.attributes.displayName')"
                                     v-model="getDisplayName"
                                     :rules="[this.fieldRules(getDisplayName, 'ge_topic', true)]"
@@ -72,6 +76,7 @@
                                 <v-col cols="12" lg="2">
                                     <v-text-field
                                     dense
+                                    @keydown.enter="nextStep"
                                     :label="$t('section.users.attributes.initials')"
                                     v-model="userToCreate.initials"
                                     :rules="[this.fieldRules(userToCreate.initials, 'ge_topic')]"
@@ -82,6 +87,7 @@
                                 <v-col cols="12" lg="4">
                                     <v-text-field
                                     dense
+                                    @keydown.enter="nextStep"
                                     :hint="$t('misc.autocomputedField')"
                                     persistent-hint
                                     :label="$t('section.users.attributes.userPrincipalName')"
@@ -92,6 +98,7 @@
                                 <v-col cols="12" lg="4">
                                     <v-text-field
                                     dense
+                                    @keydown.enter="nextStep"
                                     :hint="$t('misc.autocomputedField')"
                                     persistent-hint
                                     :label="$t('section.users.attributes.userPrincipalName_pre2000')"
@@ -113,6 +120,7 @@
                                 <v-col cols="12" lg="4">
                                     <v-text-field
                                     dense
+                                    @keydown.enter="nextStep"
                                     :label="$t('section.users.attributes.mail')"
                                     v-model="userToCreate.mail"
                                     :rules="[this.fieldRules(userToCreate.mail, 'ge_mail')]"
@@ -121,6 +129,7 @@
                                 <v-col cols="12" lg="4">
                                         <v-text-field
                                         dense
+                                        @keydown.enter="nextStep"
                                         :label="$t('section.users.attributes.wWWHomePage')"
                                         v-model="userToCreate.wWWHomePage"
                                         :rules="[this.fieldRules(userToCreate.wWWHomePage, 'ge_website')]"
@@ -136,18 +145,25 @@
                             <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
                                 <v-col cols="12" lg="4">
                                     <v-text-field
+                                    :type="passwordHidden ? 'password' : 'text'"
+                                    required
+                                    @keydown.enter="nextStep"
+                                    :append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
+                                    @click:append="() => (passwordHidden = !passwordHidden)"
                                     dense
                                     :label="$t('section.users.attributes.password')"
                                     v-model="userToCreate.password"
-                                    :rules="[this.fieldRules(userToCreate.password, 'ge_password')]"
+                                    :rules="[this.fieldRules(userToCreate.password, 'ge_password', true)]"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" lg="4">
                                         <v-text-field
+                                        :type="passwordHidden ? 'password' : 'text'"
                                         dense
+                                        @keydown.enter="nextStep"
                                         :label="$t('section.users.attributes.passwordConfirm')"
                                         v-model="userToCreate.passwordConfirm"
-                                        :rules="[this.fieldRules(userToCreate.passwordConfirm, 'ge_password')]"
+                                        :rules="[userToCreate.passwordConfirm == userToCreate.password ? true : this.$t('error.validation.passwordNotSame') ]"
                                         ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -155,6 +171,7 @@
                                 <!-- Items -->
                                 <v-list-item
                                 two-line
+                                @keydown.enter="nextStep"
                                 @click="onClickPermission(key)"
                                 :value="permissions[key].value"
                                 v-for="(value, key) in permissions"
@@ -169,7 +186,9 @@
                                         </v-list-item-subtitle>
                                     </v-list-item-content>
                                         <v-list-item-action>
-                                        <v-checkbox @click="onClickPermission(key)" v-model="permissions[key].value"></v-checkbox>
+                                        <v-checkbox @keypress="false" @keydown="false"
+                                        @click="onClickPermission(key)" 
+                                        v-model="permissions[key].value"/>
                                         </v-list-item-action>
                                     </v-list-item>
                             </v-list>
@@ -177,7 +196,7 @@
                     </v-stepper-content>
                     <!-- Check if user exists - loader -->
                     <v-stepper-content step="3">
-                        check if user exists
+                        {{ userToCreate }}
                     </v-stepper-content>
                     <!-- End Screen -->
                     <v-stepper-content step="4">
@@ -206,6 +225,7 @@
                     </v-slide-x-reverse-transition>
                     <v-slide-x-reverse-transition>
                     <v-btn elevation="0" @click="prevStep" v-if="createStage > 1"
+                    @keydown.enter="prevStep"
                     class="text-normal ma-0 pa-0 pa-2 pr-4 ma-1 bg-white bg-lig-25" 
                     rounded>
                         <v-icon class="ma-0" color="primary">
@@ -214,7 +234,8 @@
                         {{ $t("actions.back_short" )}}
                     </v-btn>
                     </v-slide-x-reverse-transition>
-                    <v-btn elevation="0" @click="nextStep"
+                    <v-btn elevation="0" @click="nextStep" 
+                    @keydown.enter="nextStep"
                     class="text-normal ma-0 pa-0 pa-2 ma-1 pl-4 bg-white bg-lig-25" 
                     rounded>
                         {{ $t("actions.next" )}}
@@ -236,6 +257,7 @@ export default {
     name: 'UserCreate',
     data () {
       return {
+        passwordHidden: true,
         domain: "",
         realm: "",
         error: false,
@@ -440,12 +462,43 @@ export default {
                         this.errorMsg = this.$t('section.users.createView.validationError')
                     }
                     break;
+                case 2:
+                    if (this.$refs.userCreateForm2.validate()){
+                        this.error = false
+                        this.errorMsg = ""
+                        this.userToCreate.distinguishedName = this.userToCreate.username + "@" + this.domain
+                        this.userToCreate.sAMAccountName = this.userToCreate.username
+                        var permission_list = []
+                        Object.keys(this.userToCreate).forEach(key => {
+                            if (this.userToCreate[key] === undefined) {
+                                delete this.userToCreate[key];
+                            }
+                        });
+                        Object.keys(this.permissions).forEach(key => {
+                            if (this.permissions[key].value == true)
+                                permission_list.push(key)
+                        });
+                        this.userToCreate.permission_list = permission_list
+                    }
+                    else {
+                        // Force snackbar to reappear if error was pre-existent
+                        if (this.showSnackbar == true)
+                            this.showSnackbar = false
+                        this.showSnackbar = true
+                        this.error = true
+                        this.errorMsg = this.$t('section.users.createView.validationError')
+                    }
+                    if (!this.error || this.error == false) {
+                        this.createStage += 1
+                    }
+                    break;
                 default:
                     this.createStage += 1
                     break;
             }
         },
         async newUser(){
+            this.passwordHidden = true
             this.userToCreate = new User({})
             this.createStage = 1
             this.error = false

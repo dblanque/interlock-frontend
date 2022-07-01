@@ -117,6 +117,7 @@
       "validation":{
           "fieldinvalid": "One or more fields are invalid",
           "fieldRequired": "This field is required",
+          "passwordNotSame":"Passwords must match",
           "alphabetic": "Must contain only letters",
           "numeric": "Must contain only numbers",
           "max4": "4 Characters Maximum",
@@ -124,6 +125,7 @@
           "max8": "8 Characters Maximum",
           "alphaNumeric": "Must be Alphanumeric.",
           "alphaNumericSpecialUsername": "Must contain only letters (hyphen allowed)",
+          "alphaNumericPassword": "8 char. minimum, special characters allowed: !@#$%&*()",
           "alphaNumericSpaces": "Must be Alphanumeric (Spaces allowed)",
           "alphaNumericSpecial": "Must be Alphanumeric (Spaces and hyphen/underscores allowed)",
           "domain": "Must be a valid Top-Level Domain ( example.tld | domain.com )",
