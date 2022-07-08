@@ -78,6 +78,10 @@ class User extends ApiModel{
         return await interlock_backend.call('user/list')
     }
 
+    async insert(data){
+        return await interlock_backend.call('user/insert', data)
+    }
+
     async fetch(username){
         return await interlock_backend.call('user/fetch', {username: username}).then(
             response => {

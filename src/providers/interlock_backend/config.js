@@ -28,6 +28,7 @@ const urls = {
     },
     user: {
         base: 'api/users/',
+        insert: 'api/users/insert/',
         list: 'api/users/',
         fetch: 'api/users/fetch/'
     },

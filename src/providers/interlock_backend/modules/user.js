@@ -2,9 +2,8 @@ import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
     insert: (data)=>{
-        var addUrl = ""
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.user + addUrl, data).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.user.insert, data).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)

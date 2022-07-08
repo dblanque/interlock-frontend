@@ -20,6 +20,7 @@
   },
   "actions":{
     "label": "Actions",
+    "done":"Done",
     "enable":"Enable",
     "disable":"Disable",
     "goToLink": "Go to Link",
@@ -44,6 +45,7 @@
     "create": "Create",
     "save": "Save",
     "saveClose": "Save & Close",
+    "close": "Close",
     "next": "Next",
     "cancel": "Cancel",
     "click": "Click",
@@ -104,11 +106,15 @@
   },
   "error":{
       "codes":{
+          "badRequest": "Error 405: Bad Request",
           "auth":{
-              "invalid_credetials": "Incorrect Email or Password.",
+              "invalid_credentials": "Incorrect Email or Password.",
               "verification_code": "Incorrect Code, Please try again.",
               "verified_successfully": "Verified Successfully",
               "verification_expired": "Verification codes have been exhausted. Contact an admin."
+          },
+          "users":{
+            "userExists":"User already exists."
           }
       },
       "data":{
@@ -157,8 +163,8 @@
         "validationError":"Validation Error",
         "domainRealmError": "Domain Settings Error, please re-open this component",
         "step1":"User Details",
-        "step2":"Password",
-        "step3":"System Checks"
+        "step2":"Password and Permissions",
+        "step3":"User Created"
       },
       "basicDetails":"Basic Details",
       "location":"Location",

@@ -196,7 +196,15 @@
                     </v-stepper-content>
                     <!-- Check if user exists - loader -->
                     <v-stepper-content step="3">
-                        {{ userToCreate }}
+                        <v-row class="pa-12 ma-12" justify="center" align-content="center" align="center">
+                            <v-fade-transition>
+                                <v-progress-circular value="100"
+                                :indeterminate="loading && this.error === false" 
+                                size="100" 
+                                width="10" 
+                                :color="this.error === false ? 'primary':'red'"/>
+                            </v-fade-transition>
+                        </v-row>
                     </v-stepper-content>
                     <!-- End Screen -->
                     <v-stepper-content step="4">
@@ -224,7 +232,7 @@
                         </v-chip>
                     </v-slide-x-reverse-transition>
                     <v-slide-x-reverse-transition>
-                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1"
+                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && createStage < 4"
                     @keydown.enter="prevStep"
                     class="text-normal ma-0 pa-0 pa-2 pr-4 ma-1 bg-white bg-lig-25" 
                     rounded>
@@ -234,15 +242,28 @@
                         {{ $t("actions.back_short" )}}
                     </v-btn>
                     </v-slide-x-reverse-transition>
-                    <v-btn elevation="0" @click="nextStep" 
-                    @keydown.enter="nextStep"
-                    class="text-normal ma-0 pa-0 pa-2 ma-1 pl-4 bg-white bg-lig-25" 
-                    rounded>
-                        {{ $t("actions.next" )}}
-                        <v-icon class="ma-0" color="primary">
-                            mdi-chevron-double-right
-                        </v-icon>
-                    </v-btn>
+                    <v-slide-x-reverse-transition>
+                        <v-btn elevation="0" @click="nextStep" v-if="this.createStage < 3"
+                        @keydown.enter="nextStep"
+                        class="text-normal ma-0 pa-0 pa-2 ma-1 pl-4 bg-white bg-lig-25" 
+                        rounded>
+                            {{ $t("actions.next" )}}
+                            <v-icon class="ma-0" color="primary">
+                                mdi-chevron-double-right
+                            </v-icon>
+                        </v-btn>
+                    </v-slide-x-reverse-transition>
+                    <v-slide-x-reverse-transition>
+                        <v-btn elevation="0" @click="closeDialog" v-if="this.createStage > 3"
+                        @keydown.enter="closeDialog"
+                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                        rounded>
+                            <v-icon class="ma-0 mr-1" color="primary">
+                                mdi-checkbox-marked-circle-outline
+                            </v-icon>
+                            {{ $t("actions.done" )}}
+                        </v-btn>
+                    </v-slide-x-reverse-transition>
                 </div>
             </v-row>
         </v-card-actions>
@@ -260,6 +281,8 @@ export default {
         passwordHidden: true,
         domain: "",
         realm: "",
+        success: false,
+        loading: true,
         error: false,
         valid: false,
         errorMsg: "",
@@ -440,6 +463,12 @@ export default {
                     this.getDomainDetails()
                     this.createStage -= 1
                     break;
+                case 3:
+                    this.createStage -= 1
+                    setTimeout(() => {  
+                        this.loading = true; 
+                    }, 500);
+                    break;
                 default:
                     this.createStage -= 1
                     break;
@@ -479,6 +508,7 @@ export default {
                                 permission_list.push(key)
                         });
                         this.userToCreate.permission_list = permission_list
+                        this.createUser()
                     }
                     else {
                         // Force snackbar to reappear if error was pre-existent
@@ -487,9 +517,6 @@ export default {
                         this.showSnackbar = true
                         this.error = true
                         this.errorMsg = this.$t('section.users.createView.validationError')
-                    }
-                    if (!this.error || this.error == false) {
-                        this.createStage += 1
                     }
                     break;
                 default:
@@ -514,7 +541,42 @@ export default {
         closeDialog(){
             this.$emit('closeDialog', this.viewKey);
         },
-        createUser(){
+        async createUser(){
+            this.error = false
+            this.errorMsg = ""
+            this.createStage += 1
+            await this.userToCreate.insert(this.userToCreate)
+            .then(response => {
+                if (response.status == 200) {
+                    this.error = false;
+                    this.errorMsg = "";
+                    this.loading = false;
+                    this.success = true;
+                } else {
+                    this.error = true;
+                    this.errorMsg = this.$t("error.unknown_short")
+                    this.loading = false;
+                    this.success = false;
+                }
+            })
+            .catch(error => {
+                this.error = true;
+                this.loading = false;
+                switch (error.response.status) {
+                    case 405:
+                        this.errorMsg = this.$t("error.codes.badRequest")
+                        break;
+                    case 520:
+                        this.errorMsg = this.$t("error.codes.users.userExists")
+                        break;
+                    default:
+                        this.errorMsg = this.$t("error.unknown_short")
+                        break;
+                }
+            })
+            if (this.error != true && !this.error) {
+                setTimeout(() => {  this.createStage += 1 }, 500);
+            }
             this.$emit('save', this.viewKey, this.userToCreate);
         }
     }

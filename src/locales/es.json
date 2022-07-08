@@ -12,6 +12,7 @@
   },
   "actions": {
     "label": "Acciones",
+    "done":"Listo",
     "enable":"Habilitar",
     "disable":"Des-habilitar",
     "goToLink": "Ir a Enlace",
@@ -36,6 +37,7 @@
     "create": "Crear",
     "save": "Guardar",
     "saveClose": "Guardar y Cerrar",
+    "close": "Cerrar",
     "next": "Siguiente",
     "cancel": "Cancelar",
     "click": "Clickear",
@@ -102,11 +104,15 @@
   },
   "error": {
     "codes": {
+      "badRequest": "Error 405: Request Erróneo",
       "auth": {
-        "invalid_credetials": "Email o Contraseña Incorrectos.",
+        "invalid_credentials": "Email o Contraseña Incorrectos.",
         "verification_code": "Codigo Incorrecto, Intente nuevamente.",
         "verified_successfully": "Verificado Exitosamente.",
         "verification_expired": "Intentos de Verificación acabados. Contacte un administrador."
+      },
+      "users":{
+        "userExists":"El usuario ya existe."
       }
     },
     "data":{
@@ -156,7 +162,7 @@
         "domainRealmError": "Error de parámetros de dominio, por favor re-abra este componente",
         "step1":"Detalles del Usuario",
         "step2":"Contraseña y Permisos",
-        "step3":"Revisiones del Sistema"
+        "step3":"Usuario Creado"
       },
       "basicDetails":"Detalles Básicos",
       "location":"Ubicación",
