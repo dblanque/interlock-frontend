@@ -171,13 +171,17 @@ import UserCreate from '@/components/User/UserCreate.vue'
               if (newValue[key] == false) {
                 switch (key) {
                   case 'user':
-                    this.data.selectedUser = ""
-                    this.data.userdata = new User({})
-                    this.editableForm = false
+                    setTimeout(() => {  
+                      this.data.selectedUser = ""
+                      this.data.userdata = new User({})
+                      this.editableForm = false
+                    }, 100);
                     break;
                   case 'userCreate':
                     if (this.$refs.UserCreate != undefined)
-                      this.$refs.UserCreate.newUser()
+                      setTimeout(() => {  
+                        this.$refs.UserCreate.newUser()
+                      }, 100);
                     break;
                   default:
                     break;
