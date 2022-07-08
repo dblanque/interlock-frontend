@@ -6,6 +6,13 @@
     <v-divider class="mx-6"/>
   </v-row>
 
+  <!-- HOME -->
+  <v-container v-if="viewTitle == 'home'">
+    <v-btn @click="fetchOUs">Test Something</v-btn>
+    <v-treeview :items="ou_list">
+    </v-treeview>
+  </v-container>
+
   <!-- USERS -->
   <v-dialog eager max-width="1200px" v-model="dialogs['user']" v-if="viewTitle == 'users'">
     <UserView
@@ -122,6 +129,7 @@
 
 <script>
 import User from '@/include/User'
+import OrganizationalUnit from '@/include/OrganizationalUnit'
 import UserView from '@/components/User/UserView.vue'
 import UserCreate from '@/components/User/UserCreate.vue'
 
@@ -140,6 +148,7 @@ import UserCreate from '@/components/User/UserCreate.vue'
     },
     data () {
       return {
+        ou_list: [],
         searchString: "",
         userRefreshLoading: false,
         error: false,
@@ -229,6 +238,16 @@ import UserCreate from '@/components/User/UserCreate.vue'
         }
         this.closeDialog(key)
       },
+      async fetchOUs(){
+        await new OrganizationalUnit({}).list()
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      },
+      // Fetch individual User
       async fetchUser(username, isEditable=false){
         this.userRefreshLoading = true;
         this.data.selectedUser = username

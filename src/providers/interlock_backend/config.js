@@ -34,6 +34,9 @@ const urls = {
     },
     domain: {
         details: "api/domain/details/"
+    },
+    ou: {
+        list: "api/ou/fetchall/"
     }
 }
 
