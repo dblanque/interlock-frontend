@@ -9,6 +9,7 @@
   <!-- HOME -->
   <v-container v-if="viewTitle == 'home'">
   <v-card class="pa-2">
+    <!-- Actions Row -->
     <v-row align="center" class="px-2 mx-1 py-0 my-0">
       <v-text-field
         v-model="searchString"
@@ -32,16 +33,17 @@
           </span>
         </template>
       </v-btn>
-      <v-btn class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
+      <v-btn disabled class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
         <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
         {{ $t('actions.addN') }}
       </v-btn>
     </v-row>
-    <v-card flat outlined class="ma-2 pa-2">
+
+    <!-- Item Legends -->
+    <v-card flat outlined class="ma-1 pa-2">
       <v-col cols="12">
         <h4>{{ $t('words.legend') }}</h4>
       </v-col>
-      <!-- Item Legends -->
       <v-row class="px-4 ma-1" justify="center">
         <v-col v-for="item, key in itemTypes" :key="item" cols="12" md="auto" lg="auto">
           <v-chip :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" color="">
@@ -55,32 +57,45 @@
         </v-col>
       </v-row>
     </v-card>
-    <v-treeview 
-      :items="this.tableDataItems"
-      dense
-      :search="searchString"
-      hoverable
-      open-on-click
-      rounded
-      >
-      <template v-slot:prepend="{ item, open }">
-        <v-icon v-if="item.type == 'Organizational-Unit'">
-          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-        </v-icon>
-        <v-icon v-else-if="item.type == 'Computer'">
-          mdi-monitor
-        </v-icon>
-        <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
-          mdi-account
-        </v-icon>
-        <v-icon v-else-if="item.type == 'Group'">
-          mdi-google-circles-communities
-        </v-icon>
-        <v-icon v-else>
-          mdi-at
-        </v-icon>
-      </template>
-    </v-treeview>
+
+    <!-- Tree View -->
+    <v-card class="ma-1 pa-1" flat>
+      <v-expand-transition>
+          <v-treeview v-if="!refreshLoading"
+            :items="this.tableDataItems"
+            dense
+            :search="searchString"
+            hoverable
+            open-on-click
+            rounded
+            >
+            <template v-slot:prepend="{ item, open }">
+                <v-icon v-if="item.type == 'Organizational-Unit'">
+                  {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+                </v-icon>
+                <v-icon v-else-if="item.type == 'Computer'">
+                  mdi-monitor
+                </v-icon>
+                <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
+                  mdi-account
+                </v-icon>
+                <v-icon v-else-if="item.type == 'Group'">
+                  mdi-google-circles-communities
+                </v-icon>
+                <v-icon v-else>
+                  mdi-at
+                </v-icon>
+            </template>
+            <template v-slot:label="{item}">
+            <v-row align="start">
+              <v-col cols="11" md="auto">
+                {{ item.name }}
+              </v-col>
+            </v-row>
+            </template>
+          </v-treeview>
+      </v-expand-transition>
+    </v-card>
   </v-card>
   </v-container>
 
