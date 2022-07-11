@@ -301,6 +301,7 @@ export default {
       .then(response => {
         this.tableData.headers = []
         this.tableData.items = response.data.ou_list
+        this.refreshLoading = false;
       })
       .catch(error => {
         console.log(error)

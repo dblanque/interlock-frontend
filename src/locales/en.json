@@ -103,15 +103,27 @@
     "user":{
       "single":"User",
       "plural":"Users"
+    },
+    "container":{
+      "single":"Container",
+      "plural":"Containers"
+    },
+    "person":{
+      "single":"Person",
+      "plural":"Persons"
+    },
+    "group":{
+      "single":"Group",
+      "plural":"Groups"
+    },
+    "computer":{
+      "single":"Computer",
+      "plural":"Computers"
+    },
+    "organizational-unit":{
+      "single":"Organizational Unit",
+      "plural":"Organizational Units"
     }
-  },
-  "objectTypes":{
-    "container":"Container",
-    "person":"Person",
-    "group":"Group",
-    "user":"User",
-    "computer":"Computer",
-    "organizational-unit":"Organizational Unit"
   },
   "error":{
       "codes":{

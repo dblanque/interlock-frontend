@@ -9,6 +9,34 @@
   <!-- HOME -->
   <v-container v-if="viewTitle == 'home'">
   <v-card class="pa-2">
+    <v-row align="center" class="px-2 mx-1 py-0 my-0">
+      <v-text-field
+        v-model="searchString"
+        :label="$t('actions.search')"
+        class="mx-2"
+      ></v-text-field>
+      <v-btn 
+        class="mx-2 bg-primary" 
+        color="white" 
+        icon
+        elevation="0"
+        :loading="refreshLoading"
+        @click="refreshAction"
+        >
+        <v-icon>
+          mdi-refresh
+        </v-icon>
+        <template v-slot:loader>
+          <span class="custom-loader">
+            <v-icon light>mdi-cached</v-icon>
+          </span>
+        </template>
+      </v-btn>
+      <v-btn class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
+        <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+        {{ $t('actions.addN') }}
+      </v-btn>
+    </v-row>
     <v-card flat outlined class="ma-2 pa-2">
       <v-col cols="12">
         <h4>{{ $t('words.legend') }}</h4>
@@ -21,7 +49,7 @@
               {{ item.icon }}
             </v-icon>
             <span class="text-overline ml-1">
-              {{ $t('objectTypes.' + key) }}
+              {{ $t('classes.' + key + '.single') }}
             </span>
           </v-chip>
         </v-col>
@@ -30,6 +58,7 @@
     <v-treeview 
       :items="this.tableDataItems"
       dense
+      :search="searchString"
       hoverable
       open-on-click
       rounded

@@ -99,17 +99,29 @@
   },
   "classes":{
     "user":{
-      "single":"Usuario",
-      "plural":"Usuarios"
+      "single":"User",
+      "plural":"Users"
+    },
+    "container":{
+      "single":"Container",
+      "plural":"Containers"
+    },
+    "person":{
+      "single":"Person",
+      "plural":"Persons"
+    },
+    "group":{
+      "single":"Group",
+      "plural":"Groups"
+    },
+    "computer":{
+      "single":"Computer",
+      "plural":"Computers"
+    },
+    "organizational-unit":{
+      "single":"Organizational Unit",
+      "plural":"Organizational Units"
     }
-  },
-  "objectTypes":{
-    "container":"Contenedor",
-    "person":"Persona",
-    "group":"Grupo",
-    "user":"Usuario",
-    "computer":"Computadora",
-    "organizational-unit":"Unidad Organizativa"
   },
   "error": {
     "codes": {
