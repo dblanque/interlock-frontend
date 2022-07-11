@@ -36,7 +36,7 @@ const urls = {
         details: "api/domain/details/"
     },
     ou: {
-        list: "api/ou/fetchall/"
+        list: "api/ou/"
     }
 }
 

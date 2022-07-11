@@ -8,9 +8,51 @@
 
   <!-- HOME -->
   <v-container v-if="viewTitle == 'home'">
-    <v-btn @click="fetchOUs">Test Something</v-btn>
-    <v-treeview :items="ou_list">
+  <v-card class="pa-2">
+    <v-card flat outlined class="ma-2 pa-2">
+      <v-col cols="12">
+        <h4>{{ $t('words.legend') }}</h4>
+      </v-col>
+      <!-- Item Legends -->
+      <v-row class="px-4 ma-1" justify="center">
+        <v-col v-for="item, key in itemTypes" :key="item" cols="12" md="auto" lg="auto">
+          <v-chip :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" color="">
+            <v-icon>
+              {{ item.icon }}
+            </v-icon>
+            <span class="text-overline ml-1">
+              {{ $t('objectTypes.' + key) }}
+            </span>
+          </v-chip>
+        </v-col>
+      </v-row>
+    </v-card>
+    <v-treeview 
+      :items="this.tableDataItems"
+      dense
+      hoverable
+      open-on-click
+      rounded
+      >
+      <template v-slot:prepend="{ item, open }">
+        <v-icon v-if="item.type == 'Organizational-Unit'">
+          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+        </v-icon>
+        <v-icon v-else-if="item.type == 'Computer'">
+          mdi-monitor
+        </v-icon>
+        <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
+          mdi-account
+        </v-icon>
+        <v-icon v-else-if="item.type == 'Group'">
+          mdi-google-circles-communities
+        </v-icon>
+        <v-icon v-else>
+          mdi-at
+        </v-icon>
+      </template>
     </v-treeview>
+  </v-card>
   </v-container>
 
   <!-- USERS -->
@@ -129,7 +171,6 @@
 
 <script>
 import User from '@/include/User'
-import OrganizationalUnit from '@/include/OrganizationalUnit'
 import UserView from '@/components/User/UserView.vue'
 import UserCreate from '@/components/User/UserCreate.vue'
 
@@ -148,14 +189,33 @@ import UserCreate from '@/components/User/UserCreate.vue'
     },
     data () {
       return {
-        ou_list: [],
         searchString: "",
         userRefreshLoading: false,
         error: false,
         editableForm: false,
+        itemTypes: {
+          "container":{
+            "icon":"mdi-at"
+          },
+          "person":{
+            "icon":"mdi-account"
+          },
+          "group":{
+            "icon":"mdi-google-circles-communities"
+          },
+          "user":{
+            "icon":"mdi-account"
+          },
+          "computer":{
+            "icon":"mdi-monitor"
+          },
+          "organizational-unit":{
+            "icon":"mdi-folder"
+          },
+        },
         data: {
           selectedUser: "",
-          userdata: {}
+          userdata: {},
         },
         dialogs: {
           user: false,
@@ -237,15 +297,6 @@ import UserCreate from '@/components/User/UserCreate.vue'
             break;
         }
         this.closeDialog(key)
-      },
-      async fetchOUs(){
-        await new OrganizationalUnit({}).list()
-        .then(response => {
-          console.log(response)
-        })
-        .catch(error => {
-          console.log(error)
-        })
       },
       // Fetch individual User
       async fetchUser(username, isEditable=false){

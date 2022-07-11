@@ -159,6 +159,7 @@ import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue'
 import User from '@/include/User'
 import Domain from '@/include/Domain'
+import OrganizationalUnit from '@/include/OrganizationalUnit'
 
 export default {
   name: 'HomeView',
@@ -190,7 +191,7 @@ export default {
         headers:[],
         items:[]
       },
-      timeoutInS: 3599,
+      timeoutInS: 1800,
       timeoutId: 0,
       navTabs: [
         {
@@ -294,6 +295,17 @@ export default {
     this.loadData(this.selectedTabTitle)
   },
   methods: {
+    // Home (DirTree) View Actions
+    async fetchOUs(){
+      await new OrganizationalUnit({}).list()
+      .then(response => {
+        this.tableData.headers = []
+        this.tableData.items = response.data.ou_list
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     // User Actions
     async listUserItems(){
       await new User({}).list()
@@ -376,6 +388,10 @@ export default {
         case 'users':
           this.refreshLoading = true;
           this.listUserItems();
+          break;
+        case 'home':
+          this.refreshLoading = true;
+          this.fetchOUs();
           break;
         default:
           break;

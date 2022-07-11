@@ -60,6 +60,7 @@
   "words": {
     "today": "Hoy",
     "filter": "Filtro",
+    "legend": "Leyenda",
     "export": "Exportar",
     "maximum": "Máximo",
     "minimum": "Mínimo",
@@ -101,6 +102,14 @@
       "single":"Usuario",
       "plural":"Usuarios"
     }
+  },
+  "objectTypes":{
+    "container":"Contenedor",
+    "person":"Persona",
+    "group":"Grupo",
+    "user":"Usuario",
+    "computer":"Computadora",
+    "organizational-unit":"Unidad Organizativa"
   },
   "error": {
     "codes": {

@@ -10,7 +10,7 @@
     "gpo_short":"GPO",
     "server":"Server",
     "header": {
-      "home":"Home",
+      "home":"Full Directory Tree",
       "users":"Users",
       "groups":"Security Groups",
       "dns":"Domain Name Server",
@@ -68,6 +68,7 @@
   "words":{
       "today": "Today",
       "filter": "Filter",
+      "legend": "Legend",
       "export": "Export",
       "maximum": "Maximum",
       "minimum": "Minimum",
@@ -103,6 +104,14 @@
       "single":"User",
       "plural":"Users"
     }
+  },
+  "objectTypes":{
+    "container":"Container",
+    "person":"Person",
+    "group":"Group",
+    "user":"User",
+    "computer":"Computer",
+    "organizational-unit":"Organizational Unit"
   },
   "error":{
       "codes":{
