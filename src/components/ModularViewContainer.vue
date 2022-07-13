@@ -13,7 +13,7 @@
       <!-- Actions Row -->
       <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-text-field clearable
-          v-model="searchString"
+          v-model="treeviewSearchString"
           :label="$t('actions.search')"
           class="mx-2"
         ></v-text-field>
@@ -47,7 +47,10 @@
         </v-col>
         <v-row class="px-4 ma-1" justify="center">
           <v-col v-for="(item, key) in itemTypes" :key="item.id" cols="12" md="auto" lg="auto">
-            <v-chip :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" color="">
+            <v-chip 
+            @click="setFilter(key)"
+            :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" 
+            :color="item.filtered == true ? 'primary' : ''">
               <v-icon>
                 {{ item.icon }}
               </v-icon>
@@ -66,7 +69,7 @@
             <v-treeview v-if="!refreshLoading"
               :items="this.tableDataItems"
               dense
-              :search="searchString"
+              :search="treeviewSearchString"
               hoverable
               rounded
               >
@@ -187,14 +190,14 @@
       :items="this.tableDataItems"
       :custom-sort="sortNullLast"
       :loading="refreshLoading"
-      :search="searchString"
+      :search="dataTableSearchString"
       sort-by="sn"
       class="py-3 px-2">
       <!-- Table Header -->
       <template v-slot:top>
         <v-row align="center" class="px-2 mx-1 py-0 my-0">
           <v-text-field
-            v-model="searchString"
+            v-model="dataTableSearchString"
             clearable
             :label="$t('actions.search')"
             class="mx-2"
@@ -295,27 +298,34 @@ import UserCreate from '@/components/User/UserCreate.vue'
     },
     data () {
       return {
-        searchString: "",
+        dataTableSearchString: "",
+        treeviewSearchString: "",
         userRefreshLoading: false,
         error: false,
         editableForm: false,
         itemTypes: {
           "container":{
+            "filtered": false,
             "icon":"mdi-at"
           },
           "person":{
+            "filtered": false,
             "icon":"mdi-account"
           },
           "group":{
+            "filtered": false,
             "icon":"mdi-google-circles-communities"
           },
           "user":{
+            "filtered": false,
             "icon":"mdi-account"
           },
           "computer":{
+            "filtered": false,
             "icon":"mdi-monitor"
           },
           "organizational-unit":{
+            "filtered":false,
             "icon":"mdi-folder"
           },
         },
@@ -383,6 +393,8 @@ import UserCreate from '@/components/User/UserCreate.vue'
         deep: true
       }
     },
+    computed: {
+    },
     methods: {
       setViewToEdit(value){
         this.editableForm = value;
@@ -423,10 +435,19 @@ import UserCreate from '@/components/User/UserCreate.vue'
           this.error = true;
         })
       },
+      setFilter(key){
+        // this.itemTypes[key]['filtered'] = !this.itemTypes[key]['filtered']
+        console.log('Feature not enabled, filter for ' + key.toUpperCase() + ' objects should toggle')
+      },
       goToUser(username){
         this.$emit('goToUser', username)
       },
       refreshAction() {
+        // Reset all filters if refreshing dirtree view
+        if (this.viewTitle == 'home')
+          Object.keys(this.itemTypes).forEach(key => {
+            this.itemTypes[key]['filtered'] = false
+          });
         this.$emit('refresh')
       },
       sortNullLast(items, index, isDesc) {
