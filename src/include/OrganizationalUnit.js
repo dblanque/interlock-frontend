@@ -20,6 +20,10 @@ class OrganizationalUnit extends ApiModel{
     list(){
         return interlock_backend.call('ou/list')
     }
+
+    dirtree(){
+        return interlock_backend.call('ou/dirtree')
+    }
 }
 
 export default OrganizationalUnit

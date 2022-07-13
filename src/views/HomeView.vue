@@ -177,6 +177,7 @@ export default {
       last_name: "",
       domain: "",
       realm: "",
+      basedn: "",
       snackbarMessage: "",
       snackbarIcon: "",
       snackbarColor: "",
@@ -255,11 +256,10 @@ export default {
         this.first_name = localStorage.getItem('first_name')
         this.last_name = localStorage.getItem('last_name')
 
-        new Domain({}).getDetails().then(response => {
-          this.domain = response.data.details.name
-          this.realm = response.data.details.realm
-          localStorage.setItem('domain',this.domain)
-          localStorage.setItem('realm',this.realm)
+        new Domain({}).getDetails().then(() => {
+          this.domain = localStorage.getItem('domain')
+          this.realm = localStorage.getItem('realm')
+          this.basedn = localStorage.getItem('basedn')
         })
       }
       // If response code is an HTTP error code
@@ -299,7 +299,7 @@ export default {
   methods: {
     // Home (DirTree) View Actions
     async fetchOUs(){
-      await new OrganizationalUnit({}).list()
+      await new OrganizationalUnit({}).dirtree()
       .then(response => {
         this.tableData.headers = []
         this.tableData.items = response.data.ou_list
@@ -352,8 +352,10 @@ export default {
     async goToUser(username){
       // Index for Users Tab is 1
       await this.updateSelectedTab(1)
-      // Index for ref is same as Tab Index, wow!
-      this.$refs.ModularViewContainerRef[1].fetchUser(username)
+      // Had to get always the last element in array 
+      // (Why is the ref being fetched as an array, wtf JS?)
+      // TODO - Fix This
+      this.$refs.ModularViewContainerRef[this.$refs.ModularViewContainerRef.length - 1].fetchUser(username)
     },
     createSnackbar(color, string){
       if (!color) {

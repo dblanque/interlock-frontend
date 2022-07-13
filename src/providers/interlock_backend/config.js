@@ -36,7 +36,8 @@ const urls = {
         details: "api/domain/details/"
     },
     ou: {
-        list: "api/ou/"
+        list: "api/ou/",
+        dirtree: "api/ou/dirtree/"
     }
 }
 
