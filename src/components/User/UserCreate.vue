@@ -43,6 +43,56 @@
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
+                            <v-row class="ma-0 pa-0" justify="center">
+                                <v-col cols="12" lg="8">
+                                        <v-expansion-panels 
+                                        v-model="userPathExpansionPanel"
+                                        flat 
+                                        hover 
+                                        style="border: 1px solid var(--clr-primary);">
+                                            <v-expansion-panel>
+                                                <v-expansion-panel-header>
+                                                    <span>
+                                                        <span>
+                                                            {{ $t('section.users.createView.userCreatedIn') + ': ' }}
+                                                        </span>
+                                                        <span class="font-weight-bold">
+                                                            {{ this.userDestination }}
+                                                        </span>
+                                                    </span>
+                                                </v-expansion-panel-header>
+        
+                                                <v-expansion-panel-content>
+                                                    <v-card flat outlined style="max-height: 300px; overflow: auto !important;">
+                                                        <v-treeview
+                                                        :items="this.ouList"
+                                                        dense
+                                                        hoverable
+                                                        activatable
+                                                        @update:active="updateUserDestination"
+                                                        >
+                                                        <template v-slot:prepend="{ item, open }">
+                                                            <v-icon v-if="item.type == 'Organizational-Unit'">
+                                                                {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+                                                            </v-icon>
+                                                            <v-icon v-else>
+                                                                mdi-at
+                                                            </v-icon>
+                                                        </template>
+                                                        <template v-slot:label="{item}">
+                                                        <v-row align="start">
+                                                            <v-col cols="11" md="auto">
+                                                            {{ item.name }}
+                                                            </v-col>
+                                                        </v-row>
+                                                        </template>
+                                                        </v-treeview>
+                                                    </v-card>
+                                                </v-expansion-panel-content>
+                                            </v-expansion-panel>
+                                        </v-expansion-panels>
+                                </v-col>
+                            </v-row>
                             <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
                                 <v-col cols="12" lg="4">
                                     <v-text-field
@@ -197,18 +247,31 @@
                     <!-- Check if user exists - loader -->
                     <v-stepper-content step="3">
                         <v-row class="pa-12 ma-12" justify="center" align-content="center" align="center">
-                            <v-fade-transition>
-                                <v-progress-circular value="100"
-                                :indeterminate="loading && this.error === false" 
-                                size="100" 
-                                width="10" 
-                                :color="this.error === false ? 'primary':'red'"/>
-                            </v-fade-transition>
+                            <v-col cols="12">
+                                <v-fab-transition>
+                                    <v-progress-circular value="100"
+                                    :color="(this.error === false) ? (loading ? 'primary' : 'green') : 'red'"
+                                    :indeterminate="loading && this.error === false" 
+                                    size="100" 
+                                    width="10">
+                                        <v-fab-transition>
+                                            <div v-show="loading == false">
+                                                <v-icon v-if="error == true" size="82" color="red">mdi-close-circle</v-icon>
+                                                <v-icon v-else size="82" color="green">mdi-check-circle</v-icon>
+                                            </div>
+                                        </v-fab-transition>
+                                    </v-progress-circular>
+                                </v-fab-transition>
+                            </v-col>
+                            
+                            <v-col cols="12">
+                                <v-slide-y-transition>
+                                    <v-col v-if="!this.loading && this.loading == false">
+                                        {{ this.error ? '' : $t('section.users.createView.step3_success') }}
+                                    </v-col>
+                                </v-slide-y-transition>
+                            </v-col>
                         </v-row>
-                    </v-stepper-content>
-                    <!-- End Screen -->
-                    <v-stepper-content step="4">
-                        if user exists ok
                     </v-stepper-content>
                 </v-stepper-items>
             </v-stepper>
@@ -232,7 +295,7 @@
                         </v-chip>
                     </v-slide-x-reverse-transition>
                     <v-slide-x-reverse-transition>
-                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && createStage < 4"
+                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && (createStage < 4 && this.error == true)"
                     @keydown.enter="prevStep"
                     class="text-normal ma-0 pa-0 pa-2 pr-4 ma-1 bg-white bg-lig-25" 
                     rounded>
@@ -254,7 +317,7 @@
                         </v-btn>
                     </v-slide-x-reverse-transition>
                     <v-slide-x-reverse-transition>
-                        <v-btn elevation="0" @click="closeDialog" v-if="this.createStage > 3"
+                        <v-btn elevation="0" @click="closeDialog" v-if="this.createStage > 2 && this.error === false"
                         @keydown.enter="closeDialog"
                         class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                         rounded>
@@ -272,6 +335,7 @@
 
 <script>
 import User from '@/include/User'
+import OrganizationalUnit from '@/include/OrganizationalUnit'
 import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
@@ -281,13 +345,17 @@ export default {
         passwordHidden: true,
         domain: "",
         realm: "",
+        basedn: "",
         success: false,
         loading: true,
         error: false,
         valid: false,
         errorMsg: "",
         showSnackbar: false,
+        userPathExpansionPanel: false,
+        userDestination: '',
         userToCreate: {},
+        ouList: [],
         createStage: 1,
         addObjectClass: "",
         objectClasses: [
@@ -456,6 +524,7 @@ export default {
         getDomainDetails(){
             this.domain = localStorage.getItem('domain')
             this.realm = localStorage.getItem('realm')
+            this.basedn = localStorage.getItem('basedn')
         },
         prevStep(){
             switch (this.createStage) {
@@ -524,8 +593,58 @@ export default {
                     break;
             }
         },
+        updateUserDestination(itemID){
+            if (!itemID || itemID.length == 0){
+                this.userDestination = "CN=Users," + this.basedn
+                console.log('this.userDestination was reset to ' + this.userDestination)
+                return this.userDestination
+            }
+            var itemToUpdate = this.ouList.find(ou => ou.id == itemID)
+            var searchResult
+            if (itemToUpdate == undefined){
+                this.ouList.forEach(ou => {
+                    if (!searchResult) {
+                        searchResult = this.objectRecursiveSearch(ou, parseInt(itemID))
+                        this.userDestination = searchResult
+                    }
+                })
+            } else if (itemToUpdate.id == itemID)
+                this.userDestination = itemToUpdate.dn
+            
+            this.userPathExpansionPanel = false
+        },
+        objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='dn', childrenKey='children', searchResult=undefined){
+
+            // If ID matches with current object
+            if (idToSearch == targetEntity.id){
+                if (targetEntity[keyToSearch] != undefined) {
+                    console.log("ID Matches!")
+                    searchResult = targetEntity[keyToSearch]
+                    return searchResult
+                }
+                else {
+                    console.log('Error: targetEntity key(' + keyToSearch + ') is undefined or its value is missing')
+                    return searchResult
+                }
+            }
+
+            // If ID hasn't matched with this object,
+            // then search in it's children if it has any.
+            if (childrenKey in targetEntity && targetEntity[childrenKey].length != 0)
+                // For each child do a recursive search calling this function
+                targetEntity[childrenKey].forEach(child => {
+                    if (!searchResult) {
+                        searchResult = this.objectRecursiveSearch(child, idToSearch, keyToSearch, childrenKey, searchResult)
+                        if (searchResult && searchResult != false && searchResult != undefined){
+                            return searchResult
+                        }
+                    }
+                })
+            return searchResult
+        },
         async newUser(){
             this.passwordHidden = true
+            this.userPathExpansionPanel = false
             this.userToCreate = new User({})
             this.createStage = 1
             this.error = false
@@ -534,6 +653,17 @@ export default {
             for (const [key] of Object.entries(this.permissions))
                 this.permissions[key].value = false
             this.getDomainDetails()
+            this.fetchOUs()
+            this.userDestination = "CN=Users," + this.basedn
+        },
+        async fetchOUs(){
+            await new OrganizationalUnit({}).list()
+            .then(response => {
+                this.ouList = response.data.ou_list
+            })
+            .catch(error => {
+                console.log(error)
+            })
         },
         onClickPermission(key){
             this.permissions[key].value = !this.permissions[key].value
@@ -545,6 +675,7 @@ export default {
             this.error = false
             this.errorMsg = ""
             this.createStage += 1
+            this.userToCreate.path = this.userDestination
             await this.userToCreate.insert(this.userToCreate)
             .then(response => {
                 if (response.status == 200) {
@@ -574,9 +705,6 @@ export default {
                         break;
                 }
             })
-            if (this.error != true && !this.error) {
-                setTimeout(() => {  this.createStage += 1 }, 500);
-            }
             this.$emit('save', this.viewKey, this.userToCreate);
         }
     }
