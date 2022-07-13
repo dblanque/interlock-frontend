@@ -618,7 +618,6 @@ export default {
             // If ID matches with current object
             if (idToSearch == targetEntity.id){
                 if (targetEntity[keyToSearch] != undefined) {
-                    console.log("ID Matches!")
                     searchResult = targetEntity[keyToSearch]
                     return searchResult
                 }
