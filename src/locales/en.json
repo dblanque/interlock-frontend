@@ -68,6 +68,7 @@
     "addObjectClass": "Add Object Class"
   },
   "words":{
+      "error":"Error",
       "today": "Today",
       "filter": "Filter",
       "legend": "Legend",
@@ -185,9 +186,11 @@
         "optionalsHeader":"Optional Details",
         "validationError":"Validation Error",
         "domainRealmError": "Domain Settings Error, please re-open this component",
+        "userCreatedIn":"User will be created in",
         "step1":"User Details",
         "step2":"Password and Permissions",
-        "step3":"User Created"
+        "step3":"User Created",
+        "step3_success":"User Created Successfully"
       },
       "basicDetails":"Basic Details",
       "location":"Location",

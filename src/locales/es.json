@@ -60,6 +60,7 @@
     "addObjectClass": "Añadir Clase de Objeto"
   },
   "words": {
+    "error":"Error",
     "today": "Hoy",
     "filter": "Filtro",
     "legend": "Leyenda",
@@ -183,9 +184,11 @@
         "optionalsHeader":"Detalles Opcionales",
         "validationError":"Error de Validación",
         "domainRealmError": "Error de parámetros de dominio, por favor re-abra este componente",
+        "userCreatedIn":"El usuario será creado en",
         "step1":"Detalles del Usuario",
         "step2":"Contraseña y Permisos",
-        "step3":"Usuario Creado"
+        "step3":"Usuario Creado",
+        "step3_success":"Usuario Creado Exitosamente"
       },
       "basicDetails":"Detalles Básicos",
       "location":"Ubicación",
