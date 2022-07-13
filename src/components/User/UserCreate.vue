@@ -251,7 +251,7 @@
                                 <v-fab-transition>
                                     <v-progress-circular value="100"
                                     :color="(this.error === false) ? (loading ? 'primary' : 'green') : 'red'"
-                                    :indeterminate="loading && this.error === false" 
+                                    :indeterminate="loading" 
                                     size="100" 
                                     width="10">
                                         <v-fab-transition>
@@ -294,6 +294,18 @@
                             {{ this.errorMsg }}
                         </v-chip>
                     </v-slide-x-reverse-transition>
+
+                    <v-slide-x-reverse-transition>
+                        <v-btn elevation="0" @click="newUser" v-if="this.createStage < 2"
+                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                        rounded>
+                            <v-icon class="ma-0 mr-1" color="primary">
+                                mdi-cached
+                            </v-icon>
+                            {{ $t("actions.reset" )}}
+                        </v-btn>
+                    </v-slide-x-reverse-transition>
+
                     <v-slide-x-reverse-transition>
                     <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && (createStage < 4 && this.error == true)"
                     @keydown.enter="prevStep"
@@ -680,18 +692,27 @@ export default {
                 if (response.status == 200) {
                     this.error = false;
                     this.errorMsg = "";
-                    this.loading = false;
+                    // Set Timeout to do circle animation
+                    setTimeout(() => {
+                        this.loading = false;
+                    }, 450)
                     this.success = true;
                 } else {
                     this.error = true;
                     this.errorMsg = this.$t("error.unknown_short")
-                    this.loading = false;
+                    // Set Timeout to do circle animation
+                    setTimeout(() => {
+                        this.loading = false;
+                    }, 450)
                     this.success = false;
                 }
             })
             .catch(error => {
                 this.error = true;
-                this.loading = false;
+                // Set Timeout to do circle animation
+                setTimeout(() => {
+                    this.loading = false;
+                }, 450)
                 switch (error.response.status) {
                     case 405:
                         this.errorMsg = this.$t("error.codes.badRequest")
