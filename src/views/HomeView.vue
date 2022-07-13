@@ -85,6 +85,7 @@
          :key="tab.index">
          <ModularViewContainer :viewTitle="tab.title" :viewIndex="tab.index" 
          @refresh="loadData(selectedTabTitle)"
+         @goToUser="goToUser"
          :refreshLoading="refreshLoading"
          :tableDataHeaders="tableData.headers"
          :tableDataItems="tableData.items"
@@ -347,6 +348,11 @@ export default {
         setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
       })
     },
+    goToUser(dn){
+      console.log(dn)
+      this.updateSelectedTab(1)
+      this.$refs.ModularViewContainer.fetchUser(dn)
+    },
     createSnackbar(color, string){
       if (!color) {
         color = "primary"
@@ -402,7 +408,7 @@ export default {
     openLogoutDialog(){
       this.showLogoutDialog = true;
     },
-    async logoutAction(){
+    async logoutAction() {
       await new User({}).logout()
       localStorage.setItem('logoutMessage', true)
       this.$router.push('/login')
@@ -422,6 +428,7 @@ export default {
     updateSelectedTab(index) {
       if (this.selectedTab != index)
         this.selectedTab = index
+        this.active_tab = index
         this.selectedTabTitle = this.navTabs[this.selectedTab].title
         this.loadData(this.selectedTabTitle)
         var routeToPush = ''

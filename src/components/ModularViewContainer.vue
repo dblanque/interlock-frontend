@@ -1,5 +1,5 @@
 <template>
-<v-container class="my-4">
+<v-container ref="ModularViewContainer" class="my-4">
   <v-row class="ma-2" justify="center" align="center">
     <v-divider class="mx-6"/>
     <h1>{{ $t("category.header." + viewTitle) }}</h1>
@@ -8,95 +8,155 @@
 
   <!-- HOME -->
   <v-container v-if="viewTitle == 'home'">
-  <v-card class="pa-2">
-    <!-- Actions Row -->
-    <v-row align="center" class="px-2 mx-1 py-0 my-0">
-      <v-text-field
-        v-model="searchString"
-        :label="$t('actions.search')"
-        class="mx-2"
-      ></v-text-field>
-      <v-btn 
-        class="mx-2 bg-primary" 
-        color="white" 
-        icon
-        elevation="0"
-        :loading="refreshLoading"
-        @click="refreshAction"
-        >
-        <v-icon>
-          mdi-refresh
-        </v-icon>
-        <template v-slot:loader>
-          <span class="custom-loader">
-            <v-icon light>mdi-cached</v-icon>
-          </span>
-        </template>
-      </v-btn>
-      <v-btn disabled class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
-        <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-        {{ $t('actions.addN') }}
-      </v-btn>
-    </v-row>
-
-    <!-- Item Legends -->
-    <v-card flat outlined class="ma-1 pa-2">
-      <v-col cols="12">
-        <h4>{{ $t('words.legend') }}</h4>
-      </v-col>
-      <v-row class="px-4 ma-1" justify="center">
-        <v-col v-for="item, key in itemTypes" :key="item" cols="12" md="auto" lg="auto">
-          <v-chip :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" color="">
-            <v-icon>
-              {{ item.icon }}
-            </v-icon>
-            <span class="text-overline ml-1">
-              {{ $t('classes.' + key + '.single') }}
+  <v-row justify="center" class="mb-2">
+    <v-card class="pa-2" max-width="1200px">
+      <!-- Actions Row -->
+      <v-row align="center" class="px-2 mx-1 py-0 my-0">
+        <v-text-field
+          v-model="searchString"
+          :label="$t('actions.search')"
+          class="mx-2"
+        ></v-text-field>
+        <v-btn 
+          class="mx-2 bg-primary" 
+          color="white" 
+          icon
+          elevation="0"
+          :loading="refreshLoading"
+          @click="refreshAction"
+          >
+          <v-icon>
+            mdi-refresh
+          </v-icon>
+          <template v-slot:loader>
+            <span class="custom-loader">
+              <v-icon light>mdi-cached</v-icon>
             </span>
-          </v-chip>
-        </v-col>
+          </template>
+        </v-btn>
+        <v-btn disabled class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
+          <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+          {{ $t('actions.addN') }}
+        </v-btn>
       </v-row>
-    </v-card>
-
-    <!-- Tree View -->
-    <v-card class="ma-1 pa-1" flat>
+  
+      <!-- Item Legends -->
+      <v-card flat outlined class="ma-1 pa-2">
+        <v-col cols="12">
+          <h4>{{ $t('words.legend') }}</h4>
+        </v-col>
+        <v-row class="px-4 ma-1" justify="center">
+          <v-col v-for="(item, key) in itemTypes" :key="item.id" cols="12" md="auto" lg="auto">
+            <v-chip :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" color="">
+              <v-icon>
+                {{ item.icon }}
+              </v-icon>
+              <span class="text-overline ml-1">
+                {{ $t('classes.' + key + '.single') }}
+              </span>
+            </v-chip>
+          </v-col>
+        </v-row>
+        <v-progress-linear :indeterminate="refreshLoading" size="100" width="7" color="primary"/>
+      </v-card>
+  
+      <!-- Tree View -->
+      <v-card class="ma-1 pa-1" flat outlined>
       <v-expand-transition>
-          <v-treeview v-if="!refreshLoading"
-            :items="this.tableDataItems"
-            dense
-            :search="searchString"
-            hoverable
-            open-on-click
-            rounded
-            >
-            <template v-slot:prepend="{ item, open }">
-                <v-icon v-if="item.type == 'Organizational-Unit'">
-                  {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                </v-icon>
-                <v-icon v-else-if="item.type == 'Computer'">
-                  mdi-monitor
-                </v-icon>
-                <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
-                  mdi-account
-                </v-icon>
-                <v-icon v-else-if="item.type == 'Group'">
-                  mdi-google-circles-communities
-                </v-icon>
-                <v-icon v-else>
-                  mdi-at
-                </v-icon>
-            </template>
-            <template v-slot:label="{item}">
-            <v-row align="start">
-              <v-col cols="11" md="auto">
-                {{ item.name }}
-              </v-col>
-            </v-row>
-            </template>
-          </v-treeview>
+            <v-treeview v-if="!refreshLoading"
+              :items="this.tableDataItems"
+              dense
+              :search="searchString"
+              hoverable
+              rounded
+              >
+              <template v-slot:prepend="{ item, open }">
+                  <v-icon v-if="item.type == 'Organizational-Unit'">
+                    {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+                  </v-icon>
+                  <v-icon v-else-if="item.type == 'Computer'">
+                    mdi-monitor
+                  </v-icon>
+                  <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
+                    mdi-account
+                  </v-icon>
+                  <v-icon v-else-if="item.type == 'Group'">
+                    mdi-google-circles-communities
+                  </v-icon>
+                  <v-icon v-else>
+                    mdi-at
+                  </v-icon>
+              </template>
+              <template v-slot:label="{item}">
+              <v-row align="start">
+                <v-col cols="11" md="auto">
+                  {{ item.name }}
+                </v-col>
+              </v-row>
+              </template>
+              <template v-slot:append="{item}">
+                  <!-- User Buttons -->
+                  <span v-if="item.type == 'User' || item.type=='Person'">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn @click="goToUser(item.dn)"
+                          color="primary"
+                          icon
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon>
+                            mdi-arrow-right-bold
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t('actions.goTo') + ' ' + $t('classes.user.single') }}</span>
+                    </v-tooltip>
+                  </span>
+  
+                  <!-- Group Buttons -->
+                  <span>
+                    <v-tooltip bottom v-if="item.type == 'Group'">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn disabled
+                          color="primary"
+                          icon
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon>
+                            mdi-arrow-right-bold
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t('actions.goTo') + ' ' + $t('classes.group.single') }}</span>
+                    </v-tooltip>
+                  </span>
+
+                  <!-- General Buttons -->
+                  <span v-if="item.builtin != true">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn disabled
+                          color="primary"
+                          icon
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon>
+                            mdi-folder-move
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ $t('actions.move') }}</span>
+                    </v-tooltip>
+                  </span>
+              </template>
+            </v-treeview>
       </v-expand-transition>
+      </v-card>
     </v-card>
-  </v-card>
+  </v-row>
   </v-container>
 
   <!-- USERS -->
@@ -358,6 +418,9 @@ import UserCreate from '@/components/User/UserCreate.vue'
           this.editableForm = true
         setTimeout(() => { this.userRefreshLoading = false }, 300);
         this.$refs.UserView.syncUser()
+      },
+      goToUser(dn){
+        this.$emit('goToUser', dn)
       },
       refreshAction() {
         this.$emit('refresh')
