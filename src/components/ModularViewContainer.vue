@@ -1,5 +1,5 @@
 <template>
-<v-container ref="ModularViewContainer" class="my-4">
+<v-container class="my-4">
   <v-row class="ma-2" justify="center" align="center">
     <v-divider class="mx-6"/>
     <h1>{{ $t("category.header." + viewTitle) }}</h1>
@@ -12,7 +12,7 @@
     <v-card class="pa-2" max-width="1200px">
       <!-- Actions Row -->
       <v-row align="center" class="px-2 mx-1 py-0 my-0">
-        <v-text-field
+        <v-text-field clearable
           v-model="searchString"
           :label="$t('actions.search')"
           class="mx-2"
@@ -96,12 +96,13 @@
               </template>
               <template v-slot:append="{item}">
                   <!-- User Buttons -->
-                  <span v-if="item.type == 'User' || item.type=='Person'">
+                  <span v-if="(item.type == 'User' || item.type=='Person')">
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn @click="goToUser(item.dn)"
+                        <v-btn @click="goToUser(item.username)"
                           color="primary"
                           icon
+                          :disabled="item.username == 'Guest' || item.username == 'Administrator'"
                           v-bind="attrs"
                           v-on="on"
                         >
@@ -194,6 +195,7 @@
         <v-row align="center" class="px-2 mx-1 py-0 my-0">
           <v-text-field
             v-model="searchString"
+            clearable
             :label="$t('actions.search')"
             class="mx-2"
           ></v-text-field>
@@ -408,19 +410,21 @@ import UserCreate from '@/components/User/UserCreate.vue'
         this.data.selectedUser = username
         this.data.userdata = await new User({})
         await this.data.userdata.fetch(username)
+        .then(() => {
+          this.openDialog('user')
+          if (isEditable == true)
+            this.editableForm = true
+          setTimeout(() => { this.userRefreshLoading = false }, 300);
+          this.$refs.UserView.syncUser()
+        })
         .catch(error => {
           console.log(error)
           this.userRefreshLoading = false;
           this.error = true;
         })
-        this.openDialog('user')
-        if (isEditable == true)
-          this.editableForm = true
-        setTimeout(() => { this.userRefreshLoading = false }, 300);
-        this.$refs.UserView.syncUser()
       },
-      goToUser(dn){
-        this.$emit('goToUser', dn)
+      goToUser(username){
+        this.$emit('goToUser', username)
       },
       refreshAction() {
         this.$emit('refresh')

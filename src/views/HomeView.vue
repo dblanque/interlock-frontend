@@ -83,7 +83,8 @@
       <v-tab-item
          v-for="tab in navTabs"
          :key="tab.index">
-         <ModularViewContainer :viewTitle="tab.title" :viewIndex="tab.index" 
+         <ModularViewContainer :viewTitle="tab.title" :viewIndex="tab.index"
+          ref="ModularViewContainerRef"
          @refresh="loadData(selectedTabTitle)"
          @goToUser="goToUser"
          :refreshLoading="refreshLoading"
@@ -348,10 +349,11 @@ export default {
         setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
       })
     },
-    goToUser(dn){
-      console.log(dn)
-      this.updateSelectedTab(1)
-      this.$refs.ModularViewContainer.fetchUser(dn)
+    async goToUser(username){
+      // Index for Users Tab is 1
+      await this.updateSelectedTab(1)
+      // Index for ref is same as Tab Index, wow!
+      this.$refs.ModularViewContainerRef[1].fetchUser(username)
     },
     createSnackbar(color, string){
       if (!color) {
