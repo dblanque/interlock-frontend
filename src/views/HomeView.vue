@@ -350,11 +350,10 @@ export default {
       })
     },
     async goToUser(username){
-      // Index for Users Tab is 1
-      await this.updateSelectedTab(1)
+      // Don't remove this await or the first time the ModularViewContainer
+      // mounts it'll break
+      await this.updateSelectedTab(1) // Index for Users Tab is 1
       // Had to get always the last element in array 
-      // (Why is the ref being fetched as an array, wtf JS?)
-      // TODO - Fix This
       this.$refs.ModularViewContainerRef[this.$refs.ModularViewContainerRef.length - 1].fetchUser(username)
     },
     createSnackbar(color, string){
@@ -429,12 +428,12 @@ export default {
       setTimeout(() => {  this.showNavTabs = true; }, 250);
       this.reloadDataTableHeaders()
     },
-    updateSelectedTab(index) {
+    async updateSelectedTab(index) {
       if (this.selectedTab != index)
         this.selectedTab = index
         this.active_tab = index
         this.selectedTabTitle = this.navTabs[this.selectedTab].title
-        this.loadData(this.selectedTabTitle)
+        await this.loadData(this.selectedTabTitle)
         var routeToPush = ''
         this.navTabs.forEach(item => {
           if (item.index == index) {
