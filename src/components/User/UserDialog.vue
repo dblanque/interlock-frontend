@@ -511,8 +511,8 @@
                     {{ $t("actions.saveClose") }}
                 </v-btn>
                 <!-- Refresh User Button -->
-                <v-progress-circular class="pa-0 ma-0" color="accent" :value="loading" size="42">
-                    <v-btn 
+                <v-progress-circular class="pa-0 ma-0" :color="loadingColor" :value="loading" size="38" width="7">
+                    <v-btn small
                     class="ma-1 bg-primary" 
                     color="white" 
                     icon
@@ -545,6 +545,7 @@ export default {
       return {
         panel: [],
         loading: 0,
+        loadingColor: 'accent',
         tab: 0,
         domain: "",
         realm: "",
@@ -846,7 +847,7 @@ export default {
             this.$emit('editToggle', false);
             this.refreshUser();
         },
-        closeDialog(){
+        closeDialog() {
             this.$emit('closeDialog', this.viewKey);
         },
         async saveUser(closeDialog=false){
@@ -870,11 +871,13 @@ export default {
                 else
                     this.refreshUser();
                 this.loading = 100
+                this.loadingColor = 'primary'
             })
             .catch(error => {
                 console.log(error)
                 this.userRefreshLoading = false;
-                this.loading = 0
+                this.loading = 100
+                this.loadingColor = 'error'
                 this.error = true;
             })
         },
@@ -892,6 +895,7 @@ export default {
                     this.usercopy.lastLogon = this.$t('section.users.userDialog.noLastLogon')
                 this.setPermissions()
                 this.loading = 100
+                this.loadingColor = 'primary'
             })
         },
         // Tells the parent view to refresh/fetch the user again
@@ -899,6 +903,7 @@ export default {
             this.loading = 0
             this.$emit('refreshUser');
             this.loading = 100
+            this.loadingColor = 'primary'
         }
     }
 }

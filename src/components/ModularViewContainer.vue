@@ -182,6 +182,11 @@
       @refreshUser="refreshUser(data.selectedUser)"
       />
   </v-dialog>
+
+  <v-dialog eager max-width="800px" v-model="dialogs['userConfirm']" v-if="viewTitle == 'users'">
+    <ConfirmDialog/>
+  </v-dialog>
+
   <v-dialog eager max-width="1200px" v-model="dialogs['userCreate']" v-if="viewTitle == 'users'">
     <UserCreate
       :viewKey="'userCreate'"
@@ -334,12 +339,14 @@
 import User from '@/include/User'
 import UserCreate from '@/components/User/UserCreate.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
+import ConfirmDialog from '@/components/ConfirmDialog.vue'
 
   export default {
     name: 'ModularViewContainer',
     components:{
     UserCreate,
-    UserDialog
+    UserDialog,
+    ConfirmDialog
 },
     props: {
       viewTitle: String,
@@ -388,6 +395,7 @@ import UserDialog from '@/components/User/UserDialog.vue'
         },
         dialogsOld:{
           userDialog: false,
+          userConfirm: false,
           userCreate: false,
           group: false,
           dns: false,
@@ -395,6 +403,7 @@ import UserDialog from '@/components/User/UserDialog.vue'
         },
         dialogs: {
           userDialog: false,
+          userConfirm: false,
           userCreate: false,
           group: false,
           dns: false,
