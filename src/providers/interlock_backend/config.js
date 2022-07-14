@@ -30,7 +30,11 @@ const urls = {
         base: 'api/users/',
         insert: 'api/users/insert/',
         list: 'api/users/',
-        fetch: 'api/users/fetch/'
+        fetch: 'api/users/fetch/',
+        enable: 'api/users/enable/',
+        disable: 'api/users/disable/',
+        lock: 'api/users/lock/',
+        unlock: 'api/users/unlock/'
     },
     domain: {
         details: "api/domain/details/"

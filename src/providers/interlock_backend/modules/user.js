@@ -10,6 +10,47 @@ const actions = {
             })
         })
     },
+    
+    enable: (username)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.enable, { username: username }).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
+    disable: (username)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.disable, { username: username }).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
+    lock: (username)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.lock, { username: username }).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
+    unlock: (username)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.unlock, { username: username }).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
     getCurrentUserData: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.user.base + 'me', data)
