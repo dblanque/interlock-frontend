@@ -49,8 +49,9 @@
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
+                                        id="givenName"
                                         :label="$t('section.users.attributes.givenName')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.givenName"
                                         :rules="[this.fieldRules(usercopy.givenName, 'ge_name')]"
                                         ></v-text-field>
@@ -58,8 +59,9 @@
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
+                                        id="sn"
                                         :label="$t('section.users.attributes.sn')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.sn"
                                         :rules="[this.fieldRules(usercopy.sn, 'ge_name')]"
                                         ></v-text-field>
@@ -67,8 +69,9 @@
                                     <v-col cols="12" lg="6" :class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
                                         <v-text-field
                                         dense
+                                        id="mail"
                                         :label="$t('section.users.attributes.mail')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.mail"
                                         :rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"
                                         ></v-text-field>
@@ -98,8 +101,9 @@
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
+                                        id="telephoneNumber"
                                         :label="$t('section.users.attributes.telephoneNumber')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.telephoneNumber"
                                         :rules="[this.fieldRules(usercopy.telephoneNumber, 'ge_phone')]"
                                         ></v-text-field>
@@ -107,8 +111,9 @@
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
+                                        id="wWWHomePage"
                                         :label="$t('section.users.attributes.wWWHomePage')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.wWWHomePage"
                                         :rules="[this.fieldRules(usercopy.wWWHomePage, 'ge_website')]"
                                         ></v-text-field>
@@ -127,8 +132,9 @@
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
+                                        id="streetAddress"
                                         :label="$t('section.users.attributes.streetAddress')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.streetAddress"
                                         :rules="[this.fieldRules(usercopy.streetAddress, 'ge_address_street')]"
                                         ></v-text-field>
@@ -136,8 +142,9 @@
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
+                                        id="postalCode"
                                         :label="$t('section.users.attributes.postalCode')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.postalCode"
                                         :rules="[this.fieldRules(usercopy.postalCode, 'ge_address_postal_code')]"
                                         ></v-text-field>
@@ -146,8 +153,9 @@
                                     :class="this.$vuetify.breakpoint.smAndUp && user.countryCode != undefined && user.countryCode != '' && user.countryCode != 0 ? 'mt-3' : ''">
                                         <v-text-field
                                         dense
+                                        id="l"
                                         :label="$t('section.users.attributes.l')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.l"
                                         :rules="[this.fieldRules(usercopy.l, 'ge_address_city')]"
                                         ></v-text-field>
@@ -175,8 +183,9 @@
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
+                                        id="st"
                                         :label="$t('section.users.attributes.st')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.st"
                                         :rules="[this.fieldRules(usercopy.st, 'ge_state')]"
                                         ></v-text-field>
@@ -184,8 +193,9 @@
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
+                                        id="co"
                                         :label="$t('section.users.attributes.co')"
-                                        :readonly="this.editFlag != true"
+                                        :readonly="editFlag != true"
                                         v-model="usercopy.co"
                                         :rules="[this.fieldRules(usercopy.co, 'ge_country')]"
                                         ></v-text-field>
@@ -205,8 +215,9 @@
                                         <v-col cols="12" lg="8">
                                             <v-text-field
                                             dense
+                                            id="dn"
                                             :label="$t('section.users.attributes.distinguishedName')"
-                                            :readonly="this.editFlag != true"
+                                            :readonly="editFlag != true"
                                             v-model="usercopy.distinguishedName"
                                             :rules="[this.fieldRules(usercopy.distinguishedName, 'ldap_dn')]"
                                             ></v-text-field>
@@ -214,8 +225,9 @@
                                         <v-col cols="12" lg="4">
                                             <v-text-field
                                             dense
+                                            id="userPrincipalName"
                                             :label="$t('section.users.attributes.userPrincipalName')"
-                                            :readonly="this.editFlag != true"
+                                            :readonly="editFlag != true"
                                             v-model="usercopy.userPrincipalName"
                                             :rules="[this.fieldRules(usercopy.userPrincipalName, 'ldap_usn')]"
                                             ></v-text-field>
@@ -225,6 +237,7 @@
                                         <v-col cols="10" lg="3">
                                             <v-text-field
                                             dense
+                                            id="userAccountControl"
                                             :label="$t('section.users.attributes.userAccountControl')"
                                             readonly
                                             v-model="usercopy.userAccountControl"
@@ -241,8 +254,9 @@
                                         <v-col cols="12" lg="3">
                                             <v-text-field
                                             dense
+                                            id="sAMAccountType"
                                             :label="$t('section.users.attributes.sAMAccountType')"
-                                            :readonly="this.editFlag != true"
+                                            :readonly="editFlag != true"
                                             v-model="usercopy.sAMAccountType"
                                             :rules="[this.fieldRules(usercopy.sAMAccountType, 'ge_numbers')]"
                                             ></v-text-field>
@@ -250,8 +264,9 @@
                                         <v-col cols="12" lg="3">
                                             <v-text-field
                                             dense
+                                            id="primaryGroupID"
                                             :label="$t('section.users.attributes.primaryGroupID')"
-                                            :readonly="this.editFlag != true"
+                                            :readonly="editFlag != true"
                                             v-model="usercopy.primaryGroupID"
                                             :rules="[this.fieldRules(usercopy.primaryGroupID, 'ge_numbers')]"
                                             ></v-text-field>
@@ -261,6 +276,7 @@
                                         <v-col cols="12" lg="6">
                                             <v-text-field
                                             dense
+                                            id="whenCreated"
                                             :label="$t('section.users.attributes.whenCreated')"
                                             readonly
                                             v-model="usercopy.whenCreated"
@@ -269,6 +285,7 @@
                                         <v-col cols="12" lg="6">
                                             <v-text-field
                                             dense
+                                            id="whenChanged"
                                             :label="$t('section.users.attributes.whenChanged')"
                                             readonly
                                             v-model="usercopy.whenChanged"
@@ -279,6 +296,7 @@
                                         <v-col cols="12" lg="6">
                                             <v-text-field
                                             dense
+                                            id="lastLogon"
                                             :label="$t('section.users.attributes.lastLogon')"
                                             readonly
                                             v-model="usercopy.lastLogon"
@@ -287,6 +305,7 @@
                                         <v-col cols="12" lg="6">
                                             <v-text-field
                                             dense
+                                            id="pwdLastSet"
                                             :label="$t('section.users.attributes.pwdLastSet')"
                                             readonly
                                             v-model="usercopy.pwdLastSet"
@@ -294,23 +313,34 @@
                                         </v-col>
                                     </v-row>
                                     <v-row>
-                                        <v-col cols="12" lg="6">
-                                            <v-text-field
-                                            dense
-                                            :label="$t('section.users.attributes.objectClass')"
-                                            readonly
-                                            v-model="usercopy.objectClass"
-                                            ></v-text-field>
+                                        <v-col cols="12" lg="8">
+                                            <v-row justify="center">
+                                                <span>
+                                                    {{ $t('section.users.attributes.objectClass') }}
+                                                </span>
+                                            </v-row>
+                                            <v-row justify="center">
+                                                <v-chip :light="$vuetify.theme.dark"
+                                                :dark="!$vuetify.theme.dark"
+                                                class="ma-1" v-for="i in usercopy.objectClass" :key="i"
+                                                @click:close="removeObjectClassFromArray(i)"
+                                                :close="editFlag == true">
+                                                    {{ i }}
+                                                </v-chip>
+                                            </v-row>
                                         </v-col>
                                         <v-col cols="12" lg="">
                                             <v-row class="ma-0 pa-0" justify="center">
                                                 <v-autocomplete dense v-model="addObjectClass"
                                                 :label="$t('actions.addObjectClass')"
                                                 clearable
+                                                :readonly="editFlag != true"
+                                                :hint="$t('section.users.userDialog.hint.addObjectClass')"
                                                 :items="objectClasses">
                                                 </v-autocomplete>
-                                                <v-btn :class="(this.editFlag != true ? 'bg-white bg-lig-90' : 'bg-primary text-white') + ' ml-3'"
-                                                :disabled="this.editFlag != true"
+                                                <v-btn :class="(editFlag != true ? 'bg-white bg-lig-90' : 'bg-primary text-white') + ' ml-3'"
+                                                :disabled="editFlag != true"
+                                                @click="addObjectClassToArray"
                                                 rounded
                                                 icon>
                                                     <v-icon>
@@ -322,8 +352,9 @@
                                         <v-col cols="12" lg="12">
                                             <v-text-field
                                             dense
+                                            id="objectCategory"
                                             :label="$t('section.users.attributes.objectCategory')"
-                                            :readonly="this.editFlag != true"
+                                            :readonly="editFlag != true"
                                             v-model="usercopy.objectCategory"
                                             :rules="[this.fieldRules(usercopy.objectCategory, 'ldap_dn')]"
                                             ></v-text-field>
@@ -336,6 +367,8 @@
                     </v-form>
                 </v-card-text>
             </v-tab-item>
+
+            <!-- PERMISSIONS SCREEN -->
             <v-tab-item :key="1">
                 <v-card-text class="my-3 py-4">
                     <v-row align-content="center" class="mb-2">
@@ -421,7 +454,7 @@
                             <v-icon class="mr-1">
                                 mdi-chevron-left
                             </v-icon>
-                            {{ $t("actions.back" )}}
+                            {{ $t("section.users.userDialog.userDetails" )}}
                         </v-btn>
                 </v-slide-x-reverse-transition>
                 <!-- Enable/Disable Buttons -->
@@ -726,6 +759,23 @@ export default {
         },
     },
     methods: {
+        setObjectClassToArray(){
+            if (this.usercopy.objectClass && this.usercopy.objectClass != '' && (typeof this.usercopy.objectClass === 'string' || this.usercopy.objectClass instanceof String)) {
+                this.usercopy.objectClass = this.usercopy.objectClass.replace(/'/g, "\"")
+                this.usercopy.objectClass = JSON.parse(this.usercopy.objectClass)
+            }
+        },
+        removeObjectClassFromArray(value){
+            // Returns array without value
+            if (this.usercopy.objectClass.includes(value) && Array.isArray(this.usercopy.objectClass))
+                this.usercopy.objectClass = this.usercopy.objectClass.filter(e => e !== value);
+            this.addObjectClass = value
+        },
+        addObjectClassToArray(){
+            if (!this.usercopy.objectClass.includes(this.addObjectClass) && this.addObjectClass)
+                this.usercopy.objectClass.push(this.addObjectClass);
+            this.addObjectClass = ''
+        },
         // When a permission in the v-list changes this function is executed
         onClickPermission(key){
             if (this.editFlag == true) {
@@ -753,9 +803,13 @@ export default {
             this.tab = 1
             this.changingPerms = true
         },
-        disableUser(){
+        async disableUser(){
+            await this.usercopy.disable(this.usercopy.username)
+            this.refreshUser();
         },
-        enableUser(){
+        async enableUser(){
+            await this.usercopy.enable(this.usercopy.username)
+            this.refreshUser();
         },
         editUser(){
             this.$emit('editToggle', true);
@@ -776,6 +830,7 @@ export default {
             this.usercopy = new User({})
             this.$nextTick(() => {
                 this.usercopy = this.user
+                this.setObjectClassToArray()
                 if (this.usercopy.lastLogon == 0)
                     this.usercopy.lastLogon = this.$t('section.users.userDialog.noLastLogon')
                 this.setPermissions()

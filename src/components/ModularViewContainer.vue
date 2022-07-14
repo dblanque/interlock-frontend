@@ -60,18 +60,19 @@
             </v-chip>
           </v-col>
         </v-row>
-        <v-progress-linear :indeterminate="refreshLoading" size="100" width="7" color="primary"/>
+        <v-progress-linear 
+        :indeterminate="refreshLoading" size="100" width="7"
+        :color="!this.tableDataItems.length && this.errorLoading == true && !this.refreshLoading ? 'red' : 'primary'"/>
       </v-card>
   
       <!-- Tree View -->
-      <v-card class="ma-1 pa-1" flat outlined>
+      <v-card class="ma-1" flat outlined>
       <v-expand-transition>
             <v-treeview v-if="!refreshLoading"
               :items="this.tableDataItems"
               dense
               :search="treeviewSearchString"
               hoverable
-              rounded
               >
               <template v-slot:prepend="{ item, open }">
                   <v-icon v-if="item.type == 'Organizational-Unit'">
@@ -158,17 +159,22 @@
               </template>
             </v-treeview>
       </v-expand-transition>
+      <v-fab-transition>
+        <v-icon class="ma-12" v-if="!this.tableDataItems.length && this.errorLoading == true && !this.refreshLoading" size="82" color="red">
+          mdi-close-circle
+        </v-icon>
+      </v-fab-transition>
       </v-card>
     </v-card>
   </v-row>
   </v-container>
 
   <!-- USERS -->
-  <v-dialog eager max-width="1200px" v-model="dialogs['user']" v-if="viewTitle == 'users'">
+  <v-dialog eager max-width="1200px" v-model="dialogs['userDialog']" v-if="viewTitle == 'users'">
     <UserDialog
       :user="data.userdata"
       :editFlag="this.editableForm"
-      :viewKey="'user'"
+      :viewKey="'userDialog'"
       ref="UserDialog"
       :refreshLoading="userRefreshLoading"
       @closeDialog="closeDialog"
@@ -227,17 +233,44 @@
       </template>
       <!-- USER IS ENABLED STATUS -->
       <template v-slot:[`item.is_enabled`]="{ item }">
-        <div elevation="0" v-if="item.is_enabled">
-          <v-icon class="clr-valid clr-lig-40">
-            mdi-check
-          </v-icon>
-        </div>
-        <div elevation="0" icon rounded v-else>
-          <v-icon class="clr-error">
-            mdi-close
-          </v-icon>
-        </div>
+
+          <!-- Enable User Button -->
+          <v-tooltip color="red" bottom v-if="item.is_enabled">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon
+              rounded
+              v-bind="attrs"
+              v-on="on"
+              :disabled="userRefreshLoading"
+              @click="disableUser(item.username)"
+            >
+            <v-icon class="clr-valid clr-lig-40">
+              mdi-check
+            </v-icon>
+            </v-btn>
+          </template>
+          <span>{{ $t('actions.clickTo') + " " + $t('actions.disable') }}</span>
+        </v-tooltip>
+
+        <!-- Disable User Button -->
+        <v-tooltip color="green" bottom v-if="!item.is_enabled">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon
+              rounded
+              v-bind="attrs"
+              v-on="on"
+              :disabled="userRefreshLoading"
+              @click="enableUser(item.username)"
+            >
+            <v-icon class="clr-error clr-lig-40">
+              mdi-close
+            </v-icon>
+            </v-btn>
+          </template>
+          <span>{{ $t('actions.clickTo') + " " + $t('actions.enable') }}</span>
+        </v-tooltip>
       </template>
+
       <!-- USER ACTIONS -->
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn elevation="0" icon small @click="fetchUser(item.username)">
@@ -250,6 +283,26 @@
             mdi-pencil
           </v-icon>
         </v-btn>
+
+        <!-- RESET PASSWORD BUTTON -->
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon
+              rounded
+              v-bind="attrs"
+              v-on="on"
+              small
+              :disabled="userRefreshLoading"
+              @click="changeUserPassword(item.username)"
+            >
+            <v-icon small color="red">
+              mdi-key-variant
+            </v-icon>
+            </v-btn>
+          </template>
+          <span>{{ $t('actions.changePassword') }}</span>
+        </v-tooltip>
+
         <v-btn disabled color="red" elevation="0" icon small>
           <v-icon small>
             mdi-delete
@@ -294,6 +347,7 @@ import UserDialog from '@/components/User/UserDialog.vue'
       viewIndex: Number,
       tableDataHeaders: Array,
       tableDataItems: Array,
+      errorLoading: Boolean,
       refreshLoading: Boolean
     },
     data () {
@@ -333,8 +387,15 @@ import UserDialog from '@/components/User/UserDialog.vue'
           selectedUser: "",
           userdata: {},
         },
+        dialogsOld:{
+          userDialog: false,
+          userCreate: false,
+          group: false,
+          dns: false,
+          gpo: false
+        },
         dialogs: {
-          user: false,
+          userDialog: false,
           userCreate: false,
           group: false,
           dns: false,
@@ -350,15 +411,22 @@ import UserDialog from '@/components/User/UserDialog.vue'
       // might close it by clicking outside instead of clicking the close button
       dialogs: {
         handler: function (newValue) {
+            var oldValue = this.dialogsOld
             // For every dialog type
             for (let key in newValue) {
+              // console.log("Dialog value for "+key+": "+newValue[key])
+              // console.log("Previous value for "+key+": "+oldValue[key])
               // When dialog[key] CLOSES, the code below executes
-              if (newValue[key] == false) {
+              if (oldValue[key] != newValue[key] && newValue[key] == false) {
+                console.log("Dialog closed for "+key+" - Current value: "+newValue[key])
+                console.log("Previous value for "+key+": "+oldValue[key])
                 switch (key) {
-                  case 'user':
-                    setTimeout(() => {  
+                  case 'userDialog':
+                    setTimeout(() => {
                       this.data.selectedUser = ""
                       this.data.userdata = new User({})
+                      if (this.editableForm == true)
+                        this.refreshAction();
                       this.editableForm = false
                     }, 100);
                     break;
@@ -366,14 +434,17 @@ import UserDialog from '@/components/User/UserDialog.vue'
                     if (this.$refs.UserCreate != undefined)
                       setTimeout(() => {  
                         this.$refs.UserCreate.newUser()
-                      }, 100);
+                    }, 100);
+                    this.refreshAction();
                     break;
                   default:
                     break;
                 }
               } 
               // When dialog[key] OPENS, the code below executes
-              else {
+              else if (oldValue[key] != newValue[key] && newValue[key] == true) {
+                console.log("Dialog opened for "+key+" - Current value: "+newValue[key])
+                console.log("Previous value for "+key+": "+oldValue[key])
                 switch (key) {
                   case 'user':
                     if (this.$refs.UserDialog != undefined)
@@ -388,6 +459,7 @@ import UserDialog from '@/components/User/UserDialog.vue'
                     break;
                 }
               }
+              this.dialogsOld[key] = newValue[key]
             }
         },
         deep: true
@@ -423,7 +495,7 @@ import UserDialog from '@/components/User/UserDialog.vue'
         this.data.userdata = await new User({})
         await this.data.userdata.fetch(username)
         .then(() => {
-          this.openDialog('user')
+          this.openDialog('userDialog')
           if (isEditable == true)
             this.editableForm = true
           setTimeout(() => { this.userRefreshLoading = false }, 300);
@@ -449,6 +521,38 @@ import UserDialog from '@/components/User/UserDialog.vue'
             this.itemTypes[key]['filtered'] = false
           });
         this.$emit('refresh')
+        this.userRefreshLoading = false;
+      },
+      async enableUser(username){
+        this.userRefreshLoading = true;
+        this.data.selectedUser = username
+        this.data.userdata = await new User({})
+        await this.data.userdata.enable(username)
+        .then(() => {
+          this.refreshAction();
+        })
+        .catch(error => {
+          console.log(error)
+          this.userRefreshLoading = false;
+          this.error = true;
+        })
+      },
+      async disableUser(username){
+        this.userRefreshLoading = true;
+        this.data.selectedUser = username
+        this.data.userdata = await new User({})
+        await this.data.userdata.disable(username)
+        .then(() => {
+          this.refreshAction();
+        })
+        .catch(error => {
+          console.log(error)
+          this.userRefreshLoading = false;
+          this.error = true;
+        })
+      },
+      async changeUserPassword(username) {
+        console.log(username)
       },
       sortNullLast(items, index, isDesc) {
         items.sort((a, b) => {

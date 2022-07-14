@@ -87,6 +87,7 @@
           ref="ModularViewContainerRef"
          @refresh="loadData(selectedTabTitle)"
          @goToUser="goToUser"
+         :errorLoading="error"
          :refreshLoading="refreshLoading"
          :tableDataHeaders="tableData.headers"
          :tableDataItems="tableData.items"
@@ -178,6 +179,7 @@ export default {
       domain: "",
       realm: "",
       basedn: "",
+      error: false,
       snackbarMessage: "",
       snackbarIcon: "",
       snackbarColor: "",
@@ -299,14 +301,25 @@ export default {
   methods: {
     // Home (DirTree) View Actions
     async fetchOUs(){
+      this.tableData.headers = []
+      this.tableData.items = []
       await new OrganizationalUnit({}).dirtree()
       .then(response => {
         this.tableData.headers = []
         this.tableData.items = response.data.ou_list
+        this.error = false;
         this.refreshLoading = false;
+        this.resetSnackbar();
+        this.createSnackbar('green', (this.$t("category.header.home") + " " + this.$t("words.loaded.single.m")).toUpperCase() )
+        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
       })
       .catch(error => {
         console.log(error)
+        this.refreshLoading = false;
+        this.error = true;
+        this.resetSnackbar();
+        this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.selectedTabTitle.toUpperCase())
+        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
       })
     },
     // User Actions
