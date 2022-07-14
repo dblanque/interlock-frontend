@@ -78,19 +78,19 @@
                                     </v-col>
                                     <v-col cols="12" lg="6">
                                         <v-fade-transition>
-                                            <v-card v-if="user.is_enabled != undefined" v-ripple outlined class="pa-1 py-2 mini-card">
-                                                <span :class="(user.is_enabled ? 'clr-valid' : 'clr-error') + ' clr-lig-40'">
-                                                    {{ user.is_enabled ? $t('section.users.attributes.is_enabled') : $t('section.users.attributes.is_disabled') }}
+                                            <v-card v-ripple outlined class="pa-1 py-2 mini-card">
+                                                <span :class="(usercopy.is_enabled ? 'clr-valid' : 'clr-error') + ' clr-lig-40'">
+                                                    {{ usercopy.is_enabled ? $t('section.users.attributes.is_enabled') : $t('section.users.attributes.is_disabled') }}
                                                 </span>
-                                                <div elevation="0" v-if="user.is_enabled">
-                                                <v-icon class="clr-valid clr-lig-40">
-                                                    mdi-check
-                                                </v-icon>
+                                                <div elevation="0" v-if="usercopy.is_enabled == true">
+                                                    <v-icon class="clr-valid clr-lig-40">
+                                                        mdi-check
+                                                    </v-icon>
                                                 </div>
-                                                <div elevation="0" icon rounded v-else>
-                                                <v-icon class="clr-error clr-lig-40">
-                                                    mdi-close
-                                                </v-icon>
+                                                <div elevation="0" icon rounded v-else-if="usercopy.is_enabled == false">
+                                                    <v-icon class="clr-error clr-lig-40">
+                                                        mdi-close
+                                                    </v-icon>
                                                 </div>
                                             </v-card>
                                         </v-fade-transition>
@@ -150,7 +150,7 @@
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6" 
-                                    :class="this.$vuetify.breakpoint.smAndUp && user.countryCode != undefined && user.countryCode != '' && user.countryCode != 0 ? 'mt-3' : ''">
+                                    :class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
                                         <v-text-field
                                         dense
                                         id="l"
@@ -162,11 +162,11 @@
                                     </v-col>
                                     <v-col cols="12" lg="6">
                                         <v-card v-ripple outlined class="pa-1 py-2 mini-card">
-                                            <div v-if="user.countryCode != undefined && user.countryCode != '' && user.countryCode != 0">
+                                            <div v-if="usercopy.countryCode != undefined && usercopy.countryCode != '' && usercopy.countryCode != 0">
                                                 {{ $t('section.users.attributes.countryCodeCombined') }}
                                                 <div elevation="0">
-                                                {{ user.countryCode }}
-                                                {{ "(" + user.c + ")" }}
+                                                {{ usercopy.countryCode }}
+                                                {{ "(" + usercopy.c + ")" }}
                                                 </div>
                                             </div>
                                             <div v-else>
@@ -191,14 +191,15 @@
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6">
-                                        <v-text-field
+                                        <v-autocomplete
                                         dense
                                         id="co"
                                         :label="$t('section.users.attributes.co')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.co"
-                                        :rules="[this.fieldRules(usercopy.co, 'ge_country')]"
-                                        ></v-text-field>
+                                        :items="getCountryList()"
+                                        :rules="[this.fieldRules(usercopy.co, 'ge_country')]">
+                                        </v-autocomplete>
                                     </v-col>
                             </v-row>
                         </v-card>
@@ -217,7 +218,7 @@
                                             dense
                                             id="dn"
                                             :label="$t('section.users.attributes.distinguishedName')"
-                                            :readonly="editFlag != true"
+                                            readonly
                                             v-model="usercopy.distinguishedName"
                                             :rules="[this.fieldRules(usercopy.distinguishedName, 'ldap_dn')]"
                                             ></v-text-field>
@@ -227,8 +228,8 @@
                                             dense
                                             id="userPrincipalName"
                                             :label="$t('section.users.attributes.userPrincipalName')"
-                                            :readonly="editFlag != true"
-                                            v-model="usercopy.userPrincipalName"
+                                            readonly
+                                            v-model="getUSN"
                                             :rules="[this.fieldRules(usercopy.userPrincipalName, 'ldap_usn')]"
                                             ></v-text-field>
                                         </v-col>
@@ -240,8 +241,8 @@
                                             id="userAccountControl"
                                             :label="$t('section.users.attributes.userAccountControl')"
                                             readonly
-                                            v-model="usercopy.userAccountControl"
-                                            :rules="[this.fieldRules(usercopy.userAccountControl, 'ge_numbers')]"
+                                            v-model="calcEnabledPerms"
+                                            :rules="[this.fieldRules(calcEnabledPerms, 'ge_numbers')]"
                                             ></v-text-field>
                                         </v-col>
                                         <v-col cols="" lg="3">
@@ -256,7 +257,7 @@
                                             dense
                                             id="sAMAccountType"
                                             :label="$t('section.users.attributes.sAMAccountType')"
-                                            :readonly="editFlag != true"
+                                            readonly
                                             v-model="usercopy.sAMAccountType"
                                             :rules="[this.fieldRules(usercopy.sAMAccountType, 'ge_numbers')]"
                                             ></v-text-field>
@@ -354,7 +355,7 @@
                                             dense
                                             id="objectCategory"
                                             :label="$t('section.users.attributes.objectCategory')"
-                                            :readonly="editFlag != true"
+                                            readonly
                                             v-model="usercopy.objectCategory"
                                             :rules="[this.fieldRules(usercopy.objectCategory, 'ldap_dn')]"
                                             ></v-text-field>
@@ -445,7 +446,7 @@
     
         <!-- Actions -->
         <v-card-actions class="card-actions">
-            <v-row class="ma-1 pa-0" :justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
+            <v-row class="ma-1 pa-0" align="center" align-content="center" :justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
                 <!-- Go Back button (Permissions View) -->
                 <v-slide-x-reverse-transition>
                         <v-btn v-if="changingPerms" @click="goBackToDetails"
@@ -499,24 +500,36 @@
                     </v-icon>
                     {{ $t("actions.save") }}
                 </v-btn>
-                <!-- Refresh User Button -->
-                <v-btn 
-                class="ma-1 bg-primary" 
-                color="white" 
-                icon
-                elevation="0"
-                :loading="refreshLoading"
-                @click="refreshUser"
-                >
-                    <v-icon>
-                    mdi-refresh
+                <!-- Save User Changes Button -->
+                <v-btn @click="saveUser(true)"
+                :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
+                rounded 
+                :disabled="!editFlag">
+                    <v-icon class="mr-1">
+                        mdi-exit-to-app
                     </v-icon>
-                    <template v-slot:loader>
-                    <span class="custom-loader">
-                        <v-icon light>mdi-cached</v-icon>
-                    </span>
-                    </template>
+                    {{ $t("actions.saveClose") }}
                 </v-btn>
+                <!-- Refresh User Button -->
+                <v-progress-circular class="pa-0 ma-0" color="accent" :value="loading" size="42">
+                    <v-btn 
+                    class="ma-1 bg-primary" 
+                    color="white" 
+                    icon
+                    elevation="0"
+                    :loading="refreshLoading"
+                    @click="refreshUser"
+                    >
+                        <v-icon>
+                        mdi-refresh
+                        </v-icon>
+                        <template v-slot:loader>
+                        <span class="custom-loader">
+                            <v-icon light>mdi-cached</v-icon>
+                        </span>
+                        </template>
+                    </v-btn>
+                </v-progress-circular>
             </v-row>
         </v-card-actions>
     </v-card>
@@ -530,8 +543,12 @@ export default {
     name: 'UserDialog',
     data () {
       return {
-          panel: [],
+        panel: [],
+        loading: 0,
         tab: 0,
+        domain: "",
+        realm: "",
+        basedn: "",
         changingPerms: false,
         usercopy: {},
         addObjectClass: "",
@@ -612,10 +629,10 @@ export default {
                 value: false,
                 int: 8
             },
-            "LDAP_UF_LOCKOUT" : {
-                value: false,
-                int: 16
-            },
+            // "LDAP_UF_LOCKOUT" : {
+            //     value: false,
+            //     int: 16
+            // },
             "LDAP_UF_PASSWD_NOTREQD" : {
                 value: false,
                 int: 32
@@ -672,10 +689,10 @@ export default {
                 value: false,
                 int: 4194304
             },
-            "LDAP_UF_PASSWORD_EXPIRED" : {
-                value: false,
-                int: 8388608
-            },
+            // "LDAP_UF_PASSWORD_EXPIRED" : {
+            //     value: false,
+            //     int: 8388608
+            // },
             "LDAP_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION" : {
                 value: false,
                 int: 16777216
@@ -757,8 +774,19 @@ export default {
             }
             return array
         },
+        getUSN(){
+            if (this.usercopy.username != undefined)
+                return this.usercopy.username + "@" + this.domain
+            else
+                return "@" + this.domain
+        },
     },
     methods: {
+        getDomainDetails(){
+            this.domain = localStorage.getItem('domain')
+            this.realm = localStorage.getItem('realm')
+            this.basedn = localStorage.getItem('basedn')
+        },
         setObjectClassToArray(){
             if (this.usercopy.objectClass && this.usercopy.objectClass != '' && (typeof this.usercopy.objectClass === 'string' || this.usercopy.objectClass instanceof String)) {
                 this.usercopy.objectClass = this.usercopy.objectClass.replace(/'/g, "\"")
@@ -821,12 +849,41 @@ export default {
         closeDialog(){
             this.$emit('closeDialog', this.viewKey);
         },
-        saveUser(){
+        async saveUser(closeDialog=false){
+            this.loading = 0
+            // Set permissions array properly
+            this.usercopy.permission_list = []
+            this.loading = 5
+            for (const [key] of Object.entries(this.permissions)) {
+                this.loading += 1
+                if (this.permissions[key].value == true)
+                    this.usercopy.permission_list.push(key)
+            }
+            // Uncomment below to debug permissions list
+            // console.log(this.usercopy.permission_list)
             this.$emit('save', this.viewKey, this.usercopy);
+            await new User({}).update(this.usercopy)
+            .then(() => {
+                this.loading = 90
+                if (closeDialog == true)
+                    this.closeDialog();
+                else
+                    this.refreshUser();
+                this.loading = 100
+            })
+            .catch(error => {
+                console.log(error)
+                this.userRefreshLoading = false;
+                this.loading = 0
+                this.error = true;
+            })
         },
         // Sync the usercopy object to the parent view user object on the
         // next tick to avoid mutation errors
         syncUser(){
+            this.tab = 0
+            this.changingPerms = false
+            this.getDomainDetails()
             this.usercopy = new User({})
             this.$nextTick(() => {
                 this.usercopy = this.user
@@ -834,11 +891,14 @@ export default {
                 if (this.usercopy.lastLogon == 0)
                     this.usercopy.lastLogon = this.$t('section.users.userDialog.noLastLogon')
                 this.setPermissions()
+                this.loading = 100
             })
         },
         // Tells the parent view to refresh/fetch the user again
         async refreshUser(){
+            this.loading = 0
             this.$emit('refreshUser');
+            this.loading = 100
         }
     }
 }

@@ -179,7 +179,7 @@
       @closeDialog="closeDialog"
       @save="saveData"
       @editToggle="setViewToEdit"
-      @refreshUser="fetchUser(data.selectedUser)"
+      @refreshUser="refreshUser(data.selectedUser)"
       />
   </v-dialog>
   <v-dialog eager max-width="1200px" v-model="dialogs['userCreate']" v-if="viewTitle == 'users'">
@@ -417,8 +417,8 @@ import UserDialog from '@/components/User/UserDialog.vue'
               // console.log("Previous value for "+key+": "+oldValue[key])
               // When dialog[key] CLOSES, the code below executes
               if (oldValue[key] != newValue[key] && newValue[key] == false) {
-                console.log("Dialog closed for "+key+" - Current value: "+newValue[key])
-                console.log("Previous value for "+key+": "+oldValue[key])
+                // console.log("Dialog closed for "+key+" - Current value: "+newValue[key])
+                // console.log("Previous value for "+key+": "+oldValue[key])
                 switch (key) {
                   case 'userDialog':
                     setTimeout(() => {
@@ -442,10 +442,10 @@ import UserDialog from '@/components/User/UserDialog.vue'
               } 
               // When dialog[key] OPENS, the code below executes
               else if (oldValue[key] != newValue[key] && newValue[key] == true) {
-                console.log("Dialog opened for "+key+" - Current value: "+newValue[key])
-                console.log("Previous value for "+key+": "+oldValue[key])
+                // console.log("Dialog opened for "+key+" - Current value: "+newValue[key])
+                // console.log("Previous value for "+key+": "+oldValue[key])
                 switch (key) {
-                  case 'user':
+                  case 'userDialog':
                     if (this.$refs.UserDialog != undefined)
                       this.$refs.UserDialog.goBackToDetails()
                       this.$refs.UserDialog.syncUser()
@@ -476,20 +476,24 @@ import UserDialog from '@/components/User/UserDialog.vue'
       closeDialog(key){
         this.dialogs[key] = false;
       },
-      saveData(key, data){
+      async saveData(key, data){
         switch (key) {
-          case 'user':
+          case 'userDialog':
             break;
           default:
             console.log(key)
             console.log(data)
             break;
         }
-        this.closeDialog(key)
+        // this.closeDialog(key)
+      },
+      async refreshUser(username){
+        await this.fetchUser(username, this.editableForm, false);
       },
       // Fetch individual User
-      async fetchUser(username, isEditable=false){
-        this.userRefreshLoading = true;
+      async fetchUser(username, isEditable=false, refreshAnim=true){
+        if (refreshAnim == true)
+          this.userRefreshLoading = true;
         this.data.selectedUser = username
         this.data.userdata = await new User({})
         await this.data.userdata.fetch(username)

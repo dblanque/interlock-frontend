@@ -34,7 +34,8 @@ const urls = {
         enable: 'api/users/enable/',
         disable: 'api/users/disable/',
         lock: 'api/users/lock/',
-        unlock: 'api/users/unlock/'
+        unlock: 'api/users/unlock/',
+        update: 'api/users/update/'
     },
     domain: {
         details: "api/domain/details/"

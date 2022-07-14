@@ -27,6 +27,7 @@ const validationMixin ={
       inputRulesRequired: (v) => (v != null && v != undefined && v.length != 0) ||  i18n.t("error.validation.fieldRequired"),
       inputRulesAboveZero: (v) => (parseInt(v) > 0) || "Fields must be larger than 0",
       inputRulesLetters: (v) => !v || /^[üöñóúíáéa-zA-Z ]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
+      inputRulesCountry: (v) => !v || /^[a-zA-Z'\s]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
       inputRulesNumbers: (v) => !v || /^[0-9.]{0,}$/.test(v) || i18n.t("error.validation.numeric"),
       inputRulesMax4: (v) => !v || /^.{1,4}$/.test(v) || i18n.t("error.validation.max4"),
       inputRulesMax6: (v) => !v || /^.{1,6}$/.test(v) || i18n.t("error.validation.max6"),
@@ -36,6 +37,7 @@ const validationMixin ={
       inputRulesalphaNumericSpecial: (v) => !v || /^[üöñóúíáéa-z0-9]+[?¿!@üöñóúíáéa-z0-9,.\s_-]+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecial"),
       inputRulesalphaNumericPassword: (v) => !v || /^[!@#$%&*()üöñóúíáéa-z0-9]+([!@#$%&*()üöñóúíáéa-z0-9,._-]{7,})+$/i.test(v) || i18n.t("error.validation.alphaNumericPassword"),
       inputRulesalphaNumericSpecialUsername: (v) => !v || /^[a-z0-9]+([a-z0-9_-]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecialUsername"),
+      inputRulesalphaNumericSpecialName: (v) => !v || /^[a-z0-9]+([a-z0-9_-\s]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecialUsername"),
       inputRulesDN: (v) => !v || /^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:,(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/i.test(v) || i18n.t("error.validation.dn"),
       inputRulesDomain: (v) => !v || /^((?:http(?:s){0,5}(:\/\/){0,1}){0,1}(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+)?$/.test(v) || i18n.t("error.validation.domain"),
       inputRulesEmail: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+$/.test(v) || i18n.t("error.validation.email"),
@@ -153,7 +155,7 @@ const validationMixin ={
               rules.push(this.inputRulesNumbers)
             break;
           case "ge_name": // Generic Name Field
-              rules.push(this.inputRulesalphaNumericSpecialUsername)
+              rules.push(this.inputRulesalphaNumericSpecialName)
             break;
           case "ge_username": // Generic Name Field
               rules.push(this.inputRulesalphaNumericSpecialUsername)
@@ -209,8 +211,10 @@ const validationMixin ={
               rules.push(this.inputRulesalphaNumericSpecial)
             break;
           case "ge_type":
-          case "ge_country": // Country
               rules.push(this.inputRulesLetters)
+            break;
+          case "ge_country": // Country
+              rules.push(this.inputRulesCountry)
             break;
 
           default:
@@ -251,201 +255,253 @@ const validationMixin ={
       // inputRulesPhonePre2: (v) => !v || /^\+54(\s|-)?9?(\s|-)?(2[0-9]{2}|3[0-9]{2})(\s|-)?[0-9]{3}(\s|-)?[0-9]{4}$/.test(v) || i18n.t("error.validation.phonePre2"),
       // inputRulesPhonePre3: (v) => !v || /^\+54(\s|-)?9?(\s|-)?(2[0-9]{3}|3[0-9]{3})(\s|-)?[0-9]{3}(\s|-)?[0-9]{3}$/.test(v) || i18n.t("error.validation.phonePre3"),
       getCountryList() { return [
-        'Afghanistan',
-        'Albania',
-        'Algeria',
-        'Andorra',
-        'Angola',
-        'Antigua & Deps',
-        'Argentina',
-        'Armenia',
-        'Australia',
-        'Austria',
-        'Azerbaijan',
-        'Bahamas',
-        'Bahrain',
-        'Bangladesh',
-        'Barbados',
-        'Belarus',
-        'Belgium',
-        'Belize',
-        'Benin',
-        'Bhutan',
-        'Bolivia',
-        'Bosnia Herzegovina',
-        'Botswana',
-        'Brazil',
-        'Brunei',
-        'Bulgaria',
-        'Burkina',
-        'Burundi',
-        'Cambodia',
-        'Cameroon',
-        'Canada',
-        'Cape Verde',
-        'Central African Rep',
-        'Chad',
-        'Chile',
-        'China',
-        'Colombia',
-        'Comoros',
-        'Congo',
-        'Costa Rica',
-        'Croatia',
-        'Cuba',
-        'Cyprus',
-        'Czech Republic',
-        'Denmark',
-        'Djibouti',
-        'Dominica',
-        'Dominican Republic',
-        'East Timor',
-        'Ecuador',
-        'Egypt',
-        'El Salvador',
-        'Equatorial Guinea',
-        'Eritrea',
-        'Estonia',
-        'Ethiopia',
-        'Fiji',
-        'Finland',
-        'France',
-        'Gabon',
-        'Gambia',
-        'Georgia',
-        'Germany',
-        'Ghana',
-        'Greece',
-        'Grenada',
-        'Guatemala',
-        'Guinea',
-        'Guinea-Bissau',
-        'Guyana',
-        'Haiti',
-        'Honduras',
-        'Hungary',
-        'Iceland',
-        'India',
-        'Indonesia',
-        'Iran',
-        'Iraq',
-        'Ireland',
-        'Israel',
-        'Italy',
-        'Ivory Coast',
-        'Jamaica',
-        'Japan',
-        'Jordan',
-        'Kazakhstan',
-        'Kenya',
-        'Kiribati',
-        'Korea North',
-        'Korea South',
-        'Kosovo',
-        'Kuwait',
-        'Kyrgyzstan',
-        'Laos',
-        'Latvia',
-        'Lebanon',
-        'Lesotho',
-        'Liberia',
-        'Libya',
-        'Liechtenstein',
-        'Lithuania',
-        'Luxembourg',
-        'Macedonia',
-        'Madagascar',
-        'Malawi',
-        'Malaysia',
-        'Maldives',
-        'Mali',
-        'Malta',
-        'Marshall Islands',
-        'Mauritania',
-        'Mauritius',
-        'Mexico',
-        'Micronesia',
-        'Moldova',
-        'Monaco',
-        'Mongolia',
-        'Montenegro',
-        'Morocco',
-        'Mozambique',
-        'Myanmar',
-        'Namibia',
-        'Nauru',
-        'Nepal',
-        'Netherlands',
-        'New Zealand',
-        'Nicaragua',
-        'Niger',
-        'Nigeria',
-        'Norway',
-        'Oman',
-        'Pakistan',
-        'Palau',
-        'Panama',
-        'Papua New Guinea',
-        'Paraguay',
-        'Peru',
-        'Philippines',
-        'Poland',
-        'Portugal',
-        'Qatar',
-        'Romania',
-        'Russian Federation',
-        'Rwanda',
-        'St Kitts & Nevis',
-        'St Lucia',
-        'Saint Vincent & the Grenadines',
-        'Samoa',
-        'San Marino',
-        'Sao Tome & Principe',
-        'Saudi Arabia',
-        'Senegal',
-        'Serbia',
-        'Seychelles',
-        'Sierra Leone',
-        'Singapore',
-        'Slovakia',
-        'Slovenia',
-        'Solomon Islands',
-        'Somalia',
-        'South Africa',
-        'South Sudan',
-        'Spain',
-        'Sri Lanka',
-        'Sudan',
-        'Suriname',
-        'Swaziland',
-        'Sweden',
-        'Switzerland',
-        'Syria',
-        'Taiwan',
-        'Tajikistan',
-        'Tanzania',
-        'Thailand',
-        'Togo',
-        'Tonga',
-        'Trinidad & Tobago',
-        'Tunisia',
-        'Turkey',
-        'Turkmenistan',
-        'Tuvalu',
-        'Uganda',
-        'Ukraine',
-        'United Arab Emirates',
-        'United Kingdom',
-        'United States',
-        'Uruguay',
-        'Uzbekistan',
-        'Vanuatu',
-        'Vatican City',
-        'Venezuela',
-        'Vietnam',
-        'Yemen',
-        'Zambia',
-        'Zimbabwe'
+          "Afghanistan",
+          "Albania",
+          "Algeria",
+          "American Samoa",
+          "Andorra",
+          "Angola",
+          "Anguilla",
+          "Antarctica",
+          "Antigua and Barbuda",
+          "Argentina",
+          "Armenia",
+          "Aruba",
+          "Australia",
+          "Austria",
+          "Azerbaijan",
+          "Bahamas",
+          "Bahrain",
+          "Bangladesh",
+          "Barbados",
+          "Belarus",
+          "Belgium",
+          "Belize",
+          "Benin",
+          "Bermuda",
+          "Bhutan",
+          "Bolivia",
+          "Bonaire",
+          "Bosnia and Herzegovina",
+          "Botswana",
+          "Bouvet Island",
+          "Brazil",
+          "British Indian Ocean Territory",
+          "Brunei Darussalam",
+          "Bulgaria",
+          "Burkina Faso",
+          "Burundi",
+          "Cambodia",
+          "Cameroon",
+          "Canada",
+          "Cape Verde",
+          "Cayman Islands",
+          "Central African Republic",
+          "Chad",
+          "Chile",
+          "China",
+          "Christmas Island",
+          "Cocos (Keeling) Islands",
+          "Colombia",
+          "Comoros",
+          "Congo",
+          "Democratic Republic of the Congo",
+          "Cook Islands",
+          "Costa Rica",
+          "Croatia",
+          "Cuba",
+          "Curacao",
+          "Cyprus",
+          "Czech Republic",
+          "Cote d'Ivoire",
+          "Denmark",
+          "Djibouti",
+          "Dominica",
+          "Dominican Republic",
+          "Ecuador",
+          "Egypt",
+          "El Salvador",
+          "Equatorial Guinea",
+          "Eritrea",
+          "Estonia",
+          "Ethiopia",
+          "Islas Malvinas",
+          "Faroe Islands",
+          "Fiji",
+          "Finland",
+          "France",
+          "French Guiana",
+          "French Polynesia",
+          "French Southern Territories",
+          "Gabon",
+          "Gambia",
+          "Georgia",
+          "Germany",
+          "Ghana",
+          "Gibraltar",
+          "Greece",
+          "Greenland",
+          "Grenada",
+          "Guadeloupe",
+          "Guam",
+          "Guatemala",
+          "Guernsey",
+          "Guinea",
+          "Guinea-Bissau",
+          "Guyana",
+          "Haiti",
+          "Heard Island and McDonald Islands",
+          "Holy See (Vatican City State)",
+          "Honduras",
+          "Hong Kong",
+          "Hungary",
+          "Iceland",
+          "India",
+          "Indonesia",
+          "Islamic Republic of Iran",
+          "Iraq",
+          "Ireland",
+          "Isle of Man",
+          "Israel",
+          "Italy",
+          "Jamaica",
+          "Japan",
+          "Jersey",
+          "Jordan",
+          "Kazakhstan",
+          "Kenya",
+          "Kiribati",
+          "Democratic People's Republic of Korea",
+          "Kuwait",
+          "Kyrgyzstan",
+          "Lao People's Democratic Republic",
+          "Latvia",
+          "Lebanon",
+          "Lesotho",
+          "Liberia",
+          "Libya",
+          "Liechtenstein",
+          "Lithuania",
+          "Luxembourg",
+          "Macao",
+          "Former Yugoslav Republic of Macedonia",
+          "Madagascar",
+          "Malawi",
+          "Malaysia",
+          "Maldives",
+          "Mali",
+          "Malta",
+          "Marshall Islands",
+          "Martinique",
+          "Mauritania",
+          "Mauritius",
+          "Mayotte",
+          "Mexico",
+          "Federated States of Micronesia",
+          "Republic of Moldova",
+          "Monaco",
+          "Mongolia",
+          "Montenegro",
+          "Montserrat",
+          "Morocco",
+          "Mozambique",
+          "Myanmar",
+          "Namibia",
+          "Nauru",
+          "Nepal",
+          "Netherlands",
+          "New Caledonia",
+          "New Zealand",
+          "Nicaragua",
+          "Niger",
+          "Nigeria",
+          "Niue",
+          "Norfolk Island",
+          "Northern Mariana Islands",
+          "Norway",
+          "Oman",
+          "Pakistan",
+          "Palau",
+          "State of Palestine",
+          "Panama",
+          "Papua New Guinea",
+          "Paraguay",
+          "Peru",
+          "Philippines",
+          "Pitcairn",
+          "Poland",
+          "Portugal",
+          "Puerto Rico",
+          "Qatar",
+          "Romania",
+          "Russian Federation",
+          "Rwanda",
+          "Reunion",
+          "Saint Barthelemy",
+          "Saint Helena",
+          "Saint Kitts and Nevis",
+          "Saint Lucia",
+          "Saint Martin (French part)",
+          "Saint Pierre and Miquelon",
+          "Saint Vincent and the Grenadines",
+          "Samoa",
+          "San Marino",
+          "Sao Tome and Principe",
+          "Saudi Arabia",
+          "Senegal",
+          "Serbia",
+          "Seychelles",
+          "Sierra Leone",
+          "Singapore",
+          "Sint Maarten (Dutch part)",
+          "Slovakia",
+          "Slovenia",
+          "Solomon Islands",
+          "Somalia",
+          "South Africa",
+          "South Georgia and the South Sandwich Islands",
+          "South Sudan",
+          "Spain",
+          "Sri Lanka",
+          "Sudan",
+          "Suriname",
+          "Svalbard and Jan Mayen",
+          "Swaziland",
+          "Sweden",
+          "Switzerland",
+          "Syrian Arab Republic",
+          "Taiwan, Province of China",
+          "Tajikistan",
+          "United Republic of Tanzania",
+          "Thailand",
+          "Timor-Leste",
+          "Togo",
+          "Tokelau",
+          "Tonga",
+          "Trinidad and Tobago",
+          "Tunisia",
+          "Turkey",
+          "Turkmenistan",
+          "Turks and Caicos Islands",
+          "Tuvalu",
+          "Uganda",
+          "Ukraine",
+          "United Arab Emirates",
+          "United Kingdom",
+          "United States",
+          "United States Minor Outlying Islands",
+          "Uruguay",
+          "Uzbekistan",
+          "Vanuatu",
+          "Venezuela",
+          "Vietnam",
+          "British Virgin Islands",
+          "US Virgin Islands",
+          "Wallis and Futuna",
+          "Western Sahara",
+          "Yemen",
+          "Zambia",
+          "Zimbabwe",
       ]
       },
       getMessageForCode(code){
@@ -453,120 +509,6 @@ const validationMixin ={
           case null:
           case undefined:
           case "":
-          case 'CCONF00':
-          case 'CCONF01':
-          case 'CCONF99':
-          case 'CCONF06':
-          case 'USCC01':
-          case 'CCONF08':
-          case 'CCONF10':
-          case 'CU07':
-            // Could not get error message to display.
-            return i18n.t('error.notDisplayedCorrectly')
-          case 'GFP02':
-            // We couldn't find a suited Plan for your requirements
-            return i18n.t('error.suitedLoanPlanNotFound')
-          case 'CUITINVALID':
-          case 'CU08':
-            // CUIT Verifier Digit is invalid.
-            return i18n.t('error.validation.cuitVerifDigit')
-          case 'CCONF02': 
-          case 'CCONF05': 
-          case 'CH01':
-          case 'CHS01':
-          case 'CHS02':
-          case 'CU11':        
-          case 'CUC06':  
-          case 'LPS01':
-            return i18n.t('error.unknown')
-          case 'CCONF03':
-          case 'CCONF04':
-            return i18n.t('verification_code')
-          case 'CCONF07':
-            return i18n.t('error.codes.auth.verified_successfully')
-          case 'CCONF09':
-          case 'CCONF11':          
-            return i18n.t('error.codes.auth.verification_expired')
-          case 'GE00':
-            return i18n.t('error.validation.fieldRequired')
-          case 'GE01':
-          case 'GE02':
-          case 'CH02':
-          case 'CH03':
-          case 'CU09':
-          case 'CUS01':
-          case 'CUU02':
-          case 'CUU03':
-          case 'LP01':
-          case 'LP02':
-          case 'LPS04':
-          case 'LPS05':
-          case 'LPS06':
-          case 'LPS07':
-          case 'LPS08':
-          case 'LPS09':
-          case 'LPS10':
-          case 'LPS11':
-          case 'LOS01':
-          case 'LOS02':
-          case 'LOS03':
-            return i18n.t('error.validation.fieldinvalid')
-          case 'CH04': 
-          case 'CH07':
-            return i18n.t('error.codes.charges.CH04')
-          case 'CH05':
-          case 'CH06':
-          case 'CH08': 
-            return i18n.t('error.codes.charges.'+code)
-          case 'CU01':
-          case 'CU02':
-          case 'CU03':
-          case 'CU04':
-          case 'CU05':
-          case 'CU06':
-          case 'CU10':
-          case 'CUC01':
-          case 'CUC02':
-          case 'CUC03':
-          case 'CUC04':
-          case 'CUC05':
-          case 'CUU01':
-            return i18n.t('error.codes.customer.'+code)
-          case 'CU12':
-          case 'CU13':
-            return i18n.t('error.codes.customer.USCC01')
-          case 'GFP01': return i18n.t('error.codes.customer.CUU01')
-          case 'INRP01':
-            return i18n.t('error.codes.installment.'+code)
-          case 'LPD01':
-          case 'LPD02':
-          case 'LPD03':
-          case 'LPD04':
-          case 'LPD99':
-          case 'LPS02':
-          case 'LPS03':
-            return i18n.t('error.codes.loanPlan.'+code)
-          case 'LO00':
-          case 'LO01':
-          case 'LO02':
-          case 'LO03':
-          case 'LO04':
-          case 'LO05':
-          case 'LOC01':
-          case 'LOI01':
-          case 'LOUS01':
-          case 'LOUS02':
-          case 'LOUS03':
-          case 'LOUS04':
-          case 'LOUS05':
-          case 'LOUS06':
-          case 'LOUS07':
-          case 'USC01':
-          case 'USC02':
-          case 'USCAD01':
-          case 'USCAD02':
-          case 'USCAN01':
-          case 'USCM01':
           default:
             return code;
         }

@@ -128,6 +128,10 @@ class User extends ApiModel{
         return await interlock_backend.call('user/getCurrentUserData')
     }
 
+    async update(data){
+        return await interlock_backend.call('user/update', data)
+    }
+
     /**
      * Fetches provider to save model data.
      * [!] Null ID determines to update or create instance.

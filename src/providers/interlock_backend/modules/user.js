@@ -64,7 +64,7 @@ const actions = {
     },
     update: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.put(interlock_backend.urls.user + data.id + '/', data)
+            interlock_backend.request.put(interlock_backend.urls.user.update, data)
             .then(response => {
                 resolve(response.data);
             }).catch((e) => reject(e))
