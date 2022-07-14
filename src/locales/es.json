@@ -8,16 +8,26 @@
     "gpo": "GPO (Objetos de Política de Grupo)",
     "dns_short": "DNS",
     "gpo_short": "GPO",
-    "server": "Servidor"
+    "server": "Servidor",
+    "header": {
+      "home":"Árbol de Directorio",
+      "users":"Usuarios",
+      "groups":"Grupos de Seguridad",
+      "dns":"Servidor de Nombre de Dominio",
+      "gpo":"Objetos de Política de Grupo",
+      "server":"Administración de Servidor"
+    }
   },
   "actions": {
     "label": "Acciones",
     "done":"Listo",
     "enable":"Habilitar",
     "disable":"Des-habilitar",
+    "clickTo":"Clickee para",
     "move":"Mover",
+    "changePassword":"Cambiar Contraseña",
     "goToLink": "Ir a Enlace",
-    "goTo": "Go to",
+    "goTo": "Ir a",
     "search": "Buscar",
     "yes": "Si",
     "no": "No",
@@ -102,28 +112,28 @@
   },
   "classes":{
     "user":{
-      "single":"User",
-      "plural":"Users"
+      "single":"Usuario",
+      "plural":"Usuarios"
     },
     "container":{
-      "single":"Container",
-      "plural":"Containers"
+      "single":"Contenedor",
+      "plural":"Contenedores"
     },
     "person":{
-      "single":"Person",
-      "plural":"Persons"
+      "single":"Persona",
+      "plural":"Personas"
     },
     "group":{
-      "single":"Group",
-      "plural":"Groups"
+      "single":"Grupo",
+      "plural":"Grupos"
     },
     "computer":{
-      "single":"Computer",
-      "plural":"Computers"
+      "single":"Computador",
+      "plural":"Computadores"
     },
     "organizational-unit":{
-      "single":"Organizational Unit",
-      "plural":"Organizational Units"
+      "single":"Unidad Organizacional",
+      "plural":"Unidades Organizacionales"
     }
   },
   "error": {
@@ -191,7 +201,11 @@
         "step3_success":"Usuario Creado Exitosamente"
       },
       "userDialog":{
-        "noLastLogon":"El usuario aún no ha iniciado sesión"
+        "noLastLogon":"El usuario aún no ha iniciado sesión",
+        "userDetails":"Detalles de Usuario",
+        "hint":{
+          "addObjectClass":"Mejor que sepa lo que hace"
+        }
       },
       "basicDetails":"Detalles Básicos",
       "location":"Ubicación",
@@ -209,7 +223,7 @@
         "sn":"Apellido",
         "password":"Contraseña",
         "passwordConfirm":"Confirmar Contraseña",
-        "initials":"Initials",
+        "initials":"Iniciales",
         "mail":"Email",
         "displayName":"Nombre Completo",
         "is_enabled":"Usuario Habilitado",

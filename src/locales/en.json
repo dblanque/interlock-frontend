@@ -23,7 +23,9 @@
     "done":"Done",
     "enable":"Enable",
     "disable":"Disable",
+    "clickTo":"Click to",
     "move":"Move",
+    "changePassword":"Change Password",
     "goToLink": "Go to Link",
     "goTo": "Go to",
     "search": "Search",
@@ -193,7 +195,11 @@
         "step3_success":"User Created Successfully"
       },
       "userDialog":{
-        "noLastLogon":"User has not logged in yet"
+        "noLastLogon":"User has not logged in yet",
+        "userDetails":"User Details",
+        "hint":{
+          "addObjectClass":"You better know what you're doing"
+        }
       },
       "basicDetails":"Basic Details",
       "location":"Location",
