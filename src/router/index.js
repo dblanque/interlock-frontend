@@ -17,27 +17,27 @@ const routes = [
   },
   {
     path: '/users',
-    name: 'home',
+    name: 'users',
     component: HomeView
   },
   {
     path: '/groups',
-    name: 'home',
+    name: 'groups',
     component: HomeView
   },
   {
     path: '/dns',
-    name: 'home',
+    name: 'dns',
     component: HomeView
   },
   {
     path: '/gpo',
-    name: 'home',
+    name: 'gpo',
     component: HomeView
   },
   {
     path: '/server',
-    name: 'home',
+    name: 'server',
     component: HomeView
   },
   {

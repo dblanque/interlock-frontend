@@ -106,7 +106,6 @@
                         <v-btn @click="goToUser(item.username)"
                           color="primary"
                           icon
-                          :disabled="item.username == 'Guest' || item.username == 'Administrator'"
                           v-bind="attrs"
                           v-on="on"
                         >
