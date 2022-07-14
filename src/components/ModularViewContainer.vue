@@ -165,11 +165,11 @@
 
   <!-- USERS -->
   <v-dialog eager max-width="1200px" v-model="dialogs['user']" v-if="viewTitle == 'users'">
-    <UserView
+    <UserDialog
       :user="data.userdata"
       :editFlag="this.editableForm"
       :viewKey="'user'"
-      ref="UserView"
+      ref="UserDialog"
       :refreshLoading="userRefreshLoading"
       @closeDialog="closeDialog"
       @save="saveData"
@@ -280,14 +280,14 @@
 
 <script>
 import User from '@/include/User'
-import UserView from '@/components/User/UserView.vue'
 import UserCreate from '@/components/User/UserCreate.vue'
+import UserDialog from '@/components/User/UserDialog.vue'
 
   export default {
     name: 'ModularViewContainer',
     components:{
-    UserView,
-    UserCreate
+    UserCreate,
+    UserDialog
 },
     props: {
       viewTitle: String,
@@ -376,9 +376,9 @@ import UserCreate from '@/components/User/UserCreate.vue'
               else {
                 switch (key) {
                   case 'user':
-                    if (this.$refs.UserView != undefined)
-                      this.$refs.UserView.goBackToDetails()
-                      this.$refs.UserView.syncUser()
+                    if (this.$refs.UserDialog != undefined)
+                      this.$refs.UserDialog.goBackToDetails()
+                      this.$refs.UserDialog.syncUser()
                     break;
                   case 'userCreate':
                     if (this.$refs.UserCreate != undefined)
@@ -427,7 +427,7 @@ import UserCreate from '@/components/User/UserCreate.vue'
           if (isEditable == true)
             this.editableForm = true
           setTimeout(() => { this.userRefreshLoading = false }, 300);
-          this.$refs.UserView.syncUser()
+          this.$refs.UserDialog.syncUser()
         })
         .catch(error => {
           console.log(error)

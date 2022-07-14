@@ -190,6 +190,9 @@
         "step3":"Usuario Creado",
         "step3_success":"Usuario Creado Exitosamente"
       },
+      "userDialog":{
+        "noLastLogon":"El usuario aún no ha iniciado sesión"
+      },
       "basicDetails":"Detalles Básicos",
       "location":"Ubicación",
       "perms":"Permisos del Usuario",

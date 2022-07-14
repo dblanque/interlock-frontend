@@ -2,6 +2,8 @@ export function dateFromFiletime(date) {
     if (!date) {
         return console.log("No date provided for dateFromFiletime")
     }
+    if (date == 0)
+        return date
     var result = new Date(date/1e4 - 1.16444736e13)
     return result;
 }

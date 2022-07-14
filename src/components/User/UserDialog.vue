@@ -494,7 +494,7 @@ import User from '@/include/User'
 import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
-    name: 'UserView',
+    name: 'UserDialog',
     data () {
       return {
           panel: [],
@@ -776,6 +776,8 @@ export default {
             this.usercopy = new User({})
             this.$nextTick(() => {
                 this.usercopy = this.user
+                if (this.usercopy.lastLogon == 0)
+                    this.usercopy.lastLogon = this.$t('section.users.userDialog.noLastLogon')
                 this.setPermissions()
             })
         },
