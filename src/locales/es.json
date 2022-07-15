@@ -202,7 +202,7 @@
       },
       "resetPasswordDialog":{
           "title":"Blanqueo de Contraseña",
-          "changePasswordForUser":"Cambiando la contraseña del usuario"
+          "changePasswordForUser":"Cambiará la contraseña del usuario"
       },
       "userDialog":{
         "noLastLogon":"El usuario aún no ha iniciado sesión",
@@ -223,6 +223,30 @@
       "deleteUser":{
         "title":"Borrar Usuario",
         "message":"¿Está seguro de borrar el usuario"
+      },
+      "permissions":{
+        "LDAP_UF_SCRIPT" : "Usuario de Script",
+        "LDAP_UF_ACCOUNT_DISABLE" : "Des-habilitar Cuenta de Usuario",
+        "LDAP_UF_HOMEDIR_REQUIRED" : "Directorio Base Requerido",
+        "LDAP_UF_LOCKOUT" : "Cuenta Bloqueada",
+        "LDAP_UF_PASSWD_NOTREQD" : "El Usuario no requiere Contraseña",
+        "LDAP_UF_PASSWD_CANT_CHANGE" : "El Usuario no puede cambiar la Contraseña",
+        "LDAP_UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED" : "Permitir texto encriptado en la Contraseña",
+        "LDAP_UF_NORMAL_ACCOUNT" : "Cuenta Normal",
+        "LDAP_UF_INTERDOMAIN_TRUST_ACCOUNT" : "Cuenta Inter-dominio Confiable",
+        "LDAP_UF_WORKSTATION_TRUST_ACCOUNT" : "Cuenta de Estación de Trabajo Confiable",
+        "LDAP_UF_SERVER_TRUST_ACCOUNT" : "Cuenta de Servidor Confiable",
+        "LDAP_UF_DONT_EXPIRE_PASSWD" : "Contraseña sin expiración",
+        "LDAP_UF_MNS_LOGON_ACCOUNT" : "Cuenta de Inicio con MNS",
+        "LDAP_UF_SMARTCARD_REQUIRED" : "Requiere Tarjeta Inteligente (Smart-Card)",
+        "LDAP_UF_TRUSTED_FOR_DELEGATION" : "Confiable para delegar",
+        "LDAP_UF_NOT_DELEGATED" : "Cuenta no delegada",
+        "LDAP_UF_USE_DES_KEY_ONLY" : "Usa Clave DES exclusivamente",
+        "LDAP_UF_DONT_REQUIRE_PREAUTH" : "No requiere Pre-Autenticación",
+        "LDAP_UF_PASSWORD_EXPIRED" : "Contraseña Expirada",
+        "LDAP_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION" : "Confiable para Autenticar Delegados",
+        "LDAP_UF_NO_AUTH_DATA_REQUIRED" : "No requiere Datos de Autenticación",
+        "LDAP_UF_PARTIAL_SECRETS_ACCOUNT" : "Cuenta de Secretos Parciales"
       },
       "attributes":{
         "sAMAccountName":"Nombre de Cuenta",

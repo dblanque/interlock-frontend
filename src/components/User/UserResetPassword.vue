@@ -100,7 +100,7 @@ export default {
             this.$refs.userResetPasswordForm.resetValidation()
         },
         async closeDialog(resetConfirm=false, user={}) {
-            if(!resetConfirm)
+            if(resetConfirm != true)
                 this.$emit('closeDialog', this.viewKey);
 
             user.dn = this.userObject.dn

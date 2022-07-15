@@ -45,11 +45,7 @@ export default {
                 {text: 'English', value:"en"},
                 {text: 'Español', value:"es"},
             ],
-            language: this.$i18n.locale,
-            themes: [
-                {text: this.$t("themeToggle.dark"), value:"dark"},
-                {text: this.$t("themeToggle.light"), value:"light"}
-            ],
+            language: this.$i18n.locale
         }
     },
     async created() {
