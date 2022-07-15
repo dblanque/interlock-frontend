@@ -70,6 +70,14 @@ const actions = {
             }).catch((e) => reject(e))
         })
     },
+    delete: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.delete, data)
+            .then(response => {
+                resolve(response.data);
+            }).catch((e) => reject(e))
+        })
+    },
     list: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.user.list, data).then(response => {

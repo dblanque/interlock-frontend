@@ -28,14 +28,15 @@ const urls = {
     },
     user: {
         base: 'api/users/',
-        insert: 'api/users/insert/',
         list: 'api/users/',
         fetch: 'api/users/fetch/',
+        insert: 'api/users/insert/',
+        update: 'api/users/update/',
+        delete: 'api/users/delete/',
         enable: 'api/users/enable/',
         disable: 'api/users/disable/',
         lock: 'api/users/lock/',
         unlock: 'api/users/unlock/',
-        update: 'api/users/update/'
     },
     domain: {
         details: "api/domain/details/"

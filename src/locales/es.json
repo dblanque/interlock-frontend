@@ -216,6 +216,10 @@
       "permsCalc":"Número Int. de Permisos Calculado",
       "permsOutputArray":"Lista/Array a enviar",
       "advancedDetails":"Detalles Avanzados",
+      "deleteUser":{
+        "title":"Borrar Usuario",
+        "message":"¿Está seguro de borrar el usuario"
+      },
       "attributes":{
         "sAMAccountName":"Nombre de Cuenta",
         "username":"Nombre de Usuario",

@@ -210,6 +210,10 @@
       "permsCalc":"Calculated Permissions Int. Number",
       "permsOutputArray":"Array/List to send",
       "advancedDetails":"Advanced Details",
+      "deleteUser":{
+        "title":"Delete User",
+        "message":"Are you sure you wish to delete the user"
+      },
       "permissions":{
         "LDAP_UF_SCRIPT" : "Script Account",
         "LDAP_UF_ACCOUNT_DISABLE" : "Disable User Account",

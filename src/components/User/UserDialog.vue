@@ -78,7 +78,7 @@
                                     </v-col>
                                     <v-col cols="12" lg="6">
                                         <v-fade-transition>
-                                            <v-card v-ripple outlined class="pa-1 py-2 mini-card">
+                                            <v-card v-ripple outlined class="pa-1 py-2">
                                                 <span :class="(usercopy.is_enabled ? 'clr-valid' : 'clr-error') + ' clr-lig-40'">
                                                     {{ usercopy.is_enabled ? $t('section.users.attributes.is_enabled') : $t('section.users.attributes.is_disabled') }}
                                                 </span>
@@ -161,7 +161,7 @@
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6">
-                                        <v-card v-ripple outlined class="pa-1 py-2 mini-card">
+                                        <v-card v-ripple outlined class="pa-1 py-2">
                                             <div v-if="usercopy.countryCode != undefined && usercopy.countryCode != '' && usercopy.countryCode != 0">
                                                 {{ $t('section.users.attributes.countryCodeCombined') }}
                                                 <div elevation="0">
@@ -910,8 +910,6 @@ export default {
 </script>
 
 <style>
-.mini-card {
-}
 
 .outlined {
     border: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)

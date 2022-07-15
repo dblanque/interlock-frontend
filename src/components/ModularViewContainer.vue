@@ -184,7 +184,15 @@
   </v-dialog>
 
   <v-dialog eager max-width="800px" v-model="dialogs['userConfirm']" v-if="viewTitle == 'users'">
-    <ConfirmDialog/>
+    <ConfirmDialog
+      :dialogTitle="confirmDialog.title"
+      :dialogMessage="confirmDialog.message"
+      :object="confirmDialog.object"
+      :viewKey="'userConfirm'"
+      ref="UserConfirm"
+      @closeDialog="closeDialog"
+      @deleteUser="deleteUser"
+    />
   </v-dialog>
 
   <v-dialog eager max-width="1200px" v-model="dialogs['userCreate']" v-if="viewTitle == 'users'">
@@ -299,7 +307,7 @@
               :disabled="userRefreshLoading"
               @click="changeUserPassword(item.username)"
             >
-            <v-icon small color="red">
+            <v-icon small color="primary">
               mdi-key-variant
             </v-icon>
             </v-btn>
@@ -307,7 +315,11 @@
           <span>{{ $t('actions.changePassword') }}</span>
         </v-tooltip>
 
-        <v-btn disabled color="red" elevation="0" icon small>
+        <v-btn @click="openDeleteDialog(item.username)" 
+        color="red" 
+        elevation="0" 
+        icon small
+        >
           <v-icon small>
             mdi-delete
           </v-icon>
@@ -347,7 +359,7 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
     UserCreate,
     UserDialog,
     ConfirmDialog
-},
+    },
     props: {
       viewTitle: String,
       viewIndex: Number,
@@ -358,6 +370,11 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
     },
     data () {
       return {
+        confirmDialog:{
+          title:"",
+          message:"",
+          object: ""
+        },
         dataTableSearchString: "",
         treeviewSearchString: "",
         userRefreshLoading: false,
@@ -482,19 +499,31 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
       openDialog(key){
         this.dialogs[key] = true;
       },
-      closeDialog(key){
+      async closeDialog(key, confirm=false){
+        // Confirm bool is mostly for yes/no dialogs
         this.dialogs[key] = false;
+        if (confirm == true) {
+          switch (key) {
+            case 'userConfirm':
+              await new User({}).delete({username: this.selectedUser})
+              this.selectedUser = ""
+              break;
+            default:
+              console.log("Confirmed for dialog: "+key)
+              break;
+          }
+        }
       },
       async saveData(key, data){
         switch (key) {
           case 'userDialog':
+            console.log('User saved')
             break;
           default:
             console.log(key)
             console.log(data)
             break;
         }
-        // this.closeDialog(key)
       },
       async refreshUser(username){
         await this.fetchUser(username, this.editableForm, false);
@@ -564,6 +593,17 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
         })
       },
       async changeUserPassword(username) {
+        console.log(username)
+      },
+      openDeleteDialog(username) {
+        this.selectedUser = ''
+        this.confirmDialog.title = this.$t('section.users.deleteUser.title')
+        this.confirmDialog.message = this.$t('section.users.deleteUser.message')
+        this.confirmDialog.object = username
+        this.selectedUser = username
+        this.openDialog('userConfirm')
+      },
+      async deleteUser(username) {
         console.log(username)
       },
       sortNullLast(items, index, isDesc) {
