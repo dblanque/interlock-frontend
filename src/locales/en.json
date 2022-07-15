@@ -19,6 +19,7 @@
     }
   },
   "actions":{
+    "areYouSure":"Are you sure you wish to",
     "label": "Actions",
     "done":"Done",
     "enable":"Enable",
@@ -205,6 +206,9 @@
           "addObjectClass":"You better know what you're doing"
         }
       },
+      "tryingToDisable": "You're trying to disable",
+      "disablingOwnUser": "You cannot disable your own user",
+      "antiLockoutWarning":"Anti-lockout Warning",
       "basicDetails":"Basic Details",
       "location":"Location",
       "editFlagWarning":"You are now editing this user",

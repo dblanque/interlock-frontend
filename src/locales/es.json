@@ -19,6 +19,7 @@
     }
   },
   "actions": {
+    "areYouSure":"¿Esta seguro de querer",
     "label": "Acciones",
     "done":"Listo",
     "enable":"Habilitar",
@@ -211,6 +212,9 @@
           "addObjectClass":"Mejor que sepa lo que hace"
         }
       },
+      "tryingToDisable": "Está intentando des-habilitar",
+      "disablingOwnUser": "No puede des-habilitar su propio usuario",
+      "antiLockoutWarning":"Alerta Anti-bloqueo",
       "basicDetails":"Detalles Básicos",
       "location":"Ubicación",
       "perms":"Permisos del Usuario",

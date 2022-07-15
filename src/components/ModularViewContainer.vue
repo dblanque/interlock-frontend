@@ -206,6 +206,16 @@
     />
   </v-dialog>
 
+  <!-- USER CONFIRM STATUS TOGGLE -->
+  <v-dialog eager max-width="800px" v-model="dialogs['userStatusToggle']" v-if="viewTitle == 'users'">
+    <UserStatusToggleConfirm
+      :userObject="this.data.selectedUser"
+      :viewKey="'userStatusToggle'"
+      ref="UserStatusToggle"
+      @closeDialog="closeDialog"
+    />
+  </v-dialog>
+
   <!-- USER CREATE DIALOG -->
   <v-dialog eager max-width="1200px" v-model="dialogs['userCreate']" v-if="viewTitle == 'users'">
     <UserCreate
@@ -268,7 +278,7 @@
               v-bind="attrs"
               v-on="on"
               :disabled="userRefreshLoading"
-              @click="disableUser(item.username)"
+              @click="disableUser(item)"
             >
             <v-icon class="clr-valid clr-lig-40">
               mdi-check
@@ -286,7 +296,7 @@
               v-bind="attrs"
               v-on="on"
               :disabled="userRefreshLoading"
-              @click="enableUser(item.username)"
+              @click="enableUser(item)"
             >
             <v-icon class="clr-error clr-lig-40">
               mdi-close
@@ -366,6 +376,7 @@ import User from '@/include/User'
 import UserCreate from '@/components/User/UserCreate.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
+import UserStatusToggleConfirm from '@/components/User/UserStatusToggleConfirm.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
 
   export default {
@@ -374,6 +385,7 @@ import UserDelete from '@/components/User/UserDelete.vue'
     UserCreate,
     UserDialog,
     UserResetPassword,
+    UserStatusToggleConfirm,
     UserDelete
 },
     props: {
@@ -427,6 +439,7 @@ import UserDelete from '@/components/User/UserDelete.vue'
         dialogsOld:{
           userDialog: false,
           userDelete: false,
+          userStatusToggle: false,
           userResetPassword: false,
           userCreate: false,
           group: false,
@@ -436,6 +449,7 @@ import UserDelete from '@/components/User/UserDelete.vue'
         dialogs: {
           userDialog: false,
           userDelete: false,
+          userStatusToggle: false,
           userResetPassword: false,
           userCreate: false,
           group: false,
@@ -576,11 +590,12 @@ import UserDelete from '@/components/User/UserDelete.vue'
         this.$emit('refresh')
         this.userRefreshLoading = false;
       },
-      async enableUser(username){
+      async enableUser(userObject){
+        this.data.selectedUser = {}
         this.userRefreshLoading = true;
-        this.data.selectedUser.username = username
+        this.data.selectedUser = userObject
         this.data.userdata = await new User({})
-        await this.data.userdata.enable(username)
+        await this.data.userdata.enable(this.data.selectedUser.username)
         .then(() => {
           this.refreshAction();
         })
@@ -590,19 +605,25 @@ import UserDelete from '@/components/User/UserDelete.vue'
           this.error = true;
         })
       },
-      async disableUser(username){
-        this.userRefreshLoading = true;
-        this.data.selectedUser.username = username
-        this.data.userdata = await new User({})
-        await this.data.userdata.disable(username)
-        .then(() => {
-          this.refreshAction();
-        })
-        .catch(error => {
-          console.log(error)
-          this.userRefreshLoading = false;
-          this.error = true;
-        })
+      async disableUser(userObject){
+        this.data.selectedUser = {}
+        this.data.selectedUser = userObject
+        if (localStorage.getItem('username') == this.data.selectedUser.username) {
+          this.openDialog('userStatusToggle');
+        }
+        else {
+          this.userRefreshLoading = true;
+          this.data.userdata = await new User({})
+          await this.data.userdata.disable(this.data.selectedUser.username)
+          .then(() => {
+            this.refreshAction();
+          })
+          .catch(error => {
+            console.log(error)
+            this.userRefreshLoading = false;
+            this.error = true;
+          })
+        }
       },
       async changeUserPassword(userObject) {
         this.data.selectedUser = {}
