@@ -901,7 +901,7 @@ export default {
         // Tells the parent view to refresh/fetch the user again
         async refreshUser(){
             this.loading = 0
-            this.$emit('refreshUser');
+            this.$emit('refreshUser', this.user);
             this.loading = 100
             this.loadingColor = 'primary'
         }

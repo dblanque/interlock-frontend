@@ -103,7 +103,7 @@
                   <span v-if="(item.type == 'User' || item.type=='Person')">
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn @click="goToUser(item.username)"
+                        <v-btn @click="goToUser(item)"
                           color="primary"
                           icon
                           v-bind="attrs"
@@ -169,6 +169,8 @@
   </v-container>
 
   <!-- USERS -->
+
+  <!-- USER VIEW/EDIT DIALOG -->
   <v-dialog eager max-width="1200px" v-model="dialogs['userDialog']" v-if="viewTitle == 'users'">
     <UserDialog
       :user="data.userdata"
@@ -179,22 +181,32 @@
       @closeDialog="closeDialog"
       @save="saveData"
       @editToggle="setViewToEdit"
-      @refreshUser="refreshUser(data.selectedUser)"
+      @refreshUser="refreshUser"
       />
   </v-dialog>
 
-  <v-dialog eager max-width="800px" v-model="dialogs['userConfirm']" v-if="viewTitle == 'users'">
-    <ConfirmDialog
-      :dialogTitle="confirmDialog.title"
-      :dialogMessage="confirmDialog.message"
-      :object="confirmDialog.object"
-      :viewKey="'userConfirm'"
-      ref="UserConfirm"
+  <!-- USER DELETE CONFIRM DIALOG -->
+  <v-dialog eager max-width="800px" v-model="dialogs['userDelete']" v-if="viewTitle == 'users'">
+    <UserDelete
+      :userObject="this.data.selectedUser"
+      :viewKey="'userDelete'"
+      ref="UserDelete"
       @closeDialog="closeDialog"
-      @deleteUser="deleteUser"
+      @refresh="refreshAction"
     />
   </v-dialog>
 
+  <!-- USER RESET PASSWORD DIALOG -->
+  <v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']" v-if="viewTitle == 'users'">
+    <UserResetPassword
+      :userObject="this.data.selectedUser"
+      :viewKey="'userResetPassword'"
+      ref="UserResetPassword"
+      @closeDialog="closeDialog"
+    />
+  </v-dialog>
+
+  <!-- USER CREATE DIALOG -->
   <v-dialog eager max-width="1200px" v-model="dialogs['userCreate']" v-if="viewTitle == 'users'">
     <UserCreate
       :viewKey="'userCreate'"
@@ -202,6 +214,8 @@
       @closeDialog="closeDialog"
       />
   </v-dialog>
+
+  <!-- USER DATA-TABLE -->
   <v-container v-if="viewTitle == 'users'">
     <v-data-table
       :headers="this.tableDataHeaders"
@@ -285,12 +299,12 @@
 
       <!-- USER ACTIONS -->
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn elevation="0" icon small @click="fetchUser(item.username)">
+        <v-btn elevation="0" icon small @click="fetchUser(item)">
           <v-icon class="clr-primary" small>
             mdi-eye
           </v-icon>
         </v-btn>
-        <v-btn color="primary" elevation="0" icon small @click="fetchUser(item.username, true)">
+        <v-btn color="primary" elevation="0" icon small @click="fetchUser(item, true)">
           <v-icon small>
             mdi-pencil
           </v-icon>
@@ -305,7 +319,7 @@
               v-on="on"
               small
               :disabled="userRefreshLoading"
-              @click="changeUserPassword(item.username)"
+              @click="changeUserPassword(item)"
             >
             <v-icon small color="primary">
               mdi-key-variant
@@ -315,7 +329,7 @@
           <span>{{ $t('actions.changePassword') }}</span>
         </v-tooltip>
 
-        <v-btn @click="openDeleteDialog(item.username)" 
+        <v-btn @click="openDeleteDialog(item)" 
         color="red" 
         elevation="0" 
         icon small
@@ -351,15 +365,17 @@
 import User from '@/include/User'
 import UserCreate from '@/components/User/UserCreate.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
-import ConfirmDialog from '@/components/ConfirmDialog.vue'
+import UserResetPassword from '@/components/User/UserResetPassword.vue'
+import UserDelete from '@/components/User/UserDelete.vue'
 
   export default {
     name: 'ModularViewContainer',
     components:{
     UserCreate,
     UserDialog,
-    ConfirmDialog
-    },
+    UserResetPassword,
+    UserDelete
+},
     props: {
       viewTitle: String,
       viewIndex: Number,
@@ -370,11 +386,6 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
     },
     data () {
       return {
-        confirmDialog:{
-          title:"",
-          message:"",
-          object: ""
-        },
         dataTableSearchString: "",
         treeviewSearchString: "",
         userRefreshLoading: false,
@@ -407,12 +418,16 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
           },
         },
         data: {
-          selectedUser: "",
+          selectedUser: {
+            "username": "",
+            "dn": ""
+          },
           userdata: {},
         },
         dialogsOld:{
           userDialog: false,
-          userConfirm: false,
+          userDelete: false,
+          userResetPassword: false,
           userCreate: false,
           group: false,
           dns: false,
@@ -420,7 +435,8 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
         },
         dialogs: {
           userDialog: false,
-          userConfirm: false,
+          userDelete: false,
+          userResetPassword: false,
           userCreate: false,
           group: false,
           dns: false,
@@ -448,7 +464,7 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
                 switch (key) {
                   case 'userDialog':
                     setTimeout(() => {
-                      this.data.selectedUser = ""
+                      this.data.selectedUser = {}
                       this.data.userdata = new User({})
                       if (this.editableForm == true)
                         this.refreshAction();
@@ -461,6 +477,13 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
                         this.$refs.UserCreate.newUser()
                     }, 100);
                     this.refreshAction();
+                    break;
+                  case 'userResetPassword':
+                    this.$refs.UserResetPassword.clearUser();
+                    this.data.selectedUser = {}
+                    break;
+                  case 'userDelete':
+                    this.data.selectedUser = {}
                     break;
                   default:
                     break;
@@ -499,20 +522,8 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
       openDialog(key){
         this.dialogs[key] = true;
       },
-      async closeDialog(key, confirm=false){
-        // Confirm bool is mostly for yes/no dialogs
+      async closeDialog(key){
         this.dialogs[key] = false;
-        if (confirm == true) {
-          switch (key) {
-            case 'userConfirm':
-              await new User({}).delete({username: this.selectedUser})
-              this.selectedUser = ""
-              break;
-            default:
-              console.log("Confirmed for dialog: "+key)
-              break;
-          }
-        }
       },
       async saveData(key, data){
         switch (key) {
@@ -525,16 +536,17 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
             break;
         }
       },
-      async refreshUser(username){
-        await this.fetchUser(username, this.editableForm, false);
+      async refreshUser(item){
+        await this.fetchUser(item, this.editableForm, false);
       },
       // Fetch individual User
-      async fetchUser(username, isEditable=false, refreshAnim=true){
+      async fetchUser(item, isEditable=false, refreshAnim=true){
         if (refreshAnim == true)
           this.userRefreshLoading = true;
-        this.data.selectedUser = username
+        this.data.selectedUser.username = item.username
+        this.data.selectedUser.dn = item.dn
         this.data.userdata = await new User({})
-        await this.data.userdata.fetch(username)
+        await this.data.userdata.fetch(item.username)
         .then(() => {
           this.openDialog('userDialog')
           if (isEditable == true)
@@ -552,8 +564,8 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
         // this.itemTypes[key]['filtered'] = !this.itemTypes[key]['filtered']
         console.log('Feature not enabled, filter for ' + key.toUpperCase() + ' objects should toggle')
       },
-      goToUser(username){
-        this.$emit('goToUser', username)
+      goToUser(item){
+        this.$emit('goToUser', item)
       },
       refreshAction() {
         // Reset all filters if refreshing dirtree view
@@ -566,7 +578,7 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
       },
       async enableUser(username){
         this.userRefreshLoading = true;
-        this.data.selectedUser = username
+        this.data.selectedUser.username = username
         this.data.userdata = await new User({})
         await this.data.userdata.enable(username)
         .then(() => {
@@ -580,7 +592,7 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
       },
       async disableUser(username){
         this.userRefreshLoading = true;
-        this.data.selectedUser = username
+        this.data.selectedUser.username = username
         this.data.userdata = await new User({})
         await this.data.userdata.disable(username)
         .then(() => {
@@ -592,19 +604,15 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
           this.error = true;
         })
       },
-      async changeUserPassword(username) {
-        console.log(username)
+      async changeUserPassword(userObject) {
+        this.data.selectedUser = {}
+        this.data.selectedUser = userObject
+        this.openDialog('userResetPassword')
       },
-      openDeleteDialog(username) {
-        this.selectedUser = ''
-        this.confirmDialog.title = this.$t('section.users.deleteUser.title')
-        this.confirmDialog.message = this.$t('section.users.deleteUser.message')
-        this.confirmDialog.object = username
-        this.selectedUser = username
-        this.openDialog('userConfirm')
-      },
-      async deleteUser(username) {
-        console.log(username)
+      openDeleteDialog(userObject) {
+        this.data.selectedUser = {}
+        this.data.selectedUser = userObject
+        this.openDialog('userDelete')
       },
       sortNullLast(items, index, isDesc) {
         items.sort((a, b) => {

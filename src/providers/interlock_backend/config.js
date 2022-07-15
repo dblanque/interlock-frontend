@@ -37,6 +37,7 @@ const urls = {
         disable: 'api/users/disable/',
         lock: 'api/users/lock/',
         unlock: 'api/users/unlock/',
+        changePassword: 'api/users/changePassword/',
     },
     domain: {
         details: "api/domain/details/"

@@ -200,6 +200,10 @@
         "step3":"Usuario Creado",
         "step3_success":"Usuario Creado Exitosamente"
       },
+      "resetPasswordDialog":{
+          "title":"Blanqueo de Contraseña",
+          "changePasswordForUser":"Cambiando la contraseña del usuario"
+      },
       "userDialog":{
         "noLastLogon":"El usuario aún no ha iniciado sesión",
         "userDetails":"Detalles de Usuario",
