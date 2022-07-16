@@ -66,7 +66,7 @@
             center-active
             centered
             show-arrows>
-                <v-tab class="px-4" v-for="tab in navTabs" :key="tab.index" @click="updateSelectedTab(tab.index)" :disabled="!tab.enabled">
+                <v-tab class="px-4" v-for="tab in navTabs" :key="tab.index" @click="updateSelectedTab(tab.index)" :disabled="!tab.enabled || (disableAllTabs == true && refreshLoading == true)">
                 <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
                 <span v-if="$vuetify.breakpoint.md && tab.enableShortName == true">
                     {{ $t("category." + tab.title + "_short") }}
@@ -173,6 +173,7 @@ export default {
   },
   data () {
     return {
+      disableAllTabs: false,
       username: "",
       first_name: "",
       last_name: "",
@@ -324,6 +325,8 @@ export default {
     },
     // User Actions
     async listUserItems(){
+      this.tableData.headers = []
+      this.tableData.items = []
       await new User({}).list()
       .then(response => {
         var userHeaders = response.headers
@@ -407,14 +410,24 @@ export default {
       });
     },
     async loadData(viewTitle){
+      if (!this.domain || !this.realm) {
+        await new Domain({}).getDetails().then(() => {
+          this.domain = localStorage.getItem('domain')
+          this.realm = localStorage.getItem('realm')
+          this.basedn = localStorage.getItem('basedn')
+        })
+      }
+      this.disableAllTabs = true
       switch (viewTitle) {
         case 'users':
           this.refreshLoading = true;
-          this.listUserItems();
+          await this.listUserItems();
+          this.disableAllTabs = false
           break;
         case 'home':
           this.refreshLoading = true;
-          this.fetchOUs();
+          await this.fetchOUs();
+          this.disableAllTabs = false
           break;
         default:
           break;
