@@ -73,7 +73,7 @@ request.interceptors.response.use(
                 return error.response
             }
             // Else, if there's refresh token...
-            else{
+            else {
                 // Check flag for request being retried.
                 originalRequest._retry = true;
                 // Send refresh token request.
