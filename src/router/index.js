@@ -36,8 +36,8 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/server',
-    name: 'server',
+    path: '/settings',
+    name: 'settings',
     component: HomeView
   },
   {

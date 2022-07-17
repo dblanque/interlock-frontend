@@ -68,7 +68,7 @@
             show-arrows>
                 <v-tab class="px-4" v-for="tab in navTabs" :key="tab.index" @click="updateSelectedTab(tab.index)" :disabled="!tab.enabled || (disableAllTabs == true && refreshLoading == true)">
                 <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
-                <span v-if="$vuetify.breakpoint.md && tab.enableShortName == true">
+                <span v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
                     {{ $t("category." + tab.title + "_short") }}
                 </span>
                 <span v-else>
@@ -142,7 +142,7 @@
 
     <!----- ABOUT AND DONATE BUTTONS ------>
     <v-row id="home-footer-buttons" justify="end" class="pa-0 ma-0">
-      <v-btn small text class="mx-2">{{$t('footer.about')}}</v-btn>
+      <v-btn color="primary" small class="mx-2 mb-1">{{$t('footer.about')}}</v-btn>
       <!-- <v-btn small text class="mx-2">DONATE</v-btn> -->
     </v-row>
     <v-footer padless id="home-footer" :dark="!isThemeDark()" :light="isThemeDark()" class="py-1">
@@ -239,10 +239,10 @@ export default {
         },
         {
           index: 5,
-          title: "server",
-          enabled: false,
-          icon: "mdi-server",
-          route: "server"
+          title: "settings",
+          enabled: true,
+          icon: "mdi-cog",
+          route: "settings"
         }
       ],
     }

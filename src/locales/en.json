@@ -9,18 +9,21 @@
     "dns_short":"DNS",
     "gpo_short":"GPO",
     "server":"Server",
+    "settings": "Settings",
     "header": {
       "home":"Full Directory Tree",
       "users":"Users",
       "groups":"Security Groups",
       "dns":"Domain Name Server",
       "gpo":"Group Policy Objects",
-      "server":"Server Management"
+      "server":"Server Management",
+      "settings": "Settings"
     }
   },
   "actions":{
     "areYouSure":"Are you sure you wish to",
     "label": "Actions",
+    "revert": "Revert",
     "done":"Done",
     "enable":"Enable",
     "disable":"Disable",
@@ -168,7 +171,8 @@
           "email": "Must be a valid E-Mail (E.g.: john@domain.com)",
           "phone": "Must be a valid Phone",
           "date": "Date is invalid",
-          "dayDate":"Day Date is invalid"
+          "dayDate":"Day Date is invalid",
+          "ipAddress":"Invalid IP Address"
       },
       "unableToLoad":"Unable to load",
       "notDisplayedCorrectly": "Could not get error message to display",
@@ -284,6 +288,33 @@
         "objectClass":"Object Class",
         "objectCategory":"Object Category",
         "sAMAccountType":"Account Type"
+      }
+    },
+    "settings":{
+      "headers":{
+        "domain":"Domain",
+        "bindUser":"Bind User",
+        "connection":"Connection",
+        "filters":"Filters"
+      },
+      "fields":{
+        "LDAP_AUTH_URL":"LDAP Servers",
+        "LDAP_AUTH_URL_HINT":"Add a server to the list",
+        "LDAP_DOMAIN":"LDAP Domain",
+        "LDAP_AUTH_SEARCH_BASE":"Authentication Search Base",
+        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN":"Active Directory Domain / Realm",
+        "LDAP_AUTH_CONNECTION_USER_DN":"Bind User DN",
+        "LDAP_AUTH_CONNECTION_PASSWORD":"Bind User Password",
+        "LDAP_AUTH_CONNECT_TIMEOUT":"LDAP Auth Connect Timeout",
+        "LDAP_AUTH_RECEIVE_TIMEOUT":"LDAP Auth Receive Timeout",
+        "LDAP_AUTH_USE_TLS":"Use TLS",
+        "LDAP_AUTH_TLS_VERSION":"TLS Version",
+        "LDAP_AUTH_TLS_VERSION_HINT":"Default is PROTOCOL_TLSv1_2",
+        "ADMIN_GROUP_TO_SEARCH":"Admin Group DN Filter",
+        "LDAP_AUTH_OBJECT_CLASS":"Authentication Object Class",
+        "EXCLUDE_COMPUTER_ACCOUNTS":"Exclude Computer Accounts",
+        "LDAP_AUTH_USER_FIELDS":"Authentication User Fields",
+        "LDAP_AUTH_USER_LOOKUP_FIELDS":"Authentication User Lookup Fields"
       }
     }
   },

@@ -8,8 +8,8 @@
 
   <!-- HOME -->
   <v-container v-if="viewTitle == 'home'">
-  <v-row justify="center" class="mb-2">
-    <v-card class="pa-2" max-width="1200px">
+  <v-row justify="center" class="mt-2 mb-2">
+    <v-card flat outlined class="pa-2" max-width="1200px">
       <!-- Actions Row -->
       <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-text-field clearable
@@ -207,11 +207,11 @@
   </v-dialog>
 
   <!-- USER CONFIRM STATUS TOGGLE -->
-  <v-dialog eager max-width="800px" v-model="dialogs['userStatusToggle']" v-if="viewTitle == 'users'">
-    <UserStatusToggleConfirm
+  <v-dialog eager max-width="800px" v-model="dialogs['userAntilockout']" v-if="viewTitle == 'users'">
+    <UserAntilockoutWarning
       :userObject="this.data.selectedUser"
-      :viewKey="'userStatusToggle'"
-      ref="UserStatusToggle"
+      :viewKey="'userAntilockout'"
+      ref="UserAntilockout"
       @closeDialog="closeDialog"
     />
   </v-dialog>
@@ -234,7 +234,7 @@
       :loading="refreshLoading"
       :search="dataTableSearchString"
       sort-by="sn"
-      class="py-3 px-2">
+      class="py-3 px-2 mt-2 mb-2">
       <!-- Table Header -->
       <template v-slot:top>
         <v-row align="center" class="px-2 mx-1 py-0 my-0">
@@ -365,7 +365,9 @@
   </v-container>
 
   <!-- Server -->
-  <v-container v-if="viewTitle == 'server'">
+  <v-container v-if="viewTitle == 'settings'">
+    <SettingsCard class="my-2 mb-4"
+    />
   </v-container>
 
 </v-container>
@@ -376,8 +378,9 @@ import User from '@/include/User'
 import UserCreate from '@/components/User/UserCreate.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
-import UserStatusToggleConfirm from '@/components/User/UserStatusToggleConfirm.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
+import UserAntilockoutWarning from '@/components/User/UserAntilockoutWarning.vue'
+import SettingsCard from '@/components/Settings/SettingsCard.vue'
 
   export default {
     name: 'ModularViewContainer',
@@ -385,8 +388,9 @@ import UserDelete from '@/components/User/UserDelete.vue'
     UserCreate,
     UserDialog,
     UserResetPassword,
-    UserStatusToggleConfirm,
-    UserDelete
+    UserDelete,
+    UserAntilockoutWarning,
+    SettingsCard
 },
     props: {
       viewTitle: String,
@@ -439,7 +443,7 @@ import UserDelete from '@/components/User/UserDelete.vue'
         dialogsOld:{
           userDialog: false,
           userDelete: false,
-          userStatusToggle: false,
+          userAntilockout: false,
           userResetPassword: false,
           userCreate: false,
           group: false,
@@ -449,7 +453,7 @@ import UserDelete from '@/components/User/UserDelete.vue'
         dialogs: {
           userDialog: false,
           userDelete: false,
-          userStatusToggle: false,
+          userAntilockout: false,
           userResetPassword: false,
           userCreate: false,
           group: false,
@@ -609,7 +613,7 @@ import UserDelete from '@/components/User/UserDelete.vue'
         this.data.selectedUser = {}
         this.data.selectedUser = userObject
         if (localStorage.getItem('username') == this.data.selectedUser.username) {
-          this.openDialog('userStatusToggle');
+          this.openDialog('userAntilockout');
         }
         else {
           this.userRefreshLoading = true;

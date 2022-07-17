@@ -42,6 +42,7 @@ const validationMixin ={
       inputRulesDomain: (v) => !v || /^((?:http(?:s){0,5}(:\/\/){0,1}){0,1}(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+)?$/.test(v) || i18n.t("error.validation.domain"),
       inputRulesEmail: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+$/.test(v) || i18n.t("error.validation.email"),
       inputRulesUSN: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@(?:[a-zA-Z0-9-\\.]){2,61}((?:[a-zA-Z0-9-]){2,61})+$/.test(v) || i18n.t("error.validation.usn"),
+      inputRulesIP: (v) => !v || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(v) || i18n.t("error.validation.ipAddress"),
 
       // Phone Regex Rules
       //inputRulesPhone: (v) => !v || /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(v) || /.+[0-9]{2}[0-9]{1,2}[0-9]{2}[0-9]{4}[0-9]{4}/.test(v) || i18n.t("error.validation.phone"),
@@ -144,6 +145,7 @@ const validationMixin ={
 
         // Adds required input Rule if it's passed from parameter
         if (isRequired == true || (isRequired != null && isRequired.length > 0)) {
+          // console.log(fieldName+' is required')
           rules.push(this.inputRulesRequired);
         }
 
@@ -215,6 +217,9 @@ const validationMixin ={
             break;
           case "ge_country": // Country
               rules.push(this.inputRulesCountry)
+            break;
+          case "ge_ipaddress": // IP ADDR
+              rules.push(this.inputRulesIP)
             break;
 
           default:

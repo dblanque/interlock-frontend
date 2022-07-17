@@ -9,18 +9,21 @@
     "dns_short": "DNS",
     "gpo_short": "GPO",
     "server": "Servidor",
+    "settings": "Configuración",
     "header": {
       "home":"Árbol de Directorio",
       "users":"Usuarios",
       "groups":"Grupos de Seguridad",
       "dns":"Servidor de Nombre de Dominio",
       "gpo":"Objetos de Política de Grupo",
-      "server":"Administración de Servidor"
+      "server":"Administración de Servidor",
+      "settings": "Configuración"
     }
   },
   "actions": {
     "areYouSure":"¿Esta seguro de querer",
     "label": "Acciones",
+    "revert": "Revertir",
     "done":"Listo",
     "enable":"Habilitar",
     "disable":"Des-habilitar",
@@ -174,7 +177,8 @@
       "email": "Debe ser un E-Mail válido (Ej.: juan@dominio.com)",
       "phone": "Debe ser un Teléfono válido",
       "date": "Fecha inválida",
-      "dayDate": "Fecha de Día inválida"
+      "dayDate": "Fecha de Día inválida",
+      "ipAddress":"Dirección de IP inválida"
     },
     "unableToLoad":"No se pudo cargar la sección",
     "notDisplayedCorrectly": "No se pudo obtener un código de error",
@@ -290,6 +294,33 @@
         "objectClass":"Clase del Objeto",
         "objectCategory":"Categoría del Objeto",
         "sAMAccountType":"Tipo de Cuenta"
+      }
+    },
+    "settings":{
+      "headers":{
+        "domain":"Dominio",
+        "bindUser":"Usuario de Conexión",
+        "connection":"Conexión",
+        "filters":"Filtros"
+      },
+      "fields":{
+        "LDAP_AUTH_URL":"Servidores LDAP",
+        "LDAP_AUTH_URL_HINT":"Añadir un servidor a lista",
+        "LDAP_DOMAIN":"Dominio LDAP",
+        "LDAP_AUTH_SEARCH_BASE":"Base de Búsqueda de Autenticación",
+        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN":"Reino / Dominio de Autenticación de AD",
+        "LDAP_AUTH_CONNECTION_USER_DN":"DN de Usuario de Conexión",
+        "LDAP_AUTH_CONNECTION_PASSWORD":"Contraseña de Usuario de Conexión",
+        "LDAP_AUTH_CONNECT_TIMEOUT":"Tiempo de Espera para la Conexión de Autenticación LDAP",
+        "LDAP_AUTH_RECEIVE_TIMEOUT":"Tiempo de Espera para recibir la respuesta de Autenticación LDAP",
+        "LDAP_AUTH_USE_TLS":"Usar TLS",
+        "LDAP_AUTH_TLS_VERSION":"Versión de TLS",
+        "LDAP_AUTH_TLS_VERSION_HINT":"El valor Pre-determinado es PROTOCOL_TLSv1_2",
+        "ADMIN_GROUP_TO_SEARCH":"Filtro DN de Grupo Administrador",
+        "LDAP_AUTH_OBJECT_CLASS":"Clase de Objeto de Autenticación",
+        "EXCLUDE_COMPUTER_ACCOUNTS":"Excluir Objetos de Computadoras",
+        "LDAP_AUTH_USER_FIELDS":"Campos de Autenticación del Usuario",
+        "LDAP_AUTH_USER_LOOKUP_FIELDS":"Campos de Búsqueda del Usuario"
       }
     }
   },
