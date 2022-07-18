@@ -17,12 +17,12 @@ class Settings extends ApiModel{
         });
     }
 
-    list(){
-        return interlock_backend.call('ou/list')
+    async list(){
+        return await interlock_backend.call('settings/list')
     }
 
-    save(){
-        return interlock_backend.call('ou/save')
+    async save(){
+        return await interlock_backend.call('settings/save')
     }
 }
 

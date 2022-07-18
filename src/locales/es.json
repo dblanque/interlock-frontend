@@ -74,6 +74,8 @@
     "addObjectClass": "Añadir Clase de Objeto"
   },
   "words": {
+    "key":"Clave",
+    "value":"Valor",
     "error":"Error",
     "today": "Hoy",
     "filter": "Filtro",
@@ -178,7 +180,9 @@
       "phone": "Debe ser un Teléfono válido",
       "date": "Fecha inválida",
       "dayDate": "Fecha de Día inválida",
-      "ipAddress":"Dirección de IP inválida"
+      "ipAddress":"Dirección de IP inválida",
+      "dn":"Nombre Distinguido inválido",
+      "realm":"Reino NT inválido"
     },
     "unableToLoad":"No se pudo cargar la sección",
     "notDisplayedCorrectly": "No se pudo obtener un código de error",

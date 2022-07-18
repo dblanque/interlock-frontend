@@ -74,6 +74,8 @@
     "addObjectClass": "Add Object Class"
   },
   "words":{
+      "key":"Key",
+      "value":"Value",
       "error":"Error",
       "today": "Today",
       "filter": "Filter",
@@ -172,7 +174,9 @@
           "phone": "Must be a valid Phone",
           "date": "Date is invalid",
           "dayDate":"Day Date is invalid",
-          "ipAddress":"Invalid IP Address"
+          "ipAddress":"Invalid IP Address",
+          "dn":"Distinguished Name is invalid",
+          "realm":"NT Realm is invalid"
       },
       "unableToLoad":"Unable to load",
       "notDisplayedCorrectly": "Could not get error message to display",

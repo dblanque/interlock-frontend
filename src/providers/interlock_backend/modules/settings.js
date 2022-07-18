@@ -9,6 +9,7 @@ const actions = {
             }).catch((e) => reject(e))
         })
     },
+
     save: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.settings.save, data)

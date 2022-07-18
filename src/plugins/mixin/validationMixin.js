@@ -27,6 +27,7 @@ const validationMixin ={
       inputRulesRequired: (v) => (v != null && v != undefined && v.length != 0) ||  i18n.t("error.validation.fieldRequired"),
       inputRulesAboveZero: (v) => (parseInt(v) > 0) || "Fields must be larger than 0",
       inputRulesLetters: (v) => !v || /^[üöñóúíáéa-zA-Z ]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
+      inputRulesLettersStrict: (v) => !v || /^[a-zA-Z ]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
       inputRulesCountry: (v) => !v || /^[a-zA-Z'\s]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
       inputRulesNumbers: (v) => !v || /^[0-9.]{0,}$/.test(v) || i18n.t("error.validation.numeric"),
       inputRulesMax4: (v) => !v || /^.{1,4}$/.test(v) || i18n.t("error.validation.max4"),
@@ -40,9 +41,11 @@ const validationMixin ={
       inputRulesalphaNumericSpecialName: (v) => !v || /^[a-z0-9]+([a-z0-9_-\s]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecialUsername"),
       inputRulesDN: (v) => !v || /^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:,(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/i.test(v) || i18n.t("error.validation.dn"),
       inputRulesDomain: (v) => !v || /^((?:http(?:s){0,5}(:\/\/){0,1}){0,1}(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+)?$/.test(v) || i18n.t("error.validation.domain"),
+      inputRulesDomainNonTLD: (v) => !v || /^(((?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+|(?:[a-zA-Z0-9-]){2,64}))?$/.test(v) || i18n.t("error.validation.domain"),
       inputRulesEmail: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+$/.test(v) || i18n.t("error.validation.email"),
       inputRulesUSN: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@(?:[a-zA-Z0-9-\\.]){2,61}((?:[a-zA-Z0-9-]){2,61})+$/.test(v) || i18n.t("error.validation.usn"),
       inputRulesIP: (v) => !v || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[1]?[0-9][0-9]?)$/.test(v) || i18n.t("error.validation.ipAddress"),
+      inputRulesREALM: (v) => !v || /^[A-Z]{1,15}$/.test(v) || i18n.t("error.validation.realm"),
 
       // Phone Regex Rules
       //inputRulesPhone: (v) => !v || /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(v) || /.+[0-9]{2}[0-9]{1,2}[0-9]{2}[0-9]{4}[0-9]{4}/.test(v) || i18n.t("error.validation.phone"),
@@ -153,6 +156,9 @@ const validationMixin ={
         // * ------------------------------ Add your rules here ------------------------------ * //
         switch (fieldName) {
           // Generic Field Rules
+          case "ge_lettersStrict": // Generic INT Field
+              rules.push(this.inputRulesLettersStrict)
+            break;
           case "ge_numbers": // Generic INT Field
               rules.push(this.inputRulesNumbers)
             break;
@@ -167,6 +173,12 @@ const validationMixin ={
             break;
           case "ldap_dn": // LDAP Distinguished Name validator
               rules.push(this.inputRulesDN)
+            break;
+          case "ldap_realm": // LDAP Realm validator
+              rules.push(this.inputRulesREALM)
+            break;
+          case "ldap_website": // LDAP Domain validator
+              rules.push(this.inputRulesDomainNonTLD)
             break;
           case "ldap_usn": // LDAP User Principal Name validator
               rules.push(this.inputRulesUSN)

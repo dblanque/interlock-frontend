@@ -366,7 +366,9 @@
 
   <!-- Settings -->
   <v-container v-if="viewTitle == 'settings'">
-    <SettingsCard class="my-2 mb-4"
+    <SettingsCard
+      class="my-2 mb-4"
+      ref="SettingsCardRef"
     />
   </v-container>
 
