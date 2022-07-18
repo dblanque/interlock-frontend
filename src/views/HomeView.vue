@@ -55,13 +55,18 @@
       </v-row>
     
     <!-- Tabs Bar -->
-    <v-toolbar v-if="this.$vuetify.breakpoint.mdAndUp" dense id="tabs-nav-bar" :dark="!isThemeDark()" :light="isThemeDark()" 
-    :class="' ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+    <v-toolbar v-if="this.$vuetify.breakpoint.mdAndUp" 
+    dense 
+    id="tabs-nav-bar" 
+    :dark="!isThemeDark()" 
+    :light="isThemeDark()"
+    style="z-index: 1;"
+    :class="'sticky-top ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
         <v-fade-transition>
         <v-tabs 
             v-model="active_tab"
             v-if="showNavTabs"
-            color="primary" 
+            color="primary"
             slider-size="4"
             center-active
             centered
@@ -198,6 +203,7 @@ export default {
         items:[]
       },
       timeoutInS: 1800,
+      // timeoutInS: 5, // For testing
       timeoutId: 0,
       navTabs: [
         {

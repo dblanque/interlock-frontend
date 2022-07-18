@@ -42,6 +42,10 @@ const urls = {
     domain: {
         details: "api/domain/details/"
     },
+    settings: {
+        list: "api/settings/",
+        save: "api/settings/save/"
+    },
     ou: {
         list: "api/ou/",
         dirtree: "api/ou/dirtree/"

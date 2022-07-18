@@ -79,12 +79,19 @@ a {
 
 /* --------------------------- MISC ----------------------- */
 
+.unset-overflow,
+.v-window {
+    overflow: unset !important;
+}
+
 .sticky-top {
+    position: -webkit-sticky !important; /* Safari */
     position: sticky !important;
     top: 0 !important;
 }
 
 .sticky-bottom {
+    position: -webkit-sticky !important; /* Safari */
     position: sticky !important;
     bottom: 0 !important;
 }

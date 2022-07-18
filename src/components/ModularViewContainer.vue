@@ -364,7 +364,7 @@
   <v-container v-if="viewTitle == 'gpo'">
   </v-container>
 
-  <!-- Server -->
+  <!-- Settings -->
   <v-container v-if="viewTitle == 'settings'">
     <SettingsCard class="my-2 mb-4"
     />
