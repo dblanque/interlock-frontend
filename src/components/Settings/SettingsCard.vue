@@ -238,7 +238,8 @@ export default {
                     row1:{
                         // Bind User
                         LDAP_AUTH_CONNECTION_USER_DN: {
-                            value: ""
+                            value: "",
+                            validator: "ldap_dn"
                         },
                         LDAP_AUTH_CONNECTION_PASSWORD: {
                             value: "",
@@ -253,10 +254,12 @@ export default {
                         // Connection Parameters
                         LDAP_AUTH_CONNECT_TIMEOUT: {
                             value: 5,
+                            type: "integer",
                             validator: "ge_numbers"
                         },
                         LDAP_AUTH_RECEIVE_TIMEOUT: {
                             value: 5,
+                            type: "integer",
                             validator: "ge_numbers"
                         },
                     },
@@ -304,13 +307,13 @@ export default {
                             valueToAdd: "",
                             type: "object"
                         },
-                        LDAP_AUTH_USER_LOOKUP_FIELDS:{ 
-                            value: [],
-                            type: 'list',
-                            add: "",
-                            required: true,
-                            validator: "ge_lettersStrict"
-                        },
+                        // LDAP_AUTH_USER_LOOKUP_FIELDS:{ 
+                        //     value: [],
+                        //     type: 'list',
+                        //     add: "",
+                        //     required: true,
+                        //     validator: "ge_lettersStrict"
+                        // },
                     }
                 }
             }
@@ -362,11 +365,16 @@ export default {
                 for (const row in this.config[category]) {
                     var currentPath = this.config[category][row]
                     for (const settingKey in currentPath){
-                        dataToSend[settingKey] = currentPath[settingKey]['value']
+                        dataToSend[settingKey] = {}
+                        dataToSend[settingKey]['value'] = currentPath[settingKey]['value']
+                        if (currentPath[settingKey]['type'])
+                            dataToSend[settingKey]['type'] = currentPath[settingKey]['type']
+                        else
+                            dataToSend[settingKey]['type'] = 'string'
                     }
                 }
             }
-            console.log(dataToSend)
+            await new Settings({}).save(dataToSend)
         },
         async refreshSettings(){
             if (this.$refs.settingsForm != undefined)

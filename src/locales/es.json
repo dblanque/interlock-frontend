@@ -328,7 +328,7 @@
         "ADMIN_GROUP_TO_SEARCH":"Filtro DN de Grupo Administrador",
         "LDAP_AUTH_OBJECT_CLASS":"Clase de Objeto de Autenticación",
         "EXCLUDE_COMPUTER_ACCOUNTS":"Excluir Objetos de Computadoras",
-        "LDAP_AUTH_USER_FIELDS":"Campos de Autenticación del Usuario",
+        "LDAP_AUTH_USER_FIELDS":"Mappeo de Campos de Usuario de LDAP",
         "LDAP_AUTH_USER_LOOKUP_FIELDS":"Campos de Búsqueda del Usuario"
       }
     }

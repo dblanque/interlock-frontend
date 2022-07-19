@@ -187,7 +187,7 @@
   "section":{
     "login":{
       "title":"Log in to your LDAP Server",
-      "account":"Account / E-Mail",
+      "account":"LDAP / AD Account",
       "loginBtn":"Log-in",
       "forgotMyPassword":"I forgot my password"
     },
@@ -322,7 +322,7 @@
         "ADMIN_GROUP_TO_SEARCH":"Admin Group DN Filter",
         "LDAP_AUTH_OBJECT_CLASS":"Authentication Object Class",
         "EXCLUDE_COMPUTER_ACCOUNTS":"Exclude Computer Accounts",
-        "LDAP_AUTH_USER_FIELDS":"Authentication User Fields",
+        "LDAP_AUTH_USER_FIELDS":"LDAP User Field Mapping",
         "LDAP_AUTH_USER_LOOKUP_FIELDS":"Authentication User Lookup Fields"
       }
     }

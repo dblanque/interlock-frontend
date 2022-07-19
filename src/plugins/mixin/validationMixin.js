@@ -165,7 +165,7 @@ const validationMixin ={
           case "ge_name": // Generic Name Field
               rules.push(this.inputRulesalphaNumericSpecialName)
             break;
-          case "ge_username": // Generic Name Field
+          case "ge_username": // Generic Username Field
               rules.push(this.inputRulesalphaNumericSpecialUsername)
             break;
           case "ge_password": // Generic Password Field
