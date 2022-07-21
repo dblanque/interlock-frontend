@@ -517,6 +517,8 @@ export default {
             .then(response => {
                 var settings = response.data.settings
                 this.defaultAdminEnabled = settings['DEFAULT_ADMIN_ENABLED']
+                this.defaultAdminPwd = ""
+                this.defaultAdminPwdConfirm = ""
                 for (const key in settings) {
                     if (Object.hasOwnProperty.call(settings, key)) {
                         const value = settings[key]['value'];
