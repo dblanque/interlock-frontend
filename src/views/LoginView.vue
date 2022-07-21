@@ -54,7 +54,7 @@
             <!-- ERROR MESSAGE -->
             <v-row justify="center">
               <v-expand-transition>
-                <v-alert :type="errCount > 2 && error ? (errCount > 4 ? 'error' : 'warning') : 'info'" v-if="error == true && errorMsg != ''">
+                <v-alert :type="loginForbiddenCount > 2 && error ? (loginForbiddenCount > 4 ? 'error' : 'warning') : 'info'" v-if="error == true && errorMsg != ''">
                   {{ this.errorMsg }}
                 </v-alert>
               </v-expand-transition>
@@ -123,7 +123,7 @@ export default {
   },
   data() {
     return {
-      errCount: 0,
+      loginForbiddenCount: 0,
       timeoutCounter: 30,
       timedOut: false,
       timeoutInterval: false,
@@ -139,11 +139,11 @@ export default {
     };
   },
   mounted() {
-    var errInStorage = parseInt(localStorage.getItem('loginErrorCount'))
+    var errInStorage = parseInt(localStorage.getItem('loginForbiddenCount'))
     var timedOutStorage = Boolean(localStorage.getItem('loginTimedOut'))
     var timeOutCounterStorage = parseInt(localStorage.getItem('loginTimeOutCounter'))
     if (Number.isInteger(errInStorage))
-      this.errCount = errInStorage
+      this.loginForbiddenCount = errInStorage
     if (Number.isInteger(timeOutCounterStorage))
       this.timeoutCounter = timeOutCounterStorage
     if (timedOutStorage == true && this.timeoutCounter > 0)
@@ -152,7 +152,7 @@ export default {
     if (this.timedOut == true)
       this.setLoginTimeout()
 
-    if (this.errCount > 0)
+    if (this.loginForbiddenCount > 0)
       this.error = true
 
     var userJustLoggedOut = localStorage.getItem('logoutMessage')
@@ -180,7 +180,8 @@ export default {
   methods: {
     setLoginTimeout() {
         this.timedOut = true
-        this.timeoutCounter = 30
+        if (!this.timeoutCounter)
+          this.timeoutCounter = 30
         localStorage.setItem('loginTimedOut', true)
         localStorage.setItem('loginTimeOutCounter', this.timeoutCounter)
         this.submitted = false
@@ -206,12 +207,12 @@ export default {
         }, 1000)
     },
     clearLoginTimeout() {
-      localStorage.removeItem('loginErrorCount')
+      localStorage.removeItem('loginForbiddenCount')
       localStorage.removeItem('loginTimedOut')
       localStorage.removeItem('loginTimeOutCounter')
       this.timedOut = false
       this.timeoutCounter = 30
-      this.errCount = 0
+      this.loginForbiddenCount = 0
     },
     async submit() {
       if (this.username == "" || this.password == "") {
@@ -227,7 +228,7 @@ export default {
             this.error = false
             this.errorMsg = "";
             localStorage.setItem("encPwd", response.data.encPwd)
-            localStorage.removeItem('loginErrorCount')
+            localStorage.removeItem('loginForbiddenCount')
             this.clearLoginTimeout()
             this.$router.push("/home");
           }
@@ -235,11 +236,14 @@ export default {
         .catch((e) => {
           console.log(e)
           this.error = true;
-          var retriesLeft = 5 - this.errCount
+          var retriesLeft = 5 - this.loginForbiddenCount
           var retriesLeftMsg = this.$t("section.login.retriesLeft")
           if (retriesLeft == 1)
             retriesLeftMsg = this.$t("section.login.oneRetryLeft")
           if(e.status == 401){
+            // Add error count to storage to avoid people reloading out of the timeout
+            this.loginForbiddenCount += 1
+            localStorage.setItem('loginForbiddenCount', this.loginForbiddenCount)
             if (retriesLeft > 0)
               this.errorMsg = this.$t('error.codes.auth.invalid_credentials')  + " (" + retriesLeft + " " + retriesLeftMsg + ")"
             else
@@ -248,9 +252,6 @@ export default {
           else
             this.errorMsg = this.getMessageForCode(e.data.code);
           this.submitted = false;
-          // Add error count to storage to avoid people reloading out of the timeout
-          this.errCount += 1
-          localStorage.setItem('loginErrorCount', this.errCount)
         });
       }
     },
