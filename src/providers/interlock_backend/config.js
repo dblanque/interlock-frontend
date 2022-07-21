@@ -44,7 +44,8 @@ const urls = {
     },
     settings: {
         list: "api/settings/",
-        save: "api/settings/save/"
+        save: "api/settings/save/",
+        reset: "api/settings/reset/"
     },
     ou: {
         list: "api/ou/",

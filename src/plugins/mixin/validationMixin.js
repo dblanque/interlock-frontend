@@ -46,6 +46,7 @@ const validationMixin ={
       inputRulesUSN: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@(?:[a-zA-Z0-9-\\.]){2,61}((?:[a-zA-Z0-9-]){2,61})+$/.test(v) || i18n.t("error.validation.usn"),
       inputRulesIP: (v) => !v || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[1]?[0-9][0-9]?)$/.test(v) || i18n.t("error.validation.ipAddress"),
       inputRulesREALM: (v) => !v || /^[A-Z]{1,15}$/.test(v) || i18n.t("error.validation.realm"),
+      inputRulesPORT: (v) => !v || /^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/.test(v) || i18n.t("error.validation.ldapURI_PORT"),
 
       // Phone Regex Rules
       //inputRulesPhone: (v) => !v || /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(v) || /.+[0-9]{2}[0-9]{1,2}[0-9]{2}[0-9]{4}[0-9]{4}/.test(v) || i18n.t("error.validation.phone"),
@@ -174,6 +175,12 @@ const validationMixin ={
           case "ldap_dn": // LDAP Distinguished Name validator
               rules.push(this.inputRulesDN)
             break;
+          case "net_ip": // LDAP Realm validator
+              rules.push(this.inputRulesIP)
+            break;
+          case "net_port": // LDAP Realm validator
+              rules.push(this.inputRulesPORT)
+            break;
           case "ldap_realm": // LDAP Realm validator
               rules.push(this.inputRulesREALM)
             break;
@@ -229,9 +236,6 @@ const validationMixin ={
             break;
           case "ge_country": // Country
               rules.push(this.inputRulesCountry)
-            break;
-          case "ge_ipaddress": // IP ADDR
-              rules.push(this.inputRulesIP)
             break;
 
           default:

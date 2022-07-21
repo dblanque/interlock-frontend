@@ -21,6 +21,7 @@
     }
   },
   "actions": {
+    "restoreDefaultValues":"Restaurar Valores Originales",
     "areYouSure":"¿Esta seguro de querer",
     "label": "Acciones",
     "revert": "Revertir",
@@ -301,6 +302,11 @@
       }
     },
     "settings":{
+      "resetDialog":{
+        "header":"Re-establecer Configuración",
+        "message":"¿Está seguro de re-establecer <b>todos</b> los parámetros?"
+      },
+      "settingFailedValidation":"Un parámetro ha fallado la validación",
       "headers":{
         "domain":"Dominio",
         "bindUser":"Usuario de Conexión",
@@ -308,6 +314,10 @@
         "filters":"Filtros"
       },
       "fields":{
+        "LDAP_URI_PREFIX":"Prefijo LDAP",
+        "LDAP_URI_IP":"Dirección IP del Servidor",
+        "LDAP_URI_PORT":"Puerto del Servidor",
+        "LDAP_URI_PORT_HINT":"Rango Válido: 1-65535",
         "LDAP_AUTH_URL":"Servidores LDAP",
         "LDAP_AUTH_URL_HINT":"Añadir un servidor a lista",
         "LDAP_DOMAIN":"Dominio LDAP",

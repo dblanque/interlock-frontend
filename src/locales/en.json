@@ -21,6 +21,7 @@
     }
   },
   "actions":{
+    "restoreDefaultValues":"Restore Default Values",
     "areYouSure":"Are you sure you wish to",
     "label": "Actions",
     "revert": "Revert",
@@ -295,6 +296,11 @@
       }
     },
     "settings":{
+      "resetDialog":{
+        "header":"Reset Settings",
+        "message":"Are you sure you wish to reset <b>all</b> the settings?"
+      },
+      "settingFailedValidation":"A parameter has failed validation",
       "headers":{
         "domain":"Domain",
         "bindUser":"Bind User",
@@ -302,6 +308,10 @@
         "filters":"Filters"
       },
       "fields":{
+        "LDAP_URI_PREFIX":"LDAP Prefix",
+        "LDAP_URI_IP":"Server IP",
+        "LDAP_URI_PORT":"Server Port",
+        "LDAP_URI_PORT_HINT":"Valid range: 1-65535",
         "LDAP_AUTH_URL":"LDAP Servers",
         "LDAP_AUTH_URL_HINT":"Add a server to the list",
         "LDAP_DOMAIN":"LDAP Domain",

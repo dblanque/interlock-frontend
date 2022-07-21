@@ -1,7 +1,17 @@
 <template>
-    <v-card outlined flat>
-        <v-row class="ma-0 ma-1 px-4 py-2 sticky-top" style="top: 3rem !important; z-index: 10 !important;" justify="center">
-            <v-btn @click="saveSettings"
+    <v-card outlined flat class="pt-2">
+        <v-row class="ma-0 ma-1 px-4 py-0 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
+            <v-btn @click="resetDialog = true" disabled
+                class="ma-0 pa-0 pa-4 ma-1 mx-0 text-normal"
+                color="red">
+                    <v-icon :class="(loading == true ? 'custom-loader' : '' ) + ' mr-1'">
+                        mdi-blur
+                    </v-icon>
+                    {{ $t("actions.restoreDefaultValues") }}
+            </v-btn>
+        </v-row>
+        <v-row class="ma-0 ma-1 px-4 py-0 mb-4 sticky-top" style="top: 6.5rem !important; z-index: 10 !important;" justify="center">
+            <v-btn @click="saveSettings" disabled
             style="border-radius: 0; border-bottom-left-radius: 0.3rem; border-top-left-radius: 0.3rem;"
                 class="ma-0 pa-0 pa-4 ma-1 mr-0 bg-white bg-lig-25 text-normal" >
                     <v-icon class="mr-1">
@@ -19,6 +29,13 @@
                     {{ $t("actions.refresh") }}
             </v-btn>
         </v-row>
+        <v-slide-y-transition>
+            <v-row justify="center" v-if="invalid == true">
+                <v-alert type="warning" dense>
+                    {{ $t("section.settings.settingFailedValidation") }}
+                </v-alert>
+            </v-row>
+        </v-slide-y-transition>
         <v-expand-transition>
         <v-row v-if="loading == true" class="ma-0 pa-0 ma-16" justify="center" align="center" align-content="center">
             <v-progress-circular size="100" width="10" indeterminate color="primary"/>
@@ -27,7 +44,7 @@
         <v-row>
             <v-col cols="12" v-for="(category, categoryKey) in config" :key="categoryKey">
                 <!-- Category Header -->
-                <v-row class="ma-0 pa-0 pt-4" justify="center">
+                <v-row class="ma-0 pa-0" justify="center">
                     <h4>
                         {{ $t('section.settings.headers.' + categoryKey) }}
                     </h4>
@@ -37,9 +54,10 @@
                 <v-row class="ma-0 my-2 pa-0" justify="center" v-for="(row, key) in category" :key="key">
                     <v-col :class="'ma-0 pa-0 py-1 px-4'" cols="10" :md="getColSize(key, 'md')" :lg="getColSize(key, 'lg')" v-for="(item, key) in row" :key="key">
                     <!-- Checkbox Settings -->
-                    <v-checkbox
-                    v-if="item.type == 'checkbox'"
+                    <v-checkbox 
+                    v-if="item.type == 'checkbox' || item.type == 'boolean' || item.type == 'bool'"
                     v-model="item.value"
+                    :readonly="item.readonly || readonly == true"
                     :hint="$t(item.hint)"
                     :persistent-hint="item.persistentHint"
                     :label="$t('section.settings.fields.' + key)"/>
@@ -47,7 +65,7 @@
                     <v-card flat outlined class="ma-0 px-6 py-2" v-else-if="item.type == 'list' || item.type == 'array'">
                         <v-row class="ma-0 pa-0">
                             <v-text-field :label="$t('section.settings.fields.' + key)"
-                            :readonly="item.readonly"
+                            :readonly="item.readonly || readonly == true"
                             :hint="$t(item.hint)"
                             :persistent-hint="item.persistentHint"
                             @keydown.enter="addToArray(item.add, item, 'LIST_KEY_'+key)"
@@ -59,6 +77,70 @@
                             />
                             <v-btn class="bg-primary text-white mt-3 ml-5"
                             @click="addToArray(item.add, item, 'LIST_KEY_'+key)"
+                            :disabled="item.readonly || readonly == true"
+                            rounded
+                            icon>
+                                <v-icon>
+                                    mdi-plus
+                                </v-icon>
+                            </v-btn>
+                        </v-row>
+                        <v-list-item v-for="subItem, subItemKey in item.value" :key="subItemKey">
+                            <v-list-item-content>
+                                {{ subItem }}
+                            </v-list-item-content>
+                            <v-list-item-action>
+                                <v-btn class="bg-primary text-white ml-5"
+                                :disabled="item.readonly || readonly == true"
+                                @click="removeFromArray(subItem, item)"
+                                rounded small
+                                icon>
+                                    <v-icon small>
+                                        mdi-minus
+                                    </v-icon>
+                                </v-btn>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </v-card>
+                    <!-- LDAP URI Type -->
+                    <v-card flat outlined class="ma-0 px-6 py-2" v-else-if="item.type == 'ldap_uri'">
+                        <v-row class="ma-0 pa-0">
+                            <v-col cols="3">
+                                <v-select :label="$t('section.settings.fields.LDAP_URI_PREFIX')"
+                                    ref="ldapUriPrefix"
+                                    id="ldapUriPrefix"
+                                    :readonly="item.readonly || readonly == true"
+                                    v-model="item.addPREFIX"
+                                    :items="[ 'ldap://','ldaps://' ]"
+                                />
+                            </v-col>
+                            <v-col>
+                                <v-text-field :label="$t('section.settings.fields.LDAP_URI_IP')"
+                                :readonly="item.readonly || readonly == true"
+                                @keydown.enter="addServer(item)"
+                                v-model="item.addIP"
+                                ref="ldapUriIP"
+                                :required="item.required && item.value.length == 0 ? true : false"
+                                :rules="[fieldRules(item.addIP, 'net_ip', (item.required && item.value.length == 0 || item.addPORT.length > 0 ? true : false))]"
+                                id="ldapUriIP"
+                                />
+                            </v-col>
+                            <v-col>
+                                <v-text-field :label="$t('section.settings.fields.LDAP_URI_PORT')"
+                                :readonly="item.readonly || readonly == true"
+                                :hint="$t('section.settings.fields.LDAP_URI_PORT_HINT')"
+                                persistent-hint
+                                @keydown.enter="addServer(item)"
+                                v-model="item.addPORT"
+                                ref="ldapUriPort"
+                                :required="item.required && item.value.length == 0 ? true : false"
+                                :rules="[fieldRules(item.addPORT, 'net_port', (item.required && item.value.length == 0 || item.addIP.length > 0 ? true : false))]"
+                                id="ldapUriPort"
+                                />
+                            </v-col>
+                            <v-btn class="bg-primary text-white mt-3 ml-5"
+                            @click="addServer(item)"
+                            :disabled="item.readonly || readonly == true"
                             rounded
                             icon>
                                 <v-icon>
@@ -73,6 +155,7 @@
                             <v-list-item-action>
                                 <v-btn class="bg-primary text-white ml-5"
                                 @click="removeFromArray(subItem, item)"
+                                :disabled="item.readonly || readonly == true"
                                 rounded small
                                 icon>
                                     <v-icon small>
@@ -90,7 +173,7 @@
                         <v-row class="ma-0 pa-0">
                             <v-text-field :label="$t('words.key')"
                             class="px-2"
-                            :readonly="item.readonly"
+                            :readonly="item.readonly || readonly == true"
                             :hint="$t(item.hint)"
                             :ref="'OBJ_KEY_'+key"
                             :persistent-hint="item.persistentHint"
@@ -103,7 +186,7 @@
                             <v-text-field :label="$t('words.value')"
                             class="px-2"
                             :ref="'OBJ_VAL_'+key"
-                            :readonly="item.readonly"
+                            :readonly="item.readonly || readonly == true"
                             :hint="$t(item.hint)"
                             :persistent-hint="item.persistentHint"
                             @keydown.enter="addToObject(item, item.keyToAdd, item.valueToAdd)"
@@ -113,6 +196,7 @@
                             :id="'OBJ_VAL_'+key"
                             />
                             <v-btn class="bg-primary text-white mt-3 ml-5"
+                            :disabled="item.readonly || readonly == true"
                             @click="addToObject(item, item.keyToAdd, item.valueToAdd)"
                             rounded
                             icon>
@@ -138,6 +222,7 @@
                             </v-list-item-content>
                             <v-list-item-action class="ma-0 pa-0">
                                 <v-btn class="bg-primary text-white ml-2 mb-7"
+                                :disabled="item.readonly || readonly == true"
                                 @click="removeFromObject(item, subItemKey)"
                                 rounded small
                                 icon>
@@ -151,7 +236,7 @@
                     <!-- Select Settings -->
                     <v-select :label="$t('section.settings.fields.' + key)"
                     v-else-if="item.type == 'select'"
-                    :readonly="item.readonly"
+                    :readonly="item.readonly || readonly == true"
                     v-model="item.value"
                     :hint="$t(item.hint)"
                     :persistent-hint="item.persistentHint"
@@ -161,8 +246,9 @@
                     <!-- Password Settings -->
                     <v-text-field v-else-if="item.type == 'password'"
                     :type="item.hidden ? 'password' : 'text'"
+                    :readonly="item.readonly || readonly == true"
                     required
-                    :append-icon="item.hidden ? 'mdi-eye' : 'mdi-eye-off'"
+                    :append-icon="readonly == true ? undefined : (item.hidden ? 'mdi-eye' : 'mdi-eye-off')"
                     @click:append="() => (item.hidden = !item.hidden)"
                     dense
                     :label="$t('section.users.attributes.password')"
@@ -172,7 +258,7 @@
                     <!-- Text Field Settings -->
                     <v-text-field :label="$t('section.settings.fields.' + key)"
                     v-else
-                    :readonly="item.readonly"
+                    :readonly="item.readonly || readonly == true"
                     :hint="$t(item.hint)"
                     :rules="item.validator ? [fieldRules(item.value, item.validator, item.required)] : undefined"
                     :persistent-hint="item.persistentHint"
@@ -185,18 +271,32 @@
         </v-row>
         </v-form>
         </v-expand-transition>
-    </v-card>    
+
+        <v-dialog v-model="resetDialog" max-width="650px">
+            <SettingsResetDialog
+            @resetConfirm="restoreDefaultValues"
+            @closeDialog="resetDialog = false"
+            />
+        </v-dialog>
+    </v-card>
 </template>
 
 <script>
 import validationMixin from '@/plugins/mixin/validationMixin';
 import Settings from '@/include/Settings';
+import SettingsResetDialog from '@/components/Settings/SettingsResetDialog.vue'
 
 export default {
     mixins: [ validationMixin ],
+    components: {
+        SettingsResetDialog
+    },
     data() {
         return {
+            readonly: true,
+            invalid: false,
             loading: true,
+            resetDialog: false,
             showSettings: false,
             config: {
                 domain: {
@@ -204,19 +304,15 @@ export default {
                         // Domain Parameters
                         LDAP_AUTH_URL: {
                             value: [],
-                            add: "",
-                            type: "array",
-                            hint: 'section.settings.fields.LDAP_AUTH_URL_HINT',
-                            persistentHint: true,
+                            addPREFIX: "ldap://",
+                            addIP: "",
+                            addPORT: "",
+                            type: "ldap_uri",
                             required: true,
-                            validator: "ge_ipaddress"
+                            validator: "ldap_uri"
                         }
                     },
                     row2: {
-                        LDAP_PORT: {
-                            value: "",
-                            hint: 'section.settings.fields.LDAP_PORT_HINT'
-                        },
                         LDAP_DOMAIN: {
                             value: "",
                             hint: 'section.settings.fields.LDAP_DOMAIN_HINT',
@@ -266,7 +362,7 @@ export default {
                     row2:{
                         LDAP_AUTH_USE_TLS: {
                             value: "",
-                            type: "checkbox",
+                            type: "boolean",
                         },
                         LDAP_AUTH_TLS_VERSION: { 
                             value: "PROTOCOL_TLSv1_2",
@@ -297,7 +393,7 @@ export default {
                         },
                         EXCLUDE_COMPUTER_ACCOUNTS:{ 
                             value: "",
-                            type: "checkbox"
+                            type: "boolean"
                         },
                     },
                     row2:{
@@ -360,38 +456,37 @@ export default {
             }
         },
         async saveSettings(){
-            var dataToSend = {}
-            for (const category in this.config) {
-                for (const row in this.config[category]) {
-                    var currentPath = this.config[category][row]
-                    for (const settingKey in currentPath){
-                        dataToSend[settingKey] = {}
-                        dataToSend[settingKey]['value'] = currentPath[settingKey]['value']
-                        if (currentPath[settingKey]['type'])
-                            dataToSend[settingKey]['type'] = currentPath[settingKey]['type']
-                        else
-                            dataToSend[settingKey]['type'] = 'string'
-                    }
-                }
+            if (this.$refs.settingsForm.validate('settingsForm'))
+                this.invalid = false
+            else
+                this.invalid = true
+
+            if (!this.invalid) {
+                var dataToSend = {}
+                dataToSend = this.getConfigValues()
+                await new Settings({}).save(dataToSend)
             }
-            await new Settings({}).save(dataToSend)
         },
         async refreshSettings(){
             if (this.$refs.settingsForm != undefined)
-                this.$refs.settingsForm.validate('settingsForm')
+                if (this.$refs.settingsForm.validate('settingsForm'))
+                    this.invalid = false
+                else
+                    this.invalid = true
             await new Settings({}).list()
             .then(response => {
                 var settings = response.data.settings
-                console.log(settings)
                 for (const key in settings) {
                     if (Object.hasOwnProperty.call(settings, key)) {
-                        const value = settings[key];
+                        const value = settings[key]['value'];
+                        const type = settings[key]['type'];
                         for (const category in this.config) {
                             for (const row in this.config[category]) {
                                 var currentPath = this.config[category][row]
                                 for (const settingKey in currentPath){
                                     if (settingKey == key) {
                                         currentPath[settingKey]['value'] = value
+                                        currentPath[settingKey]['type'] = type
                                     }
                                 }
                             }
@@ -413,8 +508,34 @@ export default {
                 this.error = true
             })
         },
-        logConfig(){
-            console.log(this.config)
+        async restoreDefaultValues(){
+            this.resetDialog = false
+            await new Settings({}).reset()
+            .then(() => {
+                this.refreshSettings();
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        getConfigValues(log=false){
+            var dataToSend = {}
+            for (const category in this.config) {
+                for (const row in this.config[category]) {
+                    var currentPath = this.config[category][row]
+                    for (const settingKey in currentPath){
+                        dataToSend[settingKey] = {}
+                        dataToSend[settingKey]['value'] = currentPath[settingKey]['value']
+                        if (currentPath[settingKey]['type'])
+                            dataToSend[settingKey]['type'] = currentPath[settingKey]['type']
+                        else
+                            dataToSend[settingKey]['type'] = 'string'
+                    }
+                }
+            }
+            if (log == true)
+                console.log(dataToSend)
+            return dataToSend
         },
         addToObject(object, key, value){
             object['value'][key] = value
@@ -426,16 +547,38 @@ export default {
             // For some reason the v-bind isn't registering when removing an item
             this.$forceUpdate()
         },
+        addServer(item){
+            var fieldsToValidate = [
+                'ldapUriPrefix',
+                'ldapUriIP',
+                'ldapUriPort',
+            ]
+            var valid = true
+            fieldsToValidate.forEach(field => {
+                if (!this.$refs[field][0].validate())
+                    valid = false
+            });
+
+            if (item.addIP.length <= 0 || item.addPORT.length <= 0)
+                return false
+
+            if(valid == true) {
+                console.log('yay')
+                var result = item.addPREFIX + item.addIP + ":" + item.addPORT
+                this.addToArray(result, item)
+            }
+        },
         addToArray(value, object, itemRef=undefined){
             var array = object.value
             if (itemRef){
-                if (this.$refs.settingsForm.validate('LIST_KEY_'+itemRef)) {
+                if (this.$refs[itemRef][0].validate()) {
                     if (!array.includes(value) && array && value)
                         array = array.push(value);
                 }
             } 
-            else if (!array.includes(value) && array && value)
+            else if (!array.includes(value) && array && value){
                 array = array.push(value);
+            }
             return array
         },
         removeFromArray(value, object){

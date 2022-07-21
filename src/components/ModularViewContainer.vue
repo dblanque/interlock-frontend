@@ -387,13 +387,13 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
   export default {
     name: 'ModularViewContainer',
     components:{
-    UserCreate,
-    UserDialog,
-    UserResetPassword,
-    UserDelete,
-    UserAntilockoutWarning,
-    SettingsCard
-},
+      UserCreate,
+      UserDialog,
+      UserResetPassword,
+      UserDelete,
+      UserAntilockoutWarning,
+      SettingsCard
+    },
     props: {
       viewTitle: String,
       viewIndex: Number,
