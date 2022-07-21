@@ -74,7 +74,8 @@ request.interceptors.response.use(
                 localStorage.removeItem('refresh')
                 localStorage.removeItem('user_initials')
                 localStorage.removeItem('user_fullname')
-                router.push('/')
+                if (router.app._route.path != "/login")
+                    router.push('/login')
                 return error.response
             }
             // Else, if there's refresh token...
@@ -106,7 +107,8 @@ request.interceptors.response.use(
                     localStorage.removeItem('refresh')
                     localStorage.removeItem('user_initials')
                     localStorage.removeItem('user_fullname')
-                    router.push('/')
+                    if (router.app._route.path != "/login")
+                        router.push('/login')
                     return error.response
                 })
             }

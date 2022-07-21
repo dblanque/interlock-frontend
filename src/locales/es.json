@@ -21,6 +21,7 @@
     }
   },
   "actions": {
+    "testSettings":"Probar Configuración",
     "restoreDefaultValues":"Restaurar Valores Originales",
     "areYouSure":"¿Esta seguro de querer",
     "label": "Acciones",
@@ -75,6 +76,9 @@
     "addObjectClass": "Añadir Clase de Objeto"
   },
   "words": {
+    "seconds":"Segundos",
+    "minutes":"Minutos",
+    "hours":"Horas",
     "key":"Clave",
     "value":"Valor",
     "error":"Error",
@@ -147,10 +151,10 @@
     "codes": {
       "badRequest": "Error 405: Request Erróneo",
       "auth": {
-        "invalid_credentials": "Email o Contraseña Incorrectos.",
-        "verification_code": "Codigo Incorrecto, Intente nuevamente.",
-        "verified_successfully": "Verificado Exitosamente.",
-        "verification_expired": "Intentos de Verificación acabados. Contacte un administrador."
+        "invalid_credentials": "Email o Contraseña Incorrectos",
+        "verification_code": "Codigo Incorrecto, Intente nuevamente",
+        "verified_successfully": "Verificado Exitosamente",
+        "verification_expired": "Intentos de Verificación acabados, contacte un administrador"
       },
       "users":{
         "userExists":"El usuario ya existe."
@@ -196,7 +200,11 @@
       "title": "Inicie Sesión en su Servidor LDAP",
       "account": "Cuenta / E-Mail",
       "loginBtn": "Iniciar Sesión",
-      "forgotMyPassword": "Olvidé mi Contraseña"
+      "forgotMyPassword": "Olvidé mi Contraseña",
+      "tooManyLogins": "Ha sido deshabilitado",
+      "tryAgain": "Inténtelo nuevamente",
+      "oneRetryLeft": "intento restante",
+      "retriesLeft": "intentos restantes"
     },
     "users":{
       "createView":{

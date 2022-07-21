@@ -1,16 +1,24 @@
 <template>
     <v-card outlined flat class="pt-2">
-        <v-row class="ma-0 ma-1 px-4 py-0 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
+        <v-row class="ma-0 ma-1 px-4 py-0" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
             <v-btn @click="resetDialog = true" disabled
-                class="ma-0 pa-0 pa-4 ma-1 mx-0 text-normal"
+                class="ma-0 pa-0 pa-4 ma-1 mx-1 text-normal"
                 color="red">
                     <v-icon :class="(loading == true ? 'custom-loader' : '' ) + ' mr-1'">
-                        mdi-blur
+                        mdi-backup-restore
                     </v-icon>
                     {{ $t("actions.restoreDefaultValues") }}
             </v-btn>
+            <v-btn disabled
+                class="ma-0 pa-0 pa-4 ma-1 mx-1 text-normal"
+                color="red">
+                    <v-icon :class="(loading == true ? 'custom-loader' : '' ) + ' mr-1'">
+                        mdi-memory
+                    </v-icon>
+                    {{ $t("actions.testSettings") }}
+            </v-btn>
         </v-row>
-        <v-row class="ma-0 ma-1 px-4 py-0 mb-4 sticky-top" style="top: 6.5rem !important; z-index: 10 !important;" justify="center">
+        <v-row class="ma-0 ma-1 px-4 py-0 mb-4 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
             <v-btn @click="saveSettings" disabled
             style="border-radius: 0; border-bottom-left-radius: 0.3rem; border-top-left-radius: 0.3rem;"
                 class="ma-0 pa-0 pa-4 ma-1 mr-0 bg-white bg-lig-25 text-normal" >
@@ -28,6 +36,20 @@
                     </v-icon>
                     {{ $t("actions.refresh") }}
             </v-btn>
+        </v-row>
+        <v-row class="mx-1" justify="center">
+            <v-checkbox
+            label="Default Admin is"/>
+        </v-row>
+        <v-row class="mx-1" justify="center">
+            <v-col cols="8" md="4">
+                <v-text-field
+                label="Change Default Admin Password"/>
+            </v-col>
+            <v-col cols="8" md="4">
+                <v-text-field
+                label="Confirm Default Admin Password"/>
+            </v-col>
         </v-row>
         <v-slide-y-transition>
             <v-row justify="center" v-if="invalid == true">

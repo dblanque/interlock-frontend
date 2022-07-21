@@ -52,9 +52,13 @@
               <ThemeChanger class="font-weight-medium ma-6" :buttonIsSwitch="true"/>
             </v-row>
             <!-- ERROR MESSAGE -->
-            <v-row
-              class="justify-center red accent-3 ml-5 mr-5 rounded font-weight-bold"
-              >{{ this.errorMsg }}</v-row
+            <v-row justify="center">
+              <v-expand-transition>
+                <v-alert :type="errCount > 2 && error ? (errCount > 4 ? 'error' : 'warning') : 'info'" v-if="error == true && errorMsg != ''">
+                  {{ this.errorMsg }}
+                </v-alert>
+              </v-expand-transition>
+            </v-row
             >
             <!-- LOGIN BUTTONS -->
             <div>
@@ -119,6 +123,10 @@ export default {
   },
   data() {
     return {
+      errCount: 0,
+      timeoutCounter: 30,
+      timedOut: false,
+      timeoutInterval: false,
       valid: false,
       error: false,
       errorMsg: "",
@@ -131,6 +139,22 @@ export default {
     };
   },
   mounted() {
+    var errInStorage = parseInt(localStorage.getItem('loginErrorCount'))
+    var timedOutStorage = Boolean(localStorage.getItem('loginTimedOut'))
+    var timeOutCounterStorage = parseInt(localStorage.getItem('loginTimeOutCounter'))
+    if (Number.isInteger(errInStorage))
+      this.errCount = errInStorage
+    if (Number.isInteger(timeOutCounterStorage))
+      this.timeoutCounter = timeOutCounterStorage
+    if (timedOutStorage == true && this.timeoutCounter > 0)
+      this.timedOut = timedOutStorage
+
+    if (this.timedOut == true)
+      this.setLoginTimeout()
+
+    if (this.errCount > 0)
+      this.error = true
+
     var userJustLoggedOut = localStorage.getItem('logoutMessage')
     if (userJustLoggedOut) {
       this.snackbarMessage = this.$t("misc.loggedOut")
@@ -154,6 +178,41 @@ export default {
     }
   },
   methods: {
+    setLoginTimeout() {
+        this.timedOut = true
+        this.timeoutCounter = 30
+        localStorage.setItem('loginTimedOut', true)
+        localStorage.setItem('loginTimeOutCounter', this.timeoutCounter)
+        this.submitted = false
+        this.valid = false
+        this.error = true;
+        this.errorMsg = this.$t("section.login.tooManyLogins") + " (" + this.timeoutCounter + " " + this.$t("words.seconds") + ")";
+        this.timeoutInterval = setInterval(() => {
+          if (this.timeoutCounter == 0) {
+            this.clearLoginTimeout()
+            this.valid = true
+            this.errorMsg = this.$t("section.login.tryAgain")
+            clearInterval(this.timeoutInterval)
+            setTimeout(()=>{ this.error = false }, 2500)
+          } 
+          else {
+            this.timeoutCounter -= 1
+            this.valid = false
+            localStorage.setItem('loginTimeOutCounter', this.timeoutCounter)
+            if (this.timeoutCounter == 1)
+              this.errorMsg = this.$t("section.login.tooManyLogins") + " (" + this.timeoutCounter + " " + this.$t("words.seconds") + ")";
+            this.errorMsg = this.$t("section.login.tooManyLogins") + " (" + this.timeoutCounter + " " + this.$t("words.seconds") + ")";
+          }
+        }, 1000)
+    },
+    clearLoginTimeout() {
+      localStorage.removeItem('loginErrorCount')
+      localStorage.removeItem('loginTimedOut')
+      localStorage.removeItem('loginTimeOutCounter')
+      this.timedOut = false
+      this.timeoutCounter = 30
+      this.errCount = 0
+    },
     async submit() {
       if (this.username == "" || this.password == "") {
         this.error = true;
@@ -161,21 +220,37 @@ export default {
       }
       else {
         this.submitted = true;
-        this.errorMsg = "";
         var user = new User({})
-        user.login(this.username, this.password)
+        await user.login(this.username, this.password)
         .then(response =>{
-            if(response.data.access != undefined)
-              this.$router.push("/home");
+          if(response.data.access != undefined) {
+            this.error = false
+            this.errorMsg = "";
+            localStorage.setItem("encPwd", response.data.encPwd)
+            localStorage.removeItem('loginErrorCount')
+            this.clearLoginTimeout()
+            this.$router.push("/home");
+          }
         })
         .catch((e) => {
           console.log(e)
           this.error = true;
-          if(e.status == 401)
-            this.errorMsg = this.$t('error.codes.auth.invalid_credentials')
+          var retriesLeft = 5 - this.errCount
+          var retriesLeftMsg = this.$t("section.login.retriesLeft")
+          if (retriesLeft == 1)
+            retriesLeftMsg = this.$t("section.login.oneRetryLeft")
+          if(e.status == 401){
+            if (retriesLeft > 0)
+              this.errorMsg = this.$t('error.codes.auth.invalid_credentials')  + " (" + retriesLeft + " " + retriesLeftMsg + ")"
+            else
+              this.setLoginTimeout()
+          }
           else
             this.errorMsg = this.getMessageForCode(e.data.code);
           this.submitted = false;
+          // Add error count to storage to avoid people reloading out of the timeout
+          this.errCount += 1
+          localStorage.setItem('loginErrorCount', this.errCount)
         });
       }
     },

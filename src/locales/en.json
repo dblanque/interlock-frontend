@@ -21,6 +21,7 @@
     }
   },
   "actions":{
+    "testSettings":"Test Settings",
     "restoreDefaultValues":"Restore Default Values",
     "areYouSure":"Are you sure you wish to",
     "label": "Actions",
@@ -75,6 +76,9 @@
     "addObjectClass": "Add Object Class"
   },
   "words":{
+      "seconds":"Seconds",
+      "minutes":"Minutes",
+      "hours":"Hours",
       "key":"Key",
       "value":"Value",
       "error":"Error",
@@ -141,10 +145,10 @@
       "codes":{
           "badRequest": "Error 405: Bad Request",
           "auth":{
-              "invalid_credentials": "Incorrect Email or Password.",
-              "verification_code": "Incorrect Code, Please try again.",
+              "invalid_credentials": "Incorrect Email or Password",
+              "verification_code": "Incorrect Code, Please try again",
               "verified_successfully": "Verified Successfully",
-              "verification_expired": "Verification codes have been exhausted. Contact an admin."
+              "verification_expired": "Verification codes have been exhausted, contact an admin"
           },
           "users":{
             "userExists":"User already exists."
@@ -190,7 +194,11 @@
       "title":"Log in to your LDAP Server",
       "account":"LDAP / AD Account",
       "loginBtn":"Log-in",
-      "forgotMyPassword":"I forgot my password"
+      "forgotMyPassword":"I forgot my password",
+      "tooManyLogins": "You've been timed out",
+      "tryAgain": "You may now try again",
+      "oneRetryLeft": "retry left",
+      "retriesLeft": "retries left"
     },
     "users":{
       "createView":{

@@ -276,14 +276,14 @@ export default {
         var token = localStorage.getItem('token')
         console.log(token)
         if (!token || token == null || token == 'null') {
+          localStorage.removeItem('username')
+          localStorage.removeItem('first_name')
+          localStorage.removeItem('last_name')
+          localStorage.removeItem('token')
+          localStorage.removeItem('refresh')
           // console.log('login-null')
-          this.$router.push('/login')
+          // this.$router.push('/login')
         }
-        localStorage.removeItem('username')
-        localStorage.removeItem('first_name')
-        localStorage.removeItem('last_name')
-        localStorage.removeItem('token')
-        localStorage.removeItem('refresh')
         this.showLogoutDialog = true;
       }
     })
