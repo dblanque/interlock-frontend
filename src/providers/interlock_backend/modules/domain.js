@@ -1,9 +1,9 @@
 import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
-    details: (data)=>{
+    details: ()=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.domain.details + '', data)
+            interlock_backend.request.get(interlock_backend.urls.domain.details)
             .then(response => {
                 resolve(response);
                 localStorage.setItem("domain", response.data.details.name)

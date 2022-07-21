@@ -40,14 +40,17 @@ const urls = {
         changePassword: 'api/users/changePassword/',
     },
     domain: {
+        base: "api/domain/",
         details: "api/domain/details/"
     },
     settings: {
+        base: "api/settings/",
         list: "api/settings/",
         save: "api/settings/save/",
         reset: "api/settings/reset/"
     },
     ou: {
+        base: "api/ou/",
         list: "api/ou/",
         dirtree: "api/ou/dirtree/"
     }

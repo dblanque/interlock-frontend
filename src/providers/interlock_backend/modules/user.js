@@ -12,8 +12,10 @@ const actions = {
     },
     
     enable: (username)=>{
+        const data = {}
+        data['username'] = username
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.user.enable, { username: username }).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.user.enable, data).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)
@@ -22,8 +24,10 @@ const actions = {
     },
 
     disable: (username)=>{
+        const data = {}
+        data['username'] = username
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.user.disable, { username: username }).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.user.disable, data).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)
@@ -51,9 +55,9 @@ const actions = {
         })
     },
 
-    getCurrentUserData: (data)=>{
+    getCurrentUserData: ()=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.user.base + 'me', data)
+            interlock_backend.request.get(interlock_backend.urls.user.base + 'me/')
             .then(response => {
                 resolve(response);
                 localStorage.setItem("username", response.data.user.username)
@@ -86,18 +90,18 @@ const actions = {
             }).catch((e) => reject(e))
         })
     },
-    list: (data)=>{
+    list: ()=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.user.list, data).then(response => {
+            interlock_backend.request.get(interlock_backend.urls.user.list).then(response => {
                 resolve(response.data)
             }).catch((e) => {
                 reject(e)
             })
         })
     },
-    fetch: (username)=>{
+    fetch: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.user.fetch, username).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.user.fetch, data).then(response => {
                 resolve(response.data)
             }).catch((e) => {
                 reject(e)

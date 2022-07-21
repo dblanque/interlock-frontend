@@ -38,16 +38,21 @@
             </v-btn>
         </v-row>
         <v-row class="mx-1" justify="center">
-            <v-checkbox
-            label="Default Admin is"/>
+            <v-checkbox off-icon="mdi-close-box"
+            :label="$t('section.settings.defaultAdminIs') + ' ' + (defaultAdminEnabled ? $t('words.enabled') : $t('words.disabled'))"
+            v-model="defaultAdminEnabled"/>
         </v-row>
         <v-row class="mx-1" justify="center">
             <v-col cols="8" md="4">
                 <v-text-field
+                v-model="defaultAdminPwd"
+                :rules="[this.fieldRules(defaultAdminPwd, 'ge_password', true)]"
                 label="Change Default Admin Password"/>
             </v-col>
             <v-col cols="8" md="4">
                 <v-text-field
+                v-model="defaultAdminPwdConfirm"
+                :rules="[this.fieldRules(defaultAdminPwd, 'ge_password', defaultAdminPwd.length > 0 ? true : false)]"
                 label="Confirm Default Admin Password"/>
             </v-col>
         </v-row>
@@ -315,11 +320,14 @@ export default {
     },
     data() {
         return {
-            readonly: true,
+            readonly: false,
             invalid: false,
             loading: true,
             resetDialog: false,
             showSettings: false,
+            defaultAdminEnabled: true,
+            defaultAdminPwd: "",
+            defaultAdminPwdConfirm: "",
             config: {
                 domain: {
                     row1:{
@@ -486,6 +494,8 @@ export default {
             if (!this.invalid) {
                 var dataToSend = {}
                 dataToSend = this.getConfigValues()
+                dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
+                dataToSend['DEFAULT_ADMIN_PWD'] = this.defaultAdminPwd
                 await new Settings({}).save(dataToSend)
             }
         },

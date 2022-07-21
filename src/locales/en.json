@@ -76,6 +76,8 @@
     "addObjectClass": "Add Object Class"
   },
   "words":{
+      "enabled":"Enabled",
+      "disabled":"Disabled",
       "seconds":"Seconds",
       "minutes":"Minutes",
       "hours":"Hours",
@@ -304,6 +306,7 @@
       }
     },
     "settings":{
+      "defaultAdminIs":"Default Admin is",
       "resetDialog":{
         "header":"Reset Settings",
         "message":"Are you sure you wish to reset <b>all</b> the settings?"

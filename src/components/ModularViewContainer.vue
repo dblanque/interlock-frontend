@@ -404,6 +404,7 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
     },
     data () {
       return {
+        refreshOnClose: false,
         dataTableSearchString: "",
         treeviewSearchString: "",
         userRefreshLoading: false,
@@ -486,7 +487,7 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
                     setTimeout(() => {
                       this.data.selectedUser = {}
                       this.data.userdata = new User({})
-                      if (this.editableForm == true)
+                      if (this.editableForm == true && this.refreshOnClose)
                         this.refreshAction();
                       this.editableForm = false
                     }, 100);
@@ -548,7 +549,7 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
       async saveData(key, data){
         switch (key) {
           case 'userDialog':
-            console.log('User saved')
+            this.refreshOnClose = true
             break;
           default:
             console.log(key)
@@ -595,6 +596,7 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
           });
         this.$emit('refresh')
         this.userRefreshLoading = false;
+        this.refreshOnClose = false
       },
       async enableUser(userObject){
         this.data.selectedUser = {}

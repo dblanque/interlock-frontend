@@ -30,7 +30,6 @@ const calls = {
             localStorage.removeItem('token')
             localStorage.removeItem('refresh')
             localStorage.removeItem("username")
-            localStorage.removeItem("encPwd")
             localStorage.removeItem("first_name")
             localStorage.removeItem("last_name")
             resolve()

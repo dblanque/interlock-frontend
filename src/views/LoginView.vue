@@ -227,7 +227,6 @@ export default {
           if(response.data.access != undefined) {
             this.error = false
             this.errorMsg = "";
-            localStorage.setItem("encPwd", response.data.encPwd)
             localStorage.removeItem('loginForbiddenCount')
             this.clearLoginTimeout()
             this.$router.push("/home");

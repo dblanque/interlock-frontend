@@ -76,6 +76,8 @@
     "addObjectClass": "Añadir Clase de Objeto"
   },
   "words": {
+    "enabled":"Activado",
+    "disabled":"Des-activado",
     "seconds":"Segundos",
     "minutes":"Minutos",
     "hours":"Horas",
@@ -310,6 +312,7 @@
       }
     },
     "settings":{
+      "defaultAdminIs":"Administrador Pre-determinado",
       "resetDialog":{
         "header":"Re-establecer Configuración",
         "message":"¿Está seguro de re-establecer <b>todos</b> los parámetros?"
