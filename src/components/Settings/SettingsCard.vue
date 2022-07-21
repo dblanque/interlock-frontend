@@ -43,13 +43,13 @@
             v-model="defaultAdminEnabled"/>
         </v-row>
         <v-row class="mx-1" justify="center">
-            <v-col cols="8" md="4">
+            <v-col cols="8" md="4" xl="3">
                 <v-text-field
                 v-model="defaultAdminPwd"
-                :rules="[this.fieldRules(defaultAdminPwd, 'ge_password', true)]"
+                :rules="[this.fieldRules(defaultAdminPwd, 'ge_password', defaultAdminPwdConfirm.length > 0 ? true : false)]"
                 label="Change Default Admin Password"/>
             </v-col>
-            <v-col cols="8" md="4">
+            <v-col cols="8" md="4" xl="3">
                 <v-text-field
                 v-model="defaultAdminPwdConfirm"
                 :rules="[this.fieldRules(defaultAdminPwd, 'ge_password', defaultAdminPwd.length > 0 ? true : false)]"
@@ -508,6 +508,7 @@ export default {
             await new Settings({}).list()
             .then(response => {
                 var settings = response.data.settings
+                this.defaultAdminEnabled = settings['DEFAULT_ADMIN_ENABLED']
                 for (const key in settings) {
                     if (Object.hasOwnProperty.call(settings, key)) {
                         const value = settings[key]['value'];
