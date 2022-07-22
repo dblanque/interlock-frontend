@@ -25,6 +25,10 @@ class Settings extends ApiModel{
         return await interlock_backend.call('settings/reset')
     }
 
+    async test(data){
+        return await interlock_backend.call('settings/test', data)
+    }
+
     async save(data){
         return await interlock_backend.call('settings/save', data)
     }

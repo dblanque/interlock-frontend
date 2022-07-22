@@ -717,7 +717,7 @@ export default {
                     case 405:
                         this.errorMsg = this.$t("error.codes.badRequest")
                         break;
-                    case 520:
+                    case 650:
                         this.errorMsg = this.$t("error.codes.users.userExists")
                         break;
                     default:

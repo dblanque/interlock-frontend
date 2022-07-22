@@ -1,26 +1,36 @@
 <template>
     <v-card outlined flat class="pt-2">
         <v-row class="ma-0 ma-1 px-4 py-0" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
-            <v-btn @click="resetDialog = true" :disabled="readonly"
+            <v-btn @click="resetDialog = true" :disabled="readonly || getLoadingStatus"
                 class="ma-0 pa-0 pa-4 ma-1 mx-1 text-normal"
                 color="red">
-                    <v-icon :class="(loading == true ? 'custom-loader' : '' ) + ' mr-1'">
+                    <v-icon class="mr-1">
                         mdi-backup-restore
                     </v-icon>
                     {{ $t("actions.restoreDefaultValues") }}
             </v-btn>
-            <v-btn
-                class="ma-0 pa-0 pa-4 ma-1 mx-1 text-normal"
-                color="primary">
-                    <v-icon :class="(loading == true ? 'custom-loader' : '' ) + ' mr-1'">
-                        mdi-memory
-                    </v-icon>
-                    {{ $t("actions.testSettings") }}
-                    <v-progress-circular size="25" class="ml-3"/>
+            <v-btn @click="testSettings" :disabled="readonly || getLoadingStatus"
+                class="ma-0 pa-0 pa-4 ma-1 mx-1 bg-white bg-lig-25">
+                    <span class="text-normal">
+                        {{ $t("actions.testSettings") }}
+                    </span>
+                    <v-progress-circular :indeterminate="testing == true" :value="testFinished ? 100 : 0" :color="testFinished ? (!testError ? 'green' : 'red') : 'primary'" size="26" class="ml-3">
+                    <v-fab-transition>
+                        <v-icon v-if="!testing && !testFinished" color="primary">
+                            mdi-blur-radial
+                        </v-icon>
+                        <v-icon v-else-if="testFinished && !testError" >
+                            mdi-checkbox-marked-circle
+                        </v-icon>
+                        <v-icon v-else-if="testFinished == true && testError == true">
+                            mdi-close-circle
+                        </v-icon>
+                    </v-fab-transition>
+                    </v-progress-circular>
             </v-btn>
         </v-row>
         <v-row class="ma-0 ma-1 px-4 py-0 mb-4 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
-            <v-btn @click="saveSettings" :disabled="readonly"
+            <v-btn @click="saveSettings" :disabled="readonly || getLoadingStatus"
             style="border-radius: 0; border-bottom-left-radius: 0.3rem; border-top-left-radius: 0.3rem;"
                 class="ma-0 pa-0 pa-4 ma-1 mr-0 bg-white bg-lig-25 text-normal" >
                     <v-icon class="mr-1">
@@ -325,7 +335,10 @@ export default {
     },
     data() {
         return {
-            readonly: false,
+            testing: false,
+            testError: false,
+            testFinished: false,
+            readonly: true,
             invalid: false,
             loading: true,
             resetDialog: false,
@@ -451,6 +464,9 @@ export default {
         }
     },
     computed: {
+        getLoadingStatus(){
+            return this.loading
+        }
     },
     mounted(){
         this.refreshSettings();
@@ -490,6 +506,43 @@ export default {
                     return 8
             }
         },
+        async testSettings(){
+            if (this.$refs.settingsForm.validate('settingsForm') && 
+                this.$refs.defaultAdminPwd.validate() && 
+                this.$refs.defaultAdminPwdConfirm.validate()){
+                    this.invalid = false
+                    this.testing = true
+                    this.testFinished = false
+                    this.testError = false
+                }
+            else {
+                this.invalid = true
+                this.testing = false
+                this.testFinished = true
+                this.testError = true
+            }
+
+            if (!this.invalid) {
+                var dataToSend = {}
+                dataToSend = this.getConfigValues()
+                await new Settings({}).test(dataToSend).then(() => {
+                    setTimeout(() => {
+                        this.testing = false
+                        this.testFinished = true
+                        this.testError = false
+                    }, 500)
+                })
+                .catch(error => {
+                    console.log(error)
+                    setTimeout(() => {
+                        this.testing = false
+                        this.testFinished = true
+                        this.testError = true
+                    }, 500)
+                })
+                this.refreshSettings()
+            }
+        },
         async saveSettings(){
             if (this.$refs.settingsForm.validate('settingsForm') && 
                 this.$refs.defaultAdminPwd.validate() && 
@@ -513,6 +566,8 @@ export default {
                     this.invalid = false
                 else
                     this.invalid = true
+            
+            this.readonly = true
             await new Settings({}).list()
             .then(response => {
                 var settings = response.data.settings
@@ -521,7 +576,7 @@ export default {
                 this.defaultAdminPwdConfirm = ""
                 for (const key in settings) {
                     if (Object.hasOwnProperty.call(settings, key)) {
-                        const value = settings[key]['value'];
+                        var value = settings[key]['value'];
                         const type = settings[key]['type'];
                         for (const category in this.config) {
                             for (const row in this.config[category]) {
@@ -539,16 +594,18 @@ export default {
                 this.loading = false
                 setTimeout(()=>{
                     this.showSettings = true
-                }, 200)
+                }, 250)
                 this.error = false
+                this.readonly = false
             })
             .catch(error => {
                 console.log(error)
                 this.loading = false
                 setTimeout(()=>{
                     this.showSettings = false
-                }, 200)
+                }, 250)
                 this.error = true
+                this.readonly = false
             })
         },
         async restoreDefaultValues(){

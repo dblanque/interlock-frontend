@@ -47,7 +47,8 @@ const urls = {
         base: "api/settings/",
         list: "api/settings/",
         save: "api/settings/save/",
-        reset: "api/settings/reset/"
+        reset: "api/settings/reset/",
+        test: "api/settings/test/"
     },
     ou: {
         base: "api/ou/",
