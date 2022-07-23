@@ -665,6 +665,8 @@ export default {
             if(valid == true) {
                 var result = item.addPREFIX + item.addIP + ":" + item.addPORT
                 this.addToArray(result, item)
+                this.config.domain.row1.LDAP_AUTH_URL.addIP = ""
+                this.config.domain.row1.LDAP_AUTH_URL.addPORT = ""
             }
         },
         addToArray(value, object, itemRef=undefined){
