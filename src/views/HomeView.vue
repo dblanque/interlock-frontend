@@ -223,7 +223,7 @@ export default {
         {
           index: 2,
           title: "groups",
-          enabled: false,
+          enabled: true,
           icon: "mdi-group",
           route: "groups"
         },

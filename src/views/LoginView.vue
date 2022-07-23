@@ -164,7 +164,7 @@ export default {
 
     var token = localStorage.getItem('token')
     if (token && token != null && token != 'null') {
-      this.$router.push("/")
+      this.$router.push("/home")
     }
   },
   watch: {
