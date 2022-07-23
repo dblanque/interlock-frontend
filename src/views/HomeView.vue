@@ -307,7 +307,8 @@ export default {
   },
   methods: {
     // Home (DirTree) View Actions
-    async fetchOUs(){
+    async fetchDirtree(filter=undefined){
+      console.log(filter)
       this.tableData.headers = []
       this.tableData.items = []
       await new OrganizationalUnit({}).dirtree()
@@ -432,7 +433,7 @@ export default {
           break;
         case 'home':
           this.refreshLoading = true;
-          await this.fetchOUs();
+          await this.fetchDirtree();
           this.disableAllTabs = false
           break;
         default:

@@ -415,6 +415,10 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
             "filtered": false,
             "icon":"mdi-at"
           },
+          "builtin-domain":{
+            "filtered": false,
+            "icon": "mdi-hammer"
+          },
           "person":{
             "filtered": false,
             "icon":"mdi-account"
@@ -582,7 +586,7 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
         })
       },
       setFilter(key){
-        // this.itemTypes[key]['filtered'] = !this.itemTypes[key]['filtered']
+        this.itemTypes[key]['filtered'] = !this.itemTypes[key]['filtered']
         console.log('Feature not enabled, filter for ' + key.toUpperCase() + ' objects should toggle')
       },
       goToUser(item){

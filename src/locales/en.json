@@ -122,6 +122,10 @@
       "single":"User",
       "plural":"Users"
     },
+    "builtin-domain":{
+      "single":"Built-in",
+      "plural":"Built-ins"
+    },
     "container":{
       "single":"Container",
       "plural":"Containers"

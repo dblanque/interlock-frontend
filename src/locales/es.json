@@ -128,6 +128,10 @@
       "single":"Usuario",
       "plural":"Usuarios"
     },
+    "builtin-domain":{
+      "single":"Objeto Integrado",
+      "plural":"Objetos Integrados"
+    },
     "container":{
       "single":"Contenedor",
       "plural":"Contenedores"
