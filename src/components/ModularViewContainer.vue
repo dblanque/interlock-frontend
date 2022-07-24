@@ -277,7 +277,7 @@
               rounded
               v-bind="attrs"
               v-on="on"
-              :disabled="userRefreshLoading"
+              :disabled="userRefreshLoading || isLoggedInUser(item.username)"
               @click="disableUser(item)"
             >
             <v-icon class="clr-valid clr-lig-40">
@@ -295,7 +295,7 @@
               rounded
               v-bind="attrs"
               v-on="on"
-              :disabled="userRefreshLoading"
+              :disabled="userRefreshLoading || isLoggedInUser(item.username)"
               @click="enableUser(item)"
             >
             <v-icon class="clr-error clr-lig-40">
@@ -339,11 +339,19 @@
           <span>{{ $t('actions.changePassword') }}</span>
         </v-tooltip>
 
-        <v-btn @click="openDeleteDialog(item)" 
+        <v-btn @click="openDeleteDialog(item)" v-if="!isLoggedInUser(item.username)"
         color="red" 
         elevation="0" 
         icon small
         >
+          <v-icon small>
+            mdi-delete
+          </v-icon>
+        </v-btn>
+        <v-btn 
+        v-else disabled
+        elevation="0" 
+        icon small>
           <v-icon small>
             mdi-delete
           </v-icon>
@@ -616,6 +624,11 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
           this.userRefreshLoading = false;
           this.error = true;
         })
+      },
+      isLoggedInUser(username){
+        if (username == localStorage.getItem('username'))
+          return true
+        return false
       },
       async disableUser(userObject){
         this.data.selectedUser = {}

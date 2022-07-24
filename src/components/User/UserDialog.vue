@@ -259,7 +259,7 @@
                                             :label="$t('section.users.attributes.sAMAccountType')"
                                             readonly
                                             v-model="usercopy.sAMAccountType"
-                                            :rules="[this.fieldRules(usercopy.sAMAccountType, 'ge_numbers')]"
+                                            :rules="[this.fieldRules(usercopy.sAMAccountType, 'ge_lettersStrictUnderscore')]"
                                             ></v-text-field>
                                         </v-col>
                                         <v-col cols="12" lg="3">
@@ -462,14 +462,14 @@
                 <v-slide-x-reverse-transition>
                         <v-btn color="green" v-if="!usercopy.is_enabled" @click="enableUser" 
                         :class="(editFlag ? 'text-white ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" 
-                        rounded :disabled="!editFlag">
+                        rounded :disabled="!editFlag || isLoggedInUser(usercopy.username)">
                             <v-icon class="mr-1">
                                 mdi-checkbox-marked-circle-outline
                             </v-icon>
                             {{ $t("actions.enable") }}
                         </v-btn>
                         <v-btn color="red" v-else-if="usercopy.is_enabled == true" @click="disableUser" 
-                        :class="(editFlag ? 'text-white ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" rounded :disabled="!editFlag">
+                        :class="(editFlag ? 'text-white ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" rounded :disabled="!editFlag || isLoggedInUser(usercopy.username)">
                             <v-icon class="mr-1">
                                 mdi-close-circle-outline
                             </v-icon>
@@ -880,6 +880,11 @@ export default {
                 this.loadingColor = 'error'
                 this.error = true;
             })
+        },
+        isLoggedInUser(username){
+            if (username == localStorage.getItem('username'))
+                return true
+            return false
         },
         // Sync the usercopy object to the parent view user object on the
         // next tick to avoid mutation errors

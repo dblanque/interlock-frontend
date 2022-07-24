@@ -28,6 +28,7 @@ const validationMixin ={
       inputRulesAboveZero: (v) => (parseInt(v) > 0) || "Fields must be larger than 0",
       inputRulesLetters: (v) => !v || /^[üöñóúíáéa-zA-Z ]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
       inputRulesLettersStrict: (v) => !v || /^[a-zA-Z ]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
+      inputRulesLettersStrictUnderscore: (v) => !v || /^[a-zA-Z_ ]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
       inputRulesCountry: (v) => !v || /^[a-zA-Z'\s]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
       inputRulesNumbers: (v) => !v || /^[0-9.]{0,}$/.test(v) || i18n.t("error.validation.numeric"),
       inputRulesMax4: (v) => !v || /^.{1,4}$/.test(v) || i18n.t("error.validation.max4"),
@@ -157,7 +158,10 @@ const validationMixin ={
         // * ------------------------------ Add your rules here ------------------------------ * //
         switch (fieldName) {
           // Generic Field Rules
-          case "ge_lettersStrict": // Generic INT Field
+          case "ge_lettersStrictUnderscore": // Generic
+              rules.push(this.inputRulesLettersStrictUnderscore)
+            break;
+          case "ge_lettersStrict": // Generic
               rules.push(this.inputRulesLettersStrict)
             break;
           case "ge_numbers": // Generic INT Field

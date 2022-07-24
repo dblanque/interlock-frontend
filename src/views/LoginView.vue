@@ -234,6 +234,7 @@ export default {
         })
         .catch((e) => {
           console.log(e)
+          this.submitted = false;
           this.error = true;
           var retriesLeft = 5 - this.loginForbiddenCount
           var retriesLeftMsg = this.$t("section.login.retriesLeft")
@@ -248,9 +249,9 @@ export default {
             else
               this.setLoginTimeout()
           }
-          else
+          else {
             this.errorMsg = this.getMessageForCode(e.data.code);
-          this.submitted = false;
+          }
         });
       }
     },

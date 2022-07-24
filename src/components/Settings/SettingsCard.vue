@@ -1,7 +1,9 @@
 <template>
     <v-card outlined flat class="pt-2">
         <v-row class="ma-0 ma-1 px-4 py-0" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
-            <v-btn @click="resetDialog = true" :disabled="readonly || getLoadingStatus"
+            <v-btn 
+                @click="resetDialog = true" :disabled="readonly || getLoadingStatus"
+                elevation="0"
                 class="ma-0 pa-0 pa-4 ma-1 mx-1 text-normal"
                 color="red">
                     <v-icon class="mr-1">
@@ -9,8 +11,10 @@
                     </v-icon>
                     {{ $t("actions.restoreDefaultValues") }}
             </v-btn>
-            <v-btn @click="testSettings" :disabled="readonly || getLoadingStatus"
-                class="ma-0 pa-0 pa-4 ma-1 mx-1 bg-white bg-lig-25">
+            <v-btn 
+                @click="testSettings" :disabled="readonly || getLoadingStatus"
+                elevation="0"
+                class="ma-0 pa-0 pa-4 ma-1 mx-1 bg-white bg-lig-15">
                     <span class="text-normal">
                         {{ $t("actions.testSettings") }}
                     </span>
@@ -30,16 +34,19 @@
             </v-btn>
         </v-row>
         <v-row class="ma-0 ma-1 px-4 py-0 mb-4 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
-            <v-btn @click="saveSettings" :disabled="readonly || getLoadingStatus"
-            style="border-radius: 0; border-bottom-left-radius: 0.3rem; border-top-left-radius: 0.3rem;"
-                class="ma-0 pa-0 pa-4 ma-1 mr-0 bg-white bg-lig-25 text-normal" >
+            <v-btn 
+                @click="saveSettings" :disabled="readonly || getLoadingStatus"
+                elevation="0"
+                style="border-radius: 0; border-bottom-left-radius: 0.3rem; border-top-left-radius: 0.3rem;"
+                class="ma-0 pa-0 pa-4 ma-1 mr-0 bg-white bg-lig-15 text-normal" >
                     <v-icon class="mr-1">
                         mdi-content-save
                     </v-icon>
                     {{ $t("actions.save") }}
             </v-btn>
             <v-btn @click="refreshSettings"
-            style="border-radius: 0; border-bottom-right-radius: 0.3rem; border-top-right-radius: 0.3rem;"
+                style="border-radius: 0; border-bottom-right-radius: 0.3rem; border-top-right-radius: 0.3rem;"
+                elevation="0"
                 class="ma-0 pa-0 pa-4 ma-1 ml-0 text-normal"
                 color="primary">
                     <v-icon :class="(loading == true ? 'custom-loader' : '' ) + ' mr-1'">
@@ -568,6 +575,11 @@ export default {
                     this.invalid = true
             
             this.readonly = true
+            if (this.testFinished) {
+                this.testing = false
+                this.testFinished = false
+                this.testError = false
+            }
             await new Settings({}).list()
             .then(response => {
                 var settings = response.data.settings
@@ -594,9 +606,9 @@ export default {
                 this.loading = false
                 setTimeout(()=>{
                     this.showSettings = true
-                }, 250)
+                    this.readonly = false
+                }, 300)
                 this.error = false
-                this.readonly = false
             })
             .catch(error => {
                 console.log(error)

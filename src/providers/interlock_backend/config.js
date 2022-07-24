@@ -39,6 +39,10 @@ const urls = {
         unlock: 'api/users/unlock/',
         changePassword: 'api/users/changePassword/',
     },
+    group: {
+        base: 'api/groups/',
+        list: 'api/groups/'
+    },
     domain: {
         base: "api/domain/",
         details: "api/domain/details/"
