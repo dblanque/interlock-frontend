@@ -95,7 +95,7 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
       viewTitle: String,
       viewIndex: Number,
       langChanged: Boolean,
-      requestRefresh: Boolean
+      requestRefresh: Boolean,
     },
     data () {
       return {

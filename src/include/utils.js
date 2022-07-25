@@ -54,3 +54,11 @@ export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='dn'
         })
     return searchResult
 }
+
+export function getDomainDetails(){
+    var domainData = {}
+    domainData.domain = localStorage.getItem('domain')
+    domainData.realm = localStorage.getItem('realm')
+    domainData.basedn = localStorage.getItem('basedn')
+    return domainData
+}

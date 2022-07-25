@@ -206,6 +206,13 @@
       "oneRetryLeft": "retry left",
       "retriesLeft": "retries left"
     },
+    "dirtree":{
+      "move":{
+        "title":"Move Domain Object",
+        "willBeMovedTo":"Will be moved to",
+        "originalRelativePath":"Original Relative Path"
+      }
+    },
     "users":{
       "createView":{
         "header":"Create User",

@@ -349,7 +349,7 @@
 import User from '@/include/User'
 import OrganizationalUnit from '@/include/OrganizationalUnit'
 import validationMixin from '@/plugins/mixin/validationMixin';
-import { objectRecursiveSearch } from '@/include/utils';
+import { objectRecursiveSearch, getDomainDetails } from '@/include/utils';
 
 export default {
     name: 'UserCreate',
@@ -534,15 +534,13 @@ export default {
         }
     },
     methods: {
-        getDomainDetails(){
-            this.domain = localStorage.getItem('domain')
-            this.realm = localStorage.getItem('realm')
-            this.basedn = localStorage.getItem('basedn')
-        },
         prevStep(){
             switch (this.createStage) {
                 case 2:
-                    this.getDomainDetails()
+                    var domainDetails = getDomainDetails()
+                    this.domain = domainDetails.domain
+                    this.realm = domainDetails.realm
+                    this.basedn = domainDetails.basedn
                     this.createStage -= 1
                     break;
                 case 3:
@@ -636,7 +634,10 @@ export default {
             this.$refs.userCreateForm1.resetValidation()
             for (const [key] of Object.entries(this.permissions))
                 this.permissions[key].value = false
-            this.getDomainDetails()
+            var domainDetails = getDomainDetails()
+            this.domain = domainDetails.domain
+            this.realm = domainDetails.realm
+            this.basedn = domainDetails.basedn
             this.fetchOUs()
             this.userDestination = "CN=Users," + this.basedn
         },

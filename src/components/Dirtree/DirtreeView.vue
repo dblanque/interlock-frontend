@@ -25,7 +25,7 @@
             </span>
           </template>
         </v-btn>
-        <v-btn disabled class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
+        <v-btn disabled class="pa-2 mx-2" color="primary" @click="openDialog('')">
           <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
           {{ $t('actions.addN') }}
         </v-btn>
@@ -164,7 +164,8 @@
     <!-- USER VIEW/EDIT DIALOG -->
     <v-dialog eager max-width="900px" v-model="dialogs['dirtreeMove']">
         <DirtreeMove
-            :cnToMove="selectedCn"
+            :objectDn="selectedObject.dn"
+            :objectName="selectedObject.name"
             :viewKey="'dirtreeMove'"
             ref="DirtreeMove"
             @closeDialog="closeDialog"
@@ -182,7 +183,7 @@ export default {
     data() {
         return {
             searchString: "",
-            selectedCn: "",
+            selectedObject: {},
             loading: false,
             error: false,
             tableData: {
@@ -242,7 +243,8 @@ export default {
             this.dialogs[key] = true;
             switch (key) {
                 case 'dirtreeMove':
-                    this.selectedCn = item.dn
+                    this.selectedObject = item
+                    this.$refs.DirtreeMove.resetDialog();
                 break;
                 default:
                 break;

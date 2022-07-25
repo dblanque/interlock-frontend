@@ -212,6 +212,13 @@
       "oneRetryLeft": "intento restante",
       "retriesLeft": "intentos restantes"
     },
+    "dirtree":{
+      "move":{
+        "title":"Mover Objeto de Dominio",
+        "willBeMovedTo":"Será movido a",
+        "originalRelativePath":"Camino Relativo Original"
+      }
+    },
     "users":{
       "createView":{
         "header":"Crear Usuario",
