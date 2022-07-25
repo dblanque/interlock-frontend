@@ -10,9 +10,18 @@ const actions = {
         })
     },
 
-    dirtree: ()=>{
+    dirtree: (filter)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.ou.dirtree)
+            interlock_backend.request.post(interlock_backend.urls.ou.dirtree, {filter: filter})
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
+    },
+
+    move: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.ou.move, data)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))

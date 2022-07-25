@@ -11,7 +11,7 @@
       :class="'ma-0 pa-2 ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
       style="height: fit-content;">
         <v-col cols="12" md="auto">
-          <LanguageSelector :dark="!isThemeDark()" :light="isThemeDark()" class="" @updateTabSliders="refreshNavTabs"/>
+          <LanguageSelector :dark="!isThemeDark()" :light="isThemeDark()" class="" @updateTabSliders="refreshOnLanguageChange"/>
         </v-col>
         <v-divider light class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
         <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
@@ -71,7 +71,7 @@
             center-active
             centered
             show-arrows>
-                <v-tab class="px-4" v-for="tab in navTabs" :key="tab.index" @click="updateSelectedTab(tab.index)" :disabled="!tab.enabled || (disableAllTabs == true && refreshLoading == true)">
+                <v-tab class="px-4" v-for="tab in navTabs" :key="tab.index" @click="updateSelectedTab(tab.index)" :disabled="!tab.enabled">
                 <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
                 <span v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
                     {{ $t("category." + tab.title + "_short") }}
@@ -88,14 +88,14 @@
       <v-tab-item
          v-for="tab in navTabs"
          :key="tab.index">
-         <ModularViewContainer :viewTitle="tab.title" :viewIndex="tab.index"
+         <ModularViewContainer 
+          :viewTitle="tab.title" 
+          :viewIndex="tab.index"
           ref="ModularViewContainerRef"
-         @refresh="loadData(selectedTabTitle)"
-         @goToUser="goToUser"
-         :errorLoading="error"
-         :refreshLoading="refreshLoading"
-         :tableDataHeaders="tableData.headers"
-         :tableDataItems="tableData.items"
+          @refresh="loadDomainData()"
+          @goToUser="goToUser"
+          :langChanged="langChanged"
+          :requestRefresh="requestRefresh"
          />
       </v-tab-item>
     </v-tabs-items>
@@ -120,31 +120,6 @@
       </v-card>
     </v-dialog>
 
-    <!-- Snackbar -->
-    <v-snackbar
-      v-model="snackbar"
-      class="mb-12"
-      :color="snackbarColor"
-      text
-      :dark="!isThemeDark()" :light="isThemeDark()"
-    >
-      {{ snackbarMessage }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          icon
-          :color="snackbarColor"
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-        >
-          <v-icon>
-            mdi-close
-          </v-icon>
-        </v-btn>
-      </template>
-    </v-snackbar>
-
     <!----- ABOUT AND DONATE BUTTONS ------>
     <v-row id="home-footer-buttons" justify="end" class="pa-0 ma-0">
       <v-btn color="primary" small class="mx-2 mb-1">{{$t('footer.about')}}</v-btn>
@@ -167,7 +142,6 @@ import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue'
 import User from '@/include/User'
 import Domain from '@/include/Domain'
-import OrganizationalUnit from '@/include/OrganizationalUnit'
 
 export default {
   name: 'HomeView',
@@ -178,7 +152,6 @@ export default {
   },
   data () {
     return {
-      disableAllTabs: false,
       username: "",
       first_name: "",
       last_name: "",
@@ -186,17 +159,12 @@ export default {
       realm: "",
       basedn: "",
       error: false,
-      snackbarMessage: "",
-      snackbarIcon: "",
-      snackbarColor: "",
-      snackbarClasses: "",
-      snackbar: false,
-      snackbarTimeout: 2500,
       showLogoutDialog: false,
+      requestRefresh: false,
       selectedTab: 0,
       selectedTabTitle: '',
       showNavTabs: false,
-      refreshLoading: false,
+      langChanged: false,
       active_tab: 0,
       tableData: {
         headers:[],
@@ -303,141 +271,23 @@ export default {
     setTimeout(() => {  this.showNavTabs = true; }, 250);
     this.active_tab = this.selectedTab;
     this.selectedTabTitle = this.navTabs[this.selectedTab].title
-    this.loadData(this.selectedTabTitle)
+    this.loadDomainData()
   },
   methods: {
-    // Home (DirTree) View Actions
-    async fetchDirtree(filter=undefined){
-      console.log(filter)
-      this.tableData.headers = []
-      this.tableData.items = []
-      await new OrganizationalUnit({}).dirtree()
-      .then(response => {
-        this.tableData.headers = []
-        this.tableData.items = response.data.ou_list
-        this.error = false;
-        this.refreshLoading = false;
-        this.resetSnackbar();
-        this.createSnackbar('green', (this.$t("category.header.home") + " " + this.$t("words.loaded.single.m")).toUpperCase() )
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
-      })
-      .catch(error => {
-        console.log(error)
-        this.refreshLoading = false;
-        this.error = true;
-        this.resetSnackbar();
-        this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.selectedTabTitle.toUpperCase())
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
-      })
-    },
-    // User Actions
-    async listUserItems(){
-      this.tableData.headers = []
-      this.tableData.items = []
-      await new User({}).list()
-      .then(response => {
-        var userHeaders = response.headers
-        var users = response.users
-        // Reset Headers Array every time you list to avoid infinite header multiplication
-        this.resetDataTable()
-        var headerDict = {}
-        userHeaders.forEach(header => {
-          headerDict = {}
-          headerDict.text = this.$t('section.users.attributes.' + header)
-          headerDict.value = header
-          if (header == 'is_enabled') {
-            headerDict.align = 'center'
-          }
-          this.tableData.headers.push(headerDict)
-        });
-        headerDict = {}
-        headerDict.text = this.$t('actions.label')
-        headerDict.value = 'actions'
-        headerDict.align = 'center'
-        headerDict.sortable = false
-        this.tableData.headers.push(headerDict)
-        this.tableData.items = users
-        this.error = false;
-        this.refreshLoading = false;
-        this.resetSnackbar();
-        this.createSnackbar('green', (this.$t("classes.user.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase() )
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
-      })
-      .catch(error => {
-        console.log(error)
-        this.refreshLoading = false;
-        this.error = true;
-        this.resetSnackbar();
-        this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.selectedTabTitle.toUpperCase())
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
-      })
-    },
     async goToUser(username){
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
       await this.updateSelectedTab(1) // Index for Users Tab is 1
       // Had to get always the last element in array 
-      this.$refs.ModularViewContainerRef[this.$refs.ModularViewContainerRef.length - 1].fetchUser(username)
+      this.$refs.ModularViewContainerRef[this.$refs.ModularViewContainerRef.length - 1].$refs.UserView.fetchUser(username)
     },
-    createSnackbar(color, string){
-      if (!color) {
-        color = "primary"
-      }
-      this.snackbarColor = color;
-      this.snackbarMessage = string;
-      this.snackbar = true;
-    },
-    // Reset Snackbar values
-    resetSnackbar(){
-      this.snackbar = false
-      this.snackbarMessage = ""
-      this.snackbarIcon = ""
-      this.snackbarColor = ""
-      this.snackbarClasses = ""
-    },
-    // Reset Data Table variables
-    resetDataTable(){
-      this.tableData.headers = []
-      this.tableData.items = []
-    },
-    // Reload Data Table Header Labels
-    reloadDataTableHeaders(){
-      this.tableData.headers.forEach(tableHeader => {
-        switch (this.selectedTabTitle) {
-          case 'users':
-            if (tableHeader.value == "actions") {
-              tableHeader.text = this.$t('actions.label')
-            } else {
-              tableHeader.text = this.$t('section.users.attributes.' + tableHeader.value)
-            }
-            break;
-          default:
-            break;
-        }
-      });
-    },
-    async loadData(viewTitle){
+    async loadDomainData(){
       if (!this.domain || !this.realm) {
         await new Domain({}).getDetails().then(() => {
           this.domain = localStorage.getItem('domain')
           this.realm = localStorage.getItem('realm')
           this.basedn = localStorage.getItem('basedn')
         })
-      }
-      this.disableAllTabs = true
-      switch (viewTitle) {
-        case 'users':
-          this.refreshLoading = true;
-          await this.listUserItems();
-          this.disableAllTabs = false
-          break;
-        case 'home':
-          this.refreshLoading = true;
-          await this.fetchDirtree();
-          this.disableAllTabs = false
-          break;
-        default:
-          break;
       }
     },
     // Logout Actions
@@ -456,17 +306,21 @@ export default {
         }
         return false
     },
-    refreshNavTabs(){
+    refreshOnLanguageChange(){
       this.showNavTabs = false
-      setTimeout(() => {  this.showNavTabs = true; }, 250);
-      this.reloadDataTableHeaders()
+      this.langChanged = true
+      setTimeout(() => {
+        this.showNavTabs = true
+        this.langChanged = false
+      }, 250);
     },
     async updateSelectedTab(index) {
       if (this.selectedTab != index)
+        this.requestRefresh = true
         this.selectedTab = index
         this.active_tab = index
         this.selectedTabTitle = this.navTabs[this.selectedTab].title
-        await this.loadData(this.selectedTabTitle)
+        await this.loadDomainData()
         var routeToPush = ''
         this.navTabs.forEach(item => {
           if (item.index == index) {
@@ -480,6 +334,7 @@ export default {
         if (this.$route.path != '/' + routeToPush) {
           this.$router.push('/' + routeToPush)
         }
+        this.requestRefresh = false
     },
     // Refresh Token Timers
     // What happens when the timer stops

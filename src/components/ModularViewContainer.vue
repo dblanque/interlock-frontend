@@ -8,356 +8,29 @@
 
   <!-- HOME -->
   <v-container v-if="viewTitle == 'home'">
-  <v-row justify="center" class="mt-2 mb-2">
-    <v-card flat outlined class="pa-2" max-width="1200px">
-      <!-- Actions Row -->
-      <v-row align="center" class="px-2 mx-1 py-0 my-0">
-        <v-text-field clearable
-          v-model="treeviewSearchString"
-          :label="$t('actions.search')"
-          class="mx-2"
-        ></v-text-field>
-        <v-btn 
-          class="mx-2 bg-primary" 
-          color="white" 
-          icon
-          elevation="0"
-          :loading="refreshLoading"
-          @click="refreshAction"
-          >
-          <v-icon>
-            mdi-refresh
-          </v-icon>
-          <template v-slot:loader>
-            <span class="custom-loader">
-              <v-icon light>mdi-cached</v-icon>
-            </span>
-          </template>
-        </v-btn>
-        <v-btn disabled class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
-          <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-          {{ $t('actions.addN') }}
-        </v-btn>
-      </v-row>
-  
-      <!-- Item Legends -->
-      <v-card flat outlined class="ma-1 pa-2">
-        <v-col cols="12">
-          <h4>{{ $t('words.legend') }}</h4>
-        </v-col>
-        <v-row class="px-4 ma-1" justify="center">
-          <v-col v-for="(item, key) in itemTypes" :key="item.id" cols="12" md="auto" lg="auto">
-            <v-chip 
-            @click="setFilter(key)"
-            :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" 
-            :color="item.filtered == true ? 'primary' : ''">
-              <v-icon>
-                {{ item.icon }}
-              </v-icon>
-              <span class="text-overline ml-1">
-                {{ $t('classes.' + key + '.single') }}
-              </span>
-            </v-chip>
-          </v-col>
-        </v-row>
-        <v-progress-linear 
-        :indeterminate="refreshLoading" size="100" width="7"
-        :color="!this.tableDataItems.length && this.errorLoading == true && !this.refreshLoading ? 'red' : 'primary'"/>
-      </v-card>
-  
-      <!-- Tree View -->
-      <v-card class="ma-1" flat outlined>
-      <v-expand-transition>
-            <v-treeview v-if="!refreshLoading"
-              :items="this.tableDataItems"
-              dense
-              :search="treeviewSearchString"
-              hoverable
-              >
-              <template v-slot:prepend="{ item, open }">
-                  <v-icon v-if="item.type == 'Organizational-Unit'">
-                    {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                  </v-icon>
-                  <v-icon v-else-if="item.type == 'Computer'">
-                    mdi-monitor
-                  </v-icon>
-                  <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
-                    mdi-account
-                  </v-icon>
-                  <v-icon v-else-if="item.type == 'Group'">
-                    mdi-google-circles-communities
-                  </v-icon>
-                  <v-icon v-else>
-                    mdi-at
-                  </v-icon>
-              </template>
-              <template v-slot:label="{item}">
-              <v-row align="start">
-                <v-col cols="11" md="auto">
-                  {{ item.name }}
-                </v-col>
-              </v-row>
-              </template>
-              <template v-slot:append="{item}">
-                  <!-- User Buttons -->
-                  <span v-if="(item.type == 'User' || item.type=='Person')">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn @click="goToUser(item)"
-                          color="primary"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon>
-                            mdi-arrow-right-bold
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>{{ $t('actions.goTo') + ' ' + $t('classes.user.single') }}</span>
-                    </v-tooltip>
-                  </span>
-  
-                  <!-- Group Buttons -->
-                  <span>
-                    <v-tooltip bottom v-if="item.type == 'Group'">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn disabled
-                          color="primary"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon>
-                            mdi-arrow-right-bold
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>{{ $t('actions.goTo') + ' ' + $t('classes.group.single') }}</span>
-                    </v-tooltip>
-                  </span>
-
-                  <!-- General Buttons -->
-                  <span v-if="item.builtin != true">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn disabled
-                          color="primary"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon>
-                            mdi-folder-move
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>{{ $t('actions.move') }}</span>
-                    </v-tooltip>
-                  </span>
-              </template>
-            </v-treeview>
-      </v-expand-transition>
-      <v-fab-transition>
-        <v-icon class="ma-12" v-if="!this.tableDataItems.length && this.errorLoading == true && !this.refreshLoading" size="82" color="red">
-          mdi-close-circle
-        </v-icon>
-      </v-fab-transition>
-      </v-card>
-    </v-card>
-  </v-row>
+    <DirtreeView
+      ref="DirtreeView"
+      :requestRefresh="this.refreshUserDataTable"
+      :viewTitle="viewTitle"
+      :snackbarTimeout="this.snackbarTimeout"
+      @createSnackbar="createSnackbar"
+      @resetSnackbar="resetSnackbar"
+      @refresh="refreshAction"
+      @goToUser="goToUser"
+    />
   </v-container>
 
   <!-- USERS -->
 
-  <!-- USER VIEW/EDIT DIALOG -->
-  <v-dialog eager max-width="1200px" v-model="dialogs['userDialog']" v-if="viewTitle == 'users'">
-    <UserDialog
-      :user="data.userdata"
-      :editFlag="this.editableForm"
-      :viewKey="'userDialog'"
-      ref="UserDialog"
-      :refreshLoading="userRefreshLoading"
-      @closeDialog="closeDialog"
-      @save="saveData"
-      @editToggle="setViewToEdit"
-      @refreshUser="refreshUser"
-      />
-  </v-dialog>
-
-  <!-- USER DELETE CONFIRM DIALOG -->
-  <v-dialog eager max-width="800px" v-model="dialogs['userDelete']" v-if="viewTitle == 'users'">
-    <UserDelete
-      :userObject="this.data.selectedUser"
-      :viewKey="'userDelete'"
-      ref="UserDelete"
-      @closeDialog="closeDialog"
+  <v-container v-if="viewTitle == 'users'">
+    <UserView ref="UserView"
+      :requestRefresh="this.refreshUserDataTable"
+      :viewTitle="viewTitle"
+      :snackbarTimeout="this.snackbarTimeout"
+      @createSnackbar="createSnackbar"
+      @resetSnackbar="resetSnackbar"
       @refresh="refreshAction"
     />
-  </v-dialog>
-
-  <!-- USER RESET PASSWORD DIALOG -->
-  <v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']" v-if="viewTitle == 'users'">
-    <UserResetPassword
-      :userObject="this.data.selectedUser"
-      :viewKey="'userResetPassword'"
-      ref="UserResetPassword"
-      @closeDialog="closeDialog"
-    />
-  </v-dialog>
-
-  <!-- USER CONFIRM STATUS TOGGLE -->
-  <v-dialog eager max-width="800px" v-model="dialogs['userAntilockout']" v-if="viewTitle == 'users'">
-    <UserAntilockoutWarning
-      :userObject="this.data.selectedUser"
-      :viewKey="'userAntilockout'"
-      ref="UserAntilockout"
-      @closeDialog="closeDialog"
-    />
-  </v-dialog>
-
-  <!-- USER CREATE DIALOG -->
-  <v-dialog eager max-width="1200px" v-model="dialogs['userCreate']" v-if="viewTitle == 'users'">
-    <UserCreate
-      :viewKey="'userCreate'"
-      ref="UserCreate"
-      @closeDialog="closeDialog"
-      />
-  </v-dialog>
-
-  <!-- USER DATA-TABLE -->
-  <v-container v-if="viewTitle == 'users'">
-    <v-data-table
-      :headers="this.tableDataHeaders"
-      :items="this.tableDataItems"
-      :custom-sort="sortNullLast"
-      :loading="refreshLoading"
-      :search="dataTableSearchString"
-      sort-by="sn"
-      class="py-3 px-2 mt-2 mb-2">
-      <!-- Table Header -->
-      <template v-slot:top>
-        <v-row align="center" class="px-2 mx-1 py-0 my-0">
-          <v-text-field
-            v-model="dataTableSearchString"
-            clearable
-            :label="$t('actions.search')"
-            class="mx-2"
-          ></v-text-field>
-          <v-btn 
-            class="mx-2 bg-primary" 
-            color="white" 
-            icon
-            elevation="0"
-            :loading="refreshLoading"
-            @click="refreshAction"
-            >
-            <v-icon>
-              mdi-refresh
-            </v-icon>
-            <template v-slot:loader>
-              <span class="custom-loader">
-                <v-icon light>mdi-cached</v-icon>
-              </span>
-            </template>
-          </v-btn>
-          <v-btn class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
-            <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-            {{ $t('actions.addN') + ' ' + $t('classes.user.single') }}
-          </v-btn>
-        </v-row>
-      </template>
-      <!-- USER IS ENABLED STATUS -->
-      <template v-slot:[`item.is_enabled`]="{ item }">
-
-          <!-- Enable User Button -->
-          <v-tooltip color="red" bottom v-if="item.is_enabled">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon
-              rounded
-              v-bind="attrs"
-              v-on="on"
-              :disabled="userRefreshLoading || isLoggedInUser(item.username)"
-              @click="disableUser(item)"
-            >
-            <v-icon class="clr-valid clr-lig-40">
-              mdi-check
-            </v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $t('actions.clickTo') + " " + $t('actions.disable') }}</span>
-        </v-tooltip>
-
-        <!-- Disable User Button -->
-        <v-tooltip color="green" bottom v-if="!item.is_enabled">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon
-              rounded
-              v-bind="attrs"
-              v-on="on"
-              :disabled="userRefreshLoading || isLoggedInUser(item.username)"
-              @click="enableUser(item)"
-            >
-            <v-icon class="clr-error clr-lig-40">
-              mdi-close
-            </v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $t('actions.clickTo') + " " + $t('actions.enable') }}</span>
-        </v-tooltip>
-      </template>
-
-      <!-- USER ACTIONS -->
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-btn elevation="0" icon small @click="fetchUser(item)">
-          <v-icon class="clr-primary" small>
-            mdi-eye
-          </v-icon>
-        </v-btn>
-        <v-btn color="primary" elevation="0" icon small @click="fetchUser(item, true)">
-          <v-icon small>
-            mdi-pencil
-          </v-icon>
-        </v-btn>
-
-        <!-- RESET PASSWORD BUTTON -->
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon
-              rounded
-              v-bind="attrs"
-              v-on="on"
-              small
-              :disabled="userRefreshLoading"
-              @click="changeUserPassword(item)"
-            >
-            <v-icon small color="primary">
-              mdi-key-variant
-            </v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $t('actions.changePassword') }}</span>
-        </v-tooltip>
-
-        <v-btn @click="openDeleteDialog(item)" v-if="!isLoggedInUser(item.username)"
-        color="red" 
-        elevation="0" 
-        icon small
-        >
-          <v-icon small>
-            mdi-delete
-          </v-icon>
-        </v-btn>
-        <v-btn 
-        v-else disabled
-        elevation="0" 
-        icon small>
-          <v-icon small>
-            mdi-delete
-          </v-icon>
-        </v-btn>
-      </template>
-    </v-data-table>
   </v-container>
 
   <!-- Groups -->
@@ -380,91 +53,62 @@
     />
   </v-container>
 
+
+    <!-- Snackbar -->
+    <v-snackbar
+      v-model="snackbar"
+      class="mb-12"
+      :color="snackbarColor"
+      :dark="!isThemeDark()" :light="isThemeDark()"
+      >
+      {{ snackbarMessage }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          icon
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
 </v-container>
 </template>
 
 <script>
-import User from '@/include/User'
-import UserCreate from '@/components/User/UserCreate.vue'
-import UserDialog from '@/components/User/UserDialog.vue'
-import UserResetPassword from '@/components/User/UserResetPassword.vue'
-import UserDelete from '@/components/User/UserDelete.vue'
-import UserAntilockoutWarning from '@/components/User/UserAntilockoutWarning.vue'
+import UserView from '@/components/User/UserView.vue'
+import DirtreeView from '@/components/Dirtree/DirtreeView.vue'
 import SettingsCard from '@/components/Settings/SettingsCard.vue'
 
   export default {
     name: 'ModularViewContainer',
     components:{
-      UserCreate,
-      UserDialog,
-      UserResetPassword,
-      UserDelete,
-      UserAntilockoutWarning,
-      SettingsCard
+    UserView,
+    DirtreeView,
+    SettingsCard
     },
     props: {
       viewTitle: String,
       viewIndex: Number,
-      tableDataHeaders: Array,
-      tableDataItems: Array,
-      errorLoading: Boolean,
-      refreshLoading: Boolean
+      langChanged: Boolean,
+      requestRefresh: Boolean
     },
     data () {
       return {
+        refreshUserDataTable: false,
         refreshOnClose: false,
-        dataTableSearchString: "",
-        treeviewSearchString: "",
         userRefreshLoading: false,
         error: false,
-        editableForm: false,
-        itemTypes: {
-          "container":{
-            "filtered": false,
-            "icon":"mdi-at"
-          },
-          "builtin-domain":{
-            "filtered": false,
-            "icon": "mdi-hammer"
-          },
-          "person":{
-            "filtered": false,
-            "icon":"mdi-account"
-          },
-          "group":{
-            "filtered": false,
-            "icon":"mdi-google-circles-communities"
-          },
-          "user":{
-            "filtered": false,
-            "icon":"mdi-account"
-          },
-          "computer":{
-            "filtered": false,
-            "icon":"mdi-monitor"
-          },
-          "organizational-unit":{
-            "filtered":false,
-            "icon":"mdi-folder"
-          },
-        },
-        data: {
-          selectedUser: {
-            "username": "",
-            "dn": ""
-          },
-          userdata: {},
-        },
-        dialogsOld:{
-          userDialog: false,
-          userDelete: false,
-          userAntilockout: false,
-          userResetPassword: false,
-          userCreate: false,
-          group: false,
-          dns: false,
-          gpo: false
-        },
+        snackbarMessage: "",
+        snackbarIcon: "",
+        snackbarColor: "",
+        snackbarClasses: "",
+        snackbar: false,
+        snackbarTimeout: 2500,
         dialogs: {
           userDialog: false,
           userDelete: false,
@@ -480,77 +124,60 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
     created() {
     },
     watch:{
-      // Dialog Watcher
-      // We want to handle what happens when a dialog closes here as the user 
-      // might close it by clicking outside instead of clicking the close button
-      dialogs: {
-        handler: function (newValue) {
-            var oldValue = this.dialogsOld
-            // For every dialog type
-            for (let key in newValue) {
-              // console.log("Dialog value for "+key+": "+newValue[key])
-              // console.log("Previous value for "+key+": "+oldValue[key])
-              // When dialog[key] CLOSES, the code below executes
-              if (oldValue[key] != newValue[key] && newValue[key] == false) {
-                // console.log("Dialog closed for "+key+" - Current value: "+newValue[key])
-                // console.log("Previous value for "+key+": "+oldValue[key])
-                switch (key) {
-                  case 'userDialog':
-                    setTimeout(() => {
-                      this.data.selectedUser = {}
-                      this.data.userdata = new User({})
-                      if (this.editableForm == true && this.refreshOnClose)
-                        this.refreshAction();
-                      this.editableForm = false
-                    }, 100);
-                    break;
-                  case 'userCreate':
-                    if (this.$refs.UserCreate != undefined)
-                      setTimeout(() => {  
-                        this.$refs.UserCreate.newUser()
-                    }, 100);
-                    this.refreshAction();
-                    break;
-                  case 'userResetPassword':
-                    this.$refs.UserResetPassword.clearUser();
-                    this.data.selectedUser = {}
-                    break;
-                  case 'userDelete':
-                    this.data.selectedUser = {}
-                    break;
-                  default:
-                    break;
-                }
-              } 
-              // When dialog[key] OPENS, the code below executes
-              else if (oldValue[key] != newValue[key] && newValue[key] == true) {
-                // console.log("Dialog opened for "+key+" - Current value: "+newValue[key])
-                // console.log("Previous value for "+key+": "+oldValue[key])
-                switch (key) {
-                  case 'userDialog':
-                    if (this.$refs.UserDialog != undefined)
-                      this.$refs.UserDialog.goBackToDetails()
-                      this.$refs.UserDialog.syncUser()
-                    break;
-                  case 'userCreate':
-                    if (this.$refs.UserCreate != undefined)
-                      this.$refs.UserCreate.newUser()
-                    break;
-                  default:
-                    break;
-                }
-              }
-              this.dialogsOld[key] = newValue[key]
-            }
-        },
-        deep: true
-      }
+      langChanged: {
+        handler: function () {
+          switch (this.viewTitle) {
+            case 'users':
+              this.$refs.UserView.reloadDataTableHeaders()
+              break;
+            default:
+              break;
+          }
+        }
+      },
+      requestRefresh: {
+        handler: function () {
+          switch (this.viewTitle) {
+            case 'users':
+              this.$refs.UserView.listUserItems()
+              break;
+            case 'home':
+              this.$refs.DirtreeView.resetDirtree()
+              break;
+            default:
+              break;
+          }
+        }
+      },
     },
     computed: {
     },
     methods: {
-      setViewToEdit(value){
-        this.editableForm = value;
+      goToUser(user){
+        this.$emit('goToUser', user)
+      },
+      createSnackbar(color, string){
+        if (!color) {
+          color = "primary"
+        }
+        this.snackbarColor = color;
+        this.snackbarMessage = string;
+        this.snackbar = true;
+      },
+      // Reset Snackbar values
+      resetSnackbar(){
+        this.snackbar = false
+        this.snackbarMessage = ""
+        this.snackbarIcon = ""
+        this.snackbarColor = ""
+        this.snackbarClasses = ""
+      },
+      // Check if theme is dark
+      isThemeDark(){
+          if (this.$vuetify.theme.dark == true) {
+            return true
+          }
+          return false
       },
       openDialog(key){
         this.dialogs[key] = true;
@@ -569,37 +196,6 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
             break;
         }
       },
-      async refreshUser(item){
-        await this.fetchUser(item, this.editableForm, false);
-      },
-      // Fetch individual User
-      async fetchUser(item, isEditable=false, refreshAnim=true){
-        if (refreshAnim == true)
-          this.userRefreshLoading = true;
-        this.data.selectedUser.username = item.username
-        this.data.selectedUser.dn = item.dn
-        this.data.userdata = await new User({})
-        await this.data.userdata.fetch(item.username)
-        .then(() => {
-          this.openDialog('userDialog')
-          if (isEditable == true)
-            this.editableForm = true
-          setTimeout(() => { this.userRefreshLoading = false }, 300);
-          this.$refs.UserDialog.syncUser()
-        })
-        .catch(error => {
-          console.log(error)
-          this.userRefreshLoading = false;
-          this.error = true;
-        })
-      },
-      setFilter(key){
-        this.itemTypes[key]['filtered'] = !this.itemTypes[key]['filtered']
-        console.log('Feature not enabled, filter for ' + key.toUpperCase() + ' objects should toggle')
-      },
-      goToUser(item){
-        this.$emit('goToUser', item)
-      },
       refreshAction() {
         // Reset all filters if refreshing dirtree view
         if (this.viewTitle == 'home')
@@ -609,112 +205,7 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
         this.$emit('refresh')
         this.userRefreshLoading = false;
         this.refreshOnClose = false
-      },
-      async enableUser(userObject){
-        this.data.selectedUser = {}
-        this.userRefreshLoading = true;
-        this.data.selectedUser = userObject
-        this.data.userdata = await new User({})
-        await this.data.userdata.enable(this.data.selectedUser.username)
-        .then(() => {
-          this.refreshAction();
-        })
-        .catch(error => {
-          console.log(error)
-          this.userRefreshLoading = false;
-          this.error = true;
-        })
-      },
-      isLoggedInUser(username){
-        if (username == localStorage.getItem('username'))
-          return true
-        return false
-      },
-      async disableUser(userObject){
-        this.data.selectedUser = {}
-        this.data.selectedUser = userObject
-        if (localStorage.getItem('username') == this.data.selectedUser.username) {
-          this.openDialog('userAntilockout');
-        }
-        else {
-          this.userRefreshLoading = true;
-          this.data.userdata = await new User({})
-          await this.data.userdata.disable(this.data.selectedUser.username)
-          .then(() => {
-            this.refreshAction();
-          })
-          .catch(error => {
-            console.log(error)
-            this.userRefreshLoading = false;
-            this.error = true;
-          })
-        }
-      },
-      async changeUserPassword(userObject) {
-        this.data.selectedUser = {}
-        this.data.selectedUser = userObject
-        this.openDialog('userResetPassword')
-      },
-      openDeleteDialog(userObject) {
-        this.data.selectedUser = {}
-        this.data.selectedUser = userObject
-        this.openDialog('userDelete')
-      },
-      sortNullLast(items, index, isDesc) {
-        items.sort((a, b) => {
-          if (a[index] === b[index]) { // equal items sort equally
-            return 0;
-          } else if (a[index] === null || a[index] === '') { // nulls sort after anything else
-            return 1;
-          } else if (b[index] === null || b[index] === '') {
-            return -1;
-          } else if (!isDesc[0]) { // otherwise, if we're ascending, lowest sorts first
-            return a[index] < b[index] ? -1 : 1;
-          } else { // if descending, highest sorts first
-            return a[index] < b[index] ? 1 : -1;
-          }
-        });
-        return items;
       }
     }
   }
 </script>
-
-<style>
-  .custom-loader {
-    animation: loader 1s infinite;
-    display: flex;
-  }
-  @-moz-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @-webkit-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @-o-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-</style>

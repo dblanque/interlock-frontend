@@ -329,7 +329,7 @@
                         </v-btn>
                     </v-slide-x-reverse-transition>
                     <v-slide-x-reverse-transition>
-                        <v-btn elevation="0" @click="closeDialog" v-if="this.createStage > 2 && this.error === false"
+                        <v-btn elevation="0" @click="closeDialog(true)" v-if="this.createStage > 2 && this.error === false"
                         @keydown.enter="closeDialog"
                         class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                         rounded>
@@ -349,6 +349,7 @@
 import User from '@/include/User'
 import OrganizationalUnit from '@/include/OrganizationalUnit'
 import validationMixin from '@/plugins/mixin/validationMixin';
+import { objectRecursiveSearch } from '@/include/utils';
 
 export default {
     name: 'UserCreate',
@@ -616,7 +617,7 @@ export default {
             if (itemToUpdate == undefined){
                 this.ouList.forEach(ou => {
                     if (!searchResult) {
-                        searchResult = this.objectRecursiveSearch(ou, parseInt(itemID))
+                        searchResult = objectRecursiveSearch(ou, parseInt(itemID))
                         this.userDestination = searchResult
                     }
                 })
@@ -624,34 +625,6 @@ export default {
                 this.userDestination = itemToUpdate.dn
             
             this.userPathExpansionPanel = false
-        },
-        objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='dn', childrenKey='children', searchResult=undefined){
-
-            // If ID matches with current object
-            if (idToSearch == targetEntity.id){
-                if (targetEntity[keyToSearch] != undefined) {
-                    searchResult = targetEntity[keyToSearch]
-                    return searchResult
-                }
-                else {
-                    console.log('Error: targetEntity key(' + keyToSearch + ') is undefined or its value is missing')
-                    return searchResult
-                }
-            }
-
-            // If ID hasn't matched with this object,
-            // then search in it's children if it has any.
-            if (childrenKey in targetEntity && targetEntity[childrenKey].length != 0)
-                // For each child do a recursive search calling this function
-                targetEntity[childrenKey].forEach(child => {
-                    if (!searchResult) {
-                        searchResult = this.objectRecursiveSearch(child, idToSearch, keyToSearch, childrenKey, searchResult)
-                        if (searchResult && searchResult != false && searchResult != undefined){
-                            return searchResult
-                        }
-                    }
-                })
-            return searchResult
         },
         async newUser(){
             this.passwordHidden = true
@@ -679,8 +652,8 @@ export default {
         onClickPermission(key){
             this.permissions[key].value = !this.permissions[key].value
         },
-        closeDialog(){
-            this.$emit('closeDialog', this.viewKey);
+        closeDialog(refresh=false){
+            this.$emit('closeDialog', this.viewKey, refresh);
         },
         async createUser(){
             this.error = false
@@ -725,7 +698,6 @@ export default {
                         break;
                 }
             })
-            this.$emit('save', this.viewKey, this.userToCreate);
         }
     }
 }

@@ -26,3 +26,31 @@ export function dateLdapToString(date) {
     var result = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
     return result
 }
+
+export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='dn', childrenKey='children', searchResult=undefined){
+    // If ID matches with current object
+    if (idToSearch == targetEntity.id){
+        if (targetEntity[keyToSearch] != undefined) {
+            searchResult = targetEntity[keyToSearch]
+            return searchResult
+        }
+        else {
+            console.log('Error: targetEntity key(' + keyToSearch + ') is undefined or its value is missing')
+            return searchResult
+        }
+    }
+
+    // If ID hasn't matched with this object,
+    // then search in it's children if it has any.
+    if (childrenKey in targetEntity && targetEntity[childrenKey].length != 0)
+        // For each child do a recursive search calling this function
+        targetEntity[childrenKey].forEach(child => {
+            if (!searchResult) {
+                searchResult = this.objectRecursiveSearch(child, idToSearch, keyToSearch, childrenKey, searchResult)
+                if (searchResult && searchResult != false && searchResult != undefined){
+                    return searchResult
+                }
+            }
+        })
+    return searchResult
+}

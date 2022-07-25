@@ -24,10 +24,6 @@ class Group extends ApiModel{
     list(){
         return interlock_backend.call('group/list')
     }
-
-    dirtree(){
-        return interlock_backend.call('group/dirtree')
-    }
 }
 
 export default Group

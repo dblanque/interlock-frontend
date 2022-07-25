@@ -41,7 +41,10 @@ const urls = {
     },
     group: {
         base: 'api/groups/',
-        list: 'api/groups/'
+        list: 'api/groups/',
+        save: 'api/groups/save',
+        insert: 'api/groups/insert',
+        delete: 'api/groups/delete',
     },
     domain: {
         base: "api/domain/",
@@ -57,7 +60,8 @@ const urls = {
     ou: {
         base: "api/ou/",
         list: "api/ou/",
-        dirtree: "api/ou/dirtree/"
+        dirtree: "api/ou/dirtree/",
+        move: "api/ou/move/"
     }
 }
 

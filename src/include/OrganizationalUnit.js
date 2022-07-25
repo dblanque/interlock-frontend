@@ -21,8 +21,12 @@ class OrganizationalUnit extends ApiModel{
         return interlock_backend.call('ou/list')
     }
 
-    dirtree(){
-        return interlock_backend.call('ou/dirtree')
+    dirtree(filter){
+        return interlock_backend.call('ou/dirtree', filter)
+    }
+
+    move(data){
+        return interlock_backend.call('ou/move', data)
     }
 }
 

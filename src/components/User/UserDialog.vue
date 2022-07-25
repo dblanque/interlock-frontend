@@ -511,7 +511,7 @@
                     {{ $t("actions.saveClose") }}
                 </v-btn>
                 <!-- Refresh User Button -->
-                <v-progress-circular class="pa-0 ma-0" :color="loadingColor" :value="loading" size="38" width="7">
+                <v-progress-circular class="pa-0 ma-0" :color="loadingColor" value="100" :indeterminate="loading" size="38" width="7">
                     <v-btn small
                     class="ma-1 bg-primary" 
                     color="white" 
@@ -525,7 +525,7 @@
                         </v-icon>
                         <template v-slot:loader>
                         <span class="custom-loader">
-                            <v-icon light>mdi-cached</v-icon>
+                            <v-icon color="white">mdi-cached</v-icon>
                         </span>
                         </template>
                     </v-btn>
@@ -544,7 +544,7 @@ export default {
     data () {
       return {
         panel: [],
-        loading: 0,
+        loading: false,
         loadingColor: 'accent',
         tab: 0,
         domain: "",
@@ -851,12 +851,10 @@ export default {
             this.$emit('closeDialog', this.viewKey);
         },
         async saveUser(closeDialog=false){
-            this.loading = 0
+            this.loading = true
             // Set permissions array properly
             this.usercopy.permission_list = []
-            this.loading = 5
             for (const [key] of Object.entries(this.permissions)) {
-                this.loading += 1
                 if (this.permissions[key].value == true)
                     this.usercopy.permission_list.push(key)
             }
@@ -865,18 +863,17 @@ export default {
             this.$emit('save', this.viewKey, this.usercopy);
             await new User({}).update(this.usercopy)
             .then(() => {
-                this.loading = 90
                 if (closeDialog == true)
                     this.closeDialog();
                 else
                     this.refreshUser();
-                this.loading = 100
+                this.loading = false
                 this.loadingColor = 'primary'
             })
             .catch(error => {
                 console.log(error)
                 this.userRefreshLoading = false;
-                this.loading = 100
+                this.loading = false
                 this.loadingColor = 'error'
                 this.error = true;
             })
@@ -899,15 +896,15 @@ export default {
                 if (this.usercopy.lastLogon == 0)
                     this.usercopy.lastLogon = this.$t('section.users.userDialog.noLastLogon')
                 this.setPermissions()
-                this.loading = 100
+                this.loading = false
                 this.loadingColor = 'primary'
             })
         },
         // Tells the parent view to refresh/fetch the user again
         async refreshUser(){
-            this.loading = 0
+            this.loading = true
             this.$emit('refreshUser', this.user);
-            this.loading = 100
+            this.loading = false
             this.loadingColor = 'primary'
         }
     }

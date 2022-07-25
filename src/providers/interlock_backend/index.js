@@ -1,5 +1,6 @@
 import authCalls from '@/providers/interlock_backend/modules/auth.js'
 import userCalls from '@/providers/interlock_backend/modules/user.js'
+import groupCalls from '@/providers/interlock_backend/modules/group.js'
 import ouCalls from '@/providers/interlock_backend/modules/organizationalUnit.js'
 import domainCalls from '@/providers/interlock_backend/modules/domain.js'
 import settingCalls from '@/providers/interlock_backend/modules/settings.js'
@@ -7,6 +8,7 @@ import settingCalls from '@/providers/interlock_backend/modules/settings.js'
 const modules = {
     auth: authCalls,
     user: userCalls,
+    group: groupCalls,
     ou: ouCalls,
     settings: settingCalls,
     domain: domainCalls,
