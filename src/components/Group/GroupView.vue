@@ -23,7 +23,7 @@
           icon
           elevation="0"
           :loading="loading"
-          @click="listUserItems"
+          @click="listGroupItems"
           >
           <v-icon>
             mdi-refresh
@@ -34,55 +34,15 @@
             </span>
           </template>
         </v-btn>
-        <v-btn class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
+        <v-btn class="pa-2 mx-2" color="primary" @click="openDialog('groupCreate')">
           <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-          {{ $t('actions.addN') + ' ' + $t('classes.user.single') }}
+          {{ $t('actions.addN') + ' ' + $t('classes.group.single') }}
         </v-btn>
       </v-row>
     </template>
-    <!-- USER IS ENABLED STATUS -->
-    <template v-slot:[`item.is_enabled`]="{ item }">
 
-        <!-- Enable User Button -->
-        <v-tooltip color="red" bottom v-if="item.is_enabled">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon
-            rounded
-            v-bind="attrs"
-            v-on="on"
-            :disabled="loading || isLoggedInUser(item.username)"
-            @click="disableUser(item)"
-          >
-          <v-icon class="clr-valid clr-lig-40">
-            mdi-check
-          </v-icon>
-          </v-btn>
-        </template>
-        <span>{{ $t('actions.clickTo') + " " + $t('actions.disable') }}</span>
-      </v-tooltip>
-
-      <!-- Disable User Button -->
-      <v-tooltip color="green" bottom v-if="!item.is_enabled">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon
-            rounded
-            v-bind="attrs"
-            v-on="on"
-            :disabled="loading || isLoggedInUser(item.username)"
-            @click="enableUser(item)"
-          >
-          <v-icon class="clr-error clr-lig-40">
-            mdi-close
-          </v-icon>
-          </v-btn>
-        </template>
-        <span>{{ $t('actions.clickTo') + " " + $t('actions.enable') }}</span>
-      </v-tooltip>
-    </template>
-
-    <!-- USER ACTIONS -->
+    <!-- GROUP ACTIONS -->
     <template v-slot:[`item.actions`]="{ item }">
-      
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon
@@ -91,7 +51,7 @@
             v-on="on"
             small
             :disabled="loading"
-            @click="fetchUser(item)"
+            @click="fetchGroup(item)"
           >
           <v-icon small color="primary">
             mdi-eye
@@ -109,7 +69,7 @@
             v-on="on"
             small
             :disabled="loading"
-            @click="fetchUser(item, true)"
+            @click="fetchGroup(item, true)"
           >
           <v-icon small color="primary">
             mdi-pencil
@@ -117,25 +77,6 @@
           </v-btn>
         </template>
         <span>{{ $t('actions.edit') }}</span>
-      </v-tooltip>
-
-      <!-- RESET PASSWORD BUTTON -->
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon
-            rounded
-            v-bind="attrs"
-            v-on="on"
-            small
-            :disabled="loading"
-            @click="changeUserPassword(item)"
-          >
-          <v-icon small color="primary">
-            mdi-key-variant
-          </v-icon>
-          </v-btn>
-        </template>
-        <span>{{ $t('actions.changePassword') }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -147,21 +88,10 @@
             small
             :disabled="loading"
             @click="openDeleteDialog(item)"
-            v-if="!isLoggedInUser(item.username)"
           >
           <v-icon small color="red">
             mdi-delete
           </v-icon>
-          </v-btn>
-          <v-btn 
-          v-else 
-            disabled
-            elevation="0" 
-            icon 
-            small>
-            <v-icon small>
-              mdi-delete
-            </v-icon>
           </v-btn>
         </template>
         <span>{{ $t('actions.delete') }}</span>
@@ -170,65 +100,53 @@
   </v-data-table>
 
   <!-- USER VIEW/EDIT DIALOG -->
-  <v-dialog eager max-width="1200px" v-model="dialogs['userDialog']">
-    <UserDialog
+  <!-- <v-dialog eager max-width="1200px" v-model="dialogs['groupDialog']">
+    <GroupDialog
       :user="data.userdata"
       :editFlag="this.editableForm"
-      :viewKey="'userDialog'"
-      ref="UserDialog"
+      :viewKey="'groupDialog'"
+      ref="GroupDialog"
       :refreshLoading="loading"
       @closeDialog="closeDialog"
       @save="userSaved"
       @editToggle="setViewToEdit"
       @refreshUser="refreshUser"
       />
-  </v-dialog>
+  </v-dialog> -->
 
   <!-- USER DELETE CONFIRM DIALOG -->
-  <v-dialog eager max-width="800px" v-model="dialogs['userDelete']">
-    <UserDelete
-      :userObject="this.data.selectedUser"
-      :viewKey="'userDelete'"
-      ref="UserDelete"
+  <!-- <v-dialog eager max-width="800px" v-model="dialogs['groupDelete']">
+    <GroupDelete
+      :groupObject="this.data.selectedUser"
+      :viewKey="'groupDelete'"
+      ref="GroupDelete"
       @closeDialog="closeDialog"
       @refresh="listUserItems"
     />
-  </v-dialog>
-
-  <!-- USER RESET PASSWORD DIALOG -->
-  <v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']">
-    <UserResetPassword
-      :userObject="this.data.selectedUser"
-      :viewKey="'userResetPassword'"
-      ref="UserResetPassword"
-      @closeDialog="closeDialog"
-    />
-  </v-dialog>
+  </v-dialog> -->
 
   <!-- USER CREATE DIALOG -->
-  <v-dialog eager max-width="1200px" v-model="dialogs['userCreate']">
-    <UserCreate
-      :viewKey="'userCreate'"
-      ref="UserCreate"
+  <!-- <v-dialog eager max-width="1200px" v-model="dialogs['groupCreate']">
+    <GroupCreate
+      :viewKey="'groupCreate'"
+      ref="GroupCreate"
       @closeDialog="closeDialog"
       />
-  </v-dialog>
+  </v-dialog> -->
 </div>
 </template>
 
 <script>
-import User from '@/include/User'
-import UserCreate from '@/components/User/UserCreate.vue'
-import UserDialog from '@/components/User/UserDialog.vue'
-import UserResetPassword from '@/components/User/UserResetPassword.vue'
-import UserDelete from '@/components/User/UserDelete.vue'
+import Group from '@/include/Group'
+// import GroupCreate from '@/components/User/GroupCreate.vue'
+// import GroupDialog from '@/components/User/GroupDialog.vue'
+// import GroupDelete from '@/components/User/GroupDelete.vue'
 
 export default {
   components: {
-    UserCreate,
-    UserDialog,
-    UserResetPassword,
-    UserDelete
+    // GroupCreate,
+    // GroupDialog,
+    // GroupDelete
   },
   data() {
     return {
@@ -243,24 +161,23 @@ export default {
 
       // User Data
       data: {
-        selectedUser: {
-          "username": "",
+        selectedGroup: {
+          "cn": "",
           "dn": ""
         },
-        userdata: {},
+        groupdata: {},
       },
 
       // Dialog States
       dialogs: {
-        userDialog: false,
-        userDelete: false,
-        userResetPassword: false,
-        userCreate: false,
+        groupDialog: false,
+        groupDelete: false,
+        groupCreate: false
       }
     }
   },
   mounted() {
-    this.listUserItems();
+    this.listGroupItems();
   },
   props: {
     viewTitle: String,
@@ -270,22 +187,24 @@ export default {
   watch: {
     // Watch for parent components requesting a Refresh
     requestRefresh(newValue) {
-      if (newValue == true)
-        this.listUserItems
+      if (newValue == false){
+        console.log("Refresh")
+        this.listGroupItems()
+      }
     },
   },
   methods: {
     openDialog(key){
       this.dialogs[key] = true;
       switch (key) {
-        case 'userDialog':
-          if (this.$refs.UserDialog != undefined)
-            this.$refs.UserDialog.goBackToDetails()
-            this.$refs.UserDialog.syncUser()
+        case 'groupDialog':
+          if (this.$refs.GroupDialog != undefined)
+            this.$refs.GroupDialog.goBackToDetails()
+            this.$refs.GroupDialog.syncGroup()
           break;
-        case 'userCreate':
-          if (this.$refs.UserCreate != undefined)
-            this.$refs.UserCreate.newUser()
+        case 'groupCreate':
+          if (this.$refs.GroupCreate != undefined)
+            this.$refs.GroupCreate.newGroup()
           break;
         default:
           break;
@@ -294,7 +213,7 @@ export default {
     async closeDialog(key, refresh=false){
       this.dialogs[key] = false;
       if (refresh)
-        this.listUserItems()
+        this.listGroupItems()
     },
     setViewToEdit(value){
       this.editableForm = value;
@@ -320,13 +239,13 @@ export default {
     createSnackbar(color, string){
       this.$emit('createSnackbar', color, string)
     },
-    // User Actions
-    async listUserItems(){
+    // Group Actions
+    async listGroupItems(){
       this.loading = true
       this.error = false
       this.tableData.headers = []
       this.tableData.items = []
-      await new User({}).list()
+      await new Group({}).list()
       .then(response => {
         var userHeaders = response.headers
         var users = response.users
@@ -352,7 +271,7 @@ export default {
         this.loading = false
         this.error = false
         this.resetSnackbar();
-        this.createSnackbar('green', (this.$t("classes.user.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase() )
+        this.createSnackbar('green', (this.$t("classes.group.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase() )
         setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
       })
       .catch(error => {
@@ -380,67 +299,28 @@ export default {
       });
       return items;
     },
-    isLoggedInUser(username){
-      if (username == localStorage.getItem('username'))
-        return true
-      return false
+    openDeleteDialog(groupObject) {
+      this.data.selectedGroup = {}
+      this.data.selectedGroup = groupObject
+      this.openDialog('groupDelete')
     },
-    async changeUserPassword(userObject) {
-      this.data.selectedUser = {}
-      this.data.selectedUser = userObject
-      this.openDialog('userResetPassword')
-    },
-    openDeleteDialog(userObject) {
-      this.data.selectedUser = {}
-      this.data.selectedUser = userObject
-      this.openDialog('userDelete')
-    },
-    async enableUser(userObject){
-      this.data.selectedUser = {}
-      this.data.selectedUser = userObject
-      this.data.userdata = await new User({})
-      await this.data.userdata.enable(this.data.selectedUser.username)
-      .then(() => {
-        this.listUserItems();
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    async disableUser(userObject){
-      this.data.selectedUser = {}
-      this.data.selectedUser = userObject
-      if (localStorage.getItem('username') == this.data.selectedUser.username) {
-        this.openDialog('userAntilockout');
-      }
-      else {
-        this.data.userdata = await new User({})
-        await this.data.userdata.disable(this.data.selectedUser.username)
-        .then(() => {
-          this.listUserItems();
-        })
-        .catch(error => {
-          console.log(error)
-        })
-      }
-    },
-    async refreshUser(item){
-      await this.fetchUser(item, this.editableForm, false);
+    async refreshGroup(item){
+      await this.fetchGroup(item, this.editableForm, false);
     },
     userSaved(){
-      this.$refs.UserCreate.newUser()
-      this.listUserItems()
+      this.$refs.GroupCreate.newGroup()
+      this.listGroupItems()
     },
-    // Fetch individual User
-    async fetchUser(item, isEditable=false, refreshAnim=true){
+    // Fetch individual Group
+    async fetchGroup(item, isEditable=false, refreshAnim=true){
       if (refreshAnim == true)
         this.loading = true;
-      this.data.selectedUser.username = item.username
-      this.data.selectedUser.dn = item.dn
-      this.data.userdata = await new User({})
-      await this.data.userdata.fetch(item.username)
+      this.data.selectedGroup.cn = item.cn
+      this.data.selectedGroup.dn = item.dn
+      this.data.userdata = await new Group({})
+      await this.data.userdata.fetch(item.cn)
       .then(() => {
-        this.openDialog('userDialog')
+        this.openDialog('groupDialog')
         if (isEditable == true)
           this.editableForm = true
         setTimeout(() => { this.loading = false }, 300);

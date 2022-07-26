@@ -300,7 +300,7 @@
                     :append-icon="readonly == true ? undefined : (item.hidden ? 'mdi-eye' : 'mdi-eye-off')"
                     @click:append="() => (item.hidden = !item.hidden)"
                     dense
-                    :label="$t('section.users.attributes.password')"
+                    :label="$t('ldap.attributes.password')"
                     v-model="item.value"
                     :rules="[fieldRules(item.value, 'ge_password', getRequired(item.required))]"
                     />

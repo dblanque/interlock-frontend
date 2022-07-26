@@ -35,6 +35,14 @@
 
   <!-- Groups -->
   <v-container v-if="viewTitle == 'groups'">
+    <GroupView ref="GroupView"
+      :requestRefresh="this.refreshGroupDataTable"
+      :viewTitle="viewTitle"
+      :snackbarTimeout="this.snackbarTimeout"
+      @createSnackbar="createSnackbar"
+      @resetSnackbar="resetSnackbar"
+      @refresh="refreshAction"
+    />
   </v-container>
 
   <!-- DNS -->
@@ -81,6 +89,7 @@
 
 <script>
 import UserView from '@/components/User/UserView.vue'
+import GroupView from '@/components/Group/GroupView.vue'
 import DirtreeView from '@/components/Dirtree/DirtreeView.vue'
 import SettingsCard from '@/components/Settings/SettingsCard.vue'
 
@@ -88,6 +97,7 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
     name: 'ModularViewContainer',
     components:{
     UserView,
+    GroupView,
     DirtreeView,
     SettingsCard
     },
@@ -95,11 +105,12 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
       viewTitle: String,
       viewIndex: Number,
       langChanged: Boolean,
-      requestRefresh: Boolean,
+      requestRefresh: String,
     },
     data () {
       return {
         refreshUserDataTable: false,
+        refreshGroupDataTable: false,
         refreshOnClose: false,
         userRefreshLoading: false,
         error: false,
@@ -136,13 +147,25 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
         }
       },
       requestRefresh: {
-        handler: function () {
-          switch (this.viewTitle) {
+        handler: function (newValue) {
+          switch (newValue) {
             case 'users':
-              this.$refs.UserView.listUserItems()
+              if (this.$refs.UserView != undefined) {
+                console.log("Requested refresh for component "+ newValue)
+                this.$refs.UserView.listUserItems()
+              }
               break;
             case 'home':
-              this.$refs.DirtreeView.resetDirtree()
+              if (this.$refs.DirtreeView != undefined) {
+                console.log("Requested refresh for view component "+ newValue)
+                this.$refs.DirtreeView.resetDirtree()
+              }
+              break;
+            case 'groups':
+              if (this.$refs.GroupView != undefined) {
+                console.log("Requested refresh for component "+ newValue)
+                this.$refs.GroupView.listGroupItems()
+              }
               break;
             default:
               break;

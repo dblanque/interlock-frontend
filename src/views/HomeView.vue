@@ -160,7 +160,7 @@ export default {
       basedn: "",
       error: false,
       showLogoutDialog: false,
-      requestRefresh: false,
+      requestRefresh: "",
       selectedTab: 0,
       selectedTabTitle: '',
       showNavTabs: false,
@@ -316,10 +316,10 @@ export default {
     },
     async updateSelectedTab(index) {
       if (this.selectedTab != index)
-        this.requestRefresh = true
         this.selectedTab = index
         this.active_tab = index
         this.selectedTabTitle = this.navTabs[this.selectedTab].title
+        this.requestRefresh = this.selectedTabTitle
         await this.loadDomainData()
         var routeToPush = ''
         this.navTabs.forEach(item => {
@@ -334,7 +334,7 @@ export default {
         if (this.$route.path != '/' + routeToPush) {
           this.$router.push('/' + routeToPush)
         }
-        this.requestRefresh = false
+        this.requestRefresh = ""
     },
     // Refresh Token Timers
     // What happens when the timer stops

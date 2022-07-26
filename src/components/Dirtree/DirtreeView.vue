@@ -264,8 +264,9 @@ export default {
             this.itemTypes[key].filtered = !this.itemTypes[key].filtered
 
             if (key == 'user'){
-                itemTypeAmount += 1
+                itemTypeAmount += 2
                 this.itemTypes['person'].filtered = !this.itemTypes['person'].filtered
+                this.filters['organizationalPerson'] = 'objectClass'
             }
 
             for (const type in this.itemTypes) {

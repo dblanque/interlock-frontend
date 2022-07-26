@@ -50,7 +50,7 @@
                                         <v-text-field
                                         dense
                                         id="givenName"
-                                        :label="$t('section.users.attributes.givenName')"
+                                        :label="$t('ldap.attributes.givenName')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.givenName"
                                         :rules="[this.fieldRules(usercopy.givenName, 'ge_name')]"
@@ -60,7 +60,7 @@
                                         <v-text-field
                                         dense
                                         id="sn"
-                                        :label="$t('section.users.attributes.sn')"
+                                        :label="$t('ldap.attributes.sn')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.sn"
                                         :rules="[this.fieldRules(usercopy.sn, 'ge_name')]"
@@ -70,7 +70,7 @@
                                         <v-text-field
                                         dense
                                         id="mail"
-                                        :label="$t('section.users.attributes.mail')"
+                                        :label="$t('ldap.attributes.mail')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.mail"
                                         :rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"
@@ -80,7 +80,7 @@
                                         <v-fade-transition>
                                             <v-card v-ripple outlined class="pa-1 py-2">
                                                 <span :class="(usercopy.is_enabled ? 'clr-valid' : 'clr-error') + ' clr-lig-40'">
-                                                    {{ usercopy.is_enabled ? $t('section.users.attributes.is_enabled') : $t('section.users.attributes.is_disabled') }}
+                                                    {{ usercopy.is_enabled ? $t('ldap.attributes.is_enabled') : $t('ldap.attributes.is_disabled') }}
                                                 </span>
                                                 <div elevation="0" v-if="usercopy.is_enabled == true">
                                                     <v-icon class="clr-valid clr-lig-40">
@@ -96,13 +96,13 @@
                                         </v-fade-transition>
                                     </v-col>
                                     <v-col cols="12" v-if="user.last_login != undefined && user.last_login != ''">
-                                        {{ $t('section.users.attributes.last_login') + ": " + user.last_login }}
+                                        {{ $t('ldap.attributes.last_login') + ": " + user.last_login }}
                                     </v-col>
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
                                         id="telephoneNumber"
-                                        :label="$t('section.users.attributes.telephoneNumber')"
+                                        :label="$t('ldap.attributes.telephoneNumber')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.telephoneNumber"
                                         :rules="[this.fieldRules(usercopy.telephoneNumber, 'ge_phone')]"
@@ -112,7 +112,7 @@
                                         <v-text-field
                                         dense
                                         id="wWWHomePage"
-                                        :label="$t('section.users.attributes.wWWHomePage')"
+                                        :label="$t('ldap.attributes.wWWHomePage')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.wWWHomePage"
                                         :rules="[this.fieldRules(usercopy.wWWHomePage, 'ge_website')]"
@@ -133,7 +133,7 @@
                                         <v-text-field
                                         dense
                                         id="streetAddress"
-                                        :label="$t('section.users.attributes.streetAddress')"
+                                        :label="$t('ldap.attributes.streetAddress')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.streetAddress"
                                         :rules="[this.fieldRules(usercopy.streetAddress, 'ge_address_street')]"
@@ -143,7 +143,7 @@
                                         <v-text-field
                                         dense
                                         id="postalCode"
-                                        :label="$t('section.users.attributes.postalCode')"
+                                        :label="$t('ldap.attributes.postalCode')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.postalCode"
                                         :rules="[this.fieldRules(usercopy.postalCode, 'ge_address_postal_code')]"
@@ -154,7 +154,7 @@
                                         <v-text-field
                                         dense
                                         id="l"
-                                        :label="$t('section.users.attributes.l')"
+                                        :label="$t('ldap.attributes.l')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.l"
                                         :rules="[this.fieldRules(usercopy.l, 'ge_address_city')]"
@@ -163,14 +163,14 @@
                                     <v-col cols="12" lg="6">
                                         <v-card v-ripple outlined class="pa-1 py-2">
                                             <div v-if="usercopy.countryCode != undefined && usercopy.countryCode != '' && usercopy.countryCode != 0">
-                                                {{ $t('section.users.attributes.countryCodeCombined') }}
+                                                {{ $t('ldap.attributes.countryCodeCombined') }}
                                                 <div elevation="0">
                                                 {{ usercopy.countryCode }}
                                                 {{ "(" + usercopy.c + ")" }}
                                                 </div>
                                             </div>
                                             <div v-else>
-                                                {{ $t('section.users.attributes.countryCodeCombined') }}
+                                                {{ $t('ldap.attributes.countryCodeCombined') }}
                                                 <div>
                                                 {{ $t('error.data.noCountryCode') }}
                                                 </div>
@@ -178,13 +178,13 @@
                                         </v-card>
                                     </v-col>
                                     <v-col cols="12" v-if="user.last_login != undefined && user.last_login != ''">
-                                        {{ $t('section.users.attributes.last_login') + ": " + user.last_login }}
+                                        {{ $t('ldap.attributes.last_login') + ": " + user.last_login }}
                                     </v-col>
                                     <v-col cols="12" lg="6">
                                         <v-text-field
                                         dense
                                         id="st"
-                                        :label="$t('section.users.attributes.st')"
+                                        :label="$t('ldap.attributes.st')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.st"
                                         :rules="[this.fieldRules(usercopy.st, 'ge_state')]"
@@ -194,7 +194,7 @@
                                         <v-autocomplete
                                         dense
                                         id="co"
-                                        :label="$t('section.users.attributes.co')"
+                                        :label="$t('ldap.attributes.co')"
                                         :readonly="editFlag != true"
                                         v-model="usercopy.co"
                                         :items="getCountryList()"
@@ -217,7 +217,7 @@
                                             <v-text-field
                                             dense
                                             id="dn"
-                                            :label="$t('section.users.attributes.distinguishedName')"
+                                            :label="$t('ldap.attributes.distinguishedName')"
                                             readonly
                                             v-model="usercopy.distinguishedName"
                                             :rules="[this.fieldRules(usercopy.distinguishedName, 'ldap_dn')]"
@@ -227,7 +227,7 @@
                                             <v-text-field
                                             dense
                                             id="userPrincipalName"
-                                            :label="$t('section.users.attributes.userPrincipalName')"
+                                            :label="$t('ldap.attributes.userPrincipalName')"
                                             readonly
                                             v-model="getUSN"
                                             :rules="[this.fieldRules(usercopy.userPrincipalName, 'ldap_usn')]"
@@ -239,7 +239,7 @@
                                             <v-text-field
                                             dense
                                             id="userAccountControl"
-                                            :label="$t('section.users.attributes.userAccountControl')"
+                                            :label="$t('ldap.attributes.userAccountControl')"
                                             readonly
                                             v-model="calcEnabledPerms"
                                             :rules="[this.fieldRules(calcEnabledPerms, 'ge_numbers')]"
@@ -256,7 +256,7 @@
                                             <v-text-field
                                             dense
                                             id="sAMAccountType"
-                                            :label="$t('section.users.attributes.sAMAccountType')"
+                                            :label="$t('ldap.attributes.sAMAccountType')"
                                             readonly
                                             v-model="usercopy.sAMAccountType"
                                             :rules="[this.fieldRules(usercopy.sAMAccountType, 'ge_lettersStrictUnderscore')]"
@@ -266,7 +266,7 @@
                                             <v-text-field
                                             dense
                                             id="primaryGroupID"
-                                            :label="$t('section.users.attributes.primaryGroupID')"
+                                            :label="$t('ldap.attributes.primaryGroupID')"
                                             :readonly="editFlag != true"
                                             v-model="usercopy.primaryGroupID"
                                             :rules="[this.fieldRules(usercopy.primaryGroupID, 'ge_numbers')]"
@@ -278,7 +278,7 @@
                                             <v-text-field
                                             dense
                                             id="whenCreated"
-                                            :label="$t('section.users.attributes.whenCreated')"
+                                            :label="$t('ldap.attributes.whenCreated')"
                                             readonly
                                             v-model="usercopy.whenCreated"
                                             ></v-text-field>
@@ -287,7 +287,7 @@
                                             <v-text-field
                                             dense
                                             id="whenChanged"
-                                            :label="$t('section.users.attributes.whenChanged')"
+                                            :label="$t('ldap.attributes.whenChanged')"
                                             readonly
                                             v-model="usercopy.whenChanged"
                                             ></v-text-field>
@@ -298,7 +298,7 @@
                                             <v-text-field
                                             dense
                                             id="lastLogon"
-                                            :label="$t('section.users.attributes.lastLogon')"
+                                            :label="$t('ldap.attributes.lastLogon')"
                                             readonly
                                             v-model="usercopy.lastLogon"
                                             ></v-text-field>
@@ -307,7 +307,7 @@
                                             <v-text-field
                                             dense
                                             id="pwdLastSet"
-                                            :label="$t('section.users.attributes.pwdLastSet')"
+                                            :label="$t('ldap.attributes.pwdLastSet')"
                                             readonly
                                             v-model="usercopy.pwdLastSet"
                                             ></v-text-field>
@@ -317,7 +317,7 @@
                                         <v-col cols="12" lg="8">
                                             <v-row justify="center">
                                                 <span>
-                                                    {{ $t('section.users.attributes.objectClass') }}
+                                                    {{ $t('ldap.attributes.objectClass') }}
                                                 </span>
                                             </v-row>
                                             <v-row justify="center">
@@ -354,7 +354,7 @@
                                             <v-text-field
                                             dense
                                             id="objectCategory"
-                                            :label="$t('section.users.attributes.objectCategory')"
+                                            :label="$t('ldap.attributes.objectCategory')"
                                             readonly
                                             v-model="usercopy.objectCategory"
                                             :rules="[this.fieldRules(usercopy.objectCategory, 'ldap_dn')]"

@@ -37,7 +37,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('section.users.attributes.username')"
+                                    :label="$t('ldap.attributes.username')"
                                     v-model="userToCreate.username"
                                     :rules="[this.fieldRules(userToCreate.username, 'ge_username', true)]"
                                     ></v-text-field>
@@ -98,7 +98,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('section.users.attributes.givenName')"
+                                    :label="$t('ldap.attributes.givenName')"
                                     v-model="userToCreate.givenName"
                                     :rules="[this.fieldRules(userToCreate.givenName, 'ge_name', true)]"
                                     ></v-text-field>
@@ -107,7 +107,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('section.users.attributes.sn')"
+                                    :label="$t('ldap.attributes.sn')"
                                     v-model="userToCreate.sn"
                                     :rules="[this.fieldRules(userToCreate.sn, 'ge_name')]"
                                     ></v-text-field>
@@ -118,7 +118,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('section.users.attributes.displayName')"
+                                    :label="$t('ldap.attributes.displayName')"
                                     v-model="getDisplayName"
                                     :rules="[this.fieldRules(getDisplayName, 'ge_topic', true)]"
                                     ></v-text-field>
@@ -127,7 +127,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('section.users.attributes.initials')"
+                                    :label="$t('ldap.attributes.initials')"
                                     v-model="userToCreate.initials"
                                     :rules="[this.fieldRules(userToCreate.initials, 'ge_topic')]"
                                     ></v-text-field>
@@ -140,7 +140,7 @@
                                     @keydown.enter="nextStep"
                                     :hint="$t('misc.autocomputedField')"
                                     persistent-hint
-                                    :label="$t('section.users.attributes.userPrincipalName')"
+                                    :label="$t('ldap.attributes.userPrincipalName')"
                                     readonly
                                     v-model="getUSN"
                                     ></v-text-field>
@@ -151,7 +151,7 @@
                                     @keydown.enter="nextStep"
                                     :hint="$t('misc.autocomputedField')"
                                     persistent-hint
-                                    :label="$t('section.users.attributes.userPrincipalName_pre2000')"
+                                    :label="$t('ldap.attributes.userPrincipalName_pre2000')"
                                     readonly
                                     v-model="getUSN_2000"
                                     ></v-text-field>
@@ -171,7 +171,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('section.users.attributes.mail')"
+                                    :label="$t('ldap.attributes.mail')"
                                     v-model="userToCreate.mail"
                                     :rules="[this.fieldRules(userToCreate.mail, 'ge_mail')]"
                                     ></v-text-field>
@@ -180,7 +180,7 @@
                                         <v-text-field
                                         dense
                                         @keydown.enter="nextStep"
-                                        :label="$t('section.users.attributes.wWWHomePage')"
+                                        :label="$t('ldap.attributes.wWWHomePage')"
                                         v-model="userToCreate.wWWHomePage"
                                         :rules="[this.fieldRules(userToCreate.wWWHomePage, 'ge_website')]"
                                         ></v-text-field>
@@ -201,7 +201,7 @@
                                     :append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
                                     @click:append="() => (passwordHidden = !passwordHidden)"
                                     dense
-                                    :label="$t('section.users.attributes.password')"
+                                    :label="$t('ldap.attributes.password')"
                                     v-model="userToCreate.password"
                                     :rules="[this.fieldRules(userToCreate.password, 'ge_password', true)]"
                                     ></v-text-field>
@@ -211,7 +211,7 @@
                                         :type="passwordHidden ? 'password' : 'text'"
                                         dense
                                         @keydown.enter="nextStep"
-                                        :label="$t('section.users.attributes.passwordConfirm')"
+                                        :label="$t('ldap.attributes.passwordConfirm')"
                                         v-model="userToCreate.passwordConfirm"
                                         :rules="[userToCreate.passwordConfirm == userToCreate.password ? true : this.$t('error.validation.passwordNotSame') ]"
                                         ></v-text-field>
