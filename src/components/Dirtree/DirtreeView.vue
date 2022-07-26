@@ -259,28 +259,39 @@ export default {
             this.$emit('goToUser', item)
         },
         setFilter(key){
-            this.filters = []
+            this.filters = {}
             var itemTypeAmount = 0
             this.itemTypes[key].filtered = !this.itemTypes[key].filtered
-
-            for (const type in this.itemTypes) {
-                itemTypeAmount += 1
-                if (this.itemTypes[type].filtered == true)
-                    this.filters.push(type)
-            }
 
             if (key == 'user'){
                 itemTypeAmount += 1
                 this.itemTypes['person'].filtered = !this.itemTypes['person'].filtered
             }
 
+            for (const type in this.itemTypes) {
+                itemTypeAmount += 1
+                if (this.itemTypes[type].filtered == true){
+                  if (type.includes('-')) {
+                    var typeToSend = type.split('-')
+                    if (typeToSend.length > 2)
+                      console.log('Warning, filter typeToSend has more than 2 words in it ( ' + type + ' )')
+                    typeToSend = typeToSend[0].toLowerCase() + typeToSend[1].charAt(0).toUpperCase() + typeToSend[1].slice(1)
+                  }
+                  else {
+                    typeToSend = type
+                  }
+                  this.filters[typeToSend] = 'objectClass'
+                  
+                }
+            }
+
             if (itemTypeAmount == this.filters.length)
-                this.filters = []
+                this.filters = {}
             this.fetchDirtree()
             // console.log('Feature not enabled, filter for ' + key.toUpperCase() + ' objects should toggle')
         },
         resetDirtree(){
-            this.filters = []
+            this.filters = {}
             for (const type in this.itemTypes)
                 this.itemTypes[type].filtered = false
             this.fetchDirtree()
