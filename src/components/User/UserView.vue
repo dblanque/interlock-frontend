@@ -30,11 +30,11 @@
           </v-icon>
           <template v-slot:loader>
             <span class="custom-loader">
-              <v-icon light>mdi-cached</v-icon>
+              <v-icon>mdi-cached</v-icon>
             </span>
           </template>
         </v-btn>
-        <v-btn class="pa-2 mx-2" color="primary" @click="openDialog('userCreate')">
+        <v-btn class="pa-2 mx-2" :disabled="loading" color="primary" @click="openDialog('userCreate')">
           <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
           {{ $t('actions.addN') + ' ' + $t('classes.user.single') }}
         </v-btn>

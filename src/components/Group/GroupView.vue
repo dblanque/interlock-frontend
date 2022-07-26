@@ -30,11 +30,11 @@
           </v-icon>
           <template v-slot:loader>
             <span class="custom-loader">
-              <v-icon light>mdi-cached</v-icon>
+              <v-icon>mdi-cached</v-icon>
             </span>
           </template>
         </v-btn>
-        <v-btn class="pa-2 mx-2" color="primary" @click="openDialog('groupCreate')">
+        <v-btn class="pa-2 mx-2" :disabled="loading || readonly" color="primary" @click="openDialog('groupCreate')">
           <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
           {{ $t('actions.addN') + ' ' + $t('classes.group.single') }}
         </v-btn>
@@ -50,7 +50,7 @@
             v-bind="attrs"
             v-on="on"
             small
-            :disabled="loading"
+            :disabled="loading || readonly"
             @click="fetchGroup(item)"
           >
           <v-icon small color="primary">
@@ -68,7 +68,7 @@
             v-bind="attrs"
             v-on="on"
             small
-            :disabled="loading"
+            :disabled="loading || readonly"
             @click="fetchGroup(item, true)"
           >
           <v-icon small color="primary">
@@ -86,7 +86,7 @@
             v-bind="attrs"
             v-on="on"
             small
-            :disabled="loading"
+            :disabled="loading || readonly"
             @click="openDeleteDialog(item)"
           >
           <v-icon small color="red">
@@ -150,6 +150,7 @@ export default {
   },
   data() {
     return {
+      readonly: true,
       tableData: {
         headers: [],
         items: []

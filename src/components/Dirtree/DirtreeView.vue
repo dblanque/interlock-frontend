@@ -39,9 +39,9 @@
         <v-row class="px-4 ma-1" justify="center">
           <v-col v-for="(item, key) in itemTypes" :key="item.id" cols="12" md="auto" lg="auto" class="ma-0 pa-0">
             <v-chip v-if="item.show != false" class="mx-2 my-1"
-            @click="setFilter(key)"
             :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" 
             :color="item.filtered == true ? 'primary' : ''">
+            <!-- @click="setFilter(key)" -->
               <v-icon>
                 {{ item.icon }}
               </v-icon>
