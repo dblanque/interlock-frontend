@@ -6,6 +6,7 @@
             <v-card-title class="ma-0 pa-0 card-title">
                 <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
                     <h3 class="pa-0 ma-0 ma-2">
+                        {{ $t('classes.group.single') + ': ' + groupcopy.cn }}
                     </h3>
                     <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                     <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
@@ -16,20 +17,61 @@
                 </v-row>
             </v-card-title>
             
-            <v-card-text class="ma-0 py-4">
+            <v-card-text class="ma-0 py-4 pb-2">
                 <v-form>
-                <v-row align-content="center" class="mb-2">
-                <v-col class="ma-0 pa-0" cols="12" md="6">
-                    <v-text-field
-                    dense
-                    id="cn"
-                    :label="$t('ldap.attributes.cn')"
-                    :readonly="editFlag != true"
-                    v-model="groupcopy.cn"
-                    :rules="[this.fieldRules(groupcopy.cn, 'ge_name')]"
-                    ></v-text-field>
-                </v-col>
-                </v-row>
+                    <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
+                        <v-col class="ma-0 pa-0 mx-2" cols="12" md="5">
+                            <v-text-field
+                            dense
+                            id="cn"
+                            :label="$t('ldap.attributes.cn')"
+                            :readonly="editFlag != true"
+                            v-model="groupcopy.cn"
+                            :rules="[this.fieldRules(groupcopy.cn, 'ge_name')]"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col class="ma-0 pa-0 mx-2" cols="12" md="5">
+                            <v-text-field
+                            dense
+                            id="mail"
+                            :label="$t('ldap.attributes.mail')"
+                            :readonly="editFlag != true"
+                            v-model="groupcopy.mail"
+                            :rules="[this.fieldRules(groupcopy.mail, 'ge_email')]"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
+                        <v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
+                            <v-card outlined height="100%" class="ma-1 pa-0 px-3 py-1">
+                                <v-row class="ma-2">
+                                    {{ $t('section.groups.groupDialog.groupType') }}
+                                </v-row>
+                                <v-radio-group v-model="radioGroupType" class="ma-0 pa-0">
+                                    <v-radio v-for="gt, key in groupTypes" 
+                                    :value="key"
+                                    :key="key"
+                                    :label="$t('section.groups.types.' + gt)"
+                                    />
+                                </v-radio-group>
+                            </v-card>
+                        </v-col>
+                        <v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
+                            <v-card outlined height="100%" class="ma-1 pa-0 px-3 py-1">
+                                <v-row class="ma-2">
+                                    {{ $t('section.groups.groupDialog.groupScope') }}
+                                </v-row>
+                                <v-radio-group v-model="radioGroupScope" class="ma-0 pa-0">
+                                    <v-radio v-for="gs, key in groupScopes" 
+                                    :value="key"
+                                    :key="key"
+                                    :label="$t('section.groups.types.' + gs)"
+                                    />
+                                </v-radio-group>
+                            </v-card>
+                        </v-col>
+                    </v-row>
                 </v-form>
             </v-card-text>
         </div>
@@ -110,6 +152,17 @@ export default {
             realm: "",
             basedn: "",
             groupcopy: {},
+            groupTypes: [
+                "GROUP_DISTRIBUTION",
+                "GROUP_SECURITY"
+            ],
+            groupScopes: [
+                "GROUP_GLOBAL",
+                "GROUP_DOMAIN_LOCAL",
+                "GROUP_UNIVERSAL"
+            ],
+            radioGroupType: 0,
+            radioGroupScope: 0,
         }
     },
     mixins: [
@@ -128,12 +181,41 @@ export default {
         closeDialog() {
             this.$emit('closeDialog', this.viewKey);
         },
+        checkIfGroupBuiltIn(){
+            if (this.group.groupType.includes('GROUP_SYSTEM'))
+                return true
+            return false
+        },
+        setGroupTypeAndScope(){
+            this.group.groupType.forEach(groupSetting => {
+                switch (groupSetting) {
+                    case 'GROUP_DISTRIBUTION':
+                        this.radioGroupType = 0;
+                        break;
+                    case 'GROUP_SECURITY':
+                        this.radioGroupType = 1;
+                        break;
+                    case 'GROUP_GLOBAL':
+                        this.radioGroupScope = 0;
+                        break;
+                    case 'GROUP_DOMAIN_LOCAL':
+                        this.radioGroupScope = 1;
+                        break;
+                    case 'GROUP_UNIVERSAL':
+                        this.radioGroupScope = 2;
+                        break;
+                    default:
+                        break;
+                }
+            });
+        },
         // Sync the groupcopy object to the parent view group object on the
         // next tick to avoid mutation errors
         syncGroup(){
             this.groupcopy = new Group({})
             this.$nextTick(() => {
                 this.groupcopy = this.group
+                this.setGroupTypeAndScope()
                 this.loading = false
                 this.loadingColor = 'primary'
             })
