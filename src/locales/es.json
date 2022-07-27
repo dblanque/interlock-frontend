@@ -326,6 +326,16 @@
         "LDAP_UF_PARTIAL_SECRETS_ACCOUNT" : "Cuenta de Secretos Parciales"
       }
     },
+    "groups":{
+      "types":{
+        "GROUP_DISTRIBUTION": "Distribución",
+        "GROUP_SYSTEM": "Creado por el Sistema",
+        "GROUP_GLOBAL": "Global",
+        "GROUP_DOMAIN_LOCAL": "Local de Dominio",
+        "GROUP_UNIVERSAL": "Universal",
+        "GROUP_SECURITY": "Grupo de Seguridad"
+      }
+    },
     "settings":{
       "defaultAdminIs":"Administrador Pre-determinado",
       "resetDialog":{

@@ -42,6 +42,18 @@
     </template>
 
     <!-- GROUP ACTIONS -->
+    <template v-slot:[`item.groupType`]="{ item }">
+      <span>
+        <v-chip 
+        :class="getColorForGroupType(type)['color'] + ' text-' + getColorForGroupType(type)['text'] + ' mx-1'" 
+        v-for="type in item.groupType" 
+        :key="type">
+          {{ $t('section.groups.types.'+type) }}
+        </v-chip>
+      </span>
+    </template>
+
+    <!-- GROUP ACTIONS -->
     <template v-slot:[`item.actions`]="{ item }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
@@ -331,6 +343,40 @@ export default {
         this.loading = false;
         this.error = true;
       })
+    },
+    getColorForGroupType(groupType){
+      switch (groupType) {
+        case 'GROUP_DISTRIBUTION':
+          return {
+            "color":'orange',
+            "text":'black'
+            }
+        case 'GROUP_SYSTEM':
+          return {
+            "color":'secondary',
+            "text":'white'
+            }
+        case 'GROUP_GLOBAL':
+          return {
+            "color":'secondary',
+            "text":'white'
+            }
+        case 'GROUP_DOMAIN_LOCAL':
+          return {
+            "color":'green',
+            "text":'white'
+            }
+        case 'GROUP_UNIVERSAL':
+          return {
+            "color":'blue-grey',
+            "text":'white'
+            }
+        default:
+          return {
+            "color":'primary',
+            "text":'white'
+            }
+      }
     },
   },
 }

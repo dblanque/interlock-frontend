@@ -320,6 +320,16 @@
         "LDAP_UF_PARTIAL_SECRETS_ACCOUNT" : "Partial Secrets Account"
       }
     },
+    "groups":{
+      "types":{
+        "GROUP_DISTRIBUTION": "Distribution",
+        "GROUP_SYSTEM": "System Created",
+        "GROUP_GLOBAL": "Global",
+        "GROUP_DOMAIN_LOCAL": "Domain Local",
+        "GROUP_UNIVERSAL": "Universal",
+        "GROUP_SECURITY": "Security Group"
+      }
+    },
     "settings":{
       "defaultAdminIs":"Default Admin is",
       "resetDialog":{
