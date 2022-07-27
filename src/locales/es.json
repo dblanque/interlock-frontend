@@ -208,6 +208,7 @@
       "givenName":"Nombre",
       "sn":"Apellido",
       "cn":"Nombre Común",
+      "groupType": "Tipo de Grupo",
       "password":"Contraseña",
       "passwordConfirm":"Confirmar Contraseña",
       "initials":"Iniciales",

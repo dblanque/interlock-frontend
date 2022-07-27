@@ -202,6 +202,7 @@
       "givenName":"First Name",
       "sn":"Last Name",
       "cn":"Common Name",
+      "groupType": "Group Type",
       "password":"Password",
       "passwordConfirm":"Confirm Password",
       "initials":"Initials",

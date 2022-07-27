@@ -141,6 +141,9 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
             case 'users':
               this.$refs.UserView.reloadDataTableHeaders()
               break;
+            case 'groups':
+              this.$refs.GroupView.reloadDataTableHeaders()
+              break;
             default:
               break;
           }
