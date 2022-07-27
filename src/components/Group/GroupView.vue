@@ -6,7 +6,7 @@
     :custom-sort="sortNullLast"
     :loading="loading"
     :search="searchString"
-    sort-by="sn"
+    sort-by="cn"
     class="py-3 px-2 mt-2 mb-2">
     <!-- Table Header -->
     <template v-slot:top>
@@ -99,33 +99,33 @@
     </template>
   </v-data-table>
 
-  <!-- USER VIEW/EDIT DIALOG -->
-  <!-- <v-dialog eager max-width="1200px" v-model="dialogs['groupDialog']">
+  <!-- GROUP VIEW/EDIT DIALOG -->
+  <v-dialog eager max-width="1200px" v-model="dialogs['groupDialog']">
     <GroupDialog
-      :user="data.userdata"
+      :group="data.groupdata"
       :editFlag="this.editableForm"
       :viewKey="'groupDialog'"
       ref="GroupDialog"
       :refreshLoading="loading"
       @closeDialog="closeDialog"
-      @save="userSaved"
+      @save="groupSaved"
       @editToggle="setViewToEdit"
-      @refreshUser="refreshUser"
+      @refreshGroup="refreshGroup"
       />
-  </v-dialog> -->
+  </v-dialog>
 
-  <!-- USER DELETE CONFIRM DIALOG -->
+  <!-- GROUP DELETE CONFIRM DIALOG -->
   <!-- <v-dialog eager max-width="800px" v-model="dialogs['groupDelete']">
     <GroupDelete
-      :groupObject="this.data.selectedUser"
+      :groupObject="this.data.selectedGroup"
       :viewKey="'groupDelete'"
       ref="GroupDelete"
       @closeDialog="closeDialog"
-      @refresh="listUserItems"
+      @refresh="listGroupItems"
     />
   </v-dialog> -->
 
-  <!-- USER CREATE DIALOG -->
+  <!-- GROUP CREATE DIALOG -->
   <!-- <v-dialog eager max-width="1200px" v-model="dialogs['groupCreate']">
     <GroupCreate
       :viewKey="'groupCreate'"
@@ -137,20 +137,21 @@
 </template>
 
 <script>
-import Group from '@/include/Group'
-// import GroupCreate from '@/components/User/GroupCreate.vue'
-// import GroupDialog from '@/components/User/GroupDialog.vue'
-// import GroupDelete from '@/components/User/GroupDelete.vue'
+import Group from '@/include/Group';
+import GroupDialog from '@/components/Group/GroupDialog.vue'
+// import GroupCreate from '@/components/Group/GroupCreate.vue'
+// import GroupDelete from '@/components/Group/GroupDelete.vue'
 
 export default {
   components: {
+    GroupDialog
     // GroupCreate,
-    // GroupDialog,
     // GroupDelete
   },
   data() {
     return {
-      readonly: true,
+      readonly: false,
+      expandedRows: [],
       tableData: {
         headers: [],
         items: []
@@ -160,7 +161,7 @@ export default {
       error: false,
       editableForm: false,
 
-      // User Data
+      // Group Data
       data: {
         selectedGroup: {
           "cn": "",
@@ -200,7 +201,6 @@ export default {
       switch (key) {
         case 'groupDialog':
           if (this.$refs.GroupDialog != undefined)
-            this.$refs.GroupDialog.goBackToDetails()
             this.$refs.GroupDialog.syncGroup()
           break;
         case 'groupCreate':
@@ -215,6 +215,10 @@ export default {
       this.dialogs[key] = false;
       if (refresh)
         this.listGroupItems()
+    },
+    groupSaved(){
+      this.$refs.GroupCreate.newGroup()
+      this.listGroupItems()
     },
     setViewToEdit(value){
       this.editableForm = value;
@@ -248,12 +252,12 @@ export default {
       this.tableData.items = []
       await new Group({}).list()
       .then(response => {
-        var userHeaders = response.headers
-        var users = response.users
+        var groupHeaders = response.headers
+        var groups = response.groups
         // Reset Headers Array every time you list to avoid infinite header multiplication
         this.resetDataTable()
         var headerDict = {}
-        userHeaders.forEach(header => {
+        groupHeaders.forEach(header => {
           headerDict = {}
           headerDict.text = this.$t('ldap.attributes.' + header)
           headerDict.value = header
@@ -268,7 +272,7 @@ export default {
         headerDict.align = 'center'
         headerDict.sortable = false
         this.tableData.headers.push(headerDict)
-        this.tableData.items = users
+        this.tableData.items = groups
         this.loading = false
         this.error = false
         this.resetSnackbar();
@@ -308,18 +312,14 @@ export default {
     async refreshGroup(item){
       await this.fetchGroup(item, this.editableForm, false);
     },
-    userSaved(){
-      this.$refs.GroupCreate.newGroup()
-      this.listGroupItems()
-    },
     // Fetch individual Group
     async fetchGroup(item, isEditable=false, refreshAnim=true){
       if (refreshAnim == true)
         this.loading = true;
       this.data.selectedGroup.cn = item.cn
       this.data.selectedGroup.dn = item.dn
-      this.data.userdata = await new Group({})
-      await this.data.userdata.fetch(item.cn)
+      this.data.groupdata = await new Group({})
+      await this.data.groupdata.fetch(item.dn)
       .then(() => {
         this.openDialog('groupDialog')
         if (isEditable == true)

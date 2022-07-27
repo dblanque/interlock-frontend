@@ -21,8 +21,22 @@ class Group extends ApiModel{
         });
     }
 
-    list(){
-        return interlock_backend.call('group/list')
+    async list(){
+        return await interlock_backend.call('group/list')
+    }
+
+    async fetch(groupdn){
+        return await interlock_backend.call('group/fetch', {group: groupdn}).then(
+            response => {
+                if(!response)
+                        throw Error("Error fetching user data. Provider returned: " + response);
+                else{
+                    Object.keys(response.data).forEach(key => {
+                        this[key] = response.data[key];
+                    });
+                }
+            }
+        )
     }
 }
 

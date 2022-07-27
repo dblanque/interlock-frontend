@@ -42,9 +42,10 @@ const urls = {
     group: {
         base: 'api/groups/',
         list: 'api/groups/',
-        save: 'api/groups/save',
-        insert: 'api/groups/insert',
-        delete: 'api/groups/delete',
+        fetch: 'api/groups/fetch/',
+        save: 'api/groups/save/',
+        insert: 'api/groups/insert/',
+        delete: 'api/groups/delete/',
     },
     domain: {
         base: "api/domain/",

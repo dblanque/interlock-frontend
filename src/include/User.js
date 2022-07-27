@@ -111,23 +111,23 @@ class User extends ApiModel{
             response => {
                 if(!response)
                         throw Error("Error fetching user data. Provider returned: " + response);
-                    else{
-                        Object.keys(response.data).forEach(key => {
-                            switch (key) {
-                                case 'whenChanged':
-                                case 'whenCreated':
-                                    this[key] = dateLdapToString(response.data[key]);
-                                    break;
-                                case 'lastLogon':
-                                case 'pwdLastSet':
-                                    this[key] = dateFromFiletime(response.data[key]);
-                                    break;
-                                default:
-                                    this[key] = response.data[key];
-                                    break;
-                            }
-                        });
-                    }
+                else{
+                    Object.keys(response.data).forEach(key => {
+                        switch (key) {
+                            case 'whenChanged':
+                            case 'whenCreated':
+                                this[key] = dateLdapToString(response.data[key]);
+                                break;
+                            case 'lastLogon':
+                            case 'pwdLastSet':
+                                this[key] = dateFromFiletime(response.data[key]);
+                                break;
+                            default:
+                                this[key] = response.data[key];
+                                break;
+                        }
+                    });
+                }
             }
         )
     }
@@ -138,21 +138,6 @@ class User extends ApiModel{
 
     async update(data){
         return await interlock_backend.call('user/update', data)
-    }
-
-    /**
-     * Fetches provider to save model data.
-     * [!] Null ID determines to update or create instance.
-     */
-     save(){
-        var linkString = "";
-        if(!this.id )
-            linkString = 'user/insert'
-        else if (typeof this.id != "number" || this.id == 0)
-            throw Error("Error saving User instance. `id` param is not a number or is 0.");
-        else
-            linkString = 'user/update'
-        return interlock_backend.call(linkString, this)
     }
 }
 

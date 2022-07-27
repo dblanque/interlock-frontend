@@ -17,8 +17,8 @@ class Domain extends ApiModel{
         });
     }
 
-    getDetails(){
-        return interlock_backend.call('domain/details')
+    async getDetails(){
+        return await interlock_backend.call('domain/details')
     }
 }
 

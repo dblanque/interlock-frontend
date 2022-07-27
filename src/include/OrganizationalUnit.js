@@ -17,16 +17,16 @@ class OrganizationalUnit extends ApiModel{
         });
     }
 
-    list(){
-        return interlock_backend.call('ou/list')
+    async list(){
+        return await interlock_backend.call('ou/list')
     }
 
-    dirtree(filter){
-        return interlock_backend.call('ou/dirtree', filter)
+    async dirtree(filter){
+        return await interlock_backend.call('ou/dirtree', filter)
     }
 
-    move(data){
-        return interlock_backend.call('ou/move', data)
+    async move(data){
+        return await interlock_backend.call('ou/move', data)
     }
 }
 
