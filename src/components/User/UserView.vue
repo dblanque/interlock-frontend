@@ -177,6 +177,7 @@
       :viewKey="'userDialog'"
       ref="UserDialog"
       :refreshLoading="loading"
+      :fetchingData="fetchingData"
       @closeDialog="closeDialog"
       @save="userSaved"
       @editToggle="setViewToEdit"
@@ -238,6 +239,7 @@ export default {
       },
       searchString: "",
       loading: false,
+      fetchingData: false,
       error: false,
       editableForm: false,
 
@@ -434,20 +436,25 @@ export default {
     // Fetch individual User
     async fetchUser(item, isEditable=false, refreshAnim=true){
       if (refreshAnim == true)
-        this.loading = true;
+        this.loading = true
+      this.fetchingData = true
       this.data.selectedUser.username = item.username
       this.data.selectedUser.dn = item.dn
-      this.data.userdata = await new User({})
-      await this.data.userdata.fetch(item.username)
+      this.data.userdata = new User({})
+      await this.data.userdata.fetch(this.data.selectedUser.username)
       .then(() => {
         this.openDialog('userDialog')
         if (isEditable == true)
           this.editableForm = true
-        setTimeout(() => { this.loading = false }, 300);
+        setTimeout(() => {
+          this.loading = false
+        }, 300);
+        this.fetchingData = false
       })
       .catch(error => {
         console.log(error)
-        this.loading = false;
+        this.loading = false
+        this.fetchingData = false
         this.error = true;
       })
     },

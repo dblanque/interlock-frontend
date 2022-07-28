@@ -76,6 +76,7 @@
     "addObjectClass": "Add Object Class"
   },
   "words":{
+      "member":"Member",
       "enabled":"Enabled",
       "disabled":"Disabled",
       "seconds":"Seconds",

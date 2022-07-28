@@ -119,6 +119,7 @@
       :viewKey="'groupDialog'"
       ref="GroupDialog"
       :refreshLoading="loading"
+      :fetchingData="fetchingData"
       @closeDialog="closeDialog"
       @save="groupSaved"
       @editToggle="setViewToEdit"
@@ -163,6 +164,7 @@ export default {
   data() {
     return {
       readonly: false,
+      fetchingData: false,
       expandedRows: [],
       tableData: {
         headers: [],
@@ -329,21 +331,26 @@ export default {
     // Fetch individual Group
     async fetchGroup(item, isEditable=false, refreshAnim=true){
       if (refreshAnim == true)
-        this.loading = true;
+        this.loading = true
+      this.fetchingData = true
       this.data.selectedGroup.cn = item.cn
       this.data.selectedGroup.dn = item.dn
-      this.data.groupdata = await new Group({})
-      await this.data.groupdata.fetch(item.dn)
+      this.data.groupdata = new Group({})
+      await this.data.groupdata.fetch(this.data.selectedGroup.dn)
       .then(() => {
         this.openDialog('groupDialog')
         if (isEditable == true)
           this.editableForm = true
-        setTimeout(() => { this.loading = false }, 300);
+        setTimeout(() => { 
+          this.loading = false 
+        }, 300);
+        this.fetchingData = false
       })
       .catch(error => {
         console.log(error)
-        this.loading = false;
-        this.error = true;
+        this.loading = false
+        this.fetchingData = false
+        this.error = true
       })
     },
     getColorForGroupType(groupType){

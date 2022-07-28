@@ -76,6 +76,7 @@
     "addObjectClass": "Añadir Clase de Objeto"
   },
   "words": {
+    "member":"Miembro",
     "enabled":"Activado",
     "disabled":"Des-activado",
     "seconds":"Segundos",

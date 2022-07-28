@@ -511,11 +511,12 @@
                     {{ $t("actions.saveClose") }}
                 </v-btn>
                 <!-- Refresh User Button -->
-                <v-progress-circular class="pa-0 ma-0" :color="loadingColor" value="100" :indeterminate="loading" size="38" width="7">
+                <v-progress-circular class="pa-0 ma-0" :color="loadingColor" value="100" :indeterminate="loading || fetchingData" size="38" width="7">
                     <v-btn small
                     class="ma-1 bg-primary" 
                     color="white" 
                     icon
+                    :disabled="loading || fetchingData"
                     elevation="0"
                     :loading="refreshLoading"
                     @click="refreshUser"
@@ -752,6 +753,7 @@ export default {
         viewKey: String,
         editFlag: Boolean,
         user: Object,
+        fetchingData: Boolean,
         refreshLoading: Boolean
     },
     created(){

@@ -17,7 +17,21 @@
                 </v-row>
             </v-card-title>
             
-            <v-card-text class="ma-0 py-4 pb-2">
+                
+            <v-expand-transition>
+                <v-row v-if="editFlag" justify="center" class="pa-0 ma-0">
+                    <v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
+                        <v-icon class="mdso mr-2">warning</v-icon>
+                        {{ $t('section.users.editFlagWarning') }}
+                        <v-btn @click="viewGroup" small class="ma-0 pa-0 ml-2 pr-2 pl-1">
+                            <v-icon color="orange" class="">mdi-chevron-left</v-icon>
+                            {{ $t('actions.back') }}
+                        </v-btn>
+                    </v-alert>
+                </v-row>
+            </v-expand-transition>
+            <!-- BODY -->
+            <v-card-text class="ma-0 pa-0 py-4 pb-2">
                 <v-form>
                     <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
                         <v-col class="ma-0 pa-0 mx-2" cols="12" md="5">
@@ -72,10 +86,21 @@
                             </v-card>
                         </v-col>
                     </v-row>
-                    <v-row align-content="center" justify="center" class="ma-0 pa-0 my-4">
+
+                    <!-- MEMBER BUTTONS -->
+                    <v-row justify="center" class="ma-0 pa-0 my-4">
                         <v-col cols="8" class="ma-0 pa-0">
-                            <v-expansion-panels flat style="border: 1px solid var(--clr-primary);">
-                                <v-expansion-panel>
+                            <v-btn rounded text color="primary" outlined class="pa-3">
+                                <v-icon small class="mr-1">mdi-plus</v-icon>
+                                {{ $t("actions.addN") + " " + $t("words.member") }}
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                    <!-- MEMBER EXPANSION PANEL -->
+                    <v-row v-if="showMemberTab" align-content="center" justify="center" class="ma-0 pa-0 my-4">
+                        <v-col cols="8" class="ma-0 pa-0">
+                            <v-expansion-panels class="rounded-xl" flat style="border: 1px solid var(--clr-primary);">
+                                <v-expansion-panel class="rounded-xl">
                                     <v-expansion-panel-header>
                                         {{ $t('section.groups.groupDialog.members') }}
                                     </v-expansion-panel-header>
@@ -83,7 +108,7 @@
                                         <!-- TODO - Add tooltip that shows Full DN for object -->
                                         <!-- TODO - Add "Remove Member" action -->
                                         <!-- TODO - Add "Add Member" action -->
-                                        <v-list dense v-if="getMembersLength">
+                                        <v-list dense>
                                             <v-list-item v-for="member, key in this.groupcopy.member" :key="key">
                                                 <v-row v-if="member.objectCategory == 'user' || member.objectCategory == 'person' || member.objectCategory == 'organizationalPerson'">
                                                     <v-col cols="12" class="pa-0 ma-0">
@@ -150,11 +175,12 @@
                     {{ $t("actions.saveClose") }}
                 </v-btn>
                 <!-- Refresh Group Button -->
-                <v-progress-circular class="pa-0 ma-0" :color="loadingColor" value="100" :indeterminate="loading" size="38" width="7">
+                <v-progress-circular class="pa-0 ma-0" :color="loadingColor" value="100" :indeterminate="loading || fetchingData" size="38" width="7">
                     <v-btn small
                     class="ma-1 bg-primary" 
                     color="white" 
                     icon
+                    :disabled="loading || fetchingData"
                     elevation="0"
                     :loading="refreshLoading"
                     @click="refreshGroup"
@@ -186,6 +212,7 @@ export default {
             domain: "",
             realm: "",
             basedn: "",
+            showMemberTab: false,
             groupcopy: {},
             groupTypes: [
                 "GROUP_DISTRIBUTION",
@@ -210,14 +237,17 @@ export default {
         viewKey: String,
         editFlag: Boolean,
         group: Object,
+        fetchingData: Boolean,
         refreshLoading: Boolean
     },
     methods: {
         getMembersLength(){
-            if (this.groupcopy != undefined)
-                if (this.groupcopy.member.length != 0)
-                    return true
-            return false
+            if (this.groupcopy.member != undefined) {
+                if (this.groupcopy.member.length == 0 || !this.groupcopy.member)
+                    this.showMemberTab = false
+                else
+                    this.showMemberTab = true
+            }
         },
         closeDialog() {
             this.$emit('closeDialog', this.viewKey);
@@ -259,6 +289,7 @@ export default {
             this.$nextTick(() => {
                 this.groupcopy = this.group
                 this.setGroupTypeAndScope()
+                this.getMembersLength()
                 this.loading = false
                 this.loadingColor = 'primary'
             })
