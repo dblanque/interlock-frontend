@@ -62,8 +62,11 @@
                                 <v-row class="ma-2">
                                     {{ $t('section.groups.groupDialog.groupType') }}
                                 </v-row>
-                                <v-radio-group v-model="radioGroupType" class="ma-0 pa-0">
-                                    <v-radio v-for="gt, key in groupTypes" 
+                                <v-radio-group
+                                :readonly="!editFlag"
+                                :disabled="!editFlag"
+                                v-model="radioGroupType" class="ma-0 pa-0">
+                                    <v-radio v-for="gt, key in groupTypes"
                                     :value="key"
                                     :key="key"
                                     :label="$t('section.groups.types.' + gt)"
@@ -76,8 +79,11 @@
                                 <v-row class="ma-2">
                                     {{ $t('section.groups.groupDialog.groupScope') }}
                                 </v-row>
-                                <v-radio-group v-model="radioGroupScope" class="ma-0 pa-0">
-                                    <v-radio v-for="gs, key in groupScopes" 
+                                <v-radio-group
+                                :readonly="!editFlag"
+                                :disabled="!editFlag"
+                                v-model="radioGroupScope" class="ma-0 pa-0">
+                                    <v-radio v-for="gs, key in groupScopes"
                                     :value="key"
                                     :key="key"
                                     :label="$t('section.groups.types.' + gs)"
@@ -152,6 +158,7 @@
                                                     <template v-slot:activator="{ on, attrs }">
                                                         <v-btn small icon @click="removeFromArrayByIndex(key, groupcopy.member)"
                                                         color="red"
+                                                        :disabled="!editFlag"
                                                         v-bind="attrs"
                                                         v-on="on"
                                                         >

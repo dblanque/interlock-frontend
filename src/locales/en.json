@@ -200,6 +200,7 @@
   },
   "ldap":{
     "attributes":{
+      "hasMembers":"Populated",
       "sAMAccountName":"Account Name",
       "username":"User Name",
       "givenName":"First Name",
@@ -324,6 +325,8 @@
       }
     },
     "groups":{
+      "isPopulated":"This group is populated",
+      "isNotPopulated":"This group is not Populated",
       "types":{
         "GROUP_DISTRIBUTION": "Distribution Group",
         "GROUP_SYSTEM": "System Created",

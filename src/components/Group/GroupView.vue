@@ -41,7 +41,7 @@
       </v-row>
     </template>
 
-    <!-- GROUP ACTIONS -->
+    <!-- GROUP TYPE -->
     <template v-slot:[`item.groupType`]="{ item }">
       <div class="pt-2">
         <v-chip 
@@ -51,6 +51,36 @@
           {{ $t('section.groups.types.'+type) }}
         </v-chip>
       </div>
+    </template>
+
+
+    <!-- GROUP POPULATION -->
+    <template v-slot:[`item.hasMembers`]="{ item }">
+        <!-- Group is Populated -->
+        <v-tooltip color="primary" bottom v-if="item.hasMembers">
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            v-on="on"
+            class="clr-primary">
+            mdi-account-multiple
+          </v-icon>
+        </template>
+        <span>{{ $t('section.groups.isPopulated') }}</span>
+      </v-tooltip>
+
+      <!-- Group is not populated -->
+      <v-tooltip color="secondary" bottom v-else-if="!item.hasMembers">
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            v-on="on"
+            style="opacity: 0.35;">
+            mdi-account-multiple
+          </v-icon>
+        </template>
+        <span>{{ $t('section.groups.isNotPopulated') }}</span>
+      </v-tooltip>
     </template>
 
     <!-- GROUP ACTIONS -->
@@ -275,7 +305,8 @@ export default {
           headerDict = {}
           headerDict.text = this.$t('ldap.attributes.' + header)
           headerDict.value = header
-          if (header == 'is_enabled') {
+          if (header == 'hasMembers') {
+            headerDict.sortable = false
             headerDict.align = 'center'
           }
           this.tableData.headers.push(headerDict)

@@ -141,11 +141,11 @@ export default {
     },
     watch: {
     },
-    created () {
-        this.resetDialog()
+    async created () {
+        await this.resetDialog()
     },
     methods: {
-        resetDialog(){
+        async resetDialog(){
             this.fetchOUs();
             this.updateObjectDestination();
             var domainDetails = getDomainDetails()

@@ -206,6 +206,7 @@
   },
   "ldap":{
     "attributes":{
+      "hasMembers":"Tiene Miembros",
       "sAMAccountName":"Nombre de Cuenta",
       "username":"Nombre de Usuario",
       "givenName":"Nombre",

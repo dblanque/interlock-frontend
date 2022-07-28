@@ -62,7 +62,7 @@
       </v-tooltip>
 
       <!-- Disable User Button -->
-      <v-tooltip color="green" bottom v-if="!item.is_enabled">
+      <v-tooltip color="green" bottom v-else-if="!item.is_enabled">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon
             rounded
@@ -341,6 +341,7 @@ export default {
           headerDict.value = header
           if (header == 'is_enabled') {
             headerDict.align = 'center'
+            headerDict.sortable = false
           }
           this.tableData.headers.push(headerDict)
         });
