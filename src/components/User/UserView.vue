@@ -53,7 +53,7 @@
             :disabled="loading || isLoggedInUser(item.username)"
             @click="disableUser(item)"
           >
-          <v-icon class="clr-valid clr-lig-40">
+          <v-icon :class="!isLoggedInUser(item.username) ? 'clr-valid clr-lig-40': ''">
             mdi-check
           </v-icon>
           </v-btn>
@@ -71,7 +71,7 @@
             :disabled="loading || isLoggedInUser(item.username)"
             @click="enableUser(item)"
           >
-          <v-icon class="clr-error clr-lig-40">
+          <v-icon :class="!isLoggedInUser(item.username) ? 'clr-error clr-lig-40': ''">
             mdi-close
           </v-icon>
           </v-btn>
