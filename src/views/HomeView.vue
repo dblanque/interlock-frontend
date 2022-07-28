@@ -71,17 +71,54 @@
             center-active
             centered
             show-arrows>
-                <v-tab class="px-4" v-for="tab in navTabs" :key="tab.index" @click="updateSelectedTab(tab.index)" :disabled="!tab.enabled">
-                <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
-                <span v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
-                    {{ $t("category." + tab.title + "_short") }}
-                </span>
-                <span v-else>
-                    {{ $t("category." + tab.title) }}
-                </span>
+            <v-tab class="px-4" v-for="tab in navTabs" :key="tab.index" @click="updateSelectedTab(tab.index)" :disabled="!tab.enabled">
+              <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
+              <span v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
+                  {{ $t("category." + tab.title + "_short") }}
+              </span>
+              <span v-else>
+                  {{ $t("category." + tab.title) }}
+              </span>
             </v-tab>
         </v-tabs>
         </v-fade-transition>
+    </v-toolbar>
+
+    <v-toolbar v-else
+    dense 
+    id="tabs-nav-bar" 
+    :dark="!isThemeDark()" 
+    :light="isThemeDark()"
+    style="z-index: 1;"
+    :class="'sticky-top ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+    <v-row justify="space-between" class="mx-12" align="center">
+        <v-btn text color="primary" @click="updateSelectedTab(active_tab - 1)"
+        :disabled="active_tab == 0 || !navTabs[active_tab - 1].enabled">
+          <v-icon>
+            mdi-chevron-double-left
+          </v-icon>
+          <span>
+            {{ $t("actions.back_short") }}
+          </span>
+        </v-btn>
+        <span>
+          <span v-if="navTabs[active_tab].enableShortName == true" class="font-weight-medium clr-primary">
+              {{ $t("category." + navTabs[active_tab].title + "_short").toUpperCase() }}
+          </span>
+          <span class="font-weight-medium clr-primary">
+              {{ $t("category." + navTabs[active_tab].title).toUpperCase() }}
+          </span>
+        </span>
+        <v-btn text color="primary" @click="updateSelectedTab(active_tab + 1)"
+        :disabled="active_tab == (navTabs.length - 1) || !navTabs[active_tab + 1].enabled">
+          <span>
+            {{ $t("actions.next") }}
+          </span>
+          <v-icon>
+            mdi-chevron-double-right
+          </v-icon>
+        </v-btn>
+    </v-row>
     </v-toolbar>
 
     <v-tabs-items v-model="active_tab" class="transparent-body">
@@ -192,7 +229,7 @@ export default {
           index: 2,
           title: "groups",
           enabled: true,
-          icon: "mdi-group",
+          icon: "mdi-google-circles-communities",
           route: "groups"
         },
         {
@@ -272,6 +309,17 @@ export default {
     this.active_tab = this.selectedTab;
     this.selectedTabTitle = this.navTabs[this.selectedTab].title
     this.loadDomainData()
+  },
+  computed:{
+    breakpointName(){
+      return this.$vuetify.breakpoint.name
+    }
+  },
+  watch: {
+    breakpointName() {
+      this.showNavTabs = false
+      setTimeout(() => {  this.showNavTabs = true; }, 250);
+    }
   },
   methods: {
     async goToUser(username){

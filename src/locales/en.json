@@ -41,12 +41,14 @@
     "addF": "New",
     "addM": "New",
     "addN": "Add",
+    "previous":"Previous",
     "back": "Go Back",
     "back_short": "Back",
     "confirm": "Confirm",
     "edit": "Edit",
     "view": "View",
     "delete": "Delete",
+    "remove": "Remove",
     "reset": "Reset",
     "isRequired": "is required",
     "isNotValid": "must be valid",
@@ -333,7 +335,8 @@
       "groupDialog":{
         "groupType":"Group Type",
         "groupScope":"Group Scope",
-        "members":"Group Members"
+        "members":"Group Members",
+        "copyDistinguishedName":"Copy Distinguished Name"
       }
     },
     "settings":{

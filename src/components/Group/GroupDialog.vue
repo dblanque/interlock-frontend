@@ -34,7 +34,7 @@
             <v-card-text class="ma-0 pa-0 py-4 pb-2">
                 <v-form>
                     <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
-                        <v-col class="ma-0 pa-0 mx-2" cols="12" md="5">
+                        <v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
                             <v-text-field
                             dense
                             id="cn"
@@ -44,7 +44,7 @@
                             :rules="[this.fieldRules(groupcopy.cn, 'ge_name')]"
                             ></v-text-field>
                         </v-col>
-                        <v-col class="ma-0 pa-0 mx-2" cols="12" md="5">
+                        <v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
                             <v-text-field
                             dense
                             id="mail"
@@ -98,33 +98,105 @@
                     </v-row>
                     <!-- MEMBER EXPANSION PANEL -->
                     <v-row v-if="showMemberTab" align-content="center" justify="center" class="ma-0 pa-0 my-4">
-                        <v-col cols="8" class="ma-0 pa-0">
-                            <v-expansion-panels class="rounded-xl" flat style="border: 1px solid var(--clr-primary);">
-                                <v-expansion-panel class="rounded-xl">
+                        <v-col cols="10" md="8" class="ma-0 pa-0">
+                            <v-expansion-panels v-model="memberPanelExpanded" flat 
+                            :style="memberPanelExpanded == [0] ? 'border: 1px solid var(--clr-primary);' : 'border: 1px solid hsl(var(--clr-white-hue),var(--clr-white-sat),var(--clr-lig-80));'">
+                                <v-expansion-panel>
                                     <v-expansion-panel-header>
                                         {{ $t('section.groups.groupDialog.members') }}
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
                                         <!-- TODO - Add tooltip that shows Full DN for object -->
-                                        <!-- TODO - Add "Remove Member" action -->
                                         <!-- TODO - Add "Add Member" action -->
                                         <v-list dense>
-                                            <v-list-item v-for="member, key in this.groupcopy.member" :key="key">
-                                                <v-row v-if="member.objectCategory == 'user' || member.objectCategory == 'person' || member.objectCategory == 'organizationalPerson'">
-                                                    <v-col cols="12" class="pa-0 ma-0">
-                                                        {{ $t('classes.user.single') + ": " + ((member.givenName != "" && member.sn != "") ? member.givenName + " " + member.sn + " (" + member.username + ")" : member.username) }}
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row v-else-if="member.objectCategory == 'group'">
-                                                    <v-col cols="12" class="pa-0 ma-0">
-                                                        {{ $t('classes.group.single') + ": " + member.cn }}
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row v-else>
-                                                    <v-col cols="12" class="pa-0 ma-0">
-                                                        {{ member.dn }}
-                                                    </v-col>
-                                                </v-row>
+                                            <v-list-item v-for="member, key in this.groupcopy.member" :key="key"
+                                            :class="key != 0 ? 'border-bottom': 'border-block'">
+                                                <v-list-item-icon class="">
+                                                    <v-icon v-if="member.objectCategory == 'user' || member.objectCategory == 'person' || member.objectCategory == 'organizationalPerson'">
+                                                        mdi-account
+                                                    </v-icon>
+                                                    <v-icon v-else-if="member.objectCategory == 'group'">
+                                                        mdi-google-circles-communities
+                                                    </v-icon>
+                                                    <v-icon v-else>
+                                                        mdi-group
+                                                    </v-icon>
+                                                </v-list-item-icon>
+
+                                                <v-list-item-content>
+                                                    <v-row v-if="member.objectCategory == 'user' || member.objectCategory == 'person' || member.objectCategory == 'organizationalPerson'"
+                                                    align="center" justify="center">
+                                                        <v-col cols="12" class="pa-0 ma-0 px-1">
+                                                            <span class="ma-0 pa-0">
+                                                                {{ $t('classes.user.single') + ": " + ((member.givenName != "" && member.sn != "") ? member.givenName + " " + member.sn + " (" + member.username + ")" : member.username) }}
+                                                            </span>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-row v-else-if="member.objectCategory == 'group'"
+                                                    align="center" justify="center">
+                                                        <v-col cols="12" class="pa-0 ma-0 px-1">
+                                                            <span class="ma-0 pa-0">
+                                                                {{ $t('classes.group.single') + ": " + member.cn }}
+                                                            </span>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-row v-else align="center" justify="center">
+                                                        <v-col cols="12" class="pa-0 ma-0 px-1">
+                                                            {{ member.dn }}
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-list-item-content>
+
+                                                <v-list-item-action class="pa-0 ma-0">
+                                                    <v-tooltip bottom color="red">
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-btn small icon @click="removeFromArrayByIndex(key, groupcopy.member)"
+                                                        color="red"
+                                                        v-bind="attrs"
+                                                        v-on="on"
+                                                        >
+                                                        <v-icon small>
+                                                            mdi-close
+                                                        </v-icon>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span> {{ $t("actions.remove") }} </span>
+                                                    </v-tooltip>
+                                                </v-list-item-action>
+
+                                                <v-list-item-action class="pa-0 ma-0">
+                                                    <v-tooltip bottom color="primary">
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-btn small icon
+                                                        color="primary"
+                                                        v-bind="attrs"
+                                                        v-on="on"
+                                                        >
+                                                        <v-icon small>
+                                                            mdi-help-circle
+                                                        </v-icon>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span> {{ member.distinguishedName }} </span>
+                                                    </v-tooltip>
+                                                </v-list-item-action>
+
+                                                <v-list-item-action class="pa-0 ma-0">
+                                                    <v-tooltip bottom>
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-btn small icon @click="copyText(member.distinguishedName)"
+                                                        color="primary"
+                                                        v-bind="attrs"
+                                                        v-on="on"
+                                                        >
+                                                        <v-icon small>
+                                                            mdi-content-copy
+                                                        </v-icon>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span> {{ $t("section.groups.groupDialog.copyDistinguishedName") }} </span>
+                                                    </v-tooltip>
+                                                </v-list-item-action>
                                             </v-list-item>
                                         </v-list>
                                     </v-expansion-panel-content>
@@ -214,6 +286,7 @@ export default {
             basedn: "",
             showMemberTab: false,
             groupcopy: {},
+            memberPanelExpanded: [],
             groupTypes: [
                 "GROUP_DISTRIBUTION",
                 "GROUP_SECURITY"
@@ -241,6 +314,9 @@ export default {
         refreshLoading: Boolean
     },
     methods: {
+        copyText(textString) {
+            navigator.clipboard.writeText(textString);
+        },
         getMembersLength(){
             if (this.groupcopy.member != undefined) {
                 if (this.groupcopy.member.length == 0 || !this.groupcopy.member)
@@ -256,6 +332,22 @@ export default {
             if (this.group.groupType.includes('GROUP_SYSTEM'))
                 return true
             return false
+        },
+        addToArray(value, object, itemRef=undefined){
+            var array = object.value
+            if (itemRef){
+                if (this.$refs[itemRef][0].validate()) {
+                    if (!array.includes(value) && array && value)
+                        array = array.push(value);
+                }
+            } 
+            else if (!array.includes(value) && array && value){
+                array = array.push(value);
+            }
+            return array
+        },
+        removeFromArrayByIndex(index, arrayObject){
+            return arrayObject.splice(index, 1); // 2nd parameter means remove one item only
         },
         setGroupTypeAndScope(){
             if (this.group.groupType != undefined) {
@@ -314,3 +406,22 @@ export default {
     },
 }
 </script>
+
+<style>
+.border-top {
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+.border-bottom {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.border-block {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+[theme=dark] .border-top,
+[theme=dark] .border-bottom,
+[theme=dark] .border-block {
+    border-color: rgba(255,255,255,0.1)
+}
+</style>

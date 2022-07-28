@@ -41,12 +41,14 @@
     "addF": "Nueva",
     "addM": "Nuevo",
     "addN": "Añadir",
+    "previous":"Anterior",
     "back": "Volver",
     "back_short": "Volver",
     "confirm": "Confirmar",
     "edit": "Editar",
     "view": "Ver",
     "delete": "Borrar",
+    "remove": "Remover",
     "reset": "Reiniciar",
     "isRequired": "es requerido",
     "isNotValid": "debe ser válido",
@@ -339,7 +341,8 @@
       "groupDialog":{
         "groupType":"Tipo de Grupo",
         "groupScope":"Alcance del Grupo",
-        "members":"Miembros del grupo"
+        "members":"Miembros del grupo",
+        "copyDistinguishedName":"Copiar Nombre Distinguido"
       }
     },
     "settings":{

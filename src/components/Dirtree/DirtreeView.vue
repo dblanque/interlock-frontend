@@ -66,23 +66,26 @@
               hoverable
               >
               <template v-slot:prepend="{ item, open }">
-                  <v-icon v-if="item.builtin == true">
+                  <v-icon v-if="item.builtin == true && item.type != 'Container'">
                     mdi-hammer
+                  </v-icon>
+                  <v-icon v-else-if="item.type == 'Container'">
+                    {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                   </v-icon>
                   <v-icon v-else-if="item.type == 'Organizational-Unit'">
                     {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
                   </v-icon>
                   <v-icon v-else-if="item.type == 'Computer'">
-                    mdi-monitor
+                    {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                   </v-icon>
                   <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
-                    mdi-account
+                    {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                   </v-icon>
                   <v-icon v-else-if="item.type == 'Group'">
-                    mdi-google-circles-communities
+                    {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                   </v-icon>
                   <v-icon v-else>
-                    mdi-at
+                    mdi-group
                   </v-icon>
               </template>
               <template v-slot:label="{item}">
@@ -197,7 +200,7 @@ export default {
             itemTypes: {
                 "container":{
                     "filtered": false,
-                    "icon":"mdi-at"
+                    "icon":"mdi-archive"
                 },
                 "builtin-domain":{
                     "filtered": false,

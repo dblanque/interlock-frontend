@@ -84,6 +84,10 @@ a {
     overflow: unset !important;
 }
 
+.reset-line-height {
+    line-height: 1rem !important;
+}
+
 .sticky-top {
     position: -webkit-sticky !important; /* Safari */
     position: sticky !important;

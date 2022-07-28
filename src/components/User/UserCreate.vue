@@ -575,8 +575,6 @@ export default {
                     if (this.$refs.userCreateForm2.validate()){
                         this.error = false
                         this.errorMsg = ""
-                        this.userToCreate.distinguishedName = this.userToCreate.username + "@" + this.domain
-                        this.userToCreate.sAMAccountName = this.userToCreate.username
                         var permission_list = []
                         Object.keys(this.userToCreate).forEach(key => {
                             if (this.userToCreate[key] === undefined) {

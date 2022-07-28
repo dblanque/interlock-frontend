@@ -61,7 +61,6 @@
     />
   </v-container>
 
-
     <!-- Snackbar -->
     <v-snackbar
       v-model="snackbar"
@@ -193,10 +192,12 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
       // Reset Snackbar values
       resetSnackbar(){
         this.snackbar = false
-        this.snackbarMessage = ""
-        this.snackbarIcon = ""
-        this.snackbarColor = ""
-        this.snackbarClasses = ""
+        setTimeout(()=>{
+          this.snackbarMessage = ""
+          this.snackbarIcon = ""
+          this.snackbarColor = ""
+          this.snackbarClasses = ""
+        }, this.snackbarTimeout + 300)
       },
       // Check if theme is dark
       isThemeDark(){
