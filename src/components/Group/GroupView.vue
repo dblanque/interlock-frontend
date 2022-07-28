@@ -43,14 +43,14 @@
 
     <!-- GROUP ACTIONS -->
     <template v-slot:[`item.groupType`]="{ item }">
-      <span>
+      <div class="pt-2">
         <v-chip 
-        :class="getColorForGroupType(type)['color'] + ' text-' + getColorForGroupType(type)['text'] + ' mx-1'" 
+        :class="getColorForGroupType(type)['color'] + ' text-' + getColorForGroupType(type)['text'] + ' mx-1 mb-2'" 
         v-for="type in item.groupType" 
         :key="type">
           {{ $t('section.groups.types.'+type) }}
         </v-chip>
-      </span>
+      </div>
     </template>
 
     <!-- GROUP ACTIONS -->
@@ -322,7 +322,9 @@ export default {
       this.openDialog('groupDelete')
     },
     async refreshGroup(item){
-      await this.fetchGroup(item, this.editableForm, false);
+      await this.fetchGroup(item, this.editableForm, false).then(()=>{
+        this.$refs.GroupDialog.syncGroup()
+      });
     },
     // Fetch individual Group
     async fetchGroup(item, isEditable=false, refreshAnim=true){

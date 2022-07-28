@@ -334,6 +334,11 @@
         "GROUP_DOMAIN_LOCAL": "Alcance Local de Dominio",
         "GROUP_UNIVERSAL": "Alcance Universal",
         "GROUP_SECURITY": "Grupo de Seguridad"
+      },
+      "groupDialog":{
+        "groupType":"Tipo de Grupo",
+        "groupScope":"Alcance del Grupo",
+        "members":"Miembros del grupo"
       }
     },
     "settings":{

@@ -331,7 +331,8 @@
       },
       "groupDialog":{
         "groupType":"Group Type",
-        "groupScope":"Group Scope"
+        "groupScope":"Group Scope",
+        "members":"Group Members"
       }
     },
     "settings":{

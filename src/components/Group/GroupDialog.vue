@@ -25,7 +25,7 @@
                             dense
                             id="cn"
                             :label="$t('ldap.attributes.cn')"
-                            :readonly="editFlag != true"
+                            :readonly="editFlag != true && !loading"
                             v-model="groupcopy.cn"
                             :rules="[this.fieldRules(groupcopy.cn, 'ge_name')]"
                             ></v-text-field>
@@ -42,7 +42,7 @@
                         </v-col>
                     </v-row>
 
-                    <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
+                    <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
                         <v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
                             <v-card outlined height="100%" class="ma-1 pa-0 px-3 py-1">
                                 <v-row class="ma-2">
@@ -70,6 +70,41 @@
                                     />
                                 </v-radio-group>
                             </v-card>
+                        </v-col>
+                    </v-row>
+                    <v-row align-content="center" justify="center" class="ma-0 pa-0 my-4">
+                        <v-col cols="8" class="ma-0 pa-0">
+                            <v-expansion-panels flat style="border: 1px solid var(--clr-primary);">
+                                <v-expansion-panel>
+                                    <v-expansion-panel-header>
+                                        {{ $t('section.groups.groupDialog.members') }}
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <!-- TODO - Add tooltip that shows Full DN for object -->
+                                        <!-- TODO - Add "Remove Member" action -->
+                                        <!-- TODO - Add "Add Member" action -->
+                                        <v-list dense v-if="getMembersLength">
+                                            <v-list-item v-for="member, key in this.groupcopy.member" :key="key">
+                                                <v-row v-if="member.objectCategory == 'user' || member.objectCategory == 'person' || member.objectCategory == 'organizationalPerson'">
+                                                    <v-col cols="12" class="pa-0 ma-0">
+                                                        {{ $t('classes.user.single') + ": " + ((member.givenName != "" && member.sn != "") ? member.givenName + " " + member.sn + " (" + member.username + ")" : member.username) }}
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row v-else-if="member.objectCategory == 'group'">
+                                                    <v-col cols="12" class="pa-0 ma-0">
+                                                        {{ $t('classes.group.single') + ": " + member.cn }}
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row v-else>
+                                                    <v-col cols="12" class="pa-0 ma-0">
+                                                        {{ member.dn }}
+                                                    </v-col>
+                                                </v-row>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                            </v-expansion-panels>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -178,6 +213,12 @@ export default {
         refreshLoading: Boolean
     },
     methods: {
+        getMembersLength(){
+            if (this.groupcopy != undefined)
+                if (this.groupcopy.member.length != 0)
+                    return true
+            return false
+        },
         closeDialog() {
             this.$emit('closeDialog', this.viewKey);
         },
@@ -187,27 +228,29 @@ export default {
             return false
         },
         setGroupTypeAndScope(){
-            this.group.groupType.forEach(groupSetting => {
-                switch (groupSetting) {
-                    case 'GROUP_DISTRIBUTION':
-                        this.radioGroupType = 0;
-                        break;
-                    case 'GROUP_SECURITY':
-                        this.radioGroupType = 1;
-                        break;
-                    case 'GROUP_GLOBAL':
-                        this.radioGroupScope = 0;
-                        break;
-                    case 'GROUP_DOMAIN_LOCAL':
-                        this.radioGroupScope = 1;
-                        break;
-                    case 'GROUP_UNIVERSAL':
-                        this.radioGroupScope = 2;
-                        break;
-                    default:
-                        break;
-                }
-            });
+            if (this.group.groupType != undefined) {
+                this.group.groupType.forEach(groupSetting => {
+                    switch (groupSetting) {
+                        case 'GROUP_DISTRIBUTION':
+                            this.radioGroupType = 0;
+                            break;
+                        case 'GROUP_SECURITY':
+                            this.radioGroupType = 1;
+                            break;
+                        case 'GROUP_GLOBAL':
+                            this.radioGroupScope = 0;
+                            break;
+                        case 'GROUP_DOMAIN_LOCAL':
+                            this.radioGroupScope = 1;
+                            break;
+                        case 'GROUP_UNIVERSAL':
+                            this.radioGroupScope = 2;
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            }
         },
         // Sync the groupcopy object to the parent view group object on the
         // next tick to avoid mutation errors
