@@ -69,19 +69,19 @@ export default {
         async verifyLocale() {
             var setLang = localStorage.getItem('locale')
             if(setLang == undefined || setLang == null){
-            var browserlang = navigator.language.toLowerCase()
-            if(browserlang.includes('es'))
-                this.$i18n.locale = 'es'
-            else{
-                this.$i18n.locale = 'en'
-            }
-            this.language = this.$i18n.locale
-            console.log(this.language);
-            localStorage.setItem('locale', this.$i18n.locale)
+                var browserlang = navigator.language.toLowerCase()
+                if(browserlang.includes('es'))
+                    this.$i18n.locale = 'es'
+                else{
+                    this.$i18n.locale = 'en'
+                }
+                this.language = this.$i18n.locale
+                console.log("Using locale: " + this.language);
+                localStorage.setItem('locale', this.$i18n.locale)
             }
             else {
-            this.language = setLang
-            this.$i18n.locale = setLang
+                this.language = setLang
+                this.$i18n.locale = setLang
             }
         },
         changeLanguage: function(){

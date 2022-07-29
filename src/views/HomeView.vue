@@ -131,6 +131,7 @@
           ref="ModularViewContainerRef"
           @refresh="loadDomainData()"
           @goToUser="goToUser"
+          @goToGroup="goToGroup"
           :langChanged="langChanged"
           :requestRefresh="requestRefresh"
          />
@@ -322,12 +323,19 @@ export default {
     }
   },
   methods: {
-    async goToUser(username){
+    async goToUser(user){
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
       await this.updateSelectedTab(1) // Index for Users Tab is 1
       // Had to get always the last element in array 
-      this.$refs.ModularViewContainerRef[this.$refs.ModularViewContainerRef.length - 1].$refs.UserView.fetchUser(username)
+      this.$refs.ModularViewContainerRef[this.$refs.ModularViewContainerRef.length - 1].$refs.UserView.fetchUser(user)
+    },
+    async goToGroup(group){
+      // Don't remove this await or the first time the ModularViewContainer
+      // mounts it'll break
+      await this.updateSelectedTab(2) // Index for Groups Tab is 2
+      // Had to get always the last element in array 
+      this.$refs.ModularViewContainerRef[this.$refs.ModularViewContainerRef.length - 1].$refs.GroupView.fetchGroup(group)
     },
     async loadDomainData(){
       if (!this.domain || !this.realm) {

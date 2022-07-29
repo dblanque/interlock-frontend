@@ -15,11 +15,34 @@
 
         <v-row class="ma-0 pa-0 mt-3" justify="center">
             <v-col cols="12" class="font-weight-medium">
-                {{ $t('section.dirtree.move.originalRelativePath') + ": " + objectDn }}
+                {{ $t('section.dirtree.move.originalRelativePath') + ": " + originalRelativePath }}
             </v-col>
         </v-row>
 
         <v-divider class="mx-16 mt-2"/>
+
+        <v-row class="ma-0 pa-0 mt-4">
+            <v-spacer/>
+            <v-col class="ma-0 pa-0" cols="4">
+                <v-btn small
+                    class="ma-1"
+                    text
+                    :disabled="!allowRefresh"
+                    elevation="0"
+                    @click="refreshOUList"
+                    >
+                    {{ $t('actions.refresh') }}
+                    <v-icon>
+                    mdi-refresh
+                    </v-icon>
+                    <template v-slot:loader>
+                    <span class="custom-loader">
+                        <v-icon color="white">mdi-cached</v-icon>
+                    </span>
+                    </template>
+                </v-btn>
+            </v-col>
+        </v-row>
 
         <v-row class="ma-0 pa-0" justify="center">
             <v-col cols="12" lg="10">
@@ -45,29 +68,11 @@
 
                         <v-expansion-panel-content>
                             <v-card flat outlined style="max-height: 300px; overflow: auto !important;">
-                                <v-treeview
-                                :items="this.ouList"
-                                dense
-                                hoverable
-                                activatable
-                                @update:active="updateObjectDestination"
-                                >
-                                <template v-slot:prepend="{ item, open }">
-                                    <v-icon v-if="item.type == 'Organizational-Unit'">
-                                        {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                                    </v-icon>
-                                    <v-icon v-else>
-                                        mdi-at
-                                    </v-icon>
-                                </template>
-                                <template v-slot:label="{item}">
-                                <v-row align="start">
-                                    <v-col cols="11" md="auto">
-                                    {{ item.name }}
-                                    </v-col>
-                                </v-row>
-                                </template>
-                                </v-treeview>
+                                <DirtreeOUList
+                                ref="DirtreeOUList"
+                                :excludeObjects="objectDn"
+                                @selectedDestination="setDestination"
+                                />
                             </v-card>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
@@ -118,15 +123,19 @@
 </template>
 
 <script>
-import OrganizationalUnit from '@/include/OrganizationalUnit'
-import { objectRecursiveSearch, getDomainDetails } from '@/include/utils';
+import DirtreeOUList from '@/components/Dirtree/DirtreeOUList.vue'
+// import OrganizationalUnit from '@/include/OrganizationalUnit'
+import { getDomainDetails } from '@/include/utils';
 
 export default {
+    components: {
+        DirtreeOUList
+    },
     data() {
         return {
             objectDestination: "",
             userPathExpansionPanel: 0,
-            ouList: [],
+            allowRefresh: true,
             domain: "",
             realm: "",
             basedn: "",
@@ -141,47 +150,48 @@ export default {
     },
     watch: {
     },
+    computed: {
+        originalRelativePath() {
+            if (this.objectDn != undefined)
+                return this.objectDn.split(',').slice(1).join(',')
+            return ""
+        }
+    },
     async created () {
         await this.resetDialog()
     },
     methods: {
+        async refreshOUList(){
+            if (this.allowRefresh == true) {
+                this.allowRefresh = false
+                await this.$refs.DirtreeOUList.fetchOUs().then(()=>{
+                    this.allowRefresh = true
+                })
+            }
+        },
         async resetDialog(){
-            this.fetchOUs();
-            this.updateObjectDestination();
+            this.allowRefresh = false
+            this.setDestination();
+            if (this.$refs.DirtreeOUList)
+                this.$refs.DirtreeOUList.fetchOUs()
+                .then(()=>{
+                    this.allowRefresh = true
+                })
             var domainDetails = getDomainDetails()
             this.domain = domainDetails.domain
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
         },
+        setDestination(destination=undefined){
+            // Set default destination if undefined
+            if (destination == undefined || !destination)
+                this.objectDestination = this.basedn
+            // Set destination from arg
+            else
+                this.objectDestination = destination
+        },
         closeDialog(){
             this.$emit('closeDialog', this.viewKey);
-        },
-        async fetchOUs(){
-            await new OrganizationalUnit({}).list()
-            .then(response => {
-                this.ouList = response.data.ou_list
-            })
-            .catch(error => {
-                console.log(error)
-            })
-        },
-        updateObjectDestination(itemID){
-            if (!itemID || itemID.length == 0){
-                this.objectDestination = "CN=Users," + this.basedn
-                // console.log('this.objectDestination was reset to ' + this.objectDestination)
-                return this.objectDestination
-            }
-            var itemToUpdate = this.ouList.find(ou => ou.id == itemID)
-            var searchResult
-            if (itemToUpdate == undefined){
-                this.ouList.forEach(ou => {
-                    if (!searchResult) {
-                        searchResult = objectRecursiveSearch(ou, parseInt(itemID))
-                        this.objectDestination = searchResult
-                    }
-                })
-            } else if (itemToUpdate.id == itemID)
-                this.objectDestination = itemToUpdate.dn
         },
     },
 }

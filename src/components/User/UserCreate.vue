@@ -64,29 +64,11 @@
         
                                                 <v-expansion-panel-content>
                                                     <v-card flat outlined style="max-height: 300px; overflow: auto !important;">
-                                                        <v-treeview
-                                                        :items="this.ouList"
-                                                        dense
-                                                        hoverable
-                                                        activatable
-                                                        @update:active="updateUserDestination"
-                                                        >
-                                                        <template v-slot:prepend="{ item, open }">
-                                                            <v-icon v-if="item.type == 'Organizational-Unit'">
-                                                                {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                                                            </v-icon>
-                                                            <v-icon v-else>
-                                                                mdi-at
-                                                            </v-icon>
-                                                        </template>
-                                                        <template v-slot:label="{item}">
-                                                        <v-row align="start">
-                                                            <v-col cols="11" md="auto">
-                                                            {{ item.name }}
-                                                            </v-col>
-                                                        </v-row>
-                                                        </template>
-                                                        </v-treeview>
+                                                        <!-- Dirtree OU List Component -->
+                                                        <DirtreeOUList
+                                                        ref="DirtreeOUList"
+                                                        @selectedDestination="setDestination"
+                                                        />
                                                     </v-card>
                                                 </v-expansion-panel-content>
                                             </v-expansion-panel>
@@ -348,11 +330,15 @@
 <script>
 import User from '@/include/User'
 import OrganizationalUnit from '@/include/OrganizationalUnit'
+import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
 import validationMixin from '@/plugins/mixin/validationMixin';
-import { objectRecursiveSearch, getDomainDetails } from '@/include/utils';
+import { getDomainDetails } from '@/include/utils';
 
 export default {
     name: 'UserCreate',
+    components: {
+        DirtreeOUList
+    },
     data () {
       return {
         passwordHidden: true,
@@ -534,6 +520,16 @@ export default {
         }
     },
     methods: {
+        setDestination(destination=undefined){
+            // Set default destination if undefined
+            if (destination == undefined || !destination)
+                this.userDestination = this.basedn
+            // Set destination from arg
+            else
+                this.userDestination = destination
+
+            this.userPathExpansionPanel = false
+        },
         prevStep(){
             switch (this.createStage) {
                 case 2:
@@ -601,26 +597,6 @@ export default {
                     this.createStage += 1
                     break;
             }
-        },
-        updateUserDestination(itemID){
-            if (!itemID || itemID.length == 0){
-                this.userDestination = "CN=Users," + this.basedn
-                console.log('this.userDestination was reset to ' + this.userDestination)
-                return this.userDestination
-            }
-            var itemToUpdate = this.ouList.find(ou => ou.id == itemID)
-            var searchResult
-            if (itemToUpdate == undefined){
-                this.ouList.forEach(ou => {
-                    if (!searchResult) {
-                        searchResult = objectRecursiveSearch(ou, parseInt(itemID))
-                        this.userDestination = searchResult
-                    }
-                })
-            } else if (itemToUpdate.id == itemID)
-                this.userDestination = itemToUpdate.dn
-            
-            this.userPathExpansionPanel = false
         },
         async newUser(){
             this.passwordHidden = true

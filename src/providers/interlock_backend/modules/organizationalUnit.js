@@ -10,6 +10,15 @@ const actions = {
         })
     },
 
+    filter: (objectArray)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.ou.listfilter, objectArray)
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
+    },
+
     dirtree: (filter)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.ou.dirtree, {filter: filter})

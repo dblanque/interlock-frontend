@@ -59,102 +59,107 @@
       <!-- Tree View -->
       <v-card class="ma-1" flat outlined>
       <v-expand-transition>
-            <v-treeview v-if="!loading"
-              :items="this.tableData.items"
-              dense
-              :search="searchString"
-              hoverable
-              >
-              <template v-slot:prepend="{ item, open }">
-                  <v-icon v-if="item.builtin == true && item.type != 'Container'">
-                    mdi-hammer
-                  </v-icon>
-                  <v-icon v-else-if="item.type == 'Container'">
-                    {{ itemTypes[item.type.toLowerCase()]['icon'] }}
-                  </v-icon>
-                  <v-icon v-else-if="item.type == 'Organizational-Unit'">
-                    {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                  </v-icon>
-                  <v-icon v-else-if="item.type == 'Computer'">
-                    {{ itemTypes[item.type.toLowerCase()]['icon'] }}
-                  </v-icon>
-                  <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
-                    {{ itemTypes[item.type.toLowerCase()]['icon'] }}
-                  </v-icon>
-                  <v-icon v-else-if="item.type == 'Group'">
-                    {{ itemTypes[item.type.toLowerCase()]['icon'] }}
-                  </v-icon>
-                  <v-icon v-else>
-                    mdi-group
-                  </v-icon>
-              </template>
-              <template v-slot:label="{item}">
-              <v-row align="start">
-                <v-col cols="11" md="auto">
-                  {{ item.name }}
-                </v-col>
-              </v-row>
-              </template>
-              <template v-slot:append="{item}">
-                  <!-- User Buttons -->
-                  <span v-if="(item.type == 'User' || item.type=='Person')">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn @click="goToUser(item)"
-                          color="primary"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon>
-                            mdi-arrow-right-bold
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>{{ $t('actions.goTo') + ' ' + $t('classes.user.single') }}</span>
-                    </v-tooltip>
-                  </span>
-  
-                  <!-- Group Buttons -->
-                  <span>
-                    <v-tooltip bottom v-if="item.type == 'Group'">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn disabled
-                          color="primary"
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon>
-                            mdi-arrow-right-bold
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>{{ $t('actions.goTo') + ' ' + $t('classes.group.single') }}</span>
-                    </v-tooltip>
-                  </span>
+        <v-treeview v-if="!loading"
+          :items="this.tableData.items"
+          dense
+          :search="searchString"
+          hoverable
+          open-on-click
+          >
+          <!-- ICONS -->
+          <template v-slot:prepend="{ item, open }">
+              <v-icon v-if="item.builtin == true && item.type != 'Container'">
+                mdi-hammer
+              </v-icon>
+              <v-icon v-else-if="item.type == 'Container'">
+                {{ itemTypes[item.type.toLowerCase()]['icon'] }}
+              </v-icon>
+              <v-icon v-else-if="item.type == 'Organizational-Unit'">
+                {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+              </v-icon>
+              <v-icon v-else-if="item.type == 'Computer'">
+                {{ itemTypes[item.type.toLowerCase()]['icon'] }}
+              </v-icon>
+              <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
+                {{ itemTypes[item.type.toLowerCase()]['icon'] }}
+              </v-icon>
+              <v-icon v-else-if="item.type == 'Group'">
+                {{ itemTypes[item.type.toLowerCase()]['icon'] }}
+              </v-icon>
+              <v-icon v-else>
+                mdi-group
+              </v-icon>
+          </template>
+          <!-- LABEL -->
+          <template v-slot:label="{item}">
+          <v-row align="start">
+            <v-col cols="11" md="auto">
+              {{ item.name }}
+            </v-col>
+          </v-row>
+          </template>
+          <!-- ACTIONS -->
+          <template v-slot:append="{item}">
+              <!-- User Buttons -->
+              <span v-if="(item.type == 'User' || item.type=='Person')">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click="goToUser(item)"
+                      color="primary"
+                      icon
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon>
+                        mdi-arrow-right-bold
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('actions.goTo') + ' ' + $t('classes.user.single') }}</span>
+                </v-tooltip>
+              </span>
 
-                  <!-- General Buttons -->
-                  <span v-if="item.builtin != true">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            @click="openDialog('dirtreeMove', item)"
-                            color="primary"
-                            icon
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                          <v-icon>
-                            mdi-folder-move
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>{{ $t('actions.move') }}</span>
-                    </v-tooltip>
-                  </span>
-              </template>
-            </v-treeview>
+              <!-- Group Buttons -->
+              <span v-else-if="item.type == 'Group'">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="primary"
+                      icon
+                      @click="goToGroup(item)"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon>
+                        mdi-arrow-right-bold
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('actions.goTo') + ' ' + $t('classes.group.single') }}</span>
+                </v-tooltip>
+              </span>
+
+              <!-- General Buttons -->
+              <span v-if="item.builtin != true">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        @click="openDialog('dirtreeMove', item)"
+                        color="primary"
+                        icon
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                      <v-icon>
+                        mdi-folder-move
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('actions.move') }}</span>
+                </v-tooltip>
+              </span>
+          </template>
+        </v-treeview>
       </v-expand-transition>
       <v-fab-transition>
         <v-icon class="ma-12" v-if="!this.tableData.items.length && this.error == true && !this.loading" size="82" color="red">
@@ -260,6 +265,9 @@ export default {
         },
         goToUser(item){
             this.$emit('goToUser', item)
+        },
+        goToGroup(item){
+            this.$emit('goToGroup', item)
         },
         setFilter(key){
             this.filters = {}

@@ -17,6 +17,7 @@
       @resetSnackbar="resetSnackbar"
       @refresh="refreshAction"
       @goToUser="goToUser"
+      @goToGroup="goToGroup"
     />
   </v-container>
 
@@ -180,6 +181,9 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
     methods: {
       goToUser(user){
         this.$emit('goToUser', user)
+      },
+      goToGroup(group){
+        this.$emit('goToGroup', group)
       },
       createSnackbar(color, string){
         if (!color) {

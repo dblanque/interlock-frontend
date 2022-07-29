@@ -46,7 +46,7 @@ export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='dn'
         // For each child do a recursive search calling this function
         targetEntity[childrenKey].forEach(child => {
             if (!searchResult) {
-                searchResult = this.objectRecursiveSearch(child, idToSearch, keyToSearch, childrenKey, searchResult)
+                searchResult = objectRecursiveSearch(child, idToSearch, keyToSearch, childrenKey, searchResult)
                 if (searchResult && searchResult != false && searchResult != undefined){
                     return searchResult
                 }

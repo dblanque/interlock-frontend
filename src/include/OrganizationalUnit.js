@@ -21,6 +21,10 @@ class OrganizationalUnit extends ApiModel{
         return await interlock_backend.call('ou/list')
     }
 
+    async filter(objectArray){
+        return await interlock_backend.call('ou/listfilter', objectArray)
+    }
+
     async dirtree(filter){
         return await interlock_backend.call('ou/dirtree', filter)
     }
