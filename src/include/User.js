@@ -132,6 +132,32 @@ class User extends ApiModel{
         )
     }
 
+    async fetchme(username){
+        return await interlock_backend.call('user/fetchme', {username: username}).then(
+            response => {
+                if(!response)
+                        throw Error("Error fetching user data. Provider returned: " + response);
+                else{
+                    Object.keys(response.data).forEach(key => {
+                        switch (key) {
+                            case 'whenChanged':
+                            case 'whenCreated':
+                                this[key] = dateLdapToString(response.data[key]);
+                                break;
+                            case 'lastLogon':
+                            case 'pwdLastSet':
+                                this[key] = dateFromFiletime(response.data[key]);
+                                break;
+                            default:
+                                this[key] = response.data[key];
+                                break;
+                        }
+                    });
+                }
+            }
+        )
+    }
+
     async getCurrentUserData(){
         return await interlock_backend.call('user/getCurrentUserData')
     }

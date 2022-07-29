@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
+import EnduserView from '../views/EnduserView.vue'
 
 Vue.use(VueRouter)
 
@@ -48,6 +49,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: LoginView
+  },
+  {
+    path: '/enduser',
+    name: 'enduser',
+    component: EnduserView
   }
 ]
 

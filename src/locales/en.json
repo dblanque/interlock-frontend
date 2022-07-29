@@ -78,6 +78,7 @@
     "addObjectClass": "Add Object Class"
   },
   "words":{
+      "readOnly":"Read Only",
       "member":"Member",
       "enabled":"Enabled",
       "disabled":"Disabled",
@@ -252,6 +253,10 @@
       "tryAgain": "You may now try again",
       "oneRetryLeft": "retry left",
       "retriesLeft": "retries left"
+    },
+    "enduser":{
+      "title":"Welcome",
+      "helpMessage":"Below you can modify your Active Directory / LDAP user details and password"
     },
     "dirtree":{
       "move":{

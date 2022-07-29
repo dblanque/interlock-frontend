@@ -95,7 +95,7 @@
             icon
             text
             v-bind="attrs"
-            @click="snackbar = false"
+            @click="logoutSnackbar = false"
           >
             <v-icon>
               mdi-close
@@ -157,14 +157,18 @@ export default {
 
     var userJustLoggedOut = localStorage.getItem('logoutMessage')
     if (userJustLoggedOut) {
-      this.snackbarMessage = this.$t("misc.loggedOut")
+      this.snackbarMessage = this.$t("misc.loggedOut").toUpperCase()
       this.logoutSnackbar = true;
       localStorage.removeItem('logoutMessage')
     }
 
     var token = localStorage.getItem('token')
+    var admin_allowed = localStorage.getItem('admin_allowed')
     if (token && token != null && token != 'null') {
-      this.$router.push("/home")
+      if (admin_allowed == true)
+        this.$router.push("/home")
+      else
+        this.$router.push("/enduser")
     }
   },
   watch: {
@@ -229,7 +233,10 @@ export default {
             this.errorMsg = "";
             localStorage.removeItem('loginForbiddenCount')
             this.clearLoginTimeout()
-            this.$router.push("/home");
+            if (response.data.admin_allowed == true)
+              this.$router.push("/home")
+            else
+              this.$router.push("/enduser")
           }
         })
         .catch((e) => {

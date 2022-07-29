@@ -30,6 +30,7 @@ const urls = {
         base: 'api/users/',
         list: 'api/users/',
         fetch: 'api/users/fetch/',
+        fetchme: 'api/users/fetchme/',
         insert: 'api/users/insert/',
         update: 'api/users/update/',
         delete: 'api/users/delete/',

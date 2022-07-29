@@ -78,6 +78,7 @@
     "addObjectClass": "Añadir Clase de Objeto"
   },
   "words": {
+    "readOnly":"Solo Lectura",
     "member":"Miembro",
     "enabled":"Activado",
     "disabled":"Des-activado",
@@ -258,6 +259,10 @@
       "tryAgain": "Inténtelo nuevamente",
       "oneRetryLeft": "intento restante",
       "retriesLeft": "intentos restantes"
+    },
+    "enduser":{
+      "title":"Bienvenido",
+      "helpMessage":"Debajo puede modificar su contraseña y detalles de usuario de Active Directory / LDAP"
     },
     "dirtree":{
       "move":{

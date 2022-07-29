@@ -15,11 +15,13 @@ const calls = {
                 localStorage.setItem("token", 'Bearer ' + response.data.access)
                 localStorage.setItem("refresh", 'Bearer ' + response.data.refresh)
                 localStorage.setItem('refreshClock', date.toISOString())
-                localStorage.setItem("username", data.username)
+                localStorage.setItem("username", response.data.username)
+                localStorage.setItem("admin_allowed", response.data.admin_allowed)
                 resolve(response)
             }).catch((e) => {
                 localStorage.removeItem('token')
                 localStorage.removeItem('refresh')
+                localStorage.removeItem('admin_allowed')
                 console.log('Authentication Error')
                 reject(e)
             })
@@ -32,6 +34,8 @@ const calls = {
             localStorage.removeItem("username")
             localStorage.removeItem("first_name")
             localStorage.removeItem("last_name")
+            localStorage.removeItem("email")
+            localStorage.removeItem('admin_allowed')
             resolve()
         })
     }

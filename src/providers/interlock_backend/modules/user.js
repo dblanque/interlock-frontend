@@ -108,6 +108,15 @@ const actions = {
             })
         })
     },
+    fetchme: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.fetchme, data).then(response => {
+                resolve(response.data)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
     getByEmail: (email)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.user+'?email='+email).then(response => {
