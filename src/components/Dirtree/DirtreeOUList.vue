@@ -11,12 +11,18 @@
         @update:active="updateObjectDestination"
         >
             <template v-slot:prepend="{ item, open }">
-                <v-icon v-if="item.type == 'Organizational-Unit'">
-                    {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                </v-icon>
-                <v-icon v-else>
-                    mdi-at
-                </v-icon>
+              <v-icon v-if="item.builtin == true && item.type != 'Container'">
+                mdi-hammer
+              </v-icon>
+              <v-icon v-else-if="item.type == 'Container'">
+                mdi-archive
+              </v-icon>
+              <v-icon v-else-if="item.type == 'Organizational-Unit'">
+                {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+              </v-icon>
+              <v-icon v-else>
+                mdi-group
+              </v-icon>
             </template>
             <template v-slot:label="{item}">
                 <v-row align="start">

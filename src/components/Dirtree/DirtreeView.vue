@@ -64,7 +64,6 @@
           dense
           :search="searchString"
           hoverable
-          open-on-click
           >
           <!-- ICONS -->
           <template v-slot:prepend="{ item, open }">

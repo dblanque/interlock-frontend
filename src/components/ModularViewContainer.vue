@@ -197,10 +197,12 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
       resetSnackbar(){
         this.snackbar = false
         setTimeout(()=>{
-          this.snackbarMessage = ""
-          this.snackbarIcon = ""
-          this.snackbarColor = ""
-          this.snackbarClasses = ""
+          if (!this.snackbar) {
+            this.snackbarMessage = ""
+            this.snackbarIcon = ""
+            this.snackbarColor = ""
+            this.snackbarClasses = ""
+          }
         }, this.snackbarTimeout + 300)
       },
       // Check if theme is dark
