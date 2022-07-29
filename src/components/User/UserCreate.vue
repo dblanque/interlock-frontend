@@ -661,16 +661,20 @@ export default {
                 setTimeout(() => {
                     this.loading = false;
                 }, 450)
-                switch (error.response.status) {
-                    case 405:
-                        this.errorMsg = this.$t("error.codes.badRequest")
-                        break;
-                    case 650:
-                        this.errorMsg = this.$t("error.codes.users.userExists")
-                        break;
-                    default:
-                        this.errorMsg = this.$t("error.unknown_short")
-                        break;
+                if (error.response.data.code) {
+                    switch (error.response.data.code) {
+                        case 'user_passwords_dont_match':
+                            this.errorMsg = this.$t("error.codes.badRequest")
+                            break;
+                        case 'user_exists':
+                            this.errorMsg = this.$t("error.codes.users.userExists")
+                            break;
+                        default:
+                            this.errorMsg = this.$t("error.unknown_short")
+                            break;
+                    }
+                } else {
+                    this.errorMsg = this.$t("error.unknown_short")
                 }
             })
         }

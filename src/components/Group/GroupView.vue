@@ -128,7 +128,7 @@
             v-bind="attrs"
             v-on="on"
             small
-            :disabled="loading || readonly"
+            :disabled="loading || readonly || item.groupType.includes('GROUP_SYSTEM')"
             @click="openDeleteDialog(item)"
           >
           <v-icon small color="red">
