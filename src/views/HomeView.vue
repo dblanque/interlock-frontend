@@ -314,6 +314,11 @@ export default {
     };
   },
   async created() {
+    var admin_allowed = localStorage.getItem("admin_allowed");
+    if (!admin_allowed || admin_allowed == false){
+      this.logoutAction();
+      this.showLogoutDialog = true;
+    }
     await new User({}).getCurrentUserData().then((response) => {
       var responseStatus = response.status;
       // var token = localStorage.getItem('token')
@@ -335,10 +340,10 @@ export default {
       // If response code is an HTTP error code
       else {
         var token = localStorage.getItem("token");
-        var admin_allowed = localStorage.getItem("admin_allowed");
-        if (!token || token == null || token == "null" || !admin_allowed)
+        if ( !token || token == null || token == "null" ){
           this.logoutAction();
-        this.showLogoutDialog = true;
+          this.showLogoutDialog = true;
+        }
       }
     });
 
@@ -382,19 +387,20 @@ export default {
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
       await this.updateSelectedTab(1); // Index for Users Tab is 1
-      // Had to get always the last element in array
-      this.$refs.ModularViewContainerRef[
-        this.$refs.ModularViewContainerRef.length - 1
-      ].$refs.UserView.fetchUser(user);
+      
+      this.$refs.ModularViewContainerRef.forEach(refObj => {
+        if (Object.hasOwnProperty.call(refObj.$refs, 'UserView'))
+          refObj.$refs.UserView.fetchUser(user);
+      });
     },
     async goToGroup(group) {
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
       await this.updateSelectedTab(2); // Index for Groups Tab is 2
-      // Had to get always the last element in array
-      this.$refs.ModularViewContainerRef[
-        this.$refs.ModularViewContainerRef.length - 1
-      ].$refs.GroupView.fetchGroup(group);
+      this.$refs.ModularViewContainerRef.forEach(refObj => {
+        if (Object.hasOwnProperty.call(refObj.$refs, 'GroupView'))
+          refObj.$refs.GroupView.fetchGroup(group);
+      });
     },
     async loadDomainData() {
       if (!this.domain || !this.realm) {

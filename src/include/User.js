@@ -169,6 +169,10 @@ class User extends ApiModel{
     async update(data){
         return await interlock_backend.call('user/update', data)
     }
+
+    async updateSelf(data){
+        return await interlock_backend.call('user/updateSelf', data)
+    }
 }
 
 export default User

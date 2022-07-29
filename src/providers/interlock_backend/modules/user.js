@@ -76,6 +76,15 @@ const actions = {
         })
     },
 
+    updateSelf: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.put(interlock_backend.urls.user.updateSelf, data)
+            .then(response => {
+                resolve(response.data);
+            }).catch((e) => reject(e))
+        })
+    },
+
     delete: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.user.delete, data)

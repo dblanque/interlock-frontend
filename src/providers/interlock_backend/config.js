@@ -33,6 +33,7 @@ const urls = {
         fetchme: 'api/users/fetchme/',
         insert: 'api/users/insert/',
         update: 'api/users/update/',
+        updateSelf: 'api/users/updateSelf/',
         delete: 'api/users/delete/',
         enable: 'api/users/enable/',
         disable: 'api/users/disable/',

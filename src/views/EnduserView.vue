@@ -303,7 +303,7 @@
                             {{ $t("actions.changePassword") }}
                         </v-btn>
                         <!-- Save User Changes Button -->
-                        <v-btn
+                        <v-btn @click="saveUser"
                         class="ma-0 pa-0 pa-4 ma-1 bg-secondary text-normal" 
                         rounded>
                             <v-icon class="mr-1">
@@ -451,6 +451,24 @@ export default {
         },
     },
     methods: {
+        async saveUser(){
+            this.loading = true
+            // Uncomment below to debug permissions list
+            this.$emit('save', this.viewKey, this.user);
+            await new User({}).updateSelf(this.user)
+            .then(() => {
+                this.refreshUser();
+                this.loading = false
+                this.loadingColor = 'primary'
+            })
+            .catch(error => {
+                console.log(error)
+                this.userRefreshLoading = false;
+                this.loading = false
+                this.loadingColor = 'error'
+                this.error = true;
+            })
+        },
         openDialog(key){
             this.dialogs[key] = true;
             switch (key) {
