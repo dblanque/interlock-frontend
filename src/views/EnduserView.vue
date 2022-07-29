@@ -340,6 +340,7 @@
             :userObject="this.user"
             :viewKey="'userResetPassword'"
             ref="UserResetPassword"
+            :isEndUser="true"
             @closeDialog="closeDialog"
             />
         </v-dialog>
@@ -393,6 +394,7 @@ export default {
             basedn: "",
             showLogoutDialog: false,
             timeoutInS: 960,
+            // timeoutInS: 1,
             timeoutId: 0,
         }
     },
@@ -458,6 +460,8 @@ export default {
         },
         async closeDialog(key){
             this.dialogs[key] = false;
+            if (key == 'userResetPassword')
+                this.showLogoutDialog = true
         },
         async refreshUser(){
             this.loading = true

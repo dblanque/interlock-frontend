@@ -39,6 +39,7 @@ const urls = {
         lock: 'api/users/lock/',
         unlock: 'api/users/unlock/',
         changePassword: 'api/users/changePassword/',
+        changePasswordSelf: 'api/users/changePasswordSelf/',
     },
     group: {
         base: 'api/groups/',

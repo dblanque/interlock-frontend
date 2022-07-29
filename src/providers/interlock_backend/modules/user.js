@@ -66,6 +66,7 @@ const actions = {
             }).catch((e) => reject(e))
         })
     },
+
     update: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.put(interlock_backend.urls.user.update, data)
@@ -74,6 +75,7 @@ const actions = {
             }).catch((e) => reject(e))
         })
     },
+
     delete: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.user.delete, data)
@@ -82,6 +84,7 @@ const actions = {
             }).catch((e) => reject(e))
         })
     },
+
     changePassword: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.user.changePassword, data)
@@ -90,6 +93,16 @@ const actions = {
             }).catch((e) => reject(e))
         })
     },
+
+    changePasswordSelf: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.changePasswordSelf, data)
+            .then(response => {
+                resolve(response.data);
+            }).catch((e) => reject(e))
+        })
+    },
+
     list: ()=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.user.list).then(response => {
@@ -99,6 +112,7 @@ const actions = {
             })
         })
     },
+
     fetch: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.user.fetch, data).then(response => {
@@ -108,6 +122,7 @@ const actions = {
             })
         })
     },
+
     fetchme: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.user.fetchme, data).then(response => {
@@ -117,33 +132,6 @@ const actions = {
             })
         })
     },
-    getByEmail: (email)=>{
-        return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.user+'?email='+email).then(response => {
-                resolve(response)
-            }).catch((e) => {
-                reject(e)
-            })
-        })
-    },
-    getById: (id)=>{
-        return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.user + id + '/')
-            .then(response => {
-                resolve(response.data.user)
-            }).catch((e) => reject(e))
-        })
-    },
-    filter: (parameters)=>{
-        return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.user+'filter/', parameters).then(response => {
-                resolve(response.data)
-            }).catch((e) => {
-                reject(e)
-                console.log(e);
-            })
-        })
-    }
 }
 
 export default actions

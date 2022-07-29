@@ -1,16 +1,16 @@
 <template>
     <v-card class="pa-6">
-    <v-card-title>
-        <v-row justify="center">
-        {{ $t("misc.logoutForbiddenMsg") }}
-        </v-row>
-    </v-card-title>
-    <v-card-text>
-        <v-icon class="mt-4" large>mdi-emoticon-sad</v-icon>
-    </v-card-text>
+    <v-alert type="warning" :icon="false" class="ma-0 pa-6" style="border-radius: 1.25rem !important;">
+        <v-icon x-large class="clr-white clr-lig-95 mr-2">
+            mdi-alert
+        </v-icon>
+        <span class="mr-7">
+            {{ $t("misc.logoutForbiddenMsg") }}
+        </span>
+    </v-alert>
     <v-card-actions class="">
         <v-row class="ma-1 pa-0" justify="center">
-        <v-btn class="ma-2 clr-valid" rounded @click="emitLogoutAction">{{ $t("actions.back") }}</v-btn>
+        <v-btn dark class="ma-2 clr-valid" rounded @click="emitLogoutAction">{{ $t("actions.backToLogin") }}</v-btn>
         <!-- <v-btn class="ma-2 clr-error" rounded @click="showLogoutDialog = false">{{ $t('actions.no') }}</v-btn> -->
         </v-row>
     </v-card-actions>

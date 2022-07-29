@@ -21,6 +21,7 @@
     }
   },
   "actions":{
+    "backToLogin":"Go back to Log-in",
     "testSettings":"Test Settings",
     "restoreDefaultValues":"Restore Default Values",
     "areYouSure":"Are you sure you wish to",

@@ -21,6 +21,7 @@
     }
   },
   "actions": {
+    "backToLogin":"Volver a iniciar sesión",
     "testSettings":"Probar Configuración",
     "restoreDefaultValues":"Restaurar Valores Originales",
     "areYouSure":"¿Esta seguro de querer",

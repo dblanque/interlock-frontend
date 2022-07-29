@@ -87,6 +87,10 @@ export default {
     },
     props: {
         userObject: Object,
+        isEndUser: {
+            type: Boolean,
+            default: false
+        },
         viewKey: String
     },
     created() {
@@ -105,16 +109,32 @@ export default {
 
             user.dn = this.userObject.dn
             user.username = this.userObject.username
-            if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
-                await new User({}).changePassword(user)
-                .then(response => {
-                    if (response.data.username == user.username)
-                        console.log("User Password Changed Successfully")
-                    this.$emit('closeDialog', this.viewKey);
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+            console.log(this.isEndUser)
+            if (this.isEndUser === true) {
+                if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
+                    await new User({}).changePasswordSelf(user)
+                    .then(response => {
+                        if (response.data.username == user.username)
+                            console.log("User Password Changed Successfully")
+                        this.$emit('closeDialog', this.viewKey);
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+            }
+            else {
+                if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
+                    await new User({}).changePassword(user)
+                    .then(response => {
+                        if (response.data.username == user.username)
+                            console.log("User Password Changed Successfully")
+                        this.$emit('closeDialog', this.viewKey);
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
             }
         },
     }
