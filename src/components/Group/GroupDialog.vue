@@ -237,7 +237,7 @@
                 <v-btn @click="saveGroup"
                 :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
                 rounded 
-                :disabled="!editFlag">
+                :disabled="!editFlag || true">
                     <v-icon class="mr-1">
                         mdi-content-save
                     </v-icon>
@@ -247,7 +247,7 @@
                 <v-btn @click="saveGroup(true)"
                 :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
                 rounded 
-                :disabled="!editFlag">
+                :disabled="!editFlag || true">
                     <v-icon class="mr-1">
                         mdi-exit-to-app
                     </v-icon>
