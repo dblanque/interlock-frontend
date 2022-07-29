@@ -59,6 +59,8 @@
     <SettingsCard
       class="my-2 mb-4"
       ref="SettingsCardRef"
+      @createSnackbar="createSnackbar"
+      @resetSnackbar="resetSnackbar"
     />
   </v-container>
 

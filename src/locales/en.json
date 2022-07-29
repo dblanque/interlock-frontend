@@ -79,6 +79,18 @@
     "addObjectClass": "Add Object Class"
   },
   "words":{
+      "saved":{
+        "single":{
+          "m":"Saved",
+          "f":"Saved",
+          "n":"Saved"
+        },
+        "plural":{
+          "m":"Saved",
+          "f":"Saved",
+          "n":"Saved"
+        }
+      },
       "readOnly":"Read Only",
       "member":"Member",
       "enabled":"Enabled",
@@ -150,6 +162,10 @@
     "organizational-unit":{
       "single":"Organizational Unit",
       "plural":"Organizational Units"
+    },
+    "setting":{
+      "single":"Setting",
+      "plural":"Settings"
     }
   },
   "error":{
@@ -164,6 +180,10 @@
           "users":{
             "userExists":"User already exists."
           }
+      },
+      "settings": {
+        "testInvalid":"LDAP Bind Connection Failed",
+        "serverUnreachable":"LDAP Server Unreachable"
       },
       "data":{
         "noCountryCode":"No country code set"
@@ -354,14 +374,22 @@
         "header":"Reset Settings",
         "message":"Are you sure you wish to reset <b>all</b> the settings?"
       },
+      "testSuccess":"LDAP Connection Successful",
       "settingFailedValidation":"A parameter has failed validation",
       "headers":{
+        "log":"Logging",
         "domain":"Domain",
         "bindUser":"Bind User",
         "connection":"Connection",
         "filters":"Filters"
       },
       "fields":{
+        "LDAP_LOG_READ":"Log READ Events",
+        "LDAP_LOG_CREATE":"Log CREATE Events",
+        "LDAP_LOG_UPDATE":"Log UPDATE Events",
+        "LDAP_LOG_DELETE":"Log DELETE Events",
+        "LDAP_LOG_OPEN_CONNECTION":"Log OPEN LDAP CONNECTION Events",
+        "LDAP_LOG_CLOSE_CONNECTION":"Log CLOSE LDAP CONNECTION Events",
         "LDAP_URI_PREFIX":"LDAP Prefix",
         "LDAP_URI_IP":"Server IP",
         "LDAP_URI_PORT":"Server Port",

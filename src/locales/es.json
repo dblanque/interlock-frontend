@@ -79,6 +79,18 @@
     "addObjectClass": "Añadir Clase de Objeto"
   },
   "words": {
+    "saved":{
+      "single":{
+        "m":"Guardado",
+        "f":"Guardada",
+        "n":"Guardado"
+      },
+      "plural":{
+        "m":"Guardados",
+        "f":"Guardadas",
+        "n":"Guardados"
+      }
+    },
     "readOnly":"Solo Lectura",
     "member":"Miembro",
     "enabled":"Activado",
@@ -156,6 +168,10 @@
     "organizational-unit":{
       "single":"Unidad Organizacional",
       "plural":"Unidades Organizacionales"
+    },
+    "setting":{
+      "single":"Parámetro",
+      "plural":"Parámetros"
     }
   },
   "error": {
@@ -170,6 +186,10 @@
       "users":{
         "userExists":"El usuario ya existe."
       }
+    },
+    "settings": {
+      "testInvalid":"Prueba de Conexión LDAP Fallida",
+      "serverUnreachable":"Servidor LDAP Inalcanzable"
     },
     "data":{
       "noCountryCode":"Sin código configurado"
@@ -358,14 +378,22 @@
         "header":"Re-establecer Configuración",
         "message":"¿Está seguro de re-establecer <b>todos</b> los parámetros?"
       },
+      "testSuccess":"Conexión LDAP exitosa",
       "settingFailedValidation":"Un parámetro ha fallado la validación",
       "headers":{
+        "log":"Historial",
         "domain":"Dominio",
         "bindUser":"Usuario de Conexión",
         "connection":"Conexión",
         "filters":"Filtros"
       },
       "fields":{
+        "LDAP_LOG_READ":"Registrar Eventos de LECTURA",
+        "LDAP_LOG_CREATE":"Registrar Eventos de ALTA",
+        "LDAP_LOG_UPDATE":"Registrar Eventos de MODIFICACIÓN",
+        "LDAP_LOG_DELETE":"Registrar Eventos de BAJA",
+        "LDAP_LOG_OPEN_CONNECTION":"Registrar Eventos al ABRIR CONEXIÓN LDAP",
+        "LDAP_LOG_CLOSE_CONNECTION":"Registrar Evento al CERRAR CONEXIÓN LDAP",
         "LDAP_URI_PREFIX":"Prefijo LDAP",
         "LDAP_URI_IP":"Dirección IP del Servidor",
         "LDAP_URI_PORT":"Puerto del Servidor",

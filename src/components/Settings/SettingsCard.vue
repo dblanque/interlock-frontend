@@ -1,5 +1,6 @@
 <template>
-    <v-card outlined flat class="pt-2">
+    <v-card outlined flat class="">
+        <v-progress-linear :indeterminate="testing == true" :value="testFinished ? 100 : 0" :color="testFinished ? (!testError ? 'valid' : 'red') : 'primary'"/>
         <v-row class="ma-0 ma-1 px-4 py-0" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
                 @click="resetDialog = true" :disabled="readonly || getLoadingStatus"
@@ -85,241 +86,240 @@
                 </v-alert>
             </v-row>
         </v-slide-y-transition>
-        <v-expand-transition>
-        <v-row v-if="loading == true" class="ma-0 pa-0 ma-16" justify="center" align="center" align-content="center">
-            <v-progress-circular size="100" width="10" indeterminate color="primary"/>
-        </v-row>
-        <v-form ref="settingsForm" v-else-if="showSettings == true">
-        <v-row>
-            <v-col cols="12" v-for="(category, categoryKey) in config" :key="categoryKey">
-                <!-- Category Header -->
-                <v-row class="ma-0 pa-0" justify="center">
-                    <h4>
-                        {{ $t('section.settings.headers.' + categoryKey) }}
-                    </h4>
-                </v-row>
+        <v-slide-y-transition>
+            <div v-if="showSettings == true">
+                <v-form ref="settingsForm">
+                <v-row>
+                <v-col cols="12" v-for="(category, categoryKey) in config" :key="categoryKey">
+                    <!-- Category Header -->
+                    <v-row class="ma-0 pa-0" justify="center">
+                        <h4>
+                            {{ $t('section.settings.headers.' + categoryKey) }}
+                        </h4>
+                    </v-row>
 
-                <!-- Category Body -->
-                <v-row class="ma-0 my-2 pa-0" justify="center" v-for="(row, key) in category" :key="key">
-                    <v-col :class="'ma-0 pa-0 py-1 px-4'" cols="10" :md="getColSize(key, 'md')" :lg="getColSize(key, 'lg')" v-for="(item, key) in row" :key="key">
-                    <!-- Checkbox Settings -->
-                    <v-checkbox 
-                    v-if="item.type == 'checkbox' || item.type == 'boolean' || item.type == 'bool'"
-                    v-model="item.value"
-                    :readonly="item.readonly || readonly == true"
-                    :hint="$t(item.hint)"
-                    :persistent-hint="item.persistentHint"
-                    :label="$t('section.settings.fields.' + key)"/>
-                    <!-- List / Array of Settings -->
-                    <v-card flat outlined class="ma-0 px-6 py-2" v-else-if="item.type == 'list' || item.type == 'array'">
-                        <v-row class="ma-0 pa-0">
-                            <v-text-field :label="$t('section.settings.fields.' + key)"
-                            :readonly="item.readonly || readonly == true"
-                            :hint="$t(item.hint)"
-                            :persistent-hint="item.persistentHint"
-                            @keydown.enter="addToArray(item.add, item, 'LIST_KEY_'+key)"
-                            v-model="item.add"
-                            :ref="'LIST_KEY_'+key"
-                            :required="item.required && item.value.length == 0 ? true : false"
-                            :rules="item.validator ? [fieldRules(item.add, item.validator, (item.required && item.value.length == 0 ? true : false))] : undefined"
-                            :id="'LIST_KEY_'+key"
-                            />
-                            <v-btn class="bg-primary text-white mt-3 ml-5"
-                            @click="addToArray(item.add, item, 'LIST_KEY_'+key)"
-                            :disabled="item.readonly || readonly == true"
-                            rounded
-                            icon>
-                                <v-icon>
-                                    mdi-plus
-                                </v-icon>
-                            </v-btn>
-                        </v-row>
-                        <v-list-item v-for="subItem, subItemKey in item.value" :key="subItemKey">
-                            <v-list-item-content>
-                                {{ subItem }}
-                            </v-list-item-content>
-                            <v-list-item-action>
-                                <v-btn class="bg-primary text-white ml-5"
+                    <!-- Category Body -->
+                    <v-row class="ma-0 my-2 pa-0" justify="center" v-for="(row, key) in category" :key="key">
+                        <v-col :class="'ma-0 pa-0 py-1 px-4'" cols="10" :md="getColSize(key, 'md')" :lg="getColSize(key, 'lg')" v-for="(item, key) in row" :key="key">
+                        <!-- Checkbox Settings -->
+                        <v-checkbox 
+                        v-if="item.type == 'checkbox' || item.type == 'boolean' || item.type == 'bool'"
+                        v-model="item.value"
+                        :readonly="item.readonly || readonly == true"
+                        :hint="$t(item.hint)"
+                        :persistent-hint="item.persistentHint"
+                        :label="$t('section.settings.fields.' + key)"/>
+                        <!-- List / Array of Settings -->
+                        <v-card flat outlined class="ma-0 px-6 py-2" v-else-if="item.type == 'list' || item.type == 'array'">
+                            <v-row class="ma-0 pa-0">
+                                <v-text-field :label="$t('section.settings.fields.' + key)"
+                                :readonly="item.readonly || readonly == true"
+                                :hint="$t(item.hint)"
+                                :persistent-hint="item.persistentHint"
+                                @keydown.enter="addToArray(item.add, item, 'LIST_KEY_'+key)"
+                                v-model="item.add"
+                                :ref="'LIST_KEY_'+key"
+                                :required="item.required && item.value.length == 0 ? true : false"
+                                :rules="item.validator ? [fieldRules(item.add, item.validator, (item.required && item.value.length == 0 ? true : false))] : undefined"
+                                :id="'LIST_KEY_'+key"
+                                />
+                                <v-btn class="bg-primary text-white mt-3 ml-5"
+                                @click="addToArray(item.add, item, 'LIST_KEY_'+key)"
                                 :disabled="item.readonly || readonly == true"
-                                @click="removeFromArray(subItem, item)"
-                                rounded small
+                                rounded
                                 icon>
-                                    <v-icon small>
-                                        mdi-minus
+                                    <v-icon>
+                                        mdi-plus
                                     </v-icon>
                                 </v-btn>
-                            </v-list-item-action>
-                        </v-list-item>
-                    </v-card>
-                    <!-- LDAP URI Type -->
-                    <v-card flat outlined class="ma-0 px-6 py-2" v-else-if="item.type == 'ldap_uri'">
-                        <v-row class="ma-0 pa-0">
-                            <v-col cols="3">
-                                <v-select :label="$t('section.settings.fields.LDAP_URI_PREFIX')"
-                                    ref="ldapUriPrefix"
-                                    id="ldapUriPrefix"
+                            </v-row>
+                            <v-list-item v-for="subItem, subItemKey in item.value" :key="subItemKey">
+                                <v-list-item-content>
+                                    {{ subItem }}
+                                </v-list-item-content>
+                                <v-list-item-action>
+                                    <v-btn class="bg-primary text-white ml-5"
+                                    :disabled="item.readonly || readonly == true"
+                                    @click="removeFromArray(subItem, item)"
+                                    rounded small
+                                    icon>
+                                        <v-icon small>
+                                            mdi-minus
+                                        </v-icon>
+                                    </v-btn>
+                                </v-list-item-action>
+                            </v-list-item>
+                        </v-card>
+                        <!-- LDAP URI Type -->
+                        <v-card flat outlined class="ma-0 px-6 py-2" v-else-if="item.type == 'ldap_uri'">
+                            <v-row class="ma-0 pa-0">
+                                <v-col cols="3">
+                                    <v-select :label="$t('section.settings.fields.LDAP_URI_PREFIX')"
+                                        ref="ldapUriPrefix"
+                                        id="ldapUriPrefix"
+                                        :readonly="item.readonly || readonly == true"
+                                        v-model="item.addPREFIX"
+                                        :items="[ 'ldap://','ldaps://' ]"
+                                    />
+                                </v-col>
+                                <v-col>
+                                    <v-text-field :label="$t('section.settings.fields.LDAP_URI_IP')"
                                     :readonly="item.readonly || readonly == true"
-                                    v-model="item.addPREFIX"
-                                    :items="[ 'ldap://','ldaps://' ]"
-                                />
-                            </v-col>
-                            <v-col>
-                                <v-text-field :label="$t('section.settings.fields.LDAP_URI_IP')"
-                                :readonly="item.readonly || readonly == true"
-                                @keydown.enter="addServer(item)"
-                                v-model="item.addIP"
-                                ref="ldapUriIP"
-                                :required="item.required && item.value.length == 0 ? true : false"
-                                :rules="[fieldRules(item.addIP, 'net_ip', (item.required && item.value.length == 0 || item.addPORT.length > 0 ? true : false))]"
-                                id="ldapUriIP"
-                                />
-                            </v-col>
-                            <v-col>
-                                <v-text-field :label="$t('section.settings.fields.LDAP_URI_PORT')"
-                                :readonly="item.readonly || readonly == true"
-                                :hint="$t('section.settings.fields.LDAP_URI_PORT_HINT')"
-                                persistent-hint
-                                @keydown.enter="addServer(item)"
-                                v-model="item.addPORT"
-                                ref="ldapUriPort"
-                                :required="item.required && item.value.length == 0 ? true : false"
-                                :rules="[fieldRules(item.addPORT, 'net_port', (item.required && item.value.length == 0 || item.addIP.length > 0 ? true : false))]"
-                                id="ldapUriPort"
-                                />
-                            </v-col>
-                            <v-btn class="bg-primary text-white mt-3 ml-5"
-                            @click="addServer(item)"
-                            :disabled="item.readonly || readonly == true"
-                            rounded
-                            icon>
-                                <v-icon>
-                                    mdi-plus
-                                </v-icon>
-                            </v-btn>
-                        </v-row>
-                        <v-list-item v-for="subItem, subItemKey in item.value" :key="subItemKey">
-                            <v-list-item-content>
-                                {{ subItem }}
-                            </v-list-item-content>
-                            <v-list-item-action>
-                                <v-btn class="bg-primary text-white ml-5"
-                                @click="removeFromArray(subItem, item)"
+                                    @keydown.enter="addServer(item)"
+                                    v-model="item.addIP"
+                                    ref="ldapUriIP"
+                                    :required="item.required && item.value.length == 0 ? true : false"
+                                    :rules="[fieldRules(item.addIP, 'net_ip', (item.required && item.value.length == 0 || item.addPORT.length > 0 ? true : false))]"
+                                    id="ldapUriIP"
+                                    />
+                                </v-col>
+                                <v-col>
+                                    <v-text-field :label="$t('section.settings.fields.LDAP_URI_PORT')"
+                                    :readonly="item.readonly || readonly == true"
+                                    :hint="$t('section.settings.fields.LDAP_URI_PORT_HINT')"
+                                    persistent-hint
+                                    @keydown.enter="addServer(item)"
+                                    v-model="item.addPORT"
+                                    ref="ldapUriPort"
+                                    :required="item.required && item.value.length == 0 ? true : false"
+                                    :rules="[fieldRules(item.addPORT, 'net_port', (item.required && item.value.length == 0 || item.addIP.length > 0 ? true : false))]"
+                                    id="ldapUriPort"
+                                    />
+                                </v-col>
+                                <v-btn class="bg-primary text-white mt-3 ml-5"
+                                @click="addServer(item)"
                                 :disabled="item.readonly || readonly == true"
-                                rounded small
+                                rounded
                                 icon>
-                                    <v-icon small>
-                                        mdi-minus
+                                    <v-icon>
+                                        mdi-plus
                                     </v-icon>
                                 </v-btn>
-                            </v-list-item-action>
-                        </v-list-item>
-                    </v-card>
-                    <!-- Object Type Settings -->
-                    <v-card flat outlined class="ma-0 px-6 py-2 pt-4" v-else-if="item.type == 'object'">
-                        <span class="font-weight-normal">
-                            {{ $t('section.settings.fields.' + key) }}
-                        </span>
-                        <v-row class="ma-0 pa-0">
-                            <v-text-field :label="$t('words.key')"
-                            class="px-2"
-                            :readonly="item.readonly || readonly == true"
-                            :hint="$t(item.hint)"
-                            :ref="'OBJ_KEY_'+key"
-                            :persistent-hint="item.persistentHint"
-                            @keydown.enter="addToObject(item, item.keyToAdd, item.valueToAdd)"
-                            v-model="item.keyToAdd"
-                            :required="item.required && item.value.length == 0 ? true : false"
-                            :rules="item.validator ? [fieldRules(item.keyToAdd, item.validator, getRequired(item.required, true))] : undefined"
-                            :id="'OBJ_KEY_'+key"
-                            />
-                            <v-text-field :label="$t('words.value')"
-                            class="px-2"
-                            :ref="'OBJ_VAL_'+key"
-                            :readonly="item.readonly || readonly == true"
-                            :hint="$t(item.hint)"
-                            :persistent-hint="item.persistentHint"
-                            @keydown.enter="addToObject(item, item.keyToAdd, item.valueToAdd)"
-                            v-model="item.valueToAdd"
-                            :required="item.required && item.value.length == 0 ? true : false"
-                            :rules="item.validator ? [fieldRules(item.valueToAdd, item.validator, getRequired(item.required, true, true))] : undefined"
-                            :id="'OBJ_VAL_'+key"
-                            />
-                            <v-btn class="bg-primary text-white mt-3 ml-5"
-                            :disabled="item.readonly || readonly == true"
-                            @click="addToObject(item, item.keyToAdd, item.valueToAdd)"
-                            rounded
-                            icon>
-                                <v-icon>
-                                    mdi-plus
-                                </v-icon>
-                            </v-btn>
-                        </v-row>
-                        <v-list-item v-bind="item.value" v-for="subItem, subItemKey in item.value" :key="subItemKey">
-                            <v-list-item-content class="ma-0 pa-0">
-                                <v-col class="ma-0 pa-0 px-2 py-1" cols="6">
-                                    <v-text-field outlined
-                                        :label="$t('words.key')"
-                                        :value="subItemKey" 
-                                        readonly/>
-                                </v-col>
-                                <v-col class="ma-0 pa-0 px-2 py-1" cols="6">
-                                    <v-text-field outlined
-                                        :label="$t('words.value')"
-                                        :value="subItem" 
-                                        readonly/>
-                                </v-col>
-                            </v-list-item-content>
-                            <v-list-item-action class="ma-0 pa-0">
-                                <v-btn class="bg-primary text-white ml-2 mb-7"
+                            </v-row>
+                            <v-list-item v-for="subItem, subItemKey in item.value" :key="subItemKey">
+                                <v-list-item-content>
+                                    {{ subItem }}
+                                </v-list-item-content>
+                                <v-list-item-action>
+                                    <v-btn class="bg-primary text-white ml-5"
+                                    @click="removeFromArray(subItem, item)"
+                                    :disabled="item.readonly || readonly == true"
+                                    rounded small
+                                    icon>
+                                        <v-icon small>
+                                            mdi-minus
+                                        </v-icon>
+                                    </v-btn>
+                                </v-list-item-action>
+                            </v-list-item>
+                        </v-card>
+                        <!-- Object Type Settings -->
+                        <v-card flat outlined class="ma-0 px-6 py-2 pt-4" v-else-if="item.type == 'object'">
+                            <span class="font-weight-normal">
+                                {{ $t('section.settings.fields.' + key) }}
+                            </span>
+                            <v-row class="ma-0 pa-0">
+                                <v-text-field :label="$t('words.key')"
+                                class="px-2"
+                                :readonly="item.readonly || readonly == true"
+                                :hint="$t(item.hint)"
+                                :ref="'OBJ_KEY_'+key"
+                                :persistent-hint="item.persistentHint"
+                                @keydown.enter="addToObject(item, item.keyToAdd, item.valueToAdd)"
+                                v-model="item.keyToAdd"
+                                :required="item.required && item.value.length == 0 ? true : false"
+                                :rules="item.validator ? [fieldRules(item.keyToAdd, item.validator, getRequired(item.required, true))] : undefined"
+                                :id="'OBJ_KEY_'+key"
+                                />
+                                <v-text-field :label="$t('words.value')"
+                                class="px-2"
+                                :ref="'OBJ_VAL_'+key"
+                                :readonly="item.readonly || readonly == true"
+                                :hint="$t(item.hint)"
+                                :persistent-hint="item.persistentHint"
+                                @keydown.enter="addToObject(item, item.keyToAdd, item.valueToAdd)"
+                                v-model="item.valueToAdd"
+                                :required="item.required && item.value.length == 0 ? true : false"
+                                :rules="item.validator ? [fieldRules(item.valueToAdd, item.validator, getRequired(item.required, true, true))] : undefined"
+                                :id="'OBJ_VAL_'+key"
+                                />
+                                <v-btn class="bg-primary text-white mt-3 ml-5"
                                 :disabled="item.readonly || readonly == true"
-                                @click="removeFromObject(item, subItemKey)"
-                                rounded small
+                                @click="addToObject(item, item.keyToAdd, item.valueToAdd)"
+                                rounded
                                 icon>
-                                    <v-icon small>
-                                        mdi-minus
+                                    <v-icon>
+                                        mdi-plus
                                     </v-icon>
                                 </v-btn>
-                            </v-list-item-action>
-                        </v-list-item>
-                    </v-card>
-                    <!-- Select Settings -->
-                    <v-select :label="$t('section.settings.fields.' + key)"
-                    v-else-if="item.type == 'select'"
-                    :readonly="item.readonly || readonly == true"
-                    v-model="item.value"
-                    :hint="$t(item.hint)"
-                    :persistent-hint="item.persistentHint"
-                    :id="key"
-                    :items="item.choices"
-                    />
-                    <!-- Password Settings -->
-                    <v-text-field v-else-if="item.type == 'password'"
-                    :type="item.hidden ? 'password' : 'text'"
-                    :readonly="item.readonly || readonly == true"
-                    required
-                    :append-icon="readonly == true ? undefined : (item.hidden ? 'mdi-eye' : 'mdi-eye-off')"
-                    @click:append="() => (item.hidden = !item.hidden)"
-                    dense
-                    :label="$t('ldap.attributes.password')"
-                    v-model="item.value"
-                    :rules="[fieldRules(item.value, 'ge_password', getRequired(item.required))]"
-                    />
-                    <!-- Text Field Settings -->
-                    <v-text-field :label="$t('section.settings.fields.' + key)"
-                    v-else
-                    :readonly="item.readonly || readonly == true"
-                    :hint="$t(item.hint)"
-                    :rules="item.validator ? [fieldRules(item.value, item.validator, item.required)] : undefined"
-                    :persistent-hint="item.persistentHint"
-                    v-model="item.value"
-                    :id="key"
-                    />
-                    </v-col>
+                            </v-row>
+                            <v-list-item v-bind="item.value" v-for="subItem, subItemKey in item.value" :key="subItemKey">
+                                <v-list-item-content class="ma-0 pa-0">
+                                    <v-col class="ma-0 pa-0 px-2 py-1" cols="6">
+                                        <v-text-field outlined
+                                            :label="$t('words.key')"
+                                            :value="subItemKey" 
+                                            readonly/>
+                                    </v-col>
+                                    <v-col class="ma-0 pa-0 px-2 py-1" cols="6">
+                                        <v-text-field outlined
+                                            :label="$t('words.value')"
+                                            :value="subItem" 
+                                            readonly/>
+                                    </v-col>
+                                </v-list-item-content>
+                                <v-list-item-action class="ma-0 pa-0">
+                                    <v-btn class="bg-primary text-white ml-2 mb-7"
+                                    :disabled="item.readonly || readonly == true"
+                                    @click="removeFromObject(item, subItemKey)"
+                                    rounded small
+                                    icon>
+                                        <v-icon small>
+                                            mdi-minus
+                                        </v-icon>
+                                    </v-btn>
+                                </v-list-item-action>
+                            </v-list-item>
+                        </v-card>
+                        <!-- Select Settings -->
+                        <v-select :label="$t('section.settings.fields.' + key)"
+                        v-else-if="item.type == 'select'"
+                        :readonly="item.readonly || readonly == true"
+                        v-model="item.value"
+                        :hint="$t(item.hint)"
+                        :persistent-hint="item.persistentHint"
+                        :id="key"
+                        :items="item.choices"
+                        />
+                        <!-- Password Settings -->
+                        <v-text-field v-else-if="item.type == 'password'"
+                        :type="item.hidden ? 'password' : 'text'"
+                        :readonly="item.readonly || readonly == true"
+                        required
+                        :append-icon="readonly == true ? undefined : (item.hidden ? 'mdi-eye' : 'mdi-eye-off')"
+                        @click:append="() => (item.hidden = !item.hidden)"
+                        dense
+                        :label="$t('ldap.attributes.password')"
+                        v-model="item.value"
+                        :rules="[fieldRules(item.value, 'ge_password', getRequired(item.required))]"
+                        />
+                        <!-- Text Field Settings -->
+                        <v-text-field :label="$t('section.settings.fields.' + key)"
+                        v-else
+                        :readonly="item.readonly || readonly == true"
+                        :hint="$t(item.hint)"
+                        :rules="item.validator ? [fieldRules(item.value, item.validator, item.required)] : undefined"
+                        :persistent-hint="item.persistentHint"
+                        v-model="item.value"
+                        :id="key"
+                        />
+                        </v-col>
+                    </v-row>
+                </v-col>
                 </v-row>
-            </v-col>
-        </v-row>
-        </v-form>
-        </v-expand-transition>
+                </v-form>
+            </div>
+        </v-slide-y-transition>
 
         <v-dialog v-model="resetDialog" max-width="650px">
             <SettingsResetDialog
@@ -354,6 +354,35 @@ export default {
             defaultAdminPwd: "",
             defaultAdminPwdConfirm: "",
             config: {
+                log: {
+                    row1:{
+                        // Log parameters
+                        LDAP_LOG_CREATE: {
+                            value: false,
+                            type: "boolean",
+                        },
+                        LDAP_LOG_READ: {
+                            value: false,
+                            type: "boolean",
+                        },
+                        LDAP_LOG_UPDATE: {
+                            value: false,
+                            type: "boolean",
+                        },
+                        LDAP_LOG_DELETE: {
+                            value: false,
+                            type: "boolean",
+                        },
+                        LDAP_LOG_OPEN_CONNECTION: {
+                            value: false,
+                            type: "boolean",
+                        },
+                        LDAP_LOG_CLOSE_CONNECTION: {
+                            value: false,
+                            type: "boolean",
+                        },
+                    }
+                },
                 domain: {
                     row1:{
                         // Domain Parameters
@@ -537,17 +566,31 @@ export default {
                         this.testing = false
                         this.testFinished = true
                         this.testError = false
+                        this.resetSnackbar()
+                        this.createSnackbar('green', (this.$t("section.settings.testSuccess")).toUpperCase())
                     }, 500)
                 })
                 .catch(error => {
                     console.log(error)
+                    this.resetSnackbar()
+                    var errorResponseData = error.response.data
+                    var errorMsg
+                    var code = errorResponseData.code
+                    switch (code) {
+                        case 'ldap_port_err':
+                            errorMsg = this.$t("error.settings.serverUnreachable") + " (" + errorResponseData.ipAddress + ":" + errorResponseData.port + ")"
+                            break;
+                        default:
+                            errorMsg = this.$t("error.settings.testInvalid")
+                            break;
+                    }
+                    this.createSnackbar('red', errorMsg.toUpperCase())
                     setTimeout(() => {
                         this.testing = false
                         this.testFinished = true
                         this.testError = true
                     }, 500)
                 })
-                this.refreshSettings()
             }
         },
         async saveSettings(){
@@ -563,11 +606,25 @@ export default {
                 dataToSend = this.getConfigValues()
                 dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
                 dataToSend['DEFAULT_ADMIN_PWD'] = this.defaultAdminPwd
-                await new Settings({}).save(dataToSend)
+                await new Settings({}).save(dataToSend).then(() => {
+                    this.resetSnackbar()
+                    this.createSnackbar('green', (this.$t("classes.setting.plural") + " " + this.$t("words.saved.plural.m")).toUpperCase())
+                })
+                .catch(error => {
+                    console.log(error)
+                    this.resetSnackbar()
+                    this.createSnackbar('red', this.$t("error.codes.badRequest").toUpperCase())
+                })
                 this.refreshSettings
             }
         },
-        async refreshSettings(){
+        async clearLogs(){
+
+        },
+        async pruneLogs(){
+
+        },
+        validateSettings(){
             if (this.$refs.settingsForm != undefined)
                 if (this.$refs.settingsForm.validate('settingsForm'))
                     this.invalid = false
@@ -580,6 +637,9 @@ export default {
                 this.testFinished = false
                 this.testError = false
             }
+        },
+        async refreshSettings(){
+            this.invalid = false
             await new Settings({}).list()
             .then(response => {
                 var settings = response.data.settings
@@ -604,6 +664,8 @@ export default {
                     }
                 }
                 this.loading = false
+                this.resetSnackbar()
+                this.createSnackbar('green', (this.$t("classes.setting.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase())
                 setTimeout(()=>{
                     this.showSettings = true
                     this.readonly = false
@@ -613,6 +675,8 @@ export default {
             .catch(error => {
                 console.log(error)
                 this.loading = false
+                this.resetSnackbar()
+                this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase())
                 setTimeout(()=>{
                     this.showSettings = false
                 }, 250)
@@ -701,7 +765,13 @@ export default {
                 });
             }
             return object.value
-        }
+        },
+        resetSnackbar(){
+            this.$emit('resetSnackbar')
+        },
+        createSnackbar(color, string){
+            this.$emit('createSnackbar', color, string)
+        },
     }
 }
 </script>
