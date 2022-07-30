@@ -99,10 +99,10 @@
                     </v-row>
 
                     <!-- Category Body -->
-                    <v-row class="ma-0 my-2 pa-0" justify="center" v-for="(row, key) in category" :key="key">
-                        <v-col :class="'ma-0 pa-0 py-1 px-4'" cols="10" :md="getColSize(key, 'md')" :lg="getColSize(key, 'lg')" v-for="(item, key) in row" :key="key">
+                    <v-row class="ma-1 pa-1" align="center" justify="center" v-for="(row, key) in category" :key="key">
+                        <v-col :class="'ma-0 pa-0 py-0 px-4'" cols="10" :md="getColSize(key, 'md')" :lg="getColSize(key, 'lg')" v-for="(item, key) in row" :key="key">
                         <!-- Checkbox Settings -->
-                        <v-checkbox 
+                        <v-checkbox :class="'pa-0 ma-0 ' + (key == 'LDAP_AUTH_USE_TLS' ? 'mt-4' : '')"
                         v-if="item.type == 'checkbox' || item.type == 'boolean' || item.type == 'bool'"
                         v-model="item.value"
                         :readonly="item.readonly || readonly == true"
@@ -474,13 +474,15 @@ export default {
                         },
                         LDAP_AUTH_OBJECT_CLASS:{ 
                             value: "",
-                        },
+                        }
+                    },
+                    row2:{
                         EXCLUDE_COMPUTER_ACCOUNTS:{ 
                             value: "",
                             type: "boolean"
-                        },
+                        }
                     },
-                    row2:{
+                    row3:{
                         LDAP_AUTH_USER_FIELDS:{ 
                             value: {},
                             keyToAdd: "",
@@ -528,6 +530,17 @@ export default {
             return currentPath['value']
         },
         getColSize(key, breakpoint){
+            // REGEX Switch
+            switch (true) {
+                case /LDAP_LOG_[A-Z]{0,}/.test(key):
+                    if (this.$vuetify.breakpoint.mdAndUp)
+                        return 8
+                    else
+                        return 10
+                default:
+                    break;
+            }
+            // STRING Switch
             switch (key) {
                 case 'LDAP_AUTH_URL':
                     if (breakpoint == 'md')
