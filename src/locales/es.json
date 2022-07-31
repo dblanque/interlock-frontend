@@ -299,7 +299,7 @@
       "headers":{
         "date":"Fecha de Evento",
         "user":"Usuario Responsable",
-        "affectedObject":"Objeto Afectado",
+        "affectedObject":"Objeto(s) Afectado(s)",
         "actionType":"Tipo de Acción",
         "objectClass":"Clase del Objeto",
         "extraMessage":"Detalles Extra",

@@ -100,6 +100,17 @@
             </span>
         </v-row>
     </template>
+
+    <template v-slot:[`item.affectedObject`]="{ item }">
+      <span v-if="Array.isArray(item.affectedObject)">
+        <v-chip class="mx-1" outlined v-for="i, k in item.affectedObject" :key="k">
+          {{ typeof i === 'object' ? i.name : i }}
+        </v-chip>
+      </span>
+      <v-chip class="mx-1" outlined v-else>
+        {{ item.affectedObject }}
+      </v-chip>
+    </template>
   </v-data-table>
 
   <v-dialog v-model="resetDialog" max-width="650px">

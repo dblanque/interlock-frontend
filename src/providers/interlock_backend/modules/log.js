@@ -11,6 +11,7 @@ const actions = {
             })
         })
     },
+
     reset: ()=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.log.reset).then(response => {
@@ -20,6 +21,7 @@ const actions = {
             })
         })
     },
+
     truncate: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.log.truncate, data).then(response => {

@@ -301,7 +301,7 @@
       "headers":{
         "date":"Log Date",
         "user":"Responsible User",
-        "affectedObject":"Affected Object",
+        "affectedObject":"Affected Object(s)",
         "actionType":"Action Type",
         "objectClass":"Object Class",
         "extraMessage":"Extra Details",
