@@ -107,7 +107,7 @@
           {{ typeof i === 'object' ? i.name : i }}
         </v-chip>
       </span>
-      <v-chip class="mx-1" outlined v-else>
+      <v-chip class="mx-1" outlined v-else-if="item.affectedObject">
         {{ item.affectedObject }}
       </v-chip>
     </template>
@@ -206,7 +206,7 @@ export default {
             case 'DELETE':
                 return ['secondary','white']
             default:
-                return ['white','black']
+                return ['secondary','white']
         }
     },
     getIconForObjectClass(objectClass){
