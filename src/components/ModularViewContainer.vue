@@ -57,8 +57,20 @@
   <!-- Settings -->
   <v-container v-if="viewTitle == 'settings'">
     <SettingsCard
+      :viewTitle="viewTitle"
       class="my-2 mb-4"
-      ref="SettingsCardRef"
+      ref="SettingsView"
+      @createSnackbar="createSnackbar"
+      @resetSnackbar="resetSnackbar"
+    />
+  </v-container>
+
+  <!-- Logs -->
+  <v-container v-if="viewTitle == 'logs'">
+    <LogView
+      :viewTitle="viewTitle"
+      class="my-2 mb-4"
+      ref="LogView"
       @createSnackbar="createSnackbar"
       @resetSnackbar="resetSnackbar"
     />
@@ -94,6 +106,7 @@ import UserView from '@/components/User/UserView.vue'
 import GroupView from '@/components/Group/GroupView.vue'
 import DirtreeView from '@/components/Dirtree/DirtreeView.vue'
 import SettingsCard from '@/components/Settings/SettingsCard.vue'
+import LogView from '@/components/Logging/LogView.vue'
 
   export default {
     name: 'ModularViewContainer',
@@ -101,7 +114,8 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
     UserView,
     GroupView,
     DirtreeView,
-    SettingsCard
+    SettingsCard,
+    LogView
     },
     props: {
       viewTitle: String,
@@ -146,6 +160,9 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
             case 'groups':
               this.$refs.GroupView.reloadDataTableHeaders()
               break;
+            case 'logs':
+              this.$refs.LogView.reloadDataTableHeaders()
+              break;
             default:
               break;
           }
@@ -154,22 +171,33 @@ import SettingsCard from '@/components/Settings/SettingsCard.vue'
       requestRefresh: {
         handler: function (newValue) {
           switch (newValue) {
-            case 'users':
-              if (this.$refs.UserView != undefined) {
-                console.log("Requested refresh for component "+ newValue)
-                this.$refs.UserView.listUserItems()
-              }
-              break;
             case 'home':
               if (this.$refs.DirtreeView != undefined) {
                 console.log("Requested refresh for view component "+ newValue)
                 this.$refs.DirtreeView.resetDirtree()
               }
               break;
+            case 'users':
+              if (this.$refs.UserView != undefined) {
+                console.log("Requested refresh for component "+ newValue)
+                this.$refs.UserView.listUserItems()
+              }
+              break;
             case 'groups':
               if (this.$refs.GroupView != undefined) {
                 console.log("Requested refresh for component "+ newValue)
                 this.$refs.GroupView.listGroupItems()
+              }
+              break;
+            case 'settings':
+              if (this.$refs.SettingsView != undefined) {
+                console.log("Requested refresh for component "+ newValue)
+                this.$refs.SettingsView.refreshSettings()
+              }
+              break;
+            case 'logs':
+              if (this.$refs.LogsView != undefined) {
+                console.log("Requested refresh for component "+ newValue)
               }
               break;
             default:

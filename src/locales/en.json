@@ -10,6 +10,7 @@
     "gpo_short":"GPO",
     "server":"Server",
     "settings": "Settings",
+    "logs":"Event Logs",
     "header": {
       "home":"Full Directory Tree",
       "users":"Users",
@@ -17,7 +18,8 @@
       "dns":"Domain Name Server",
       "gpo":"Group Policy Objects",
       "server":"Server Management",
-      "settings": "Settings"
+      "settings": "Settings",
+      "logs":"Event Logs"
     }
   },
   "actions":{
@@ -166,6 +168,10 @@
     "setting":{
       "single":"Setting",
       "plural":"Settings"
+    },
+    "ldap":{
+      "single":"LDAP Object",
+      "plural":"LDAP Objects"
     }
   },
   "error":{
@@ -274,6 +280,27 @@
       "tryAgain": "You may now try again",
       "oneRetryLeft": "retry left",
       "retriesLeft": "retries left"
+    },
+    "logs":{
+      "headers":{
+        "date":"Log Date",
+        "user":"Responsible User",
+        "affectedObject":"Affected Object",
+        "actionType":"Action Type",
+        "objectClass":"Object Class",
+        "extraMessage":"Extra Details",
+        "id":"Log ID"
+      },
+      "actionType":{
+        "CREATE":"Create",
+        "READ":"Read",
+        "UPDATE":"Update",
+        "DELETE":"Delete",
+        "LOGIN":"Login",
+        "LOGOUT":"Logout",
+        "OPEN":"Opened LDAP Connection",
+        "CLOSE":"Closed LDAP Connection"
+      }
     },
     "enduser":{
       "title":"Welcome",
@@ -384,6 +411,7 @@
         "filters":"Filters"
       },
       "fields":{
+        "LDAP_LOG_MAX":"Maximum Logs in Rotation",
         "LDAP_LOG_READ":"Log READ Events",
         "LDAP_LOG_CREATE":"Log CREATE Events",
         "LDAP_LOG_UPDATE":"Log UPDATE Events",

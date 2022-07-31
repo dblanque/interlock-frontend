@@ -239,11 +239,10 @@ export default {
     },
     props: {
         viewTitle: String,
-        snackbarTimeout: Number,
-        requestRefresh: Boolean
+        snackbarTimeout: Number
     },
-    created () {
-        this.fetchDirtree();
+    created() {
+      this.fetchDirtree();
     },
     methods: {
         openDialog(key, item){

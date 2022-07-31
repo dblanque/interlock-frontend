@@ -10,6 +10,7 @@
     "gpo_short": "GPO",
     "server": "Servidor",
     "settings": "Configuración",
+    "logs":"Registro de Eventos",
     "header": {
       "home":"Árbol de Directorio",
       "users":"Usuarios",
@@ -17,7 +18,8 @@
       "dns":"Servidor de Nombre de Dominio",
       "gpo":"Objetos de Política de Grupo",
       "server":"Administración de Servidor",
-      "settings": "Configuración"
+      "settings": "Configuración",
+      "logs":"Registro de Eventos"
     }
   },
   "actions": {
@@ -172,6 +174,10 @@
     "setting":{
       "single":"Parámetro",
       "plural":"Parámetros"
+    },
+    "ldap":{
+      "single":"Objeto LDAP",
+      "plural":"Objetos LDAP"
     }
   },
   "error": {
@@ -281,6 +287,27 @@
       "oneRetryLeft": "intento restante",
       "retriesLeft": "intentos restantes"
     },
+    "logs":{
+      "headers":{
+        "date":"Fecha de Evento",
+        "user":"Usuario Responsable",
+        "affectedObject":"Objeto Afectado",
+        "actionType":"Tipo de Acción",
+        "objectClass":"Clase del Objeto",
+        "extraMessage":"Detalles Extra",
+        "id":"ID de Evento"
+      },
+      "actionType":{
+        "CREATE":"Creación",
+        "READ":"Lectura",
+        "UPDATE":"Modificación",
+        "DELETE":"Baja",
+        "LOGIN":"Inicio de Sesión",
+        "LOGOUT":"Cierre de Sesión",
+        "OPEN":"Apertura de Conexión",
+        "CLOSE":"Cierre de Conexión"
+      }
+    },
     "enduser":{
       "title":"Bienvenido",
       "helpMessage":"Debajo puede modificar su contraseña y detalles de usuario de Active Directory / LDAP"
@@ -388,6 +415,7 @@
         "filters":"Filtros"
       },
       "fields":{
+        "LDAP_LOG_MAX":"Cantidad Máxima de Eventos Registrados",
         "LDAP_LOG_READ":"Registrar Eventos de LECTURA",
         "LDAP_LOG_CREATE":"Registrar Eventos de ALTA",
         "LDAP_LOG_UPDATE":"Registrar Eventos de MODIFICACIÓN",

@@ -261,20 +261,12 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.listUserItems();
   },
   props: {
     viewTitle: String,
-    snackbarTimeout: Number,
-    requestRefresh: Boolean
-  },
-  watch: {
-    // Watch for parent components requesting a Refresh
-    requestRefresh(newValue) {
-      if (newValue == true)
-        this.listUserItems
-    },
+    snackbarTimeout: Number
   },
   methods: {
     openDialog(key){

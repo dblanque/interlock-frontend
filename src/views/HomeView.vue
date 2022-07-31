@@ -310,6 +310,13 @@ export default {
           icon: "mdi-cog",
           route: "settings",
         },
+        {
+          index: 6,
+          title: "logs",
+          enabled: true,
+          icon: "mdi-flag-outline",
+          route: "logs",
+        },
       ],
     };
   },
@@ -349,7 +356,7 @@ export default {
 
     this.setupTimers();
   },
-  mounted: function () {
+  mounted() {
     var currentPath = this.$route.path;
     if (currentPath && currentPath.length > 0) {
       this.navTabs.forEach((item) => {
@@ -364,6 +371,7 @@ export default {
     }, 250);
     this.active_tab = this.selectedTab;
     this.selectedTabTitle = this.navTabs[this.selectedTab].title;
+    this.requestRefresh = this.selectedTabTitle
     this.loadDomainData();
   },
   computed: {

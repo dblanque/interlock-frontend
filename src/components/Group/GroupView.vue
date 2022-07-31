@@ -222,22 +222,12 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.listGroupItems();
   },
   props: {
     viewTitle: String,
     snackbarTimeout: Number,
-    requestRefresh: Boolean
-  },
-  watch: {
-    // Watch for parent components requesting a Refresh
-    requestRefresh(newValue) {
-      if (newValue == false){
-        console.log("Refresh")
-        this.listGroupItems()
-      }
-    },
   },
   methods: {
     openDialog(key){

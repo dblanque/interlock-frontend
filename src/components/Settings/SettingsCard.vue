@@ -357,6 +357,10 @@ export default {
                 log: {
                     row1:{
                         // Log parameters
+                        LDAP_LOG_MAX: {
+                            value: 0,
+                            type: "integer",
+                        },
                         LDAP_LOG_CREATE: {
                             value: false,
                             type: "boolean",
@@ -500,6 +504,9 @@ export default {
                 }
             }
         }
+    },
+    props: {
+        viewTitle: String
     },
     computed: {
         getLoadingStatus(){

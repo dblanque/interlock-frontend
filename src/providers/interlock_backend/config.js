@@ -50,6 +50,10 @@ const urls = {
         insert: 'api/groups/insert/',
         delete: 'api/groups/delete/',
     },
+    log: {
+        base: 'api/logs/',
+        list: 'api/logs/'
+    },
     domain: {
         base: "api/domain/",
         details: "api/domain/details/"
