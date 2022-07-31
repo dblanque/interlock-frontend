@@ -52,7 +52,9 @@ const urls = {
     },
     log: {
         base: 'api/logs/',
-        list: 'api/logs/'
+        list: 'api/logs/',
+        reset: 'api/logs/reset/',
+        truncate: 'api/logs/truncate/'
     },
     domain: {
         base: "api/domain/",

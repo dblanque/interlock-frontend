@@ -12,12 +12,15 @@
     <!-- Table Header -->
     <template v-slot:top>
       <v-row align="center" class="px-2 mx-1 py-0 my-0">
+        <v-col class="ma-0 pa-0">
         <v-text-field
           v-model="searchString"
           clearable
           :label="$t('actions.search')"
           class="mx-2"
         ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4" lg="3" xl="2" class="ma-0 pa-0">
         <v-btn 
           class="mx-2 bg-primary" 
           color="white" 
@@ -35,6 +38,49 @@
             </span>
           </template>
         </v-btn>
+        <v-btn class="pa-2 mx-2" :disabled="loading" color="primary" @click="openResetLogsDialog()">
+          <v-icon class="ma-0 pa-0 mr-1">mdi-fire</v-icon>
+          {{ $t('actions.delete') + ' ' + $t('classes.log.plural') }}
+        </v-btn>
+        </v-col>
+      </v-row>
+      <!-- Log Truncate Actions -->
+      <v-row class="ma-0 pa-0 px-4 mt-4" justify="center" align="center">
+        <v-col cols="12" lg="6" class="ma-0 pa-0">
+          <v-range-slider v-model="logTruncateRange"
+          :label="$t('section.logs.viewAction.truncate.slider')"
+          class="mx-4"
+          :min="getLogTruncateMin"
+          :max="getLogTruncateMax"
+          />
+        </v-col>
+        <v-col cols="10" lg="3" class="ma-0 pa-0">
+          <v-row class="ma-0 pa-0">
+            <v-col class="ma-0 pa-0" cols="6">
+            <v-text-field class="mx-4"
+            :label="$t('section.logs.viewAction.truncate.min')"
+            v-model="logTruncateRange[0]">
+            </v-text-field>
+            </v-col>
+            <v-col class="ma-0 pa-0" cols="6">
+            <v-text-field class="mx-4"
+            :label="$t('section.logs.viewAction.truncate.max')"
+            v-model="logTruncateRange[1]">
+            </v-text-field>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="12" lg="2" xl="1" class="ma-0 my-4 pa-0">
+          <v-btn @click="openTruncateLogsDialog"
+          outlined 
+          class="mx-4 pa-0 px-2" 
+          color="primary">
+            <v-icon class="mr-2">
+              mdi-content-cut
+            </v-icon>
+            {{ $t('section.logs.viewAction.truncate.button') }}
+          </v-btn>
+        </v-col>
       </v-row>
     </template>
 
@@ -56,19 +102,32 @@
     </template>
   </v-data-table>
 
+  <v-dialog v-model="resetDialog" max-width="650px">
+      <LogResetDialog
+      :logAction="logAction"
+      @resetConfirm="resetLogs"
+      @truncateConfirm="truncateLogs"
+      @closeDialog="resetDialog = false"
+      />
+  </v-dialog>
 </div>
 </template>
 
 <script>
 import Log from '@/include/Log';
+import LogResetDialog from '@/components/Logging/LogResetDialog.vue'
 
 export default {
   components: {
+    LogResetDialog
   },
   data() {
     return {
+      logTruncateRange: [0, 0],
+      logAction: "",
       readonly: false,
       fetchingData: false,
+      resetDialog: false,
       tableData: {
         headers: [],
         items: []
@@ -81,6 +140,20 @@ export default {
       dialogs: {
         logDelete: false
       }
+    }
+  },
+  computed: {
+    getLogTruncateMin(){
+      var ids = this.tableData.items.map(log => {
+        return log.id;
+      });
+      return ids[0]
+    },
+    getLogTruncateMax(){
+      var ids = this.tableData.items.map(log => {
+        return log.id;
+      });
+      return ids[ids.length - 1]
     }
   },
   mounted() {
@@ -188,7 +261,6 @@ export default {
       .then(response => {
         var logHeaders = response.headers
         var logs = response.logs
-        console.log(logs)
         // Reset Headers Array every time you list to avoid infinite header multiplication
         this.resetDataTable()
         var headerDict = {}
@@ -214,6 +286,7 @@ export default {
         this.resetSnackbar();
         this.createSnackbar('green', (this.$t("classes.log.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase() )
         setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+        this.logTruncateRange = [ this.getLogTruncateMin, this.getLogTruncateMax ]
       })
       .catch(error => {
         console.log(error)
@@ -240,8 +313,43 @@ export default {
       });
       return items;
     },
-    openDeleteDialog() {
+    openResetLogsDialog(){
+      this.resetDialog = true
+      this.logAction = 'reset'
     },
+    openTruncateLogsDialog(){
+      this.resetDialog = true
+      this.logAction = 'truncate'
+    },
+    async resetLogs(){
+      await new Log({}).reset()
+      .then(() => {
+        this.resetDialog = false
+        this.logAction = ""
+        this.listLogs()
+      })
+      .catch(error => {
+        console.log(error)
+        this.resetDialog = false
+        this.logAction = ""
+      })
+    },
+    async truncateLogs() {
+      var data = {}
+      data['min'] = this.logTruncateRange[0]
+      data['max'] = this.logTruncateRange[1]
+      await new Log({}).truncate(data)
+      .then(() => {
+        this.resetDialog = false
+        this.logAction = ""
+        this.listLogs()
+      })
+      .catch(error => {
+        console.log(error)
+        this.resetDialog = false
+        this.logAction = ""
+      })
+    }
   },
 }
 </script>

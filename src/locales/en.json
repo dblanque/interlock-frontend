@@ -137,6 +137,14 @@
       }
   },
   "classes":{
+    "log":{
+      "single":"Log",
+      "plural":"Logs"
+    },
+    "connection":{
+      "single":"Connection",
+      "plural":"Connections"
+    },
     "user":{
       "single":"User",
       "plural":"Users"
@@ -282,6 +290,14 @@
       "retriesLeft": "retries left"
     },
     "logs":{
+      "resetDialog":{
+        "header":"Delete Event Logs",
+        "message":"Are you sure you wish to delete <b>all</b> the stored event logs?"
+      },
+      "truncateDialog":{
+        "header":"Truncate Event Logs",
+        "message":"Are you sure you wish to truncate the stored event logs?"
+      },
       "headers":{
         "date":"Log Date",
         "user":"Responsible User",
@@ -290,6 +306,14 @@
         "objectClass":"Object Class",
         "extraMessage":"Extra Details",
         "id":"Log ID"
+      },
+      "viewAction":{
+        "truncate":{
+          "slider":"Range to Truncate",
+          "button":"Truncate Logs",
+          "max":"Max",
+          "min":"Min"
+        }
       },
       "actionType":{
         "CREATE":"Create",

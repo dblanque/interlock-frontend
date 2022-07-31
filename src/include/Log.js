@@ -24,6 +24,12 @@ class Log extends ApiModel{
     async list(){
         return await interlock_backend.call('log/list')
     }
+    async reset(){
+        return await interlock_backend.call('log/reset')
+    }
+    async truncate(data){
+        return await interlock_backend.call('log/truncate', data)
+    }
 }
 
 export default Log

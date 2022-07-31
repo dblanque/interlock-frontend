@@ -143,6 +143,14 @@
     }
   },
   "classes":{
+    "log":{
+      "single":"Evento",
+      "plural":"Eventos"
+    },
+    "connection":{
+      "single":"Conexión",
+      "plural":"Conexiones"
+    },
     "user":{
       "single":"Usuario",
       "plural":"Usuarios"
@@ -296,6 +304,22 @@
         "objectClass":"Clase del Objeto",
         "extraMessage":"Detalles Extra",
         "id":"ID de Evento"
+      },
+      "resetDialog":{
+        "header":"Borrar Registros de Eventos",
+        "message":"¿Está seguro de borrar <b>todos</b> los registros de evento?"
+      },
+      "truncateDialog":{
+        "header":"Truncar Registros de Eventos",
+        "message":"¿Está seguro de truncar los registros de evento?"
+      },
+      "viewAction":{
+        "truncate":{
+          "slider":"Rango a Truncar",
+          "button":"Truncar Registros",
+          "max":"Máx",
+          "min":"Mín"
+        }
       },
       "actionType":{
         "CREATE":"Creación",

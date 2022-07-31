@@ -196,8 +196,9 @@ import LogView from '@/components/Logging/LogView.vue'
               }
               break;
             case 'logs':
-              if (this.$refs.LogsView != undefined) {
+              if (this.$refs.LogView != undefined) {
                 console.log("Requested refresh for component "+ newValue)
+                this.$refs.LogView.listLogs()
               }
               break;
             default:

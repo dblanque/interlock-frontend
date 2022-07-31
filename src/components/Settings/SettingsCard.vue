@@ -359,6 +359,7 @@ export default {
                         // Log parameters
                         LDAP_LOG_MAX: {
                             value: 0,
+                            validator: 'ge_integer',
                             type: "integer",
                         },
                         LDAP_LOG_CREATE: {

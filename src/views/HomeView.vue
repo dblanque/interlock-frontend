@@ -139,9 +139,8 @@
         <v-btn
           text
           color="primary"
-          @click="updateSelectedTab(active_tab - 1)"
-          :disabled="active_tab == 0 || !navTabs[active_tab - 1].enabled"
-        >
+          @click="goToPrevTab"
+          :disabled="active_tab == 0">
           <v-icon> mdi-chevron-double-left </v-icon>
           <span>
             {{ $t("actions.back_short") }}
@@ -150,13 +149,8 @@
         <span>
           <span
             v-if="navTabs[active_tab].enableShortName == true"
-            class="font-weight-medium clr-primary"
-          >
-            {{
-              $t(
-                "category." + navTabs[active_tab].title + "_short"
-              ).toUpperCase()
-            }}
+            class="font-weight-medium clr-primary">
+            {{ $t("category." + navTabs[active_tab].title + "_short").toUpperCase() }}
           </span>
           <span class="font-weight-medium clr-primary">
             {{ $t("category." + navTabs[active_tab].title).toUpperCase() }}
@@ -165,8 +159,8 @@
         <v-btn
           text
           color="primary"
-          @click="updateSelectedTab(active_tab + 1)"
-          :disabled="active_tab == navTabs.length - 1 || !navTabs[active_tab + 1].enabled">
+          @click="goToNextTab"
+          :disabled="active_tab == navTabs.length - 1">
           <span>
             {{ $t("actions.next") }}
           </span>
@@ -391,6 +385,26 @@ export default {
     ////////////////////////////////////////////////////////////////////////////
     // General Component Methods
     ////////////////////////////////////////////////////////////////////////////
+    goToPrevTab(){
+      var counter = this.selectedTab - 1
+      this.navTabs.forEach(() => {
+        if (this.navTabs[counter].enabled)
+          return this.updateSelectedTab(counter)
+        else {
+          counter -= 1
+        }
+      });
+    },
+    goToNextTab(){
+      var counter = this.selectedTab + 1
+      this.navTabs.forEach(() => {
+        if (this.navTabs[counter].enabled)
+          return this.updateSelectedTab(counter)
+        else {
+          counter += 1
+        }
+      });
+    },
     async goToUser(user) {
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
