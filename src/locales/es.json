@@ -242,6 +242,8 @@
   },
   "ldap":{
     "attributes":{
+      "objectRid":"Identificador Relativo del Objeto (RID)",
+      "objectSid":"Identificador de Seguridad del Objeto (SID)",
       "hasMembers":"Tiene Miembros",
       "sAMAccountName":"Nombre de Cuenta",
       "username":"Nombre de Usuario",

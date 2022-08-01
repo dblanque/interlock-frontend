@@ -59,7 +59,7 @@
                             dense
                             id="objectRid"
                             :label="$t('ldap.attributes.objectRid')"
-                            :readonly="editFlag != true"
+                            readonly
                             v-model="groupcopy.objectRid"
                             ></v-text-field>
                         </v-col>
@@ -68,7 +68,7 @@
                             dense
                             id="objectSid"
                             :label="$t('ldap.attributes.objectSid')"
-                            :readonly="editFlag != true"
+                            readonly
                             v-model="groupcopy.objectSid"
                             ></v-text-field>
                         </v-col>
