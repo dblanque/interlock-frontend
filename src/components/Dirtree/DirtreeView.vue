@@ -268,13 +268,22 @@ export default {
     created() {
       this.fetchDirtree();
     },
+    watch: {
+      'dialogs': {
+          handler: function (newValue) {
+            if (!newValue['dirtreeMove'] || newValue['dirtreeMove'] == false)
+              this.$refs.DirtreeMove.clearList(this.selectedObject.dn);
+          },
+          deep: true
+      }
+    },
     methods: {
         openDialog(key, item){
             this.dialogs[key] = true;
             switch (key) {
                 case 'dirtreeMove':
                     this.selectedObject = item
-                    this.$refs.DirtreeMove.resetDialog();
+                    this.$refs.DirtreeMove.resetDialog(this.selectedObject.dn);
                 break;
                 default:
                 break;

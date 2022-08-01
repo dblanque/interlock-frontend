@@ -55,14 +55,22 @@ export default {
         showLoadingBar: {
             type: Boolean,
             default: true
-        },  
+        },
+        fetchOnCreated: {
+            type: Boolean,
+            default: true
+        }
     },
     created () {
-        this.fetchOUs();
+        if (this.fetchOnCreated)
+            this.fetchOUs()
     },
     methods: {
         emitDestination(){
             this.$emit('selectedDestination', this.objectDestination)
+        },
+        clearList(){
+            this.ouList = []
         },
         updateObjectDestination(itemID){
             if (!itemID || itemID.length == 0){
@@ -84,19 +92,35 @@ export default {
 
             this.emitDestination()
         },
-        async fetchOUs(){
+        async fetchOUs(excludeDict=undefined){
             this.loading = true
             this.error = false
-            await new OrganizationalUnit({}).list()
-            .then(response => {
-                this.ouList = response.data.ou_list
-                this.loading = false
-            })
-            .catch(error => {
-                this.loading = false
-                this.error = true
-                console.log(error)
-            })
+            if (excludeDict)
+                await new OrganizationalUnit({}).filter(excludeDict)
+                .then(response => {
+                    this.ouList = response.data.ou_list
+                    this.loading = false
+                    return response
+                })
+                .catch(error => {
+                    this.loading = false
+                    this.error = true
+                    console.log(error)
+                    return error
+                })
+            else
+                await new OrganizationalUnit({}).list()
+                .then(response => {
+                    this.ouList = response.data.ou_list
+                    this.loading = false
+                    return response
+                })
+                .catch(error => {
+                    this.loading = false
+                    this.error = true
+                    console.log(error)
+                    return error
+                })
         },
     },
 }

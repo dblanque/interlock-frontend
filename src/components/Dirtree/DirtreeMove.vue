@@ -70,6 +70,7 @@
                             <v-card flat outlined style="max-height: 300px; overflow: auto !important;">
                                 <DirtreeOUList
                                 ref="DirtreeOUList"
+                                :fetchOnCreated="false"
                                 :excludeObjects="objectDn"
                                 @selectedDestination="setDestination"
                                 />
@@ -140,7 +141,10 @@ export default {
             realm: "",
             basedn: "",
             error: "",
-            errorMsg: ""
+            errorMsg: "",
+            filter: {
+                "iexact":{}
+            }
         }
     },
     props: {
@@ -158,13 +162,27 @@ export default {
         }
     },
     async created () {
-        await this.resetDialog()
     },
     methods: {
+        resetFilter(){
+            this.filter = {
+                "iexact":{}
+            }
+        },
+        setExcludeFilter(){
+            // 2nd argument is exclude
+            if (this.objectDn && this.objectDn != undefined && this.objectDn != null){
+                this.filter['iexact'][this.objectDn] = {attr: 'distinguishedName', exclude: true}
+                this.filter['iexact']['organizationalUnit'] = 'objectClass'
+            }
+        },
+        clearList(){
+            this.$refs.DirtreeOUList.clearList()
+        },
         async refreshOUList(){
             if (this.allowRefresh == true) {
                 this.allowRefresh = false
-                await this.$refs.DirtreeOUList.fetchOUs().then(()=>{
+                await this.$refs.DirtreeOUList.fetchOUs(this.filter).then(()=>{
                     this.allowRefresh = true
                 })
             }
@@ -172,15 +190,20 @@ export default {
         async resetDialog(){
             this.allowRefresh = false
             this.setDestination();
-            if (this.$refs.DirtreeOUList)
-                this.$refs.DirtreeOUList.fetchOUs()
-                .then(()=>{
-                    this.allowRefresh = true
+            if (this.$refs.DirtreeOUList) {
+                this.$nextTick(()=>{
+                    this.setExcludeFilter()
+                    this.$refs.DirtreeOUList.fetchOUs(this.filter)
+                    .then(() => {
+                        this.allowRefresh = true
+                    })
                 })
+            }
             var domainDetails = getDomainDetails()
             this.domain = domainDetails.domain
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
+            return
         },
         setDestination(destination=undefined){
             // Set default destination if undefined

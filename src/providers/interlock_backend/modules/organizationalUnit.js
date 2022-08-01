@@ -12,7 +12,7 @@ const actions = {
 
     filter: (objectArray)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.listfilter, objectArray)
+            interlock_backend.request.post(interlock_backend.urls.ou.filter, objectArray)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
