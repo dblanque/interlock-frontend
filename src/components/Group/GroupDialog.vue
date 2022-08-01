@@ -54,6 +54,24 @@
                             :rules="[this.fieldRules(groupcopy.mail, 'ge_email')]"
                             ></v-text-field>
                         </v-col>
+                        <v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
+                            <v-text-field
+                            dense
+                            id="objectRid"
+                            :label="$t('ldap.attributes.objectRid')"
+                            :readonly="editFlag != true"
+                            v-model="groupcopy.objectRid"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
+                            <v-text-field
+                            dense
+                            id="objectSid"
+                            :label="$t('ldap.attributes.objectSid')"
+                            :readonly="editFlag != true"
+                            v-model="groupcopy.objectSid"
+                            ></v-text-field>
+                        </v-col>
                     </v-row>
 
                     <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
@@ -387,6 +405,7 @@ export default {
             this.groupcopy = new Group({})
             this.$nextTick(() => {
                 this.groupcopy = this.group
+                console.log(this.group.objectSid)
                 this.setGroupTypeAndScope()
                 this.getMembersLength()
                 this.loading = false
