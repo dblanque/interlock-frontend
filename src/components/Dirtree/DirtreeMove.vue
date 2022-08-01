@@ -17,31 +17,34 @@
             <v-col cols="12" class="font-weight-medium">
                 {{ $t('section.dirtree.move.originalRelativePath') + ": " + originalRelativePath }}
             </v-col>
+            <v-col cols="12" class="font-weight-medium">
+                {{ $t('ldap.attributes.distinguishedName') + ": " + objectDn }}
+            </v-col>
         </v-row>
 
         <v-divider class="mx-16 mt-2"/>
 
-        <v-row class="ma-0 pa-0 mt-4">
-            <v-spacer/>
-            <v-col class="ma-0 pa-0" cols="4">
-                <v-btn small
-                    class="ma-1"
-                    text
-                    :disabled="!allowRefresh"
-                    elevation="0"
-                    @click="refreshOUList"
-                    >
-                    {{ $t('actions.refresh') }}
-                    <v-icon>
-                    mdi-refresh
-                    </v-icon>
-                    <template v-slot:loader>
-                    <span class="custom-loader">
-                        <v-icon color="white">mdi-cached</v-icon>
-                    </span>
-                    </template>
-                </v-btn>
-            </v-col>
+        <v-row class="ma-0 pa-0 mt-4" align="center" justify="space-around">
+            <v-btn small text color="primary" class="ma-1" @click="setDestination()">
+                {{ $t('section.dirtree.move.setToRoot')}}
+            </v-btn>
+            <v-btn small
+                class="ma-1"
+                text
+                :disabled="!allowRefresh"
+                elevation="0"
+                @click="refreshOUList"
+                >
+                {{ $t('actions.refresh') }}
+                <v-icon>
+                mdi-refresh
+                </v-icon>
+                <template v-slot:loader>
+                <span class="custom-loader">
+                    <v-icon color="white">mdi-cached</v-icon>
+                </span>
+                </template>
+            </v-btn>
         </v-row>
 
         <v-row class="ma-0 pa-0" justify="center">
@@ -93,8 +96,8 @@
                     </v-slide-x-reverse-transition>
 
                     <v-slide-y-reverse-transition>
-                        <v-btn elevation="0" @click="closeDialog"
-                        @keydown.enter="closeDialog" color="primary"
+                        <v-btn elevation="0" @click="confirmMove"
+                        @keydown.enter="confirmMove" color="primary"
                         class="ma-0 pa-0 pa-2 ma-1 pr-4" 
                         rounded>
                             <v-icon class="ma-0 mx-1">
@@ -177,11 +180,13 @@ export default {
             }
         },
         clearList(){
+            this.resetFilter()
             this.$refs.DirtreeOUList.clearList()
         },
         async refreshOUList(){
             if (this.allowRefresh == true) {
                 this.allowRefresh = false
+                this.setExcludeFilter()
                 await this.$refs.DirtreeOUList.fetchOUs(this.filter).then(()=>{
                     this.allowRefresh = true
                 })
@@ -189,9 +194,9 @@ export default {
         },
         async resetDialog(){
             this.allowRefresh = false
-            this.setDestination();
             if (this.$refs.DirtreeOUList) {
                 this.$nextTick(()=>{
+                    this.setDestination();
                     this.setExcludeFilter()
                     this.$refs.DirtreeOUList.fetchOUs(this.filter)
                     .then(() => {
@@ -215,6 +220,9 @@ export default {
         },
         closeDialog(){
             this.$emit('closeDialog', this.viewKey);
+        },
+        confirmMove(){
+            this.$emit('confirmMove', this.objectDestination);
         },
     },
 }

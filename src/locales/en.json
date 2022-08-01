@@ -335,6 +335,7 @@
     },
     "dirtree":{
       "move":{
+        "setToRoot":"Select Domain Root",
         "title":"Move Domain Object",
         "willBeMovedTo":"Will be moved to",
         "originalRelativePath":"Original Relative Path"

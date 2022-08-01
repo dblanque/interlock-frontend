@@ -43,6 +43,30 @@
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
+
+                            <v-row class="ma-0 pa-0 mt-4" align="center" justify="space-around">
+                                <v-btn small text color="primary" class="ma-1" @click="userDestination = basedn">
+                                    {{ $t('section.dirtree.move.setToRoot')}}
+                                </v-btn>
+                                <v-btn small
+                                    class="ma-1"
+                                    text
+                                    :disabled="!allowOURefresh"
+                                    elevation="0"
+                                    @click="fetchOUs"
+                                    >
+                                    {{ $t('actions.refresh') }}
+                                    <v-icon>
+                                    mdi-refresh
+                                    </v-icon>
+                                    <template v-slot:loader>
+                                    <span class="custom-loader">
+                                        <v-icon color="white">mdi-cached</v-icon>
+                                    </span>
+                                    </template>
+                                </v-btn>
+                            </v-row>
+
                             <v-row class="ma-0 pa-0" justify="center">
                                 <v-col cols="12" lg="8">
                                         <v-expansion-panels 
@@ -329,7 +353,6 @@
 
 <script>
 import User from '@/include/User'
-import OrganizationalUnit from '@/include/OrganizationalUnit'
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
 import validationMixin from '@/plugins/mixin/validationMixin';
 import { getDomainDetails } from '@/include/utils';
@@ -349,12 +372,12 @@ export default {
         loading: true,
         error: false,
         valid: false,
+        allowOURefresh: true,
         errorMsg: "",
         showSnackbar: false,
         userPathExpansionPanel: false,
         userDestination: '',
         userToCreate: {},
-        ouList: [],
         createStage: 1,
         addObjectClass: "",
         objectClasses: [
@@ -616,13 +639,10 @@ export default {
             this.userDestination = "CN=Users," + this.basedn
         },
         async fetchOUs(){
-            await new OrganizationalUnit({}).list()
-            .then(response => {
-                this.ouList = response.data.ou_list
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            this.userPathExpansionPanel = 0
+            setTimeout(()=>{
+                this.$refs.DirtreeOUList.fetchOUs()
+            },100)
         },
         onClickPermission(key){
             this.permissions[key].value = !this.permissions[key].value

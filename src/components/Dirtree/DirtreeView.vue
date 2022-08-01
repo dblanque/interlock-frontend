@@ -48,7 +48,7 @@
             <v-icon class="mr-1">
               mdi-filter-remove-outline
             </v-icon>
-            Reset Filters
+            {{ $t('actions.resetFilters') }}
           </v-btn>
         </v-row>
         <v-row class="px-4 ma-1" justify="center">
@@ -200,7 +200,7 @@
             :viewKey="'dirtreeMove'"
             ref="DirtreeMove"
             @closeDialog="closeDialog"
-            @save="fetchDirtree"
+            @confirmMove="moveObject"
         />
     </v-dialog>
   </v-row>
@@ -278,6 +278,10 @@ export default {
       }
     },
     methods: {
+        moveObject(destination){
+          console.log(destination)
+          this.dialogs['dirtreeMove'] = false
+        },
         openDialog(key, item){
             this.dialogs[key] = true;
             switch (key) {

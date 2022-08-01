@@ -272,7 +272,7 @@
       "c":"País (Código ISO)",
       "co":"País",
       "wWWHomePage":"Página Web",
-      "distinguishedName":"Nombre Distinguido (dn)",
+      "distinguishedName":"Nombre Distinguido",
       "userPrincipalName":"Nombre Principal del Usuario",
       "userPrincipalName_pre2000":"Nombre del Usuario (pre-Windows 2000)",
       "userAccountControl":"Permisos del Usuario (INT Crudo)",
@@ -341,6 +341,7 @@
     },
     "dirtree":{
       "move":{
+        "setToRoot":"Seleccionar Raíz de Dominio",
         "title":"Mover Objeto de Dominio",
         "willBeMovedTo":"Será movido a",
         "originalRelativePath":"Camino Relativo Original"
