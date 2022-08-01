@@ -23,6 +23,7 @@
     }
   },
   "actions":{
+    "resetFilters":"Reset Filters",
     "backToLogin":"Go back to Log-in",
     "testSettings":"Test Settings",
     "restoreDefaultValues":"Restore Default Values",

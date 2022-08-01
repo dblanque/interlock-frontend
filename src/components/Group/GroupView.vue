@@ -174,26 +174,26 @@
   </v-dialog> -->
 
   <!-- GROUP CREATE DIALOG -->
-  <!-- <v-dialog eager max-width="1200px" v-model="dialogs['groupCreate']">
+  <v-dialog eager max-width="1200px" v-model="dialogs['groupCreate']">
     <GroupCreate
       :viewKey="'groupCreate'"
       ref="GroupCreate"
       @closeDialog="closeDialog"
       />
-  </v-dialog> -->
+  </v-dialog>
 </div>
 </template>
 
 <script>
 import Group from '@/include/Group';
 import GroupDialog from '@/components/Group/GroupDialog.vue'
-// import GroupCreate from '@/components/Group/GroupCreate.vue'
+import GroupCreate from '@/components/Group/GroupCreate.vue'
 // import GroupDelete from '@/components/Group/GroupDelete.vue'
 
 export default {
   components: {
-    GroupDialog
-    // GroupCreate,
+    GroupDialog,
+    GroupCreate
     // GroupDelete
   },
   data() {

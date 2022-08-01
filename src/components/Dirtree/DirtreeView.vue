@@ -41,12 +41,23 @@
         <v-col cols="12">
           <h4>{{ $t('words.legend') }}</h4>
         </v-col>
+        <v-row :justify="$vuetify.breakpoint.mdAndUp ? 'end': 'center'" class="mx-7 my-2" align="center">
+          <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
+          <v-btn @click="resetDirtree"
+          outlined rounded color="primary" class="ma-0 pa-0 px-3">
+            <v-icon class="mr-1">
+              mdi-filter-remove-outline
+            </v-icon>
+            Reset Filters
+          </v-btn>
+        </v-row>
         <v-row class="px-4 ma-1" justify="center">
           <v-col v-for="(item, key) in itemTypes" :key="item.id" cols="12" md="auto" lg="auto" class="ma-0 pa-0">
             <v-chip v-if="item.show != false" class="mx-2 my-1"
             :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" 
-            :color="item.filtered == true ? 'primary' : ''">
-            <!-- @click="setFilter(key)" -->
+            :color="item.filtered == true ? 'red' : ''"
+            @click="setFilter(key)"
+            >
               <v-icon>
                 {{ item.icon }}
               </v-icon>
@@ -75,6 +86,14 @@
               <v-icon v-if="item.builtin == true && item.type != 'Container'">
                 mdi-hammer
               </v-icon>
+              <div v-else-if="item.type == 'Container' && item.builtin == true">
+                <v-icon>
+                  {{ itemTypes[item.type.toLowerCase()]['icon'] }}
+                </v-icon>
+                <v-icon class="ml-1" small>
+                  mdi-hammer
+                </v-icon>
+              </div>
               <v-icon v-else-if="item.type == 'Container'">
                 {{ itemTypes[item.type.toLowerCase()]['icon'] }}
               </v-icon>
@@ -307,9 +326,17 @@ export default {
         },
         resetDirtree(){
             this.filters = {}
-            for (const type in this.itemTypes)
+            var filterReset = false
+            var value
+            for (const type in this.itemTypes){
+              value = this.itemTypes[type].filtered
+              if (value == true) {
                 this.itemTypes[type].filtered = false
-            this.fetchDirtree()
+                filterReset = true
+              }
+            }
+            if (filterReset)
+              this.fetchDirtree()
         },
         resetSnackbar(){
             this.$emit('resetSnackbar')

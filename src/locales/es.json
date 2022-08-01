@@ -23,6 +23,7 @@
     }
   },
   "actions": {
+    "resetFilters":"Borrar Filtros",
     "backToLogin":"Volver a iniciar sesión",
     "testSettings":"Probar Configuración",
     "restoreDefaultValues":"Restaurar Valores Originales",

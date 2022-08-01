@@ -114,11 +114,13 @@
                     <!-- MEMBER BUTTONS -->
                     <v-row justify="center" class="ma-0 pa-0 my-4">
                         <v-col cols="8" class="ma-0 pa-0">
-                            <v-btn rounded text color="primary" outlined class="pa-3">
+                            <v-btn rounded text color="primary" outlined :disabled="!editFlag" class="pa-3">
                                 <v-icon small class="mr-1">mdi-plus</v-icon>
                                 {{ $t("actions.addN") + " " + $t("words.member") }}
                             </v-btn>
                         </v-col>
+                    </v-row>
+                    <v-row>
                     </v-row>
                     <!-- MEMBER EXPANSION PANEL -->
                     <v-row v-if="showMemberTab" align-content="center" justify="center" class="ma-0 pa-0 my-4">
@@ -405,7 +407,6 @@ export default {
             this.groupcopy = new Group({})
             this.$nextTick(() => {
                 this.groupcopy = this.group
-                console.log(this.group.objectSid)
                 this.setGroupTypeAndScope()
                 this.getMembersLength()
                 this.loading = false
