@@ -164,6 +164,7 @@ export default {
       var ids = this.tableData.items.map(log => {
         return log.id;
       });
+      ids = ids.sort((a, b) => a > b)
       return ids[ids.length - 1]
     }
   },
