@@ -73,7 +73,14 @@ const urls = {
         filter: "api/ou/filter/",
         dirtree: "api/ou/dirtree/",
         move: "api/ou/move/"
-    }
+    },
+    test: {
+        get: "api/test/",
+        post: "api/test/post/",
+        put: "api/test/put/",
+        delete: "api/test/delete/",
+        options: "api/test/options/"
+    },
 }
 
 // Adds Axios Response Interceptor.

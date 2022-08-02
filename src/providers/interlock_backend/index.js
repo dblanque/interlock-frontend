@@ -5,6 +5,7 @@ import ouCalls from '@/providers/interlock_backend/modules/organizationalUnit.js
 import domainCalls from '@/providers/interlock_backend/modules/domain.js'
 import settingCalls from '@/providers/interlock_backend/modules/settings.js'
 import logCalls from '@/providers/interlock_backend/modules/log.js'
+import testCalls from '@/providers/interlock_backend/modules/test.js'
 
 const modules = {
     auth: authCalls,
@@ -14,6 +15,7 @@ const modules = {
     settings: settingCalls,
     log: logCalls,
     domain: domainCalls,
+    test: testCalls,
 }
 
 const interlock_backend = {

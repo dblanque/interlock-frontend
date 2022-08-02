@@ -77,6 +77,10 @@
             :light="isThemeDark()"
             :buttonIsSmall="true"
           />
+          <v-btn @click="debugAction"
+           outlined class="mx-3" rounded color="primary">
+            Debug
+          </v-btn>
         </div>
       </v-col>
     </v-row>
@@ -225,6 +229,7 @@ import LanguageSelector from "@/components/LanguageSelector.vue";
 import ThemeChanger from "@/components/ThemeChanger.vue";
 import LogoutDialog from "@/components/LogoutDialog.vue";
 import User from "@/include/User";
+import Test from "@/include/Test";
 import Domain from "@/include/Domain";
 
 export default {
@@ -506,6 +511,16 @@ export default {
     setupTimers() {
       this.startTimer();
     },
+    async debugAction() {
+      console.log('This button should be removed and/or disabled in production')
+      await new Test({}).get()
+      .then(response => {
+        console.log(response)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
   },
 };
 </script>
