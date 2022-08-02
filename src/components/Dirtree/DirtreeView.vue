@@ -238,7 +238,9 @@ export default {
             dialogs: {
                 dirtreeMove: false,
             },
-            filters: [],
+            filters: {
+              "exclude":{}
+            },
             itemTypes: {
                 "container":{
                     "filtered": false,
@@ -325,14 +327,16 @@ export default {
             this.$emit('goToGroup', item)
         },
         setFilter(key){
-            this.filters = {}
+            this.filters = {
+              'exclude':{}
+            }
             var itemTypeAmount = 0
             this.itemTypes[key].filtered = !this.itemTypes[key].filtered
 
             if (key == 'user'){
                 itemTypeAmount += 2
                 this.itemTypes['person'].filtered = !this.itemTypes['person'].filtered
-                this.filters['organizationalPerson'] = 'objectClass'
+                this.filters['exclude']['organizationalPerson'] = 'objectClass'
             }
 
             for (const type in this.itemTypes) {
@@ -347,13 +351,15 @@ export default {
                   else {
                     typeToSend = type
                   }
-                  this.filters[typeToSend] = 'objectClass'
+                  this.filters['exclude'][typeToSend] = 'objectClass'
                   
                 }
             }
 
             if (itemTypeAmount == this.filters.length)
-                this.filters = {}
+              this.filters = {  
+                'exclude':{}
+              }
             this.fetchDirtree()
             // console.log('Feature not enabled, filter for ' + key.toUpperCase() + ' objects should toggle')
         },
