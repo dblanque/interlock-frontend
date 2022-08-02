@@ -97,7 +97,7 @@
               <v-icon v-else-if="item.type == 'Container'">
                 {{ itemTypes[item.type.toLowerCase()]['icon'] }}
               </v-icon>
-              <v-icon v-else-if="item.type == 'Organizational-Unit'">
+              <v-icon v-else-if="item.type == 'Organizational-Unit'" :color="open ? 'primary' : undefined">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
               <v-icon v-else-if="item.type == 'Computer'">
