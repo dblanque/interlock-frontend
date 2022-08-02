@@ -320,14 +320,10 @@ export default {
     };
   },
   async created() {
-    var admin_allowed = localStorage.getItem("admin_allowed");
-    if (!admin_allowed || Boolean(admin_allowed) == false){
-      this.logoutAction();
-      this.showLogoutDialog = true;
-    }
     await new User({}).getCurrentUserData().then((response) => {
       var responseStatus = response.status;
-      // var token = localStorage.getItem('token')
+      var token = localStorage.getItem('token')
+      var admin_allowed = (localStorage.getItem('admin_allowed') === 'true')
       response = response.data;
 
       // If response code is valid
@@ -345,11 +341,16 @@ export default {
       }
       // If response code is an HTTP error code
       else {
-        var token = localStorage.getItem("token");
+        token = localStorage.getItem("token");
         if ( !token || token == null || token == "null" ){
           this.logoutAction();
           this.showLogoutDialog = true;
         }
+      }
+
+      if (!admin_allowed || admin_allowed == false){
+        this.logoutAction();
+        this.showLogoutDialog = true;
       }
     });
 
