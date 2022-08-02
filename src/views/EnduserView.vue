@@ -300,7 +300,7 @@
                             <v-icon class="mr-1">
                                 mdi-key-variant
                             </v-icon>
-                            {{ $t("actions.changePassword") }}
+                            {{ $t("actions.changeEnduserPassword") }}
                         </v-btn>
                         <!-- Save User Changes Button -->
                         <v-btn @click="saveUser"
@@ -399,6 +399,9 @@ export default {
         }
     },
     async created () {
+        var admin_allowed = localStorage.getItem('admin_allowed')
+        if (Boolean(admin_allowed) == true)
+            this.$router.push("/home");
         this.user = new User({})
         this.user.getCurrentUserData().then(response => {
             var responseStatus = response.status
@@ -420,8 +423,8 @@ export default {
             // If response code is an HTTP error code
             else {
                 var token = localStorage.getItem('token')
-                var admin_allowed = localStorage.getItem('admin_allowed')
-                if ( !token || token == null || token == 'null' || !admin_allowed )
+                admin_allowed = localStorage.getItem('admin_allowed')
+                if ( !token || token == null || token == 'null' )
                     this.logoutAction()
                 this.showLogoutDialog = true;
             }

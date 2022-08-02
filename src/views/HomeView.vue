@@ -321,7 +321,7 @@ export default {
   },
   async created() {
     var admin_allowed = localStorage.getItem("admin_allowed");
-    if (!admin_allowed || admin_allowed == false){
+    if (!admin_allowed || Boolean(admin_allowed) == false){
       this.logoutAction();
       this.showLogoutDialog = true;
     }
