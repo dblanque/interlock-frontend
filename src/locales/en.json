@@ -341,7 +341,8 @@
         "title":"Move Domain Object",
         "willBeMovedTo":"Will be moved to",
         "originalRelativePath":"Original Relative Path"
-      }
+      },
+      "cantBeDeletedHasChildren":"This object has children and cannot be deleted"
     },
     "users":{
       "createView":{

@@ -90,25 +90,31 @@
       <v-card class="ma-1" flat outlined>
       <v-expand-transition>
         <v-treeview v-if="!loading"
-          :items="this.tableData.items"
+          selected-color="primary"
+          selection-type="independent"
           dense
-          :search="searchString"
           hoverable
+          :open.sync="dirtreeOpen"
+          item-key="id"
+          v-model="dirtreeSelection"
+          :items="this.tableData.items"
+          :search="searchString"
           >
           <!-- ICONS -->
           <template v-slot:prepend="{ item, open }">
-              <v-icon v-if="item.builtin == true && item.type != 'Container'">
+            <div @click="changeOpenStatus(item.id)" class="clickable">
+              <v-icon v-if="item.builtin == true && item.type != 'Container'" :color="open ? 'primary' : undefined">
                 mdi-hammer
               </v-icon>
               <div v-else-if="item.type == 'Container' && item.builtin == true">
-                <v-icon>
+                <v-icon :color="open ? 'primary' : undefined">
                   {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                 </v-icon>
-                <v-icon class="ml-1" small>
+                <v-icon class="ml-1" small :color="open ? 'primary' : undefined">
                   mdi-hammer
                 </v-icon>
               </div>
-              <v-icon v-else-if="item.type == 'Container'">
+              <v-icon v-else-if="item.type == 'Container'" :color="open ? 'primary' : undefined">
                 {{ itemTypes[item.type.toLowerCase()]['icon'] }}
               </v-icon>
               <v-icon v-else-if="item.type == 'Organizational-Unit'" :color="open ? 'primary' : undefined">
@@ -126,17 +132,18 @@
               <v-icon v-else>
                 mdi-group
               </v-icon>
+            </div>
           </template>
           <!-- LABEL -->
-          <template v-slot:label="{item}">
-          <v-row align="start">
+          <template v-slot:label="{ item }">
+          <v-row align="start" @click="changeOpenStatus(item.id)" class="clickable">
             <v-col cols="11" md="auto">
               {{ item.name }}
             </v-col>
           </v-row>
           </template>
           <!-- ACTIONS -->
-          <template v-slot:append="{item}">
+          <template v-slot:append="{ item }">
               <!-- User Buttons -->
               <span v-if="(item.type == 'User' || item.type=='Person')">
                 <v-tooltip bottom>
@@ -194,6 +201,22 @@
                   </template>
                   <span>{{ $t('actions.move') }}</span>
                 </v-tooltip>
+                <v-tooltip bottom v-if="item.type.toLowerCase() == 'organizational-unit'">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        :disabled="item.children && item.children.length > 0"
+                        color="red"
+                        icon
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                      <v-icon>
+                        mdi-delete
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('actions.delete') }}</span>
+                </v-tooltip>
               </span>
           </template>
         </v-treeview>
@@ -231,6 +254,8 @@ export default {
             selectedObject: {},
             loading: false,
             error: false,
+            dirtreeSelection: [],
+            dirtreeOpen: [],
             tableData: {
                 headers: [],
                 items: []
@@ -291,6 +316,14 @@ export default {
       this.fetchDirtree();
     },
     watch: {
+      // dirtreeSelection(newValue, oldValue) {
+      //   console.log(oldValue)
+      //   console.log(newValue)
+      // },
+      // dirtreeOpen(newValue, oldValue) {
+      //   console.log(oldValue)
+      //   console.log(newValue)
+      // },
       'dialogs': {
           handler: function (newValue) {
             if (!newValue['dirtreeMove'] || newValue['dirtreeMove'] == false)
@@ -300,6 +333,12 @@ export default {
       }
     },
     methods: {
+        changeOpenStatus(itemId){
+          if (this.dirtreeOpen.includes(itemId))
+            this.dirtreeOpen = this.dirtreeOpen.filter(e => e !== itemId)
+          else
+            this.dirtreeOpen.push(itemId)
+        },
         moveObject(destination){
           console.log(destination)
           this.dialogs['dirtreeMove'] = false
@@ -411,5 +450,7 @@ export default {
 }
 </script>
 <style>
-    
+.clickable {
+  cursor: pointer !important;
+}
 </style>

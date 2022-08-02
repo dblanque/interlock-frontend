@@ -347,7 +347,8 @@
         "title":"Mover Objeto de Dominio",
         "willBeMovedTo":"Será movido a",
         "originalRelativePath":"Camino Relativo Original"
-      }
+      },
+      "cantBeDeletedHasChildren":"Este objeto tiene hijos y no puede ser borrado"
     },
     "users":{
       "createView":{
