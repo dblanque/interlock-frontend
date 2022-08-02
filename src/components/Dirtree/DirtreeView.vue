@@ -42,6 +42,9 @@
           <h4>{{ $t('words.legend') }}</h4>
         </v-col>
         <v-row :justify="$vuetify.breakpoint.mdAndUp ? 'end': 'center'" class="mx-7 my-2" align="center">
+          <v-alert color="secondary" class="ma-0" type="info" dense rounded="xl">
+            {{ $t("section.dirtree.filterHint") }}
+          </v-alert>
           <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
           <v-btn @click="resetDirtree"
           outlined rounded color="primary" class="ma-0 pa-0 px-3">
@@ -53,10 +56,21 @@
         </v-row>
         <v-row class="px-4 ma-1" justify="center">
           <v-col v-for="(item, key) in itemTypes" :key="item.id" cols="12" md="auto" lg="auto" class="ma-0 pa-0">
-            <v-chip v-if="item.show != false" class="mx-2 my-1"
+            <v-chip v-if="item.show != false && !item.required" class="mx-2 my-1"
+            :id="'legend-'+key"
             :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" 
-            :color="item.filtered == true ? 'red' : ''"
+            :color="item.filtered == true ? 'secondary' : 'primary'"
             @click="setFilter(key)"
+            >
+              <v-icon>
+                {{ item.icon }}
+              </v-icon>
+              <span class="text-overline ml-1">
+                {{ $t('classes.' + key + '.single') }}
+              </span>
+            </v-chip>
+            <v-chip v-else-if="item.show != false && item.required" class="mx-2 my-1"
+            :light="!$vuetify.theme.dark" :dark="$vuetify.theme.dark"
             >
               <v-icon>
                 {{ item.icon }}
@@ -228,11 +242,13 @@ export default {
             itemTypes: {
                 "container":{
                     "filtered": false,
-                    "icon":"mdi-archive"
+                    "icon":"mdi-archive",
+                    "required": false,
                 },
                 "builtin-domain":{
                     "filtered": false,
-                    "icon": "mdi-hammer"
+                    "icon": "mdi-hammer",
+                    "required": true,
                 },
                 "person":{
                     "filtered": false,
@@ -241,19 +257,23 @@ export default {
                 },
                 "group":{
                     "filtered": false,
-                    "icon":"mdi-google-circles-communities"
+                    "icon":"mdi-google-circles-communities",
+                    "required": false,
                 },
                 "user":{
                     "filtered": false,
-                    "icon":"mdi-account"
+                    "icon":"mdi-account",
+                    "required": false,
                 },
                 "computer":{
                     "filtered": false,
-                    "icon":"mdi-monitor"
+                    "icon":"mdi-monitor",
+                    "required": false,
                 },
                 "organizational-unit":{
                     "filtered":false,
-                    "icon":"mdi-folder"
+                    "icon":"mdi-folder",
+                    "required": true,
                 },
             },
         }

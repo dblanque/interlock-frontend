@@ -96,7 +96,7 @@ export default {
             this.loading = true
             this.error = false
             if (excludeDict)
-                await new OrganizationalUnit({}).filter(excludeDict)
+                await new OrganizationalUnit({}).dirtree(excludeDict)
                 .then(response => {
                     this.ouList = response.data.ou_list
                     this.loading = false

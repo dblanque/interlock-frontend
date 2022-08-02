@@ -340,6 +340,7 @@
       "helpMessage":"Debajo puede modificar su contraseña y detalles de usuario de Active Directory / LDAP"
     },
     "dirtree":{
+      "filterHint":"Clickee los chips azules para filtrarlos",
       "move":{
         "setToRoot":"Seleccionar Raíz de Dominio",
         "title":"Mover Objeto de Dominio",

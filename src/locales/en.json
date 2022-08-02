@@ -334,6 +334,7 @@
       "helpMessage":"Below you can modify your Active Directory / LDAP user details and password"
     },
     "dirtree":{
+      "filterHint":"Click the blue chips to filter them",
       "move":{
         "setToRoot":"Select Domain Root",
         "title":"Move Domain Object",
