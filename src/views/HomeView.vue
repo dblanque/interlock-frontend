@@ -78,7 +78,7 @@
             :buttonIsSmall="true"
           />
           <v-btn @click="debugAction"
-           outlined class="mx-3" rounded color="primary">
+           outlined class="mx-3" rounded color="red">
             Debug
           </v-btn>
         </div>

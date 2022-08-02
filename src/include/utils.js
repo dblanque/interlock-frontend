@@ -42,7 +42,7 @@ export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='dn'
 
     // If ID hasn't matched with this object,
     // then search in it's children if it has any.
-    if (childrenKey in targetEntity && targetEntity[childrenKey].length != 0)
+    if (targetEntity[childrenKey] !== undefined && targetEntity[childrenKey] !== null && targetEntity[childrenKey].length != 0)
         // For each child do a recursive search calling this function
         targetEntity[childrenKey].forEach(child => {
             if (!searchResult) {
