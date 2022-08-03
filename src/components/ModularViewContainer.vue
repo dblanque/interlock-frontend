@@ -1,5 +1,5 @@
 <template>
-<v-container class="my-4">
+<v-container class="my-4 max-width-change">
   <v-row class="ma-2" justify="center" align="center">
     <v-divider class="mx-6"/>
     <h1>{{ $t("category.header." + viewTitle) }}</h1>
@@ -7,7 +7,7 @@
   </v-row>
 
   <!-- HOME -->
-  <v-container v-if="viewTitle == 'home'">
+  <v-container v-if="viewTitle == 'home'" class="max-width-change">
     <DirtreeView
       ref="DirtreeView"
       :requestRefresh="this.refreshUserDataTable"
@@ -23,7 +23,7 @@
 
   <!-- USERS -->
 
-  <v-container v-if="viewTitle == 'users'">
+  <v-container v-if="viewTitle == 'users'" class="max-width-change">
     <UserView ref="UserView"
       :requestRefresh="this.refreshUserDataTable"
       :viewTitle="viewTitle"
@@ -35,7 +35,7 @@
   </v-container>
 
   <!-- Groups -->
-  <v-container v-if="viewTitle == 'groups'">
+  <v-container v-if="viewTitle == 'groups'" class="max-width-change">
     <GroupView ref="GroupView"
       :requestRefresh="this.refreshGroupDataTable"
       :viewTitle="viewTitle"
@@ -47,15 +47,15 @@
   </v-container>
 
   <!-- DNS -->
-  <v-container v-if="viewTitle == 'dns'">
+  <v-container v-if="viewTitle == 'dns'" class="max-width-change">
   </v-container>
 
   <!-- GPO -->
-  <v-container v-if="viewTitle == 'gpo'">
+  <v-container v-if="viewTitle == 'gpo'" class="max-width-change">
   </v-container>
 
   <!-- Settings -->
-  <v-container v-if="viewTitle == 'settings'">
+  <v-container v-if="viewTitle == 'settings'" class="max-width-change">
     <SettingsCard
       :viewTitle="viewTitle"
       class="my-2 mb-4"
@@ -66,7 +66,7 @@
   </v-container>
 
   <!-- Logs -->
-  <v-container v-if="viewTitle == 'logs'">
+  <v-container v-if="viewTitle == 'logs'" class="max-width-change">
     <LogView
       :viewTitle="viewTitle"
       class="my-2 mb-4"
@@ -283,3 +283,8 @@ import LogView from '@/components/Logging/LogView.vue'
     }
   }
 </script>
+<style>
+.max-width-change {
+  max-width: 1100px;
+}
+</style>
