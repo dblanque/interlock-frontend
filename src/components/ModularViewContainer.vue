@@ -285,6 +285,6 @@ import LogView from '@/components/Logging/LogView.vue'
 </script>
 <style>
 .max-width-change {
-  max-width: 1100px;
+  max-width: max(90%, 1100px);
 }
 </style>
