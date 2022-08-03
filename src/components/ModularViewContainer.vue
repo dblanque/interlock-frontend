@@ -174,7 +174,7 @@ import LogView from '@/components/Logging/LogView.vue'
             case 'home':
               if (this.$refs.DirtreeView != undefined) {
                 console.log("Requested refresh for view component "+ newValue)
-                this.$refs.DirtreeView.resetDirtree()
+                this.$refs.DirtreeView.resetDirtree(true)
               }
               break;
             case 'users':

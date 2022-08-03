@@ -255,6 +255,7 @@ export default {
             loading: false,
             error: false,
             dirtreeSelection: [],
+            forceReload: false,
             dirtreeOpen: [],
             tableData: {
                 headers: [],
@@ -402,7 +403,7 @@ export default {
             this.fetchDirtree()
             // console.log('Feature not enabled, filter for ' + key.toUpperCase() + ' objects should toggle')
         },
-        resetDirtree(){
+        resetDirtree(forceReload=false){
             this.filters = {}
             var filterReset = false
             var value
@@ -413,8 +414,9 @@ export default {
                 filterReset = true
               }
             }
-            if (filterReset)
+            if (filterReset == true || forceReload == true)
               this.fetchDirtree()
+              this.forceReload = false
         },
         resetSnackbar(){
             this.$emit('resetSnackbar')
