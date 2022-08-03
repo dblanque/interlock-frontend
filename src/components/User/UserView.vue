@@ -96,7 +96,7 @@
             v-on="on"
             small
             :disabled="loading"
-            @click="fetchUser(item, false, true)"
+            @click="fetchUser(item, false)"
           >
           <v-icon small color="primary">
             mdi-eye
@@ -479,8 +479,7 @@ export default {
       this.data.userdata = new User({})
       await this.data.userdata.fetch(this.data.selectedUser.username)
       .then(() => {
-        if (refreshAnim == true)
-          this.openDialog('userDialog')
+        this.openDialog('userDialog')
         if (isEditable == true)
           this.editableForm = true
         setTimeout(() => {
