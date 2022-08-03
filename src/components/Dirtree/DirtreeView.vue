@@ -103,7 +103,7 @@
           <!-- ICONS -->
           <template v-slot:prepend="{ item, open }">
             <div @click="getObjectIsClickable ? changeOpenStatus(item.id) : undefined" :class="getObjectIsClickable(item) + ' '">
-              <v-icon v-if="item.builtin == true && item.type != 'Container'" :color="open ? 'primary' : undefined">
+              <v-icon v-if="item.builtin == true && item.type != 'Container' && item.type != 'Computer'" :color="open ? 'primary' : undefined">
                 mdi-hammer
               </v-icon>
               <div v-else-if="item.type == 'Container' && item.builtin == true">
