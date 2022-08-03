@@ -63,7 +63,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.clickTo') + " " + $t('actions.disable') }}</span>
+        <span>{{ $t('actions.clickTo') + " " + $t('actions.disable') + " " + item.username }}</span>
       </v-tooltip>
 
       <!-- Disable User Button -->
@@ -81,7 +81,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.clickTo') + " " + $t('actions.enable') }}</span>
+        <span>{{ $t('actions.clickTo') + " " + $t('actions.enable') + " " + item.username  }}</span>
       </v-tooltip>
     </template>
 
@@ -141,6 +141,25 @@
           </v-btn>
         </template>
         <span>{{ $t('actions.changePassword') }}</span>
+      </v-tooltip>
+
+      <!-- UNLOCK USER BUTTON -->
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon
+            rounded
+            v-bind="attrs"
+            v-on="on"
+            small
+            :disabled="loading"
+            @click="unlockUser(item)"
+          >
+          <v-icon small color="secondary">
+            mdi-lock-open
+          </v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $t('actions.unlock') + " " + $t('classes.user.single') }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -361,6 +380,24 @@ export default {
         this.error = true
         this.resetSnackbar();
         this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.viewTitle.toUpperCase())
+        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+      })
+    },
+    async unlockUser(userObject){
+      await new User({}).unlock(userObject.username)
+      .then(() => {
+        this.loading = false
+        this.error = false
+        this.resetSnackbar();
+        this.createSnackbar('primary', this.$t("section.users.userUnlocked").toUpperCase())
+        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+      })
+      .catch(error => {
+        console.log(error)
+        this.loading = false
+        this.error = true
+        this.resetSnackbar();
+        this.createSnackbar('red', this.$t("section.users.errorUserUnlock").toUpperCase())
         setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
       })
     },

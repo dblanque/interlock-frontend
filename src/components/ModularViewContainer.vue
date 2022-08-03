@@ -81,8 +81,18 @@
       v-model="snackbar"
       class="mb-12"
       :color="snackbarColor"
-      :dark="!isThemeDark()" :light="isThemeDark()"
       >
+      <v-fab-transition>
+        <v-icon v-if="snackbarColor == 'green' || snackbarColor == 'valid'" class="mr-1">
+          mdi-checkbox-marked-circle-outline
+        </v-icon>
+        <v-icon v-else-if="snackbarColor == 'primary'" class="mr-1">
+          mdi-information-outline
+        </v-icon>
+        <v-icon v-else-if="snackbarColor == 'error' || snackbarColor == 'red'" class="mr-1">
+          mdi-close-circle-outline
+        </v-icon>
+      </v-fab-transition>
       {{ snackbarMessage }}
 
       <template v-slot:action="{ attrs }">

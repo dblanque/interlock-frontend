@@ -27,7 +27,7 @@ export function dateLdapToString(date) {
     return result
 }
 
-export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='dn', childrenKey='children', searchResult=undefined){
+export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='distinguishedName', childrenKey='children', searchResult=undefined){
     // If ID matches with current object
     if (idToSearch == targetEntity.id){
         if (targetEntity[keyToSearch] != undefined) {

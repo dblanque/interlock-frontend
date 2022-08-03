@@ -3,7 +3,7 @@
         <!-- Title Bar -->
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-                <h3 class="ma-2">{{$t("section.users.createView.header")}}</h3>
+                <h3 class="ma-2">{{$t("section.users.userCreate.header")}}</h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
                     <v-icon>
@@ -20,11 +20,11 @@
             <!-- Steps -->
                 <v-stepper-header class="px-16">
                     <!-- Basics -->
-                    <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.users.createView.step1') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.users.userCreate.step1') }}</v-stepper-step>
                     <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
-                    <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.users.createView.step2') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.users.userCreate.step2') }}</v-stepper-step>
                     <v-divider class="mx-3" :style="createStage > 2 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
-                    <v-stepper-step :complete="createStage > 3" step="3">{{ $t('section.users.createView.step3') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 3" step="3">{{ $t('section.users.userCreate.step3') }}</v-stepper-step>
                 </v-stepper-header>
 
             <!-- Steps Content -->
@@ -78,7 +78,7 @@
                                                 <v-expansion-panel-header>
                                                     <span>
                                                         <span>
-                                                            {{ $t('section.users.createView.userCreatedIn') + ': ' }}
+                                                            {{ $t('section.users.userCreate.userCreatedIn') + ': ' }}
                                                         </span>
                                                         <span class="font-weight-bold">
                                                             {{ this.userDestination }}
@@ -170,7 +170,7 @@
 
                             <!-- Optionals -->
                             <v-row justify="center" class="mb-1">
-                                <span class="text-overline" style="font-size: .95em !important;">{{ $t("section.users.createView.optionalsHeader") }}</span>
+                                <span class="text-overline" style="font-size: .95em !important;">{{ $t("section.users.userCreate.optionalsHeader") }}</span>
                             </v-row>
                             <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
                                 <v-col cols="12" lg="4">
@@ -273,7 +273,7 @@
                             <v-col cols="12">
                                 <v-slide-y-transition>
                                     <v-col v-if="!this.loading && this.loading == false">
-                                        {{ this.error ? '' : $t('section.users.createView.step3_success') }}
+                                        {{ this.error ? '' : $t('section.users.userCreate.step3_success') }}
                                     </v-col>
                                 </v-slide-y-transition>
                             </v-col>
@@ -587,7 +587,7 @@ export default {
                             this.showSnackbar = false
                         this.showSnackbar = true
                         this.error = true
-                        this.errorMsg = this.$t('section.users.createView.validationError')
+                        this.errorMsg = this.$t('section.users.userCreate.validationError')
                     }
                     break;
                 case 2:
@@ -613,7 +613,7 @@ export default {
                             this.showSnackbar = false
                         this.showSnackbar = true
                         this.error = true
-                        this.errorMsg = this.$t('section.users.createView.validationError')
+                        this.errorMsg = this.$t('section.users.userCreate.validationError')
                     }
                     break;
                 default:

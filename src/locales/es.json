@@ -23,6 +23,7 @@
     }
   },
   "actions": {
+    "unlock":"Desbloquear",
     "resetFilters":"Borrar Filtros",
     "backToLogin":"Volver a iniciar sesión",
     "testSettings":"Probar Configuración",
@@ -347,11 +348,10 @@
         "title":"Mover Objeto de Dominio",
         "willBeMovedTo":"Será movido a",
         "originalRelativePath":"Camino Relativo Original"
-      },
-      "cantBeDeletedHasChildren":"Este objeto tiene hijos y no puede ser borrado"
+      }
     },
     "users":{
-      "createView":{
+      "userCreate":{
         "header":"Crear Usuario",
         "optionalsHeader":"Detalles Opcionales",
         "validationError":"Error de Validación",
@@ -373,6 +373,8 @@
           "addObjectClass":"Mejor que sepa lo que hace"
         }
       },
+      "userUnlocked": "Usuario desbloqueado Exitosamente",
+      "errorUserUnlock": "Error al desbloquear el Usuario",
       "tryingToDisable": "Está intentando des-habilitar",
       "disablingOwnUser": "No puede des-habilitar su propio usuario",
       "antiLockoutWarning":"Alerta Anti-bloqueo",
@@ -422,6 +424,14 @@
         "GROUP_DOMAIN_LOCAL": "Alcance Local de Dominio",
         "GROUP_UNIVERSAL": "Alcance Universal",
         "GROUP_SECURITY": "Grupo de Seguridad"
+      },
+      "groupCreate":{
+        "header":"Crear Grupo",
+        "step1":"Detalles del Grupo",
+        "step2":"Miembros del Grupo",
+        "step3":"Grupo Creado",
+        "optionalsHeader":"Detalles Opcionales",
+        "groupCreatedIn":"El Grupo será creado en"
       },
       "groupDialog":{
         "groupType":"Tipo de Grupo",

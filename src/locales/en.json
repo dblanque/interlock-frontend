@@ -23,6 +23,7 @@
     }
   },
   "actions":{
+    "unlock":"Unlock",
     "resetFilters":"Reset Filters",
     "backToLogin":"Go back to Log-in",
     "testSettings":"Test Settings",
@@ -341,11 +342,10 @@
         "title":"Move Domain Object",
         "willBeMovedTo":"Will be moved to",
         "originalRelativePath":"Original Relative Path"
-      },
-      "cantBeDeletedHasChildren":"This object has children and cannot be deleted"
+      }
     },
     "users":{
-      "createView":{
+      "userCreate":{
         "header":"Create User",
         "optionalsHeader":"Optional Details",
         "validationError":"Validation Error",
@@ -367,6 +367,8 @@
           "addObjectClass":"You better know what you're doing"
         }
       },
+      "userUnlocked": "User unlocked Successfully",
+      "errorUserUnlock": "Error unlocking User",
       "tryingToDisable": "You're trying to disable",
       "disablingOwnUser": "You cannot disable your own user",
       "antiLockoutWarning":"Anti-lockout Warning",
@@ -418,6 +420,14 @@
         "GROUP_DOMAIN_LOCAL": "Domain Local Scope",
         "GROUP_UNIVERSAL": "Universal Scope",
         "GROUP_SECURITY": "Security Group"
+      },
+      "groupCreate":{
+        "header":"Create Group",
+        "step1":"Group Details",
+        "step2":"Group Members",
+        "step3":"Group Created",
+        "optionalsHeader":"Optional Details",
+        "groupCreatedIn":"Group will be created in"
       },
       "groupDialog":{
         "groupType":"Group Type",

@@ -3,7 +3,7 @@
         <!-- Title Bar -->
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-                <h3 class="ma-2">{{$t("section.groups.createView.header")}}</h3>
+                <h3 class="ma-2">{{$t("section.groups.groupCreate.header")}}</h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
                     <v-icon>
@@ -20,11 +20,11 @@
             <!-- Steps -->
                 <v-stepper-header class="px-16">
                     <!-- Basics -->
-                    <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.groups.createView.step1') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.groups.groupCreate.step1') }}</v-stepper-step>
                     <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
-                    <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.groups.createView.step2') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.groups.groupCreate.step2') }}</v-stepper-step>
                     <v-divider class="mx-3" :style="createStage > 2 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
-                    <v-stepper-step :complete="createStage > 3" step="3">{{ $t('section.groups.createView.step3') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 3" step="3">{{ $t('section.groups.groupCreate.step3') }}</v-stepper-step>
                 </v-stepper-header>
 
             <!-- Steps Content -->
@@ -46,7 +46,7 @@
                             <v-row class="ma-0 pa-0" justify="center">
                                 <v-col cols="12" lg="8">
                                         <v-expansion-panels 
-                                        v-model="userPathExpansionPanel"
+                                        v-model="groupPathExpansionPanel"
                                         flat 
                                         hover 
                                         style="border: 1px solid var(--clr-primary);">
@@ -54,7 +54,7 @@
                                                 <v-expansion-panel-header>
                                                     <span>
                                                         <span>
-                                                            {{ $t('section.groups.createView.groupCreatedIn') + ': ' }}
+                                                            {{ $t('section.groups.groupCreate.groupCreatedIn') + ': ' }}
                                                         </span>
                                                         <span class="font-weight-bold">
                                                             {{ this.groupDestination }}
@@ -75,78 +75,21 @@
                                         </v-expansion-panels>
                                 </v-col>
                             </v-row>
-                            <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-                                <v-col cols="12" lg="4">
-                                    <v-text-field
-                                    dense
-                                    @keydown.enter="nextStep"
-                                    :label="$t('ldap.attributes.givenName')"
-                                    v-model="groupToCreate.givenName"
-                                    :rules="[this.fieldRules(groupToCreate.givenName, 'ge_name', true)]"
-                                    ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" lg="4">
-                                    <v-text-field
-                                    dense
-                                    @keydown.enter="nextStep"
-                                    :label="$t('ldap.attributes.sn')"
-                                    v-model="groupToCreate.sn"
-                                    :rules="[this.fieldRules(groupToCreate.sn, 'ge_name')]"
-                                    ></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-                                <v-col cols="12" lg="6">
-                                    <v-text-field
-                                    dense
-                                    @keydown.enter="nextStep"
-                                    :label="$t('ldap.attributes.displayName')"
-                                    v-model="getDisplayName"
-                                    :rules="[this.fieldRules(getDisplayName, 'ge_topic', true)]"
-                                    ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" lg="2">
-                                    <v-text-field
-                                    dense
-                                    @keydown.enter="nextStep"
-                                    :label="$t('ldap.attributes.initials')"
-                                    v-model="groupToCreate.initials"
-                                    :rules="[this.fieldRules(groupToCreate.initials, 'ge_topic')]"
-                                    ></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-                                <v-col cols="12" lg="4">
-                                    <v-text-field
-                                    dense
-                                    @keydown.enter="nextStep"
-                                    :hint="$t('misc.autocomputedField')"
-                                    persistent-hint
-                                    :label="$t('ldap.attributes.userPrincipalName')"
-                                    readonly
-                                    v-model="getUSN"
-                                    ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" lg="4">
-                                    <v-text-field
-                                    dense
-                                    @keydown.enter="nextStep"
-                                    :hint="$t('misc.autocomputedField')"
-                                    persistent-hint
-                                    :label="$t('ldap.attributes.userPrincipalName_pre2000')"
-                                    readonly
-                                    v-model="getUSN_2000"
-                                    ></v-text-field>
-                                </v-col>
-                            </v-row>
     
+                            <GroupTypeRadioGroups
+                                :editFlag="true"
+                                :radioGroupScope="radioGroupScope"
+                                :radioGroupType="radioGroupType"
+                                @update="updateValue"
+                            />
                             <v-row class="ma-0 pa-0">
                                 <v-divider class="mx-12 my-3 mt-6"></v-divider>
                             </v-row>
 
+
                             <!-- Optionals -->
                             <v-row justify="center" class="mb-1">
-                                <span class="text-overline" style="font-size: .95em !important;">{{ $t("section.users.createView.optionalsHeader") }}</span>
+                                <span class="text-overline" style="font-size: .95em !important;">{{ $t("section.groups.groupCreate.optionalsHeader") }}</span>
                             </v-row>
                             <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
                                 <v-col cols="12" lg="4">
@@ -158,22 +101,13 @@
                                     :rules="[this.fieldRules(groupToCreate.mail, 'ge_mail')]"
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="12" lg="4">
-                                        <v-text-field
-                                        dense
-                                        @keydown.enter="nextStep"
-                                        :label="$t('ldap.attributes.wWWHomePage')"
-                                        v-model="groupToCreate.wWWHomePage"
-                                        :rules="[this.fieldRules(groupToCreate.wWWHomePage, 'ge_website')]"
-                                        ></v-text-field>
-                                </v-col>
                             </v-row>
                         </v-form>
                     </v-stepper-content>
                     <!-- Password -->
                     <v-stepper-content step="2">
                         
-                        <v-form ref="userCreateForm2">
+                        <v-form ref="groupCreateForm2">
                             <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
                                 <v-col cols="12" lg="4">
                                     <v-text-field
@@ -199,31 +133,6 @@
                                         ></v-text-field>
                                 </v-col>
                             </v-row>
-                            <v-list>
-                                <!-- Items -->
-                                <v-list-item
-                                two-line
-                                @keydown.enter="nextStep"
-                                @click="onClickPermission(key)"
-                                :value="permissions[key].value"
-                                v-for="(value, key) in permissions"
-                                :key="key">
-                                    <v-list-item-content class="pl-10">
-                                        <!-- Title -->
-                                        <v-list-item-title class="font-weight-bold">
-                                        {{ $t('section.users.permissions.' + key) }}
-                                        </v-list-item-title>
-                                        <v-list-item-subtitle>
-                                            {{ key }}
-                                        </v-list-item-subtitle>
-                                    </v-list-item-content>
-                                        <v-list-item-action>
-                                        <v-checkbox @keypress="false" @keydown="false"
-                                        @click="onClickPermission(key)" 
-                                        v-model="permissions[key].value"/>
-                                        </v-list-item-action>
-                                    </v-list-item>
-                            </v-list>
                         </v-form>
                     </v-stepper-content>
                     <!-- Check if user exists - loader -->
@@ -249,7 +158,7 @@
                             <v-col cols="12">
                                 <v-slide-y-transition>
                                     <v-col v-if="!this.loading && this.loading == false">
-                                        {{ this.error ? '' : $t('section.users.createView.step3_success') }}
+                                        {{ this.error ? '' : $t('section.groups.groupCreate.step3_success') }}
                                     </v-col>
                                 </v-slide-y-transition>
                             </v-col>
@@ -278,7 +187,7 @@
                     </v-slide-x-reverse-transition>
 
                     <v-slide-x-reverse-transition>
-                        <v-btn elevation="0" @click="newUser" v-if="this.createStage < 2"
+                        <v-btn elevation="0" @click="newGroup" v-if="this.createStage < 2"
                         class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
@@ -331,13 +240,15 @@
 import Group from '@/include/Group'
 import OrganizationalUnit from '@/include/OrganizationalUnit'
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
+import GroupTypeRadioGroups from '@/components/Group/GroupTypeRadioGroups.vue'
 import validationMixin from '@/plugins/mixin/validationMixin';
 import { getDomainDetails } from '@/include/utils';
 
 export default {
     name: 'GroupCreate',
     components: {
-        DirtreeOUList
+        DirtreeOUList,
+        GroupTypeRadioGroups
     },
     data () {
       return {
@@ -354,123 +265,10 @@ export default {
         groupPathExpansionPanel: false,
         groupDestination: '',
         groupToCreate: {},
+        radioGroupScope: 0,
+        radioGroupType: 0,
         ouList: [],
         createStage: 1,
-        addObjectClass: "",
-        objectClasses: [
-            "accessControlSubentry",
-            "account",
-            "alias",
-            "applicationEntity",
-            "applicationProcess",
-            "bootableDevice",
-            "certificationAuthority",
-            "certificationAuthority-V2",
-            "collectiveAttributeSubentry",
-            "country",
-            "crlDistributionPoint",
-            "device",
-            "dmd",
-            "dnsDomain",
-            "documentSeries",
-            "domain",
-            "domainRelatedObject",
-            "dsa",
-            "extensibleObject",
-            "friendlyCountry",
-            "groupOfNames",
-            "groupOfUniqueNames",
-            "ieee802Device",
-            "inetOrgPerson",
-            "ipHost",
-            "ipNetwork",
-            "ipProtocol",
-            "ipService",
-            "javaContainer",
-            "javaMarshalledObject",
-            "javaNamingReference",
-            "javaObject",
-            "javaSerializedObject",
-            "labeledURIObject",
-            "locality",
-            "mailRecipient",
-            "newPilotPerson",
-            "nisDomainObject",
-            "nisKeyObject",
-            "nisMap",
-            "nisNetgroup",
-            "nisObject",
-            "oldQualityLabelledData",
-            "oncRpc",
-            "organization",
-            "organizationalPerson",
-            "organizationalRole",
-            "organizationalUnit",
-            "person",
-            "pilotDSA",
-            "pilotObject",
-            "pilotOrganization",
-            "posixAccount",
-            "posixGroup",
-            "top",
-            "user",
-            "referral",
-            "residentialPerson",
-            "room",
-            "shadowAccount",
-            "simpleSecurityObject",
-            "strongAuthenticationUser"
-        ],
-        permissions: {
-            "LDAP_UF_ACCOUNT_DISABLE" : {
-                value: false,
-                int: 2
-            },
-            "LDAP_UF_PASSWD_CANT_CHANGE" : {
-                value: false,
-                int: 64
-            },
-            "LDAP_UF_DONT_EXPIRE_PASSWD" : {
-                value: false,
-                int: 65536
-            },
-        },
-        categories: {
-            basic: [
-                "sAMAccountName",
-                "givenName",
-                "sn",
-                "mail",
-                "displayName",
-                "is_enabled",
-                "last_login",
-                "telephoneNumber",
-                "wWWHomePage",
-            ],
-            location: [
-                "streetAddress",
-                "postalCode",
-                "l",
-                "st",
-                "countryCode",
-                "co",
-                "c",
-            ],
-            account: [
-                "distinguishedName",
-                "userPrincipalName",
-                "userAccountControl",
-                "whenCreated",
-                "whenChanged",
-                "lastLogon",
-                "badPwdCount",
-                "pwdLastSet",
-                "primaryGroupID",
-                "objectClass",
-                "objectCategory",
-                "sAMAccountType"
-            ]
-        }
       }
     },
     mixins: [
@@ -529,7 +327,7 @@ export default {
                             this.showSnackbar = false
                         this.showSnackbar = true
                         this.error = true
-                        this.errorMsg = this.$t('section.groups.createView.validationError')
+                        this.errorMsg = this.$t('section.groups.groupCreate.validationError')
                     }
                     break;
                 case 2:
@@ -549,7 +347,7 @@ export default {
                             this.showSnackbar = false
                         this.showSnackbar = true
                         this.error = true
-                        this.errorMsg = this.$t('section.groups.createView.validationError')
+                        this.errorMsg = this.$t('section.groups.groupCreate.validationError')
                     }
                     break;
                 default:
@@ -571,6 +369,9 @@ export default {
             this.basedn = domainDetails.basedn
             this.fetchOUs()
             this.groupDestination = "CN=Users," + this.basedn
+        },
+        updateValue(key, value){
+            this[key] = value
         },
         async fetchOUs(){
             await new OrganizationalUnit({}).list()
