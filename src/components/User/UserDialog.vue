@@ -213,7 +213,7 @@
                                 </v-expansion-panel-header>
                                 <v-expansion-panel-content>
                                     <v-row>
-                                        <v-col cols="12" lg="8">
+                                        <v-col cols="12">
                                             <v-text-field
                                             dense
                                             id="distinguishedName"
@@ -223,7 +223,7 @@
                                             :rules="[this.fieldRules(usercopy.distinguishedName, 'ldap_dn')]"
                                             ></v-text-field>
                                         </v-col>
-                                        <v-col cols="12" lg="4">
+                                        <v-col cols="12" lg="6">
                                             <v-text-field
                                             dense
                                             id="userPrincipalName"
@@ -233,26 +233,7 @@
                                             :rules="[this.fieldRules(usercopy.userPrincipalName, 'ldap_usn')]"
                                             ></v-text-field>
                                         </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="10" lg="3">
-                                            <v-text-field
-                                            dense
-                                            id="userAccountControl"
-                                            :label="$t('ldap.attributes.userAccountControl')"
-                                            readonly
-                                            v-model="calcEnabledPerms"
-                                            :rules="[this.fieldRules(calcEnabledPerms, 'ge_numbers')]"
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="" lg="3">
-                                            <v-btn color="primary" @click="changePerms"
-                                            small class="">
-                                                {{ $t("actions.changeUserPerms") }}
-                                                <v-icon>mdi-chevron-right</v-icon>
-                                            </v-btn>
-                                        </v-col>
-                                        <v-col cols="12" lg="3">
+                                        <v-col cols="12" lg="6" :justify="$vuetify.breakpoint.lgAndUp ? 'start':'center'">
                                             <v-text-field
                                             dense
                                             id="sAMAccountType"
@@ -262,15 +243,45 @@
                                             :rules="[this.fieldRules(usercopy.sAMAccountType, 'ge_lettersStrictUnderscore')]"
                                             ></v-text-field>
                                         </v-col>
-                                        <v-col cols="12" lg="3">
-                                            <v-text-field
+                                    </v-row>
+                                    <v-row :justify="$vuetify.breakpoint.lgAndUp ? 'start':'center'" align="center">
+                                        <v-col cols="12" md="3">
+                                            <v-btn outlined color="primary" @click="goToGroups"
+                                            class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
+                                                {{ $t("actions.changeUserGroups") }}
+                                                <v-icon>mdi-chevron-left</v-icon>
+                                            </v-btn>
+                                        </v-col>
+                                        <v-col cols="12" md="4">
+                                            <v-select
                                             dense
                                             id="primaryGroupID"
                                             :label="$t('ldap.attributes.primaryGroupID')"
                                             :readonly="editFlag != true"
                                             v-model="usercopy.primaryGroupID"
-                                            :rules="[this.fieldRules(usercopy.primaryGroupID, 'ge_numbers')]"
+                                            :items="this.usercopy.memberOfObjects"
+                                            :hint="$t('section.users.userDialog.hint.primaryGroupID')"
+                                            persistent-hint
+                                            :item-text="getNameForPID"
+                                            item-value="objectRid"
+                                            ></v-select>
+                                        </v-col>
+                                        <v-col cols="12" md="2">
+                                            <v-text-field
+                                            dense
+                                            id="userAccountControl"
+                                            :label="$t('ldap.attributes.userAccountControl')"
+                                            readonly
+                                            v-model="calcEnabledPerms"
+                                            :rules="[this.fieldRules(calcEnabledPerms, 'ge_numbers')]"
                                             ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="3">
+                                            <v-btn outlined color="primary" @click="goToPerms"
+                                            class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
+                                                {{ $t("actions.changeUserPerms") }}
+                                                <v-icon>mdi-chevron-right</v-icon>
+                                            </v-btn>
                                         </v-col>
                                     </v-row>
                                     <v-row>
@@ -439,6 +450,61 @@
                     </v-row>
                 </v-card-text>
             </v-tab-item>
+
+            <!-- GROUPS SCREEN -->
+            <v-tab-item :key="2">
+                <v-card-text class="my-3 py-4">
+                    <v-row justify="center">
+                        <v-col cols="12" md="10">
+                            <v-select
+                            dense
+                            id="primaryGroupID"
+                            :label="$t('ldap.attributes.primaryGroupID')"
+                            :readonly="editFlag != true"
+                            v-model="usercopy.primaryGroupID"
+                            :items="this.usercopy.memberOfObjects"
+                            :hint="$t('section.users.userDialog.hint.primaryGroupID')"
+                            persistent-hint
+                            :item-text="getNameForPID"
+                            item-value="objectRid"
+                            ></v-select>
+                        </v-col>
+                    </v-row>
+                    <v-row justify="center" align-content="center" class="mb-2">
+                    <v-col class="ma-0 pa-0" cols="12" md="10">
+                        <v-card outlined height="100%" class="ma-1 pa-0 pt-4">
+                            <v-row justify="center"
+                            class="pa-0 ma-0 text-h6 mx-4 ml-8 mb-2">
+                                {{ $t('section.users.groups') }}
+                            </v-row>
+                            <v-list dense>
+                                <v-list-item-group
+                                    multiple
+                                    active-class="groupSelected"
+                                    v-model="groupsToRemove">
+                                    <v-list-item v-for="group, key in usercopy.memberOfObjects" :key="key">
+                                        <template v-slot:default="{ active }">
+                                            <v-list-item-action>
+                                            <v-checkbox :input-value="active"></v-checkbox>
+                                            </v-list-item-action>
+                                                                        
+                                            <v-list-item-content>
+                                                <v-list-item-title>
+                                                    {{ group.name + " (" + group.objectRid + ")" }}
+                                                </v-list-item-title>
+                                            </v-list-item-content>
+
+                                            <v-list-item-action>
+                                            </v-list-item-action>
+                                        </template>
+                                    </v-list-item>
+                                </v-list-item-group>
+                            </v-list>
+                        </v-card>
+                    </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-tab-item>
         </v-tabs>
         <!-- End of Details Page -->
         </div>
@@ -449,13 +515,22 @@
             <v-row class="ma-1 pa-0" align="center" align-content="center" :justify="this.$vuetify.breakpoint.mdAndDown ? 'center' : 'end'">
                 <!-- Go Back button (Permissions View) -->
                 <v-slide-x-reverse-transition>
-                        <v-btn v-if="changingPerms" @click="goBackToDetails"
-                        class="text-normal ma-0 pa-0 pa-3 ma-1 bg-white bg-lig-25" 
+                        <v-btn v-if="changingPerms || changingGroups" @click="goBackToDetails"
+                        class="text-normal ma-0 pa-0 pa-3 ma-1 px-1 bg-white bg-lig-25" 
                         rounded>
-                            <v-icon class="mr-1">
-                                mdi-chevron-left
-                            </v-icon>
-                            {{ $t("section.users.userDialog.userDetails" )}}
+                            <v-fab-transition>
+                                <v-icon class="ml-0" v-if="changingPerms">
+                                    mdi-chevron-left
+                                </v-icon>
+                            </v-fab-transition>
+                            <span :class="changingPerms ? 'mr-2' : 'ml-2'">
+                                {{ $t("section.users.userDialog.userDetails" )}}
+                            </span>
+                            <v-fab-transition>
+                                <v-icon class="mr-0" v-if="changingGroups">
+                                    mdi-chevron-right
+                                </v-icon>
+                            </v-fab-transition>
                         </v-btn>
                 </v-slide-x-reverse-transition>
                 <!-- Enable/Disable Buttons -->
@@ -552,7 +627,9 @@ export default {
         realm: "",
         basedn: "",
         changingPerms: false,
+        changingGroups: false,
         usercopy: {},
+        groupsToRemove: [],
         addObjectClass: "",
         objectClasses: [
             "accessControlSubentry",
@@ -785,6 +862,9 @@ export default {
         },
     },
     methods: {
+        getNameForPID(item){
+            return item.name + " (" + item.objectRid + ")"
+        },
         getDomainDetails(){
             this.domain = localStorage.getItem('domain')
             this.realm = localStorage.getItem('realm')
@@ -816,6 +896,7 @@ export default {
         goBackToDetails(){
             this.tab = 0
             this.changingPerms = false
+            this.changingGroups = false
         },
         // This function sets the permissions each time the usercopy object is
         // synced to the parent view user object
@@ -829,10 +910,15 @@ export default {
                 });
             }
         },
-        // changePerms(): Changes tab to the permissions section
-        changePerms(){
+        goToPerms(){
             this.tab = 1
             this.changingPerms = true
+            this.changingGroups = false
+        },
+        goToGroups(){
+            this.tab = 2
+            this.changingPerms = false
+            this.changingGroups = true
         },
         async disableUser(){
             await this.usercopy.disable(this.usercopy.username)
@@ -890,6 +976,7 @@ export default {
         syncUser(){
             this.tab = 0
             this.changingPerms = false
+            this.changingGroups = false
             this.getDomainDetails()
             this.usercopy = new User({})
             this.$nextTick(() => {
@@ -914,7 +1001,6 @@ export default {
 </script>
 
 <style>
-
 .outlined {
     border: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
 }
@@ -943,5 +1029,12 @@ export default {
 
 [theme=dark] .card-actions {
     background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-85));
+}
+
+.groupSelected {
+    border-left: 4px solid var(--clr-primary);
+}
+.groupSelected::before {
+    background-color: rgba(0,0,0,0.3);
 }
 </style>

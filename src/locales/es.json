@@ -81,6 +81,7 @@
     "download": "Descargar",
     "downloadLatest": "Descargar Último",
     "changeUserPerms": "Ver Permisos",
+    "changeUserGroups":"Ver Grupos",
     "addObjectClass": "Añadir Clase de Objeto"
   },
   "words": {
@@ -370,7 +371,8 @@
         "noLastLogon":"El usuario aún no ha iniciado sesión",
         "userDetails":"Detalles de Usuario",
         "hint":{
-          "addObjectClass":"Mejor que sepa lo que hace"
+          "addObjectClass":"Mejor que sepa lo que hace",
+          "primaryGroupID":"Solo modifique este valor si tiene Clientes Macintosh o Aplicaciones que utilicen POSIX"
         }
       },
       "userUnlocked": "Usuario desbloqueado Exitosamente",
@@ -381,6 +383,7 @@
       "basicDetails":"Detalles Básicos",
       "location":"Ubicación",
       "perms":"Permisos del Usuario",
+      "groups":"Grupos del Usuario",
       "editFlagWarning":"Está editando el usuario",
       "permsRaw":"Salida en Crudo",
       "permsRawHint":"Clickee aquí para abrir documentación de Microsoft sobre Permisos de LDAP",

@@ -81,6 +81,7 @@
     "download":"Download",
     "downloadLatest":"Download Latest",
     "changeUserPerms": "View Permissions",
+    "changeUserGroups":"View Groups",
     "addObjectClass": "Add Object Class"
   },
   "words":{
@@ -364,7 +365,8 @@
         "noLastLogon":"User has not logged in yet",
         "userDetails":"User Details",
         "hint":{
-          "addObjectClass":"You better know what you're doing"
+          "addObjectClass":"You better know what you're doing",
+          "primaryGroupID":"Only change this if you have Macintosh Clients or POSIX Compliant Applications"
         }
       },
       "userUnlocked": "User unlocked Successfully",
@@ -376,6 +378,7 @@
       "location":"Location",
       "editFlagWarning":"You are now editing this user",
       "perms":"User Permissions",
+      "groups":"User Groups",
       "permsRaw":"Raw Output",
       "permsRawHint":"Click here to open Microsoft Documentation on LDAP Permissions",
       "permsCalc":"Calculated Permissions Int. Number",
