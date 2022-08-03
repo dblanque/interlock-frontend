@@ -147,6 +147,7 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon
+            class="clr-secondary clr-lig-20"
             rounded
             v-bind="attrs"
             v-on="on"
@@ -154,7 +155,7 @@
             :disabled="loading"
             @click="unlockUser(item)"
           >
-          <v-icon small color="secondary">
+          <v-icon small>
             mdi-lock-open
           </v-icon>
           </v-btn>

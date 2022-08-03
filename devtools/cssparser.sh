@@ -25,6 +25,9 @@ secondary
 valid
 error
 cancel
+blue
+red
+orange
 white
 black
 )
@@ -89,6 +92,11 @@ HAVE HIGHER SELECTOR SPECIFICITY THIS FILE IS LONG */
     --clr-blue-sat: 89.7%;
     --clr-blue-lig: 54.1%;
     --clr-blue: hsl(var(--clr-blue-hue), var(--clr-blue-sat), var(--clr-blue-lig));
+
+    --clr-red-hue: 4.1;
+    --clr-red-sat: 89.6%;
+    --clr-red-lig: 58.4%;
+    --clr-red: hsl(var(--clr-red-hue), var(--clr-red-sat), var(--clr-red-lig));
 
     --clr-orange-hue: 35.8;
     --clr-orange-sat: 100%;

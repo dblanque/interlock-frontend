@@ -142,6 +142,25 @@ to {
     bottom: 0 !important;
 }
 
+.pill-start {
+    border-color: var(--clr-white) !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.pill-center {
+    border-color: var(--clr-white) !important;
+    border-left: 0 !important;
+    border-radius: 0 !important;
+}
+
+.pill-end {
+    border-color: var(--clr-white) !important;
+    border-left: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
 .mdsi, .mdsi::after { font-family: "Material Icons" !important; }
 .mdso, .mdso::after { font-family: "Material Icons Outlined" !important; }
 .mdss, .mdss::after { font-family: "Material Icons Sharp" !important; }

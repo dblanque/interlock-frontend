@@ -474,27 +474,83 @@
                     <v-col class="ma-0 pa-0" cols="12" md="10">
                         <v-card outlined height="100%" class="ma-1 pa-0 pt-4">
                             <v-row justify="center"
-                            class="pa-0 ma-0 text-h6 mx-4 ml-8 mb-2">
+                            class="pa-0 ma-0 text-h6 mx-4 mb-2">
                                 {{ $t('section.users.groups') }}
                             </v-row>
+                            <v-divider class="mx-12"/>
                             <v-list dense>
-                                <v-list-item-group
-                                    multiple
-                                    active-class="groupSelected"
-                                    v-model="groupsToRemove">
-                                    <v-list-item v-for="group, key in usercopy.memberOfObjects" :key="key">
-                                        <template v-slot:default="{ active }">
-                                            <v-list-item-action>
-                                            <v-checkbox :input-value="active"></v-checkbox>
-                                            </v-list-item-action>
-                                                                        
+                                <v-row class="ma-0 pa-0 mx-6 my-3" justify="end">
+                                        <v-btn color="primary" outlined @click="openAddToGroupDialog">
+                                            <v-icon small>
+                                                mdi-plus
+                                            </v-icon>
+                                            {{ $t("section.users.userDialog.addToGroup") }}
+                                        </v-btn>
+                                </v-row>
+                                <v-list-item-group active-class="groupSelected">
+                                    <v-list-item v-for="group, key in getCorrectedMemberOf" :key="key">
+                                        <template v-slot:default="{ }">
+                                            <v-list-item-action/>
+
                                             <v-list-item-content>
                                                 <v-list-item-title>
                                                     {{ group.name + " (" + group.objectRid + ")" }}
                                                 </v-list-item-title>
                                             </v-list-item-content>
 
-                                            <v-list-item-action>
+                                            <v-list-item-action class="ma-0">
+                                                <v-tooltip bottom>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-btn small icon 
+                                                    @click="goToGroup(group.distinguishedName)"
+                                                    @click.stop
+                                                    color="primary"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >
+                                                    <v-icon small>
+                                                        mdi-arrow-right-bold
+                                                    </v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span> {{ $t("actions.goTo") + " " + $t("classes.group.single") }} </span>
+                                                </v-tooltip>
+                                            </v-list-item-action>
+                                            <v-list-item-action class="ma-0">
+                                                <v-tooltip bottom>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-btn small icon 
+                                                    @click="copyText(group.distinguishedName)"
+                                                    @click.stop
+                                                    color="primary"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >
+                                                    <v-icon small>
+                                                        mdi-content-copy
+                                                    </v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span> {{ $t("section.groups.groupDialog.copyDistinguishedName") }} </span>
+                                                </v-tooltip>
+                                            </v-list-item-action>
+                                            <v-list-item-action class="ma-0">
+                                                <v-tooltip bottom>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-btn small icon
+                                                    @click="removeFromGroup(group.distinguishedName)"
+                                                    @click.stop
+                                                    color="red"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >
+                                                    <v-icon small>
+                                                        mdi-close
+                                                    </v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span> {{ $t("section.users.userDialog.removeFromGroup") }} </span>
+                                                </v-tooltip>
                                             </v-list-item-action>
                                         </template>
                                     </v-list-item>
@@ -629,7 +685,6 @@ export default {
         changingPerms: false,
         changingGroups: false,
         usercopy: {},
-        groupsToRemove: [],
         addObjectClass: "",
         objectClasses: [
             "accessControlSubentry",
@@ -837,6 +892,18 @@ export default {
         this.syncUser();
     },
     computed:{
+        getCorrectedMemberOf() {
+            var arrayResult = []
+            if (this.usercopy.memberOfObjects != undefined){
+                this.usercopy.memberOfObjects.forEach(group => {
+                    if (this.usercopy.memberOf.includes(group.distinguishedName))
+                        arrayResult.push(group)
+                });
+                console.log(arrayResult)
+                return arrayResult
+            }
+            return undefined
+        },
         calcEnabledPerms() {
             var result = 0
             for (const [key] of Object.entries(this.permissions)) {
@@ -861,7 +928,27 @@ export default {
                 return "@" + this.domain
         },
     },
+    watch: {
+        usercopy(newValue) {
+            console.log(newValue.primaryGroupID)
+        }
+    },
     methods: {
+        goToGroup(groupDn) {
+            console.log(groupDn)
+        },
+        openAddToGroupDialog() {
+            console.log("openAddToGroupDialog")
+        },
+        addToGroup(groupDn){
+            console.log(groupDn)
+        },
+        removeFromGroup(groupDn) {
+            console.log(groupDn)
+        },
+        copyText(textString) {
+            navigator.clipboard.writeText(textString);
+        },
         getNameForPID(item){
             return item.name + " (" + item.objectRid + ")"
         },
@@ -946,6 +1033,8 @@ export default {
                 if (this.permissions[key].value == true)
                     this.usercopy.permission_list.push(key)
             }
+            // Set groups to add or remove
+            
             // Uncomment below to debug permissions list
             // console.log(this.usercopy.permission_list)
             this.$emit('save', this.viewKey, this.usercopy);
