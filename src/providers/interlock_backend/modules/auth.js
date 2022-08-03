@@ -29,14 +29,26 @@ const calls = {
     },
     logout: () => {
         return new Promise(resolve => {
-            localStorage.removeItem('token')
-            localStorage.removeItem('refresh')
-            localStorage.removeItem("username")
-            localStorage.removeItem("first_name")
-            localStorage.removeItem("last_name")
-            localStorage.removeItem("email")
-            localStorage.removeItem('admin_allowed')
-            resolve()
+            backend.request.get(backend.urls.auth.logout).then(() => {
+                localStorage.removeItem('token')
+                localStorage.removeItem('refresh')
+                localStorage.removeItem("username")
+                localStorage.removeItem("first_name")
+                localStorage.removeItem("last_name")
+                localStorage.removeItem("email")
+                localStorage.removeItem('admin_allowed')
+                resolve()
+            }).catch(error => {
+                console.log(error)
+                localStorage.removeItem('token')
+                localStorage.removeItem('refresh')
+                localStorage.removeItem("username")
+                localStorage.removeItem("first_name")
+                localStorage.removeItem("last_name")
+                localStorage.removeItem("email")
+                localStorage.removeItem('admin_allowed')
+                resolve()
+            })
         })
     }
 }

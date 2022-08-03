@@ -459,6 +459,8 @@
         "LDAP_LOG_DELETE":"Log DELETE Events",
         "LDAP_LOG_OPEN_CONNECTION":"Log OPEN LDAP CONNECTION Events",
         "LDAP_LOG_CLOSE_CONNECTION":"Log CLOSE LDAP CONNECTION Events",
+        "LDAP_LOG_LOGIN":"Log Interlock LOGIN Events",
+        "LDAP_LOG_LOGOUT":"Log Interlock LOGOUT Events",
         "LDAP_URI_PREFIX":"LDAP Prefix",
         "LDAP_URI_IP":"Server IP",
         "LDAP_URI_PORT":"Server Port",

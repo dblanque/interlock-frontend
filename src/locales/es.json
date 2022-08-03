@@ -463,6 +463,8 @@
         "LDAP_LOG_DELETE":"Registrar Eventos de BAJA",
         "LDAP_LOG_OPEN_CONNECTION":"Registrar Eventos al ABRIR CONEXIÓN LDAP",
         "LDAP_LOG_CLOSE_CONNECTION":"Registrar Evento al CERRAR CONEXIÓN LDAP",
+        "LDAP_LOG_LOGIN":"Registrar Inicios de Sesión en Interlock",
+        "LDAP_LOG_LOGOUT":"Registrar Cierres de Sesión en Interlock",
         "LDAP_URI_PREFIX":"Prefijo LDAP",
         "LDAP_URI_IP":"Dirección IP del Servidor",
         "LDAP_URI_PORT":"Puerto del Servidor",

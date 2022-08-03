@@ -386,6 +386,14 @@ export default {
                             value: false,
                             type: "boolean",
                         },
+                        LDAP_LOG_LOGIN: {
+                            value: false,
+                            type: "boolean",
+                        },
+                        LDAP_LOG_LOGOUT: {
+                            value: false,
+                            type: "boolean",
+                        },
                     }
                 },
                 domain: {

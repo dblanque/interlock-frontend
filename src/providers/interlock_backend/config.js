@@ -24,7 +24,8 @@ if(auth != null && auth != undefined && auth.length > 0)
 const urls = {
     auth: {
         token: 'api/token/',
-        tokenRefresh: 'api/token/refresh/'
+        tokenRefresh: 'api/token/refresh/',
+        logout: 'api/users/logout/'
     },
     user: {
         base: 'api/users/',
