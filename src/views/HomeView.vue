@@ -200,7 +200,7 @@
 
     <!----- ABOUT AND DONATE BUTTONS ------>
     <v-row id="home-footer-buttons" justify="end" class="pa-0 ma-0">
-      <v-btn color="primary" small class="mx-2 mb-1">{{ $t("footer.about") }}</v-btn>
+      <!-- <v-btn color="primary" small class="mx-2 mb-1">{{ $t("footer.about") }}</v-btn> -->
       <!-- <v-btn small text class="mx-2">DONATE</v-btn> -->
     </v-row>
     <v-footer

@@ -168,7 +168,7 @@
                                                     </v-row>
                                                     <v-row v-else align="center" justify="center">
                                                         <v-col cols="12" class="pa-0 ma-0 px-1">
-                                                            {{ member.dn }}
+                                                            {{ member.distinguishedName }}
                                                         </v-col>
                                                     </v-row>
                                                 </v-list-item-content>

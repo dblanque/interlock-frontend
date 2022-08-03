@@ -228,7 +228,7 @@
           "date": "Date is invalid",
           "dayDate":"Day Date is invalid",
           "ipAddress":"Invalid IP Address",
-          "dn":"Distinguished Name is invalid",
+          "distinguishedName":"Distinguished Name is invalid",
           "realm":"NT Realm is invalid"
       },
       "unableToLoad":"Unable to load",

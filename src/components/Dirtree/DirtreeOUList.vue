@@ -88,7 +88,7 @@ export default {
                     }
                 })
             } else if (itemToUpdate.id == itemID)
-                this.objectDestination = itemToUpdate.dn
+                this.objectDestination = itemToUpdate.distinguishedName
 
             this.emitDestination()
         },

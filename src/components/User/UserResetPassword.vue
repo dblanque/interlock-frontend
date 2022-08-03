@@ -107,7 +107,7 @@ export default {
             if(resetConfirm != true)
                 this.$emit('closeDialog', this.viewKey);
 
-            user.dn = this.userObject.dn
+            user.distinguishedName = this.userObject.distinguishedName
             user.username = this.userObject.username
             console.log(this.isEndUser)
             if (this.isEndUser === true) {

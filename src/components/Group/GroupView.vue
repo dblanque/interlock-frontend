@@ -214,7 +214,7 @@ export default {
       data: {
         selectedGroup: {
           "cn": "",
-          "dn": ""
+          "distinguishedName": ""
         },
         groupdata: {},
       },
@@ -360,9 +360,9 @@ export default {
         this.loading = true
       this.fetchingData = true
       this.data.selectedGroup.cn = item.cn
-      this.data.selectedGroup.dn = item.dn
+      this.data.selectedGroup.distinguishedName = item.distinguishedName
       this.data.groupdata = new Group({})
-      await this.data.groupdata.fetch(this.data.selectedGroup.dn)
+      await this.data.groupdata.fetch(this.data.selectedGroup.distinguishedName)
       .then(() => {
         this.openDialog('groupDialog')
         if (isEditable == true)

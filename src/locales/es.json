@@ -234,7 +234,7 @@
       "date": "Fecha inválida",
       "dayDate": "Fecha de Día inválida",
       "ipAddress":"Dirección de IP inválida",
-      "dn":"Nombre Distinguido inválido",
+      "distinguishedName":"Nombre Distinguido inválido",
       "realm":"Reino NT inválido"
     },
     "unableToLoad":"No se pudo cargar la sección",

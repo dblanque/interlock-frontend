@@ -227,7 +227,7 @@
                                     <v-col cols="12" lg="8">
                                         <v-text-field
                                         dense
-                                        id="dn"
+                                        id="distinguishedName"
                                         :label="$t('ldap.attributes.distinguishedName')"
                                         readonly
                                         v-model="user.distinguishedName"

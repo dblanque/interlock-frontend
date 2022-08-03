@@ -7,7 +7,7 @@ class Group extends ApiModel{
     displayName;
     mail;
     member;
-    dn;
+    distinguishedName;
     sAMAccountName;
 
     /**

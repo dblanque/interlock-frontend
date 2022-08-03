@@ -232,7 +232,7 @@
     <!-- USER VIEW/EDIT DIALOG -->
     <v-dialog eager max-width="900px" v-model="dialogs['dirtreeMove']">
         <DirtreeMove
-            :objectDn="selectedObject.dn"
+            :objectDn="selectedObject.distinguishedName"
             :objectName="selectedObject.name"
             :viewKey="'dirtreeMove'"
             ref="DirtreeMove"
@@ -328,7 +328,7 @@ export default {
       'dialogs': {
           handler: function (newValue) {
             if (!newValue['dirtreeMove'] || newValue['dirtreeMove'] == false)
-              this.$refs.DirtreeMove.clearList(this.selectedObject.dn);
+              this.$refs.DirtreeMove.clearList(this.selectedObject.distinguishedName);
           },
           deep: true
       }
@@ -349,7 +349,7 @@ export default {
             switch (key) {
                 case 'dirtreeMove':
                     this.selectedObject = item
-                    this.$refs.DirtreeMove.resetDialog(this.selectedObject.dn);
+                    this.$refs.DirtreeMove.resetDialog(this.selectedObject.distinguishedName);
                 break;
                 default:
                 break;

@@ -3,7 +3,7 @@ import ApiModel from '@/include/super/ApiModel'
 
 class OrganizationalUnit extends ApiModel{
     
-    dn;
+    distinguishedName;
     attributes;
 
     /**

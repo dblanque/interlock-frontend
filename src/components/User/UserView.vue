@@ -81,7 +81,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.clickTo') + " " + $t('actions.enable') + " " + item.username  }}</span>
+        <span>{{ $t('actions.clickTo') + " " + $t('actions.enable') + " " + item.username }}</span>
       </v-tooltip>
     </template>
 
@@ -103,7 +103,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.view') }}</span>
+        <span>{{ $t('actions.view') + " " + item.username }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -121,7 +121,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.edit') }}</span>
+        <span>{{ $t('actions.edit') + " " + item.username }}</span>
       </v-tooltip>
 
       <!-- RESET PASSWORD BUTTON -->
@@ -271,7 +271,7 @@ export default {
       data: {
         selectedUser: {
           "username": "",
-          "dn": ""
+          "distinguishedName": ""
         },
         userdata: {},
       },
@@ -474,7 +474,7 @@ export default {
         this.loading = true
       this.fetchingData = true
       this.data.selectedUser.username = item.username
-      this.data.selectedUser.dn = item.dn
+      this.data.selectedUser.distinguishedName = item.distinguishedName
       this.data.userdata = new User({})
       await this.data.userdata.fetch(this.data.selectedUser.username)
       .then(() => {

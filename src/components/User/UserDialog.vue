@@ -216,7 +216,7 @@
                                         <v-col cols="12" lg="8">
                                             <v-text-field
                                             dense
-                                            id="dn"
+                                            id="distinguishedName"
                                             :label="$t('ldap.attributes.distinguishedName')"
                                             readonly
                                             v-model="usercopy.distinguishedName"
@@ -446,7 +446,7 @@
     
         <!-- Actions -->
         <v-card-actions class="card-actions">
-            <v-row class="ma-1 pa-0" align="center" align-content="center" :justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
+            <v-row class="ma-1 pa-0" align="center" align-content="center" :justify="this.$vuetify.breakpoint.mdAndDown ? 'center' : 'end'">
                 <!-- Go Back button (Permissions View) -->
                 <v-slide-x-reverse-transition>
                         <v-btn v-if="changingPerms" @click="goBackToDetails"

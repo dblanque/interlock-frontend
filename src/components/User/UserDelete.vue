@@ -65,7 +65,7 @@ export default {
     methods: {
         async closeDialog(deleteConfirm=false, user={}) {
             if (user != {}) {
-                user.dn = this.userObject.dn
+                user.distinguishedName = this.userObject.distinguishedName
                 user.username = this.userObject.username
             }
             if (deleteConfirm == true) {
