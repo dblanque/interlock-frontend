@@ -102,7 +102,7 @@
           >
           <!-- ICONS -->
           <template v-slot:prepend="{ item, open }">
-            <div @click="changeOpenStatus(item.id)" class="clickable">
+            <div @click="getObjectIsClickable ? changeOpenStatus(item.id) : undefined" :class="getObjectIsClickable(item) + ' '">
               <v-icon v-if="item.builtin == true && item.type != 'Container'" :color="open ? 'primary' : undefined">
                 mdi-hammer
               </v-icon>
@@ -136,7 +136,7 @@
           </template>
           <!-- LABEL -->
           <template v-slot:label="{ item }">
-          <v-row align="start" @click="changeOpenStatus(item.id)" class="clickable">
+          <v-row align="start" @click="getObjectIsClickable ? changeOpenStatus(item.id) : undefined" :class="getObjectIsClickable(item) + ' '">
             <v-col cols="11" md="auto">
               {{ item.name }}
             </v-col>
@@ -402,6 +402,12 @@ export default {
               }
             this.fetchDirtree()
             // console.log('Feature not enabled, filter for ' + key.toUpperCase() + ' objects should toggle')
+        },
+        getObjectIsClickable(item){
+          if (Array.isArray(item.children) && item.children.length > 0)
+            return 'clickable'
+          else
+            return
         },
         resetDirtree(forceReload=false){
             this.filters = {}
