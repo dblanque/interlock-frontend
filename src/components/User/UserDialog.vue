@@ -490,7 +490,7 @@
                                         </v-btn>
                                 </v-row>
                                 <v-list-item-group active-class="groupSelected">
-                                    <v-list-item v-for="group, key in correctedMemberOf" :key="key">
+                                    <v-list-item v-for="group, key in usercopy.memberOfObjects" :key="key">
                                         <template v-slot:default="{ }">
                                             <v-list-item-action/>
 
@@ -539,6 +539,7 @@
                                             <v-list-item-action class="ma-0">
                                                 <v-tooltip bottom>
                                                 <template v-slot:activator="{ on, attrs }">
+                                                     <!-- || group.objectRid == usercopy.primaryGroupID -->
                                                     <v-btn small icon
                                                     :disabled="editFlag != true"
                                                     @click="removeFromGroup(group.distinguishedName)"
@@ -667,14 +668,14 @@
                 </v-progress-circular>
             </v-row>
         </v-card-actions>
-        
+
         <!-- USER ADD TO GROUP DIALOG -->
         <v-dialog eager max-width="1200px" v-model="dialogs['userAddToGroup']">
             <UserAddToGroup
             :viewKey="'userAddToGroup'"
             ref="UserAddToGroup"
             @addGroups="addToGroup"
-            :excludeGroups="usercopy.memberOf"
+            :excludeGroups="excludeGroups"
             @closeDialog="closeInnerDialog"
             />
         </v-dialog>
@@ -706,7 +707,7 @@ export default {
         addObjectClass: "",
         groupsToRemove: [],
         groupsToAdd: [],
-        correctedMemberOf: [],
+        excludeGroups: [],
         // Dialog States
         dialogs: {
             userAddToGroup: false
@@ -954,6 +955,10 @@ export default {
             this.dialogs[key] = true;
             switch (key) {
                 case 'userAddToGroup':
+                    this.excludeGroups = []
+                    this.usercopy.memberOfObjects.forEach(g => {
+                        this.excludeGroups.push(g.distinguishedName)
+                    });
                     this.$refs.UserAddToGroup.fetchLists()
                 break;
                 default:
@@ -965,8 +970,6 @@ export default {
         },
         addToGroup(groups){
             this.groupsToAdd = groups.map(e => e.distinguishedName)
-            if (!this.usercopy.memberOf)
-                this.usercopy.memberOf = []
             if (!this.usercopy.memberOfObjects)
                 this.usercopy.memberOfObjects = []
             groups.forEach(g => {
@@ -975,18 +978,12 @@ export default {
                 if (this.usercopy.memberOfObjects.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
                     this.usercopy.memberOfObjects.push(g)
                 }
-                if (this.correctedMemberOf.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
-                    this.correctedMemberOf.push(g)
-                }
                 console.log("groupsToAdd")
                 console.log(this.groupsToAdd)
-                console.log("usercopy.memberOf")
-                console.log(this.usercopy.memberOf)
                 console.log("usercopy.memberOfObjects")
                 console.log(this.usercopy.memberOfObjects)
-                console.log("correctedMemberOf")
-                console.log(this.correctedMemberOf)
             });
+            this.logGroups()
             this.closeInnerDialog('userAddToGroup')
             this.$forceUpdate
         },
@@ -997,12 +994,7 @@ export default {
             if (this.groupsToAdd.includes(groupDn))
                 this.groupsToAdd = this.groupsToRemove.filter(e => e == groupDn)
 
-            // Check if it's in memberOf and remove it
-            if (this.usercopy.memberOf.includes(groupDn))
-                this.usercopy.memberOf = this.usercopy.memberOf.filter(e => e != groupDn)
-
             this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
-            this.correctedMemberOf = this.correctedMemberOf.filter(e => e.distinguishedName != groupDn)
             this.logGroups()
             this.$forceUpdate
         },
@@ -1011,12 +1003,8 @@ export default {
             console.log(this.groupsToAdd)
             console.log("Groups to Remove")
             console.log(this.groupsToRemove)
-            console.log("Member Of")
-            console.log(this.usercopy.memberOf)
             console.log("Member Of Objects")
             console.log(this.usercopy.memberOfObjects)
-            console.log("Corrected Member Of")
-            console.log(this.correctedMemberOf)
         },
         copyText(textString) {
             navigator.clipboard.writeText(textString);
@@ -1136,23 +1124,9 @@ export default {
             return false
         },
 
-        ////////////////////////////////////////////////////////////////////////
-        // Displayed groups are set in a special array (correctedMemberOf)    //
-        // because the primary group ID or RID for the Domain Users group     //
-        // must always be selectable, don't remove this                       //
-        ////////////////////////////////////////////////////////////////////////
         setUserGroups(){
             this.groupsToRemove = []
             this.groupsToAdd = []
-            this.correctedMemberOf = []
-            if (this.usercopy.memberOfObjects != undefined && this.usercopy.memberOfObjects.length > 0){
-                this.usercopy.memberOfObjects.forEach(group => {
-                    var filteredGroupObject = this.correctedMemberOf.filter(e => e.distinguishedName == group.distinguishedName)
-                    if (this.usercopy.memberOf)
-                        if (this.usercopy.memberOf.includes(group.distinguishedName) && filteredGroupObject.length == 0)
-                            this.correctedMemberOf.push(group)
-                });
-            }
         },
         // Sync the usercopy object to the parent view user object on the
         // next tick to avoid mutation errors

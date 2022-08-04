@@ -85,7 +85,7 @@
                         </template>
                         <template v-slot:label="{item}">
                             <v-row align="start"
-                                @click="changeSelectedStatus(item.id)">
+                                @click="item.type.toLowerCase() == 'group' ? changeSelectedStatus(item.id) : undefined">
                                 <v-col cols="11" md="auto">
                                 {{ item.name }}
                                 </v-col>
@@ -127,10 +127,6 @@ export default {
                     "group":{
                         attr: "objectClass",
                         or: true
-                    },
-                    "Domain Users*":{
-                        attr: "cn",
-                        exclude: true
                     }
                 }
             }

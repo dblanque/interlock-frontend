@@ -31,6 +31,7 @@ class User extends ApiModel{
     wWWHomePage;
     distinguishedName;
     userPrincipalName;
+    memberOfObjects;
     // Permission ACLs
     userAccountControl;
     whenCreated;
