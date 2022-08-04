@@ -539,8 +539,7 @@
                                             <v-list-item-action class="ma-0">
                                                 <v-tooltip bottom>
                                                 <template v-slot:activator="{ on, attrs }">
-                                                     <!-- || group.objectRid == usercopy.primaryGroupID -->
-                                                    <v-btn small icon
+                                                    <v-btn small icon v-show="group.objectRid != usercopy.primaryGroupID"
                                                     :disabled="editFlag != true"
                                                     @click="removeFromGroup(group.distinguishedName)"
                                                     @click.stop
@@ -552,8 +551,18 @@
                                                         mdi-close
                                                     </v-icon>
                                                     </v-btn>
+                                                    <v-btn small icon v-show="group.objectRid == usercopy.primaryGroupID"
+                                                    @click.stop
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >
+                                                    <v-icon small>
+                                                        mdi-close
+                                                    </v-icon>
+                                                    </v-btn>
                                                 </template>
-                                                <span> {{ $t("section.users.userDialog.removeFromGroup") }} </span>
+                                                <span v-if="group.objectRid != usercopy.primaryGroupID"> {{ $t("section.users.userDialog.removeFromGroup") }} </span>
+                                                <span v-else> {{ $t("section.users.userDialog.primaryGroupRemoveDisabled") }} </span>
                                                 </v-tooltip>
                                             </v-list-item-action>
                                         </template>
@@ -949,7 +958,7 @@ export default {
     },
     methods: {
         goToGroup(groupDn) {
-            console.log(groupDn)
+            this.$emit('goToGroup', { distinguishedName: groupDn })
         },
         openDialog(key){
             this.dialogs[key] = true;
@@ -973,30 +982,33 @@ export default {
             if (!this.usercopy.memberOfObjects)
                 this.usercopy.memberOfObjects = []
             groups.forEach(g => {
-                if (!this.usercopy.memberOf.includes(g.distinguishedName))
-                    this.usercopy.memberOf.push(g.distinguishedName)
                 if (this.usercopy.memberOfObjects.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
                     this.usercopy.memberOfObjects.push(g)
                 }
-                console.log("groupsToAdd")
-                console.log(this.groupsToAdd)
-                console.log("usercopy.memberOfObjects")
-                console.log(this.usercopy.memberOfObjects)
             });
-            this.logGroups()
+            // this.logGroups()
             this.closeInnerDialog('userAddToGroup')
             this.$forceUpdate
         },
         removeFromGroup(groupDn) {
-            if (!this.groupsToRemove.includes(groupDn))
-                this.groupsToRemove.push(groupDn)
+            var currentGroupFilter = this.usercopy.memberOfObjects.filter(e => e.distinguishedName == groupDn)
+            if (currentGroupFilter.length > 0)
+                var currentGroup = currentGroupFilter[0]
 
-            if (this.groupsToAdd.includes(groupDn))
-                this.groupsToAdd = this.groupsToRemove.filter(e => e == groupDn)
-
-            this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
-            this.logGroups()
-            this.$forceUpdate
+            if (currentGroup['objectRid'] == this.usercopy['primaryGroupID']) {
+                console.error("Primary group cannot be deleted")
+            }
+            else {
+                if (!this.groupsToRemove.includes(groupDn))
+                    this.groupsToRemove.push(groupDn)
+    
+                if (this.groupsToAdd.includes(groupDn))
+                    this.groupsToAdd = this.groupsToRemove.filter(e => e == groupDn)
+    
+                this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
+                // this.logGroups()
+                this.$forceUpdate
+            }
         },
         logGroups(){
             console.log("Groups to Add")

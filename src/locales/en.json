@@ -366,6 +366,7 @@
         "userDetails":"User Details",
         "addToGroup": "Add to Group",
         "removeFromGroup": "Remove from Group",
+        "primaryGroupRemoveDisabled": "The primary group cannot be removed",
         "hint":{
           "addObjectClass":"You better know what you're doing",
           "primaryGroupID":"Only change this if you have Macintosh Clients or POSIX Compliant Applications"

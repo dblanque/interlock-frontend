@@ -370,8 +370,9 @@
       "userDialog":{
         "noLastLogon":"El usuario aún no ha iniciado sesión",
         "userDetails":"Detalles de Usuario",
-        "addToGroup": "Add to Group",
-        "removeFromGroup": "Remove from Group",
+        "addToGroup": "Añadir a Grupo",
+        "removeFromGroup": "Remover del Grupo",
+        "primaryGroupRemoveDisabled": "El grupo primario no puede ser removido",
         "hint":{
           "addObjectClass":"Mejor que sepa lo que hace",
           "primaryGroupID":"Solo modifique este valor si tiene Clientes Macintosh o Aplicaciones que utilicen POSIX"

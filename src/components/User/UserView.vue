@@ -205,6 +205,7 @@
       :fetchingData="fetchingData"
       @closeDialog="closeDialog"
       @save="userSaved"
+      @goToGroup="goToGroup"
       @editToggle="setViewToEdit"
       @refreshUser="refreshUser"
       />
@@ -294,6 +295,10 @@ export default {
     snackbarTimeout: Number
   },
   methods: {
+    goToGroup(groupDn){
+      this.$emit('goToGroup', groupDn)
+      this.closeDialog('userDialog')
+    },
     openDialog(key){
       this.dialogs[key] = true;
       switch (key) {

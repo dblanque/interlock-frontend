@@ -31,6 +31,7 @@
       @createSnackbar="createSnackbar"
       @resetSnackbar="resetSnackbar"
       @refresh="refreshAction"
+      @goToGroup="goToGroup"
     />
   </v-container>
 
