@@ -83,7 +83,7 @@ export default {
             if (itemToUpdate == undefined){
                 this.ouList.forEach(ou => {
                     if (!searchResult) {
-                        searchResult = objectRecursiveSearch(ou, parseInt(itemID))
+                        searchResult = objectRecursiveSearch(ou, parseInt(itemID), "distinguishedName")
                         this.objectDestination = searchResult
                     }
                 })

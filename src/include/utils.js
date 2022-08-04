@@ -27,7 +27,8 @@ export function dateLdapToString(date) {
     return result
 }
 
-export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='distinguishedName', childrenKey='children', searchResult=undefined){
+export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch=undefined, childrenKey='children', searchResult=undefined){
+    // console.log(targetEntity.distinguishedName)
     // If ID matches with current object
     if (idToSearch == targetEntity.id){
         if (targetEntity[keyToSearch] != undefined) {
@@ -35,7 +36,8 @@ export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch='dis
             return searchResult
         }
         else {
-            console.log('Error: targetEntity key(' + keyToSearch + ') is undefined or its value is missing')
+            // console.log('Error: targetEntity key(' + keyToSearch + ') is undefined or its value is missing')
+            searchResult = targetEntity
             return searchResult
         }
     }

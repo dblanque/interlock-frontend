@@ -480,7 +480,9 @@
                             <v-divider class="mx-12"/>
                             <v-list dense>
                                 <v-row class="ma-0 pa-0 mx-6 my-3" justify="end">
-                                        <v-btn color="primary" outlined @click="openAddToGroupDialog">
+                                        <v-btn color="primary" outlined
+                                            :disabled="editFlag != true"
+                                            @click="openDialog('userAddToGroup')">
                                             <v-icon small>
                                                 mdi-plus
                                             </v-icon>
@@ -538,6 +540,7 @@
                                                 <v-tooltip bottom>
                                                 <template v-slot:activator="{ on, attrs }">
                                                     <v-btn small icon
+                                                    :disabled="editFlag != true"
                                                     @click="removeFromGroup(group.distinguishedName)"
                                                     @click.stop
                                                     color="red"
@@ -664,15 +667,30 @@
                 </v-progress-circular>
             </v-row>
         </v-card-actions>
+        
+        <!-- USER ADD TO GROUP DIALOG -->
+        <v-dialog eager max-width="1200px" v-model="dialogs['userAddToGroup']">
+            <UserAddToGroup
+            :viewKey="'userAddToGroup'"
+            ref="UserAddToGroup"
+            @addGroups="addToGroup"
+            :excludeGroups="usercopy.memberOf"
+            @closeDialog="closeInnerDialog"
+            />
+        </v-dialog>
     </v-card>
 </template>
 
 <script>
 import User from '@/include/User'
+import UserAddToGroup from '@/components/User/UserAddToGroup.vue'
 import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
     name: 'UserDialog',
+    components: {
+        UserAddToGroup,
+    },
     data () {
       return {
         panel: [],
@@ -689,6 +707,10 @@ export default {
         groupsToRemove: [],
         groupsToAdd: [],
         correctedMemberOf: [],
+        // Dialog States
+        dialogs: {
+            userAddToGroup: false
+        },
         objectClasses: [
             "accessControlSubentry",
             "account",
@@ -928,22 +950,65 @@ export default {
         goToGroup(groupDn) {
             console.log(groupDn)
         },
-        openAddToGroupDialog() {
-            console.log("openAddToGroupDialog")
+        openDialog(key){
+            this.dialogs[key] = true;
+            switch (key) {
+                case 'userAddToGroup':
+                    this.$refs.UserAddToGroup.fetchLists()
+                break;
+                default:
+                break;
+            }
         },
-        addToGroup(groupDn){
-            console.log(groupDn)
+        async closeInnerDialog(key){
+            this.dialogs[key] = false;
+        },
+        addToGroup(groups){
+            this.groupsToAdd = groups.map(e => e.distinguishedName)
+            if (!this.usercopy.memberOf)
+                this.usercopy.memberOf = []
+            if (!this.usercopy.memberOfObjects)
+                this.usercopy.memberOfObjects = []
+            groups.forEach(g => {
+                if (!this.usercopy.memberOf.includes(g.distinguishedName))
+                    this.usercopy.memberOf.push(g.distinguishedName)
+                if (this.usercopy.memberOfObjects.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
+                    this.usercopy.memberOfObjects.push(g)
+                }
+                if (this.correctedMemberOf.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
+                    this.correctedMemberOf.push(g)
+                }
+                console.log("groupsToAdd")
+                console.log(this.groupsToAdd)
+                console.log("usercopy.memberOf")
+                console.log(this.usercopy.memberOf)
+                console.log("usercopy.memberOfObjects")
+                console.log(this.usercopy.memberOfObjects)
+                console.log("correctedMemberOf")
+                console.log(this.correctedMemberOf)
+            });
+            this.closeInnerDialog('userAddToGroup')
+            this.$forceUpdate
         },
         removeFromGroup(groupDn) {
             if (!this.groupsToRemove.includes(groupDn))
                 this.groupsToRemove.push(groupDn)
+
+            if (this.groupsToAdd.includes(groupDn))
+                this.groupsToAdd = this.groupsToRemove.filter(e => e == groupDn)
+
             // Check if it's in memberOf and remove it
             if (this.usercopy.memberOf.includes(groupDn))
                 this.usercopy.memberOf = this.usercopy.memberOf.filter(e => e != groupDn)
 
             this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
             this.correctedMemberOf = this.correctedMemberOf.filter(e => e.distinguishedName != groupDn)
+            this.logGroups()
             this.$forceUpdate
+        },
+        logGroups(){
+            console.log("Groups to Add")
+            console.log(this.groupsToAdd)
             console.log("Groups to Remove")
             console.log(this.groupsToRemove)
             console.log("Member Of")
@@ -1041,11 +1106,14 @@ export default {
                     this.usercopy.permission_list.push(key)
             }
             // Set groups to add or remove
-            
+            if (this.groupsToAdd.length > 0)
+                this.usercopy.groupsToAdd = this.groupsToAdd
+            if (this.groupsToRemove.length > 0)
+                this.usercopy.groupsToRemove = this.groupsToRemove
             // Uncomment below to debug permissions list
             // console.log(this.usercopy.permission_list)
             this.$emit('save', this.viewKey, this.usercopy);
-            await new User({}).update(this.usercopy)
+            await new User({}).update({user: this.usercopy})
             .then(() => {
                 if (closeDialog == true)
                     this.closeDialog();
@@ -1067,14 +1135,22 @@ export default {
                 return true
             return false
         },
+
+        ////////////////////////////////////////////////////////////////////////
+        // Displayed groups are set in a special array (correctedMemberOf)    //
+        // because the primary group ID or RID for the Domain Users group     //
+        // must always be selectable, don't remove this                       //
+        ////////////////////////////////////////////////////////////////////////
         setUserGroups(){
             this.groupsToRemove = []
             this.groupsToAdd = []
+            this.correctedMemberOf = []
             if (this.usercopy.memberOfObjects != undefined && this.usercopy.memberOfObjects.length > 0){
                 this.usercopy.memberOfObjects.forEach(group => {
                     var filteredGroupObject = this.correctedMemberOf.filter(e => e.distinguishedName == group.distinguishedName)
-                    if (this.usercopy.memberOf.includes(group.distinguishedName) && filteredGroupObject.length == 0)
-                        this.correctedMemberOf.push(group)
+                    if (this.usercopy.memberOf)
+                        if (this.usercopy.memberOf.includes(group.distinguishedName) && filteredGroupObject.length == 0)
+                            this.correctedMemberOf.push(group)
                 });
             }
         },
