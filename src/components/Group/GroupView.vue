@@ -20,28 +20,30 @@
         ></v-text-field>
         </v-col>
 
-        <v-col cols="12" lg="3" xl="2" class="ma-0 my-4 pa-0">
-        <v-btn 
-          class="mx-2 bg-primary" 
-          color="white" 
-          icon
-          elevation="0"
-          :loading="loading"
-          @click="listGroupItems"
-          >
-          <v-icon>
-            mdi-refresh
-          </v-icon>
-          <template v-slot:loader>
-            <span class="custom-loader">
-              <v-icon>mdi-cached</v-icon>
-            </span>
-          </template>
-        </v-btn>
-        <v-btn class="pa-2 mx-2" :disabled="loading || readonly" color="primary" @click="openDialog('groupCreate')">
-          <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-          {{ $t('actions.addN') + ' ' + $t('classes.group.single') }}
-        </v-btn>
+        <v-col cols="12" lg="3" xl="2" class="ma-0 ma-2 pa-0">
+        <v-row class="pa-0">
+          <v-btn 
+            class="mx-2 bg-primary" 
+            color="white" 
+            icon
+            elevation="0"
+            :loading="loading"
+            @click="listGroupItems"
+            >
+            <v-icon>
+              mdi-refresh
+            </v-icon>
+            <template v-slot:loader>
+              <span class="custom-loader">
+                <v-icon>mdi-cached</v-icon>
+              </span>
+            </template>
+          </v-btn>
+          <v-btn class="pa-2 mx-2" :disabled="loading || readonly" color="primary" @click="openDialog('groupCreate')">
+            <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+            {{ $t('actions.addN') + ' ' + $t('classes.group.single') }}
+          </v-btn>
+        </v-row>
         </v-col>
       </v-row>
     </template>
