@@ -488,7 +488,7 @@
                                         </v-btn>
                                 </v-row>
                                 <v-list-item-group active-class="groupSelected">
-                                    <v-list-item v-for="group, key in getCorrectedMemberOf" :key="key">
+                                    <v-list-item v-for="group, key in correctedMemberOf" :key="key">
                                         <template v-slot:default="{ }">
                                             <v-list-item-action/>
 
@@ -686,6 +686,9 @@ export default {
         changingGroups: false,
         usercopy: {},
         addObjectClass: "",
+        groupsToRemove: [],
+        groupsToAdd: [],
+        correctedMemberOf: [],
         objectClasses: [
             "accessControlSubentry",
             "account",
@@ -892,18 +895,6 @@ export default {
         this.syncUser();
     },
     computed:{
-        getCorrectedMemberOf() {
-            var arrayResult = []
-            if (this.usercopy.memberOfObjects != undefined){
-                this.usercopy.memberOfObjects.forEach(group => {
-                    if (this.usercopy.memberOf.includes(group.distinguishedName))
-                        arrayResult.push(group)
-                });
-                console.log(arrayResult)
-                return arrayResult
-            }
-            return undefined
-        },
         calcEnabledPerms() {
             var result = 0
             for (const [key] of Object.entries(this.permissions)) {
@@ -929,9 +920,9 @@ export default {
         },
     },
     watch: {
-        usercopy(newValue) {
-            console.log(newValue.primaryGroupID)
-        }
+        // Monitor changes in usercopy
+        // usercopy(newValue) {
+        // }
     },
     methods: {
         goToGroup(groupDn) {
@@ -944,7 +935,23 @@ export default {
             console.log(groupDn)
         },
         removeFromGroup(groupDn) {
-            console.log(groupDn)
+            if (!this.groupsToRemove.includes(groupDn))
+                this.groupsToRemove.push(groupDn)
+            // Check if it's in memberOf and remove it
+            if (this.usercopy.memberOf.includes(groupDn))
+                this.usercopy.memberOf = this.usercopy.memberOf.filter(e => e != groupDn)
+
+            this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
+            this.correctedMemberOf = this.correctedMemberOf.filter(e => e.distinguishedName != groupDn)
+            this.$forceUpdate
+            console.log("Groups to Remove")
+            console.log(this.groupsToRemove)
+            console.log("Member Of")
+            console.log(this.usercopy.memberOf)
+            console.log("Member Of Objects")
+            console.log(this.usercopy.memberOfObjects)
+            console.log("Corrected Member Of")
+            console.log(this.correctedMemberOf)
         },
         copyText(textString) {
             navigator.clipboard.writeText(textString);
@@ -1060,6 +1067,17 @@ export default {
                 return true
             return false
         },
+        setUserGroups(){
+            this.groupsToRemove = []
+            this.groupsToAdd = []
+            if (this.usercopy.memberOfObjects != undefined && this.usercopy.memberOfObjects.length > 0){
+                this.usercopy.memberOfObjects.forEach(group => {
+                    var filteredGroupObject = this.correctedMemberOf.filter(e => e.distinguishedName == group.distinguishedName)
+                    if (this.usercopy.memberOf.includes(group.distinguishedName) && filteredGroupObject.length == 0)
+                        this.correctedMemberOf.push(group)
+                });
+            }
+        },
         // Sync the usercopy object to the parent view user object on the
         // next tick to avoid mutation errors
         syncUser(){
@@ -1070,6 +1088,7 @@ export default {
             this.usercopy = new User({})
             this.$nextTick(() => {
                 this.usercopy = this.user
+                this.setUserGroups()
                 this.setObjectClassToArray()
                 if (this.usercopy.lastLogon == 0)
                     this.usercopy.lastLogon = this.$t('section.users.userDialog.noLastLogon')
