@@ -23,20 +23,48 @@
   nano ./src/providers/interlock_backend/local_settings.js
   ```
 
-## LDAP Manager Checkpoints | ROAD-MAP
+## LDAP Manager Checkpoints | ROAD-MAP & Features
+
+### LDAP Directory Tree
+ - [x] Recursive Read
+ - [ ] Move Objects
+ - [ ] Rename Objects
+ - [ ] Delete Objects
+
+### Organizational Unit Management
+ - [ ] Create
+ - [x] Read
+ - [ ] Update
+      - [ ] Move OU to another CN in the Dirtree
+ - [ ] Delete
 
 ### User & Permissions Management
- - Create
- - Modify (Add to group, Attributes, etc.)
- - Password Reset Screen for End-Users
- - Delete
+ - [x] Create
+ - [x] Read
+ - [x] Update
+      - [x] Standard LDAP Attribute Updates
+      - [x] Permission Parsing and Updates
+      - [x] Enable/Disable User Functionality
+      - [x] Unlock User
+      - [x] User Group Membership management
+      - [x] End-user Password Changing
+ - [x] Delete
+
+### Group Management
+ - [x] Create
+ - [x] Read
+ - [x] Update
+      - [x] Standard LDAP Attribute Updates
+      - [x] Group Member Management
+      - [x] Group Type and Scope 
+ - [x] Delete
 
 ### DNS Management
 
- - Create DNS Entries
- - Modify DNS Entries
- - Delete DNS Entries
- - Supported Types should at least be:
+ - [ ] Create DNS Entries
+ - [ ] Modify DNS Entries
+ - [ ] Delete DNS Entries
+ - [ ] Supported Types should at least be:
     * A
     * AAAA
     * CNAME
@@ -53,13 +81,13 @@
 TBD
 
 ### Server Management
- - Start Service
- - Stop Service
- - Restart Service
- - Restart Server
- - Update Server
- - Add Secondary Domain Controller?
- - Remove Domain Controller?
+ - [ ] Start Service
+ - [ ] Stop Service
+ - [ ] Restart Service
+ - [ ] Restart Server
+ - [ ] Update Server
+ - [ ] Add Secondary Domain Controller?
+ - [ ] Remove Domain Controller?
 
 ## Project setup
 ```
