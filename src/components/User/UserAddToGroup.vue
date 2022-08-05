@@ -69,7 +69,6 @@
                 <v-expand-transition>
                     <v-treeview v-if="this.ldapList.length > 0"
                     :open-all="this.listOpenAll"
-                    v-model="this.openItems"
                     :items="this.ldapList"
                     dense
                     ref="groupTreeview"
