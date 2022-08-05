@@ -3,16 +3,12 @@
     <v-card flat outlined class="pa-2" max-width="1200px">
       <!-- Actions Row -->
       <v-row align="center" class="px-2 mx-1 py-0 my-0">
-        <v-col class="ma-0 my-4 pa-0">
         <v-text-field clearable
           v-model="searchString"
           :label="$t('actions.search')"
           class="mx-2"
         ></v-text-field>
-        </v-col>
-        
-        <v-col cols="auto" class="ma-0 ma-2 pa-0">
-        <v-row class="pa-0">
+        <v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end">
           <v-btn 
             class="mx-2 bg-primary" 
             color="white" 
@@ -35,7 +31,6 @@
             {{ $t('actions.addN') }}
           </v-btn>
         </v-row>
-        </v-col>
       </v-row>
   
       <!-- Item Legends -->
