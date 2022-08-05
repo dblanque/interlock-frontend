@@ -269,6 +269,7 @@ export default {
       loading: false,
       fetchingData: false,
       error: false,
+      errorMsg: "",
       editableForm: false,
 
       // User Data
@@ -496,6 +497,18 @@ export default {
       })
       .catch(error => {
         console.log(error)
+        if (error.response.data.code) {
+            switch (error.response.data.code) {
+                case 'user_group_fetch_error':
+                    this.errorMsg = this.$t("error.codes.users.couldNotFetchGroups")
+                    break;
+                default:
+                    this.errorMsg = this.$t("error.unknown_short")
+                    break;
+            }
+        } else {
+            this.errorMsg = this.$t("error.unknown_short")
+        }
         this.loading = false
         this.fetchingData = false
         this.error = true;

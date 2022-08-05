@@ -202,7 +202,11 @@
         "verification_expired": "Intentos de Verificación acabados, contacte un administrador"
       },
       "users":{
-        "userExists":"El usuario ya existe."
+        "userExists":"El usuario ya existe.",
+        "couldNotSaveUser":"El usuario no pudo ser guardado",
+        "countryMalformed":"Campo de País mal formado",
+        "couldNotFetchGroups":"Error obteniendo Grupos del Usuario",
+        "permissionMalformed":"Diccionario de Permisos mal formado"
       }
     },
     "settings": {

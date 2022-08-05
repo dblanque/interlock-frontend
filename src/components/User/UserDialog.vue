@@ -707,6 +707,8 @@ export default {
         loading: false,
         loadingColor: 'accent',
         tab: 0,
+        error: false,
+        errorMsg: "",
         domain: "",
         realm: "",
         basedn: "",
@@ -1124,6 +1126,24 @@ export default {
             })
             .catch(error => {
                 console.log(error)
+                if (error.response.data.code) {
+                    switch (error.response.data.code) {
+                        case 'user_permission_malformed':
+                            this.errorMsg = this.$t("error.codes.users.permissionMalformed")
+                            break;
+                        case 'user_update_error':
+                            this.errorMsg = this.$t("error.codes.users.couldNotSaveUser")
+                            break;
+                        case 'user_country_error':
+                            this.errorMsg = this.$t("error.codes.users.countryMalformed")
+                            break;
+                        default:
+                            this.errorMsg = this.$t("error.unknown_short")
+                            break;
+                    }
+                } else {
+                    this.errorMsg = this.$t("error.unknown_short")
+                }
                 this.userRefreshLoading = false;
                 this.loading = false
                 this.loadingColor = 'error'

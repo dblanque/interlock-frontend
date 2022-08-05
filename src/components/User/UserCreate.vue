@@ -371,9 +371,9 @@ export default {
         success: false,
         loading: true,
         error: false,
+        errorMsg: "",
         valid: false,
         allowOURefresh: true,
-        errorMsg: "",
         showSnackbar: false,
         userPathExpansionPanel: false,
         userDestination: '',
@@ -688,6 +688,9 @@ export default {
                             break;
                         case 'user_exists':
                             this.errorMsg = this.$t("error.codes.users.userExists")
+                            break;
+                        case 'user_permission_malformed':
+                            this.errorMsg = this.$t("error.codes.users.permissionMalformed")
                             break;
                         default:
                             this.errorMsg = this.$t("error.unknown_short")

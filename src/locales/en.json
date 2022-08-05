@@ -196,7 +196,11 @@
               "verification_expired": "Verification codes have been exhausted, contact an admin"
           },
           "users":{
-            "userExists":"User already exists."
+            "userExists":"User already exists",
+            "couldNotSaveUser":"User could not be saved",
+            "countryMalformed":"User Country field is malformed",
+            "couldNotFetchGroups":"Error fetching User Groups",
+            "permissionMalformed":"Malformed Permissions Dictionary"
           }
       },
       "settings": {
