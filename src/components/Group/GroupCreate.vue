@@ -434,8 +434,8 @@ export default {
                 }, 450)
                 if (error.response.data.code) {
                     switch (error.response.data.code) {
-                        case 'group_exists':
-                            this.errorMsg = this.$t("error.codes.groups.groupExists")
+                        case 'ldap_obj_exists':
+                            this.errorMsg = this.$t("error.codes.ldapObjectExists")
                             break;
                         default:
                             this.errorMsg = this.$t("error.unknown_short")

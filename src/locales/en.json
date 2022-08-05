@@ -207,7 +207,8 @@
           "groups":{
             "groupExists":"Group already exists",
             "couldNotSave":"Group could not be saved"
-          }
+          },
+          "ldapObjectExists":"An LDAP Object with that Identifier Exists"
       },
       "settings": {
         "testInvalid":"LDAP Bind Connection Failed",

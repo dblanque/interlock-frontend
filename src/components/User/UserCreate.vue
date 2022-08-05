@@ -686,8 +686,8 @@ export default {
                         case 'user_passwords_dont_match':
                             this.errorMsg = this.$t("error.codes.badRequest")
                             break;
-                        case 'user_exists':
-                            this.errorMsg = this.$t("error.codes.users.userExists")
+                        case 'ldap_obj_exists':
+                            this.errorMsg = this.$t("error.codes.ldapObjectExists")
                             break;
                         case 'user_permission_malformed':
                             this.errorMsg = this.$t("error.codes.users.permissionMalformed")

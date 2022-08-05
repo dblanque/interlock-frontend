@@ -213,7 +213,8 @@
       "groups":{
         "groupExists":"El grupo ya existe",
         "couldNotSave":"El grupo no pudo ser guardado"
-      }
+      },
+      "ldapObjectExists":"Un Objeto LDAP con ese Identificador ya existe"
     },
     "settings": {
       "testInvalid":"Prueba de Conexión LDAP Fallida",
