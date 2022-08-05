@@ -33,7 +33,7 @@
         </v-col>
         <v-col>
             <v-row justify="end">
-                <v-btn  :disabled="this.ldapList && this.ldapList.length < 1"
+                <v-btn  :disabled="!this.ldapList || this.ldapList.length < 1"
                 text color="primary" @click="toggleOpenAll">
                     <v-fab-transition>
                     <v-icon v-if="listOpenAll">

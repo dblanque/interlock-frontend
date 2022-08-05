@@ -235,8 +235,10 @@ import LogView from '@/components/Logging/LogView.vue'
         if (!color) {
           color = "primary"
         }
-        this.snackbarColor = color;
-        this.snackbarMessage = string;
+        if (!this.snackbarColor || this.snackbarColor.length == 0)
+          this.snackbarColor = color;
+        if (!this.snackbarMessage || this.snackbarMessage.length == 0)
+          this.snackbarMessage = string;
         this.snackbar = true;
       },
       // Reset Snackbar values

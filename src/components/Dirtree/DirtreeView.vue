@@ -50,6 +50,19 @@
             </v-icon>
             {{ $t('actions.resetFilters') }}
           </v-btn>
+          
+          <v-btn rounded :disabled="!this.tableData.items || this.tableData.items.length < 1"
+          outlined color="primary" @click="toggleOpenAll" class="ml-2">
+              <v-fab-transition>
+              <v-icon v-if="listOpenAll">
+                  mdi-chevron-double-up
+              </v-icon>
+              <v-icon v-else>
+                  mdi-chevron-double-down
+              </v-icon>
+              </v-fab-transition>
+              {{ listOpenAll ? $t("actions.closeAll") : $t("actions.openAll") }}
+          </v-btn>
         </v-row>
         <v-row class="px-4 ma-1" justify="center">
           <v-col v-for="(item, key) in itemTypes" :key="item.id" cols="12" md="auto" lg="auto" class="ma-0 pa-0">
@@ -96,6 +109,7 @@
           v-model="dirtreeSelection"
           :items="this.tableData.items"
           :search="searchString"
+          ref="dirTreeviewList"
           >
           <!-- ICONS -->
           <template v-slot:prepend="{ item, open }">
@@ -254,6 +268,7 @@ export default {
             dirtreeSelection: [],
             forceReload: false,
             dirtreeOpen: [],
+            listOpenAll: false,
             tableData: {
                 headers: [],
                 items: []
@@ -333,6 +348,11 @@ export default {
     methods: {
         resetSearch(){
           this.searchString = ""
+        },
+        toggleOpenAll(){
+            this.listOpenAll = !this.listOpenAll
+            if (this.$refs.dirTreeviewList != undefined)
+                this.$refs.dirTreeviewList.updateAll(this.listOpenAll)
         },
         changeOpenStatus(itemId){
           if (this.dirtreeOpen.includes(itemId))
