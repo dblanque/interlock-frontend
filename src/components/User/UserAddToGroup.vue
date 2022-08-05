@@ -21,18 +21,30 @@
                     <v-icon class="mr-1">
                         mdi-checkbox-blank
                     </v-icon>
-                    Contains Groups
+                    {{ $t("section.users.userDialog.containsGroups") }}
                 </v-chip>
                 <v-chip>
                     <v-icon class="mr-1">
                         mdi-close-box
                     </v-icon>
-                    Has no groups
+                    {{ $t("section.users.userDialog.doesNotContainGroups") }}
                 </v-chip>
             </v-row>
         </v-col>
         <v-col>
             <v-row justify="end">
+                <v-btn  :disabled="this.ldapList && this.ldapList.length < 1"
+                text color="primary" @click="toggleOpenAll">
+                    <v-fab-transition>
+                    <v-icon v-if="listOpenAll">
+                        mdi-chevron-double-up
+                    </v-icon>
+                    <v-icon v-else>
+                        mdi-chevron-double-down
+                    </v-icon>
+                    </v-fab-transition>
+                    {{ listOpenAll ? $t("actions.closeAll") : $t("actions.openAll") }}
+                </v-btn>
                 <v-btn :disabled="this.ldapList && this.ldapList.length < 1"
                     @click="addGroups" color="primary" class="ma-0 pa-0 mx-2 px-2">
                     <v-icon class="ma-0 pa-0 mr-1">
@@ -51,13 +63,16 @@
 
     <v-row class="ma-0 pa-0" justify="center">
         <v-col class="ma-0 pa-0" cols="12" md="10">
-            <v-card flat outlined style="max-height: 300px; overflow: auto !important;">
+            <v-card flat outlined style="max-height: 560px; overflow: auto !important;">
                 <v-progress-linear v-if="showLoadingBar" :indeterminate="loading"
                 :color="loading ? 'primary' : 'secondary'"/>
                 <v-expand-transition>
                     <v-treeview v-if="this.ldapList.length > 0"
+                    :open-all="this.listOpenAll"
+                    v-model="this.openItems"
                     :items="this.ldapList"
                     dense
+                    ref="groupTreeview"
                     open-on-click
                     hoverable
                     >
@@ -114,6 +129,8 @@ export default {
             selectedGroups: [],
             showLoadingBar: false,
             loading: false,
+            listOpenAll: false,
+            openItems: [],
             filter: {
                 "iexact":{
                     "organizationalUnit":{
@@ -137,6 +154,12 @@ export default {
         excludeGroups: Array
     },
     methods: {
+        toggleOpenAll(){
+            console.log(this.listOpenAll)
+            this.listOpenAll = !this.listOpenAll
+            if (this.$refs.groupTreeview != undefined)
+                this.$refs.groupTreeview.updateAll(this.listOpenAll)
+        },
         addGroups(){
             var searchResult
             var finalGroupArray = []

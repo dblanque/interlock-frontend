@@ -23,6 +23,8 @@
     }
   },
   "actions":{
+    "openAll":"Open all",
+    "closeAll":"Close all",
     "unlock":"Unlock",
     "resetFilters":"Reset Filters",
     "backToLogin":"Go back to Log-in",
@@ -371,6 +373,8 @@
         "addToGroup": "Add to Group",
         "removeFromGroup": "Remove from Group",
         "primaryGroupRemoveDisabled": "The primary group cannot be removed",
+        "containsGroups":"Contains Groups",
+        "doesNotContainGroups":"Does not contain Groups",
         "hint":{
           "addObjectClass":"You better know what you're doing",
           "primaryGroupID":"Only change this if you have Macintosh Clients or POSIX Compliant Applications"
