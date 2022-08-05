@@ -680,11 +680,12 @@
 
         <!-- USER ADD TO GROUP DIALOG -->
         <v-dialog eager max-width="1200px" v-model="dialogs['userAddToGroup']">
-            <UserAddToGroup
+            <CNObjectList
             :viewKey="'userAddToGroup'"
             ref="UserAddToGroup"
-            @addGroups="addToGroup"
-            :excludeGroups="excludeGroups"
+            @addDNs="addToGroup"
+            :excludeDNs="excludeGroups"
+            :enableUsers="false"
             @closeDialog="closeInnerDialog"
             />
         </v-dialog>
@@ -693,13 +694,13 @@
 
 <script>
 import User from '@/include/User'
-import UserAddToGroup from '@/components/User/UserAddToGroup.vue'
+import CNObjectList from '@/components/CNObjectList.vue'
 import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
     name: 'UserDialog',
     components: {
-        UserAddToGroup,
+        CNObjectList,
     },
     data () {
       return {
@@ -954,6 +955,13 @@ export default {
         },
     },
     watch: {
+        'dialogs': {
+            handler: function (newValue) {
+                if (!newValue['userAddToGroup'] || newValue['userAddToGroup'] == false)
+                this.$refs.UserAddToGroup.clearList();
+            },
+            deep: true
+        }
         // Monitor changes in usercopy
         // usercopy(newValue) {
         // }
@@ -970,13 +978,15 @@ export default {
                     this.usercopy.memberOfObjects.forEach(g => {
                         this.excludeGroups.push(g.distinguishedName)
                     });
-                    this.$refs.UserAddToGroup.fetchLists()
+                    setTimeout(() => {
+                        this.$refs.UserAddToGroup.fetchLists()
+                    }, 5)
                 break;
                 default:
                 break;
             }
         },
-        async closeInnerDialog(key){
+        closeInnerDialog(key){
             this.dialogs[key] = false;
         },
         addToGroup(groups){

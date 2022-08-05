@@ -22,7 +22,7 @@
                 <v-row v-if="editFlag" justify="center" class="pa-0 ma-0">
                     <v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
                         <v-icon class="mdso mr-2">warning</v-icon>
-                        {{ $t('section.users.editFlagWarning') }}
+                        {{ $t('section.groups.editFlagWarning') }}
                         <v-btn @click="viewGroup" small class="ma-0 pa-0 ml-2 pr-2 pl-1">
                             <v-icon color="orange" class="">mdi-chevron-left</v-icon>
                             {{ $t('actions.back') }}
@@ -114,7 +114,8 @@
                     <!-- MEMBER BUTTONS -->
                     <v-row justify="center" class="ma-0 pa-0 my-4">
                         <v-col cols="8" class="ma-0 pa-0">
-                            <v-btn rounded text color="primary" outlined :disabled="!editFlag" class="pa-3">
+                            <v-btn @click="openDialog('addToGroup')"
+                            rounded text color="primary" outlined :disabled="!editFlag" class="pa-3">
                                 <v-icon small class="mr-1">mdi-plus</v-icon>
                                 {{ $t("actions.addN") + " " + $t("words.member") }}
                             </v-btn>
@@ -138,10 +139,10 @@
                                             <v-list-item v-for="member, key in this.groupcopy.member" :key="key"
                                             :class="key != 0 ? 'border-bottom': 'border-block'">
                                                 <v-list-item-icon class="">
-                                                    <v-icon v-if="member.objectCategory == 'user' || member.objectCategory == 'person' || member.objectCategory == 'organizationalPerson'">
+                                                    <v-icon v-if="isUserType(member.objectClass)">
                                                         mdi-account
                                                     </v-icon>
-                                                    <v-icon v-else-if="member.objectCategory == 'group'">
+                                                    <v-icon v-else-if="member.objectClass.includes('group')">
                                                         mdi-google-circles-communities
                                                     </v-icon>
                                                     <v-icon v-else>
@@ -150,7 +151,7 @@
                                                 </v-list-item-icon>
 
                                                 <v-list-item-content>
-                                                    <v-row v-if="member.objectCategory == 'user' || member.objectCategory == 'person' || member.objectCategory == 'organizationalPerson'"
+                                                    <v-row v-if="isUserType(member.objectClass)"
                                                     align="center" justify="center">
                                                         <v-col cols="12" class="pa-0 ma-0 px-1">
                                                             <span class="ma-0 pa-0">
@@ -158,7 +159,7 @@
                                                             </span>
                                                         </v-col>
                                                     </v-row>
-                                                    <v-row v-else-if="member.objectCategory == 'group'"
+                                                    <v-row v-else-if="member.objectClass.includes('group')"
                                                     align="center" justify="center">
                                                         <v-col cols="12" class="pa-0 ma-0 px-1">
                                                             <span class="ma-0 pa-0">
@@ -172,24 +173,6 @@
                                                         </v-col>
                                                     </v-row>
                                                 </v-list-item-content>
-
-                                                <v-list-item-action class="pa-0 ma-0">
-                                                    <v-tooltip bottom color="red">
-                                                    <template v-slot:activator="{ on, attrs }">
-                                                        <v-btn small icon @click="removeFromArrayByIndex(key, groupcopy.member)"
-                                                        color="red"
-                                                        :disabled="!editFlag"
-                                                        v-bind="attrs"
-                                                        v-on="on"
-                                                        >
-                                                        <v-icon small>
-                                                            mdi-close
-                                                        </v-icon>
-                                                        </v-btn>
-                                                    </template>
-                                                    <span> {{ $t("actions.remove") }} </span>
-                                                    </v-tooltip>
-                                                </v-list-item-action>
 
                                                 <v-list-item-action class="pa-0 ma-0">
                                                     <v-tooltip bottom color="primary">
@@ -222,6 +205,24 @@
                                                         </v-btn>
                                                     </template>
                                                     <span> {{ $t("section.groups.groupDialog.copyDistinguishedName") }} </span>
+                                                    </v-tooltip>
+                                                </v-list-item-action>
+
+                                                <v-list-item-action class="pa-0 ma-0">
+                                                    <v-tooltip bottom color="red">
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-btn small icon @click="removeFromArrayByIndex(key, groupcopy.member)"
+                                                        color="red"
+                                                        :disabled="!editFlag"
+                                                        v-bind="attrs"
+                                                        v-on="on"
+                                                        >
+                                                        <v-icon small>
+                                                            mdi-close
+                                                        </v-icon>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span> {{ $t("actions.remove") }} </span>
                                                     </v-tooltip>
                                                 </v-list-item-action>
                                             </v-list-item>
@@ -296,16 +297,32 @@
                 </v-progress-circular>
             </v-row>
         </v-card-actions>
+        
+        <!-- USER ADD TO GROUP DIALOG -->
+        <v-dialog eager max-width="1200px" v-model="dialogs['addToGroup']">
+            <CNObjectList
+            :viewKey="'addToGroup'"
+            ref="AddToGroup"
+            @addDNs="addMember"
+            :excludeDNs="excludeDNs"
+            @closeDialog="closeInnerDialog"
+            />
+        </v-dialog>
     </v-card>
 </template>
 
 <script>
 import Group from '@/include/Group';
+import CNObjectList from '@/components/CNObjectList.vue'
 import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
+    components: {
+        CNObjectList,
+    },
     data() {
         return {
+            userClasses: ['user','person','organizationalPerson','organizationalperson'],
             loading: false,
             loadingColor: 'accent',
             domain: "",
@@ -313,7 +330,10 @@ export default {
             basedn: "",
             showMemberTab: false,
             groupcopy: {},
+            excludeDNs: [],
             memberPanelExpanded: [],
+            membersToAdd: [],
+            membersToRemove: [],
             groupTypes: [
                 "GROUP_DISTRIBUTION",
                 "GROUP_SECURITY"
@@ -325,6 +345,10 @@ export default {
             ],
             radioGroupType: 0,
             radioGroupScope: 0,
+            // Dialog States
+            dialogs: {
+                addToGroup: false
+            },
         }
     },
     mixins: [
@@ -332,6 +356,15 @@ export default {
     ],
     created(){
         this.syncGroup();
+    },
+    watch: {
+        'dialogs': {
+            handler: function (newValue) {
+                if (!newValue['addToGroup'] || newValue['addToGroup'] == false)
+                this.$refs.AddToGroup.clearList();
+            },
+            deep: true
+        }
     },
     props: {
         viewKey: String,
@@ -352,8 +385,40 @@ export default {
                     this.showMemberTab = true
             }
         },
+        openDialog(key){
+            this.dialogs[key] = true;
+            switch (key) {
+                case 'addToGroup':
+                    this.excludeDNs = []
+                    this.groupcopy.member.forEach(g => {
+                        this.excludeDNs.push(g.distinguishedName)
+                    });
+                    setTimeout(() => {
+                        this.$refs.AddToGroup.fetchLists()
+                    }, 5)
+                break;
+                default:
+                break;
+            }
+        },
         closeDialog() {
             this.$emit('closeDialog', this.viewKey);
+        },
+        closeInnerDialog(key){
+            this.dialogs[key] = false;
+        },
+        addMember(members){
+            this.membersToAdd = members.map(e => e.distinguishedName)
+            if (!this.groupcopy.member)
+                this.groupcopy.member = []
+            members.forEach(g => {
+                if (this.groupcopy.member.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
+                    this.groupcopy.member.push(g)
+                }
+            });
+            console.log(this.groupcopy.member)
+            this.closeInnerDialog('addToGroup')
+            this.$forceUpdate
         },
         checkIfGroupBuiltIn(){
             if (this.group.groupType.includes('GROUP_SYSTEM'))
@@ -412,6 +477,14 @@ export default {
                 this.loading = false
                 this.loadingColor = 'primary'
             })
+        },
+        isUserType(itemObjectClasses){
+            var isUser = false
+            itemObjectClasses.forEach(v => {
+                if (this.userClasses.includes(v))
+                    isUser = true
+            })
+            return isUser
         },
         // Tells the parent view to refresh/fetch the group again
         async refreshGroup(){

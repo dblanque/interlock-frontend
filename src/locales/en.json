@@ -355,7 +355,6 @@
       "userCreate":{
         "header":"Create User",
         "optionalsHeader":"Optional Details",
-        "validationError":"Validation Error",
         "domainRealmError": "Domain Settings Error, please re-open this component",
         "userCreatedIn":"User will be created in",
         "step1":"User Details",
@@ -425,6 +424,7 @@
       }
     },
     "groups":{
+      "editFlagWarning":"You are now editing this group",
       "isPopulated":"This group is populated",
       "isNotPopulated":"This group is not Populated",
       "types":{

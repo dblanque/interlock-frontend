@@ -105,7 +105,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.view') + " " + item.username }}</span>
+        <span>{{ $t('actions.view') }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -123,7 +123,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.edit') + " " + item.username }}</span>
+        <span>{{ $t('actions.edit') }}</span>
       </v-tooltip>
 
       <!-- RESET PASSWORD BUTTON -->
@@ -162,7 +162,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.unlock') + " " + $t('classes.user.single') }}</span>
+        <span>{{ $t('actions.unlock') }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -308,7 +308,6 @@ export default {
         case 'userDialog':
           if (this.$refs.UserDialog != undefined)
             this.$refs.UserDialog.goBackToDetails()
-            this.$refs.UserDialog.syncUser()
           break;
         case 'userCreate':
           if (this.$refs.UserCreate != undefined)
@@ -474,7 +473,6 @@ export default {
       await this.fetchUser(item, this.editableForm, false);
     },
     userSaved(){
-      this.$refs.UserCreate.newUser()
       this.listUserItems()
     },
     // Fetch individual User
@@ -487,7 +485,10 @@ export default {
       this.data.userdata = new User({})
       await this.data.userdata.fetch(this.data.selectedUser.username)
       .then(() => {
-        this.openDialog('userDialog')
+        if (!this.dialogs.userDialog) {
+          this.openDialog('userDialog')
+          this.$refs.UserDialog.syncUser()
+        }
         if (isEditable == true)
           this.editableForm = true
         setTimeout(() => {

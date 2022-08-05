@@ -46,11 +46,11 @@
                     {{ listOpenAll ? $t("actions.closeAll") : $t("actions.openAll") }}
                 </v-btn>
                 <v-btn :disabled="this.ldapList && this.ldapList.length < 1"
-                    @click="addGroups" color="primary" class="ma-0 pa-0 mx-2 px-2">
+                    @click="addDNs" color="primary" class="ma-0 pa-0 mx-2 px-2">
                     <v-icon class="ma-0 pa-0 mr-1">
                         mdi-plus
                     </v-icon>
-                    {{ $t('actions.addN') + " " + $t('classes.group.plural') }}
+                    {{ $t('actions.addN') }}
                 </v-btn>
                 <Refresh
                     :loading="loading"
@@ -78,9 +78,9 @@
                         <template v-slot:prepend="{ item, open }">
                         <v-row class="mx-1">
                             <v-checkbox
-                                :off-icon="(item.type.toLowerCase() != 'group') ? (item.children && item.children.length > 0 ? 'mdi-checkbox-blank':'mdi-close-box') : undefined"
-                                :value="selectedGroups.includes(item.id) ? true : false"
-                                :disabled="item.type.toLowerCase() != 'group'"
+                                :off-icon="(!isTypeValid(item.type.toLowerCase())) ? (item.children && item.children.length > 0 ? 'mdi-checkbox-blank':'mdi-close-box') : undefined"
+                                :value="selectedDNs.includes(item.id) ? true : false"
+                                :disabled="!isTypeValid(item.type.toLowerCase())"
                                 @change="changeSelectedStatus(item.id)"
                                 @click.stop/>
                             <v-icon :color="open ? 'primary' : undefined" v-if="item.builtin == true && item.type != 'Container'">
@@ -99,7 +99,7 @@
                         </template>
                         <template v-slot:label="{item}">
                             <v-row align="start"
-                                @click="item.type.toLowerCase() == 'group' ? changeSelectedStatus(item.id) : undefined">
+                                @click="isTypeValid(item.type.toLowerCase()) ? changeSelectedStatus(item.id) : undefined">
                                 <v-col cols="11" md="auto">
                                 {{ item.name }}
                                 </v-col>
@@ -125,7 +125,7 @@ export default {
     data() {
         return {
             ldapList: [],
-            selectedGroups: [],
+            selectedDNs: [],
             showLoadingBar: false,
             loading: false,
             listOpenAll: false,
@@ -139,10 +139,6 @@ export default {
                     "container":{
                         attr: "objectClass",
                         or: true
-                    },
-                    "group":{
-                        attr: "objectClass",
-                        or: true
                     }
                 }
             }
@@ -150,22 +146,29 @@ export default {
     },
     props: {
         viewKey: String,
-        excludeGroups: Array
+        excludeDNs: Array,
+        enableGroups: {
+            type: Boolean,
+            default: true
+        },
+        enableUsers: {
+            type: Boolean,
+            default: true
+        }
     },
     methods: {
         toggleOpenAll(){
-            console.log(this.listOpenAll)
             this.listOpenAll = !this.listOpenAll
             if (this.$refs.groupTreeview != undefined)
                 this.$refs.groupTreeview.updateAll(this.listOpenAll)
         },
-        addGroups(){
+        addDNs(){
             var searchResult
             var finalGroupArray = []
             // If there's a Selected Group to Add
-            if (this.selectedGroups.length > 0) {
+            if (this.selectedDNs.length > 0) {
                 // Loop for each Group ID
-                this.selectedGroups.forEach(groupID => {
+                this.selectedDNs.forEach(groupID => {
                     // Loop for all objects in LDAP List to do a recursive search
                     this.ldapList.forEach(element => {
                         // If a result is not found keep searching
@@ -179,25 +182,48 @@ export default {
                     });
                 });
                 // console.log(finalGroupArray)
-                this.$emit('addGroups', finalGroupArray)
+                this.$emit('addDNs', finalGroupArray)
             }
         },
         changeSelectedStatus(itemID){
-            console.log(itemID)
-            if (this.selectedGroups.includes(itemID)) {
-                this.selectedGroups = this.selectedGroups.filter(e => e != itemID)
+            if (this.selectedDNs.includes(itemID)) {
+                this.selectedDNs = this.selectedDNs.filter(e => e != itemID)
             }
             else {
-                this.selectedGroups.push(itemID)
+                this.selectedDNs.push(itemID)
             }
         },
+        isTypeValid(type){
+            var types = [
+                'user',
+                'person',
+                'organizationalperson',
+                'group'
+            ]
+            if (types.includes(type))
+                return true
+            return false
+        },
         async fetchLists(){
+            if (this.enableGroups) {
+                this.filter['iexact']['group'] = {
+                    attr: "objectClass",
+                    or: true
+
+                }
+            } else delete this.filter['iexact']['group']
+            if (this.enableUsers) {
+                this.filter['iexact']['user'] = {
+                    attr: "objectClass",
+                    or: true
+                }
+            } else delete this.filter['iexact']['user']
             this.loading = true
             this.error = false
-            this.selectedGroups = []
-            if (this.excludeGroups != undefined && this.excludeGroups.length > 0) {
-                this.excludeGroups.forEach(groupDN => {
-                    this.filter['iexact'][groupDN] = {
+            this.selectedDNs = []
+            if (this.excludeDNs != undefined && this.excludeDNs.length > 0) {
+                this.excludeDNs.forEach(distinguishedName => {
+                    this.filter['iexact'][distinguishedName] = {
                         attr: "distinguishedName",
                         exclude: true
                     }

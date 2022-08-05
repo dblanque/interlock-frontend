@@ -431,6 +431,9 @@
       }
     },
     "groups":{
+      "editFlagWarning":"Está editando el grupo",
+      "isPopulated":"El grupo tiene miembros",
+      "isNotPopulated":"El grupo no tiene miembros",
       "types":{
         "GROUP_DISTRIBUTION": "Grupo de Distribución",
         "GROUP_SYSTEM": "Creado por el Sistema",

@@ -266,7 +266,7 @@ export default {
         groupDestination: '',
         groupToCreate: {},
         radioGroupScope: 0,
-        radioGroupType: 0,
+        radioGroupType: 1,
         ouList: [],
         createStage: 1,
       }
@@ -327,7 +327,7 @@ export default {
                             this.showSnackbar = false
                         this.showSnackbar = true
                         this.error = true
-                        this.errorMsg = this.$t('section.groups.groupCreate.validationError')
+                        this.errorMsg = this.$t('error.validation.fieldinvalid')
                     }
                     break;
                 case 2:
@@ -361,6 +361,8 @@ export default {
             this.groupToCreate = new Group({})
             this.createStage = 1
             this.error = false
+            this.radioGroupScope = 0
+            this.radioGroupType = 1
             this.errorMsg = ""
             this.$refs.groupCreateForm1.resetValidation()
             var domainDetails = getDomainDetails()
