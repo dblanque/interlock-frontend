@@ -273,7 +273,7 @@
                 <v-btn @click="saveGroup"
                 :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
                 rounded 
-                :disabled="!editFlag || true">
+                :disabled="!editFlag">
                     <v-icon class="mr-1">
                         mdi-content-save
                     </v-icon>
@@ -283,7 +283,7 @@
                 <v-btn @click="saveGroup(true)"
                 :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
                 rounded 
-                :disabled="!editFlag || true">
+                :disabled="!editFlag">
                     <v-icon class="mr-1">
                         mdi-exit-to-app
                     </v-icon>
@@ -529,9 +529,41 @@ export default {
             this.loading = false
             this.loadingColor = 'primary'
         },
-        saveGroup(){
-            console.log('save')
-            console.log(this.groupcopy)
+        async saveGroup(closeDialog=false){
+            this.loading = true
+            this.groupcopy.groupType = this.radioGroupType
+            this.groupcopy.groupScope = this.radioGroupScope
+            // Set members to add or remove
+            if (this.membersToAdd.length > 0)
+                this.groupcopy.membersToAdd = this.membersToAdd
+            if (this.membersToRemove.length > 0)
+                this.groupcopy.membersToRemove = this.membersToRemove
+            this.$emit('save', this.viewKey, this.groupcopy);
+            await new Group({}).update({group: this.groupcopy})
+            .then(() => {
+                if (closeDialog == true)
+                    this.closeDialog();
+                else
+                    this.refreshGroup();
+                this.loading = false
+                this.loadingColor = 'primary'
+            })
+            .catch(error => {
+                console.log(error)
+                if (error.response.data.code) {
+                    switch (error.response.data.code) {
+                        default:
+                            this.errorMsg = this.$t("error.unknown_short")
+                            break;
+                    }
+                } else {
+                    this.errorMsg = this.$t("error.unknown_short")
+                }
+                this.userRefreshLoading = false;
+                this.loading = false
+                this.loadingColor = 'error'
+                this.error = true;
+            })
         },
         editGroup(){
             this.$emit('editToggle', true);

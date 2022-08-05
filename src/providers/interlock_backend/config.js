@@ -49,6 +49,7 @@ const urls = {
         fetch: 'api/groups/fetch/',
         save: 'api/groups/save/',
         insert: 'api/groups/insert/',
+        update: 'api/groups/update/',
         delete: 'api/groups/delete/',
     },
     log: {

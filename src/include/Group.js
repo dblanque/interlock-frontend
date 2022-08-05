@@ -43,6 +43,10 @@ class Group extends ApiModel{
         return await interlock_backend.call('group/insert', group)
     }
 
+    async update(group){
+        return await interlock_backend.call('group/update', group)
+    }
+
     async delete(group){
         return await interlock_backend.call('group/delete', group)
     }

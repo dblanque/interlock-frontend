@@ -342,8 +342,8 @@ export default {
                 case 2:
                     this.$refs.AddToGroup.addDNs()
                     if (!this.error){
-                        this.groupToCreate['groupType'] = this.radioGroupType
-                        this.groupToCreate['groupScope'] = this.radioGroupScope
+                        this.groupToCreate.groupType = this.radioGroupType
+                        this.groupToCreate.groupScope = this.radioGroupScope
                         Object.keys(this.groupToCreate).forEach(key => {
                             if (this.groupToCreate[key] === undefined) {
                                 delete this.groupToCreate[key];

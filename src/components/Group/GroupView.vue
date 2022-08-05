@@ -272,7 +272,6 @@ export default {
         this.listGroupItems()
     },
     groupSaved(){
-      this.$refs.GroupCreate.newGroup()
       this.listGroupItems()
     },
     setViewToEdit(value){
