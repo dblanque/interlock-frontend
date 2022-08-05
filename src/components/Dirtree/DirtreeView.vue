@@ -331,6 +331,9 @@ export default {
       }
     },
     methods: {
+        resetSearch(){
+          this.searchString = ""
+        },
         changeOpenStatus(itemId){
           if (this.dirtreeOpen.includes(itemId))
             this.dirtreeOpen = this.dirtreeOpen.filter(e => e !== itemId)

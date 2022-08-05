@@ -170,7 +170,7 @@
                                                     align="center" justify="center">
                                                         <v-col cols="12" class="pa-0 ma-0 px-1">
                                                             <span class="ma-0 pa-0">
-                                                                {{ $t('classes.user.single') + ": " + ((member.givenName != "" && member.sn != "") ? member.givenName + " " + member.sn + " (" + member.username + ")" : member.username) }}
+                                                                {{ $t('classes.user.single') + ": " + ((member.givenName && member.sn) ? member.givenName + " " + member.sn + " (" + member.username + ")" : member.username) }}
                                                             </span>
                                                         </v-col>
                                                     </v-row>
@@ -226,7 +226,7 @@
                                                 <v-list-item-action class="pa-0 ma-0">
                                                     <v-tooltip bottom color="red">
                                                     <template v-slot:activator="{ on, attrs }">
-                                                        <v-btn small icon @click="removeFromArrayByIndex(key, groupcopy.member)"
+                                                        <v-btn small icon @click="removeMember(member.distinguishedName, groupcopy.member)"
                                                         color="red"
                                                         :disabled="!editFlag"
                                                         v-bind="attrs"
@@ -400,17 +400,22 @@ export default {
                     this.showMemberTab = true
             }
         },
+        setupExclude(){
+            this.excludeDNs = []
+            this.groupcopy.member.forEach(member => {
+                this.excludeDNs.push(member.distinguishedName)
+            });
+            this.membersToAdd.forEach(member => {
+                if (!this.excludeDNs.includes(member))
+                    this.excludeDNs.push(member)
+            });
+        },
         openDialog(key){
             this.dialogs[key] = true;
             switch (key) {
                 case 'addToGroup':
-                    this.excludeDNs = []
-                    this.groupcopy.member.forEach(g => {
-                        this.excludeDNs.push(g.distinguishedName)
-                    });
-                    setTimeout(() => {
-                        this.$refs.AddToGroup.fetchLists()
-                    }, 5)
+                    this.setupExclude()
+                    this.$refs.AddToGroup.fetchLists()
                 break;
                 default:
                 break;
@@ -431,9 +436,28 @@ export default {
                     this.groupcopy.member.push(g)
                 }
             });
-            console.log(this.groupcopy.member)
+            this.logGroups()
             this.closeInnerDialog('addToGroup')
             this.$forceUpdate
+        },
+        removeMember(memberDn) {
+            if (!this.membersToRemove.includes(memberDn))
+                this.membersToRemove.push(memberDn)
+
+            if (this.membersToAdd.includes(memberDn))
+                this.membersToAdd = this.membersToRemove.filter(e => e == memberDn)
+
+            this.groupcopy.member = this.groupcopy.member.filter(e => e.distinguishedName != memberDn)
+            this.logGroups()
+            this.$forceUpdate
+        },
+        logGroups(){
+            console.log("Member Array")
+            console.log(this.groupcopy.member)
+            console.log("Members to Add")
+            console.log(this.membersToAdd)
+            console.log("Members to Remove")
+            console.log(this.membersToRemove)
         },
         checkIfGroupBuiltIn(){
             if (this.group.groupType.includes('GROUP_SYSTEM'))
@@ -452,9 +476,6 @@ export default {
                 array = array.push(value);
             }
             return array
-        },
-        removeFromArrayByIndex(index, arrayObject){
-            return arrayObject.splice(index, 1); // 2nd parameter means remove one item only
         },
         setGroupTypeAndScope(){
             if (this.group.groupType != undefined) {
@@ -510,6 +531,7 @@ export default {
         },
         saveGroup(){
             console.log('save')
+            console.log(this.groupcopy)
         },
         editGroup(){
             this.$emit('editToggle', true);

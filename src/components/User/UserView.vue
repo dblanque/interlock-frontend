@@ -293,6 +293,9 @@ export default {
     snackbarTimeout: Number
   },
   methods: {
+    resetSearch(){
+      this.searchString = ""
+    },
     goToGroup(groupDn){
       this.$emit('goToGroup', groupDn)
       this.closeDialog('userDialog')

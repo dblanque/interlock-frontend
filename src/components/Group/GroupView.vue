@@ -125,12 +125,12 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon
+          <v-btn icon v-show="!loading && !readonly && !item.groupType.includes('GROUP_SYSTEM') && !item.cn.startsWith('Domain ')"
             rounded
             v-bind="attrs"
             v-on="on"
             small
-            :disabled="loading || readonly || item.groupType.includes('GROUP_SYSTEM')"
+            :disabled="loading || readonly || item.groupType.includes('GROUP_SYSTEM') || item.cn.startsWith('Domain ')"
             @click="openDeleteDialog(item)"
           >
           <v-icon small color="red">
@@ -139,6 +139,22 @@
           </v-btn>
         </template>
         <span>{{ $t('actions.delete') }}</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <span v-bind="attrs" v-on="on"
+              v-show="loading || readonly || item.groupType.includes('GROUP_SYSTEM') || item.cn.startsWith('Domain ')">
+            <v-btn icon
+              rounded
+              small
+              disabled>
+            <v-icon small>
+              mdi-delete
+            </v-icon>
+            </v-btn>
+          </span>
+        </template>
+        <span>{{ $t('section.groups.groupBuiltinCannotDelete') }}</span>
       </v-tooltip>
     </template>
   </v-data-table>
@@ -232,6 +248,9 @@ export default {
     snackbarTimeout: Number,
   },
   methods: {
+    resetSearch(){
+      this.searchString = ""
+    },
     openDialog(key){
       this.dialogs[key] = true;
       switch (key) {

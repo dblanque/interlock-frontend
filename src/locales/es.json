@@ -435,6 +435,7 @@
       }
     },
     "groups":{
+      "groupBuiltinCannotDelete":"Este grupo es del sistema o está protegido",
       "editFlagWarning":"Está editando el grupo",
       "isPopulated":"El grupo tiene miembros",
       "isNotPopulated":"El grupo no tiene miembros",

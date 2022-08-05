@@ -428,6 +428,7 @@
       }
     },
     "groups":{
+      "groupBuiltinCannotDelete":"This group is built-in or protected",
       "editFlagWarning":"You are now editing this group",
       "isPopulated":"This group is populated",
       "isNotPopulated":"This group is not Populated",

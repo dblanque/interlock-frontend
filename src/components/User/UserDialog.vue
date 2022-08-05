@@ -970,17 +970,22 @@ export default {
         goToGroup(groupDn) {
             this.$emit('goToGroup', { distinguishedName: groupDn })
         },
+        setupExclude(){
+            this.excludeGroups = []
+            this.usercopy.memberOfObjects.forEach(g => {
+                this.excludeGroups.push(g.distinguishedName)
+            });
+            this.usercopy.groupsToAdd.forEach(g => {
+                if (!this.excludeGroups.includes(g))
+                    this.excludeGroups.push(g)
+            });
+        },
         openDialog(key){
             this.dialogs[key] = true;
             switch (key) {
                 case 'userAddToGroup':
-                    this.excludeGroups = []
-                    this.usercopy.memberOfObjects.forEach(g => {
-                        this.excludeGroups.push(g.distinguishedName)
-                    });
-                    setTimeout(() => {
-                        this.$refs.UserAddToGroup.fetchLists()
-                    }, 5)
+                    this.setupExclude()
+                    this.$refs.UserAddToGroup.fetchLists()
                 break;
                 default:
                 break;

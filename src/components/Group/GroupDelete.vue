@@ -69,7 +69,7 @@ export default {
                 group.cn = this.groupObject.cn
             }
             if (deleteConfirm == true) {
-                await new Group({}).delete(group)
+                await new Group({}).delete({group: group})
                 .then(response => {
                     if (response.data.groupname == group.groupname)
                         console.log("Group Deleted Successfully")

@@ -173,6 +173,9 @@ export default {
     viewTitle: String
   },
   methods: {
+    resetSearch(){
+      this.searchString = ""
+    },
     getObjectClassTranslationKey(objectClass){
         switch (objectClass) {
             case 'USER':

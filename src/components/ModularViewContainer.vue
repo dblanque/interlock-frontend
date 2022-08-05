@@ -185,18 +185,21 @@ import LogView from '@/components/Logging/LogView.vue'
             case 'home':
               if (this.$refs.DirtreeView != undefined) {
                 console.log("Requested refresh for view component "+ newValue)
+                this.$refs.DirtreeView.resetSearch()
                 this.$refs.DirtreeView.resetDirtree(true)
               }
               break;
             case 'users':
               if (this.$refs.UserView != undefined) {
                 console.log("Requested refresh for component "+ newValue)
+                this.$refs.UserView.resetSearch()
                 this.$refs.UserView.listUserItems()
               }
               break;
             case 'groups':
               if (this.$refs.GroupView != undefined) {
                 console.log("Requested refresh for component "+ newValue)
+                this.$refs.GroupView.resetSearch()
                 this.$refs.GroupView.listGroupItems()
               }
               break;
@@ -209,6 +212,7 @@ import LogView from '@/components/Logging/LogView.vue'
             case 'logs':
               if (this.$refs.LogView != undefined) {
                 console.log("Requested refresh for component "+ newValue)
+                this.$refs.LogView.resetSearch()
                 this.$refs.LogView.listLogs()
               }
               break;
