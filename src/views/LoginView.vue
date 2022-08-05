@@ -17,29 +17,42 @@
               <span class="">{{ $t("section.login.title") }}</span>
             </v-row>
             <!-- USER / EMAIL FIELD -->
-            <v-row justify="center">
+            <v-row justify="center" class="ma-0 mt-6 mb-1 field-name">
+              <span>
+                {{ $t('section.login.account') }}
+              </span>
+            </v-row>
+            <v-row justify="center" class="ma-0 pa-0">
               <v-text-field
+                autofocus
+                outlined
+                dense
                 v-model="username"
                 prepend-inner-icon="mdi-account"
                 :disabled="submitted"
                 validate-on-blur
                 :rules="[this.fieldRules(username, 'ge_name', true)]"
-                :label="$t('section.login.account')"
-                class="font-weight-bold my-2"
+                class="font-weight-bold mb-2"
                 required
                 @keydown.enter="submit()"
               ></v-text-field>
             </v-row>
             <!-- PASSWORD FIELD -->
-            <v-row justify="center">
+            <v-row justify="center" class="ma-0 pa-0 mb-1 field-name">
+              <span>
+                {{ $t('attribute.users.password') }}
+              </span>
+            </v-row>
+            <v-row justify="center" class="ma-0 pa-0">
               <v-text-field
+                outlined
+                dense
                 :type="value ? 'password' : 'text'"
                 prepend-inner-icon="mdi-lock"
                 v-model="password"
                 :disabled="submitted"
-                :label="$t('attribute.users.password')"
                 @keydown.enter="submit()"
-                class="login-pwd-field login-field font-weight-bold my-2"
+                class="login-pwd-field login-field font-weight-bold mb-2"
                 required
                 :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="() => (value = !value)"
@@ -272,3 +285,10 @@ export default {
   },
 };
 </script>
+
+<style>
+.field-name{
+  font-family: Montserrat;
+  font-weight: 500;
+}
+</style>

@@ -199,10 +199,14 @@
           },
           "users":{
             "userExists":"User already exists",
-            "couldNotSaveUser":"User could not be saved",
+            "couldNotSave":"User could not be saved",
             "countryMalformed":"User Country field is malformed",
             "couldNotFetchGroups":"Error fetching User Groups",
             "permissionMalformed":"Malformed Permissions Dictionary"
+          },
+          "groups":{
+            "groupExists":"Group already exists",
+            "couldNotSave":"Group could not be saved"
           }
       },
       "settings": {
@@ -440,14 +444,20 @@
         "step1":"Group Details",
         "step2":"Group Members",
         "step3":"Group Created",
+        "step3_success":"Group Created Successfully",
         "optionalsHeader":"Optional Details",
-        "groupCreatedIn":"Group will be created in"
+        "groupCreatedIn":"Group will be created in",
+        "memberAddError":"Error adding member, please try again"
       },
       "groupDialog":{
         "groupType":"Group Type",
         "groupScope":"Group Scope",
         "members":"Group Members",
         "copyDistinguishedName":"Copy Distinguished Name"
+      },
+      "deleteGroup":{
+        "title":"Delete Group",
+        "message":"Are you sure you wish to delete the group"
       }
     },
     "settings":{

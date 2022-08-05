@@ -54,6 +54,9 @@
                             :rules="[this.fieldRules(groupcopy.mail, 'ge_email')]"
                             ></v-text-field>
                         </v-col>
+                    </v-row>
+
+                    <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
                         <v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
                             <v-text-field
                             dense
@@ -70,6 +73,18 @@
                             :label="$t('ldap.attributes.objectSid')"
                             readonly
                             v-model="groupcopy.objectSid"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row justify="center" class="ma-0 pa-0 mt-2">
+                        <v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
+                            <v-text-field
+                            dense
+                            id="distinguishedName"
+                            :label="$t('ldap.attributes.distinguishedName')"
+                            readonly
+                            v-model="groupcopy.distinguishedName"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -303,7 +318,7 @@
             <CNObjectList
             :viewKey="'addToGroup'"
             ref="AddToGroup"
-            @addDNs="addMember"
+            @addDNs="addMembers"
             :excludeDNs="excludeDNs"
             @closeDialog="closeInnerDialog"
             />
@@ -407,7 +422,7 @@ export default {
         closeInnerDialog(key){
             this.dialogs[key] = false;
         },
-        addMember(members){
+        addMembers(members){
             this.membersToAdd = members.map(e => e.distinguishedName)
             if (!this.groupcopy.member)
                 this.groupcopy.member = []

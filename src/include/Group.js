@@ -38,6 +38,14 @@ class Group extends ApiModel{
             }
         )
     }
+
+    async insert(group){
+        return await interlock_backend.call('group/insert', group)
+    }
+
+    async delete(group){
+        return await interlock_backend.call('group/delete', group)
+    }
 }
 
 export default Group

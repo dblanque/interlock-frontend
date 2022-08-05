@@ -6,6 +6,7 @@
                     {{ $t('section.groups.groupDialog.groupType') }}
                 </v-row>
                 <v-radio-group @change="emitValueUpdate('radioGroupScope', selectedRadioGroupType)"
+                mandatory
                 :readonly="!editFlag"
                 :disabled="!editFlag"
                 v-model="selectedRadioGroupType" class="ma-0 pa-0">
@@ -23,6 +24,7 @@
                     {{ $t('section.groups.groupDialog.groupScope') }}
                 </v-row>
                 <v-radio-group @change="emitValueUpdate('radioGroupScope', selectedRadioGroupScope)"
+                mandatory
                 :readonly="!editFlag"
                 :disabled="!editFlag"
                 v-model="selectedRadioGroupScope" class="ma-0 pa-0">

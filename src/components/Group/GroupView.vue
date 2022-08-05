@@ -160,7 +160,7 @@
   </v-dialog>
 
   <!-- GROUP DELETE CONFIRM DIALOG -->
-  <!-- <v-dialog eager max-width="800px" v-model="dialogs['groupDelete']">
+  <v-dialog eager max-width="800px" v-model="dialogs['groupDelete']">
     <GroupDelete
       :groupObject="this.data.selectedGroup"
       :viewKey="'groupDelete'"
@@ -168,7 +168,7 @@
       @closeDialog="closeDialog"
       @refresh="listGroupItems"
     />
-  </v-dialog> -->
+  </v-dialog>
 
   <!-- GROUP CREATE DIALOG -->
   <v-dialog eager max-width="1200px" v-model="dialogs['groupCreate']">
@@ -185,13 +185,13 @@
 import Group from '@/include/Group';
 import GroupDialog from '@/components/Group/GroupDialog.vue'
 import GroupCreate from '@/components/Group/GroupCreate.vue'
-// import GroupDelete from '@/components/Group/GroupDelete.vue'
+import GroupDelete from '@/components/Group/GroupDelete.vue'
 
 export default {
   components: {
     GroupDialog,
-    GroupCreate
-    // GroupDelete
+    GroupCreate,
+    GroupDelete
   },
   data() {
     return {

@@ -104,35 +104,15 @@
                             </v-row>
                         </v-form>
                     </v-stepper-content>
-                    <!-- Password -->
+                    <!-- Members -->
                     <v-stepper-content step="2">
-                        
                         <v-form ref="groupCreateForm2">
-                            <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-                                <v-col cols="12" lg="4">
-                                    <v-text-field
-                                    :type="passwordHidden ? 'password' : 'text'"
-                                    required
-                                    @keydown.enter="nextStep"
-                                    :append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
-                                    @click:append="() => (passwordHidden = !passwordHidden)"
-                                    dense
-                                    :label="$t('ldap.attributes.password')"
-                                    v-model="groupToCreate.password"
-                                    :rules="[this.fieldRules(groupToCreate.password, 'ge_password', true)]"
-                                    ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" lg="4">
-                                        <v-text-field
-                                        :type="passwordHidden ? 'password' : 'text'"
-                                        dense
-                                        @keydown.enter="nextStep"
-                                        :label="$t('ldap.attributes.passwordConfirm')"
-                                        v-model="groupToCreate.passwordConfirm"
-                                        :rules="[groupToCreate.passwordConfirm == groupToCreate.password ? true : this.$t('error.validation.passwordNotSame') ]"
-                                        ></v-text-field>
-                                </v-col>
-                            </v-row>
+                            <CNObjectList
+                            ref="AddToGroup"
+                            @addDNs="addMembers"
+                            :showHeader="false"
+                            :addButton="false"
+                            />
                         </v-form>
                     </v-stepper-content>
                     <!-- Check if user exists - loader -->
@@ -198,7 +178,7 @@
                     </v-slide-x-reverse-transition>
 
                     <v-slide-x-reverse-transition>
-                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && (createStage < 4 && this.error == true)"
+                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && createStage < 3 || this.error == true && createStage > 1"
                     @keydown.enter="prevStep"
                     class="text-normal ma-0 pa-0 pa-2 pr-4 ma-1 bg-white bg-lig-25" 
                     rounded>
@@ -240,6 +220,7 @@
 import Group from '@/include/Group'
 import OrganizationalUnit from '@/include/OrganizationalUnit'
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
+import CNObjectList from '@/components/CNObjectList.vue'
 import GroupTypeRadioGroups from '@/components/Group/GroupTypeRadioGroups.vue'
 import validationMixin from '@/plugins/mixin/validationMixin';
 import { getDomainDetails } from '@/include/utils';
@@ -248,6 +229,7 @@ export default {
     name: 'GroupCreate',
     components: {
         DirtreeOUList,
+        CNObjectList,
         GroupTypeRadioGroups
     },
     data () {
@@ -256,6 +238,7 @@ export default {
         domain: "",
         realm: "",
         basedn: "",
+        membersToAdd: [],
         success: false,
         loading: true,
         error: false,
@@ -283,6 +266,27 @@ export default {
     computed:{
     },
     methods: {
+        addMembers(members){
+            try {
+                this.membersToAdd = members.map(e => e.distinguishedName)
+                if (!this.groupToCreate.member)
+                    this.groupToCreate.member = []
+                members.forEach(g => {
+                    if (this.groupToCreate.member.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
+                        this.groupToCreate.member.push(g)
+                    }
+                });
+            } 
+            catch (error) {
+                console.error(error)
+                // Force snackbar to reappear if error was pre-existent
+                if (this.showSnackbar == true)
+                    this.showSnackbar = false
+                this.showSnackbar = true
+                this.error = true
+                this.errorMsg = this.$t('section.groups.groupCreate.memberAddError')
+            }
+        },
         setDestination(destination=undefined){
             // Set default destination if undefined
             if (destination == undefined || !destination)
@@ -297,12 +301,16 @@ export default {
             switch (this.createStage) {
                 case 2:
                     var domainDetails = getDomainDetails()
+                    this.groupToCreate.member = []
+                    this.membersToAdd = []
                     this.domain = domainDetails.domain
                     this.realm = domainDetails.realm
                     this.basedn = domainDetails.basedn
                     this.createStage -= 1
                     break;
                 case 3:
+                    this.error = false
+                    this.errorMsg = ""
                     this.createStage -= 1
                     setTimeout(() => {  
                         this.loading = true; 
@@ -319,6 +327,7 @@ export default {
                     if (this.$refs.groupCreateForm1.validate()){
                         this.error = false
                         this.errorMsg = ""
+                        this.$refs.AddToGroup.fetchLists()
                         this.createStage += 1
                     }
                     else {
@@ -331,14 +340,19 @@ export default {
                     }
                     break;
                 case 2:
-                    if (this.$refs.groupCreateForm2.validate()){
-                        this.error = false
-                        this.errorMsg = ""
+                    this.$refs.AddToGroup.addDNs()
+                    if (!this.error){
+                        this.groupToCreate['groupType'] = this.radioGroupType
+                        this.groupToCreate['groupScope'] = this.radioGroupScope
                         Object.keys(this.groupToCreate).forEach(key => {
                             if (this.groupToCreate[key] === undefined) {
                                 delete this.groupToCreate[key];
                             }
                         });
+                        //
+                        if (this.membersToAdd.length > 0)
+                            this.groupToCreate['membersToAdd'] = this.membersToAdd
+                        //
                         this.createGroup()
                     }
                     else {
@@ -392,7 +406,7 @@ export default {
             this.errorMsg = ""
             this.createStage += 1
             this.groupToCreate.path = this.groupDestination
-            await this.groupToCreate.insert(this.groupToCreate)
+            await this.groupToCreate.insert({group: this.groupToCreate})
             .then(response => {
                 if (response.status == 200) {
                     this.error = false;

@@ -1,7 +1,7 @@
 <template>
-<v-card class="pa-2">
+<v-card class="pa-2" flat>
     <!-- Title Bar -->
-    <v-card-title class="ma-0 pa-0 card-title">
+    <v-card-title class="ma-0 pa-0 card-title" v-if="showHeader">
         <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
             <h3 class="pa-0 ma-0 ma-2">
                 Add User to Group(s)
@@ -45,7 +45,7 @@
                     </v-fab-transition>
                     {{ listOpenAll ? $t("actions.closeAll") : $t("actions.openAll") }}
                 </v-btn>
-                <v-btn :disabled="this.ldapList && this.ldapList.length < 1"
+                <v-btn :disabled="this.ldapList && this.ldapList.length < 1" v-if="addButton"
                     @click="addDNs" color="primary" class="ma-0 pa-0 mx-2 px-2">
                     <v-icon class="ma-0 pa-0 mr-1">
                         mdi-plus
@@ -152,6 +152,18 @@ export default {
             default: true
         },
         enableUsers: {
+            type: Boolean,
+            default: true
+        },
+        addButton: {
+            type: Boolean,
+            default: true
+        },
+        openAllButton: {
+            type: Boolean,
+            default: true
+        },
+        showHeader: {
             type: Boolean,
             default: true
         }

@@ -15,7 +15,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             interlock_backend.request.put(interlock_backend.urls.group.update, data)
             .then(response => {
-                resolve(response.data);
+                resolve(response);
             }).catch((e) => reject(e))
         })
     },
@@ -47,7 +47,7 @@ const actions = {
                 reject(e)
             })
         })
-    },
+    }
 }
 
 export default actions

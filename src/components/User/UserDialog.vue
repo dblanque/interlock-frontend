@@ -1142,7 +1142,7 @@ export default {
                             this.errorMsg = this.$t("error.codes.users.permissionMalformed")
                             break;
                         case 'user_update_error':
-                            this.errorMsg = this.$t("error.codes.users.couldNotSaveUser")
+                            this.errorMsg = this.$t("error.codes.users.couldNotSave")
                             break;
                         case 'user_country_error':
                             this.errorMsg = this.$t("error.codes.users.countryMalformed")

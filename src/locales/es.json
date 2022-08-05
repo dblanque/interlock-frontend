@@ -205,10 +205,14 @@
       },
       "users":{
         "userExists":"El usuario ya existe.",
-        "couldNotSaveUser":"El usuario no pudo ser guardado",
+        "couldNotSave":"El usuario no pudo ser guardado",
         "countryMalformed":"Campo de País mal formado",
         "couldNotFetchGroups":"Error obteniendo Grupos del Usuario",
         "permissionMalformed":"Diccionario de Permisos mal formado"
+      },
+      "groups":{
+        "groupExists":"El grupo ya existe",
+        "couldNotSave":"El grupo no pudo ser guardado"
       }
     },
     "settings": {
@@ -448,13 +452,18 @@
         "step2":"Miembros del Grupo",
         "step3":"Grupo Creado",
         "optionalsHeader":"Detalles Opcionales",
-        "groupCreatedIn":"El Grupo será creado en"
+        "groupCreatedIn":"El Grupo será creado en",
+        "memberAddError":"Error al añadir el miembro, por favor intente nuevamente"
       },
       "groupDialog":{
         "groupType":"Tipo de Grupo",
         "groupScope":"Alcance del Grupo",
         "members":"Miembros del grupo",
         "copyDistinguishedName":"Copiar Nombre Distinguido"
+      },
+      "deleteGroup":{
+        "title":"Borrar Grupo",
+        "message":"¿Está seguro de borrar el grupo"
       }
     },
     "settings":{
