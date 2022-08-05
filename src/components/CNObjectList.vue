@@ -92,6 +92,12 @@
                             <v-icon :color="open ? 'primary' : undefined" v-else-if="item.type == 'Organizational-Unit'">
                                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
                             </v-icon>
+                            <v-icon v-if="isUserType(item.type)">
+                                mdi-account
+                            </v-icon>
+                            <v-icon v-else-if="item.type.toLowerCase() == 'group'">
+                                mdi-google-circles-communities
+                            </v-icon>
                             <v-icon v-else>
                                 mdi-group
                             </v-icon>
@@ -124,6 +130,7 @@ export default {
     },
     data() {
         return {
+            userClasses: ['user','person','organizationalperson'],
             ldapList: [],
             selectedDNs: [],
             showLoadingBar: false,
@@ -169,6 +176,13 @@ export default {
         }
     },
     methods: {
+        isUserType(itemObjectClass){
+            console.log(itemObjectClass)
+            var isUser = false
+            if (this.userClasses.includes(itemObjectClass.toLowerCase()))
+                isUser = true
+            return isUser
+        },
         toggleOpenAll(){
             this.listOpenAll = !this.listOpenAll
             if (this.$refs.groupTreeview != undefined)
