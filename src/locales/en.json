@@ -298,7 +298,9 @@
   "section":{
     "login":{
       "title":"Log in to your LDAP Server",
-      "account":"LDAP / AD Account",
+      "account":"LDAP Account / Username",
+      "useEmail":"Use E-Mail",
+      "useLDAPUser":"Use LDAP Account",
       "loginBtn":"Log-in",
       "forgotMyPassword":"I forgot my password",
       "tooManyLogins": "You've been timed out",

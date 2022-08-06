@@ -17,36 +17,61 @@
               <span class="">{{ $t("section.login.title") }}</span>
             </v-row>
             <!-- USER / EMAIL FIELD -->
-            <v-row justify="center" class="ma-0 mt-6 mb-1 field-name">
-              <span>
-                {{ $t('section.login.account') }}
-              </span>
-            </v-row>
-            <v-row justify="center" class="ma-0 pa-0">
+            <v-row v-if="modeUser" justify="center" class="ma-0 pa-0 mt-8">
               <v-text-field
                 autofocus
                 outlined
                 dense
                 v-model="username"
+                :label="$t('section.login.account')"
                 prepend-inner-icon="mdi-account"
                 :disabled="submitted"
                 validate-on-blur
                 :rules="[this.fieldRules(username, 'ge_name', true)]"
-                class="font-weight-bold mb-2"
+                class="font-weight-bold"
                 required
                 @keydown.enter="submit()"
               ></v-text-field>
             </v-row>
-            <!-- PASSWORD FIELD -->
-            <v-row justify="center" class="ma-0 pa-0 mb-1 field-name">
-              <span>
-                {{ $t('attribute.users.password') }}
-              </span>
+            <v-row v-else justify="center" class="ma-0 pa-0 mt-8">
+              <v-text-field
+                autofocus
+                outlined
+                dense
+                v-model="username"
+                :label="$t('attribute.email')"
+                prepend-inner-icon="mdi-email"
+                :disabled="submitted"
+                validate-on-blur
+                :rules="[this.fieldRules(username, 'ge_email', true)]"
+                class="font-weight-bold"
+                required
+                @keydown.enter="submit()"
+              ></v-text-field>
             </v-row>
-            <v-row justify="center" class="ma-0 pa-0">
+            
+            <v-row class="ma-0 pa-0 mb-1" justify="center" align="center">
+                <v-btn class="ma-0 pa-0 px-2" small outlined color="primary" @click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
+                  <span v-if="modeUser">
+                    <v-icon class="mr-1">
+                      mdi-email
+                    </v-icon>
+                    {{ $t("section.login.useEmail")}}
+                  </span>
+                  <span v-else>
+                    <v-icon class="mr-1">
+                      mdi-account
+                    </v-icon>
+                    {{ $t("section.login.useLDAPUser")}}
+                  </span>
+                </v-btn>
+            </v-row>
+            <!-- PASSWORD FIELD -->
+            <v-row justify="center" class="ma-0 pa-0 mt-6">
               <v-text-field
                 outlined
                 dense
+                :label="$t('attribute.users.password')"
                 :type="value ? 'password' : 'text'"
                 prepend-inner-icon="mdi-lock"
                 v-model="password"
@@ -136,6 +161,7 @@ export default {
   },
   data() {
     return {
+      modeUser: true,
       loginForbiddenCount: 0,
       timeoutCounter: 30,
       timedOut: false,
