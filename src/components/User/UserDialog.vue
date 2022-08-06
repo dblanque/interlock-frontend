@@ -1140,7 +1140,6 @@ export default {
                 this.usercopy.groupsToAdd = this.groupsToAdd
             else
                 delete this.usercopy.groupsToAdd
-            
             if (this.groupsToRemove.length > 0)
                 this.usercopy.groupsToRemove = this.groupsToRemove
             else
