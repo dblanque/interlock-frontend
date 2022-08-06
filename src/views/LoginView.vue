@@ -13,11 +13,27 @@
         >
           <v-col align="center">
             <!-- TITLE -->
-            <v-row class="text-md-h6 justify-center">
+            <v-row class="text-md-h6 justify-center my-1">
               <span class="">{{ $t("section.login.title") }}</span>
             </v-row>
+            <v-row class="ma-0 pa-0 my-4" justify="center" align="center">
+                <v-btn class="ma-0 pa-0 px-2" small outlined color="primary" @click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
+                  <span v-if="modeUser">
+                    <v-icon class="mr-1">
+                      mdi-email
+                    </v-icon>
+                    {{ $t("section.login.useEmail")}}
+                  </span>
+                  <span v-else>
+                    <v-icon class="mr-1">
+                      mdi-account
+                    </v-icon>
+                    {{ $t("section.login.useLDAPUser")}}
+                  </span>
+                </v-btn>
+            </v-row>
             <!-- USER / EMAIL FIELD -->
-            <v-row v-if="modeUser" justify="center" class="ma-0 pa-0 mt-8">
+            <v-row v-if="modeUser" justify="center" class="ma-0 pa-0">
               <v-text-field
                 autofocus
                 outlined
@@ -33,7 +49,7 @@
                 @keydown.enter="submit()"
               ></v-text-field>
             </v-row>
-            <v-row v-else justify="center" class="ma-0 pa-0 mt-8">
+            <v-row v-else justify="center" class="ma-0 pa-0">
               <v-text-field
                 autofocus
                 outlined
@@ -50,24 +66,8 @@
               ></v-text-field>
             </v-row>
             
-            <v-row class="ma-0 pa-0 mb-1" justify="center" align="center">
-                <v-btn class="ma-0 pa-0 px-2" small outlined color="primary" @click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
-                  <span v-if="modeUser">
-                    <v-icon class="mr-1">
-                      mdi-email
-                    </v-icon>
-                    {{ $t("section.login.useEmail")}}
-                  </span>
-                  <span v-else>
-                    <v-icon class="mr-1">
-                      mdi-account
-                    </v-icon>
-                    {{ $t("section.login.useLDAPUser")}}
-                  </span>
-                </v-btn>
-            </v-row>
             <!-- PASSWORD FIELD -->
-            <v-row justify="center" class="ma-0 pa-0 mt-6">
+            <v-row justify="center" class="ma-0 pa-0 mt-3">
               <v-text-field
                 outlined
                 dense

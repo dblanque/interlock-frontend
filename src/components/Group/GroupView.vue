@@ -95,7 +95,7 @@
             v-on="on"
             small
             :disabled="loading || readonly"
-            @click="fetchGroup(item)"
+            @click="fetchGroup(item, false)"
           >
           <v-icon small color="primary">
             mdi-eye
@@ -382,6 +382,8 @@ export default {
         this.openDialog('groupDialog')
         if (isEditable == true)
           this.editableForm = true
+        else
+          this.editableForm = false
         setTimeout(() => { 
           this.loading = false 
         }, 300);

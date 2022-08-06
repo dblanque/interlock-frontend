@@ -489,6 +489,8 @@ export default {
         }
         if (isEditable == true)
           this.editableForm = true
+        else
+          this.editableForm = false
         setTimeout(() => {
           this.loading = false
         }, 300);

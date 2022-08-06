@@ -972,13 +972,18 @@ export default {
         },
         setupExclude(){
             this.excludeGroups = []
-            this.usercopy.memberOfObjects.forEach(g => {
-                this.excludeGroups.push(g.distinguishedName)
-            });
-            this.usercopy.groupsToAdd.forEach(g => {
-                if (!this.excludeGroups.includes(g))
-                    this.excludeGroups.push(g)
-            });
+            if (this.usercopy.memberOfObjects != undefined && this.usercopy.memberOfObjects.length > 0) {
+                this.usercopy.memberOfObjects.forEach(g => {
+                    this.excludeGroups.push(g.distinguishedName)
+                });
+            }
+            if (this.usercopy.groupsToAdd != undefined && this.usercopy.groupsToAdd.length > 0) {
+                this.usercopy.groupsToAdd.forEach(g => {
+                    if (!this.excludeGroups.includes(g))
+                        this.excludeGroups.push(g)
+                });
+            }
+            return
         },
         openDialog(key){
             this.dialogs[key] = true;
@@ -1020,7 +1025,10 @@ export default {
                     this.groupsToRemove.push(groupDn)
     
                 if (this.groupsToAdd.includes(groupDn))
-                    this.groupsToAdd = this.groupsToRemove.filter(e => e == groupDn)
+                    this.groupsToAdd = this.groupsToAdd.filter(e => e != groupDn)
+    
+                if (this.excludeGroups.includes(groupDn))
+                    this.excludeGroups = this.excludeGroups.filter(e => e != groupDn)
     
                 this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
                 // this.logGroups()
@@ -1187,6 +1195,7 @@ export default {
                 this.usercopy = this.user
                 this.setUserGroups()
                 this.setObjectClassToArray()
+                this.setupExclude()
                 if (this.usercopy.lastLogon == 0)
                     this.usercopy.lastLogon = this.$t('section.users.userDialog.noLastLogon')
                 this.setPermissions()

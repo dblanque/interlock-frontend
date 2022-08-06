@@ -174,7 +174,6 @@ export default {
     },
     methods: {
         isUserType(itemObjectClass){
-            console.log(itemObjectClass)
             var isUser = false
             if (this.userClasses.includes(itemObjectClass.toLowerCase()))
                 isUser = true
@@ -228,11 +227,12 @@ export default {
             return false
         },
         async fetchLists(){
+            // Gotta force update for the filter value refresh, Javascript LOL
+            this.$forceUpdate
             if (this.enableGroups) {
                 this.filter['iexact']['group'] = {
                     attr: "objectClass",
                     or: true
-
                 }
             } else delete this.filter['iexact']['group']
             if (this.enableUsers) {

@@ -402,13 +402,18 @@ export default {
         },
         setupExclude(){
             this.excludeDNs = []
-            this.groupcopy.member.forEach(member => {
-                this.excludeDNs.push(member.distinguishedName)
-            });
-            this.membersToAdd.forEach(member => {
-                if (!this.excludeDNs.includes(member))
-                    this.excludeDNs.push(member)
-            });
+            if (this.groupcopy.member != undefined && this.groupcopy.member.length > 0) {
+                this.groupcopy.member.forEach(member => {
+                    this.excludeDNs.push(member.distinguishedName)
+                });
+            }
+            if (this.membersToAdd != undefined && this.membersToAdd.length > 0) {
+                console.log(this.membersToAdd)
+                this.membersToAdd.forEach(member => {
+                    if (!this.excludeDNs.includes(member))
+                        this.excludeDNs.push(member)
+                });
+            }
         },
         openDialog(key){
             this.dialogs[key] = true;
@@ -432,9 +437,11 @@ export default {
             if (!this.groupcopy.member)
                 this.groupcopy.member = []
             members.forEach(g => {
-                if (this.groupcopy.member.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
+                if (this.groupcopy.member.filter(e => e.distinguishedName == g.distinguishedName).length == 0)
                     this.groupcopy.member.push(g)
-                }
+
+                if (this.membersToRemove.includes(g.distinguishedName))
+                    this.membersToRemove = this.membersToRemove.filter(e => e.distinguishedName != g.distinguishedName)
             });
             this.logGroups()
             this.closeInnerDialog('addToGroup')
@@ -445,7 +452,10 @@ export default {
                 this.membersToRemove.push(memberDn)
 
             if (this.membersToAdd.includes(memberDn))
-                this.membersToAdd = this.membersToRemove.filter(e => e == memberDn)
+                this.membersToAdd = this.membersToAdd.filter(e => e != memberDn)
+
+            if (this.excludeDNs.includes(memberDn))
+                this.excludeDNs = this.excludeDNs.filter(e => e != memberDn)
 
             this.groupcopy.member = this.groupcopy.member.filter(e => e.distinguishedName != memberDn)
             this.logGroups()
@@ -458,6 +468,8 @@ export default {
             console.log(this.membersToAdd)
             console.log("Members to Remove")
             console.log(this.membersToRemove)
+            console.log("Exclude DNs")
+            console.log(this.excludeDNs)
         },
         checkIfGroupBuiltIn(){
             if (this.group.groupType.includes('GROUP_SYSTEM'))
@@ -510,6 +522,7 @@ export default {
                 this.groupcopy = this.group
                 this.setGroupTypeAndScope()
                 this.getMembersLength()
+                this.setupExclude()
                 this.loading = false
                 this.loadingColor = 'primary'
             })
