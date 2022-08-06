@@ -1138,8 +1138,13 @@ export default {
             // Set groups to add or remove
             if (this.groupsToAdd.length > 0)
                 this.usercopy.groupsToAdd = this.groupsToAdd
+            else
+                delete this.usercopy.groupsToAdd
+            
             if (this.groupsToRemove.length > 0)
                 this.usercopy.groupsToRemove = this.groupsToRemove
+            else
+                delete this.usercopy.groupsToRemove
             // Uncomment below to debug permissions list
             // console.log(this.usercopy.permission_list)
             this.$emit('save', this.viewKey, this.usercopy);
