@@ -39,7 +39,7 @@
                                     @keydown.enter="nextStep"
                                     :label="$t('ldap.attributes.cn')"
                                     v-model="groupToCreate.cn"
-                                    :rules="[this.fieldRules(groupToCreate.cn, 'ge_username', true)]"
+                                    :rules="[this.fieldRules(groupToCreate.cn, 'ge_cn', true)]"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>

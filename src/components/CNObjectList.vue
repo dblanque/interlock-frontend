@@ -150,7 +150,6 @@ export default {
     },
     props: {
         viewKey: String,
-        excludeDNs: Array,
         enableGroups: {
             type: Boolean,
             default: true
@@ -226,27 +225,29 @@ export default {
                 return true
             return false
         },
-        async fetchLists(){
+        async fetchLists(excludeDNs=undefined){
+            this.ldapList = []
+            var filter = this.filter
             // Gotta force update for the filter value refresh, Javascript LOL
             this.$forceUpdate
             if (this.enableGroups) {
-                this.filter['iexact']['group'] = {
+                filter['iexact']['group'] = {
                     attr: "objectClass",
                     or: true
                 }
-            } else delete this.filter['iexact']['group']
+            } else delete filter['iexact']['group']
             if (this.enableUsers) {
-                this.filter['iexact']['user'] = {
+                filter['iexact']['user'] = {
                     attr: "objectClass",
                     or: true
                 }
-            } else delete this.filter['iexact']['user']
+            } else delete filter['iexact']['user']
             this.loading = true
             this.error = false
             this.selectedDNs = []
-            if (this.excludeDNs != undefined && this.excludeDNs.length > 0) {
-                this.excludeDNs.forEach(distinguishedName => {
-                    this.filter['iexact'][distinguishedName] = {
+            if (excludeDNs != undefined && excludeDNs.length > 0) {
+                excludeDNs.forEach(distinguishedName => {
+                    filter['iexact'][distinguishedName] = {
                         attr: "distinguishedName",
                         exclude: true
                     }

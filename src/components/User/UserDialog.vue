@@ -1007,9 +1007,14 @@ export default {
                 if (this.usercopy.memberOfObjects.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
                     this.usercopy.memberOfObjects.push(g)
                 }
+
+                if (this.groupsToRemove != undefined) {
+                    console.log("MTR Includes this member, removing. " + g.distinguishedName)
+                    this.groupsToRemove = this.groupsToRemove.filter(e => e != g.distinguishedName)
+                }
             });
-            // this.logGroups()
             this.closeInnerDialog('userAddToGroup')
+            this.logGroups()
             this.$forceUpdate
         },
         removeFromGroup(groupDn) {
@@ -1031,7 +1036,7 @@ export default {
                     this.excludeGroups = this.excludeGroups.filter(e => e != groupDn)
     
                 this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
-                // this.logGroups()
+                this.logGroups()
                 this.$forceUpdate
             }
         },

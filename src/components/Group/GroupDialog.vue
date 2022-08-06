@@ -41,7 +41,7 @@
                             :label="$t('ldap.attributes.cn')"
                             :readonly="editFlag != true && !loading"
                             v-model="groupcopy.cn"
-                            :rules="[this.fieldRules(groupcopy.cn, 'ge_name')]"
+                            :rules="[this.fieldRules(groupcopy.cn, 'ge_cn')]"
                             ></v-text-field>
                         </v-col>
                         <v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
@@ -346,7 +346,7 @@ export default {
             showMemberTab: false,
             groupcopy: {},
             excludeDNs: [],
-            memberPanelExpanded: [],
+            memberPanelExpanded: 0,
             membersToAdd: [],
             membersToRemove: [],
             groupTypes: [
@@ -420,7 +420,7 @@ export default {
             switch (key) {
                 case 'addToGroup':
                     this.setupExclude()
-                    this.$refs.AddToGroup.fetchLists()
+                    this.$refs.AddToGroup.fetchLists(this.excludeDNs)
                 break;
                 default:
                 break;
@@ -440,25 +440,30 @@ export default {
                 if (this.groupcopy.member.filter(e => e.distinguishedName == g.distinguishedName).length == 0)
                     this.groupcopy.member.push(g)
 
-                if (this.membersToRemove.includes(g.distinguishedName))
-                    this.membersToRemove = this.membersToRemove.filter(e => e.distinguishedName != g.distinguishedName)
+                if (this.membersToRemove != undefined) {
+                    console.log("MTR Includes this member, removing. " + g.distinguishedName)
+                    this.membersToRemove = this.membersToRemove.filter(e => e != g.distinguishedName)
+                }
             });
-            this.logGroups()
             this.closeInnerDialog('addToGroup')
+            this.logGroups()
+            this.showMemberTab = true
             this.$forceUpdate
         },
         removeMember(memberDn) {
-            if (!this.membersToRemove.includes(memberDn))
+            if (!this.membersToRemove != undefined && !this.membersToRemove.includes(memberDn))
                 this.membersToRemove.push(memberDn)
 
-            if (this.membersToAdd.includes(memberDn))
+            if (this.membersToAdd != undefined && this.membersToAdd.includes(memberDn))
                 this.membersToAdd = this.membersToAdd.filter(e => e != memberDn)
 
-            if (this.excludeDNs.includes(memberDn))
+            if (this.excludeDNs != undefined && this.excludeDNs.includes(memberDn))
                 this.excludeDNs = this.excludeDNs.filter(e => e != memberDn)
 
             this.groupcopy.member = this.groupcopy.member.filter(e => e.distinguishedName != memberDn)
             this.logGroups()
+            if (this.groupcopy.member == undefined || this.groupcopy.member.length == 0)
+                this.showMemberTab = false
             this.$forceUpdate
         },
         logGroups(){
