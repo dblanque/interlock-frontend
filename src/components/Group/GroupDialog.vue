@@ -551,15 +551,18 @@ export default {
             this.loading = true
             this.groupcopy.groupType = this.radioGroupType
             this.groupcopy.groupScope = this.radioGroupScope
-            // Set members to add or remove
+            // Set members
+            // Members to Add
             if (this.membersToAdd.length > 0)
                 this.groupcopy.membersToAdd = this.membersToAdd
             else
                 delete this.groupcopy.membersToAdd
+            // Members to Remove
             if (this.membersToRemove.length > 0)
                 this.groupcopy.membersToRemove = this.membersToRemove
             else
                 delete this.groupcopy.membersToRemove
+
             this.$emit('save', this.viewKey, this.groupcopy);
             await new Group({}).update({group: this.groupcopy})
             .then(() => {

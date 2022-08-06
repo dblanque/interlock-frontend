@@ -151,6 +151,10 @@ export default {
         }
     },
     props: {
+        createMode: {
+            type: Boolean,
+            default: false
+        },
         viewKey: String,
         objectDn: String,
         objectName: String

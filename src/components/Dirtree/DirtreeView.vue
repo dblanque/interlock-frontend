@@ -26,10 +26,43 @@
               </span>
             </template>
           </v-btn>
-          <v-btn disabled class="pa-2 mx-2" color="primary" @click="openDialog('')">
-            <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-            {{ $t('actions.addN') }}
-          </v-btn>
+          <v-row class="ma-0 pa-0" style="position: relative;">
+            <v-btn elevation="0" rounded class="pa-2 mx-2 mr-0 pill-start" color="primary" @click="openDialog('dirtreeOUCreate')">
+              <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+              {{ $t('actions.addN') + " " + $t("classes.organizational-unit.single") }}
+            </v-btn>
+            <v-btn @click="openActions" 
+            style="min-width: 32px;" elevation="0" rounded class="pa-0 px-2 pr-3 pill-end" color="primary">
+              <v-icon>
+                mdi-chevron-down
+              </v-icon>
+            </v-btn>
+            <v-slide-y-transition>
+              <div class="ma-0 pa-0" tile dense
+              tabindex="0"
+              v-show="floatingActionListExpanded"
+              @blur="closeActions"
+              ref="floatingActionList"
+              id="floatingActionList">
+                <div class="ma-0 pa-0" v-for="action, key in actionList" :key="key">
+                  <v-btn @click="openDialog(action.value)"
+                  class="py-5 px-4" text tile color="primary" style="min-width:100%;" elevation="0" :disabled="!action.enabled"
+                  :dark="!isThemeDark()"
+                  :light="isThemeDark()">
+                    <v-icon class="mr-2">
+                      {{action.icon}}
+                    </v-icon>
+                    <span>
+                      {{ getTranslationKey(action) }}
+                    </span>
+                  </v-btn>
+                  <v-divider
+                  :dark="!isThemeDark()"
+                  :light="isThemeDark()"/>
+                </div>
+              </div>
+            </v-slide-y-transition>
+          </v-row>
         </v-row>
       </v-row>
   
@@ -240,7 +273,16 @@
       </v-card>
     </v-card>
 
-    <!-- USER VIEW/EDIT DIALOG -->
+    <!-- CREATE OU DIALOG -->
+    <v-dialog eager max-width="900px" v-model="dialogs['dirtreeOUCreate']">
+        <DirtreeOUCreate
+          :viewKey="'dirtreeOUCreate'"
+          ref="DirtreeOUCreate"
+          @closeDialog="closeDialog"
+        />
+    </v-dialog>
+
+    <!-- MOVE OBJECT DIALOG -->
     <v-dialog eager max-width="900px" v-model="dialogs['dirtreeMove']">
         <DirtreeMove
             :objectDn="selectedObject.distinguishedName"
@@ -256,11 +298,25 @@
 
 <script>
 import OrganizationalUnit from '@/include/OrganizationalUnit'
+import DirtreeOUCreate from '@/components/Dirtree/DirtreeOUCreate.vue';
 import DirtreeMove from '@/components/Dirtree/DirtreeMove.vue';
 
 export default {
     data() {
         return {
+            floatingActionListExpanded: false,
+            actionList:[
+              {
+                value: "dirtreePrinterCreate",
+                icon: "mdi-printer",
+                enabled: false
+              },
+              {
+                value: "dirtreeComputerCreate",
+                icon: "mdi-monitor",
+                enabled: false
+              }
+            ],
             searchString: "",
             selectedObject: {},
             loading: false,
@@ -274,6 +330,7 @@ export default {
                 items: []
             },
             dialogs: {
+                dirtreeOUCreate: false,
                 dirtreeMove: false,
             },
             filters: {
@@ -319,7 +376,8 @@ export default {
         }
     },
     components: {
-        DirtreeMove
+        DirtreeMove,
+        DirtreeOUCreate
     },
     props: {
         viewTitle: String,
@@ -346,6 +404,40 @@ export default {
       }
     },
     methods: {
+        closeActions(){
+          this.floatingActionListExpanded = !this.floatingActionListExpanded
+        },
+        openActions() {
+          this.floatingActionListExpanded = !this.floatingActionListExpanded
+          this.$nextTick(() => {
+            console.log(this.$refs.floatingActionList)
+            this.$refs.floatingActionList.focus()
+          })
+        },
+        // Check if theme is dark
+        isThemeDark() {
+          if (this.$vuetify.theme.dark == true) {
+            return true;
+          }
+          return false;
+        },
+        getTranslationKey(o){
+          var key = o.value
+          switch (key) {
+            case "dirtreeOUCreate":
+              return this.$t("actions.create") + " " + this.$t("classes.organizational-unit.single")
+            case "dirtreeMove":
+              return this.$t("actions.move") + " " + this.$t("classes.ldap.single")
+            case "dirtreePrinterCreate":
+              return this.$t("actions.create") + " " + this.$t("classes.ldap.single")
+            case "dirtreeComputerCreate":
+              return this.$t("actions.create") + " " + this.$t("classes.ldap.single")
+            case "dirtreeDelete":
+              return this.$t("actions.delete") + " " + this.$t("classes.ldap.single")
+            default:
+              return "No Translation Key"
+          }
+        },
         resetSearch(){
           this.searchString = ""
         },
@@ -368,8 +460,12 @@ export default {
             this.dialogs[key] = true;
             switch (key) {
                 case 'dirtreeMove':
+                    this.createFlag = false
                     this.selectedObject = item
                     this.$refs.DirtreeMove.resetDialog(this.selectedObject.distinguishedName);
+                break;
+                case 'dirtreeOUCreate':
+                    this.$refs.DirtreeOUCreate.resetDialog();
                 break;
                 default:
                 break;
@@ -480,5 +576,19 @@ export default {
 <style>
 .clickable {
   cursor: pointer !important;
+}
+
+#floatingActionList{
+  background: var(--clr-secondary);
+  position: absolute;
+  min-width: 14rem;
+  max-width: 16rem;
+  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
 }
 </style>
