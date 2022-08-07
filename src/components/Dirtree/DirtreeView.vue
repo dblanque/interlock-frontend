@@ -336,14 +336,14 @@ export default {
             actionListOpen: false,
             actionList:[
               {
-                value: "dirtreePrinterCreate",
-                icon: "mdi-printer",
-                enabled: false
-              },
-              {
                 value: "dirtreeComputerCreate",
                 icon: "mdi-monitor",
                 enabled: true
+              },
+              {
+                value: "dirtreePrinterCreate",
+                icon: "mdi-printer",
+                enabled: false
               }
             ],
             searchString: "",
@@ -456,13 +456,13 @@ export default {
           var key = o.value
           switch (key) {
             case "dirtreeOUCreate":
-              return this.$t("actions.create") + " " + this.$t("classes.organizational-unit.single")
+              return this.$t("actions.addN") + " " + this.$t("classes.organizational-unit.single")
             case "dirtreeMove":
               return this.$t("actions.move") + " " + this.$t("classes.ldap.single")
             case "dirtreePrinterCreate":
-              return this.$t("actions.create") + " " + this.$t("classes.printer.single")
+              return this.$t("actions.addN") + " " + this.$t("classes.printer.single")
             case "dirtreeComputerCreate":
-              return this.$t("actions.create") + " " + this.$t("classes.computer.single")
+              return this.$t("actions.addN") + " " + this.$t("classes.computer.single")
             case "dirtreeDelete":
               return this.$t("actions.delete") + " " + this.$t("classes.ldap.single")
             default:
@@ -624,7 +624,7 @@ export default {
             await new OrganizationalUnit({}).dirtree(this.filters)
             .then(response => {
                 this.tableData.headers = []
-                this.tableData.items = response.data.ou_list
+                this.tableData.items = response.data.ldapObjectList
                 this.error = false;
                 this.loading = false;
                 this.resetSnackbar();

@@ -255,7 +255,7 @@ export default {
             }
             await new OrganizationalUnit({}).dirtree(this.filter)
             .then(response => {
-                this.ldapList = response.data.ou_list
+                this.ldapList = response.data.ldapObjectList
                 this.loading = false
                 return response
             })

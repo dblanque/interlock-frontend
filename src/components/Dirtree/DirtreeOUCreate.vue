@@ -217,9 +217,7 @@ export default {
         viewKey: String
     },
     created(){
-        this.newOU
-    },
-    computed:{
+        this.newOU()
     },
     methods: {
         async resetDialog(){
@@ -308,7 +306,8 @@ export default {
             this.createStage = 1
             this.error = false
             this.errorMsg = ""
-            this.$refs.ouCreateForm1.resetValidation()
+            if (this.$refs.ouCreateForm1)
+                this.$refs.ouCreateForm1.resetValidation()
             var domainDetails = getDomainDetails()
             this.domain = domainDetails.domain
             this.realm = domainDetails.realm
@@ -322,7 +321,7 @@ export default {
         async fetchOUs(){
             await new OrganizationalUnit({}).list()
             .then(response => {
-                this.ouList = response.data.ou_list
+                this.ouList = response.data.ldapObjectList
             })
             .catch(error => {
                 console.log(error)

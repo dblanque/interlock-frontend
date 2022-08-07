@@ -98,7 +98,7 @@ export default {
             if (excludeDict)
                 await new OrganizationalUnit({}).dirtree(excludeDict)
                 .then(response => {
-                    this.ouList = response.data.ou_list
+                    this.ouList = response.data.ldapObjectList
                     this.loading = false
                     return response
                 })
@@ -111,7 +111,7 @@ export default {
             else
                 await new OrganizationalUnit({}).list()
                 .then(response => {
-                    this.ouList = response.data.ou_list
+                    this.ouList = response.data.ldapObjectList
                     this.loading = false
                     return response
                 })
