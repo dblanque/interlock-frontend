@@ -159,8 +159,6 @@ export default {
         objectDn: String,
         objectName: String
     },
-    watch: {
-    },
     computed: {
         originalRelativePath() {
             if (this.objectDn != undefined)
