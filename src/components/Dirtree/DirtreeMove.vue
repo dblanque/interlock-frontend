@@ -168,8 +168,6 @@ export default {
             return ""
         }
     },
-    async created () {
-    },
     methods: {
         resetFilter(){
             this.filter = {
