@@ -541,6 +541,7 @@ const validationMixin ={
           case 'ERR_NETWORK':
             return this.$t('error.codes.networkError')
           case 'entryAlreadyExists':
+          case 'ldap_obj_exists':
             return this.$t('error.codes.ldapObjectExists')
           case null:
           case undefined:
