@@ -33,7 +33,8 @@
           <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
           {{ $t('actions.addN') + " " + $t("classes.organizational-unit.single") }}
         </v-btn>
-        <v-menu :close-on-content-click="false" left :nudge-left="(($t('actions.addN') + ' ' + $t('classes.organizational-unit.single')).length * 2.5)+'ch'"
+        <v-menu :close-on-content-click="false" left 
+        :nudge-left="(($t('actions.addN') + ' ' + $t('classes.organizational-unit.single')).length * 2)+'ch'"
         v-model="actionListOpen" :dark="isThemeDark()" :light="!isThemeDark()" offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on"
@@ -50,7 +51,7 @@
               :key="index"
             >
             <v-btn :disabled="!item.enabled" @click="openDialog(item.value)" color="primary" tile text style="width: 100%;">
-              <v-icon>
+              <v-icon class="mr-1">
                 {{ item.icon }}
               </v-icon>
               {{ getTranslationKey(item).toUpperCase() }}
@@ -337,7 +338,7 @@ export default {
               {
                 value: "dirtreePrinterCreate",
                 icon: "mdi-printer",
-                enabled: true
+                enabled: false
               },
               {
                 value: "dirtreeComputerCreate",
