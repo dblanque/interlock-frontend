@@ -536,8 +536,19 @@ const validationMixin ={
           "Zimbabwe",
       ]
       },
-      getMessageForCode(code){
-        switch(code){
+      getMessageForCode(errorData=undefined){
+        var codeToUse
+        if (typeof errorData == "string")
+          console.error("The Error Data Object must be passed to this function, not a string")
+        if (errorData == undefined) {
+          console.log('Error Data is undefined')
+          return this.$t("error.unknown_short")
+        }
+        if ("code_ext" in errorData)
+          codeToUse = errorData.code_ext
+        else
+          codeToUse = errorData.code
+        switch(codeToUse){
           case 'ERR_NETWORK':
             return this.$t('error.codes.networkError')
           case 'entryAlreadyExists':
@@ -547,7 +558,7 @@ const validationMixin ={
           case undefined:
           case "":
           default:
-            return this.$t("error.unknown_short") + " (" + code + ")"
+            return this.$t("error.unknown_short") + " (" + codeToUse + ")"
         }
       }
     },

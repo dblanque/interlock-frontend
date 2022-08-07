@@ -483,14 +483,10 @@ export default {
                 setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
           })
           .catch(error => {
-                var errorData = error.response.data
                 console.log(error)
                 this.loading = false;
                 this.error = true;
-                if ("code_ext" in errorData)
-                  this.errorMsg = this.getMessageForCode(errorData.code_ext)
-                else
-                  this.errorMsg = this.getMessageForCode(errorData.code)
+                this.errorMsg = this.getMessageForCode(error.response.data)
                 this.resetSnackbar();
                 this.createSnackbar('red', this.errorMsg.toUpperCase() )
                 setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);

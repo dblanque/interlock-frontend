@@ -359,15 +359,7 @@ export default {
                 setTimeout(() => {
                     this.loading = false;
                 }, 450)
-                if ("code_ext" in error.response.data){
-                    this.errorMsg = this.getMessageForCode(error.response.data.code_ext)
-                    console.log(this.errorMsg)
-                } else if ("code" in error.response.data) {
-                    this.errorMsg = this.getMessageForCode(error.response.data.code)
-                    console.log(this.errorMsg)
-                }
-                else
-                    this.errorMsg = this.$t("error.unknown_short")
+                this.errorMsg = this.getMessageForCode(error.response.data)
             })
         }
     }
