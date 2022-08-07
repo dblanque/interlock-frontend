@@ -26,39 +26,39 @@
               </span>
             </template>
           </v-btn>
-          <v-row class="ma-0 pa-0" style="position: relative;">
-            <v-btn elevation="0" rounded class="pa-2 mx-2 mr-0 pill-start" color="primary" @click="openDialog('dirtreeOUCreate')">
-              <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-              {{ $t('actions.addN') + " " + $t("classes.organizational-unit.single") }}
-            </v-btn>
-            <v-menu :close-on-content-click="false" left :nudge-left="(($t('actions.addN') + ' ' + $t('classes.organizational-unit.single')).length * 2.5)+'ch'"
-            v-model="actionListOpen" :dark="isThemeDark()" :light="!isThemeDark()" offset-y>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn v-bind="attrs" v-on="on"
-                style="min-width: 32px;" elevation="0" rounded class="pa-0 px-2 pr-3 pill-end" color="primary">
-                  <v-icon id="floatingActionListButton" :class="actionListOpen == true  ? 'active' : ''">
-                    mdi-chevron-down
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-list dense>
-                <v-divider class="mx-4"/>
-                <v-list-item class="ma-0 pa-0"
-                  v-for="(item, index) in actionList"
-                  :key="index"
-                >
-                <v-btn :disabled="!item.enabled" @click="openDialog(item.value)" color="primary" tile text style="width: 100%;">
-                  <v-icon>
-                    {{ item.icon }}
-                  </v-icon>
-                  {{ getTranslationKey(item).toUpperCase() }}
-                </v-btn>
-                </v-list-item>
-                <v-divider class="mx-4"/>
-              </v-list>
-            </v-menu>
-          </v-row>
         </v-row>
+      </v-row>
+      <v-row justify="center" justify-lg="end" class="ma-0 pa-0 mx-6 mb-4" style="position: relative;">
+        <v-btn elevation="0" rounded class="pa-2 mx-2 mr-0 pill-start" color="primary" @click="openDialog('dirtreeOUCreate')">
+          <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+          {{ $t('actions.addN') + " " + $t("classes.organizational-unit.single") }}
+        </v-btn>
+        <v-menu :close-on-content-click="false" left :nudge-left="(($t('actions.addN') + ' ' + $t('classes.organizational-unit.single')).length * 2.5)+'ch'"
+        v-model="actionListOpen" :dark="isThemeDark()" :light="!isThemeDark()" offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" v-on="on"
+            style="min-width: 32px;" elevation="0" rounded class="pa-0 px-2 pr-3 pill-end" color="primary">
+              <v-icon id="floatingActionListButton" :class="actionListOpen == true  ? 'active' : ''">
+                mdi-chevron-down
+              </v-icon>
+            </v-btn>
+          </template>
+          <v-list dense>
+            <v-divider class="mx-4"/>
+            <v-list-item class="ma-0 pa-0"
+              v-for="(item, index) in actionList"
+              :key="index"
+            >
+            <v-btn :disabled="!item.enabled" @click="openDialog(item.value)" color="primary" tile text style="width: 100%;">
+              <v-icon>
+                {{ item.icon }}
+              </v-icon>
+              {{ getTranslationKey(item).toUpperCase() }}
+            </v-btn>
+            </v-list-item>
+            <v-divider class="mx-4"/>
+          </v-list>
+        </v-menu>
       </v-row>
   
       <!-- Item Legends -->
