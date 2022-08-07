@@ -23,6 +23,7 @@
     }
   },
   "actions": {
+    "rename":"Renombrar",
     "openAll":"Abrir todos",
     "closeAll":"Cerrar todos",
     "unlock":"Desbloquear",
@@ -198,8 +199,9 @@
       "plural":"Objetos LDAP"
     }
   },
-  "error": {
+  "error":{
     "codes": {
+      "networkError": "AXIOS: Error de Red",
       "badRequest": "Error 405: Request Erróneo",
       "auth": {
         "invalid_credentials": "Email o Contraseña Incorrectos",
@@ -361,6 +363,7 @@
       "helpMessage":"Debajo puede modificar su contraseña y detalles de usuario de Active Directory / LDAP"
     },
     "dirtree":{
+      "moveSuccessful":"Objeto movido exitosamente",
       "deleteObject":{
         "title":"Borrar Objeto LDAP",
         "message":"¿Está seguro de borrar el objeto"

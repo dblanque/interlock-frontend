@@ -23,6 +23,7 @@
     }
   },
   "actions":{
+    "rename":"Rename",
     "openAll":"Open all",
     "closeAll":"Close all",
     "unlock":"Unlock",
@@ -194,6 +195,7 @@
   },
   "error":{
       "codes":{
+          "networkError": "AXIOS: Network Error",
           "badRequest": "Error 405: Bad Request",
           "auth":{
               "invalid_credentials": "Incorrect Email or Password",
@@ -355,6 +357,7 @@
       "helpMessage":"Below you can modify your Active Directory / LDAP user details and password"
     },
     "dirtree":{
+      "moveSuccessful":"Object moved successfully",
       "deleteObject":{
         "title":"Delete LDAP Object",
         "message":"Are you sure you wish to delete"

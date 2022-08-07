@@ -538,11 +538,15 @@ const validationMixin ={
       },
       getMessageForCode(code){
         switch(code){
+          case 'ERR_NETWORK':
+            return this.$t('error.codes.networkError')
+          case 'entryAlreadyExists':
+            return this.$t('error.codes.ldapObjectExists')
           case null:
           case undefined:
           case "":
           default:
-            return code;
+            return this.$t("error.unknown_short") + " (" + code + ")"
         }
       }
     },

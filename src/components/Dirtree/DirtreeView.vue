@@ -222,7 +222,8 @@
                 </v-tooltip>
               </span>
 
-              <!-- General Buttons -->
+              <!----------------------- General Buttons ----------------------->
+              <!-- Move LDAP Object -->
               <span v-if="item.builtin != true">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
@@ -239,6 +240,22 @@
                     </v-btn>
                   </template>
                   <span>{{ $t('actions.move') }}</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn disabled
+                        @click="openDialog('dirtreeRename', item)"
+                        color="primary"
+                        icon
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                      <v-icon>
+                        mdi-rename-box
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('actions.rename') }}</span>
                 </v-tooltip>
                 <v-tooltip bottom v-if="item.type.toLowerCase() == 'organizational-unit'">
                   <template v-slot:activator="{ on, attrs }">
@@ -307,8 +324,10 @@ import OrganizationalUnit from '@/include/OrganizationalUnit'
 import DirtreeOUCreate from '@/components/Dirtree/DirtreeOUCreate.vue';
 import DirtreeMove from '@/components/Dirtree/DirtreeMove.vue';
 import DirtreeDeleteObject from '@/components/Dirtree/DirtreeDeleteObject.vue';
+import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
+    mixins: [ validationMixin ],
     data() {
         return {
             actionListOpen: false,
@@ -451,9 +470,31 @@ export default {
           else
             this.dirtreeOpen.push(itemId)
         },
-        moveObject(destination){
-          console.log(destination)
+        async moveObject(destination){
+          this.loading = true;
           this.dialogs['dirtreeMove'] = false
+          this.selectedObject.destination = destination
+          await new OrganizationalUnit({}).move({ldapObject: this.selectedObject})
+          .then(() => {
+                this.error = false;
+                this.loading = false;
+                this.resetSnackbar();
+                this.createSnackbar('green', this.$t("section.dirtree.moveSuccessful").toUpperCase() )
+                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+          })
+          .catch(error => {
+                var errorData = error.response.data
+                console.log(error)
+                this.loading = false;
+                this.error = true;
+                if ("code_ext" in errorData)
+                  this.errorMsg = this.getMessageForCode(errorData.code_ext)
+                else
+                  this.errorMsg = this.getMessageForCode(errorData.code)
+                this.resetSnackbar();
+                this.createSnackbar('red', this.errorMsg.toUpperCase() )
+                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+          })
         },
         openDialog(key, item){
             this.dialogs[key] = true;

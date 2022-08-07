@@ -92,7 +92,9 @@
             <!-- ERROR MESSAGE -->
             <v-row justify="center">
               <v-expand-transition>
-                <v-alert :type="loginForbiddenCount > 2 && error ? (loginForbiddenCount > 4 ? 'error' : 'warning') : 'info'" v-if="error == true && errorMsg != ''">
+                <v-alert 
+                  :type="loginForbiddenCount > 2 && error ? (loginForbiddenCount > 4 ? 'error' : 'warning') : 'info'" 
+                  v-if="error == true && errorMsg != ''">
                   {{ this.errorMsg }}
                 </v-alert>
               </v-expand-transition>
@@ -296,7 +298,7 @@ export default {
               this.setLoginTimeout()
           }
           else {
-            this.errorMsg = this.getMessageForCode(e.data.code);
+            this.errorMsg = this.getMessageForCode(e.code);
           }
         });
       }

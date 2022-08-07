@@ -179,8 +179,9 @@ export default {
         setExcludeFilter(){
             // 2nd argument is exclude
             if (this.objectDn && this.objectDn != undefined && this.objectDn != null){
-                this.filter['iexact'][this.objectDn] = {attr: 'distinguishedName', exclude: true}
                 this.filter['iexact']['organizationalUnit'] = 'objectClass'
+                this.filter['iexact']['container'] = { attr: 'objectClass', or: true }
+                this.filter['iexact'][this.objectDn] = {attr: 'distinguishedName', exclude: true}
             }
         },
         clearList(){
