@@ -3,7 +3,7 @@
         <!-- Title Bar -->
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-                <h3 class="ma-2">{{$t("section.dirtree.ouCreate.header")}}</h3>
+                <h3 class="ma-2">{{$t("actions.create") + " " + $t("classes."+createType+".single")}}</h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
                     <v-icon>
@@ -20,9 +20,9 @@
             <!-- Steps -->
                 <v-stepper-header class="px-16">
                     <!-- Basics -->
-                    <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.dirtree.ouCreate.step1') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.dirtree.' + createType + 'Create.step1') }}</v-stepper-step>
                     <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
-                    <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.dirtree.ouCreate.step2') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.dirtree.' + createType + 'Create.step2') }}</v-stepper-step>
                 </v-stepper-header>
 
             <!-- Steps Content -->
@@ -35,9 +35,9 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('ldap.attributes.ouName')"
-                                    v-model="ouToCreate.name"
-                                    :rules="[this.fieldRules(ouToCreate.name, 'ge_cn', true)]"
+                                    :label="$t('classes.'+createType+'.single') + ' ' + $t('ldap.attributes.name')"
+                                    v-model="objectToCreate.name"
+                                    :rules="[this.fieldRules(objectToCreate.name, 'ge_cn', true)]"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -52,7 +52,7 @@
                                                 <v-expansion-panel-header>
                                                     <span>
                                                         <span>
-                                                            {{ $t('section.dirtree.ouCreate.ouCreatedIn') + ': ' }}
+                                                            {{ $t('section.dirtree.'+createType+'Create.'+createType+'CreatedIn') + ': ' }}
                                                         </span>
                                                         <span class="font-weight-bold">
                                                             {{ this.ouDestination }}
@@ -98,7 +98,7 @@
                             <v-col cols="12">
                                 <v-slide-y-transition>
                                     <v-col v-if="!this.loading && this.loading == false">
-                                        {{ this.error ? '' : $t('section.dirtree.ouCreate.step2_success') }}
+                                        {{ this.error ? '' : $t('section.dirtree.'+createType+'Create.step2_success') }}
                                     </v-col>
                                 </v-slide-y-transition>
                             </v-col>
@@ -201,7 +201,7 @@ export default {
         showSnackbar: false,
         ouPathExpansionPanel: false,
         ouDestination: '',
-        ouToCreate: {},
+        objectToCreate: {},
         ouList: [],
         createStage: 1,
       }
@@ -210,6 +210,10 @@ export default {
         validationMixin
     ],
     props: {
+        createType: {
+            type: String,
+            default: "ou"
+        },
         viewKey: String
     },
     created(){
@@ -268,12 +272,12 @@ export default {
                         this.error = false
                         this.errorMsg = ""
                         if (!this.error){
-                            Object.keys(this.ouToCreate).forEach(key => {
-                                if (this.ouToCreate[key] === undefined) {
-                                    delete this.ouToCreate[key];
+                            Object.keys(this.objectToCreate).forEach(key => {
+                                if (this.objectToCreate[key] === undefined) {
+                                    delete this.objectToCreate[key];
                                 }
                             });
-                            this.createOU()
+                            this.createLDAPObject()
                         }
                         else {
                             // Force snackbar to reappear if error was pre-existent
@@ -300,7 +304,7 @@ export default {
         async newOU(){
             this.passwordHidden = true
             this.ouPathExpansionPanel = false
-            this.ouToCreate = new OrganizationalUnit({})
+            this.objectToCreate = new OrganizationalUnit({})
             this.createStage = 1
             this.error = false
             this.errorMsg = ""
@@ -327,13 +331,15 @@ export default {
         closeDialog(refresh=false){
             this.$emit('closeDialog', this.viewKey, refresh);
         },
-        async createOU(){
+        async createLDAPObject(){
             this.error = false
             this.errorMsg = ""
             this.createStage += 1
-            this.ouToCreate.path = this.ouDestination
-            this.ouToCreate.ou = this.ouToCreate.name
-            await this.ouToCreate.insert({ou: this.ouToCreate})
+            this.objectToCreate.path = this.ouDestination
+            this.objectToCreate.type = this.createType
+            if (this.createType == 'ou' || !this.createType)
+                this.objectToCreate.ou = this.objectToCreate.name
+            await this.objectToCreate.insert({ldapObject: this.objectToCreate})
             .then(response => {
                 if (response.status == 200) {
                     this.error = false;

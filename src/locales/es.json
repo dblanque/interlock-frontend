@@ -190,6 +190,10 @@
       "single":"Unidad Organizacional",
       "plural":"Unidades Organizacionales"
     },
+    "ou":{
+      "single":"Unidad Organizacional",
+      "plural":"Unidades Organizacionales"
+    },
     "setting":{
       "single":"Parámetro",
       "plural":"Parámetros"
@@ -263,7 +267,7 @@
   },
   "ldap":{
     "attributes":{
-      "ouName":"Nombre de la Unidad Organizativa",
+      "name":"Nombre",
       "objectRid":"Identificador Relativo del Objeto (RID)",
       "objectSid":"Identificador de Seguridad del Objeto (SID)",
       "hasMembers":"Tiene Miembros",
@@ -369,11 +373,22 @@
         "message":"¿Está seguro de borrar el objeto"
       },
       "ouCreate":{
-        "header":"Crear Unidad Organizacional",
         "step1":"Detalles de la Unidad Organizacional",
         "step2":"Unidad Organizacional Creada",
         "step2_success":"Organizational Unit Created Successfully",
         "ouCreatedIn":"La Unidad será creada en"
+      },
+      "computerCreate":{
+        "step1":"Detalles de la Computadora",
+        "step2":"Computadora Creada",
+        "step2_success":"Computadora Creada Exitosamente",
+        "computerCreatedIn":"La Computadora será creada en"
+      },
+      "printerCreate":{
+        "step1":"Detalles de la Impresora",
+        "step2":"Impresora Creada",
+        "step2_success":"Impresora Creada Exitosamente",
+        "printerCreatedIn":"La Impresora será creada en"
       },
       "filterHint":"Clickee los chips azules para filtrarlos",
       "move":{

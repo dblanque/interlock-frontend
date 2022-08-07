@@ -148,8 +148,6 @@
                                         {{ $t('section.groups.groupDialog.members') }}
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <!-- TODO - Add tooltip that shows Full DN for object -->
-                                        <!-- TODO - Add "Add Member" action -->
                                         <v-list dense>
                                             <v-list-item v-for="member, key in this.groupcopy.member" :key="key"
                                             :class="key != 0 ? 'border-bottom': 'border-block'">

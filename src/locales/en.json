@@ -184,6 +184,10 @@
       "single":"Organizational Unit",
       "plural":"Organizational Units"
     },
+    "ou":{
+      "single":"Organizational Unit",
+      "plural":"Organizational Units"
+    },
     "setting":{
       "single":"Setting",
       "plural":"Settings"
@@ -257,7 +261,7 @@
   },
   "ldap":{
     "attributes":{
-      "ouName":"Organizational Unit Name",
+      "name":"Name",
       "objectRid":"Object Relative Identifier (RID)",
       "objectSid":"Object Security Identifier (SID)",
       "hasMembers":"Populated",
@@ -368,6 +372,18 @@
         "step2":"Organizational Unit Created",
         "step2_success":"Organizational Unit Created Successfully",
         "ouCreatedIn":"Organizational Unit will be created in"
+      },
+      "computerCreate":{
+        "step1":"Computer Details",
+        "step2":"Computer Created",
+        "step2_success":"Computer Created Successfully",
+        "computerCreatedIn":"Computer will be created in"
+      },
+      "printerCreate":{
+        "step1":"Printer Details",
+        "step2":"Printer Created",
+        "step2_success":"Printer Created Successfully",
+        "printerCreatedIn":"Printer will be created in"
       },
       "filterHint":"Click the blue chips to filter them",
       "move":{

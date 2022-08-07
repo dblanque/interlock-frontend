@@ -257,7 +257,7 @@
                   </template>
                   <span>{{ $t('actions.rename') }}</span>
                 </v-tooltip>
-                <v-tooltip bottom v-if="item.type.toLowerCase() == 'organizational-unit'">
+                <v-tooltip bottom v-if="validToDelete(item.type)">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="openDialog('dirtreeDeleteObject', item)"
                         :disabled="item.children && item.children.length > 0"
@@ -288,6 +288,7 @@
     <!-- CREATE OU DIALOG -->
     <v-dialog eager max-width="900px" v-model="dialogs['dirtreeOUCreate']">
         <DirtreeOUCreate
+          :createType="createType"
           :viewKey="'dirtreeOUCreate'"
           ref="DirtreeOUCreate"
           @closeDialog="closeDialog"
@@ -330,17 +331,18 @@ export default {
     mixins: [ validationMixin ],
     data() {
         return {
+            createType: "ou",
             actionListOpen: false,
             actionList:[
               {
                 value: "dirtreePrinterCreate",
                 icon: "mdi-printer",
-                enabled: false
+                enabled: true
               },
               {
                 value: "dirtreeComputerCreate",
                 icon: "mdi-monitor",
-                enabled: false
+                enabled: true
               }
             ],
             searchString: "",
@@ -432,6 +434,16 @@ export default {
       }
     },
     methods: {
+        validToDelete(itemType){
+          switch (itemType.toLowerCase()) {
+            case 'organizational-unit':
+            case 'computer':
+            case 'printer':
+              return true
+            default:
+              return false
+          }
+        },
         // Check if theme is dark
         isThemeDark() {
           if (this.$vuetify.theme.dark == true) {
@@ -502,6 +514,21 @@ export default {
                     this.$refs.DirtreeMove.resetDialog(this.selectedObject.distinguishedName);
                 break;
                 case 'dirtreeOUCreate':
+                  this.createType = 'ou'
+                  this.$refs.DirtreeOUCreate.newOU();
+                  this.$refs.DirtreeOUCreate.resetDialog();
+                  this.$refs.DirtreeOUCreate.setDestination();
+                break;
+                case 'dirtreeComputerCreate':
+                  this.dialogs['dirtreeOUCreate'] = true;
+                  this.createType = 'computer'
+                  this.$refs.DirtreeOUCreate.newOU();
+                  this.$refs.DirtreeOUCreate.resetDialog();
+                  this.$refs.DirtreeOUCreate.setDestination();
+                break;
+                case 'dirtreePrinterCreate':
+                  this.dialogs['dirtreeOUCreate'] = true;
+                  this.createType = 'printer'
                   this.$refs.DirtreeOUCreate.newOU();
                   this.$refs.DirtreeOUCreate.resetDialog();
                   this.$refs.DirtreeOUCreate.setDestination();
