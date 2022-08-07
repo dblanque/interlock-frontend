@@ -72,6 +72,8 @@ const urls = {
     ou: {
         base: "api/ou/",
         list: "api/ou/",
+        insert: "api/ou/insert/",
+        delete: "api/ou/delete/",
         filter: "api/ou/filter/",
         dirtree: "api/ou/dirtree/",
         move: "api/ou/move/"

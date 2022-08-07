@@ -32,6 +32,14 @@ class OrganizationalUnit extends ApiModel{
     async move(data){
         return await interlock_backend.call('ou/move', data)
     }
+
+    async insert(data){
+        return await interlock_backend.call('ou/insert', data)
+    }
+
+    async delete(data){
+        return await interlock_backend.call('ou/delete', data)
+    }
 }
 
 export default OrganizationalUnit

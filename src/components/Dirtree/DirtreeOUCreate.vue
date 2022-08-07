@@ -3,7 +3,7 @@
         <!-- Title Bar -->
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-                <h3 class="ma-2">{{$t("section.orgunits.orgunitCreate.header")}}</h3>
+                <h3 class="ma-2">{{$t("section.dirtree.ouCreate.header")}}</h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
                     <v-icon>
@@ -20,33 +20,31 @@
             <!-- Steps -->
                 <v-stepper-header class="px-16">
                     <!-- Basics -->
-                    <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.orgunits.orgunitCreate.step1') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.dirtree.ouCreate.step1') }}</v-stepper-step>
                     <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
-                    <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.orgunits.orgunitCreate.step2') }}</v-stepper-step>
-                    <v-divider class="mx-3" :style="createStage > 2 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
-                    <v-stepper-step :complete="createStage > 3" step="3">{{ $t('section.orgunits.orgunitCreate.step3') }}</v-stepper-step>
+                    <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.dirtree.ouCreate.step2') }}</v-stepper-step>
                 </v-stepper-header>
 
             <!-- Steps Content -->
                 <v-stepper-items>
                     <!-- Basics -->
                     <v-stepper-content step="1">
-                        <v-form ref="orgunitCreateForm1">
+                        <v-form ref="ouCreateForm1">
                             <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
                                 <v-col cols="12" lg="5">
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('ldap.attributes.cn')"
-                                    v-model="orgunitToCreate.cn"
-                                    :rules="[this.fieldRules(orgunitToCreate.cn, 'ge_cn', true)]"
+                                    :label="$t('ldap.attributes.ouName')"
+                                    v-model="ouToCreate.name"
+                                    :rules="[this.fieldRules(ouToCreate.name, 'ge_cn', true)]"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
                             <v-row class="ma-0 pa-0" justify="center">
-                                <v-col cols="12" lg="8">
+                                <v-col cols="12">
                                         <v-expansion-panels 
-                                        v-model="orgunitPathExpansionPanel"
+                                        v-model="ouPathExpansionPanel"
                                         flat 
                                         hover 
                                         style="border: 1px solid var(--clr-primary);">
@@ -54,10 +52,10 @@
                                                 <v-expansion-panel-header>
                                                     <span>
                                                         <span>
-                                                            {{ $t('section.orgunits.orgunitCreate.orgunitCreatedIn') + ': ' }}
+                                                            {{ $t('section.dirtree.ouCreate.ouCreatedIn') + ': ' }}
                                                         </span>
                                                         <span class="font-weight-bold">
-                                                            {{ this.orgunitDestination }}
+                                                            {{ this.ouDestination }}
                                                         </span>
                                                     </span>
                                                 </v-expansion-panel-header>
@@ -75,31 +73,10 @@
                                         </v-expansion-panels>
                                 </v-col>
                             </v-row>
-    
-                            <v-row class="ma-0 pa-0">
-                                <v-divider class="mx-12 my-3 mt-6"></v-divider>
-                            </v-row>
-
-
-                            <!-- Optionals -->
-                            <v-row justify="center" class="mb-1">
-                                <span class="text-overline" style="font-size: .95em !important;">{{ $t("section.orgunits.orgunitCreate.optionalsHeader") }}</span>
-                            </v-row>
-                            <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-                                <v-col cols="12" lg="4">
-                                    <v-text-field
-                                    dense
-                                    @keydown.enter="nextStep"
-                                    :label="$t('ldap.attributes.mail')"
-                                    v-model="orgunitToCreate.mail"
-                                    :rules="[this.fieldRules(orgunitToCreate.mail, 'ge_mail')]"
-                                    ></v-text-field>
-                                </v-col>
-                            </v-row>
                         </v-form>
                     </v-stepper-content>
-                    <!-- Check if user exists - loader -->
-                    <v-stepper-content step="3">
+                    <!-- Check if OU exists - loader -->
+                    <v-stepper-content step="2">
                         <v-row class="pa-12 ma-12" justify="center" align-content="center" align="center">
                             <v-col cols="12">
                                 <v-fab-transition>
@@ -121,7 +98,7 @@
                             <v-col cols="12">
                                 <v-slide-y-transition>
                                     <v-col v-if="!this.loading && this.loading == false">
-                                        {{ this.error ? '' : $t('section.orgunits.orgunitCreate.step3_success') }}
+                                        {{ this.error ? '' : $t('section.dirtree.ouCreate.step2_success') }}
                                     </v-col>
                                 </v-slide-y-transition>
                             </v-col>
@@ -150,7 +127,7 @@
                     </v-slide-x-reverse-transition>
 
                     <v-slide-x-reverse-transition>
-                        <v-btn elevation="0" @click="newOrgunit" v-if="this.createStage < 2"
+                        <v-btn elevation="0" @click="newOU" v-if="this.createStage < 2"
                         class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
@@ -161,7 +138,7 @@
                     </v-slide-x-reverse-transition>
 
                     <v-slide-x-reverse-transition>
-                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && createStage < 3 || this.error == true && createStage > 1"
+                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && this.error"
                     @keydown.enter="prevStep"
                     class="text-normal ma-0 pa-0 pa-2 pr-4 ma-1 bg-white bg-lig-25" 
                     rounded>
@@ -172,7 +149,7 @@
                     </v-btn>
                     </v-slide-x-reverse-transition>
                     <v-slide-x-reverse-transition>
-                        <v-btn elevation="0" @click="nextStep" v-if="this.createStage < 3"
+                        <v-btn elevation="0" @click="nextStep" v-if="this.createStage < 2"
                         @keydown.enter="nextStep"
                         class="text-normal ma-0 pa-0 pa-2 ma-1 pl-4 bg-white bg-lig-25" 
                         rounded>
@@ -183,7 +160,7 @@
                         </v-btn>
                     </v-slide-x-reverse-transition>
                     <v-slide-x-reverse-transition>
-                        <v-btn elevation="0" @click="closeDialog(true)" v-if="this.createStage > 2 && this.error === false"
+                        <v-btn elevation="0" @click="closeDialog(true)" v-if="this.createStage > 1 && this.error === false"
                         @keydown.enter="closeDialog"
                         class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                         rounded>
@@ -222,9 +199,9 @@ export default {
         valid: false,
         errorMsg: "",
         showSnackbar: false,
-        orgunitPathExpansionPanel: false,
-        orgunitDestination: '',
-        orgunitToCreate: {},
+        ouPathExpansionPanel: false,
+        ouDestination: '',
+        ouToCreate: {},
         ouList: [],
         createStage: 1,
       }
@@ -236,55 +213,48 @@ export default {
         viewKey: String
     },
     created(){
-        this.newOrgunit
+        this.newOU
     },
     computed:{
     },
     methods: {
         async resetDialog(){
+            var domainDetails = getDomainDetails()
+            this.domain = domainDetails.domain
+            this.realm = domainDetails.realm
+            this.basedn = domainDetails.basedn
             this.allowRefresh = false
             if (this.$refs.DirtreeOUList) {
                 this.$nextTick(()=>{
-                    this.setDestination();
-                    this.setExcludeFilter()
+                    this.setDestination()
                     this.$refs.DirtreeOUList.fetchOUs(this.filter)
                     .then(() => {
                         this.allowRefresh = true
                     })
                 })
             }
-            var domainDetails = getDomainDetails()
-            this.domain = domainDetails.domain
-            this.realm = domainDetails.realm
-            this.basedn = domainDetails.basedn
             return
         },
         setDestination(destination=undefined){
             // Set default destination if undefined
             if (destination == undefined || !destination)
-                this.orgunitDestination = this.basedn
+                this.ouDestination = this.basedn
             // Set destination from arg
             else
-                this.orgunitDestination = destination
+                this.ouDestination = destination
 
-            this.orgunitPathExpansionPanel = false
+            this.ouPathExpansionPanel = false
         },
         prevStep(){
             switch (this.createStage) {
                 case 2:
+                    this.error = false
+                    this.errorMsg = ""
                     var domainDetails = getDomainDetails()
                     this.domain = domainDetails.domain
                     this.realm = domainDetails.realm
                     this.basedn = domainDetails.basedn
                     this.createStage -= 1
-                    break;
-                case 3:
-                    this.error = false
-                    this.errorMsg = ""
-                    this.createStage -= 1
-                    setTimeout(() => {  
-                        this.loading = true; 
-                    }, 500);
                     break;
                 default:
                     this.createStage -= 1
@@ -294,11 +264,25 @@ export default {
         nextStep(){
             switch (this.createStage) {
                 case 1:
-                    if (this.$refs.orgunitCreateForm1.validate()){
+                    if (this.$refs.ouCreateForm1.validate() && this.ouDestination != ""){
                         this.error = false
                         this.errorMsg = ""
-                        this.$refs.AddToOrgunit.fetchLists()
-                        this.createStage += 1
+                        if (!this.error){
+                            Object.keys(this.ouToCreate).forEach(key => {
+                                if (this.ouToCreate[key] === undefined) {
+                                    delete this.ouToCreate[key];
+                                }
+                            });
+                            this.createOU()
+                        }
+                        else {
+                            // Force snackbar to reappear if error was pre-existent
+                            if (this.showSnackbar == true)
+                                this.showSnackbar = false
+                            this.showSnackbar = true
+                            this.error = true
+                            this.errorMsg = this.$t('section.dirtree.ouCreate.validationError')
+                        }
                     }
                     else {
                         // Force snackbar to reappear if error was pre-existent
@@ -309,48 +293,24 @@ export default {
                         this.errorMsg = this.$t('error.validation.fieldinvalid')
                     }
                     break;
-                case 2:
-                    this.$refs.AddToOrgunit.addDNs()
-                    if (!this.error){
-                        this.orgunitToCreate.orgunitType = this.radioOrgunitType
-                        this.orgunitToCreate.orgunitScope = this.radioOrgunitScope
-                        Object.keys(this.orgunitToCreate).forEach(key => {
-                            if (this.orgunitToCreate[key] === undefined) {
-                                delete this.orgunitToCreate[key];
-                            }
-                        });
-                        this.createOrgunit()
-                    }
-                    else {
-                        // Force snackbar to reappear if error was pre-existent
-                        if (this.showSnackbar == true)
-                            this.showSnackbar = false
-                        this.showSnackbar = true
-                        this.error = true
-                        this.errorMsg = this.$t('section.orgunits.orgunitCreate.validationError')
-                    }
-                    break;
                 default:
-                    this.createStage += 1
                     break;
             }
         },
-        async newOrgunit(){
+        async newOU(){
             this.passwordHidden = true
-            this.orgunitPathExpansionPanel = false
-            this.orgunitToCreate = new OrganizationalUnit({})
+            this.ouPathExpansionPanel = false
+            this.ouToCreate = new OrganizationalUnit({})
             this.createStage = 1
             this.error = false
-            this.radioOrgunitScope = 0
-            this.radioOrgunitType = 1
             this.errorMsg = ""
-            this.$refs.orgunitCreateForm1.resetValidation()
+            this.$refs.ouCreateForm1.resetValidation()
             var domainDetails = getDomainDetails()
             this.domain = domainDetails.domain
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
             this.fetchOUs()
-            this.orgunitDestination = "CN=Users," + this.basedn
+            this.ouDestination = this.basedn
         },
         updateValue(key, value){
             this[key] = value
@@ -367,12 +327,13 @@ export default {
         closeDialog(refresh=false){
             this.$emit('closeDialog', this.viewKey, refresh);
         },
-        async createOrgunit(){
+        async createOU(){
             this.error = false
             this.errorMsg = ""
             this.createStage += 1
-            this.orgunitToCreate.path = this.orgunitDestination
-            await this.orgunitToCreate.insert({orgunit: this.orgunitToCreate})
+            this.ouToCreate.path = this.ouDestination
+            this.ouToCreate.ou = this.ouToCreate.name
+            await this.ouToCreate.insert({ou: this.ouToCreate})
             .then(response => {
                 if (response.status == 200) {
                     this.error = false;

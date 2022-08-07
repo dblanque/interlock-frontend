@@ -31,37 +31,32 @@
               <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
               {{ $t('actions.addN') + " " + $t("classes.organizational-unit.single") }}
             </v-btn>
-            <v-btn @click="openActions" 
-            style="min-width: 32px;" elevation="0" rounded class="pa-0 px-2 pr-3 pill-end" color="primary">
-              <v-icon>
-                mdi-chevron-down
-              </v-icon>
-            </v-btn>
-            <v-slide-y-transition>
-              <div class="ma-0 pa-0" tile dense
-              tabindex="0"
-              v-show="floatingActionListExpanded"
-              @blur="closeActions"
-              ref="floatingActionList"
-              id="floatingActionList">
-                <div class="ma-0 pa-0" v-for="action, key in actionList" :key="key">
-                  <v-btn @click="openDialog(action.value)"
-                  class="py-5 px-4" text tile color="primary" style="min-width:100%;" elevation="0" :disabled="!action.enabled"
-                  :dark="!isThemeDark()"
-                  :light="isThemeDark()">
-                    <v-icon class="mr-2">
-                      {{action.icon}}
-                    </v-icon>
-                    <span>
-                      {{ getTranslationKey(action) }}
-                    </span>
-                  </v-btn>
-                  <v-divider
-                  :dark="!isThemeDark()"
-                  :light="isThemeDark()"/>
-                </div>
-              </div>
-            </v-slide-y-transition>
+            <v-menu :close-on-content-click="false" left :nudge-left="(($t('actions.addN') + ' ' + $t('classes.organizational-unit.single')).length * 2.5)+'ch'"
+            v-model="actionListOpen" :dark="isThemeDark()" :light="!isThemeDark()" offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-bind="attrs" v-on="on"
+                style="min-width: 32px;" elevation="0" rounded class="pa-0 px-2 pr-3 pill-end" color="primary">
+                  <v-icon id="floatingActionListButton" :class="actionListOpen == true  ? 'active' : ''">
+                    mdi-chevron-down
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-list dense>
+                <v-divider class="mx-4"/>
+                <v-list-item class="ma-0 pa-0"
+                  v-for="(item, index) in actionList"
+                  :key="index"
+                >
+                <v-btn :disabled="!item.enabled" @click="openDialog(item.value)" color="primary" tile text style="width: 100%;">
+                  <v-icon>
+                    {{ item.icon }}
+                  </v-icon>
+                  {{ getTranslationKey(item).toUpperCase() }}
+                </v-btn>
+                </v-list-item>
+                <v-divider class="mx-4"/>
+              </v-list>
+            </v-menu>
           </v-row>
         </v-row>
       </v-row>
@@ -247,7 +242,7 @@
                 </v-tooltip>
                 <v-tooltip bottom v-if="item.type.toLowerCase() == 'organizational-unit'">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn
+                    <v-btn @click="openDialog('dirtreeDeleteObject', item)"
                         :disabled="item.children && item.children.length > 0"
                         color="red"
                         icon
@@ -282,6 +277,17 @@
         />
     </v-dialog>
 
+    <!-- DELETE OBJECT CONFIRM DIALOG -->
+    <v-dialog eager max-width="800px" v-model="dialogs['dirtreeDeleteObject']">
+      <DirtreeDeleteObject
+        :ldapObject="this.selectedObject"
+        :viewKey="'dirtreeDeleteObject'"
+        ref="DirtreeDeleteObject"
+        @closeDialog="closeDialog"
+        @refresh="resetDirtree(true)"
+      />
+    </v-dialog>
+    
     <!-- MOVE OBJECT DIALOG -->
     <v-dialog eager max-width="900px" v-model="dialogs['dirtreeMove']">
         <DirtreeMove
@@ -300,11 +306,12 @@
 import OrganizationalUnit from '@/include/OrganizationalUnit'
 import DirtreeOUCreate from '@/components/Dirtree/DirtreeOUCreate.vue';
 import DirtreeMove from '@/components/Dirtree/DirtreeMove.vue';
+import DirtreeDeleteObject from '@/components/Dirtree/DirtreeDeleteObject.vue';
 
 export default {
     data() {
         return {
-            floatingActionListExpanded: false,
+            actionListOpen: false,
             actionList:[
               {
                 value: "dirtreePrinterCreate",
@@ -332,6 +339,7 @@ export default {
             dialogs: {
                 dirtreeOUCreate: false,
                 dirtreeMove: false,
+                dirtreeDeleteObject: false,
             },
             filters: {
               "exclude":{}
@@ -377,7 +385,8 @@ export default {
     },
     components: {
         DirtreeMove,
-        DirtreeOUCreate
+        DirtreeOUCreate,
+        DirtreeDeleteObject
     },
     props: {
         viewTitle: String,
@@ -404,16 +413,6 @@ export default {
       }
     },
     methods: {
-        closeActions(){
-          this.floatingActionListExpanded = !this.floatingActionListExpanded
-        },
-        openActions() {
-          this.floatingActionListExpanded = !this.floatingActionListExpanded
-          this.$nextTick(() => {
-            console.log(this.$refs.floatingActionList)
-            this.$refs.floatingActionList.focus()
-          })
-        },
         // Check if theme is dark
         isThemeDark() {
           if (this.$vuetify.theme.dark == true) {
@@ -429,9 +428,9 @@ export default {
             case "dirtreeMove":
               return this.$t("actions.move") + " " + this.$t("classes.ldap.single")
             case "dirtreePrinterCreate":
-              return this.$t("actions.create") + " " + this.$t("classes.ldap.single")
+              return this.$t("actions.create") + " " + this.$t("classes.printer.single")
             case "dirtreeComputerCreate":
-              return this.$t("actions.create") + " " + this.$t("classes.ldap.single")
+              return this.$t("actions.create") + " " + this.$t("classes.computer.single")
             case "dirtreeDelete":
               return this.$t("actions.delete") + " " + this.$t("classes.ldap.single")
             default:
@@ -458,6 +457,7 @@ export default {
         },
         openDialog(key, item){
             this.dialogs[key] = true;
+            this.selectedObject = {}
             switch (key) {
                 case 'dirtreeMove':
                     this.createFlag = false
@@ -465,7 +465,12 @@ export default {
                     this.$refs.DirtreeMove.resetDialog(this.selectedObject.distinguishedName);
                 break;
                 case 'dirtreeOUCreate':
-                    this.$refs.DirtreeOUCreate.resetDialog();
+                  this.$refs.DirtreeOUCreate.newOU();
+                  this.$refs.DirtreeOUCreate.resetDialog();
+                  this.$refs.DirtreeOUCreate.setDestination();
+                break;
+                case 'dirtreeDeleteObject':
+                  this.selectedObject = item
                 break;
                 default:
                 break;
@@ -523,7 +528,7 @@ export default {
           if (Array.isArray(item.children) && item.children.length > 0)
             return 'clickable'
           else
-            return
+            return 'notclickable'
         },
         resetDirtree(forceReload=false){
             this.filters = {}
@@ -578,17 +583,15 @@ export default {
   cursor: pointer !important;
 }
 
-#floatingActionList{
-  background: var(--clr-secondary);
-  position: absolute;
-  min-width: 14rem;
-  max-width: 16rem;
-  border-radius: 4px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
+.notclickable {
+  cursor: default
+}
+
+#floatingActionListButton.active{
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 </style>

@@ -197,6 +197,10 @@ export default {
             }
         },
         async resetDialog(){
+            var domainDetails = getDomainDetails()
+            this.domain = domainDetails.domain
+            this.realm = domainDetails.realm
+            this.basedn = domainDetails.basedn
             this.allowRefresh = false
             if (this.$refs.DirtreeOUList) {
                 this.$nextTick(()=>{
@@ -208,10 +212,6 @@ export default {
                     })
                 })
             }
-            var domainDetails = getDomainDetails()
-            this.domain = domainDetails.domain
-            this.realm = domainDetails.realm
-            this.basedn = domainDetails.basedn
             return
         },
         setDestination(destination=undefined){

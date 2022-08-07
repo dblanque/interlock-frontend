@@ -175,6 +175,10 @@
       "single":"Computer",
       "plural":"Computers"
     },
+    "printer":{
+      "single":"Printer",
+      "plural":"Printers"
+    },
     "organizational-unit":{
       "single":"Organizational Unit",
       "plural":"Organizational Units"
@@ -251,6 +255,7 @@
   },
   "ldap":{
     "attributes":{
+      "ouName":"Organizational Unit Name",
       "objectRid":"Object Relative Identifier (RID)",
       "objectSid":"Object Security Identifier (SID)",
       "hasMembers":"Populated",
@@ -350,6 +355,17 @@
       "helpMessage":"Below you can modify your Active Directory / LDAP user details and password"
     },
     "dirtree":{
+      "deleteObject":{
+        "title":"Delete LDAP Object",
+        "message":"Are you sure you wish to delete"
+      },
+      "ouCreate":{
+        "header":"Create Organizational Unit",
+        "step1":"Organizational Unit Details",
+        "step2":"Organizational Unit Created",
+        "step2_success":"Organizational Unit Created Successfully",
+        "ouCreatedIn":"Organizational Unit will be created in"
+      },
       "filterHint":"Click the blue chips to filter them",
       "move":{
         "setToRoot":"Select Domain Root",

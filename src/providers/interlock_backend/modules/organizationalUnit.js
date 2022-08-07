@@ -35,7 +35,27 @@ const actions = {
                 resolve(response);
             }).catch((e) => reject(e))
         })
-    }
+    },
+
+    insert: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.ou.insert, data).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
+    delete: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.ou.delete, data).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
 }
 
 export default actions
