@@ -101,6 +101,25 @@
           "n":"Saved"
         }
       },
+      "all":{
+        "single":{
+          "m":"All",
+          "f":"All",
+          "n":"All"
+        },
+        "plural":{
+          "m":"All",
+          "f":"All",
+          "n":"All"
+        }
+      },
+      "none":{
+        "single":{
+          "m":"None",
+          "f":"None",
+          "n":"None"
+        }
+      },
       "readOnly":"Read Only",
       "member":"Member",
       "enabled":"Enabled",

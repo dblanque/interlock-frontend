@@ -62,6 +62,20 @@
                     </v-btn>
                 </template>
                 <v-list dense :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)">
+                    <v-list-item>
+                        <v-btn @click="filterAll" class="mx-1" color="primary">
+                            <v-icon>
+                                mdi-filter
+                            </v-icon>
+                            {{ $t('words.all.single.m') }}
+                        </v-btn>
+                        <v-btn @click="filterNone" class="mx-1">
+                            <v-icon>
+                                mdi-filter-outline
+                            </v-icon>
+                            {{ $t('words.none.single.m') }}
+                        </v-btn>
+                    </v-list-item>
                     <v-list-item v-for="enabled, key in recordTypes" :key="key">
                             <v-list-item-action class="ma-0 pa-0 mr-2">
                                 <v-checkbox on-icon="mdi-close-box" color="red" v-model="recordTypes[key]" class="ma-0 pa-0" dense/>
@@ -226,8 +240,6 @@ export default {
             zoneFilter: {
                 dnsZone: ""
             },
-            filterRecordTypes: {
-            },
         }
     },
     created () {
@@ -243,6 +255,16 @@ export default {
         }
     },
     methods: {
+        filterAll(){
+            for (var key in this.recordTypes) {
+                this.recordTypes[key] = true
+            }
+        },
+        filterNone(){
+            for (var key in this.recordTypes) {
+                this.recordTypes[key] = false
+            }
+        },
         filterData(filters){
             var value
             this.filteredData = this.dns.records

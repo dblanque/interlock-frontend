@@ -101,6 +101,25 @@
         "n":"Guardados"
       }
     },
+    "all":{
+      "single":{
+        "m":"Todo",
+        "f":"Toda",
+        "n":"Todo"
+      },
+      "plural":{
+        "m":"Todos",
+        "f":"Todas",
+        "n":"Todos"
+      }
+    },
+    "none":{
+      "single":{
+        "m":"Ninguno",
+        "f":"Ninguna",
+        "n":"Ninguno"
+      }
+    },
     "readOnly":"Solo Lectura",
     "member":"Miembro",
     "enabled":"Activado",
