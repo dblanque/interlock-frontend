@@ -564,6 +564,14 @@ const validationMixin = {
         }
       },
       
+    // Check if theme is dark
+    isThemeDark(vuetify) {
+      if (vuetify.theme.dark === true) {
+        return true;
+      }
+      return false;
+    },
+
     sortNullLast(items, index, isDesc) {
       items.sort((a, b) => {
         if (a[index] === b[index]) { // equal items sort equally

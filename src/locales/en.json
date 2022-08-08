@@ -23,6 +23,7 @@
     }
   },
   "actions":{
+    "filter":"Filter",
     "rename":"Rename",
     "openAll":"Open all",
     "closeAll":"Close all",
@@ -272,7 +273,8 @@
   "dns":{
     "attributes":{
       "value": "Record Value",
-      "nameTarget":"Name",
+      "name":"Record Name",
+      "nameTarget":"Target Name",
       "address":"Address",
       "type":"Record Type (Internal)",
       "typeName":"Record Type",

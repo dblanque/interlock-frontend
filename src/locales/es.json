@@ -23,6 +23,7 @@
     }
   },
   "actions": {
+    "filter":"Filtrar",
     "rename":"Renombrar",
     "openAll":"Abrir todos",
     "closeAll":"Cerrar todos",
@@ -204,12 +205,12 @@
     },
     "dns":{
       "zone":{
-        "single":"DNS Zone",
-        "plural":"DNS Zones"
+        "single":"Zona de DNS",
+        "plural":"Zonas de DNS"
       },
       "record":{
-        "single":"DNS Record",
-        "plural":"DNS Records"
+        "single":"Registro de DNS",
+        "plural":"Registros de DNS"
       }
     }
   },
@@ -278,7 +279,8 @@
   "dns":{
     "attributes":{
       "value": "Valor del Registro",
-      "nameTarget":"Nombre",
+      "name":"Nombre del Registro",
+      "nameTarget":"Nombre del Objetivo",
       "address":"Dirección",
       "type":"Tipo de Registro (Interno)",
       "typeName":"Tipo de Registro",

@@ -185,6 +185,9 @@ import LogView from '@/components/Logging/LogView.vue'
             case 'logs':
               this.$refs.LogView.reloadDataTableHeaders()
               break;
+            case 'dns':
+              this.$refs.dnsView.reloadDataTableHeaders()
+              break;
             default:
               break;
           }
