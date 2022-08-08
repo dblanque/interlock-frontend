@@ -33,7 +33,7 @@
           <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
           {{ $t('actions.addN') + " " + $t("classes.organizational-unit.single") }}
         </v-btn>
-        <v-menu :close-on-content-click="false" left 
+        <v-menu :close-on-content-click="false" left
         :nudge-left="(($t('actions.addN') + ' ' + $t('classes.organizational-unit.single')).length * 2)+'ch'"
         v-model="actionListOpen" :dark="isThemeDark()" :light="!isThemeDark()" offset-y>
           <template v-slot:activator="{ on, attrs }">

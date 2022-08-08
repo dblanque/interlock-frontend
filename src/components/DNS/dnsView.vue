@@ -238,7 +238,6 @@ export default {
         'recordTypes': {
             handler: function (newValue) {
                 this.filterData(newValue)
-                console.log(this.filteredData)
             },
             deep: true
         }

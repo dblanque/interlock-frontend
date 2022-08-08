@@ -194,6 +194,10 @@ export default {
                 return 'connection'
             case 'SET':
                 return 'setting'
+            case 'DNSZ':
+                return 'dns.zone'
+            case 'DNSR':
+                return 'dns.record'
             default:
                 return 'ldap'
         }
@@ -229,6 +233,10 @@ export default {
                 return ['mdi-web', 'orange']
             case 'SET':
                 return ['mdi-cog', 'orange']
+            case 'DNSZ':
+                return ['mdi-google-circles', 'orange']
+            case 'DNSR':
+                return ['mdi-google-circles-group', 'orange']
             default:
                 return ['mdi-group']
         }
