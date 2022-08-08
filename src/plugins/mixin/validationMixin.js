@@ -20,7 +20,7 @@ function calculateCUITVerifierDigit(cuitNum) {
   return validateModEleven;
 }
 
-const validationMixin ={
+const validationMixin = {
     methods:{
 
       // * ------------------------------ Individual REGEX Input Rules ------------------------------ * //
@@ -537,13 +537,15 @@ const validationMixin ={
       ]
       },
       getMessageForCode(errorData=undefined){
-        var codeToUse
-        if (typeof errorData == "string")
-          console.error("The Error Data Object must be passed to this function, not a string")
         if (errorData == undefined) {
           console.log('Error Data is undefined')
           return this.$t("error.unknown_short")
         }
+
+        if (typeof errorData == "string")
+        console.error("The Error Data Object must be passed to this function, not a string")
+
+        var codeToUse
         if ("code_ext" in errorData)
           codeToUse = errorData.code_ext
         else
@@ -560,9 +562,26 @@ const validationMixin ={
           default:
             return this.$t("error.unknown_short") + " (" + codeToUse + ")"
         }
-      }
-    },
+      },
+      
+    sortNullLast(items, index, isDesc) {
+      items.sort((a, b) => {
+        if (a[index] === b[index]) { // equal items sort equally
+          return 0;
+        } else if (a[index] === null || a[index] === '') { // nulls sort after anything else
+          return 1;
+        } else if (b[index] === null || b[index] === '') {
+          return -1;
+        } else if (!isDesc[0]) { // otherwise, if we're ascending, lowest sorts first
+          return a[index] < b[index] ? -1 : 1;
+        } else { // if descending, highest sorts first
+          return a[index] < b[index] ? 1 : -1;
+        }
+      });
+      return items;
+    }
   }
+}
 export default validationMixin;
 
 // Vuelidate Documentation - https://vuelidate.js.org/#sub-regex-based-validator

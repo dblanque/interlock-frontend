@@ -289,7 +289,7 @@ export default {
         {
           index: 3,
           title: "dns",
-          enabled: false,
+          enabled: true,
           enableShortName: true,
           icon: "mdi-dns",
           route: "dns",

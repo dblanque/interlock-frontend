@@ -49,6 +49,14 @@
 
   <!-- DNS -->
   <v-container v-if="viewTitle == 'dns'" class="max-width-change">
+    <dnsView ref="dnsView"
+      :requestRefresh="this.refreshDNSData"
+      :viewTitle="viewTitle"
+      :snackbarTimeout="this.snackbarTimeout"
+      @createSnackbar="createSnackbar"
+      @resetSnackbar="resetSnackbar"
+      @refresh="refreshAction"
+    />
   </v-container>
 
   <!-- GPO -->
@@ -116,6 +124,7 @@
 import UserView from '@/components/User/UserView.vue'
 import GroupView from '@/components/Group/GroupView.vue'
 import DirtreeView from '@/components/Dirtree/DirtreeView.vue'
+import dnsView from '@/components/DNS/dnsView.vue'
 import SettingsCard from '@/components/Settings/SettingsCard.vue'
 import LogView from '@/components/Logging/LogView.vue'
 
@@ -125,6 +134,7 @@ import LogView from '@/components/Logging/LogView.vue'
     UserView,
     GroupView,
     DirtreeView,
+    dnsView,
     SettingsCard,
     LogView
     },
@@ -138,6 +148,7 @@ import LogView from '@/components/Logging/LogView.vue'
       return {
         refreshUserDataTable: false,
         refreshGroupDataTable: false,
+        refreshDNSData: false,
         refreshOnClose: false,
         userRefreshLoading: false,
         error: false,

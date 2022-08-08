@@ -20,6 +20,10 @@ class Domain extends ApiModel{
     async getDetails(){
         return await interlock_backend.call('domain/details')
     }
+
+    async zones(data){
+        return await interlock_backend.call('domain/zones', data)
+    }
 }
 
 export default Domain

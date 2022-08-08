@@ -195,6 +195,16 @@
     "ldap":{
       "single":"LDAP Object",
       "plural":"LDAP Objects"
+    },
+    "dns":{
+      "zone":{
+        "single":"DNS Zone",
+        "plural":"DNS Zones"
+      },
+      "record":{
+        "single":"DNS Record",
+        "plural":"DNS Records"
+      }
     }
   },
   "error":{
@@ -258,6 +268,28 @@
       "notFound": "not found",
       "unknown_short": "An Unknown error has occurred",
       "unknown": "An Unknown error has occurred, please try again or contact us"
+  },
+  "dns":{
+    "attributes":{
+      "value": "Record Value",
+      "nameTarget":"Name",
+      "address":"Address",
+      "type":"Record Type (Internal)",
+      "typeName":"Record Type",
+      "serial":"Serial",
+      "ts":"Tombstoned",
+      "tstime":"Tombstone Time",
+      "wPriority":"Priority",
+      "wWeight":"Weight",
+      "wPort":"Port",
+      "dwSerialNo":"Serial No.",
+      "dwRefresh":"Refresh",
+      "dwRetry":"Retry",
+      "dwExpire":"Expire",
+      "dwMinimumTtl":"Minimum TTL",
+      "namePrimaryServer":"Name Primary Server",
+      "zoneAdminEmail":"Zone Admin E-mail"
+    }
   },
   "ldap":{
     "attributes":{

@@ -246,8 +246,10 @@ import UserCreate from '@/components/User/UserCreate.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
+import validationMixin from '@/plugins/mixin/validationMixin'
 
 export default {
+  mixins: [ validationMixin ],
   components: {
     UserCreate,
     UserDialog,
@@ -406,22 +408,6 @@ export default {
         this.createSnackbar('red', this.$t("section.users.errorUserUnlock").toUpperCase())
         setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
       })
-    },
-    sortNullLast(items, index, isDesc) {
-      items.sort((a, b) => {
-        if (a[index] === b[index]) { // equal items sort equally
-          return 0;
-        } else if (a[index] === null || a[index] === '') { // nulls sort after anything else
-          return 1;
-        } else if (b[index] === null || b[index] === '') {
-          return -1;
-        } else if (!isDesc[0]) { // otherwise, if we're ascending, lowest sorts first
-          return a[index] < b[index] ? -1 : 1;
-        } else { // if descending, highest sorts first
-          return a[index] < b[index] ? 1 : -1;
-        }
-      });
-      return items;
     },
     isLoggedInUser(username){
       if (username == localStorage.getItem('username'))

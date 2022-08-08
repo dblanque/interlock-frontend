@@ -60,7 +60,8 @@ const urls = {
     },
     domain: {
         base: "api/domain/",
-        details: "api/domain/details/"
+        details: "api/domain/details/",
+        zones: "api/domain/zones/"
     },
     settings: {
         base: "api/settings/",

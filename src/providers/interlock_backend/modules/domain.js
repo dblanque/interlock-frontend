@@ -11,6 +11,16 @@ const actions = {
                 localStorage.setItem("basedn", response.data.details.basedn)
             }).catch((e) => reject(e))
         })
+    },
+
+    zones: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.domain.zones, data).then(response => {
+                resolve(response.data)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
     }
 }
 

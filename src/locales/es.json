@@ -201,6 +201,16 @@
     "ldap":{
       "single":"Objeto LDAP",
       "plural":"Objetos LDAP"
+    },
+    "dns":{
+      "zone":{
+        "single":"DNS Zone",
+        "plural":"DNS Zones"
+      },
+      "record":{
+        "single":"DNS Record",
+        "plural":"DNS Records"
+      }
     }
   },
   "error":{
@@ -264,6 +274,28 @@
     "notFound": "no encontrado",
     "unknown_short": "Un error desconocido ha ocurrido",
     "unknown": "Un error desconocido ha ocurrido, por favor inténtelo nuevamente"
+  },
+  "dns":{
+    "attributes":{
+      "value": "Valor del Registro",
+      "nameTarget":"Nombre",
+      "address":"Dirección",
+      "type":"Tipo de Registro (Interno)",
+      "typeName":"Tipo de Registro",
+      "serial":"Serial",
+      "ts":"Lapidado",
+      "tstime":"Fecha de Lapidación",
+      "wPriority":"Prioridad",
+      "wWeight":"Peso",
+      "wPort":"Puerto",
+      "dwSerialNo":"Nro. Serial",
+      "dwRefresh":"Refresco",
+      "dwRetry":"Reintento",
+      "dwExpire":"Expiración",
+      "dwMinimumTtl":"Tiempo de Vida Mínimo (TTL)",
+      "namePrimaryServer":"Servidor Primario del Nombre",
+      "zoneAdminEmail":"E-mail del Admin de Zona"
+    }
   },
   "ldap":{
     "attributes":{
