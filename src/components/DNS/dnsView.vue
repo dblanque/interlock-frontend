@@ -10,6 +10,19 @@
     class="py-3 px-2 mt-2 mb-2">
     <!-- Table Header -->
     <template v-slot:top>
+      <!-- Zone selection and operations -->
+      <v-row align="center" class="px-2 mx-1 py-0 my-0">
+        <v-select v-model="zoneFilter['dnsZone']" @change="getDNSData" :items="dns.zones" class="mx-2">
+        </v-select>
+        <v-btn class="pa-2 mx-2" :disabled="loading" color="primary">
+            <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+            {{ $t('actions.addN') + ' ' + $t('classes.dns.zone.single') }}
+        </v-btn>
+        <v-btn class="pa-2 mx-2" :disabled="loading" color="red" dark>
+            <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+            {{ $t('actions.delete') + ' ' + $t('classes.dns.zone.single') }}
+        </v-btn>
+      </v-row>
       <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-text-field
           v-model="searchString"
@@ -24,7 +37,7 @@
             icon
             elevation="0"
             :loading="loading"
-            @click="getDNSData"
+            @click="getDNSData()"
             >
             <v-icon>
               mdi-refresh
@@ -35,11 +48,7 @@
               </span>
             </template>
           </v-btn>
-          <v-btn class="pa-2 mx-2" :disabled="loading" color="primary">
-            <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-            {{ $t('actions.addN') + ' ' + $t('classes.dns.zone.single') }}
-          </v-btn>
-          <v-btn class="pa-2 mx-2" :disabled="loading" color="primary">
+          <v-btn class="pa-2 mx-2" :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="primary">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
             {{ $t('actions.addN') + ' ' + $t('classes.dns.record.single') }}
           </v-btn>
@@ -123,7 +132,7 @@
             v-bind="attrs"
             v-on="on"
             small
-            :disabled="loading"
+            :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'"
           >
           <v-icon small color="primary">
             mdi-pencil
@@ -140,7 +149,7 @@
             v-bind="attrs"
             v-on="on"
             small
-            :disabled="loading"
+            :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'"
           >
           <v-icon small color="red">
             mdi-delete
@@ -158,6 +167,7 @@
 <script>
 import { default as DNS } from '@/include/Domain'
 import validationMixin from '@/plugins/mixin/validationMixin'
+import { getDomainDetails } from '@/include/utils';
 
 export default {
     mixins: [ validationMixin ],
@@ -168,20 +178,26 @@ export default {
             error: false,
             errorMsg: "",
             readonly: false,
+            ldap: {},
             dns: {
                 headers: [],
                 zones: [],
                 records: []
             },
+            zoneFilter: {
+                dnsZone: ""
+            },
             filterRecordTypes: {
-            }
+            },
         }
     },
     created () {
-        this.getDNSData()
+        this.ldap = getDomainDetails()
+        this.getDNSData(this.defaultZone)
     },
     methods: {
         resetData(resetFilter=false){
+            this.ldap = getDomainDetails()
             this.loading = true
             this.error = false
             this.errorMsg = ""
@@ -204,15 +220,18 @@ export default {
                 this.errorMsg = ""
             }
         },
-        async getDNSData() {
+        async getDNSData(zoneToQuery=undefined) {
+            if (zoneToQuery)
+                this.zoneFilter['dnsZone'] = zoneToQuery
+            else if (this.zoneFilter['dnsZone'] == "")
+                this.zoneFilter['dnsZone'] = this.ldap.domain
+            var queryFilter = this.zoneFilter
             this.resetData()
-            await new DNS({}).zones()
+            await new DNS({}).zones({filter: queryFilter})
             .then(response => {
-                console.log(response.data)
                 var dnsHeaders = response.data.headers
                 this.dns.zones = response.data.dnsZones
                 this.dns.records = response.data.records
-                console.log(this.dns.records)
                 // Add actions header
                 var headerDict = {}
 
@@ -226,7 +245,11 @@ export default {
                     }
                     if (header == 'address' || header == 'nameTarget')
                         headerDict.width = '35ch'
-                    this.dns.headers.push(headerDict)
+                    
+                    if (header == 'ts' && this.zoneFilter['dnsZone'] != 'Root DNS Servers')
+                        this.dns.headers.push(headerDict)
+                    else if (header != 'ts')
+                        this.dns.headers.push(headerDict)
                 });
                 // Add actions last
                 headerDict = {}
