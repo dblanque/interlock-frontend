@@ -227,7 +227,15 @@ import LogView from '@/components/Logging/LogView.vue'
                 this.$refs.LogView.listLogs()
               }
               break;
+            case 'dns':
+              if (this.$refs.dnsView != undefined) {
+                console.log("Requested refresh for component "+ newValue)
+                this.$refs.dnsView.getDNSData()
+              }
+              break;
             default:
+              if (newValue)
+                console.log("Requested refresh for component "+ newValue)
               break;
           }
         }
