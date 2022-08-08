@@ -186,23 +186,24 @@ export default {
         addDNs(){
             var searchResult
             var finalGroupArray = []
-            // If there's a Selected Group to Add
+            // If there's a Selected Member to Add
             if (this.selectedDNs.length > 0) {
                 // Loop for each Group ID
                 this.selectedDNs.forEach(groupID => {
                     // Loop for all objects in LDAP List to do a recursive search
                     this.ldapList.forEach(element => {
                         // If a result is not found keep searching
-                        if (!searchResult)
+                        if (!searchResult || searchResult.length == 0){
                             searchResult = objectRecursiveSearch(element, parseInt(groupID))
-                        // Else push it and set the result to undefined for the next object
-                        else {
+                        }
+                        // Once done push it and set the result to undefined for the next object
+                        if (searchResult != undefined) {
+                            console.log(searchResult)
                             finalGroupArray.push(searchResult)
                             searchResult = undefined
                         }
                     });
                 });
-                // console.log(finalGroupArray)
                 this.$emit('addDNs', finalGroupArray)
             }
         },

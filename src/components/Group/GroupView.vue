@@ -257,6 +257,7 @@ export default {
         case 'groupDialog':
           if (this.$refs.GroupDialog != undefined)
             this.$refs.GroupDialog.syncGroup()
+            this.$refs.GroupDialog.setupExclude()
           break;
         case 'groupCreate':
           if (this.$refs.GroupCreate != undefined)

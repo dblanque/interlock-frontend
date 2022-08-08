@@ -486,6 +486,7 @@ export default {
         if (!this.dialogs.userDialog) {
           this.openDialog('userDialog')
           this.$refs.UserDialog.syncUser()
+          this.$refs.UserDialog.setupExclude()
         }
         if (isEditable == true)
           this.editableForm = true

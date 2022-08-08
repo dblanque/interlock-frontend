@@ -542,6 +542,7 @@ export default {
         async refreshGroup(){
             this.loading = true
             this.$emit('refreshGroup', this.group);
+            this.setupExclude()
             this.loading = false
             this.loadingColor = 'primary'
         },

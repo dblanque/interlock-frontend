@@ -1219,6 +1219,7 @@ export default {
         async refreshUser(){
             this.loading = true
             this.$emit('refreshUser', this.user);
+            this.setupExclude()
             this.loading = false
             this.loadingColor = 'primary'
         }
