@@ -244,7 +244,7 @@
                 </v-tooltip>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn disabled
+                    <v-btn
                         @click="openDialog('dirtreeRename', item)"
                         color="primary"
                         icon
@@ -315,7 +315,19 @@
             :viewKey="'dirtreeMove'"
             ref="DirtreeMove"
             @closeDialog="closeDialog"
-            @confirmMove="moveObject"
+            @confirm="moveObject"
+        />
+    </v-dialog>
+    
+    <!-- RENAME OBJECT DIALOG -->
+    <v-dialog eager max-width="900px" v-model="dialogs['dirtreeRename']">
+        <DirtreeRename
+            :objectDn="selectedObject.distinguishedName"
+            :objectName="selectedObject.name"
+            :viewKey="'dirtreeRename'"
+            ref="DirtreeRename"
+            @closeDialog="closeDialog"
+            @confirm="renameObject"
         />
     </v-dialog>
   </v-row>
@@ -325,11 +337,22 @@
 import OrganizationalUnit from '@/include/OrganizationalUnit'
 import DirtreeOUCreate from '@/components/Dirtree/DirtreeOUCreate.vue';
 import DirtreeMove from '@/components/Dirtree/DirtreeMove.vue';
+import DirtreeRename from '@/components/Dirtree/DirtreeRename.vue';
 import DirtreeDeleteObject from '@/components/Dirtree/DirtreeDeleteObject.vue';
 import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
     mixins: [ validationMixin ],
+    components: {
+        DirtreeMove,
+        DirtreeRename,
+        DirtreeOUCreate,
+        DirtreeDeleteObject
+    },
+    props: {
+        viewTitle: String,
+        snackbarTimeout: Number
+    },
     data() {
         return {
             createType: "ou",
@@ -361,6 +384,7 @@ export default {
             dialogs: {
                 dirtreeOUCreate: false,
                 dirtreeMove: false,
+                dirtreeRename: false,
                 dirtreeDeleteObject: false,
             },
             filters: {
@@ -404,15 +428,6 @@ export default {
                 },
             },
         }
-    },
-    components: {
-        DirtreeMove,
-        DirtreeOUCreate,
-        DirtreeDeleteObject
-    },
-    props: {
-        viewTitle: String,
-        snackbarTimeout: Number
     },
     created() {
       this.fetchDirtree();
@@ -492,15 +507,39 @@ export default {
                 this.error = false;
                 this.loading = false;
                 this.resetSnackbar();
-                this.createSnackbar('green', this.$t("section.dirtree.moveSuccessful").toUpperCase() )
+                this.resetDirtree(true)
+                this.createSnackbar('green', this.$t("section.dirtree.move.success").toUpperCase() )
                 setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
           })
           .catch(error => {
                 console.log(error)
-                this.loading = false;
-                this.error = true;
+                this.loading = false
+                this.error = true
                 this.errorMsg = this.getMessageForCode(error.response.data)
-                this.resetSnackbar();
+                this.resetSnackbar()
+                this.createSnackbar('red', this.errorMsg.toUpperCase() )
+                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+          })
+        },
+        async renameObject(newRDN){
+          this.loading = true;
+          this.dialogs['dirtreeRename'] = false
+          this.selectedObject.newRDN = newRDN
+          await new OrganizationalUnit({}).rename({ldapObject: this.selectedObject})
+          .then(() => {
+                this.error = false;
+                this.loading = false;
+                this.resetSnackbar()
+                this.resetDirtree(true)
+                this.createSnackbar('green', this.$t("section.dirtree.rename.success").toUpperCase() )
+                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+          })
+          .catch(error => {
+                console.log(error)
+                this.loading = false
+                this.error = true
+                this.errorMsg = this.getMessageForCode(error.response.data)
+                this.resetSnackbar()
                 this.createSnackbar('red', this.errorMsg.toUpperCase() )
                 setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
           })
@@ -513,6 +552,10 @@ export default {
                     this.createFlag = false
                     this.selectedObject = item
                     this.$refs.DirtreeMove.resetDialog(this.selectedObject.distinguishedName);
+                break;
+                case 'dirtreeRename':
+                    this.selectedObject = item
+                    this.$refs.DirtreeRename.clearData();
                 break;
                 case 'dirtreeOUCreate':
                   this.createType = 'ou'

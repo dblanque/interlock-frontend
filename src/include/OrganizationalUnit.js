@@ -33,6 +33,10 @@ class OrganizationalUnit extends ApiModel{
         return await interlock_backend.call('ou/move', data)
     }
 
+    async rename(data){
+        return await interlock_backend.call('ou/rename', data)
+    }
+
     async insert(data){
         return await interlock_backend.call('ou/insert', data)
     }

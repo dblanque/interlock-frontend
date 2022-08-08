@@ -223,7 +223,7 @@ export default {
             this.$emit('closeDialog', this.viewKey);
         },
         confirmMove(){
-            this.$emit('confirmMove', this.objectDestination);
+            this.$emit('confirm', this.objectDestination);
         },
     },
 }

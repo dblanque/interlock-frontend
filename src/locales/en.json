@@ -361,7 +361,6 @@
       "helpMessage":"Below you can modify your Active Directory / LDAP user details and password"
     },
     "dirtree":{
-      "moveSuccessful":"Object moved successfully",
       "deleteObject":{
         "title":"Delete LDAP Object",
         "message":"Are you sure you wish to delete"
@@ -386,11 +385,17 @@
         "printerCreatedIn":"Printer will be created in"
       },
       "filterHint":"Click the blue chips to filter them",
+      "rename":{
+        "title":"Rename LDAP Object",
+        "originalDistinguishedName":"Original Distinguished Name",
+        "success":"lDAP Object renamed successfully"
+      },
       "move":{
         "setToRoot":"Select Domain Root",
-        "title":"Move Domain Object",
+        "title":"Move LDAP Object",
         "willBeMovedTo":"Will be moved to",
-        "originalRelativePath":"Original Relative Path"
+        "originalRelativePath":"Original Relative Path",
+        "success":"LDAP Object moved successfully"
       }
     },
     "users":{

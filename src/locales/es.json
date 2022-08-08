@@ -367,7 +367,6 @@
       "helpMessage":"Debajo puede modificar su contraseña y detalles de usuario de Active Directory / LDAP"
     },
     "dirtree":{
-      "moveSuccessful":"Objeto movido exitosamente",
       "deleteObject":{
         "title":"Borrar Objeto LDAP",
         "message":"¿Está seguro de borrar el objeto"
@@ -391,11 +390,17 @@
         "printerCreatedIn":"La Impresora será creada en"
       },
       "filterHint":"Clickee los chips azules para filtrarlos",
+      "rename":{
+        "title":"Renombrar Objeto LDAP",
+        "originalDistinguishedName":"Nombre Distinguido Original",
+        "success":"Objeto LDAP renombrado exitosamente"
+      },
       "move":{
         "setToRoot":"Seleccionar Raíz de Dominio",
         "title":"Mover Objeto de Dominio",
         "willBeMovedTo":"Será movido a",
-        "originalRelativePath":"Camino Relativo Original"
+        "originalRelativePath":"Camino Relativo Original",
+        "success":"Objeto LDAP movido exitosamente"
       }
     },
     "users":{

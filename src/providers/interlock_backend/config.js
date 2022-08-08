@@ -76,7 +76,8 @@ const urls = {
         delete: "api/ou/delete/",
         filter: "api/ou/filter/",
         dirtree: "api/ou/dirtree/",
-        move: "api/ou/move/"
+        move: "api/ou/move/",
+        rename: "api/ou/rename/"
     },
     test: {
         get: "api/test/",
