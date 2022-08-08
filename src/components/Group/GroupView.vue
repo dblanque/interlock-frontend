@@ -202,8 +202,10 @@ import Group from '@/include/Group';
 import GroupDialog from '@/components/Group/GroupDialog.vue'
 import GroupCreate from '@/components/Group/GroupCreate.vue'
 import GroupDelete from '@/components/Group/GroupDelete.vue'
+import validationMixin from '@/plugins/mixin/validationMixin'
 
 export default {
+  mixins: [ validationMixin ],
   components: {
     GroupDialog,
     GroupCreate,
@@ -343,22 +345,6 @@ export default {
         this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.viewTitle.toUpperCase())
         setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
       })
-    },
-    sortNullLast(items, index, isDesc) {
-      items.sort((a, b) => {
-        if (a[index] === b[index]) { // equal items sort equally
-          return 0;
-        } else if (a[index] === null || a[index] === '') { // nulls sort after anything else
-          return 1;
-        } else if (b[index] === null || b[index] === '') {
-          return -1;
-        } else if (!isDesc[0]) { // otherwise, if we're ascending, lowest sorts first
-          return a[index] < b[index] ? -1 : 1;
-        } else { // if descending, highest sorts first
-          return a[index] < b[index] ? 1 : -1;
-        }
-      });
-      return items;
     },
     openDeleteDialog(groupObject) {
       this.data.selectedGroup = {}
