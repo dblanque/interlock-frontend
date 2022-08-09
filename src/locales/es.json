@@ -299,7 +299,7 @@
     "attributes":{
       "value": "Valor del Registro",
       "displayName":"Nombre a Mostrar",
-      "name":"Valor de Nombre del Registro",
+      "name":"Nombre del Registro",
       "nameTarget":"Nombre del Objetivo",
       "address":"Dirección",
       "type":"Tipo de Registro (Interno)",

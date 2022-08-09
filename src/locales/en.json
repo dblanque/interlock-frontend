@@ -293,7 +293,7 @@
     "attributes":{
       "value": "Record Value",
       "displayName":"Display Name",
-      "name":"Record Name Value",
+      "name":"Record Name",
       "nameTarget":"Target Name",
       "address":"Address",
       "type":"Record Type (Internal)",
