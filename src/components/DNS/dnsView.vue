@@ -147,25 +147,6 @@
 
     <!-- DNS RECORD ACTIONS -->
     <template v-slot:[`item.actions`]="{ }">
-      
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon
-            rounded
-            v-bind="attrs"
-            v-on="on"
-            small
-            disabled
-          >
-            <!-- :disabled="loading" -->
-          <v-icon small color="primary">
-            mdi-eye
-          </v-icon>
-          </v-btn>
-        </template>
-        <span>{{ $t('actions.view') }}</span>
-      </v-tooltip>
-
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon
@@ -208,13 +189,13 @@
         <td :colspan="headers.length">
             <v-row class="ma-0 pa-0 my-3 mx-2" v-for="attribute, key in getExtrasFromRecord(item, headers)" :key="key">
                 <span>
-                    <v-icon class="mr-2" v-if="key == 'type'">
+                    <v-icon color="primary" class="mr-2" v-if="key == 'type'">
                         mdi-information-outline
                     </v-icon>
-                    <v-icon class="mr-2" v-else-if="key == 'distinguishedName'">
+                    <v-icon color="primary" class="mr-2" v-else-if="key == 'distinguishedName'">
                         mdi-menu
                     </v-icon>
-                    <v-icon class="mr-2" v-else>
+                    <v-icon color="primary" class="mr-2" v-else>
                         mdi-menu-right
                     </v-icon>
                     <span v-if="key == 'distinguishedName'">
@@ -241,7 +222,7 @@ export default {
     mixins: [ validationMixin ],
     data() {
         return {
-            singleExpand: true,
+            singleExpand: false,
             expanded: [],
             filteredData: [],
             recordTypes: {
@@ -283,7 +264,7 @@ export default {
                 this.filterData(newValue)
             },
             deep: true
-        }
+        },
     },
     methods: {
         getExtrasFromRecord(item, headers) {
@@ -357,12 +338,16 @@ export default {
             }
         },
         async getDNSData(zoneToQuery=undefined) {
+            // Set DNS Zone Query
             if (zoneToQuery)
                 this.zoneFilter['dnsZone'] = zoneToQuery
             else if (this.zoneFilter['dnsZone'] == "")
                 this.zoneFilter['dnsZone'] = this.ldap.domain
             var queryFilter = this.zoneFilter
+
+            // Reset Data
             this.resetData()
+
             await new DNS({}).zones({filter: queryFilter})
             .then(response => {
                 var dnsHeaders = response.data.headers
@@ -435,5 +420,9 @@ export default {
   -ms-transform: rotate(180deg);
   -o-transform: rotate(180deg);
   transform: rotate(180deg);
+}
+
+.v-data-table > .v-data-table__wrapper tbody tr.v-data-table__expanded__content {
+    box-shadow: none !important;
 }
 </style>
