@@ -6,6 +6,10 @@
     :custom-sort="sortNullLast"
     :loading="loading"
     :search="searchString"
+    show-expand
+    :single-expand="singleExpand"
+    item-key="distinguishedName"
+    :expanded.sync="expanded"
     sort-by="type"
     class="py-3 px-2 mt-2 mb-2">
     <!-- Table Header -->
@@ -198,6 +202,31 @@
         <span>{{ $t('actions.delete') }}</span>
       </v-tooltip>
     </template>
+
+    <!-- DNS RECORD EXTRA INFO -->
+    <template v-slot:expanded-item="{ headers, item }">
+        <td :colspan="headers.length">
+            <v-row class="ma-0 pa-0 my-3 mx-2" v-for="attribute, key in getExtrasFromRecord(item, headers)" :key="key">
+                <span>
+                    <v-icon class="mr-2" v-if="key == 'type'">
+                        mdi-information-outline
+                    </v-icon>
+                    <v-icon class="mr-2" v-else-if="key == 'distinguishedName'">
+                        mdi-menu
+                    </v-icon>
+                    <v-icon class="mr-2" v-else>
+                        mdi-menu-right
+                    </v-icon>
+                    <span v-if="key == 'distinguishedName'">
+                        {{ $t("ldap.attributes." + key) + ": " + attribute + " "}}
+                    </span>
+                    <span v-else>
+                        {{ $t("dns.attributes." + key) + ": " + attribute + " "}}
+                    </span>
+                </span>
+            </v-row>
+        </td>
+    </template>
   </v-data-table>
 
 </v-card>
@@ -212,6 +241,8 @@ export default {
     mixins: [ validationMixin ],
     data() {
         return {
+            singleExpand: true,
+            expanded: [],
             filteredData: [],
             recordTypes: {
                 A: false,
@@ -255,6 +286,20 @@ export default {
         }
     },
     methods: {
+        getExtrasFromRecord(item, headers) {
+            var result = {}
+            // var keys = Object.keys(item)
+            headers = headers.map(e => e.value)
+
+            for (const key in item) {
+                if (Object.hasOwnProperty.call(item, key)) {
+                    if (!headers.includes(key)) {
+                        result[key] = item[key]
+                    }
+                }
+            }
+            return result
+        },
         filterAll(){
             for (var key in this.recordTypes) {
                 this.recordTypes[key] = true

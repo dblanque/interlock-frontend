@@ -292,7 +292,8 @@
   "dns":{
     "attributes":{
       "value": "Record Value",
-      "name":"Record Name",
+      "displayName":"Display Name",
+      "name":"Record Name Value",
       "nameTarget":"Target Name",
       "address":"Address",
       "type":"Record Type (Internal)",
