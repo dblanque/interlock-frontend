@@ -201,7 +201,7 @@
                     </v-slide-x-reverse-transition>
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="closeDialog(true)" v-if="this.createStage > 2 && this.error === false"
-                        @keydown.enter="closeDialog"
+                        @keydown.enter="closeDialog(true)"
                         class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
@@ -449,3 +449,18 @@ export default {
     }
 }
 </script>
+
+<style>
+.card-actions {
+    border-radius: 4px;
+    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-100));
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 100;
+    border-top: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
+}
+
+[theme=dark] .card-actions {
+    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-85));
+}
+</style>

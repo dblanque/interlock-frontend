@@ -1,0 +1,377 @@
+<template>
+<v-card class="pa-0 ma-0">
+    <!-- Title Bar -->
+    <v-card-title class="ma-0 pa-0 card-title">
+        <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
+            <h3 class="ma-2">{{ (updateFlag ? $t('actions.edit') : $t('actions.create')) + " " + $t("classes.dns.record.single") }}</h3>
+            <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
+            <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
+                <v-icon>
+                    mdi-close
+                </v-icon>
+            </v-btn>
+        </v-row>
+    </v-card-title>
+
+    <v-form ref="RecordForm">
+    <v-row class="ma-0 pa-0" justify="center" v-if="updateFlag != true">
+        <v-col cols="10" md="8">
+            <v-select @change="resetRecord" :label="$t('dns.attributes.typeName')"
+            v-model="selectedType"
+            :items="recordTypes.filter(e => e.supported == true)"
+            item-value="value"
+            item-text="name"/>
+        </v-col>
+    </v-row>
+
+    <!-- A Record Type -->
+    <v-expand-transition>
+        <v-row class="ma-0 pa-0" v-if="selectedType == 1">
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.name"
+                :hint="$t('dns.hints.name')"
+                persistent-hint
+                :label="$t('dns.attributes.name')"
+                :rules="[this.fieldRules(recordCopy.name, 'dns_root', true)]"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.address"
+                :label="$t('dns.attributes.ipAddress')"
+                :rules="[this.fieldRules(recordCopy.address, 'net_ip', true)]"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+    </v-expand-transition>
+
+    <!-- NS / CNAME Record Types -->
+    <v-expand-transition>
+        <v-row class="ma-0 pa-0" v-if="selectedType == 2 || selectedType == 5">
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.name"
+                :hint="$t('dns.hints.name')"
+                persistent-hint
+                :label="$t('dns.attributes.name')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.address"
+                :label="$t('dns.attributes.address')"
+                :rules="[this.fieldRules(recordCopy.address, 'net_domain_canonical', true)]"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+    </v-expand-transition>
+
+    <!-- MX Record Types -->
+    <v-expand-transition>
+        <v-row class="ma-0 pa-0" v-if="selectedType == 15">
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.name"
+                :hint="$t('dns.hints.name')"
+                persistent-hint
+                :label="$t('dns.attributes.name')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.nameExchange"
+                :label="$t('dns.attributes.nameExchange')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.wPreference"
+                :label="$t('dns.attributes.wPreference')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+    </v-expand-transition>
+
+    <!-- TXT Record Types -->
+    <v-expand-transition>
+        <v-row class="ma-0 pa-0" v-if="selectedType == 16">
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.name"
+                :hint="$t('dns.hints.name')"
+                persistent-hint
+                :label="$t('dns.attributes.name')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-textarea auto-grow outlined
+                v-model="recordCopy.stringData"
+                :label="$t('dns.attributes.stringData')"
+                class="mx-2"
+                ></v-textarea>
+            </v-col>
+        </v-row>
+    </v-expand-transition>
+
+    <!-- SOA Record Type -->
+    <v-expand-transition>
+        <v-row class="ma-0 pa-0" v-if="selectedType == 6">
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.name"
+                :label="$t('dns.attributes.name')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.namePrimaryServer"
+                :label="$t('dns.attributes.namePrimaryServer')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.zoneAdminEmail"
+                :label="$t('dns.attributes.zoneAdminEmail')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.dwSerialNo"
+                :label="$t('dns.attributes.dwSerialNo')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.dwRefresh"
+                :label="$t('dns.attributes.dwRefresh')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.dwRetry"
+                :label="$t('dns.attributes.dwRetry')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.dwExpire"
+                :label="$t('dns.attributes.dwExpire')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.dwMinimumTtl"
+                :label="$t('dns.attributes.dwMinimumTtl')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+    </v-expand-transition>
+
+    <!-- SRV Record Type -->
+    <v-expand-transition>
+        <v-row class="ma-0 pa-0" v-if="selectedType == 33">
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.name"
+                :label="$t('dns.attributes.name')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.wPriority"
+                :label="$t('dns.attributes.wPriority')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.wWeight"
+                :label="$t('dns.attributes.wWeight')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.wPort"
+                :label="$t('dns.attributes.wPort')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="recordCopy.nameTarget"
+                :label="$t('dns.attributes.nameTarget')"
+                class="mx-2"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+    </v-expand-transition>
+    </v-form>
+
+    <!-- Actions -->
+    <v-card-actions class="card-actions">
+        <v-row class="ma-1 pa-0" :justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
+            <!-- Back and Next buttons -->
+            <div>
+                <v-slide-x-reverse-transition>
+                    <v-btn elevation="0" @click="syncRecord"
+                    class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                    rounded>
+                        <v-icon class="ma-0 mr-1" color="primary">
+                            mdi-cached
+                        </v-icon>
+                        {{ $t("actions.reset" )}}
+                    </v-btn>
+                </v-slide-x-reverse-transition>
+
+                <v-slide-x-reverse-transition>
+                    <v-btn elevation="0" @click="closeDialog(true)"
+                    @keydown.enter="closeDialog(true)"
+                    class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                    rounded>
+                        <v-icon class="ma-0 mr-1" color="primary">
+                            mdi-checkbox-marked-circle-outline
+                        </v-icon>
+                        {{ $t("actions.done" )}}
+                    </v-btn>
+                </v-slide-x-reverse-transition>
+            </div>
+        </v-row>
+    </v-card-actions>
+</v-card>
+</template>
+
+<script>
+import validationMixin from '@/plugins/mixin/validationMixin'
+
+export default {
+    mixins: [ validationMixin ],
+    props: {
+        viewKey: String,
+        recordObject: Object,
+        updateFlag: Boolean
+    },
+    data() {
+        return {
+            selectedType: 1,
+            recordTypes: [
+                {
+                    name: "A",
+                    value: 1,
+                    supported: true
+                },
+                {
+                    name: "NS",
+                    value: 2,
+                    supported: true
+                },
+                {
+                    name: "CNAME",
+                    value: 5,
+                    supported: true
+                },
+                {
+                    name: "SOA",
+                    value: 6,
+                    supported: true
+                },
+                {
+                    name: "MX",
+                    value: 15,
+                    supported: true
+                },
+                {
+                    name: "TXT",
+                    value: 16,
+                    supported: true
+                },
+                {
+                    name: "AAAA",
+                    value: 28,
+                    supported: false
+                },
+                {
+                    name: "SRV",
+                    value: 33,
+                    supported: true
+                },
+                {
+                    name: "PTR",
+                    value: 35,
+                    supported: false
+                },
+                {
+                    name: "WINS",
+                    value: 65281,
+                    supported: false
+                },
+            ],
+            recordCopy: {}
+        }
+    },
+    created () {
+        this.syncRecord();
+    },
+    methods: {
+        logData(){
+            console.log(this.recordCopy)
+            console.log(this.recordObject)
+        },
+        resetRecord() {
+            this.recordCopy = {}
+            setTimeout(() => {
+                this.recordCopy.type = this.selectedType
+            }, 500)
+        },
+        resetValidation(){
+            if (this.$refs.RecordForm != undefined)
+                this.$refs.RecordForm.resetValidation()
+        },
+        syncRecord() {
+            this.resetRecord()
+            this.$nextTick(() => {
+                // Do deep copy of object for reset
+                this.recordCopy = JSON.parse(JSON.stringify(this.recordObject))
+                if (this.recordObject.type != undefined)
+                    this.selectedType = this.recordObject.type
+            })
+        },
+        closeDialog(refresh=false){
+            this.$emit('closeDialog', this.viewKey, refresh);
+        },
+    },
+}
+</script>
+
+<style>
+.card-actions {
+    border-radius: 4px;
+    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-100));
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 100;
+    border-top: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
+}
+
+[theme=dark] .card-actions {
+    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-85));
+}
+</style>

@@ -281,7 +281,8 @@
           "dayDate":"Day Date is invalid",
           "ipAddress":"Invalid IP Address",
           "distinguishedName":"Distinguished Name is invalid",
-          "realm":"NT Realm is invalid"
+          "realm":"NT Realm is invalid",
+          "domainCanonical":"Must be a valid Domain in Canonical format (with a dot at the end)"
       },
       "unableToLoad":"Unable to load",
       "notDisplayedCorrectly": "Could not get error message to display",
@@ -290,11 +291,15 @@
       "unknown": "An Unknown error has occurred, please try again or contact us"
   },
   "dns":{
+    "hints":{
+      "name":"Use the character @ to identify your root zone"
+    },
     "attributes":{
       "value": "Record Value",
       "displayName":"Display Name",
       "name":"Record Name",
       "nameTarget":"Target Name",
+      "ipAddress":"IP Address",
       "address":"Address",
       "type":"Record Type (Internal)",
       "typeName":"Record Type",

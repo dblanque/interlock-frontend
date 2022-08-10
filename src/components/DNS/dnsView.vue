@@ -51,6 +51,11 @@
                     </span>
                 </template>
             </v-btn>
+            <v-btn @click="openDialog('recordDialog')"
+             class="pa-2 mx-2" :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="primary">
+                <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+                {{ $t('actions.addN') + ' ' + $t('classes.dns.record.single') }}
+            </v-btn>
             <v-menu offset-y left nudge-bottom="1rem" :close-on-content-click="false" v-model="filterListOpen">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn v-bind="attrs" v-on="on"
@@ -90,26 +95,7 @@
             </v-menu>
         </v-row>
     </v-row>
-    <v-row align="center" class="px-2 mx-1 py-0 my-0">
-        <v-text-field
-          clearable
-          :label="$t('dns.attributes.name')"
-          class="mx-2"
-        ></v-text-field>
-        <span>
-            <v-text-field
-            clearable
-            :label="$t('dns.attributes.value')"
-            class="mx-2"
-            ></v-text-field>
-        </span>
-        <v-select>
-        </v-select>
-        <v-btn class="pa-2 mx-2" :disabled="true || loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="primary">
-            <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-            {{ $t('actions.addN') + ' ' + $t('classes.dns.record.single') }}
-        </v-btn>
-    </v-row>
+    <v-divider class="mx-12 my-3"/>
     </template>
 
     <template v-slot:[`item.nameTarget`]="{ item }">
@@ -178,7 +164,7 @@
     </template>
 
     <!-- DNS RECORD ACTIONS -->
-    <template v-slot:[`item.actions`]="{ }">
+    <template v-slot:[`item.actions`]="{ item }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon
@@ -186,7 +172,7 @@
             v-bind="attrs"
             v-on="on"
             small
-            disabled
+            @click="editRecord(item)"
           >
             <!-- :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" -->
           <v-icon small color="primary">
@@ -242,23 +228,37 @@
     </template>
   </v-data-table>
 
+  <!-- GROUP VIEW/EDIT DIALOG -->
+  <v-dialog eager max-width="800px" v-model="dialogs['recordDialog']">
+    <RecordDialog
+        :recordObject="this.currentRecord"
+        :updateFlag="this.updateFlag"
+        :viewKey="'recordDialog'"
+        ref="RecordDialog"
+      />
+  </v-dialog>
+
 </v-card>
 </template>
 
 <script>
 import { default as DNS } from '@/include/Domain'
 import validationMixin from '@/plugins/mixin/validationMixin'
+import RecordDialog from '@/components/DNS/RecordDialog.vue'
 import { getDomainDetails } from '@/include/utils';
 
 export default {
     mixins: [ validationMixin ],
+    components: {
+        RecordDialog,
+    },
     data() {
         return {
-            createRecord: {
+            currentRecord: {
                 name: "",
-                value: "",
-                type: 0,
+                type: 1,
             },
+            updateFlag: false,
             singleExpand: false,
             expanded: [],
             filteredData: [],
@@ -281,6 +281,10 @@ export default {
             errorMsg: "",
             readonly: false,
             ldap: {},
+            // Dialog States
+            dialogs: {
+                recordDialog: false
+            },
             dns: {
                 headers: [],
                 zones: [],
@@ -302,8 +306,22 @@ export default {
             },
             deep: true
         },
+        // Dialog Closed Handler
+        'dialogs': {
+            handler: function (newValue) {
+                if (!newValue['recordDialog'] || newValue['recordDialog'] == false)
+                this.$refs.RecordDialog.resetRecord();
+                this.$refs.RecordDialog.resetValidation();
+            },
+            deep: true
+        }
     },
     methods: {
+        resetCurrentRecord() {
+            this.currentRecord = {}
+            this.currentRecord.name = ""
+            this.currentRecord.type = 1
+        },
         getExtrasFromRecord(item, headers) {
             var result = {}
             // var keys = Object.keys(item)
@@ -375,6 +393,33 @@ export default {
                 this.error = false
                 this.errorMsg = ""
             }
+        },
+        openDialog(key, updateFlag=false){
+            if (updateFlag === true)
+                this.updateFlag = true
+            else {
+                this.updateFlag = false
+                this.resetCurrentRecord()
+            }
+
+            this.dialogs[key] = true;
+            switch (key) {
+                case 'recordDialog':
+                    this.$refs.RecordDialog.resetValidation()
+                    this.$refs.RecordDialog.syncRecord()
+                break;
+                default:
+                break;
+            }
+        },
+        editRecord(recordItem) {
+            this.currentRecord = recordItem
+            this.openDialog('recordDialog', true)
+        },
+        async closeDialog(key, refresh=false){
+            this.dialogs[key] = false;
+            if (refresh)
+                this.getDNSData()
         },
         async getDNSData(zoneToQuery=undefined) {
             // Set DNS Zone Query

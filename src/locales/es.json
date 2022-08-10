@@ -287,7 +287,8 @@
       "dayDate": "Fecha de Día inválida",
       "ipAddress":"Dirección de IP inválida",
       "distinguishedName":"Nombre Distinguido inválido",
-      "realm":"Reino NT inválido"
+      "realm":"Reino NT inválido",
+      "domainCanonical":"Debe ser un Dominio en formato Canónico (con un punto al final)"
     },
     "unableToLoad":"No se pudo cargar la sección",
     "notDisplayedCorrectly": "No se pudo obtener un código de error",
@@ -296,11 +297,15 @@
     "unknown": "Un error desconocido ha ocurrido, por favor inténtelo nuevamente"
   },
   "dns":{
+    "hints":{
+      "name":"Utilice el caracter @ para identificar su zona raíz"
+    },
     "attributes":{
       "value": "Valor del Registro",
       "displayName":"Nombre a Mostrar",
       "name":"Nombre del Registro",
       "nameTarget":"Nombre del Objetivo",
+      "ipAddress":"Dirección IP",
       "address":"Dirección",
       "type":"Tipo de Registro (Interno)",
       "typeName":"Tipo de Registro",

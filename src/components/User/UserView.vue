@@ -320,7 +320,7 @@ export default {
     async closeDialog(key, refresh=false){
       this.dialogs[key] = false;
       if (refresh)
-        this.listUserItems()
+        await this.listUserItems()
     },
     setViewToEdit(value){
       this.editableForm = value;
