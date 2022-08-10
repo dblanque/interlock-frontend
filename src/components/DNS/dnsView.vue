@@ -8,7 +8,7 @@
     :search="searchString"
     show-expand
     :single-expand="singleExpand"
-    item-key="distinguishedName"
+    item-key="id"
     :expanded.sync="expanded"
     sort-by="type"
     class="py-3 px-2 mt-2 mb-2">
@@ -100,13 +100,26 @@
         {{ item.nameTarget == '' || !item.nameTarget ? '@' : item.nameTarget }}
     </template>
 
-    <template v-slot:[`item.address`]="{ item }">
+    <!-- <template v-slot:[`item.address`]="{ item }">
         <span v-if="item.address">
             {{ item.address }}
         </span>
         <v-divider class="mx-10" v-else/>
-    </template>
+    </template> -->
 
+    <template v-slot:[`item.value`]="{ item }">
+        <span v-if="item.address">
+            {{ item.address }}
+        </span>
+        <span v-else-if="item.nameExchange">
+            {{ item.nameExchange }}
+        </span>
+        <span v-else-if="item.typeName == 'SOA'">
+            {{ item.namePrimaryServer + " " + item.zoneAdminEmail + " " + item.dwSerialNo + " " + item.dwRefresh + " " + item.dwRetry + " " + item.dwExpire + " " + item.dwMinimumTtl }}
+        </span>
+        <v-divider class="mx-10" v-else/>
+    </template>
+    
     <!-- ZONE IS TOMBSTONED STATUS -->
     <template v-slot:[`item.ts`]="{ item }">
 
@@ -274,7 +287,7 @@ export default {
 
             for (const key in item) {
                 if (Object.hasOwnProperty.call(item, key)) {
-                    if (!headers.includes(key)) {
+                    if (!headers.includes(key) && key != 'id') {
                         result[key] = item[key]
                     }
                 }

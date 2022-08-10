@@ -3,16 +3,16 @@
         
     <!------------------>
     <v-row justify="center"
-    :class="'ma-0 pa-2 py-4 text-normal ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
+    :class="'ma-0 pa-2 py-4 text-normal ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
         >
         <h2 class="font-weight-medium">{{ domain.toUpperCase() }}</h2>
     </v-row>
     <v-row
-        :dark="!isThemeDark()" :light="isThemeDark()" align="center"
-        :class="'ma-0 pa-2 ' + (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
+        :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)" align="center"
+        :class="'ma-0 pa-2 ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
         style="height: fit-content;">
         <v-col cols="12" md="auto">
-            <LanguageSelector :dark="!isThemeDark()" :light="isThemeDark()" class=""/>
+            <LanguageSelector :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)" class=""/>
         </v-col>
         <v-divider light class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
         <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
@@ -34,7 +34,7 @@
                 </span>
             </span>
             <v-btn
-            :dark="!isThemeDark()" :light="isThemeDark()"
+            :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
             @click="logoutAction"
             class="pa-0 mx-2 pl-2 pr-1"
             text
@@ -44,7 +44,7 @@
                 mdi-logout
             </v-icon>
             </v-btn>
-            <ThemeChanger :dark="!isThemeDark()" :light="isThemeDark()" :buttonIsSmall="true"/>
+            <ThemeChanger :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)" :buttonIsSmall="true"/>
             </div>
         </v-col>
         </v-row>
@@ -519,13 +519,6 @@ export default {
                 localStorage.setItem("logoutMessage", true);
                 this.$router.push("/login");
             });
-        },
-        // Check if theme is dark
-        isThemeDark(){
-            if (this.$vuetify.theme.dark == true) {
-            return true
-            }
-            return false
         },
         ////////////////////////////////////////////////////////////////////////
         // Refresh Token Timers

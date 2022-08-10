@@ -1,6 +1,6 @@
 <template>
   <v-container class="login ma-0 pa-0" fluid fill-height>
-    <v-card style="min-width:100%;" flat class="py-4 px-6" :dark="isThemeDark()" :light="!isThemeDark()">
+    <v-card style="min-width:100%;" flat class="py-4 px-6" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
       <h1>{{ $t("indexTitle") }}</h1>
       <v-row class="pa-0 ma-0" justify="center">
         <v-form
@@ -126,7 +126,7 @@
         v-model="logoutSnackbar"
         timeout="1500"
         class="mb-12"
-        :dark="!isThemeDark()" :light="isThemeDark()"
+        :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
       >
         {{ snackbarMessage }}
 
@@ -304,12 +304,6 @@ export default {
       }
     },
     gotoPasswRecovery: function () {},
-    isThemeDark(){
-        if (this.$vuetify.theme.dark == true) {
-          return true
-        }
-        return false
-    },
   },
 };
 </script>

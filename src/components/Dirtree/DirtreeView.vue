@@ -35,7 +35,7 @@
         </v-btn>
         <v-menu :close-on-content-click="false" left
         :nudge-left="(($t('actions.addN') + ' ' + $t('classes.organizational-unit.single')).length * 2)+'ch'"
-        v-model="actionListOpen" :dark="isThemeDark()" :light="!isThemeDark()" offset-y>
+        v-model="actionListOpen" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)" offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on"
             style="min-width: 32px;" elevation="0" rounded class="pa-0 px-2 pr-3 pill-end" color="primary">
@@ -459,13 +459,6 @@ export default {
             default:
               return false
           }
-        },
-        // Check if theme is dark
-        isThemeDark() {
-          if (this.$vuetify.theme.dark == true) {
-            return true;
-          }
-          return false;
         },
         getTranslationKey(o){
           var key = o.value

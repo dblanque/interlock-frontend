@@ -127,9 +127,11 @@ import DirtreeView from '@/components/Dirtree/DirtreeView.vue'
 import dnsView from '@/components/DNS/dnsView.vue'
 import SettingsCard from '@/components/Settings/SettingsCard.vue'
 import LogView from '@/components/Logging/LogView.vue'
+import validationMixin from '@/plugins/mixin/validationMixin';
 
   export default {
     name: 'ModularViewContainer',
+    mixins: [ validationMixin ],
     components:{
     UserView,
     GroupView,
@@ -274,13 +276,6 @@ import LogView from '@/components/Logging/LogView.vue'
             this.snackbarClasses = ""
           }
         }, this.snackbarTimeout + 300)
-      },
-      // Check if theme is dark
-      isThemeDark(){
-          if (this.$vuetify.theme.dark == true) {
-            return true
-          }
-          return false
       },
       openDialog(key){
         this.dialogs[key] = true;

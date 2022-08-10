@@ -5,25 +5,25 @@
       justify="center"
       :class="
         'ma-0 pa-2 py-4 text-normal ' +
-        (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
+        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
       "
     >
       <h2 class="font-weight-medium">{{ domain.toUpperCase() }}</h2>
     </v-row>
     <v-row
-      :dark="!isThemeDark()"
-      :light="isThemeDark()"
+      :dark="!isThemeDark($vuetify)"
+      :light="isThemeDark($vuetify)"
       align="center"
       :class="
         'ma-0 pa-2 ' +
-        (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
+        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
       "
       style="height: fit-content"
     >
       <v-col cols="12" md="auto">
         <LanguageSelector
-          :dark="!isThemeDark()"
-          :light="isThemeDark()"
+          :dark="!isThemeDark($vuetify)"
+          :light="isThemeDark($vuetify)"
           class=""
           @updateTabSliders="refreshOnLanguageChange"
         />
@@ -59,8 +59,8 @@
           <v-tooltip bottom color="primary">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                :dark="!isThemeDark()"
-                :light="isThemeDark()"
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
                 @click="logoutAction"
                 icon
                 class="mx-2"
@@ -73,8 +73,8 @@
             <span>{{ $t("misc.logoutTooltip") }}</span>
           </v-tooltip>
           <ThemeChanger
-            :dark="!isThemeDark()"
-            :light="isThemeDark()"
+            :dark="!isThemeDark($vuetify)"
+            :light="isThemeDark($vuetify)"
             :buttonIsSmall="true"
           />
           <v-btn @click="debugAction"
@@ -90,12 +90,12 @@
       v-if="this.$vuetify.breakpoint.mdAndUp"
       dense
       id="tabs-nav-bar"
-      :dark="!isThemeDark()"
-      :light="isThemeDark()"
+      :dark="!isThemeDark($vuetify)"
+      :light="isThemeDark($vuetify)"
       style="z-index: 1"
       :class="
         'sticky-top ' +
-        (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
+        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
       "
     >
       <v-fade-transition>
@@ -131,12 +131,12 @@
       v-else
       dense
       id="tabs-nav-bar"
-      :dark="!isThemeDark()"
-      :light="isThemeDark()"
+      :dark="!isThemeDark($vuetify)"
+      :light="isThemeDark($vuetify)"
       style="z-index: 1"
       :class="
         'sticky-top ' +
-        (isThemeDark() ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
+        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
       "
     >
       <v-row justify="space-between" class="mx-12" align="center">
@@ -206,8 +206,8 @@
     <v-footer
       padless
       id="home-footer"
-      :dark="!isThemeDark()"
-      :light="isThemeDark()"
+      :dark="!isThemeDark($vuetify)"
+      :light="isThemeDark($vuetify)"
       class="py-1"
     >
       <v-row
@@ -231,9 +231,11 @@ import LogoutDialog from "@/components/LogoutDialog.vue";
 import User from "@/include/User";
 import Test from "@/include/Test";
 import Domain from "@/include/Domain";
+import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
   name: "HomeView",
+  mixins: [ validationMixin ],
   components: {
     ModularViewContainer,
     LanguageSelector,
@@ -451,13 +453,6 @@ export default {
         localStorage.setItem("logoutMessage", true);
         this.$router.push("/login");
       });
-    },
-    // Check if theme is dark
-    isThemeDark() {
-      if (this.$vuetify.theme.dark == true) {
-        return true;
-      }
-      return false;
     },
     refreshOnLanguageChange() {
       this.showNavTabs = false;

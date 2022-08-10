@@ -4,7 +4,7 @@
       v-model="showSnackbar"
       :class="'mb-12 ' + snackbarClasses"
       :color="snackbarColor"
-      :dark="!isThemeDark()" :light="isThemeDark()"
+      :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
       >
       {{ snackbarMessage }}
 
@@ -24,22 +24,16 @@
 </template>
 
 <script>
+import validationMixin from '@/plugins/mixin/validationMixin';
+
 export default {
+    mixins: [ validationMixin ],
     props: {
         showSnackbar: Boolean,
         snackbarMessage: String,
         snackbarIcon: String,
         snackbarColor: String,
         snackbarClasses: String
-    },
-    methods: {
-      // Check if theme is dark
-      isThemeDark(){
-          if (this.$vuetify.theme.dark == true) {
-            return true
-          }
-          return false
-      }
-    },
+    }
 }
 </script>
