@@ -316,7 +316,10 @@
       "dwExpire":"Expiración",
       "dwMinimumTtl":"Tiempo de Vida Mínimo (TTL)",
       "namePrimaryServer":"Servidor Primario del Nombre",
-      "zoneAdminEmail":"E-mail del Admin de Zona"
+      "zoneAdminEmail":"E-mail del Admin de Zona",
+      "nameExchange":"Nombre del MX",
+      "stringData":"Datos del String",
+      "wPreference":"Prioridad"
     }
   },
   "ldap":{

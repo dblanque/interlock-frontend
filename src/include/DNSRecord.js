@@ -12,6 +12,7 @@ class DNSRecord extends ApiModel{
     nameTarget;
     type;
     tstime;
+    wPreference;
     wPriority;
     wWeight;
     wPort;

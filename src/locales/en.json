@@ -310,7 +310,10 @@
       "dwExpire":"Expire",
       "dwMinimumTtl":"Minimum TTL",
       "namePrimaryServer":"Name Primary Server",
-      "zoneAdminEmail":"Zone Admin E-mail"
+      "zoneAdminEmail":"Zone Admin E-mail",
+      "nameExchange":"Name Exchange",
+      "stringData":"String Data",
+      "wPreference":"Priority"
     }
   },
   "ldap":{

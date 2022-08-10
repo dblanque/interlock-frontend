@@ -114,6 +114,9 @@
         <span v-else-if="item.nameExchange">
             {{ item.nameExchange }}
         </span>
+        <span v-else-if="item.stringData">
+            {{ item.stringData }}
+        </span>
         <span v-else-if="item.typeName == 'SOA'">
             {{ item.namePrimaryServer + " " + item.zoneAdminEmail + " " + item.dwSerialNo + " " + item.dwRefresh + " " + item.dwRetry + " " + item.dwExpire + " " + item.dwMinimumTtl }}
         </span>
