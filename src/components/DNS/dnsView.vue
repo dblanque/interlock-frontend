@@ -15,7 +15,7 @@
     <!-- Table Header -->
     <template v-slot:top>
       <!-- Zone selection and operations -->
-      <v-row align="center" class="px-2 mx-1 py-0 my-0">
+    <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-select v-model="zoneFilter['dnsZone']" @change="getDNSData" :items="dns.zones" class="mx-2"/>
         <v-btn class="pa-2 mx-2" disabled color="primary">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
@@ -25,8 +25,8 @@
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
             {{ $t('actions.delete') + ' ' + $t('classes.dns.zone.single') }}
         </v-btn>
-      </v-row>
-      <v-row align="center" class="px-2 mx-1 py-0 my-0">
+    </v-row>
+    <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-text-field
           v-model="searchString"
           clearable
@@ -50,10 +50,6 @@
                     <v-icon>mdi-cached</v-icon>
                     </span>
                 </template>
-            </v-btn>
-            <v-btn class="pa-2 mx-2" :disabled="true || loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="primary">
-                <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-                {{ $t('actions.addN') + ' ' + $t('classes.dns.record.single') }}
             </v-btn>
             <v-menu offset-y left nudge-bottom="1rem" :close-on-content-click="false" v-model="filterListOpen">
                 <template v-slot:activator="{ on, attrs }">
@@ -80,9 +76,9 @@
                             {{ $t('words.none.single.m') }}
                         </v-btn>
                     </v-list-item>
-                    <v-list-item v-for="enabled, key in recordTypes" :key="key">
+                    <v-list-item v-for="enabled, key in enabledRecordTypes" :key="key">
                             <v-list-item-action class="ma-0 pa-0 mr-2">
-                                <v-checkbox on-icon="mdi-close-box" color="red" v-model="recordTypes[key]" class="ma-0 pa-0" dense/>
+                                <v-checkbox on-icon="mdi-checkbox-marked" color="green" v-model="enabledRecordTypes[key]" class="ma-0 pa-0" dense/>
                             </v-list-item-action>
                             <v-list-item-title class="font-weight-medium">
                                 <v-row class="ma-0 pa-0" align="center">
@@ -93,7 +89,27 @@
                 </v-list>
             </v-menu>
         </v-row>
-        </v-row>
+    </v-row>
+    <v-row align="center" class="px-2 mx-1 py-0 my-0">
+        <v-text-field
+          clearable
+          :label="$t('dns.attributes.name')"
+          class="mx-2"
+        ></v-text-field>
+        <span>
+            <v-text-field
+            clearable
+            :label="$t('dns.attributes.value')"
+            class="mx-2"
+            ></v-text-field>
+        </span>
+        <v-select>
+        </v-select>
+        <v-btn class="pa-2 mx-2" :disabled="true || loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="primary">
+            <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+            {{ $t('actions.addN') + ' ' + $t('classes.dns.record.single') }}
+        </v-btn>
+    </v-row>
     </template>
 
     <template v-slot:[`item.nameTarget`]="{ item }">
@@ -238,20 +254,25 @@ export default {
     mixins: [ validationMixin ],
     data() {
         return {
+            createRecord: {
+                name: "",
+                value: "",
+                type: 0,
+            },
             singleExpand: false,
             expanded: [],
             filteredData: [],
-            recordTypes: {
-                A: false,
-                AAAA: false,
-                NS: false,
-                TXT: false,
-                MX: false,
-                SOA: false,
-                CNAME: false,
-                PTR: false,
-                SRV: false,
-                Unsupported: true
+            enabledRecordTypes: {
+                A: true,
+                AAAA: true,
+                NS: true,
+                TXT: true,
+                MX: true,
+                SOA: true,
+                CNAME: true,
+                PTR: true,
+                SRV: true,
+                Unsupported: false
             },
             filterListOpen: false,
             searchString: "",
@@ -275,7 +296,7 @@ export default {
         this.getDNSData(this.defaultZone)
     },
     watch: {
-        'recordTypes': {
+        'enabledRecordTypes': {
             handler: function (newValue) {
                 this.filterData(newValue)
             },
@@ -298,36 +319,38 @@ export default {
             return result
         },
         filterAll(){
-            for (var key in this.recordTypes) {
-                this.recordTypes[key] = true
+            for (var key in this.enabledRecordTypes) {
+                this.enabledRecordTypes[key] = true
             }
         },
         filterNone(){
-            for (var key in this.recordTypes) {
-                this.recordTypes[key] = false
+            for (var key in this.enabledRecordTypes) {
+                this.enabledRecordTypes[key] = false
             }
         },
         filterData(filters){
             var value
-            this.filteredData = this.dns.records
+            this.filteredData = []
             for (var key in filters) {
                 value = filters[key]
-                if (value === true)
-                    this.filteredData = this.filteredData.filter(e => e.typeName.toUpperCase() != key)
+                if (value === true){
+                    var filteredItems = this.dns.records.filter(e => e.typeName.toUpperCase() == key)
+                    this.filteredData.push(...filteredItems)
+                }
             }
         },
         resetData(resetFilter=false){
-            this.recordTypes = {
-                A: false,
-                AAAA: false,
-                NS: false,
-                TXT: false,
-                MX: false,
-                SOA: false,
-                CNAME: false,
-                PTR: false,
-                SRV: false,
-                Unsupported: true
+            this.enabledRecordTypes = {
+                A: true,
+                AAAA: true,
+                NS: true,
+                TXT: true,
+                MX: true,
+                SOA: true,
+                CNAME: true,
+                PTR: true,
+                SRV: true,
+                Unsupported: false
             },
             this.ldap = getDomainDetails()
             this.loading = true
@@ -337,10 +360,10 @@ export default {
             this.dns.zones = []
             this.dns.records = []
             if (resetFilter === true)
-                this.filterRecordTypes = {}
+                this.filterEnabledRecordTypes = {}
         },
         loadFinished(error=undefined, message=undefined) {
-            this.filterData(this.recordTypes)
+            this.filterData(this.enabledRecordTypes)
             this.loading = false
             if (error != undefined){
                 this.error = true
