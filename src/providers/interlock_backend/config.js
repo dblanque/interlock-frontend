@@ -138,13 +138,15 @@ request.interceptors.response.use(
                 // on refresh request error catch
                 }).catch((e)=>{
                     console.log(e)
-                    // erase local storage and go to Index Login.
-                    localStorage.removeItem('token')
-                    localStorage.removeItem('refresh')
-                    localStorage.removeItem('user_initials')
-                    localStorage.removeItem('user_fullname')
-                    if (router.app._route.path != "/login")
-                        router.push('/login')
+                    if (e.status_code == 401) {
+                        // erase local storage and go to Index Login.
+                        localStorage.removeItem('token')
+                        localStorage.removeItem('refresh')
+                        localStorage.removeItem('user_initials')
+                        localStorage.removeItem('user_fullname')
+                        if (router.app._route.path != "/login")
+                            router.push('/login')
+                    }
                     return error.response
                 })
             }
