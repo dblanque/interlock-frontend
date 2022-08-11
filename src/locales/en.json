@@ -298,6 +298,7 @@
       "value": "Record Value",
       "displayName":"Display Name",
       "name":"Record Name",
+      "nameNode":"Node Name",
       "nameTarget":"Target Name",
       "ipAddress":"IP Address",
       "address":"Address",

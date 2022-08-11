@@ -304,6 +304,7 @@
       "value": "Valor del Registro",
       "displayName":"Nombre a Mostrar",
       "name":"Nombre del Registro",
+      "nameNode":"Nombre del Nodo",
       "nameTarget":"Nombre del Objetivo",
       "ipAddress":"Dirección IP",
       "address":"Dirección",

@@ -110,17 +110,20 @@
     </template> -->
 
     <template v-slot:[`item.value`]="{ item }">
-        <span v-if="item.address">
-            {{ item.address }}
-        </span>
-        <span v-else-if="item.nameExchange">
+        <span v-if="item.typeName == 'MX'">
             {{ item.nameExchange }}
         </span>
-        <span v-else-if="item.stringData">
+        <span v-else-if="item.typeName == 'TXT'">
             {{ item.stringData }}
+        </span>
+        <span v-else-if="item.typeName == 'NS' || item.typeName == 'CNAME'">
+            {{ item.nameNode }}
         </span>
         <span v-else-if="item.typeName == 'SOA'">
             {{ item.namePrimaryServer + " " + item.zoneAdminEmail + " " + item.dwSerialNo + " " + item.dwRefresh + " " + item.dwRetry + " " + item.dwExpire + " " + item.dwMinimumTtl }}
+        </span>
+        <span v-else-if="item.address">
+            {{ item.address }}
         </span>
         <v-divider class="mx-10" v-else/>
     </template>
@@ -129,7 +132,7 @@
     <template v-slot:[`item.ts`]="{ item }">
 
         <!-- Enable Record Button -->
-        <v-tooltip color="primary" bottom v-if="item.ts">
+        <v-tooltip color="primary" bottom v-if="item.ts == true">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon
             rounded
@@ -146,7 +149,7 @@
       </v-tooltip>
 
       <!-- Disable Record Button -->
-      <v-tooltip color="red" bottom v-else-if="!item.ts">
+      <v-tooltip color="red" bottom v-else>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon
             rounded
