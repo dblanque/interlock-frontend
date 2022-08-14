@@ -240,8 +240,8 @@
                 </v-slide-x-reverse-transition>
 
                 <v-slide-x-reverse-transition>
-                    <v-btn elevation="0" @click="closeDialog(true)"
-                    @keydown.enter="closeDialog(true)"
+                    <v-btn elevation="0" @click="updateFlag == true ? updateRecord() : createRecord()"
+                    @keydown.enter="updateFlag == true ? updateRecord() : createRecord()"
                     class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                     rounded>
                         <v-icon class="ma-0 mr-1" color="primary">
@@ -258,6 +258,7 @@
 
 <script>
 import validationMixin from '@/plugins/mixin/validationMixin'
+import DNSRecord from '@/include/DNSRecord'
 
 export default {
     mixins: [ validationMixin ],
@@ -415,6 +416,30 @@ export default {
                 if (this.recordObject.type != undefined)
                     this.selectedType = this.recordObject.type
             })
+        },
+        async createRecord() {
+            console.log(this.recordCopy)
+            if (this.$refs.RecordForm.validate()) {
+                await new DNSRecord({}).createRecord(this.recordCopy)
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+        },
+        async updateRecord() {
+            console.log(this.recordCopy)
+            if (this.$refs.RecordForm.validate()) {
+                await new DNSRecord({}).updateRecord(this.recordCopy)
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.log(error)    
+                })
+            }
         },
         closeDialog(refresh=false){
             this.$emit('closeDialog', this.viewKey, refresh);
