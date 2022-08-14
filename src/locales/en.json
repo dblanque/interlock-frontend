@@ -295,6 +295,7 @@
       "name":"Use the character @ to identify your root zone"
     },
     "attributes":{
+      "ttl":"Time To Live",
       "value": "Record Value",
       "displayName":"Display Name",
       "name":"Record Name",

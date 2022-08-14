@@ -23,6 +23,14 @@
             item-value="value"
             item-text="name"/>
         </v-col>
+        <v-col cols="12" class="ma-0 pa-0 px-6 mt-3">
+            <v-combobox @change="resetRecord" :label="$t('dns.attributes.ttl')"
+            v-model="recordCopy.ttl"
+            hide-details
+            :items="ttlPresets"
+            item-value="value"
+            item-text="name"/>
+        </v-col>
     </v-row>
 
     <!-- A Record Type -->
@@ -260,6 +268,13 @@ export default {
     },
     data() {
         return {
+            ttlPresets: [
+                60,
+                300,
+                3600,
+                86400,
+                604800
+            ],
             showFields: true,
             selectedType: 1,
             recordTypes: [

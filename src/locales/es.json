@@ -301,6 +301,7 @@
       "name":"Utilice el caracter @ para identificar su zona raíz"
     },
     "attributes":{
+      "ttl":"Tiempo de Vida",
       "value": "Valor del Registro",
       "displayName":"Nombre a Mostrar",
       "name":"Nombre del Registro",
