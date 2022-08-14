@@ -14,10 +14,11 @@
     </v-card-title>
 
     <v-form ref="RecordForm">
-    <v-row class="ma-0 pa-0" justify="center" v-if="updateFlag != true">
-        <v-col cols="10" md="8">
+    <v-row class="ma-0 pa-0 py-4" align="center" justify="center" v-if="updateFlag != true">
+        <v-col cols="10" md="8" class="ma-0 pa-0">
             <v-select @change="resetRecord" :label="$t('dns.attributes.typeName')"
             v-model="selectedType"
+            hide-details
             :items="recordTypes.filter(e => e.supported == true)"
             item-value="value"
             item-text="name"/>
@@ -25,205 +26,193 @@
     </v-row>
 
     <!-- A Record Type -->
-    <v-expand-transition>
-        <v-row class="ma-0 pa-0" v-if="selectedType == 1">
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.name"
-                :hint="$t('dns.hints.name')"
-                persistent-hint
-                :label="$t('dns.attributes.name')"
-                :rules="[this.fieldRules(recordCopy.name, 'dns_root', true)]"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.address"
-                :label="$t('dns.attributes.ipAddress')"
-                :rules="[this.fieldRules(recordCopy.address, 'net_ip', true)]"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-        </v-row>
-    </v-expand-transition>
+    <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 1">
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.name"
+            :hint="$t('dns.hints.name')"
+            persistent-hint
+            :label="$t('dns.attributes.name')"
+            :rules="[this.fieldRules(recordCopy.name, 'dns_root', true)]"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.address"
+            :label="$t('dns.attributes.ipAddress')"
+            :rules="[this.fieldRules(recordCopy.address, 'net_ip', true)]"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+    </v-row>
 
     <!-- NS / CNAME Record Types -->
-    <v-expand-transition>
-        <v-row class="ma-0 pa-0" v-if="isNodeNameRecord(selectedType)">
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.name"
-                :hint="$t('dns.hints.name')"
-                persistent-hint
-                :label="$t('dns.attributes.name')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.nameNode"
-                :label="$t('dns.attributes.nameNode')"
-                :rules="[this.fieldRules(recordCopy.nameNode, 'net_domain_canonical', true)]"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-        </v-row>
-    </v-expand-transition>
+    <v-row class="ma-0 pa-0 px-4 pb-4" v-if="isNodeNameRecord(selectedType)">
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.name"
+            :hint="$t('dns.hints.name')"
+            persistent-hint
+            :label="$t('dns.attributes.name')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.nameNode"
+            :label="$t('dns.attributes.nameNode')"
+            :rules="[this.fieldRules(recordCopy.nameNode, 'net_domain_canonical', true)]"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+    </v-row>
 
     <!-- MX Record Types -->
-    <v-expand-transition>
-        <v-row class="ma-0 pa-0" v-if="selectedType == 15">
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.name"
-                :hint="$t('dns.hints.name')"
-                persistent-hint
-                :label="$t('dns.attributes.name')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.nameExchange"
-                :label="$t('dns.attributes.nameExchange')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.wPreference"
-                :label="$t('dns.attributes.wPreference')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-        </v-row>
-    </v-expand-transition>
+    <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 15">
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.name"
+            :hint="$t('dns.hints.name')"
+            persistent-hint
+            :label="$t('dns.attributes.name')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.nameExchange"
+            :label="$t('dns.attributes.nameExchange')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.wPreference"
+            :label="$t('dns.attributes.wPreference')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+    </v-row>
 
     <!-- TXT Record Types -->
-    <v-expand-transition>
-        <v-row class="ma-0 pa-0" v-if="isStringRecord(selectedType)">
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.name"
-                :hint="$t('dns.hints.name')"
-                persistent-hint
-                :label="$t('dns.attributes.name')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-textarea auto-grow outlined
-                v-model="recordCopy.stringData"
-                :label="$t('dns.attributes.stringData')"
-                class="mx-2"
-                ></v-textarea>
-            </v-col>
-        </v-row>
-    </v-expand-transition>
+    <v-row class="ma-0 pa-0 px-4 pb-4" v-if="isStringRecord(selectedType)">
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.name"
+            :hint="$t('dns.hints.name')"
+            persistent-hint
+            :label="$t('dns.attributes.name')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0 mt-4">
+            <v-textarea auto-grow outlined
+            v-model="recordCopy.stringData"
+            :label="$t('dns.attributes.stringData')"
+            class="mx-2"
+            ></v-textarea>
+        </v-col>
+    </v-row>
 
     <!-- SOA Record Type -->
-    <v-expand-transition>
-        <v-row class="ma-0 pa-0" v-if="selectedType == 6">
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.name"
-                :label="$t('dns.attributes.name')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.namePrimaryServer"
-                :label="$t('dns.attributes.namePrimaryServer')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.zoneAdminEmail"
-                :label="$t('dns.attributes.zoneAdminEmail')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.dwSerialNo"
-                :label="$t('dns.attributes.dwSerialNo')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.dwRefresh"
-                :label="$t('dns.attributes.dwRefresh')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.dwRetry"
-                :label="$t('dns.attributes.dwRetry')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.dwExpire"
-                :label="$t('dns.attributes.dwExpire')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.dwMinimumTtl"
-                :label="$t('dns.attributes.dwMinimumTtl')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-        </v-row>
-    </v-expand-transition>
+    <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 6">
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.name"
+            :label="$t('dns.attributes.name')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.namePrimaryServer"
+            :label="$t('dns.attributes.namePrimaryServer')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.zoneAdminEmail"
+            :label="$t('dns.attributes.zoneAdminEmail')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.dwSerialNo"
+            :label="$t('dns.attributes.dwSerialNo')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.dwRefresh"
+            :label="$t('dns.attributes.dwRefresh')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.dwRetry"
+            :label="$t('dns.attributes.dwRetry')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.dwExpire"
+            :label="$t('dns.attributes.dwExpire')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.dwMinimumTtl"
+            :label="$t('dns.attributes.dwMinimumTtl')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+    </v-row>
 
     <!-- SRV Record Type -->
-    <v-expand-transition>
-        <v-row class="ma-0 pa-0" v-if="selectedType == 33">
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.name"
-                :label="$t('dns.attributes.name')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.wPriority"
-                :label="$t('dns.attributes.wPriority')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.wWeight"
-                :label="$t('dns.attributes.wWeight')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.wPort"
-                :label="$t('dns.attributes.wPort')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                v-model="recordCopy.nameTarget"
-                :label="$t('dns.attributes.nameTarget')"
-                class="mx-2"
-                ></v-text-field>
-            </v-col>
-        </v-row>
-    </v-expand-transition>
+    <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 33">
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.name"
+            :label="$t('dns.attributes.name')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.wPriority"
+            :label="$t('dns.attributes.wPriority')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.wWeight"
+            :label="$t('dns.attributes.wWeight')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.wPort"
+            :label="$t('dns.attributes.wPort')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0">
+            <v-text-field
+            v-model="recordCopy.nameTarget"
+            :label="$t('dns.attributes.nameTarget')"
+            class="mx-2"
+            ></v-text-field>
+        </v-col>
+    </v-row>
     </v-form>
 
     <!-- Actions -->
@@ -271,6 +260,7 @@ export default {
     },
     data() {
         return {
+            showFields: true,
             selectedType: 1,
             recordTypes: [
                 {
@@ -390,9 +380,13 @@ export default {
         },
         resetRecord() {
             this.recordCopy = {}
+            this.showFields = false
             setTimeout(() => {
                 this.recordCopy.type = this.selectedType
             }, 500)
+            setTimeout(() => {
+                this.showFields = true
+            }, 100)
         },
         resetValidation(){
             if (this.$refs.RecordForm != undefined)
