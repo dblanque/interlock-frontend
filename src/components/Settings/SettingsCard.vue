@@ -495,13 +495,13 @@ export default {
                             type: "boolean"
                         }
                     },
-                    row3:{
-                        LDAP_AUTH_USER_FIELDS:{ 
-                            value: {},
-                            keyToAdd: "",
-                            valueToAdd: "",
-                            type: "object"
-                        },
+                    // row3:{
+                        // LDAP_AUTH_USER_FIELDS:{ 
+                        //     value: {},
+                        //     keyToAdd: "",
+                        //     valueToAdd: "",
+                        //     type: "object"
+                        // },
                         // LDAP_AUTH_USER_LOOKUP_FIELDS:{ 
                         //     value: [],
                         //     type: 'list',
@@ -509,7 +509,7 @@ export default {
                         //     required: true,
                         //     validator: "ge_lettersStrict"
                         // },
-                    }
+                    // }
                 }
             }
         }

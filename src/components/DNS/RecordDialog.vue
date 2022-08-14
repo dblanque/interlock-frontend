@@ -50,7 +50,7 @@
 
     <!-- NS / CNAME Record Types -->
     <v-expand-transition>
-        <v-row class="ma-0 pa-0" v-if="selectedType == 2 || selectedType == 5">
+        <v-row class="ma-0 pa-0" v-if="isNodeNameRecord(selectedType)">
             <v-col cols="12">
                 <v-text-field
                 v-model="recordCopy.name"
@@ -62,9 +62,9 @@
             </v-col>
             <v-col cols="12">
                 <v-text-field
-                v-model="recordCopy.address"
-                :label="$t('dns.attributes.address')"
-                :rules="[this.fieldRules(recordCopy.address, 'net_domain_canonical', true)]"
+                v-model="recordCopy.nameNode"
+                :label="$t('dns.attributes.nameNode')"
+                :rules="[this.fieldRules(recordCopy.nameNode, 'net_domain_canonical', true)]"
                 class="mx-2"
                 ></v-text-field>
             </v-col>
@@ -102,7 +102,7 @@
 
     <!-- TXT Record Types -->
     <v-expand-transition>
-        <v-row class="ma-0 pa-0" v-if="selectedType == 16">
+        <v-row class="ma-0 pa-0" v-if="isStringRecord(selectedType)">
             <v-col cols="12">
                 <v-text-field
                 v-model="recordCopy.name"
@@ -289,8 +289,18 @@ export default {
                     supported: true
                 },
                 {
+                    name: "DNAME",
+                    value: 39,
+                    supported: true
+                },
+                {
                     name: "SOA",
                     value: 6,
+                    supported: true
+                },
+                {
+                    name: "HINFO",
+                    value: 13,
                     supported: true
                 },
                 {
@@ -304,9 +314,29 @@ export default {
                     supported: true
                 },
                 {
+                    name: "SIG",
+                    value: 18,
+                    supported: false
+                },
+                {
+                    name: "KEY",
+                    value: 19,
+                    supported: false
+                },
+                {
+                    name: "ISDN",
+                    value: 20,
+                    supported: true
+                },
+                {
                     name: "AAAA",
                     value: 28,
                     supported: false
+                },
+                {
+                    name: "LOC",
+                    value: 29,
+                    supported: true
                 },
                 {
                     name: "SRV",
@@ -316,7 +346,7 @@ export default {
                 {
                     name: "PTR",
                     value: 35,
-                    supported: false
+                    supported: true
                 },
                 {
                     name: "WINS",
@@ -324,13 +354,36 @@ export default {
                     supported: false
                 },
             ],
-            recordCopy: {}
+            recordCopy: {},
+            nodeNameRecordTypes: [
+                35, // PTR
+                2,  // NS
+                5,  // CNAME
+                39 // DNAME
+            ],
+            stringRecordTypes: [
+                13, // HINFO
+                20, // ISDN
+                16, // TXT
+                19, // X25
+                29  // LOC
+            ]
         }
     },
     created () {
         this.syncRecord();
     },
     methods: {
+        isNodeNameRecord(type){
+            if (this.nodeNameRecordTypes.includes(type))
+                return true
+            return false
+        },
+        isStringRecord(type){
+            if (this.stringRecordTypes.includes(type))
+                return true
+            return false
+        },
         logData(){
             console.log(this.recordCopy)
             console.log(this.recordObject)

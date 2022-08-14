@@ -237,6 +237,7 @@
         :recordObject="this.currentRecord"
         :updateFlag="this.updateFlag"
         :viewKey="'recordDialog'"
+        @closeDialog="closeDialog"
         ref="RecordDialog"
       />
   </v-dialog>
