@@ -295,6 +295,7 @@
       "name":"Use the character @ to identify your root zone"
     },
     "attributes":{
+      "infiniteTtl":"Infinite TTL",
       "ttl":"Time To Live",
       "value": "Record Value",
       "displayName":"Display Name",

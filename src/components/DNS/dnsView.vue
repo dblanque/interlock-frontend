@@ -102,6 +102,10 @@
         {{ item.nameTarget == '' || !item.nameTarget ? '@' : item.nameTarget }}
     </template>
 
+    <template v-slot:[`item.ttl`]="{ item }">
+        {{ item.ttl == 0 ? $t('dns.attributes.infiniteTtl') : item.ttl }}
+    </template>
+
     <!-- <template v-slot:[`item.address`]="{ item }">
         <span v-if="item.address">
             {{ item.address }}
