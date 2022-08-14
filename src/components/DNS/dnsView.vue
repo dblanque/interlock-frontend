@@ -422,7 +422,7 @@ export default {
         },
         async closeDialog(key, refresh=false){
             this.dialogs[key] = false;
-            if (refresh)
+            if (refresh == true)
                 this.getDNSData()
         },
         async getDNSData(zoneToQuery=undefined) {
