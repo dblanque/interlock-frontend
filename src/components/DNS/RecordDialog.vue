@@ -237,6 +237,7 @@ export default {
     props: {
         viewKey: String,
         recordObject: Object,
+        currentZone: String,
         updateFlag: Boolean
     },
     data() {
@@ -248,7 +249,6 @@ export default {
                 86400,
                 604800
             ],
-            showFields: true,
             selectedType: 1,
             recordTypes: [
                 {
@@ -370,13 +370,9 @@ export default {
             if (this.$refs.RecordForm != undefined)
                 this.$refs.RecordForm.resetValidation()
             this.recordCopy = {}
-            this.showFields = false
             setTimeout(() => {
                 this.recordCopy.type = this.selectedType
             }, 500)
-            setTimeout(() => {
-                this.showFields = true
-            }, 100)
         },
         resetValidation(){
             if (this.$refs.RecordForm != undefined)
@@ -397,6 +393,7 @@ export default {
         async createRecord() {
             console.log('Create Record')
             console.log(this.recordCopy)
+            this.recordCopy.zone = this.currentZone
             if (this.$refs.RecordForm.validate()) {
                 await new DNSRecord({}).insert(this.recordCopy)
                 .then(response => {
@@ -410,6 +407,7 @@ export default {
         async updateRecord() {
             console.log('Update Record')
             console.log(this.recordCopy)
+            this.recordCopy.zone = this.currentZone
             if (this.$refs.RecordForm.validate()) {
                 await new DNSRecord({}).update(this.recordCopy)
                 .then(response => {

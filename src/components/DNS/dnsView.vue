@@ -238,6 +238,7 @@
   <!-- GROUP VIEW/EDIT DIALOG -->
   <v-dialog eager max-width="800px" v-model="dialogs['recordDialog']">
     <RecordDialog
+        :currentZone="this.zoneFilter.dnsZone"
         :recordObject="this.currentRecord"
         :updateFlag="this.updateFlag"
         :viewKey="'recordDialog'"
