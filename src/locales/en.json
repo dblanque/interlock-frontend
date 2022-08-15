@@ -296,6 +296,7 @@
       "name":"Use the character @ to identify your root zone"
     },
     "attributes":{
+      "index": "Record Index",
       "infiniteTtl":"Infinite TTL",
       "ttl":"Time To Live",
       "value": "Record Value",
@@ -373,6 +374,11 @@
     }
   },
   "section":{
+    "dns":{
+      "deleteRecord":{
+        "message":"Are you sure you wish to delete the DNS Record"
+      }
+    },
     "login":{
       "title":"Log in to your LDAP Server",
       "account":"LDAP Account / Username",

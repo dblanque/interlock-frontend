@@ -302,6 +302,7 @@
       "name":"Utilice el caracter @ para identificar su zona raíz"
     },
     "attributes":{
+      "index": "Indice del Registro",
       "infiniteTtl":"TTL Infinito",
       "ttl":"Tiempo de Vida",
       "value": "Valor del Registro",
@@ -379,6 +380,11 @@
     }
   },
   "section": {
+    "dns":{
+      "deleteRecord":{
+        "message":"¿Está seguro de borrar el registro de DNS"
+      }
+    },
     "login": {
       "title": "Inicie Sesión en su Servidor LDAP",
       "account": "Cuenta LDAP / Usuario",

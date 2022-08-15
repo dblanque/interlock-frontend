@@ -192,12 +192,11 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon
+          <v-btn icon @click="openDeleteDialog(item)"
             rounded
             v-bind="attrs"
             v-on="on"
             small
-            disabled
           >
             <!-- :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" -->
           <v-icon small color="red">
@@ -235,7 +234,7 @@
     </template>
   </v-data-table>
 
-  <!-- GROUP VIEW/EDIT DIALOG -->
+  <!-- RECORD VIEW/EDIT DIALOG -->
   <v-dialog eager max-width="800px" v-model="dialogs['recordDialog']">
     <RecordDialog
         :currentZone="this.zoneFilter.dnsZone"
@@ -243,7 +242,20 @@
         :updateFlag="this.updateFlag"
         :viewKey="'recordDialog'"
         @closeDialog="closeDialog"
+        @refresh="getDNSData"
         ref="RecordDialog"
+      />
+  </v-dialog>
+
+  <!-- RECORD DELETE DIALOG -->
+  <v-dialog eager max-width="800px" v-model="dialogs['recordDelete']">
+    <RecordDelete
+        :currentZone="this.zoneFilter.dnsZone"
+        :recordObject="this.currentRecord"
+        :viewKey="'recordDelete'"
+        @closeDialog="closeDialog"
+        @refresh="getDNSData"
+        ref="RecordDelete"
       />
   </v-dialog>
 
@@ -254,12 +266,14 @@
 import { default as DNS } from '@/include/Domain'
 import validationMixin from '@/plugins/mixin/validationMixin'
 import RecordDialog from '@/components/DNS/RecordDialog.vue'
+import RecordDelete from '@/components/DNS/RecordDelete.vue'
 import { getDomainDetails } from '@/include/utils';
 
 export default {
     mixins: [ validationMixin ],
     components: {
         RecordDialog,
+        RecordDelete
     },
     data() {
         return {
@@ -292,7 +306,8 @@ export default {
             ldap: {},
             // Dialog States
             dialogs: {
-                recordDialog: false
+                recordDialog: false,
+                recordDelete: false
             },
             dns: {
                 headers: [],
@@ -406,7 +421,7 @@ export default {
         openDialog(key, updateFlag=false){
             if (updateFlag === true)
                 this.updateFlag = true
-            else {
+            else if (key == 'recordDialog') {
                 this.updateFlag = false
                 this.resetCurrentRecord()
             }
@@ -424,6 +439,10 @@ export default {
         editRecord(recordItem) {
             this.currentRecord = recordItem
             this.openDialog('recordDialog', true)
+        },
+        openDeleteDialog(recordItem) {
+            this.currentRecord = recordItem
+            this.openDialog('recordDelete')
         },
         async closeDialog(key, refresh=false){
             this.dialogs[key] = false;
