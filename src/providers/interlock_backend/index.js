@@ -3,6 +3,7 @@ import userCalls from '@/providers/interlock_backend/modules/user.js'
 import groupCalls from '@/providers/interlock_backend/modules/group.js'
 import ouCalls from '@/providers/interlock_backend/modules/organizationalUnit.js'
 import domainCalls from '@/providers/interlock_backend/modules/domain.js'
+import dnsRecordCalls from '@/providers/interlock_backend/modules/dnsrecord.js'
 import settingCalls from '@/providers/interlock_backend/modules/settings.js'
 import logCalls from '@/providers/interlock_backend/modules/log.js'
 import testCalls from '@/providers/interlock_backend/modules/test.js'
@@ -15,6 +16,7 @@ const modules = {
     settings: settingCalls,
     log: logCalls,
     domain: domainCalls,
+    dnsr: dnsRecordCalls,
     test: testCalls,
 }
 

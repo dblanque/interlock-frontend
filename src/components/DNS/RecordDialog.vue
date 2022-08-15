@@ -398,7 +398,7 @@ export default {
             console.log('Create Record')
             console.log(this.recordCopy)
             if (this.$refs.RecordForm.validate()) {
-                await new DNSRecord({}).createRecord(this.recordCopy)
+                await new DNSRecord({}).insert(this.recordCopy)
                 .then(response => {
                     console.log(response)
                 })
@@ -411,7 +411,7 @@ export default {
             console.log('Update Record')
             console.log(this.recordCopy)
             if (this.$refs.RecordForm.validate()) {
-                await new DNSRecord({}).updateRecord(this.recordCopy)
+                await new DNSRecord({}).update(this.recordCopy)
                 .then(response => {
                     console.log(response)
                 })

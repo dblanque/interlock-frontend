@@ -63,10 +63,10 @@ const urls = {
         details: "api/domain/details/",
         zones: "api/domain/zones/"
     },
-    dnsrecord: {
-        insert: "api/domain/",
-        update: "api/domain/details/",
-        delete: "api/domain/zones/"
+    dnsr: {
+        insert: "api/record/insert/",
+        update: "api/record/update/",
+        delete: "api/record/delete/"
     },
     settings: {
         base: "api/settings/",
