@@ -264,6 +264,7 @@
       "noCountryCode":"Sin código configurado"
     },
     "validation": {
+      "ascii": "Los Datos del String deben contener solo Caracteres ASCII",
       "fieldinvalid": "Uno o mas campos son invalidos",
       "fieldRequired": "Este campo es requerido",
       "passwordNotSame":"Las contraseñas no coinciden",

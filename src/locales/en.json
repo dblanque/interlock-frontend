@@ -258,6 +258,7 @@
         "noCountryCode":"No country code set"
       },
       "validation":{
+          "ascii": "String Data must contain only ASCII Characters",
           "fieldinvalid": "One or more fields are invalid",
           "fieldRequired": "This field is required",
           "passwordNotSame":"Passwords must match",

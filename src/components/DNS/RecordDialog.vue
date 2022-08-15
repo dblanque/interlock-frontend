@@ -14,7 +14,7 @@
     </v-card-title>
 
     <v-form ref="RecordForm">
-    <v-row class="ma-0 pa-0 py-4" align="center" justify="center">
+    <v-row class="ma-0 pa-0 pa-4 pb-1" align="center" justify="center">
         <v-col cols="10" md="8" class="ma-0 pa-0" v-if="updateFlag != true">
             <v-select @change="resetRecord" :label="$t('dns.attributes.typeName')"
             v-model="selectedType"
@@ -23,19 +23,14 @@
             item-value="value"
             item-text="name"/>
         </v-col>
-        <v-col cols="12" class="ma-0 pa-0 px-6 mt-3">
-            <v-combobox @change="resetRecord" :label="$t('dns.attributes.ttl')"
-            v-model="recordCopy.ttl"
-            hide-details
+        <v-col cols="12" class="ma-0 pa-0 px-2 mt-4">
+            <v-combobox @change="setTTL" :label="$t('dns.attributes.ttl')"
             :items="ttlPresets"
-            item-value="value"
-            item-text="name"/>
+            v-model="recordCopy.ttl"
+            :rules="[this.fieldRules(recordCopy.ttl, 'ge_numbers', true)]"
+            />
         </v-col>
-    </v-row>
-
-    <!-- A Record Type -->
-    <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 1">
-        <v-col cols="12" class="ma-0 pa-0">
+        <v-col cols="12" class="ma-0 pa-0 mt-0">
             <v-text-field
             v-model="recordCopy.name"
             :hint="$t('dns.hints.name')"
@@ -45,6 +40,10 @@
             class="mx-2"
             ></v-text-field>
         </v-col>
+    </v-row>
+
+    <!-- A Record Type -->
+    <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 1">
         <v-col cols="12" class="ma-0 pa-0">
             <v-text-field
             v-model="recordCopy.address"
@@ -59,15 +58,6 @@
     <v-row class="ma-0 pa-0 px-4 pb-4" v-if="isNodeNameRecord(selectedType)">
         <v-col cols="12" class="ma-0 pa-0">
             <v-text-field
-            v-model="recordCopy.name"
-            :hint="$t('dns.hints.name')"
-            persistent-hint
-            :label="$t('dns.attributes.name')"
-            class="mx-2"
-            ></v-text-field>
-        </v-col>
-        <v-col cols="12" class="ma-0 pa-0">
-            <v-text-field
             v-model="recordCopy.nameNode"
             :label="$t('dns.attributes.nameNode')"
             :rules="[this.fieldRules(recordCopy.nameNode, 'net_domain_canonical', true)]"
@@ -80,17 +70,9 @@
     <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 15">
         <v-col cols="12" class="ma-0 pa-0">
             <v-text-field
-            v-model="recordCopy.name"
-            :hint="$t('dns.hints.name')"
-            persistent-hint
-            :label="$t('dns.attributes.name')"
-            class="mx-2"
-            ></v-text-field>
-        </v-col>
-        <v-col cols="12" class="ma-0 pa-0">
-            <v-text-field
             v-model="recordCopy.nameExchange"
             :label="$t('dns.attributes.nameExchange')"
+            :rules="[this.fieldRules(recordCopy.nameExchange, 'net_domain_canonical', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -98,6 +80,7 @@
             <v-text-field
             v-model="recordCopy.wPreference"
             :label="$t('dns.attributes.wPreference')"
+            :rules="[this.fieldRules(recordCopy.wPreference, 'ge_numbers', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -105,19 +88,11 @@
 
     <!-- TXT Record Types -->
     <v-row class="ma-0 pa-0 px-4 pb-4" v-if="isStringRecord(selectedType)">
-        <v-col cols="12" class="ma-0 pa-0">
-            <v-text-field
-            v-model="recordCopy.name"
-            :hint="$t('dns.hints.name')"
-            persistent-hint
-            :label="$t('dns.attributes.name')"
-            class="mx-2"
-            ></v-text-field>
-        </v-col>
         <v-col cols="12" class="ma-0 pa-0 mt-4">
             <v-textarea auto-grow outlined
             v-model="recordCopy.stringData"
             :label="$t('dns.attributes.stringData')"
+            :rules="[this.fieldRules(recordCopy.stringData, 'ge_ascii', true)]"
             class="mx-2"
             ></v-textarea>
         </v-col>
@@ -127,15 +102,9 @@
     <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 6">
         <v-col cols="12" class="ma-0 pa-0">
             <v-text-field
-            v-model="recordCopy.name"
-            :label="$t('dns.attributes.name')"
-            class="mx-2"
-            ></v-text-field>
-        </v-col>
-        <v-col cols="12" class="ma-0 pa-0">
-            <v-text-field
             v-model="recordCopy.namePrimaryServer"
             :label="$t('dns.attributes.namePrimaryServer')"
+            :rules="[this.fieldRules(recordCopy.namePrimaryServer, 'net_domain_canonical', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -143,6 +112,7 @@
             <v-text-field
             v-model="recordCopy.zoneAdminEmail"
             :label="$t('dns.attributes.zoneAdminEmail')"
+            :rules="[this.fieldRules(recordCopy.zoneAdminEmail, 'net_domain_canonical', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -150,6 +120,7 @@
             <v-text-field
             v-model="recordCopy.dwSerialNo"
             :label="$t('dns.attributes.dwSerialNo')"
+            :rules="[this.fieldRules(recordCopy.dwSerialNo, 'ge_numbers', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -157,6 +128,7 @@
             <v-text-field
             v-model="recordCopy.dwRefresh"
             :label="$t('dns.attributes.dwRefresh')"
+            :rules="[this.fieldRules(recordCopy.dwRefresh, 'ge_numbers', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -164,6 +136,7 @@
             <v-text-field
             v-model="recordCopy.dwRetry"
             :label="$t('dns.attributes.dwRetry')"
+            :rules="[this.fieldRules(recordCopy.dwRetry, 'ge_numbers', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -171,6 +144,7 @@
             <v-text-field
             v-model="recordCopy.dwExpire"
             :label="$t('dns.attributes.dwExpire')"
+            :rules="[this.fieldRules(recordCopy.dwExpire, 'ge_numbers', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -178,6 +152,7 @@
             <v-text-field
             v-model="recordCopy.dwMinimumTtl"
             :label="$t('dns.attributes.dwMinimumTtl')"
+            :rules="[this.fieldRules(recordCopy.dwMinimumTtl, 'ge_numbers', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -187,15 +162,9 @@
     <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 33">
         <v-col cols="12" class="ma-0 pa-0">
             <v-text-field
-            v-model="recordCopy.name"
-            :label="$t('dns.attributes.name')"
-            class="mx-2"
-            ></v-text-field>
-        </v-col>
-        <v-col cols="12" class="ma-0 pa-0">
-            <v-text-field
             v-model="recordCopy.wPriority"
             :label="$t('dns.attributes.wPriority')"
+            :rules="[this.fieldRules(recordCopy.wPriority, 'ge_numbers', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -203,6 +172,7 @@
             <v-text-field
             v-model="recordCopy.wWeight"
             :label="$t('dns.attributes.wWeight')"
+            :rules="[this.fieldRules(recordCopy.wWeight, 'ge_numbers', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -210,6 +180,7 @@
             <v-text-field
             v-model="recordCopy.wPort"
             :label="$t('dns.attributes.wPort')"
+            :rules="[this.fieldRules(recordCopy.wPort, 'ge_numbers', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -217,6 +188,7 @@
             <v-text-field
             v-model="recordCopy.nameTarget"
             :label="$t('dns.attributes.nameTarget')"
+            :rules="[this.fieldRules(recordCopy.nameTarget, 'net_domain_canonical', true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -395,6 +367,8 @@ export default {
             console.log(this.recordObject)
         },
         resetRecord() {
+            if (this.$refs.RecordForm != undefined)
+                this.$refs.RecordForm.resetValidation()
             this.recordCopy = {}
             this.showFields = false
             setTimeout(() => {
@@ -417,7 +391,11 @@ export default {
                     this.selectedType = this.recordObject.type
             })
         },
+        setTTL(v) {
+            this.recordCopy.ttl = v
+        },
         async createRecord() {
+            console.log('Create Record')
             console.log(this.recordCopy)
             if (this.$refs.RecordForm.validate()) {
                 await new DNSRecord({}).createRecord(this.recordCopy)
@@ -430,6 +408,7 @@ export default {
             }
         },
         async updateRecord() {
+            console.log('Update Record')
             console.log(this.recordCopy)
             if (this.$refs.RecordForm.validate()) {
                 await new DNSRecord({}).updateRecord(this.recordCopy)

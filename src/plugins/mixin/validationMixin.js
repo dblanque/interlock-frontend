@@ -41,6 +41,11 @@ const validationMixin = {
       inputRulesalphaNumericSpecialUsername: (v) => !v || /^[a-z0-9]+([a-z0-9_-]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecialUsername"),
       inputRulesalphaNumericSpecialCN: (v) => !v || /^[a-z0-9]+([a-z0-9_-\s]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecialUsername"),
       inputRulesalphaNumericSpecialName: (v) => !v || /^[a-z0-9]+([a-z0-9_-\s]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecialUsername"),
+
+      // ASCII Source
+      // https://stackoverflow.com/questions/14313183/javascript-regex-how-do-i-check-if-the-string-is-ascii-only
+      inputRulesFullASCIISet: (v) => !v || /^[\x20-\x7E]*$/.test(v) || i18n.t("error.validation.ascii"),
+
       inputRulesDN: (v) => !v || /^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:,(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/i.test(v) || i18n.t("error.validation.distinguishedName"),
       inputRulesDomain: (v) => !v || /^((?:http(?:s){0,5}(:\/\/){0,1}){0,1}(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+)?$/.test(v) || i18n.t("error.validation.domain"),
       inputRulesDomainCanonical: (v) => !v || /^(((?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+|(?:[a-zA-Z0-9-]){2,63}))\.$/.test(v) || i18n.t("error.validation.domainCanonical"),
@@ -252,6 +257,9 @@ const validationMixin = {
             break;
           case "ge_country": // Country
               rules.push(this.inputRulesCountry)
+            break;
+          case "ge_ascii": // Country
+              rules.push(this.inputRulesFullASCIISet)
             break;
           case "dns_root": // Country
               rules.push(this.inputRulesDomainRoot)
