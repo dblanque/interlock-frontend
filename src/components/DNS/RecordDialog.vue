@@ -19,7 +19,7 @@
             <v-select @change="resetRecord" :label="$t('dns.attributes.typeName')"
             v-model="selectedType"
             hide-details
-            :items="recordTypes.filter(e => e.supported == true)"
+            :items="getRecordTypes"
             item-value="value"
             item-text="name"/>
         </v-col>
@@ -257,7 +257,11 @@ export default {
         viewKey: String,
         recordObject: Object,
         currentZone: String,
-        updateFlag: Boolean
+        updateFlag: Boolean,
+        zoneHasSOA: {
+            type: Boolean,
+            default: true
+        }
     },
     data() {
         return {
@@ -386,6 +390,12 @@ export default {
                 }
             } else
             return defaultValidator
+        },
+        getRecordTypes(){
+            var rTypes = this.recordTypes.filter(e => e.supported == true)
+            if (this.zoneHasSOA == true)
+                rTypes = rTypes.filter(e => e.value != 6)
+            return rTypes
         },
     },
     created () {

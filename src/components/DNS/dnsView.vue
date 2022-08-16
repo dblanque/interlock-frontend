@@ -174,7 +174,7 @@
     <template v-slot:[`item.actions`]="{ item }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon
+          <v-btn icon :disabled="zoneFilter['dnsZone'] == 'Root DNS Servers'"
             rounded
             v-bind="attrs"
             v-on="on"
@@ -192,7 +192,7 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon @click="openDeleteDialog(item)"
+          <v-btn icon @click="openDeleteDialog(item)" :disabled="zoneFilter['dnsZone'] == 'Root DNS Servers'"
             rounded
             v-bind="attrs"
             v-on="on"
@@ -211,23 +211,31 @@
     <!-- DNS RECORD EXTRA INFO -->
     <template v-slot:expanded-item="{ headers, item }">
         <td :colspan="headers.length">
-            <v-row class="ma-0 pa-0 my-3 mx-2" v-for="attribute, key in getExtrasFromRecord(item, headers)" :key="key">
-                <span>
-                    <v-icon color="primary" class="mr-2" v-if="key == 'type'">
-                        mdi-information-outline
+            <v-row justify="start" class="ma-0 pa-0 my-3 mx-2" v-for="attribute, key in getExtrasFromRecord(item, headers)" :key="key">
+                <v-icon color="primary" class="mr-2" v-if="key == 'type'">
+                    mdi-information-outline
+                </v-icon>
+                <v-icon color="primary" class="mr-2" v-else-if="key == 'distinguishedName'">
+                    mdi-menu
+                </v-icon>
+                <v-icon color="primary" class="mr-2" v-else>
+                    mdi-menu-right
+                </v-icon>
+                <span v-if="key == 'distinguishedName'">
+                    {{ $t("ldap.attributes." + key) + ": " + attribute + " "}}
+                </span>
+                <span v-else-if="key == 'ts'">
+                    {{ $t("dns.attributes." + key) + ": " }}
+                    <v-icon v-if="item.ts == true" color="green">
+                        mdi-check-circle
                     </v-icon>
-                    <v-icon color="primary" class="mr-2" v-else-if="key == 'distinguishedName'">
-                        mdi-menu
+
+                    <v-icon v-else color="red">
+                        mdi-close-circle
                     </v-icon>
-                    <v-icon color="primary" class="mr-2" v-else>
-                        mdi-menu-right
-                    </v-icon>
-                    <span v-if="key == 'distinguishedName'">
-                        {{ $t("ldap.attributes." + key) + ": " + attribute + " "}}
-                    </span>
-                    <span v-else>
-                        {{ $t("dns.attributes." + key) + ": " + attribute + " "}}
-                    </span>
+                </span>
+                <span v-else>
+                    {{ $t("dns.attributes." + key) + ": " + attribute + " "}}
                 </span>
             </v-row>
         </td>
@@ -237,6 +245,7 @@
   <!-- RECORD VIEW/EDIT DIALOG -->
   <v-dialog eager max-width="800px" v-model="dialogs['recordDialog']">
     <RecordDialog
+        :zoneHasSOA="zoneHasSOA()"
         :currentZone="this.zoneFilter.dnsZone"
         :recordObject="this.currentRecord"
         :updateFlag="this.updateFlag"
@@ -341,6 +350,11 @@ export default {
         }
     },
     methods: {
+        zoneHasSOA(){
+            if (this.dns.records.filter(e => e.type == 6).length > 0)
+                return true
+            return false
+        },
         resetCurrentRecord() {
             this.currentRecord = {}
             this.currentRecord.name = ""
@@ -350,10 +364,14 @@ export default {
             var result = {}
             // var keys = Object.keys(item)
             headers = headers.map(e => e.value)
-
+            var excludeKeys = [
+                'id',
+                'record_bytes',
+                'zone'
+            ]
             for (const key in item) {
                 if (Object.hasOwnProperty.call(item, key)) {
-                    if (!headers.includes(key) && key != 'id') {
+                    if (!headers.includes(key) && !excludeKeys.includes(key)) {
                         result[key] = item[key]
                     }
                 }
