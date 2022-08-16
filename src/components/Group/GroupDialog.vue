@@ -400,6 +400,8 @@ export default {
         },
         setupExclude(){
             this.excludeDNs = []
+            if (!this.excludeDNs.includes(this.groupcopy.distinguishedName))
+                this.excludeDNs.push(this.groupcopy.distinguishedName)
             if (this.groupcopy.member != undefined && this.groupcopy.member.length > 0) {
                 this.groupcopy.member.forEach(member => {
                     this.excludeDNs.push(member.distinguishedName)

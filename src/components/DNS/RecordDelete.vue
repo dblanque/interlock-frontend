@@ -88,7 +88,8 @@ export default {
                 'id',
                 'index',
                 'distinguishedName',
-                'zone'
+                'zone',
+                'record_bytes'
             ],
             loading: false,
             error: false,
