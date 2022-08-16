@@ -13,7 +13,7 @@ const actions = {
 
     update: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.put(interlock_backend.urls.dnsr.update, {record: data})
+            interlock_backend.request.put(interlock_backend.urls.dnsr.update, data)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))

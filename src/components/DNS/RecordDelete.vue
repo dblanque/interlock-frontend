@@ -23,10 +23,10 @@
                 ?
             </v-row>
             <v-divider class="mx-8 mb-3"/>
-            <v-row class="pa-0 ma-0 text-subtitle-1 text-inverted" justify="center" v-for="attr, name in recordObject" :key="attr">
+            <v-row class="pa-0 ma-0 text-subtitle-1 text-inverted" justify="center" v-for="value, attr_key in recordObject" :key="attr_key">
                 <span class="ma-0 pa-0" style="padding-left: 0.5ch;" 
-                v-if="showAttribute(name)">
-                    {{ $t('dns.attributes.' + name) + ": " + attr }}
+                v-if="showAttribute(attr_key)">
+                    {{ $t('dns.attributes.' + attr_key) + ": " + value }}
                 </span>
             </v-row>
         </v-card-text>
@@ -71,7 +71,10 @@ export default {
                 'id',
                 'index',
                 'distinguishedName',
-            ]
+            ],
+            loading: false,
+            error: false,
+            submitted: false,
         }
     },
     props: {

@@ -229,8 +229,9 @@
   },
   "error":{
       "codes":{
+          "conflict": "HTTP 409: Conflict",
+          "badRequest": "HTTP 405: Bad Request",
           "networkError": "AXIOS: Network Error",
-          "badRequest": "Error 405: Bad Request",
           "auth":{
               "invalid_credentials": "Incorrect Email or Password",
               "verification_code": "Incorrect Code, Please try again",
@@ -258,6 +259,7 @@
         "noCountryCode":"No country code set"
       },
       "validation":{
+          "domainRoot":"Must be a valid Domain Name (Exclude the DNS Zone, @ allowed for root)",
           "ascii": "String Data must contain only ASCII Characters",
           "fieldinvalid": "One or more fields are invalid",
           "fieldRequired": "This field is required",
@@ -375,6 +377,9 @@
   },
   "section":{
     "dns":{
+      "createSuccess":"Record Created",
+      "updateSuccess":"Record Updated",
+      "deleteSuccess":"Record Deleted",
       "deleteRecord":{
         "message":"Are you sure you wish to delete the DNS Record"
       }

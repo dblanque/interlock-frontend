@@ -235,8 +235,9 @@
   },
   "error":{
     "codes": {
+      "conflict": "HTTP 409: Conflicto",
+      "badRequest": "HTTP 405: Request Erróneo",
       "networkError": "AXIOS: Error de Red",
-      "badRequest": "Error 405: Request Erróneo",
       "auth": {
         "invalid_credentials": "Email o Contraseña Incorrectos",
         "verification_code": "Codigo Incorrecto, Intente nuevamente",
@@ -264,6 +265,7 @@
       "noCountryCode":"Sin código configurado"
     },
     "validation": {
+      "domainRoot":"Debe ser un Nombre de Dominio válido (excluir la zona, se permite @ para la raíz)",
       "ascii": "Los Datos del String deben contener solo Caracteres ASCII",
       "fieldinvalid": "Uno o mas campos son invalidos",
       "fieldRequired": "Este campo es requerido",
@@ -381,6 +383,9 @@
   },
   "section": {
     "dns":{
+      "createSuccess":"Registro Creado",
+      "updateSuccess":"Registro Modificado",
+      "deleteSuccess":"Registro Eliminado",
       "deleteRecord":{
         "message":"¿Está seguro de borrar el registro de DNS"
       }

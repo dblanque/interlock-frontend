@@ -564,9 +564,16 @@ const validationMixin = {
         var codeToUse
         if ("code_ext" in errorData)
           codeToUse = errorData.code_ext
-        else
+        else if ('code' in errorData)
           codeToUse = errorData.code
+        else
+          codeToUse = errorData.status_code
+
         switch(codeToUse){
+          case 405:
+            return this.$t('error.codes.badRequest')
+          case 409:
+            return this.$t('error.codes.conflict')
           case 'ERR_NETWORK':
             return this.$t('error.codes.networkError')
           case 'entryAlreadyExists':

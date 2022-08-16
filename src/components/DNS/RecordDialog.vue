@@ -36,7 +36,7 @@
             :hint="$t('dns.hints.name')"
             persistent-hint
             :label="$t('dns.attributes.name')"
-            :rules="[this.fieldRules(recordCopy.name, 'dns_root', true)]"
+            :rules="[this.fieldRules(recordCopy.name, getValidationForRecordTypeName, true)]"
             class="mx-2"
             ></v-text-field>
         </v-col>
@@ -201,6 +201,25 @@
             <!-- Back and Next buttons -->
             <div>
                 <v-slide-x-reverse-transition>
+                    <v-progress-circular :indeterminate="loading == true" :value="submitted ? 100 : 0" :color="submitted ? (!error ? 'green' : 'red') : 'primary'" size="26" class="mx-3">
+                    <v-fab-transition>
+                        <v-icon color="green" v-if="submitted && !error" >
+                            mdi-checkbox-marked-circle
+                        </v-icon>
+                        <v-icon color="red" v-else-if="submitted == true && error == true">
+                            mdi-close-circle
+                        </v-icon>
+                    </v-fab-transition>
+                    </v-progress-circular>
+                </v-slide-x-reverse-transition>
+
+                <v-slide-x-reverse-transition>
+                    <v-chip class="mr-2" v-if="submitted == true" :color="error == true ? 'red':'green'">
+                        {{ errorMsg == "" ? $t('section.dns.'+ (updateFlag ? 'update' : 'create' ) +'Success') : errorMsg }}
+                    </v-chip>
+                </v-slide-x-reverse-transition>
+
+                <v-slide-x-reverse-transition>
                     <v-btn elevation="0" @click="syncRecord"
                     class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                     rounded>
@@ -242,9 +261,14 @@ export default {
     },
     data() {
         return {
+            loading: false,
+            error: false,
+            submitted: false,
+            errorMsg: "",
             ttlPresets: [
                 60,
                 300,
+                900,
                 3600,
                 86400,
                 604800
@@ -333,6 +357,7 @@ export default {
                 },
             ],
             recordCopy: {},
+            originalRecord: {},
             nodeNameRecordTypes: [
                 35, // PTR
                 2,  // NS
@@ -347,6 +372,21 @@ export default {
                 29  // LOC
             ]
         }
+    },
+    computed: {
+        getValidationForRecordTypeName(){
+            var defaultValidator = 'dns_root'
+            if (this.recordCopy.type != undefined) {
+                switch (this.recordCopy.type) {
+                    case 2:
+                    case 5:
+                        return 'ldap_website'
+                    default:
+                        return defaultValidator
+                }
+            } else
+            return defaultValidator
+        },
     },
     created () {
         this.syncRecord();
@@ -367,9 +407,12 @@ export default {
             console.log(this.recordObject)
         },
         resetRecord() {
+            this.resetLoadingStatus
             if (this.$refs.RecordForm != undefined)
                 this.$refs.RecordForm.resetValidation()
             this.recordCopy = {}
+            if (this.recordObject.ttl == undefined)
+                this.recordCopy.ttl = 900
             setTimeout(() => {
                 this.recordCopy.type = this.selectedType
             }, 500)
@@ -383,6 +426,10 @@ export default {
             this.$nextTick(() => {
                 // Do deep copy of object for reset
                 this.recordCopy = JSON.parse(JSON.stringify(this.recordObject))
+                this.originalRecord = JSON.parse(JSON.stringify(this.recordObject))
+                
+                if (this.recordObject.ttl == undefined)
+                    this.recordCopy.ttl = 900
                 if (this.recordObject.type != undefined)
                     this.selectedType = this.recordObject.type
             })
@@ -390,32 +437,78 @@ export default {
         setTTL(v) {
             this.recordCopy.ttl = v
         },
+        resetLoadingStatus(){
+            this.loading = false
+            this.error = false
+            this.errorMsg = ""
+            this.submitted = false
+        },
         async createRecord() {
-            console.log('Create Record')
-            console.log(this.recordCopy)
+            // console.log('Create Record')
+            // console.log(this.recordCopy)
             this.recordCopy.zone = this.currentZone
             if (this.$refs.RecordForm.validate()) {
+                this.resetLoadingStatus
+                this.loading = true
                 await new DNSRecord({}).insert(this.recordCopy)
-                .then(response => {
-                    console.log(response)
+                .then(() => {
+                    this.loading = false
+                    this.error = false
+                    this.errorMsg = ""
+                    this.submitted = true
+                    setTimeout(() => {
+                        this.closeDialog(true)
+                    }, 250)
                 })
                 .catch(error => {
                     console.log(error)
+                    this.loading = false
+                    this.error = true
+                    this.submitted = true
+                    this.errorMsg = this.getMessageForCode(error.response.data)
+                    this.resetSnackbar()
+                    this.createSnackbar('red', this.errorMsg.toUpperCase() )
+                    setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
                 })
             }
         },
         async updateRecord() {
-            console.log('Update Record')
-            console.log(this.recordCopy)
+            // console.log('Update Record')
+            // console.log(this.recordCopy)
             this.recordCopy.zone = this.currentZone
-            if (this.$refs.RecordForm.validate()) {
-                await new DNSRecord({}).update(this.recordCopy)
-                .then(response => {
-                    console.log(response)
-                })
-                .catch(error => {
-                    console.log(error)    
-                })
+            var recordDiffers = false
+            for (const key in this.recordCopy) {
+                if (key in this.recordCopy && key in this.originalRecord) {
+                    if (this.recordCopy[key] != this.originalRecord[key])
+                        recordDiffers = true
+                }
+            }
+
+            if (recordDiffers == true && this.$refs.RecordForm.validate()) {
+                    this.resetLoadingStatus
+                    this.loading = true
+                    await new DNSRecord({}).update({record: this.recordCopy, oldRecord: this.originalRecord})
+                    .then(() => {
+                        this.loading = false
+                        this.error = false
+                        this.errorMsg = ""
+                        this.submitted = true
+                        setTimeout(() => {
+                            this.closeDialog(true)
+                        }, 250)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.loading = false
+                        this.error = true
+                        this.submitted = true
+                        this.errorMsg = this.getMessageForCode(error.response.data)
+                        this.resetSnackbar()
+                        this.createSnackbar('red', this.errorMsg.toUpperCase() )
+                        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                    })
+            } else {
+                this.closeDialog()
             }
         },
         closeDialog(refresh=false){
