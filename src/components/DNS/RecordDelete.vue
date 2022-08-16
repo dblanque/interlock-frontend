@@ -137,9 +137,14 @@ export default {
                     console.log(error)
                 })
             }
-            setTimeout(() => {
+
+            // Wait for animations if delete confirm true
+            if (deleteConfirm == true)
+                setTimeout(() => {
+                    this.$emit('closeDialog', this.viewKey);
+                }, 150)
+            else
                 this.$emit('closeDialog', this.viewKey);
-            }, 150)
         },
     }
 }
