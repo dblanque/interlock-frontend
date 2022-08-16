@@ -34,11 +34,26 @@
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
                 <v-btn @click="closeDialog(true)" :disabled="recordObject == undefined"
-                class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25" 
+                class="ma-0 pa-0 pa-2 pl-1 ma-1 bg-white bg-lig-25" 
                 rounded>
                     <v-icon class="mr-1" color="green">
-                        mdi-checkbox-marked-circle-outline
                     </v-icon>
+                    <v-progress-circular :indeterminate="loading == true" :value="submitted ? 100 : 0" 
+                    :color="submitted ? (!error ? 'green' : 'red') : 'primary'" 
+                    size="26" 
+                    class="ma-0 mr-1">
+                    <v-fab-transition>
+                        <v-icon color="green" v-if="!submitted" >
+                            mdi-checkbox-marked-circle-outline
+                        </v-icon>
+                        <v-icon color="green" v-else-if="submitted && !error" >
+                            mdi-checkbox-marked-circle
+                        </v-icon>
+                        <v-icon color="red" v-else-if="submitted == true && error == true">
+                            mdi-close-circle
+                        </v-icon>
+                    </v-fab-transition>
+                    </v-progress-circular>
                     <span class="pr-1 text-normal">
                         {{ $t("actions.yes" )}}
                     </span>
@@ -60,9 +75,11 @@
 
 <script>
 import DNSRecord from '@/include/DNSRecord'
+import validationMixin from '@/plugins/mixin/validationMixin'
 
 export default {
     name: "confirmDialog",
+    mixins: [ validationMixin ],
     data() {
         return {
             excludeAttr: [
@@ -71,6 +88,7 @@ export default {
                 'id',
                 'index',
                 'distinguishedName',
+                'zone'
             ],
             loading: false,
             error: false,
@@ -96,17 +114,31 @@ export default {
                 record.zone = this.currentZone
             }
             if (deleteConfirm == true) {
+                this.loading = true
+                this.error = false
+                this.errorMsg = ""
+                this.submitted = false
                 await new DNSRecord({}).delete(record)
                 .then(response => {
+                    this.loading = false
+                    this.error = false
+                    this.errorMsg = ""
+                    this.submitted = false
                     if (response.data.distinguishedName == record.distinguishedName)
                         console.log("Record Deleted Successfully")
                     this.$emit('refresh');
                 })
                 .catch(error => {
+                    this.loading = false
+                    this.error = true
+                    this.errorMsg = this.getMessageForCode(error)
+                    this.submitted = false
                     console.log(error)
                 })
             }
-            this.$emit('closeDialog', this.viewKey);
+            setTimeout(() => {
+                this.$emit('closeDialog', this.viewKey);
+            }, 150)
         },
     }
 }

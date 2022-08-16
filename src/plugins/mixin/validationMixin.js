@@ -562,7 +562,9 @@ const validationMixin = {
         console.error("The Error Data Object must be passed to this function, not a string")
 
         var codeToUse
-        if ("code_ext" in errorData)
+        if (typeof errorData === 'string')
+          codeToUse = errorData
+        else if ("code_ext" in errorData)
           codeToUse = errorData.code_ext
         else if ('code' in errorData)
           codeToUse = errorData.code
@@ -583,7 +585,7 @@ const validationMixin = {
           case undefined:
           case "":
           default:
-            return this.$t("error.unknown_short") + " (" + codeToUse + ")"
+            return this.$t("error.unknown_short") + " (" + codeToUse.substring(0,48) + ")"
         }
       },
       

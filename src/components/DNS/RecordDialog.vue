@@ -30,7 +30,7 @@
             :rules="[this.fieldRules(recordCopy.ttl, 'ge_numbers', true)]"
             />
         </v-col>
-        <v-col cols="12" class="ma-0 pa-0 mt-0">
+        <v-col v-if="selectedType != 6" cols="12" class="ma-0 pa-0 mt-0">
             <v-text-field
             v-model="recordCopy.name"
             :hint="$t('dns.hints.name')"
@@ -214,7 +214,7 @@
                 </v-slide-x-reverse-transition>
 
                 <v-slide-x-reverse-transition>
-                    <v-chip class="mr-2" v-if="submitted == true" :color="error == true ? 'red':'green'">
+                    <v-chip text-color="white" class="mr-2" v-if="submitted == true" :color="error == true ? 'red':'green'">
                         {{ errorMsg == "" ? $t('section.dns.'+ (updateFlag ? 'update' : 'create' ) +'Success') : errorMsg }}
                     </v-chip>
                 </v-slide-x-reverse-transition>
@@ -407,7 +407,7 @@ export default {
             console.log(this.recordObject)
         },
         resetRecord() {
-            this.resetLoadingStatus
+            this.resetLoadingStatus()
             if (this.$refs.RecordForm != undefined)
                 this.$refs.RecordForm.resetValidation()
             this.recordCopy = {}
@@ -447,8 +447,12 @@ export default {
             // console.log('Create Record')
             // console.log(this.recordCopy)
             this.recordCopy.zone = this.currentZone
+            // If Record Type is SOA force the Root Name
+            if (this.recordCopy.type == 6)
+                this.recordCopy.name = '@'
+
             if (this.$refs.RecordForm.validate()) {
-                this.resetLoadingStatus
+                this.resetLoadingStatus()
                 this.loading = true
                 await new DNSRecord({}).insert(this.recordCopy)
                 .then(() => {
@@ -466,9 +470,9 @@ export default {
                     this.error = true
                     this.submitted = true
                     this.errorMsg = this.getMessageForCode(error.response.data)
-                    this.resetSnackbar()
-                    this.createSnackbar('red', this.errorMsg.toUpperCase() )
-                    setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                    // this.resetSnackbar()
+                    // this.createSnackbar('red', this.errorMsg.toUpperCase() )
+                    // setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
                 })
             }
         },
@@ -477,6 +481,10 @@ export default {
             // console.log(this.recordCopy)
             this.recordCopy.zone = this.currentZone
             var recordDiffers = false
+
+            if (this.recordCopy.type == 6)
+                this.recordCopy.serial = parseInt(this.recordCopy.dwSerialNo)
+
             for (const key in this.recordCopy) {
                 if (key in this.recordCopy && key in this.originalRecord) {
                     if (this.recordCopy[key] != this.originalRecord[key])
@@ -485,7 +493,7 @@ export default {
             }
 
             if (recordDiffers == true && this.$refs.RecordForm.validate()) {
-                    this.resetLoadingStatus
+                    this.resetLoadingStatus()
                     this.loading = true
                     await new DNSRecord({}).update({record: this.recordCopy, oldRecord: this.originalRecord})
                     .then(() => {
@@ -503,9 +511,9 @@ export default {
                         this.error = true
                         this.submitted = true
                         this.errorMsg = this.getMessageForCode(error.response.data)
-                        this.resetSnackbar()
-                        this.createSnackbar('red', this.errorMsg.toUpperCase() )
-                        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                        // this.resetSnackbar()
+                        // this.createSnackbar('red', this.errorMsg.toUpperCase() )
+                        // setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
                     })
             } else {
                 this.closeDialog()
