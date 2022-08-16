@@ -39,7 +39,7 @@
                     <v-icon class="mr-1" color="green">
                     </v-icon>
                     <v-progress-circular :indeterminate="loading == true" :value="submitted ? 100 : 0" 
-                    :color="submitted ? (!error ? 'green' : 'red') : 'primary'" 
+                    :color="error ? 'red' : 'green'" 
                     size="26" 
                     class="ma-0 mr-1">
                     <v-fab-transition>
