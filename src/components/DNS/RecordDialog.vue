@@ -479,7 +479,7 @@ export default {
                     this.loading = false
                     this.error = true
                     this.submitted = true
-                    this.errorMsg = this.getMessageForCode(error.response.data)
+                    this.errorMsg = this.getMessageForCode(error)
                     // this.resetSnackbar()
                     // this.createSnackbar('red', this.errorMsg.toUpperCase() )
                     // setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
@@ -520,7 +520,7 @@ export default {
                         this.loading = false
                         this.error = true
                         this.submitted = true
-                        this.errorMsg = this.getMessageForCode(error.response.data)
+                        this.errorMsg = this.getMessageForCode(error)
                         // this.resetSnackbar()
                         // this.createSnackbar('red', this.errorMsg.toUpperCase() )
                         // setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);

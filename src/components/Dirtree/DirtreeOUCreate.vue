@@ -364,7 +364,7 @@ export default {
                 setTimeout(() => {
                     this.loading = false;
                 }, 450)
-                this.errorMsg = this.getMessageForCode(error.response.data)
+                this.errorMsg = this.getMessageForCode(error)
             })
         }
     }

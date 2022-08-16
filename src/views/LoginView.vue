@@ -280,7 +280,7 @@ export default {
               this.$router.push("/enduser")
           }
         })
-        .catch((e) => {
+        .catch(e => {
           console.log(e)
           this.submitted = false;
           this.error = true;
@@ -298,7 +298,7 @@ export default {
               this.setLoginTimeout()
           }
           else {
-            this.errorMsg = this.getMessageForCode(e.code);
+            this.errorMsg = this.getMessageForCode(e);
           }
         });
       }

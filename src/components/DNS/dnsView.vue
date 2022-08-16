@@ -489,6 +489,7 @@ export default {
                 dnsHeaders.forEach(header => {
                     headerDict = {}
                     headerDict.text = this.$t('dns.attributes.' + header)
+                    headerDict.width = (headerDict.text.length + 1) + "ch"
                     headerDict.value = header
                     if (header == 'ts') {
                         headerDict.align = 'center'
@@ -506,6 +507,7 @@ export default {
                 headerDict = {}
                 headerDict.text = this.$t('actions.label')
                 headerDict.value = 'actions'
+                headerDict.width = '6rem'
                 headerDict.align = 'center'
                 headerDict.sortable = false
                 this.dns.headers.push(headerDict)
@@ -520,10 +522,14 @@ export default {
         // Reload Data Table Header Labels
         reloadDataTableHeaders(){
             this.dns.headers.forEach(tableHeader => {
-                if (tableHeader.value == "actions")
+                if (tableHeader.value == "actions"){
                     tableHeader.text = this.$t('actions.label')
-                else
+                    tableHeader.width = (tableHeader.text.length + 1) + "ch"
+                }
+                else {
                     tableHeader.text = this.$t('dns.attributes.' + tableHeader.value)
+                    tableHeader.width = (tableHeader.text.length + 1) + "ch"
+                }
             });
         },
         // Reset Data Table variables

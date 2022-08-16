@@ -553,6 +553,8 @@ const validationMixin = {
       ]
       },
       getMessageForCode(errorData=undefined){
+        var suffix
+
         if (errorData == undefined) {
           console.log('Error Data is undefined')
           return this.$t("error.unknown_short")
@@ -571,6 +573,11 @@ const validationMixin = {
         else
           codeToUse = errorData.status_code
 
+        if (codeToUse.length < 40)
+          suffix = " (" + codeToUse + ")"
+        else
+          suffix = " (" + codeToUse.substring(0, 40) + "...)"
+
         switch(codeToUse){
           case 405:
             return this.$t('error.codes.badRequest')
@@ -585,10 +592,10 @@ const validationMixin = {
           case undefined:
           case "":
           default:
-            return this.$t("error.unknown_short") + " (" + codeToUse.substring(0,48) + ")"
+            return this.$t("error.unknown_short") + suffix
         }
       },
-      
+
     // Check if theme is dark
     isThemeDark(vuetify) {
       if (vuetify.theme.dark === true) {
