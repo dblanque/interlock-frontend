@@ -494,7 +494,7 @@ export default {
             this.dialogs[key] = false;
             if (refresh == true && this.deleteMode == 'record')
                 this.getDNSData()
-            else {
+            else if (refresh == true && this.deleteMode == 'zone') {
                 this.zoneFilter['dnsZone'] = this.ldap.domain
                 this.getDNSData()
             }
