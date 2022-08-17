@@ -61,7 +61,9 @@ const urls = {
     domain: {
         base: "api/domain/",
         details: "api/domain/details/",
-        zones: "api/domain/zones/"
+        zones: "api/domain/zones/",
+        insert: "api/domain/insert/",
+        delete: "api/domain/delete/",
     },
     dnsr: {
         insert: "api/record/insert/",

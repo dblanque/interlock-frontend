@@ -383,11 +383,16 @@
   },
   "section": {
     "dns":{
+      "zoneToAddName":"Nombre de la nueva Zona de DNS",
+      "confirmZoneCreation":"Confirmar Creación de Zona",
       "createSuccess":"Registro Creado",
       "updateSuccess":"Registro Modificado",
       "deleteSuccess":"Registro Eliminado",
       "deleteRecord":{
-        "message":"¿Está seguro de borrar el registro de DNS"
+        "message":"¿Está seguro de borrar el Registro de DNS"
+      },
+      "deleteZone":{
+        "message":"¿Está seguro de borrar la Zona de DNS"
       }
     },
     "login": {

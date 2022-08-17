@@ -22,6 +22,26 @@ const actions = {
             })
         })
     },
+
+    insert: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.domain.insert, data).then(response => {
+                resolve(response.data)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
+    delete: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.domain.delete, data).then(response => {
+                resolve(response.data)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
 }
 
 export default actions

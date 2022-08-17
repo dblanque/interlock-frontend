@@ -17,15 +17,35 @@
       <!-- Zone selection and operations -->
     <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-select v-model="zoneFilter['dnsZone']" @change="getDNSData" :items="dns.zones" class="mx-2"/>
-        <v-btn class="pa-2 mx-2" disabled color="primary">
+        <v-btn class="pa-2 mx-2" @click="showZoneAdd = !showZoneAdd" color="primary">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
             {{ $t('actions.addN') + ' ' + $t('classes.dns.zone.single') }}
         </v-btn>
-        <v-btn class="pa-2 mx-2" disabled color="red">
-            <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
+        <v-btn class="text-white pa-2 mx-2" @click="openDeleteDialog(null, 'zone')"
+        :disabled="loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain" color="red">
+            <v-icon class="clr-white ma-0 pa-0">mdi-delete</v-icon>
             {{ $t('actions.delete') + ' ' + $t('classes.dns.zone.single') }}
         </v-btn>
     </v-row>
+    <v-expand-transition>
+        <v-form ref="zoneCreateForm">
+        <v-row v-if="showZoneAdd" align="center" class="px-2 mx-6 py-0 my-0">
+                <v-text-field
+                v-model="zoneToCreate"
+                clearable
+                :rules="[fieldRules(zoneToCreate, 'ldap_website', true)]"
+                :label="$t('section.dns.zoneToAddName')"
+                class="mx-2"
+                ></v-text-field>
+            <v-btn class="pa-2 mx-2" color="primary" outlined @click="createZone" :disabled="zoneToCreate.length == 0 || loading">
+                {{ $t('section.dns.confirmZoneCreation') }}
+                <v-icon color="primary" class="ml-1">
+                    mdi-check-all
+                </v-icon>
+            </v-btn>
+        </v-row>
+        </v-form>
+    </v-expand-transition>
     <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-text-field
           v-model="searchString"
@@ -106,13 +126,6 @@
         {{ item.ttl == 0 ? $t('dns.attributes.infiniteTtl') : item.ttl }}
     </template>
 
-    <!-- <template v-slot:[`item.address`]="{ item }">
-        <span v-if="item.address">
-            {{ item.address }}
-        </span>
-        <v-divider class="mx-10" v-else/>
-    </template> -->
-
     <template v-slot:[`item.value`]="{ item }">
         <span v-if="item.typeName == 'MX'">
             {{ item.nameExchange }}
@@ -174,14 +187,13 @@
     <template v-slot:[`item.actions`]="{ item }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon :disabled="zoneFilter['dnsZone'] == 'Root DNS Servers'"
+          <v-btn icon :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'"
             rounded
             v-bind="attrs"
             v-on="on"
             small
             @click="editRecord(item)"
           >
-            <!-- :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" -->
           <v-icon small color="primary">
             mdi-pencil
           </v-icon>
@@ -192,13 +204,12 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon @click="openDeleteDialog(item)" :disabled="zoneFilter['dnsZone'] == 'Root DNS Servers'"
+          <v-btn icon @click="openDeleteDialog(item)" :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'"
             rounded
             v-bind="attrs"
             v-on="on"
             small
           >
-            <!-- :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" -->
           <v-icon small color="red">
             mdi-delete
           </v-icon>
@@ -259,6 +270,7 @@
   <!-- RECORD DELETE DIALOG -->
   <v-dialog eager max-width="800px" v-model="dialogs['recordDelete']">
     <RecordDelete
+        :deleteMode="this.deleteMode"
         :currentZone="this.zoneFilter.dnsZone"
         :recordObject="this.currentRecord"
         :viewKey="'recordDelete'"
@@ -272,7 +284,7 @@
 </template>
 
 <script>
-import { default as DNS } from '@/include/Domain'
+import Domain, { default as DNS } from '@/include/Domain'
 import validationMixin from '@/plugins/mixin/validationMixin'
 import RecordDialog from '@/components/DNS/RecordDialog.vue'
 import RecordDelete from '@/components/DNS/RecordDelete.vue'
@@ -290,6 +302,8 @@ export default {
                 name: "",
                 type: 1,
             },
+            zoneToCreate: "",
+            showZoneAdd: false,
             updateFlag: false,
             singleExpand: false,
             expanded: [],
@@ -312,6 +326,7 @@ export default {
             error: false,
             errorMsg: "",
             readonly: false,
+            deleteMode: 'record',
             ldap: {},
             // Dialog States
             dialogs: {
@@ -350,6 +365,18 @@ export default {
         }
     },
     methods: {
+        async createZone(){
+            if (this.$refs.zoneCreateForm.validate()) {
+                await new Domain({}).insert({dnsZone: this.zoneToCreate})
+                .then(() => {
+                    this.zoneFilter['dnsZone'] = this.zoneToCreate
+                    this.getDNSData()
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+        },
         zoneHasSOA(){
             if (this.dns.records.filter(e => e.type == 6).length > 0)
                 return true
@@ -458,14 +485,19 @@ export default {
             this.currentRecord = recordItem
             this.openDialog('recordDialog', true)
         },
-        openDeleteDialog(recordItem) {
+        openDeleteDialog(recordItem, mode='record') {
+            this.deleteMode = mode
             this.currentRecord = recordItem
             this.openDialog('recordDelete')
         },
         async closeDialog(key, refresh=false){
             this.dialogs[key] = false;
-            if (refresh == true)
+            if (refresh == true && this.deleteMode == 'record')
                 this.getDNSData()
+            else {
+                this.zoneFilter['dnsZone'] = this.ldap.domain
+                this.getDNSData()
+            }
         },
         async getDNSData(zoneToQuery=undefined) {
             // Set DNS Zone Query

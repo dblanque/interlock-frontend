@@ -377,11 +377,16 @@
   },
   "section":{
     "dns":{
+      "zoneToAddName":"Name of the new DNS Zone",
+      "confirmZoneCreation":"Confirm Zone Creation",
       "createSuccess":"Record Created",
       "updateSuccess":"Record Updated",
       "deleteSuccess":"Record Deleted",
       "deleteRecord":{
         "message":"Are you sure you wish to delete the DNS Record"
+      },
+      "deleteZone":{
+        "message":"Are you sure you wish to delete the DNS Zone"
       }
     },
     "login":{

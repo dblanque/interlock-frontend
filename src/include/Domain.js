@@ -24,6 +24,14 @@ class Domain extends ApiModel{
     async zones(data){
         return await interlock_backend.call('domain/zones', data)
     }
+
+    async insert(data){
+        return await interlock_backend.call('domain/insert', data)
+    }
+
+    async delete(data){
+        return await interlock_backend.call('domain/delete', data)
+    }
 }
 
 export default Domain

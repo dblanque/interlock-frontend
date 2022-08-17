@@ -421,11 +421,13 @@ export default {
             if (this.$refs.RecordForm != undefined)
                 this.$refs.RecordForm.resetValidation()
             this.recordCopy = {}
-            if (this.recordObject.ttl == undefined)
-                this.recordCopy.ttl = 900
-            setTimeout(() => {
-                this.recordCopy.type = this.selectedType
-            }, 500)
+            if (this.recordObject != undefined && this.recordObject != null){
+                if (this.recordObject.ttl == undefined)
+                    this.recordCopy.ttl = 900
+                setTimeout(() => {
+                        this.recordCopy.type = this.selectedType
+                }, 500)
+            }
         },
         resetValidation(){
             if (this.$refs.RecordForm != undefined)
@@ -435,13 +437,15 @@ export default {
             this.resetRecord()
             this.$nextTick(() => {
                 // Do deep copy of object for reset
-                this.recordCopy = JSON.parse(JSON.stringify(this.recordObject))
-                this.originalRecord = JSON.parse(JSON.stringify(this.recordObject))
-                
-                if (this.recordObject.ttl == undefined)
-                    this.recordCopy.ttl = 900
-                if (this.recordObject.type != undefined)
-                    this.selectedType = this.recordObject.type
+                if (this.recordObject != undefined && this.recordObject != null) {
+                    this.recordCopy = JSON.parse(JSON.stringify(this.recordObject))
+                    this.originalRecord = JSON.parse(JSON.stringify(this.recordObject))
+                    
+                    if (this.recordObject.ttl == undefined)
+                        this.recordCopy.ttl = 900
+                    if (this.recordObject.type != undefined)
+                        this.selectedType = this.recordObject.type
+                }
             })
         },
         setTTL(v) {

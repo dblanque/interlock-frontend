@@ -3,7 +3,7 @@
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
                 <h3 class="pa-0 ma-0 ma-2">
-                {{ $t('actions.delete') + ' ' + $t('classes.dns.record.single') }}
+                {{ $t('actions.delete') + ' ' + $t('classes.dns.'+ deleteMode +'.single') }}
                 </h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
@@ -15,25 +15,34 @@
         </v-card-title>
 
         <v-card-text class="pa-0 ma-0 pb-4">
-            <v-row class="pa-0 ma-8 mb-2 text-subtitle-1 text-inverted" justify="center">
+            <v-row v-if="deleteMode == 'record'" class="pa-0 ma-8 mb-2 text-subtitle-1 text-inverted" justify="center">
                 {{ $t('section.dns.deleteRecord.message') }}
                 <span class="font-weight-medium" style="padding-left: 0.5ch;">
                     {{ recordObject.displayName + " (" + recordObject.typeName + ")" }}
                 </span>
                 ?
             </v-row>
-            <v-divider class="mx-8 mb-3"/>
-            <v-row class="pa-0 ma-0 text-subtitle-1 text-inverted" justify="center" v-for="value, attr_key in recordObject" :key="attr_key">
-                <span class="ma-0 pa-0" style="padding-left: 0.5ch;" 
-                v-if="showAttribute(attr_key)">
-                    {{ $t('dns.attributes.' + attr_key) + ": " + value }}
+            <v-row v-else-if="deleteMode == 'zone'" class="pa-0 ma-8 mb-2 text-subtitle-1 text-inverted" justify="center">
+                {{ $t('section.dns.deleteRecord.message') }}
+                <span class="font-weight-medium" style="padding-left: 0.5ch;">
+                    {{ currentZone }}
                 </span>
+                ?
             </v-row>
+            <v-divider v-if="deleteMode == 'record'" class="mx-8 mb-3"/>
+            <span v-if="deleteMode == 'record'">
+                <v-row class="pa-0 ma-0 text-subtitle-1 text-inverted" justify="center" v-for="value, attr_key in recordObject" :key="attr_key">
+                    <span class="ma-0 pa-0" style="padding-left: 0.5ch;" 
+                    v-if="showAttribute(attr_key)">
+                        {{ $t('dns.attributes.' + attr_key) + ": " + value }}
+                    </span>
+                </v-row>
+            </span>
         </v-card-text>
         <!-- Actions -->
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn @click="closeDialog(true)" :disabled="recordObject == undefined"
+                <v-btn @click="closeDialog(true)" :disabled="deleteMode == 'record' ? (recordObject == undefined) : (currentZone == undefined)"
                 class="ma-0 pa-0 pa-2 pl-1 ma-1 bg-white bg-lig-25" 
                 rounded>
                     <v-icon class="mr-1" color="green">
@@ -75,6 +84,7 @@
 
 <script>
 import DNSRecord from '@/include/DNSRecord'
+import Domain from '@/include/Domain'
 import validationMixin from '@/plugins/mixin/validationMixin'
 
 export default {
@@ -98,10 +108,12 @@ export default {
     },
     props: {
         currentZone: String,
+        deleteMode: {
+            type: String,
+            default: "record"
+        },
         recordObject: Object,
         viewKey: String
-    },
-    created() {
     },
     methods: {
         showAttribute(attr){
@@ -110,7 +122,7 @@ export default {
             return true
         },
         async closeDialog(deleteConfirm=false, record={}) {
-            if (record != {}) {
+            if (record != {} && this.deleteMode == 'record') {
                 record = this.recordObject
                 record.zone = this.currentZone
             }
@@ -119,23 +131,41 @@ export default {
                 this.error = false
                 this.errorMsg = ""
                 this.submitted = false
-                await new DNSRecord({}).delete(record)
-                .then(response => {
-                    this.loading = false
-                    this.error = false
-                    this.errorMsg = ""
-                    this.submitted = false
-                    if (response.data.distinguishedName == record.distinguishedName)
-                        console.log("Record Deleted Successfully")
-                    this.$emit('refresh');
-                })
-                .catch(error => {
-                    this.loading = false
-                    this.error = true
-                    this.errorMsg = this.getMessageForCode(error)
-                    this.submitted = false
-                    console.log(error)
-                })
+                if (this.deleteMode == 'zone') {
+                    await new Domain({}).delete({dnsZone: this.currentZone})
+                    .then(() => {
+                        this.loading = false
+                        this.error = false
+                        this.errorMsg = ""
+                        this.submitted = false
+                        this.$emit('refresh');
+                    })
+                    .catch(error => {
+                        this.loading = false
+                        this.error = true
+                        this.errorMsg = this.getMessageForCode(error)
+                        this.submitted = false
+                        console.log(error)
+                    })
+                } else if (record) {
+                    await new DNSRecord({}).delete(record)
+                    .then(response => {
+                        this.loading = false
+                        this.error = false
+                        this.errorMsg = ""
+                        this.submitted = false
+                        if (response.data.distinguishedName == record.distinguishedName)
+                            console.log("Record Deleted Successfully")
+                        this.$emit('refresh');
+                    })
+                    .catch(error => {
+                        this.loading = false
+                        this.error = true
+                        this.errorMsg = this.getMessageForCode(error)
+                        this.submitted = false
+                        console.log(error)
+                    })
+                }
             }
 
             // Wait for animations if delete confirm true
