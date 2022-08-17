@@ -89,8 +89,8 @@
     </template>
 
     <template v-slot:[`item.objectClass`]="{ item }">
-        <v-row justify="center" align="center" class="pr-6">
-            <v-icon class="mr-1" :color="getIconForObjectClass(item.objectClass)[1] || undefined">
+        <v-row justify="center" align="center" class="px-6 my-2">
+            <v-icon class="mr-2" :small="$vuetify.breakpoint.mdAndDown" :color="getIconForObjectClass(item.objectClass)[1] || undefined">
                 {{ getIconForObjectClass(item.objectClass)[0] }}
             </v-icon>
             <span>

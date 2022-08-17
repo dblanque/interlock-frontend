@@ -33,7 +33,7 @@
                 <v-text-field
                 v-model="zoneToCreate"
                 clearable
-                :rules="[fieldRules(zoneToCreate, 'ldap_website', true)]"
+                :rules="[fieldRules(zoneToCreate, 'ldap_website')]"
                 :label="$t('section.dns.zoneToAddName')"
                 class="mx-2"
                 ></v-text-field>
