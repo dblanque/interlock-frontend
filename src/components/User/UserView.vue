@@ -247,6 +247,7 @@ import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
+import { notificationBus } from '@/main.js'
 
 export default {
   mixins: [ validationMixin ],
@@ -340,11 +341,8 @@ export default {
       this.tableData.headers = []
       this.tableData.items = []
     },
-    resetSnackbar(){
-      this.$emit('resetSnackbar')
-    },
-    createSnackbar(color, string){
-      this.$emit('createSnackbar', color, string)
+    createSnackbar(notifObj){
+      notificationBus.$emit('createNotification', notifObj);
     },
     // User Actions
     async listUserItems(){
@@ -378,17 +376,13 @@ export default {
         this.tableData.items = users
         this.loading = false
         this.error = false
-        this.resetSnackbar();
-        this.createSnackbar('green', (this.$t("classes.user.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase() )
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+        this.createSnackbar({message: (this.$t("classes.user.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
       })
       .catch(error => {
         console.log(error)
         this.loading = false
         this.error = true
-        this.resetSnackbar();
-        this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.viewTitle.toUpperCase())
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+        this.createSnackbar({message: this.$t("error.unableToLoad").toUpperCase() + " " + this.viewTitle.toUpperCase(), type: 'error'})
       })
     },
     async unlockUser(userObject){
@@ -396,17 +390,13 @@ export default {
       .then(() => {
         this.loading = false
         this.error = false
-        this.resetSnackbar();
-        this.createSnackbar('primary', this.$t("section.users.userUnlocked").toUpperCase())
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+        this.createSnackbar({message: this.$t("section.users.userUnlocked").toUpperCase(), type: 'success'})
       })
       .catch(error => {
         console.log(error)
         this.loading = false
         this.error = true
-        this.resetSnackbar();
-        this.createSnackbar('red', this.$t("section.users.errorUserUnlock").toUpperCase())
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+        this.createSnackbar({message: this.$t("section.users.errorUserUnlock").toUpperCase(), type: 'error'})
       })
     },
     isLoggedInUser(username){

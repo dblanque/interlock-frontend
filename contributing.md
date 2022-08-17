@@ -17,6 +17,7 @@ to this project.
 * **Martin Vilche**
     - Site: [https://martinvsolutions.com/](https://martinvsolutions.com/)
     - Credited for Calls Module and Constructors in Interlock Front-end
+    - Credited for Notification Bus: Assistance with Implementation
     - Other Minor Fixes and Assistance
 * **etianen**
     - Credited for creating the Django-python3-ldap module

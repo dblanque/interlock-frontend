@@ -174,6 +174,9 @@
       </v-tab-item>
     </v-tabs-items>
 
+    <!-- SNACKBAR / NOTIF. BUS -->
+    <NotificationBusContainer/>
+
     <!-- LOGOUT DIALOG  -->
     <v-dialog
       persistent
@@ -217,6 +220,7 @@ import LogoutDialog from "@/components/LogoutDialog.vue";
 import User from "@/include/User";
 import Test from "@/include/Test";
 import Domain from "@/include/Domain";
+import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin';
 
 export default {
@@ -226,7 +230,8 @@ export default {
     ModularViewContainer,
     LanguageSelector,
     LogoutDialog,
-    ThemeChanger
+    ThemeChanger,
+    NotificationBusContainer
   },
   data() {
     return {
