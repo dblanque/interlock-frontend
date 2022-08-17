@@ -3,23 +3,15 @@
     <!------------------>
     <v-row
       justify="center"
-      :class="
-        'ma-0 pa-2 py-4 text-normal ' +
-        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
-      "
-    >
+      :class="'ma-0 pa-2 py-4 text-normal transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
       <h2 class="font-weight-medium">{{ domain.toUpperCase() }}</h2>
     </v-row>
     <v-row
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
       align="center"
-      :class="
-        'ma-0 pa-2 ' +
-        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
-      "
-      style="height: fit-content"
-    >
+      :class="'ma-0 pa-2 transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
+      style="height: fit-content">
       <v-col cols="12" md="auto">
         <LanguageSelector
           :dark="!isThemeDark($vuetify)"
@@ -31,8 +23,7 @@
       <v-divider light class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp" />
       <v-col
         class="ma-0 pa-0 my-3"
-        v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''"
-      >
+        v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
         <span
           class="text-normal"
           v-if="last_name && last_name != '' && first_name && first_name != ''">
@@ -65,8 +56,7 @@
                 icon
                 class="mx-2"
                 v-bind="attrs"
-                v-on="on"
-              >
+                v-on="on">
                 <v-icon> mdi-logout </v-icon>
               </v-btn>
             </template>
@@ -93,11 +83,7 @@
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
       style="z-index: 1"
-      :class="
-        'sticky-top ' +
-        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
-      "
-    >
+      :class="'sticky-top transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
       <v-fade-transition>
         <v-tabs
           v-model="active_tab"
@@ -542,5 +528,9 @@ export default {
 
 .rounded-dialog {
   border-radius: 40px !important;
+}
+
+.transition-speed-fix {
+  transition: background-color var(--base-transition-speed-fast-5) ease-in-out !important;
 }
 </style>
