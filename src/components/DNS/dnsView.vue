@@ -27,12 +27,11 @@
             {{ $t('actions.delete') + ' ' + $t('classes.dns.zone.single') }}
         </v-btn>
     </v-row>
+    <v-form ref="zoneCreateForm">
     <v-expand-transition>
-        <v-form ref="zoneCreateForm">
-        <v-row v-if="showZoneAdd" align="center" class="px-2 mx-6 py-0 my-0">
+        <v-row v-show="showZoneAdd" align="center" class="px-2 mx-6 py-0 my-0">
                 <v-text-field
                 v-model="zoneToCreate"
-                clearable
                 :rules="[fieldRules(zoneToCreate, 'ldap_website')]"
                 :label="$t('section.dns.zoneToAddName')"
                 class="mx-2"
@@ -44,8 +43,8 @@
                 </v-icon>
             </v-btn>
         </v-row>
-        </v-form>
     </v-expand-transition>
+    </v-form>
     <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-text-field
           v-model="searchString"
@@ -492,11 +491,11 @@ export default {
         },
         async closeDialog(key, refresh=false){
             this.dialogs[key] = false;
-            if (refresh == true && this.deleteMode == 'record')
-                this.getDNSData()
-            else if (refresh == true && this.deleteMode == 'zone') {
+            if (refresh == true && this.deleteMode == 'zone') {
                 this.zoneToCreate = ""
                 this.zoneFilter['dnsZone'] = this.ldap.domain
+                this.getDNSData(this.ldap.domain)
+            } else if (refresh === true) {
                 this.getDNSData()
             }
         },

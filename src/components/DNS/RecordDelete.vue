@@ -138,7 +138,6 @@ export default {
                         this.error = false
                         this.errorMsg = ""
                         this.submitted = false
-                        this.$emit('refresh');
                     })
                     .catch(error => {
                         this.loading = false
@@ -156,7 +155,6 @@ export default {
                         this.submitted = false
                         if (response.data.distinguishedName == record.distinguishedName)
                             console.log("Record Deleted Successfully")
-                        this.$emit('refresh');
                     })
                     .catch(error => {
                         this.loading = false
@@ -171,7 +169,7 @@ export default {
             // Wait for animations if delete confirm true
             if (deleteConfirm == true)
                 setTimeout(() => {
-                    this.$emit('closeDialog', this.viewKey);
+                    this.$emit('closeDialog', this.viewKey, deleteConfirm);
                 }, 150)
             else
                 this.$emit('closeDialog', this.viewKey);
