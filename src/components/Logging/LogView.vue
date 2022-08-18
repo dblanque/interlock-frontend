@@ -159,7 +159,7 @@ export default {
       var ids = this.tableData.items.map(log => {
         return log.id;
       });
-      return ids[0]
+      return ids.sort((a, b) => a > b)[0]
     },
     getLogTruncateMax(){
       var ids = this.tableData.items.map(log => {
