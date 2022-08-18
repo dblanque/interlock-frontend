@@ -126,6 +126,7 @@
 import Log from '@/include/Log';
 import LogResetDialog from '@/components/Logging/LogResetDialog.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
+import { notificationBus } from '@/main.js'
 
 export default {
   mixins: [ validationMixin ],
@@ -175,6 +176,9 @@ export default {
     viewTitle: String
   },
   methods: {
+    createSnackbar(notifObj){
+      notificationBus.$emit('createNotification', notifObj);
+    },
     resetSearch(){
       this.searchString = ""
     },
@@ -268,12 +272,6 @@ export default {
       this.tableData.headers = []
       this.tableData.items = []
     },
-    resetSnackbar(){
-      this.$emit('resetSnackbar')
-    },
-    createSnackbar(color, string){
-      this.$emit('createSnackbar', color, string)
-    },
     // Log Actions
     async listLogs(){
       this.loading = true
@@ -306,18 +304,14 @@ export default {
         this.tableData.items = logs
         this.loading = false
         this.error = false
-        this.resetSnackbar();
-        this.createSnackbar('green', (this.$t("classes.log.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase() )
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+        this.createSnackbar({message: (this.$t("classes.log.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
         this.logTruncateRange = [ this.getLogTruncateMin, this.getLogTruncateMax ]
       })
       .catch(error => {
         console.log(error)
         this.loading = false
         this.error = true
-        this.resetSnackbar();
-        this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.viewTitle.toUpperCase())
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+        this.createSnackbar({message: this.$t("error.unableToLoad").toUpperCase() + " " + this.viewTitle.toUpperCase(), type: 'error'})
       })
     },
     openResetLogsDialog(){

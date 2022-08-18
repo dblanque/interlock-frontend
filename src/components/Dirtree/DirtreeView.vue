@@ -340,6 +340,7 @@ import DirtreeMove from '@/components/Dirtree/DirtreeMove.vue';
 import DirtreeRename from '@/components/Dirtree/DirtreeRename.vue';
 import DirtreeDeleteObject from '@/components/Dirtree/DirtreeDeleteObject.vue';
 import validationMixin from '@/plugins/mixin/validationMixin';
+import { notificationBus } from '@/main.js'
 
 export default {
     mixins: [ validationMixin ],
@@ -450,6 +451,9 @@ export default {
       }
     },
     methods: {
+        createSnackbar(notifObj){
+          notificationBus.$emit('createNotification', notifObj);
+        },
         validToDelete(itemType){
           switch (itemType.toLowerCase()) {
             case 'organizational-unit':
@@ -499,19 +503,15 @@ export default {
           .then(() => {
                 this.error = false;
                 this.loading = false;
-                this.resetSnackbar();
                 this.resetDirtree(true)
-                this.createSnackbar('green', this.$t("section.dirtree.move.success").toUpperCase() )
-                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                this.createSnackbar({message: this.$t("section.dirtree.move.success").toUpperCase(), type: 'success'})
           })
           .catch(error => {
                 console.log(error)
                 this.loading = false
                 this.error = true
                 this.errorMsg = this.getMessageForCode(error)
-                this.resetSnackbar()
-                this.createSnackbar('red', this.errorMsg.toUpperCase() )
-                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                this.createSnackbar({message: this.errorMsg.toUpperCase(), type: 'error'})
           })
         },
         async renameObject(newRDN){
@@ -522,19 +522,15 @@ export default {
           .then(() => {
                 this.error = false;
                 this.loading = false;
-                this.resetSnackbar()
                 this.resetDirtree(true)
-                this.createSnackbar('green', this.$t("section.dirtree.rename.success").toUpperCase() )
-                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                this.createSnackbar({message: this.$t("section.dirtree.rename.success").toUpperCase(), type: 'success'})
           })
           .catch(error => {
                 console.log(error)
                 this.loading = false
                 this.error = true
                 this.errorMsg = this.getMessageForCode(error)
-                this.resetSnackbar()
-                this.createSnackbar('red', this.errorMsg.toUpperCase() )
-                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                this.createSnackbar({message: this.errorMsg.toUpperCase(), type: 'error'})
           })
         },
         openDialog(key, item){
@@ -646,12 +642,6 @@ export default {
               this.fetchDirtree()
               this.forceReload = false
         },
-        resetSnackbar(){
-            this.$emit('resetSnackbar')
-        },
-        createSnackbar(color, string){
-            this.$emit('createSnackbar', color, string)
-        },
         // Home (DirTree) View Actions
         async fetchDirtree(){
             this.loading = true
@@ -663,17 +653,13 @@ export default {
                 this.tableData.items = response.data.ldapObjectList
                 this.error = false;
                 this.loading = false;
-                this.resetSnackbar();
-                this.createSnackbar('green', (this.$t("category.header.home") + " " + this.$t("words.loaded.single.m")).toUpperCase() )
-                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                this.createSnackbar({message: (this.$t("category.header.home") + " " + this.$t("words.loaded.single.m")).toUpperCase(), type: 'success'})
             })
             .catch(error => {
                 console.log(error)
                 this.loading = false;
                 this.error = true;
-                this.resetSnackbar();
-                this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.selectedTabTitle.toUpperCase())
-                setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                this.createSnackbar({message: (this.$t("error.unableToLoad") + " " + this.selectedTabTitle).toUpperCase(), type: 'error'})
             })
         },
     },

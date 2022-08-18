@@ -13,8 +13,6 @@
       :requestRefresh="this.refreshUserDataTable"
       :viewTitle="viewTitle"
       :snackbarTimeout="this.snackbarTimeout"
-      @createSnackbar="createSnackbar"
-      @resetSnackbar="resetSnackbar"
       @refresh="refreshAction"
       @goToUser="goToUser"
       @goToGroup="goToGroup"
@@ -28,8 +26,6 @@
       :requestRefresh="this.refreshUserDataTable"
       :viewTitle="viewTitle"
       :snackbarTimeout="this.snackbarTimeout"
-      @createSnackbar="createSnackbar"
-      @resetSnackbar="resetSnackbar"
       @refresh="refreshAction"
       @goToGroup="goToGroup"
     />
@@ -41,8 +37,6 @@
       :requestRefresh="this.refreshGroupDataTable"
       :viewTitle="viewTitle"
       :snackbarTimeout="this.snackbarTimeout"
-      @createSnackbar="createSnackbar"
-      @resetSnackbar="resetSnackbar"
       @refresh="refreshAction"
     />
   </v-container>
@@ -53,8 +47,6 @@
       :requestRefresh="this.refreshDNSData"
       :viewTitle="viewTitle"
       :snackbarTimeout="this.snackbarTimeout"
-      @createSnackbar="createSnackbar"
-      @resetSnackbar="resetSnackbar"
       @refresh="refreshAction"
     />
   </v-container>
@@ -69,8 +61,6 @@
       :viewTitle="viewTitle"
       class="my-2 mb-4"
       ref="SettingsView"
-      @createSnackbar="createSnackbar"
-      @resetSnackbar="resetSnackbar"
     />
   </v-container>
 
@@ -80,8 +70,6 @@
       :viewTitle="viewTitle"
       class="my-2 mb-4"
       ref="LogView"
-      @createSnackbar="createSnackbar"
-      @resetSnackbar="resetSnackbar"
     />
   </v-container>
 
@@ -254,28 +242,6 @@ import validationMixin from '@/plugins/mixin/validationMixin';
       },
       goToGroup(group){
         this.$emit('goToGroup', group)
-      },
-      createSnackbar(color, string){
-        if (!color) {
-          color = "primary"
-        }
-        if (!this.snackbarColor || this.snackbarColor.length == 0)
-          this.snackbarColor = color;
-        if (!this.snackbarMessage || this.snackbarMessage.length == 0)
-          this.snackbarMessage = string;
-        this.snackbar = true;
-      },
-      // Reset Snackbar values
-      resetSnackbar(){
-        this.snackbar = false
-        setTimeout(()=>{
-          if (!this.snackbar) {
-            this.snackbarMessage = ""
-            this.snackbarIcon = ""
-            this.snackbarColor = ""
-            this.snackbarClasses = ""
-          }
-        }, this.snackbarTimeout + 300)
       },
       openDialog(key){
         this.dialogs[key] = true;

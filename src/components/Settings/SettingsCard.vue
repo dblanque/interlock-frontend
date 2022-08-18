@@ -334,6 +334,7 @@
 import validationMixin from '@/plugins/mixin/validationMixin';
 import Settings from '@/include/Settings';
 import SettingsResetDialog from '@/components/Settings/SettingsResetDialog.vue'
+import { notificationBus } from '@/main.js'
 
 export default {
     mixins: [ validationMixin ],
@@ -526,6 +527,9 @@ export default {
         this.refreshSettings();
     },
     methods:{
+        createSnackbar(notifObj){
+            notificationBus.$emit('createNotification', notifObj);
+        },
         // This function returns true or false based on another key value 
         // if a data key path is passed through
         getRequired(value, sameObject=false, valueField=false) {
@@ -595,13 +599,11 @@ export default {
                         this.testing = false
                         this.testFinished = true
                         this.testError = false
-                        this.resetSnackbar()
-                        this.createSnackbar('green', (this.$t("section.settings.testSuccess")).toUpperCase())
+                        this.createSnackbar({message: (this.$t("section.settings.testSuccess")).toUpperCase(), type: 'success'})
                     }, 500)
                 })
                 .catch(error => {
                     console.log(error)
-                    this.resetSnackbar()
                     var errorResponseData = error.response.data
                     var errorMsg
                     var code = errorResponseData.code
@@ -613,7 +615,7 @@ export default {
                             errorMsg = this.$t("error.settings.testInvalid")
                             break;
                     }
-                    this.createSnackbar('red', errorMsg.toUpperCase())
+                    this.createSnackbar({message: errorMsg.toUpperCase(), type: 'error'})
                     setTimeout(() => {
                         this.testing = false
                         this.testFinished = true
@@ -636,13 +638,11 @@ export default {
                 dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
                 dataToSend['DEFAULT_ADMIN_PWD'] = this.defaultAdminPwd
                 await new Settings({}).save(dataToSend).then(() => {
-                    this.resetSnackbar()
-                    this.createSnackbar('green', (this.$t("classes.setting.plural") + " " + this.$t("words.saved.plural.m")).toUpperCase())
+                    this.createSnackbar({message: (this.$t("classes.setting.plural") + " " + this.$t("words.saved.plural.m")).toUpperCase(), type: 'success'})
                 })
                 .catch(error => {
                     console.log(error)
-                    this.resetSnackbar()
-                    this.createSnackbar('red', this.$t("error.codes.badRequest").toUpperCase())
+                    this.createSnackbar({message: this.$t("error.codes.badRequest").toUpperCase(), type: 'error'})
                 })
                 this.refreshSettings
             }
@@ -693,8 +693,7 @@ export default {
                     }
                 }
                 this.loading = false
-                this.resetSnackbar()
-                this.createSnackbar('green', (this.$t("classes.setting.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase())
+                this.createSnackbar({message: (this.$t("classes.setting.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
                 setTimeout(()=>{
                     this.showSettings = true
                     this.readonly = false
@@ -704,8 +703,7 @@ export default {
             .catch(error => {
                 console.log(error)
                 this.loading = false
-                this.resetSnackbar()
-                this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase())
+                this.createSnackbar({message: (this.$t("error.unableToLoad") + " " + this.$t('classes.setting.plural')).toUpperCase(), type: 'error'})
                 setTimeout(()=>{
                     this.showSettings = false
                 }, 250)
@@ -794,12 +792,6 @@ export default {
                 });
             }
             return object.value
-        },
-        resetSnackbar(){
-            this.$emit('resetSnackbar')
-        },
-        createSnackbar(color, string){
-            this.$emit('createSnackbar', color, string)
         },
     }
 }

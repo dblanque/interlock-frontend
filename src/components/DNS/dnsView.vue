@@ -288,6 +288,7 @@ import validationMixin from '@/plugins/mixin/validationMixin'
 import RecordDialog from '@/components/DNS/RecordDialog.vue'
 import RecordDelete from '@/components/DNS/RecordDelete.vue'
 import { getDomainDetails } from '@/include/utils';
+import { notificationBus } from '@/main.js'
 
 export default {
     mixins: [ validationMixin ],
@@ -364,6 +365,9 @@ export default {
         }
     },
     methods: {
+        createSnackbar(notifObj){
+            notificationBus.$emit('createNotification', notifObj);
+        },
         async createZone(){
             if (this.$refs.zoneCreateForm.validate()) {
                 await new Domain({}).insert({dnsZone: this.zoneToCreate})
@@ -453,11 +457,14 @@ export default {
             this.loading = false
             if (error != undefined){
                 this.error = true
-                if (message != undefined)
+                if (message != undefined && message.length > 0)
                     this.errorMsg = message
                 else
-                    this.errorMsg = this.getMessageForCode()
+                    this.errorMsg = this.getMessageForCode(error)
+                var msgToShow = this.errorMsg.length > 0 ? this.errorMsg.toUpperCase() : (this.$t("error.unableToLoad") + " " + this.viewTitle).toUpperCase()
+                this.createSnackbar({message: msgToShow, type: 'error'})
             } else {
+                this.createSnackbar({message: (this.$t("classes.dns.zone.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
                 this.error = false
                 this.errorMsg = ""
             }
@@ -548,7 +555,7 @@ export default {
             .catch(error => {
                 console.log(error)
                 this.reloadDataTableHeaders()
-                this.loadFinished(true, "")
+                this.loadFinished(error, "")
             })
         },
         // Reload Data Table Header Labels
@@ -569,12 +576,6 @@ export default {
             this.dns.headers = []
             this.dns.zones = []
             this.dns.records = []
-        },
-        resetSnackbar(){
-            this.$emit('resetSnackbar')
-        },
-        createSnackbar(color, string){
-            this.$emit('createSnackbar', color, string)
         },
     },
 }

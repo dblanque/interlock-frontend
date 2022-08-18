@@ -2,7 +2,7 @@
 <v-row justify="center">
     <!-- Snackbar -->
     <v-snackbar transition="slide-y-reverse-transition"
-      :timeout="2500"
+      :timeout="0"
       v-model="showSnackbar"
       :class="'mb-12 ' + snackbarTextColor"
       :color="snackbarColor"
@@ -42,7 +42,9 @@ export default {
             notificationType: "",
             snackbarColor: 'primary',
             snackbarTextColor: '',
-            snackbarIcon: ""
+            snackbarIcon: "",
+            snackbarTimeout: 2500,
+            snackBarTimer: 0
         }
     },
     watch: {
@@ -53,6 +55,7 @@ export default {
     },
     created() {
         notificationBus.$on('createNotification', (notifObj) => {
+            clearTimeout(this.snackBarTimer);
             this.showSnackbar = true
             this.snackbarMessage = notifObj.message
             this.notificationType = notifObj.type
@@ -79,6 +82,9 @@ export default {
                     this.snackbarColor = 'primary'
                     break;
             }
+            this.snackBarTimer = setTimeout(() => {
+                this.showSnackbar = false
+            }, this.snackbarTimeout)
         })
     },
     methods: {

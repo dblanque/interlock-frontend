@@ -203,6 +203,7 @@ import GroupDialog from '@/components/Group/GroupDialog.vue'
 import GroupCreate from '@/components/Group/GroupCreate.vue'
 import GroupDelete from '@/components/Group/GroupDelete.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
+import { notificationBus } from '@/main.js'
 
 export default {
   mixins: [ validationMixin ],
@@ -250,24 +251,27 @@ export default {
     snackbarTimeout: Number,
   },
   methods: {
+    createSnackbar(notifObj){
+        notificationBus.$emit('createNotification', notifObj);
+    },
     resetSearch(){
-      this.searchString = ""
+        this.searchString = ""
     },
     openDialog(key){
-      this.dialogs[key] = true;
-      switch (key) {
-        case 'groupDialog':
-          if (this.$refs.GroupDialog != undefined)
-            this.$refs.GroupDialog.syncGroup()
-            this.$refs.GroupDialog.setupExclude()
-          break;
-        case 'groupCreate':
-          if (this.$refs.GroupCreate != undefined)
-            this.$refs.GroupCreate.newGroup()
-          break;
-        default:
-          break;
-      }
+        this.dialogs[key] = true;
+        switch (key) {
+            case 'groupDialog':
+                if (this.$refs.GroupDialog != undefined)
+                this.$refs.GroupDialog.syncGroup()
+                this.$refs.GroupDialog.setupExclude()
+                break;
+            case 'groupCreate':
+                if (this.$refs.GroupCreate != undefined)
+                this.$refs.GroupCreate.newGroup()
+                break;
+            default:
+                break;
+        }
     },
     async closeDialog(key, refresh=false){
       this.dialogs[key] = false;
@@ -294,12 +298,6 @@ export default {
     resetDataTable(){
       this.tableData.headers = []
       this.tableData.items = []
-    },
-    resetSnackbar(){
-      this.$emit('resetSnackbar')
-    },
-    createSnackbar(color, string){
-      this.$emit('createSnackbar', color, string)
     },
     // Group Actions
     async listGroupItems(){
@@ -333,17 +331,13 @@ export default {
         this.tableData.items = groups
         this.loading = false
         this.error = false
-        this.resetSnackbar();
-        this.createSnackbar('green', (this.$t("classes.group.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase() )
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+        this.createSnackbar({message: (this.$t("classes.group.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
       })
       .catch(error => {
         console.log(error)
         this.loading = false
         this.error = true
-        this.resetSnackbar();
-        this.createSnackbar('red', this.$t("error.unableToLoad").toUpperCase() + " " + this.viewTitle.toUpperCase())
-        setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+        this.createSnackbar({message: (this.$t("error.unableToLoad") + " " + this.viewTitle).toUpperCase(), type: 'error'})
       })
     },
     openDeleteDialog(groupObject) {

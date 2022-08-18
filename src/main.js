@@ -6,6 +6,8 @@ import router from './router'
 
 Vue.config.productionTip = false
 
+const notificationBus = new Vue()
+
 new Vue({
   vuetify,
   i18n,
@@ -13,4 +15,4 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-export const notificationBus = new Vue()
+export { notificationBus }

@@ -296,6 +296,9 @@ export default {
     snackbarTimeout: Number
   },
   methods: {
+    createSnackbar(notifObj){
+      notificationBus.$emit('createNotification', notifObj);
+    },
     resetSearch(){
       this.searchString = ""
     },
@@ -340,9 +343,6 @@ export default {
     resetDataTable(){
       this.tableData.headers = []
       this.tableData.items = []
-    },
-    createSnackbar(notifObj){
-      notificationBus.$emit('createNotification', notifObj);
     },
     // User Actions
     async listUserItems(){

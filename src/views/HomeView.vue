@@ -160,18 +160,20 @@
     </v-toolbar>
 
     <v-tabs-items v-model="active_tab" class="transparent-body">
-      <v-tab-item v-for="tab in navTabs" :key="tab.index">
-        <ModularViewContainer
-          :viewTitle="tab.title"
-          :viewIndex="tab.index"
-          ref="ModularViewContainerRef"
-          @refresh="loadDomainData()"
-          @goToUser="goToUser"
-          @goToGroup="goToGroup"
-          :langChanged="langChanged"
-          :requestRefresh="requestRefresh"
-        />
-      </v-tab-item>
+      <div v-if="initLoad == true">
+        <v-tab-item v-for="tab in navTabs" :key="tab.index">
+          <ModularViewContainer
+            :viewTitle="tab.title"
+            :viewIndex="tab.index"
+            ref="ModularViewContainerRef"
+            @refresh="loadDomainData()"
+            @goToUser="goToUser"
+            @goToGroup="goToGroup"
+            :langChanged="langChanged"
+            :requestRefresh="requestRefresh"
+          />
+        </v-tab-item>
+      </div>
     </v-tabs-items>
 
     <!-- SNACKBAR / NOTIF. BUS -->
@@ -189,7 +191,7 @@
 
     <!----- ABOUT AND DONATE BUTTONS ------>
     <v-row id="home-footer-buttons" justify="end" class="pa-0 ma-0">
-      <!-- <v-btn color="primary" small class="mx-2 mb-1">{{ $t("footer.about") }}</v-btn> -->
+      <v-btn color="primary" small class="mx-2 mb-1">{{ $t("footer.about") }}</v-btn>
       <!-- <v-btn small text class="mx-2">DONATE</v-btn> -->
     </v-row>
     <v-footer
@@ -237,6 +239,7 @@ export default {
     return {
       username: "",
       first_name: "",
+      initLoad: false,
       last_name: "",
       email: "",
       domain: "",
@@ -365,6 +368,7 @@ export default {
     this.active_tab = this.selectedTab;
     this.selectedTabTitle = this.navTabs[this.selectedTab].title;
     this.requestRefresh = this.selectedTabTitle
+    this.initLoad = true
     this.loadDomainData();
   },
   computed: {
