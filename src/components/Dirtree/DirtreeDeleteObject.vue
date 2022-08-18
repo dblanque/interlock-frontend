@@ -66,7 +66,7 @@ export default {
         async closeDialog(deleteConfirm=false, ou={}) {
             if (ou != {}) {
                 ou.distinguishedName = this.ldapObject.distinguishedName
-                ou.name = this.ldapObject.distinguishedName
+                ou.name = this.ldapObject.name
             }
             if (deleteConfirm == true) {
                 await new OrganizationalUnit({}).delete(ou)
