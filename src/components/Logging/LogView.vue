@@ -267,11 +267,8 @@ export default {
     // Reload Data Table Header Labels
     reloadDataTableHeaders(){
       this.tableData.headers.forEach(tableHeader => {
-        if (tableHeader.value == "actions") {
-          tableHeader.text = this.$t('actions.label')
-        } else {
+        if (tableHeader.value != undefined)
           tableHeader.text = this.$t('section.logs.headers.' + tableHeader.value)
-        }
       });
     },
     // Reset Data Table variables
