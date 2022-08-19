@@ -19,18 +19,21 @@
             <v-row class="my-2 mx-1">
                 <span v-html="$t('contrib.mainMsg')"/>
             </v-row>
+            <h3 class="mt-3 mb-1">
+                {{ $t('contrib.subTitle') }}
+            </h3>
             <v-row class="my-2 mx-1" justify="start">
                 <ul class="contrib-list">
                     <li>
-                        Javier Blanqué
-                        <a href="https://javier.blanque.com.ar/" target="_blank">(https://javier.blanque.com.ar/)</a>
+                        Javier Blanqué - 
+                        <a href="https://javier.blanque.com.ar" target="_blank">(https://javier.blanque.com.ar)</a>
                         <ul>
                             <li v-html="$t('contrib.jblanque')"/>
                         </ul>
                     </li>
                     <li>
-                        Martín Vilche
-                        <a href="https://martinvsolutions.com/" target="_blank">(https://martinvsolutions.com/)</a>
+                        Martín Vilche - 
+                        <a href="https://martinvsolutions.com" target="_blank">(https://martinvsolutions.com)</a>
                         <ul>
                             <li v-for="v, k in $t('contrib.mvilche')" :key="k">
                                 <span v-html="$t('contrib.mvilche.' + k)"/>
@@ -38,14 +41,14 @@
                         </ul>
                     </li>
                     <li>
-                        Etianen
+                        Etianen - 
                         <a href="https://github.com/etianen/django-python3-ldap" target="_blank">(https://github.com/etianen/django-python3-ldap)</a>
                         <ul>
                             <li v-html="$t('contrib.etianen')"/>
                         </ul>
                     </li>
                     <li>
-                        Dirk Jan M.
+                        Dirk Jan M. - 
                         <a href="https://github.com/dirkjanm/krbrelayx" target="_blank">(https://github.com/dirkjanm/krbrelayx)</a>
                         <ul>
                             <li v-html="$t('contrib.dirkjanm')"/>
