@@ -201,7 +201,7 @@
       <v-tooltip left color="primary">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-          @click="showAboutDialog = true" 
+            @click="showAboutDialog = true" 
             small 
             class="ma-0 mx-2"
             color="primary"
@@ -217,7 +217,12 @@
         <span>{{ $t("footer.about").toUpperCase() }}</span>
       </v-tooltip>
       <!-- Donate -->
-      <v-btn disabled small outlined color="primary" class="mx-2">{{ $t("footer.donate") }}</v-btn>
+      <v-btn small
+        :dark="!isThemeDark($vuetify)" 
+        :light="isThemeDark($vuetify)" 
+        class="mx-2">
+        {{ $t("footer.donate") }}
+      </v-btn>
     </v-row>
     <!-- Footer -->
     <v-footer

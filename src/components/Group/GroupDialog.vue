@@ -446,7 +446,7 @@ export default {
                 }
             });
             this.closeInnerDialog('addToGroup')
-            this.logGroups()
+            // this.logGroups()
             this.showMemberTab = true
             this.$forceUpdate
         },
@@ -461,7 +461,7 @@ export default {
                 this.excludeDNs = this.excludeDNs.filter(e => e != memberDn)
 
             this.groupcopy.member = this.groupcopy.member.filter(e => e.distinguishedName != memberDn)
-            this.logGroups()
+            // this.logGroups()
             if (this.groupcopy.member == undefined || this.groupcopy.member.length == 0)
                 this.showMemberTab = false
             this.$forceUpdate
