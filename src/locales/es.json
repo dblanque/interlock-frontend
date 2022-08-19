@@ -408,6 +408,23 @@
       "retriesLeft": "intentos restantes"
     },
     "logs":{
+      "resetDialog":{
+        "header":"Borrar Registros de Eventos",
+        "message":"¿Está seguro de borrar <b>todos</b> los registros de evento?"
+      },
+      "truncateDialog":{
+        "header":"Truncar Registros de Eventos",
+        "message":"¿Está seguro de truncar los registros de evento?"
+      },
+      "extras":{
+        "move":"El objeto fue movido",
+        "rename":"El objeto fue renombrado",
+        "end_user_updated":"El usuario modificó sus detalles",
+        "changed_password":"La contraseña del Usuario cambió",
+        "disable":"El usuario fue des-habilitado",
+        "enable":"El usuario fue habilitado",
+        "unlock":"El usuario fue des-bloqueado"
+      },
       "headers":{
         "date":"Fecha de Evento",
         "user":"Usuario Responsable",
@@ -416,14 +433,6 @@
         "objectClass":"Clase del Objeto",
         "extraMessage":"Detalles Extra",
         "id":"ID de Evento"
-      },
-      "resetDialog":{
-        "header":"Borrar Registros de Eventos",
-        "message":"¿Está seguro de borrar <b>todos</b> los registros de evento?"
-      },
-      "truncateDialog":{
-        "header":"Truncar Registros de Eventos",
-        "message":"¿Está seguro de truncar los registros de evento?"
       },
       "viewAction":{
         "truncate":{

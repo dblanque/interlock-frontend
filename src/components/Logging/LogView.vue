@@ -109,6 +109,12 @@
         {{ item.affectedObject }}
       </v-chip>
     </template>
+
+    <template v-slot:[`item.extraMessage`]="{ item }">
+      <v-chip class="ma-0 pa-0 hide-chip" color="transparent" v-if="item.extraMessage">
+        {{ $t('section.logs.extras.'+ (item.extraMessage.toLowerCase()) ) }}
+      </v-chip>
+    </template>
   </v-data-table>
 
   <v-dialog v-model="resetDialog" max-width="650px">
@@ -355,3 +361,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.hide-chip.v-chip:hover::before {
+  background-color: transparent !important;
+}
+</style>

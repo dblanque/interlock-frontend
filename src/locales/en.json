@@ -410,6 +410,15 @@
         "header":"Truncate Event Logs",
         "message":"Are you sure you wish to truncate the stored event logs?"
       },
+      "extras":{
+        "move":"LDAP Object was moved",
+        "rename":"LDAP Object was renamed",
+        "end_user_updated":"User changed his details",
+        "changed_password":"User password changed",
+        "disable":"User was disabled",
+        "enable":"User was enabled",
+        "unlock":"User was unlocked"
+      },
       "headers":{
         "date":"Log Date",
         "user":"Responsible User",
