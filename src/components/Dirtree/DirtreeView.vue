@@ -340,10 +340,11 @@ import DirtreeMove from '@/components/Dirtree/DirtreeMove.vue';
 import DirtreeRename from '@/components/Dirtree/DirtreeRename.vue';
 import DirtreeDeleteObject from '@/components/Dirtree/DirtreeDeleteObject.vue';
 import validationMixin from '@/plugins/mixin/validationMixin';
+import utilsMixin from '@/plugins/mixin/utilsMixin';
 import { notificationBus } from '@/main.js'
 
 export default {
-    mixins: [ validationMixin ],
+    mixins: [ validationMixin, utilsMixin ],
     components: {
         DirtreeMove,
         DirtreeRename,

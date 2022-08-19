@@ -283,15 +283,16 @@
 </template>
 
 <script>
+import { notificationBus } from '@/main.js'
+import { getDomainDetails } from '@/include/utils'
 import Domain, { default as DNS } from '@/include/Domain'
-import validationMixin from '@/plugins/mixin/validationMixin'
 import RecordDialog from '@/components/DNS/RecordDialog.vue'
 import RecordDelete from '@/components/DNS/RecordDelete.vue'
-import { getDomainDetails } from '@/include/utils';
-import { notificationBus } from '@/main.js'
+import validationMixin from '@/plugins/mixin/validationMixin'
+import utilsMixin from '@/plugins/mixin/utilsMixin'
 
 export default {
-    mixins: [ validationMixin ],
+    mixins: [ validationMixin, utilsMixin ],
     components: {
         RecordDialog,
         RecordDelete

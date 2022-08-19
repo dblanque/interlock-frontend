@@ -198,15 +198,16 @@
 </template>
 
 <script>
+import { notificationBus } from '@/main.js'
 import Group from '@/include/Group';
 import GroupDialog from '@/components/Group/GroupDialog.vue'
 import GroupCreate from '@/components/Group/GroupCreate.vue'
 import GroupDelete from '@/components/Group/GroupDelete.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
-import { notificationBus } from '@/main.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin'
 
 export default {
-  mixins: [ validationMixin ],
+  mixins: [ validationMixin, utilsMixin ],
   components: {
     GroupDialog,
     GroupCreate,

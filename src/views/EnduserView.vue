@@ -365,10 +365,11 @@ import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
+import utilsMixin from '@/plugins/mixin/utilsMixin'
 
 export default {
     name: 'EnduserView',
-    mixins: [ validationMixin ],
+    mixins: [ validationMixin, utilsMixin ],
     components: {
         LanguageSelector,
         UserResetPassword,

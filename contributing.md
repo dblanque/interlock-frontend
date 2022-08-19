@@ -22,3 +22,7 @@ to this project.
 * **etianen**
     - Credited for creating the Django-python3-ldap module
     - Site: [django-python3-ldap (Github)](https://github.com/etianen/django-python3-ldap)
+* **dirkjanm**
+    - Credited for his *amazing* krbrelayx repo and scripts
+    - I managed to do all the DNS Section Operations thanks to this script set
+    - Repo Link: [krbrelayx (Github)](https://github.com/dirkjanm/krbrelayx)

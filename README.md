@@ -61,26 +61,26 @@
 
 ### DNS Management
 
- - [ ] Create DNS Entries
- - [ ] Modify DNS Entries
- - [ ] Delete DNS Entries
- - [ ] Supported Types should at least be:
-    * A
-    * AAAA
-    * CNAME
-    * TXT
-    * MX
-    * DS
-    * NS
-    * SOA
-    * SPF
-    * PTR
+ - [x] Create DNS Entries
+ - [x] Modify DNS Entries
+ - [x] Delete DNS Entries
+ - [x] Supported Types should at least be:
+    * [x] A
+    * [x] AAAA
+    * [x] CNAME
+    * [x] TXT
+    * [x] MX
+    * [ ] DS
+    * [x] NS
+    * [x] SOA
+    * [x] PTR
 
 ### GPO Management
 
 TBD
 
 ### Server Management
+This tab will require to have an ssh key or be the locally installed server
  - [ ] Start Service
  - [ ] Stop Service
  - [ ] Restart Service

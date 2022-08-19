@@ -7,7 +7,7 @@
   </v-row>
 
   <!-- HOME -->
-  <v-container v-if="viewTitle == 'home'" class="max-width-change">
+  <v-container v-if="viewTitle == 'home' && initLoad == true" class="max-width-change">
     <DirtreeView
       ref="DirtreeView"
       :requestRefresh="this.refreshUserDataTable"
@@ -72,39 +72,6 @@
       ref="LogView"
     />
   </v-container>
-
-    <!-- Snackbar -->
-    <v-snackbar
-      v-model="snackbar"
-      class="mb-12"
-      :color="snackbarColor"
-      >
-      <v-fab-transition>
-        <v-icon v-if="snackbarColor == 'green' || snackbarColor == 'valid'" class="mr-1">
-          mdi-checkbox-marked-circle-outline
-        </v-icon>
-        <v-icon v-else-if="snackbarColor == 'primary'" class="mr-1">
-          mdi-information-outline
-        </v-icon>
-        <v-icon v-else-if="snackbarColor == 'error' || snackbarColor == 'red'" class="mr-1">
-          mdi-close-circle-outline
-        </v-icon>
-      </v-fab-transition>
-      {{ snackbarMessage }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          icon
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-        >
-          <v-icon>
-            mdi-close
-          </v-icon>
-        </v-btn>
-      </template>
-    </v-snackbar>
 </v-container>
 </template>
 
@@ -133,6 +100,7 @@ import validationMixin from '@/plugins/mixin/validationMixin';
       viewIndex: Number,
       langChanged: Boolean,
       requestRefresh: String,
+      initLoad: Boolean
     },
     data () {
       return {
@@ -148,19 +116,7 @@ import validationMixin from '@/plugins/mixin/validationMixin';
         snackbarClasses: "",
         snackbar: false,
         snackbarTimeout: 2500,
-        dialogs: {
-          userDialog: false,
-          userDelete: false,
-          userAntilockout: false,
-          userResetPassword: false,
-          userCreate: false,
-          group: false,
-          dns: false,
-          gpo: false
-        }
       }
-    },
-    created() {
     },
     watch:{
       langChanged: {
@@ -242,12 +198,6 @@ import validationMixin from '@/plugins/mixin/validationMixin';
       },
       goToGroup(group){
         this.$emit('goToGroup', group)
-      },
-      openDialog(key){
-        this.dialogs[key] = true;
-      },
-      async closeDialog(key){
-        this.dialogs[key] = false;
       },
       async saveData(key, data){
         switch (key) {

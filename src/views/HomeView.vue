@@ -160,24 +160,30 @@
     </v-toolbar>
 
     <v-tabs-items v-model="active_tab" class="transparent-body">
-      <div v-if="initLoad == true">
-        <v-tab-item v-for="tab in navTabs" :key="tab.index">
-          <ModularViewContainer
-            :viewTitle="tab.title"
-            :viewIndex="tab.index"
-            ref="ModularViewContainerRef"
-            @refresh="loadDomainData()"
-            @goToUser="goToUser"
-            @goToGroup="goToGroup"
-            :langChanged="langChanged"
-            :requestRefresh="requestRefresh"
-          />
-        </v-tab-item>
-      </div>
+      <v-tab-item v-for="tab in navTabs" :key="tab.index">
+        <ModularViewContainer
+          :initLoad="initLoad"
+          :viewTitle="tab.title"
+          :viewIndex="tab.index"
+          ref="ModularViewContainerRef"
+          @refresh="loadDomainData()"
+          @goToUser="goToUser"
+          @goToGroup="goToGroup"
+          :langChanged="langChanged"
+          :requestRefresh="requestRefresh"
+        />
+      </v-tab-item>
     </v-tabs-items>
 
     <!-- SNACKBAR / NOTIF. BUS -->
     <NotificationBusContainer/>
+
+    <!-- ABOUT DIALOG  -->
+    <v-dialog
+      max-width="48rem"
+      v-model="showAboutDialog">
+        <AboutDialog @close='closeAbout'/>
+    </v-dialog>
 
     <!-- LOGOUT DIALOG  -->
     <v-dialog
@@ -190,10 +196,30 @@
     </v-dialog>
 
     <!----- ABOUT AND DONATE BUTTONS ------>
-    <v-row id="home-footer-buttons" justify="end" class="pa-0 ma-0">
-      <v-btn color="primary" small class="mx-2 mb-1">{{ $t("footer.about") }}</v-btn>
-      <!-- <v-btn small text class="mx-2">DONATE</v-btn> -->
+    <v-row id="home-footer-buttons" justify="end" align="center" class="pa-0 ma-0 px-2 mb-2">
+      <!-- About -->
+      <v-tooltip left color="primary">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+          @click="showAboutDialog = true" 
+            small 
+            class="ma-0 mx-2"
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+            icon
+          >
+            <v-icon>
+              mdi-information
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $t("footer.about").toUpperCase() }}</span>
+      </v-tooltip>
+      <!-- Donate -->
+      <v-btn disabled small outlined color="primary" class="mx-2">{{ $t("footer.donate") }}</v-btn>
     </v-row>
+    <!-- Footer -->
     <v-footer
       padless
       id="home-footer"
@@ -215,25 +241,28 @@
 
 <script>
 // @ is an alias to /src
-import ModularViewContainer from "@/components/ModularViewContainer.vue";
-import LanguageSelector from "@/components/LanguageSelector.vue";
-import ThemeChanger from "@/components/ThemeChanger.vue";
-import LogoutDialog from "@/components/LogoutDialog.vue";
-import User from "@/include/User";
-import Test from "@/include/Test";
-import Domain from "@/include/Domain";
+import ModularViewContainer from "@/components/ModularViewContainer.vue"
+import LanguageSelector from "@/components/LanguageSelector.vue"
+import ThemeChanger from "@/components/ThemeChanger.vue"
+import LogoutDialog from "@/components/LogoutDialog.vue"
+import AboutDialog from "@/components/AboutDialog.vue"
+import User from "@/include/User"
+import Test from "@/include/Test"
+import Domain from "@/include/Domain"
 import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
-import validationMixin from '@/plugins/mixin/validationMixin';
+import validationMixin from '@/plugins/mixin/validationMixin'
+import utilsMixin from '@/plugins/mixin/utilsMixin'
 
 export default {
   name: "HomeView",
-  mixins: [ validationMixin ],
+  mixins: [ validationMixin, utilsMixin ],
   components: {
     ModularViewContainer,
     LanguageSelector,
     LogoutDialog,
     ThemeChanger,
-    NotificationBusContainer
+    NotificationBusContainer,
+    AboutDialog
   },
   data() {
     return {
@@ -246,6 +275,7 @@ export default {
       realm: "",
       basedn: "",
       error: false,
+      showAboutDialog: false,
       showLogoutDialog: false,
       requestRefresh: "",
       selectedTab: 0,
@@ -388,6 +418,9 @@ export default {
     ////////////////////////////////////////////////////////////////////////////
     // General Component Methods
     ////////////////////////////////////////////////////////////////////////////
+    closeAbout(){
+      this.showAboutDialog = false
+    },
     goToPrevTab(){
       var counter = this.selectedTab - 1
       this.navTabs.forEach(() => {

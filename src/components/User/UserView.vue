@@ -247,10 +247,11 @@ import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
+import utilsMixin from '@/plugins/mixin/utilsMixin'
 import { notificationBus } from '@/main.js'
 
 export default {
-  mixins: [ validationMixin ],
+  mixins: [ validationMixin, utilsMixin ],
   components: {
     UserCreate,
     UserDialog,

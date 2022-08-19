@@ -86,10 +86,11 @@
 import DNSRecord from '@/include/DNSRecord'
 import Domain from '@/include/Domain'
 import validationMixin from '@/plugins/mixin/validationMixin'
+import utilsMixin from '@/plugins/mixin/utilsMixin';
 
 export default {
     name: "confirmDialog",
-    mixins: [ validationMixin ],
+    mixins: [ validationMixin, utilsMixin ],
     data() {
         return {
             excludeAttr: [

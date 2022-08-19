@@ -680,8 +680,8 @@
   },
   "footer":{
     "copyright":"Copyright (C) 2022 | BR Consulting S.R.L.",
-    "about":"ABOUT",
-    "donate":"DONATE"
+    "about":"About",
+    "donate":"Donate"
   },
   "misc":{
     "autocomputedField":"Autocomputed Field",
@@ -691,5 +691,17 @@
     "logoutForbiddenMsg":"Please Log in Again",
     "logoutTooltip":"Logout",
     "themerTooltip":"Change Theme"
+  },
+  "contrib":{
+    "title":"About Interlock",
+    "mainMsg":"Interlock was originally developed by <a target=\"_blank\" href=\"https://dylan.blanque.com.ar\">Dylan Blanqué</a> as an internal tool for <b>BR Consulting S.R.L.</b> and later made open source, with the intent of sharing a responsive and dynamic LDAP Management tool with the community.",
+    "jblanque": "Credited for assistance with Samba Binary Permission Parsing",
+    "mvilche": {
+      "1":"Credited for Calls Module and Constructors in Interlock Front-end",
+      "2":"Credited for Notification Bus: Assistance with Implementation",
+      "3":"Other Minor Fixes and Assistance"
+    },
+    "etianen":"Credited for creating the original Django-python3-ldap module",
+    "dirkjanm":"Credited for his <b>amazing</b> krbrelayx repo and scripts"
   }
 }

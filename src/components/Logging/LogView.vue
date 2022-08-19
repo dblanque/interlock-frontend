@@ -123,13 +123,14 @@
 </template>
 
 <script>
+import { notificationBus } from '@/main.js'
 import Log from '@/include/Log';
 import LogResetDialog from '@/components/Logging/LogResetDialog.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
-import { notificationBus } from '@/main.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin'
 
 export default {
-  mixins: [ validationMixin ],
+  mixins: [ validationMixin, utilsMixin ],
   components: {
     LogResetDialog
   },

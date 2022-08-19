@@ -151,10 +151,11 @@ import User from '@/include/User'
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue';
 import validationMixin from '@/plugins/mixin/validationMixin';
+import utilsMixin from '@/plugins/mixin/utilsMixin';
 
 export default {
   name: "LoginView",
-  mixins: [ validationMixin ],
+  mixins: [ validationMixin, utilsMixin ],
   components: {
     LanguageSelector,
     ThemeChanger

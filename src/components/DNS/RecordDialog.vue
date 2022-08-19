@@ -249,10 +249,11 @@
 
 <script>
 import validationMixin from '@/plugins/mixin/validationMixin'
+import utilsMixin from '@/plugins/mixin/utilsMixin';
 import DNSRecord from '@/include/DNSRecord'
 
 export default {
-    mixins: [ validationMixin ],
+    mixins: [ validationMixin, utilsMixin ],
     props: {
         viewKey: String,
         recordObject: Object,

@@ -180,6 +180,7 @@
 import OrganizationalUnit from '@/include/OrganizationalUnit'
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
 import validationMixin from '@/plugins/mixin/validationMixin';
+import utilsMixin from '@/plugins/mixin/utilsMixin';
 import { getDomainDetails } from '@/include/utils';
 
 export default {
@@ -207,7 +208,8 @@ export default {
       }
     },
     mixins: [
-        validationMixin
+        validationMixin,
+        utilsMixin
     ],
     props: {
         createType: {
