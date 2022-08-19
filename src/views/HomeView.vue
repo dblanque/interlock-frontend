@@ -67,10 +67,10 @@
             :light="isThemeDark($vuetify)"
             :buttonIsSmall="true"
           />
-          <v-btn @click="debugAction"
+          <!-- <v-btn @click="debugAction"
            outlined class="mx-3" rounded color="red">
             Debug
-          </v-btn>
+          </v-btn> -->
         </div>
       </v-col>
     </v-row>
@@ -257,7 +257,7 @@ export default {
         headers: [],
         items: [],
       },
-      timeoutInS: 1800,
+      timeoutInS: 900,
     //   timeoutInS: 1, // For testing
       timeoutId: 0,
       navTabs: [
