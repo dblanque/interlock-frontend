@@ -67,10 +67,10 @@
             :light="isThemeDark($vuetify)"
             :buttonIsSmall="true"
           />
-          <!-- <v-btn @click="debugAction"
+          <v-btn @click="debugAction"
            outlined class="mx-3" rounded color="red">
             Debug
-          </v-btn> -->
+          </v-btn>
         </div>
       </v-col>
     </v-row>
