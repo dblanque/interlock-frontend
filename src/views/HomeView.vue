@@ -217,12 +217,12 @@
         <span>{{ $t("footer.about").toUpperCase() }}</span>
       </v-tooltip>
       <!-- Donate -->
-      <v-btn small
+      <!-- <v-btn small
         :dark="!isThemeDark($vuetify)" 
         :light="isThemeDark($vuetify)" 
         class="mx-2">
         {{ $t("footer.donate") }}
-      </v-btn>
+      </v-btn> -->
     </v-row>
     <!-- Footer -->
     <v-footer
