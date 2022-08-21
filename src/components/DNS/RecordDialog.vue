@@ -24,10 +24,12 @@
             item-text="name"/>
         </v-col>
         <v-col cols="12" class="ma-0 pa-0 px-2 mt-4">
-            <v-combobox @change="setTTL" :label="$t('dns.attributes.ttl')"
+            <v-combobox @change="setTTL"
+            :label="$t('dns.attributes.ttl')"
             :items="ttlPresets"
-            v-model="recordCopy.ttl"
-            :rules="[this.fieldRules(recordCopy.ttl, 'ge_numbers', true)]"
+            v-model="ttlVal"
+            ref="TTLField"
+            :rules="[this.fieldRules(ttlVal, 'ge_numbers', true)]"
             />
         </v-col>
         <v-col v-if="selectedType != 6" cols="12" class="ma-0 pa-0 mt-0">
@@ -270,6 +272,7 @@ export default {
             error: false,
             submitted: false,
             errorMsg: "",
+            ttlVal: 900,
             ttlPresets: [
                 60,
                 300,
@@ -450,7 +453,8 @@ export default {
             })
         },
         setTTL(v) {
-            this.recordCopy.ttl = v
+            if (this.$refs.TTLField.validate())
+                this.recordCopy.ttl = v
         },
         resetLoadingStatus(){
             this.loading = false
