@@ -18,16 +18,14 @@
             <v-row v-if="deleteMode == 'record'" class="pa-0 ma-8 mb-2 text-subtitle-1 text-inverted" justify="center">
                 {{ $t('section.dns.deleteRecord.message') }}
                 <span class="font-weight-medium" style="padding-left: 0.5ch;">
-                    {{ recordObject.displayName + " (" + recordObject.typeName + ")" }}
+                    {{ recordObject.displayName + " (" + recordObject.typeName + ")?" }}
                 </span>
-                ?
             </v-row>
             <v-row v-else-if="deleteMode == 'zone'" class="pa-0 ma-8 mb-2 text-subtitle-1 text-inverted" justify="center">
                 {{ $t('section.dns.deleteRecord.message') }}
                 <span class="font-weight-medium" style="padding-left: 0.5ch;">
-                    {{ currentZone }}
+                    {{ currentZone + "?" }}
                 </span>
-                ?
             </v-row>
             <v-divider class="mx-8 mb-3"/>
             <span v-if="deleteMode == 'record'">
@@ -39,7 +37,7 @@
                 </v-row>
             </span>
             <span v-else-if="deleteMode == 'zone'">
-                <v-form ref="deleteZoneForm">
+                <v-form @submit="confirmZone == currentZone ? closeDialog(true) : false" @submit.prevent ref="deleteZoneForm">
                 <v-row class="ma-0 pa-0" justify="center">
                     <v-col cols="8">
                         <v-text-field v-model="confirmZone"
@@ -54,7 +52,7 @@
         <!-- Actions -->
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn 
+                <v-btn @keydown.enter="closeDialog(true)" 
                 @click="closeDialog(true)" 
                 :disabled="getAllowConfirmStatus"
                 class="ma-0 pa-0 pa-2 pl-1 ma-1 bg-white bg-lig-25" 
@@ -166,7 +164,7 @@ export default {
                 this.error = false
                 this.errorMsg = ""
                 this.submitted = false
-                if (this.deleteMode == 'zone' && this.currentZone == this.confirmZone) {
+                if (this.deleteMode == 'zone' && this.currentZone == this.confirmZone && this.$refs.deleteZoneForm.validate()) {
                     await new Domain({}).delete({dnsZone: this.currentZone})
                     .then(() => {
                         this.loading = false
@@ -202,7 +200,7 @@ export default {
             }
 
             // Wait for animations if delete confirm true
-            if (deleteConfirm == true)
+            if (deleteConfirm == true && this.submitted == true)
                 setTimeout(() => {
                     this.$emit('closeDialog', this.viewKey, deleteConfirm);
                 }, 150)

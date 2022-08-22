@@ -18,15 +18,15 @@
             <v-row class="pa-0 ma-8 text-subtitle-1 text-inverted" justify="center">
                 {{ $t('section.dirtree.deleteObject.message') }}
                 <span class="font-weight-medium" style="padding-left: 0.5ch;">
-                    {{ ldapObject.distinguishedName }}
+                    {{ ldapObject.distinguishedName + "?" }}
                 </span>
-                ?
             </v-row>
         </v-card-text>
         <!-- Actions -->
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn @click="closeDialog(true)"
+                <v-btn @keydown.enter="closeDialog(true)" 
+                @click="closeDialog(true)"
                 class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25" 
                 rounded>
                     <v-icon class="mr-1" color="green">
