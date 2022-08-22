@@ -23,6 +23,7 @@
     }
   },
   "actions": {
+    "groupBy":"Agrupar por",
     "filter":"Filtrar",
     "rename":"Renombrar",
     "openAll":"Abrir todos",

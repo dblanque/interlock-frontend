@@ -23,6 +23,7 @@
     }
   },
   "actions":{
+    "groupBy":"Group by",
     "filter":"Filter",
     "rename":"Rename",
     "openAll":"Open all",

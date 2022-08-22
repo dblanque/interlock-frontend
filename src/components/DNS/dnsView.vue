@@ -6,7 +6,9 @@
     :custom-sort="sortNullLast"
     :loading="loading"
     :search="searchString"
+    show-select
     show-expand
+    v-model="selectedRecords"
     :single-expand="singleExpand"
     item-key="id"
     :expanded.sync="expanded"
@@ -115,6 +117,35 @@
         </v-row>
     </v-row>
     <v-divider class="mx-12 my-3"/>
+    </template>
+
+    <template v-slot:header="props">
+    <thead>
+        <tr>
+            <template v-for="header in props.props.headers">
+            <th class="py-2 px-0"
+            :key="header.value">
+                <v-btn x-small text color="primary" v-if="header.groupable == true"
+                @click.stop="props.on.group(header.value)">
+                    <v-icon class="mr-2">flip_to_back</v-icon>
+                    <span v-if="$vuetify.breakpoint.mdAndUp">
+                        {{ $t('actions.groupBy') + " " + header.text }}
+                    </span>
+                </v-btn>
+            </th>
+            </template>
+        </tr>
+    </thead>
+    </template>
+
+    <template v-slot:[`group.header`]="{ group, groupBy, headers, toggle, isOpen }">
+    <td :colspan="headers.length">
+        <v-btn @click="toggle" x-small icon :ref="group">
+            <v-icon v-if="!isOpen">mdi-plus</v-icon>
+            <v-icon v-else>mdi-minus</v-icon>
+        </v-btn>
+        <span class="mx-5 font-weight-bold">{{ $t("dns.attributes." + groupBy) + ": " + group }}</span>
+    </td>
     </template>
 
     <template v-slot:[`item.nameTarget`]="{ item }">
@@ -299,6 +330,7 @@ export default {
     },
     data() {
         return {
+            selectedRecords: [],
             currentRecord: {
                 name: "",
                 type: 1,
@@ -538,6 +570,9 @@ export default {
                     if (header == 'address' || header == 'nameTarget')
                         headerDict.width = '35ch'
                     
+                    if (header == 'displayName' || header == 'typeName')
+                        headerDict.groupable = true
+
                     if (header == 'ts' && this.zoneFilter['dnsZone'] != 'Root DNS Servers')
                         this.dns.headers.push(headerDict)
                     else if (header != 'ts')
@@ -547,6 +582,7 @@ export default {
                 headerDict = {}
                 headerDict.text = this.$t('actions.label')
                 headerDict.value = 'actions'
+                headerDict.groupable = false
                 headerDict.width = '6rem'
                 headerDict.align = 'center'
                 headerDict.sortable = false
