@@ -170,7 +170,7 @@ export default {
                         this.loading = false
                         this.error = false
                         this.errorMsg = ""
-                        this.submitted = false
+                        this.submitted = true
                     })
                     .catch(error => {
                         this.loading = false
@@ -185,7 +185,7 @@ export default {
                         this.loading = false
                         this.error = false
                         this.errorMsg = ""
-                        this.submitted = false
+                        this.submitted = true
                         if (response.data.distinguishedName == record.distinguishedName)
                             console.log("Record Deleted Successfully")
                     })
