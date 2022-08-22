@@ -302,7 +302,8 @@
   },
   "dns":{
     "hints":{
-      "name":"Utilice el caracter @ para identificar su zona raíz"
+      "name":"Utilice el caracter @ para identificar su zona raíz",
+      "stringData":"Inserte el registro sin doble comilla"
     },
     "attributes":{
       "index": "Indice del Registro",

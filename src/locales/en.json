@@ -296,7 +296,8 @@
   },
   "dns":{
     "hints":{
-      "name":"Use the character @ to identify your root zone"
+      "name":"Use the character @ to identify your root zone",
+      "stringData":"Insert the record without double quotation marks"
     },
     "attributes":{
       "index": "Record Index",

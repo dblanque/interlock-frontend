@@ -410,6 +410,8 @@ export default {
             if (this.$refs.zoneCreateForm.validate()) {
                 await new Domain({}).insert({dnsZone: this.zoneToCreate})
                 .then(() => {
+                    this.zoneToCreate = ""
+                    this.showZoneAdd = false
                     this.zoneFilter['dnsZone'] = this.zoneToCreate
                     this.getDNSData()
                 })

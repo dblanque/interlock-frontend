@@ -93,6 +93,8 @@
         <v-col cols="12" class="ma-0 pa-0 mt-4">
             <v-textarea auto-grow outlined
             v-model="recordCopy.stringData"
+            :hint="$t('dns.hints.stringData')"
+            persistent-hint
             :label="$t('dns.attributes.stringData')"
             :rules="[this.fieldRules(recordCopy.stringData, 'ge_ascii', true)]"
             class="mx-2"
