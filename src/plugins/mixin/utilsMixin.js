@@ -12,17 +12,17 @@ const utilsMixin = {
             if (typeof errorData == "string")
             console.error("The Error Data Object must be passed to this function, not a string")
 
+            console.log(errorData)
+
             var codeToUse
             if (typeof errorData === 'string')
-            codeToUse = errorData
-            else if ('code_ext' in errorData)
-            codeToUse = errorData.code_ext
-            else if ('code' in errorData)
-            codeToUse = errorData.code
+                codeToUse = errorData
+            else if ('code_ext' in errorData.response.data)
+                codeToUse = errorData.response.data.code_ext
+            else if ('code' in errorData.response.data)
+                codeToUse = errorData.response.data.code
             else
-            codeToUse = errorData.status_code
-
-            console.log(codeToUse)
+                codeToUse = errorData.status_code
 
             if (codeToUse.length < 40)
             suffix = " (" + codeToUse + ")"
@@ -39,11 +39,36 @@ const utilsMixin = {
             case 'entryAlreadyExists':
             case 'ldap_obj_exists':
                 return this.$t('error.codes.ldapObjectExists')
+            // DNS ---------------------------------------------------------- //
+            case 'dns_zone_missing':
+            case 'dns_zone_in_record':
+            case 'dns_zone_not_deletable':
+            case 'dns_zone_exists':
+            case 'dns_zone_does_not_exist':
+            case 'dns_record_not_in_request':
+            case 'dns_record_dn_missing':
+            case 'dns_record_type_conflict':
+            case 'dns_record_exists_conflict':
+            case 'dns_record_type_unsupported':
+            case 'dns_record_attr_missing':
+            case 'dns_record_type_missing':
+            case 'dns_record_data_does_not_match':
+            case 'dns_record_entry_does_not_exist':
+            case 'dns_soa_increment':
+            case 'dns_soa_record_root_only':
+            case 'dns_root_servers_only_cli':
+            case 'dns_field_validator_failed':
+                var result = this.$t('error.codes.dns.'+codeToUse)
+                return result
+            // -------------------------------------------------------------- //
             case null:
             case undefined:
             case "":
             default:
-                return this.$t("error.unknown_short") + suffix
+                if (codeToUse in this.$t('error.codes'))
+                    return this.$t('error.codes.'+codeToUse)
+                else
+                    return this.$t("error.unknown_short") + suffix
             }
         },
 

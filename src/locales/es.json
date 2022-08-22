@@ -245,6 +245,26 @@
         "verified_successfully": "Verificado Exitosamente",
         "verification_expired": "Intentos de Verificación acabados, contacte un administrador"
       },
+      "dns":{
+        "dns_zone_missing":"Valor de Zona DNS Inválido",
+        "dns_zone_in_record":"El Registro no debe incluir la Zona",
+        "dns_zone_not_deletable":"Esta Zona DNS no puede ser borrada",
+        "dns_zone_exists":"La Zona ya existe",
+        "dns_zone_does_not_exist":"La Zona no existe",
+        "dns_record_not_in_request":"El Registro DNS no se encuentra en el Request",
+        "dns_record_dn_missing":"No existe el Nombre Distinguido en ese Registro",
+        "dns_record_type_conflict":"La Inserción o Modificación genera un conflicto",
+        "dns_record_exists_conflict":"Este Registro DNS ya existe",
+        "dns_record_type_unsupported":"Tipo de Registro DNS no soportado",
+        "dns_record_attr_missing":"Falta un atributo requerido en el Request",
+        "dns_record_type_missing":"Falta el tipo de Registro DNS en el Request",
+        "dns_record_data_does_not_match":"Los datos del Registro no coinciden con los datos del servidor",
+        "dns_record_entry_does_not_exist":"La Entrada LDAP del Registro no existe",
+        "dns_soa_increment":"No se pudo Incrementar el Serial del SOA",
+        "dns_soa_record_root_only":"Solo puede configurar un SOA para la raíz de su zona",
+        "dns_root_servers_only_cli":"Los Servidores DNS de Raíz solo pueden ser modificados desde la consola",
+        "dns_field_validator_failed":"Un campo no fue validado correctamente"
+      },
       "users":{
         "userExists":"El usuario ya existe.",
         "couldNotSave":"El usuario no pudo ser guardado",
