@@ -176,7 +176,7 @@ export default {
                         this.loading = false
                         this.error = true
                         this.errorMsg = this.getMessageForCode(error)
-                        this.submitted = false
+                        this.submitted = true
                         console.log(error)
                     })
                 } else if (this.deleteMode == 'record' && record) {
@@ -193,14 +193,14 @@ export default {
                         this.loading = false
                         this.error = true
                         this.errorMsg = this.getMessageForCode(error)
-                        this.submitted = false
+                        this.submitted = true
                         console.log(error)
                     })
                 }
             }
 
             // Wait for animations if delete confirm true
-            if (deleteConfirm == true && this.submitted == true)
+            if (deleteConfirm == true && this.submitted == true && this.error != true)
                 setTimeout(() => {
                     this.$emit('closeDialog', this.viewKey, deleteConfirm);
                 }, 150)
