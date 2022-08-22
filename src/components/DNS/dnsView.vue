@@ -125,7 +125,8 @@
             <template v-for="header in props.props.headers">
             <th class="py-2 px-0"
             :key="header.value">
-                <v-btn x-small text color="primary" v-if="header.groupable == true"
+                <v-btn class="py-4"
+                x-small text color="primary" v-if="header.groupable == true"
                 @click.stop="props.on.group(header.value)">
                     <v-icon class="mr-2">flip_to_back</v-icon>
                     <span v-if="$vuetify.breakpoint.mdAndUp">
@@ -138,13 +139,18 @@
     </thead>
     </template>
 
-    <template v-slot:[`group.header`]="{ group, groupBy, headers, toggle, isOpen }">
+    <template v-slot:[`group.header`]="{ group, groupBy, headers, toggle, isOpen, remove }">
     <td :colspan="headers.length">
         <v-btn @click="toggle" x-small icon :ref="group">
-            <v-icon v-if="!isOpen">mdi-plus</v-icon>
-            <v-icon v-else>mdi-minus</v-icon>
+            <v-icon v-if="!isOpen">mdi-chevron-down</v-icon>
+            <v-icon v-else>mdi-chevron-up</v-icon>
         </v-btn>
         <span class="mx-5 font-weight-bold">{{ $t("dns.attributes." + groupBy) + ": " + group }}</span>
+        <v-btn color="red" @click="remove" icon x-small>
+            <v-icon>
+                mdi-close
+            </v-icon>
+        </v-btn>
     </td>
     </template>
 
