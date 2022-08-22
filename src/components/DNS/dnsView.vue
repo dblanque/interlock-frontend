@@ -6,7 +6,6 @@
     :custom-sort="sortNullLast"
     :loading="loading"
     :search="searchString"
-    show-select
     show-expand
     v-model="selectedRecords"
     :single-expand="singleExpand"
