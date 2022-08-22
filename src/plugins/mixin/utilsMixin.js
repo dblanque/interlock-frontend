@@ -15,7 +15,7 @@ const utilsMixin = {
             var codeToUse
             if (typeof errorData === 'string')
             codeToUse = errorData
-            else if ("code_ext" in errorData)
+            else if ('code_ext' in errorData)
             codeToUse = errorData.code_ext
             else if ('code' in errorData)
             codeToUse = errorData.code
