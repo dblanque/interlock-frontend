@@ -29,7 +29,7 @@
                 </span>
                 ?
             </v-row>
-            <v-divider v-if="deleteMode == 'record'" class="mx-8 mb-3"/>
+            <v-divider class="mx-8 mb-3"/>
             <span v-if="deleteMode == 'record'">
                 <v-row class="pa-0 ma-0 text-subtitle-1 text-inverted" justify="center" v-for="value, attr_key in recordObject" :key="attr_key">
                     <span class="ma-0 pa-0" style="padding-left: 0.5ch;" 
@@ -38,11 +38,25 @@
                     </span>
                 </v-row>
             </span>
+            <span v-else-if="deleteMode == 'zone'">
+                <v-form ref="deleteZoneForm">
+                <v-row class="ma-0 pa-0" justify="center">
+                    <v-col cols="8">
+                        <v-text-field v-model="confirmZone"
+                        :label="$t('section.dns.deleteZone.confirmZone')"
+                        :rules="[fieldRules(confirmZone, 'ldap_website')]"
+                        />
+                    </v-col>
+                </v-row>
+                </v-form>
+            </span>
         </v-card-text>
         <!-- Actions -->
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn @click="closeDialog(true)" :disabled="deleteMode == 'record' ? (recordObject == undefined) : (currentZone == undefined)"
+                <v-btn 
+                @click="closeDialog(true)" 
+                :disabled="getAllowConfirmStatus"
                 class="ma-0 pa-0 pa-2 pl-1 ma-1 bg-white bg-lig-25" 
                 rounded>
                     <v-icon class="mr-1" color="green">
@@ -93,6 +107,7 @@ export default {
     mixins: [ validationMixin, utilsMixin ],
     data() {
         return {
+            confirmZone: "",
             excludeAttr: [
                 'ts',
                 'type',
@@ -116,6 +131,25 @@ export default {
         recordObject: Object,
         viewKey: String
     },
+    computed: {
+        getAllowConfirmStatus() {
+            switch (this.deleteMode) {
+                case 'zone':
+                    if (this.currentZone == undefined || this.currentZone == null)
+                        return true
+                    if (this.currentZone != this.confirmZone)
+                        return true
+                    break;
+                case 'record':
+                    if (this.recordObject == undefined)
+                        return true
+                    break;
+                default:
+                    break;
+            }
+            return false
+        },
+    },
     methods: {
         showAttribute(attr){
             if (this.excludeAttr.includes(attr))
@@ -132,7 +166,7 @@ export default {
                 this.error = false
                 this.errorMsg = ""
                 this.submitted = false
-                if (this.deleteMode == 'zone') {
+                if (this.deleteMode == 'zone' && this.currentZone == this.confirmZone) {
                     await new Domain({}).delete({dnsZone: this.currentZone})
                     .then(() => {
                         this.loading = false
@@ -147,7 +181,7 @@ export default {
                         this.submitted = false
                         console.log(error)
                     })
-                } else if (record) {
+                } else if (this.deleteMode == 'record' && record) {
                     await new DNSRecord({}).delete(record)
                     .then(response => {
                         this.loading = false

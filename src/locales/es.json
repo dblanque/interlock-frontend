@@ -392,7 +392,8 @@
         "message":"¿Está seguro de borrar el Registro de DNS"
       },
       "deleteZone":{
-        "message":"¿Está seguro de borrar la Zona de DNS"
+        "message":"¿Está seguro de borrar la Zona de DNS",
+        "confirmZone":"Por favor confirme re-escribiendo el nombre de la Zona"
       }
     },
     "login": {
