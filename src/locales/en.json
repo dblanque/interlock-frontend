@@ -121,6 +121,7 @@
           "n":"None"
         }
       },
+      "selected":"Selected",
       "readOnly":"Read Only",
       "member":"Member",
       "enabled":"Enabled",
@@ -406,6 +407,9 @@
       "deleteSuccess":"Record Deleted",
       "deleteRecord":{
         "message":"Are you sure you wish to delete the DNS Record"
+      },
+      "massAction":{
+        "delete":"The following DNS Records will be deleted"
       },
       "deleteZone":{
         "message":"Are you sure you wish to delete the DNS Zone",

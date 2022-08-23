@@ -121,6 +121,7 @@
         "n":"Ninguno"
       }
     },
+    "selected":"Seleccionados",
     "readOnly":"Solo Lectura",
     "member":"Miembro",
     "enabled":"Activado",
@@ -412,6 +413,9 @@
       "deleteSuccess":"Registro Eliminado",
       "deleteRecord":{
         "message":"¿Está seguro de borrar el Registro de DNS"
+      },
+      "massAction":{
+        "delete":"Los siguientes registros de DNS serán eliminados"
       },
       "deleteZone":{
         "message":"¿Está seguro de borrar la Zona de DNS",

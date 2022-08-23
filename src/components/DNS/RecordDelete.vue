@@ -149,6 +149,12 @@ export default {
         },
     },
     methods: {
+        resetDelete(){
+            this.confirmZone = ""
+            this.loading = false
+            this.error = false
+            this.submitted = false
+        },
         showAttribute(attr){
             if (this.excludeAttr.includes(attr))
                 return false
@@ -180,7 +186,7 @@ export default {
                         console.log(error)
                     })
                 } else if (this.deleteMode == 'record' && record) {
-                    await new DNSRecord({}).delete(record)
+                    await new DNSRecord({}).delete({record: record})
                     .then(response => {
                         this.loading = false
                         this.error = false

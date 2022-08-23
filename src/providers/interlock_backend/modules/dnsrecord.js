@@ -22,7 +22,7 @@ const actions = {
 
     delete: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.dnsr.delete, {record: data})
+            interlock_backend.request.post(interlock_backend.urls.dnsr.delete, data)
             .then(response => {
                 resolve(response.data);
             }).catch((e) => reject(e))

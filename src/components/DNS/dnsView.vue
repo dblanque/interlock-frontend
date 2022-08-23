@@ -7,6 +7,7 @@
     :loading="loading"
     :search="searchString"
     show-expand
+    show-select
     v-model="selectedRecords"
     :single-expand="singleExpand"
     item-key="id"
@@ -76,6 +77,11 @@
                 <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
                 {{ $t('actions.addN') + ' ' + $t('classes.dns.record.single') }}
             </v-btn>
+            <v-btn @click="openDialog('recordMassAction')"
+             class="clr-white pa-2 mr-2" :disabled="selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="red">
+                <v-icon class="clr-white ma-0 pa-0">mdi-delete</v-icon>
+                {{ $t('actions.delete') + ' ' + $t('words.selected') }}
+            </v-btn>
             <v-menu offset-y left nudge-bottom="1rem" :close-on-content-click="false" v-model="filterListOpen">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn v-bind="attrs" v-on="on"
@@ -122,12 +128,12 @@
     <thead>
         <tr>
             <template v-for="header in props.props.headers">
-            <th class="py-2 px-0"
+            <th :class="($vuetify.breakpoint.mdAndUp ? '':'text-center') + ' py-2 px-0'"
             :key="header.value">
                 <v-btn class="py-4"
                 x-small text color="primary" v-if="header.groupable == true"
                 @click.stop="props.on.group(header.value)">
-                    <v-icon class="mr-2">flip_to_back</v-icon>
+                    <v-icon :class="$vuetify.breakpoint.mdAndUp ? 'mr-2':''">flip_to_back</v-icon>
                     <span v-if="$vuetify.breakpoint.mdAndUp">
                         {{ $t('actions.groupBy') + " " + header.text }}
                     </span>
@@ -315,6 +321,19 @@
       />
   </v-dialog>
 
+  <!-- RECORD DELETE DIALOG -->
+  <v-dialog eager max-width="800px" v-model="dialogs['recordMassAction']">
+    <RecordMassAction
+        :actionType="'delete'"
+        :selectedRecords="selectedRecords"
+        :currentZone="this.zoneFilter.dnsZone"
+        :viewKey="'recordMassAction'"
+        @closeDialog="closeDialog"
+        @refresh="getDNSData"
+        ref="RecordMassAction"
+      />
+  </v-dialog>
+
 </v-card>
 </template>
 
@@ -324,6 +343,7 @@ import { getDomainDetails } from '@/include/utils'
 import Domain, { default as DNS } from '@/include/Domain'
 import RecordDialog from '@/components/DNS/RecordDialog.vue'
 import RecordDelete from '@/components/DNS/RecordDelete.vue'
+import RecordMassAction from '@/components/DNS/RecordMassAction.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
 import utilsMixin from '@/plugins/mixin/utilsMixin'
 
@@ -331,7 +351,8 @@ export default {
     mixins: [ validationMixin, utilsMixin ],
     components: {
         RecordDialog,
-        RecordDelete
+        RecordDelete,
+        RecordMassAction
     },
     data() {
         return {
@@ -369,7 +390,8 @@ export default {
             // Dialog States
             dialogs: {
                 recordDialog: false,
-                recordDelete: false
+                recordDelete: false,
+                recordMassAction: false
             },
             dns: {
                 headers: [],
@@ -523,6 +545,12 @@ export default {
                     this.$refs.RecordDialog.resetValidation()
                     this.$refs.RecordDialog.syncRecord()
                 break;
+                case 'recordDelete':
+                    this.$refs.RecordDelete.resetDelete()
+                break;
+                case 'recordMassAction':
+                    this.$refs.RecordMassAction.reset()
+                break;
                 default:
                 break;
             }
@@ -553,6 +581,8 @@ export default {
             else if (this.zoneFilter['dnsZone'] == "")
                 this.zoneFilter['dnsZone'] = this.ldap.domain
             var queryFilter = this.zoneFilter
+
+            this.selectedRecords = []
 
             // Reset Data
             this.resetData()
