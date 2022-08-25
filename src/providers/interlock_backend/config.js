@@ -1,14 +1,22 @@
 import axios from "axios";
 import router from "@/router/index.js"
-// import localSettings from "@/providers/interlock_backend/local_settings.js";
+import localSettings from "@/providers/interlock_backend/local_settings.js";
 
 // Sets content type to json utf-8 default.
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
 
-// Default back-end provider url.
+// SSL
+const ssl = true
+
+// Default back-end provider urls.
 // ! PLEASE INCLUDE '/' at the end of URL.
-// const base_url =  "https://" + localSettings.backend_url + "/";
-const base_url =  "http://127.0.0.1:8000/";
+if (ssl == true) {
+    const base_url =  "http://" + localSettings.backend_url + "/";
+}
+else {
+    const base_url =  "https://" + localSettings.backend_url + "/";
+}
+// const base_url =  "http://127.0.0.1:8000/";
 
 // Axios Instance.
 const request = axios.create({

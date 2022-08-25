@@ -1,5 +1,3 @@
 export default ({
-    // domain: "example.com",
-    // realm: "realm"
-    backend_url: "example-backend.com",
+    backend_url: "127.0.0.1:8000",
 })
