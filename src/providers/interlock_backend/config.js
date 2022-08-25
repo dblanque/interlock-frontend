@@ -20,8 +20,6 @@ else {
 const base_url =  urlPrefix + localSettings.backend_url + "/";
 // const base_url =  "http://127.0.0.1:8000/";
 
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = base_url;
-
 // Axios Instance.
 const request = axios.create({
     baseURL: base_url
