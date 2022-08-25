@@ -432,10 +432,10 @@ export default {
             if (this.$refs.zoneCreateForm.validate()) {
                 await new Domain({}).insert({dnsZone: this.zoneToCreate})
                 .then(() => {
-                    this.zoneToCreate = ""
                     this.showZoneAdd = false
                     this.zoneFilter['dnsZone'] = this.zoneToCreate
                     this.getDNSData()
+                    this.zoneToCreate = ""
                 })
                 .catch(error => {
                     console.log(error)
@@ -576,7 +576,7 @@ export default {
         },
         async getDNSData(zoneToQuery=undefined) {
             // Set DNS Zone Query
-            if (zoneToQuery)
+            if (zoneToQuery != undefined && zoneToQuery != null && zoneToQuery.length > 0)
                 this.zoneFilter['dnsZone'] = zoneToQuery
             else if (this.zoneFilter['dnsZone'] == "")
                 this.zoneFilter['dnsZone'] = this.ldap.domain
