@@ -1,6 +1,6 @@
 import axios from "axios";
 import router from "@/router/index.js"
-import localSettings from "@/providers/interlock_backend/local_settings.js";
+import localSettings from "../../../public/js/local_settings";
 
 // Sets content type to json utf-8 default.
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
