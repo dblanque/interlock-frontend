@@ -7,15 +7,17 @@ axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8"
 
 // SSL
 const ssl = true
+var urlPrefix
 
 // Default back-end provider urls.
 // ! PLEASE INCLUDE '/' at the end of URL.
 if (ssl == true) {
-    const base_url =  "http://" + localSettings.backend_url + "/";
+    urlPrefix = "https://"
 }
 else {
-    const base_url =  "https://" + localSettings.backend_url + "/";
+    urlPrefix = "http://"
 }
+const base_url =  urlPrefix + localSettings.backend_url + "/";
 // const base_url =  "http://127.0.0.1:8000/";
 
 // Axios Instance.
