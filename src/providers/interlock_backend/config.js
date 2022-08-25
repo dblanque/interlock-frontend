@@ -29,7 +29,6 @@ const request = axios.create({
 var auth = localStorage.getItem('token');
 if(auth != null && auth != undefined && auth.length > 0)
     request.defaults.headers.common.Authorization = auth;
-    request.defaults.headers.common['Access-Control-Allow-Origin'] = "https://interlock.brconsulting.info";
 
 // LIST OF URL PATTERNS.
 const urls = {
