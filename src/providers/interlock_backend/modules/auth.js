@@ -1,4 +1,4 @@
-import backend from "@/providers/interlock_backend/config";
+import backend from "@/../public/js/config.js";
 
 const calls = {
     login: (data)=>{

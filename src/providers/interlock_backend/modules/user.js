@@ -1,4 +1,4 @@
-import interlock_backend from "@/providers/interlock_backend/config";
+import interlock_backend from "@/../public/js/config.js";
 
 const actions = {
     insert: (data)=>{
