@@ -6,7 +6,7 @@ import localSettings from "@/providers/interlock_backend/local_settings.js";
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
 
 // SSL
-const ssl = true
+const ssl = false
 var urlPrefix
 
 // Default back-end provider urls.
