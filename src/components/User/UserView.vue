@@ -324,8 +324,11 @@ export default {
     },
     async closeDialog(key, refresh=false){
       this.dialogs[key] = false;
-      if (refresh)
+      if (refresh) {
         await this.listUserItems()
+        if (key == 'userResetPassword')
+          this.createSnackbar({message: this.$t("actions.passwordChanged").toUpperCase(), type: 'success'})
+      }
     },
     setViewToEdit(value){
       this.editableForm = value;
@@ -346,7 +349,7 @@ export default {
       this.tableData.items = []
     },
     // User Actions
-    async listUserItems(){
+    async listUserItems(emitNotif=true){
       this.loading = true
       this.error = false
       this.tableData.headers = []
@@ -377,7 +380,8 @@ export default {
         this.tableData.items = users
         this.loading = false
         this.error = false
-        this.createSnackbar({message: (this.$t("classes.user.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
+        if (emitNotif == true)
+          this.createSnackbar({message: (this.$t("classes.user.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
       })
       .catch(error => {
         console.log(error)
@@ -448,7 +452,8 @@ export default {
       await this.fetchUser(item, this.editableForm, false);
     },
     userSaved(){
-      this.listUserItems()
+      this.listUserItems(false)
+      this.createSnackbar({message: (this.$t("classes.user.single") + " " + this.$t("words.saved.single.m")).toUpperCase(), type: 'success'})
     },
     // Fetch individual User
     async fetchUser(item, isEditable=false, refreshAnim=true){

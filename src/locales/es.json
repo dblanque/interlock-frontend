@@ -87,7 +87,8 @@
     "downloadLatest": "Descargar Último",
     "changeUserPerms": "Ver Permisos",
     "changeUserGroups":"Ver Grupos",
-    "addObjectClass": "Añadir Clase de Objeto"
+    "addObjectClass": "Añadir Clase de Objeto",
+    "passwordChanged": "Contraseña Modificada"
   },
   "words": {
     "saved":{

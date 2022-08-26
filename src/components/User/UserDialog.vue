@@ -1149,13 +1149,13 @@ export default {
 
             // Uncomment below to debug permissions list
             // console.log(this.usercopy.permission_list)
-            this.$emit('save', this.viewKey, this.usercopy);
             await new User({}).update({user: this.usercopy})
             .then(() => {
                 if (closeDialog == true)
                     this.closeDialog();
                 else
                     this.refreshUser();
+                this.$emit('save', this.viewKey, this.usercopy);
                 this.loading = false
                 this.loadingColor = 'primary'
             })

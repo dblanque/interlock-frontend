@@ -23,7 +23,7 @@
                     {{ userObject.givenName && userObject.sn ? userObject.givenName + " " + userObject.sn + " (" + userObject.username + ")" : userObject.username }}
                 </v-row>
                 <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-                    <v-col cols="12" lg="4">
+                    <v-col cols="10" lg="4">
                         <v-text-field
                         :type="passwordHidden ? 'password' : 'text'"
                         required
@@ -36,7 +36,7 @@
                         :rules="[this.fieldRules(user.password, 'ge_password', true)]"
                         ></v-text-field>
                     </v-col>
-                    <v-col cols="12" lg="4">
+                    <v-col cols="10" lg="4">
                             <v-text-field
                             :type="passwordHidden ? 'password' : 'text'"
                             dense
@@ -129,7 +129,7 @@ export default {
                     .then(response => {
                         if (response.data.username == user.username)
                             console.log("User Password Changed Successfully")
-                        this.$emit('closeDialog', this.viewKey);
+                        this.$emit('closeDialog', this.viewKey, true);
                     })
                     .catch(error => {
                         console.log(error)

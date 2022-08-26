@@ -87,7 +87,8 @@
     "downloadLatest":"Download Latest",
     "changeUserPerms": "View Permissions",
     "changeUserGroups":"View Groups",
-    "addObjectClass": "Add Object Class"
+    "addObjectClass": "Add Object Class",
+    "passwordChanged": "Password Changed"
   },
   "words":{
       "saved":{
