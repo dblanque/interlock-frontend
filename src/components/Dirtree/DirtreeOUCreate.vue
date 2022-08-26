@@ -44,7 +44,29 @@
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
-                            <v-row class="ma-0 pa-0" justify="center">
+                            <v-row class="ma-0 pa-0" justify="center">                                
+                                <v-row class="ma-0 pa-0 mt-4" align="center" justify="space-around">
+                                    <v-btn small text color="primary" class="ma-1" @click="setDestination()">
+                                        {{ $t('section.dirtree.move.setToRoot')}}
+                                    </v-btn>
+                                    <v-btn small
+                                        class="ma-1"
+                                        text
+                                        :disabled="!allowRefresh"
+                                        elevation="0"
+                                        @click="fetchOUs"
+                                        >
+                                        {{ $t('actions.refresh') }}
+                                        <v-icon>
+                                        mdi-refresh
+                                        </v-icon>
+                                        <template v-slot:loader>
+                                        <span class="custom-loader">
+                                            <v-icon color="white">mdi-cached</v-icon>
+                                        </span>
+                                        </template>
+                                    </v-btn>
+                                </v-row>
                                 <v-col cols="12">
                                         <v-expansion-panels 
                                         v-model="ouPathExpansionPanel"
@@ -202,6 +224,7 @@ export default {
         error: false,
         valid: false,
         errorMsg: "",
+        allowRefresh: false,
         showSnackbar: false,
         ouPathExpansionPanel: false,
         ouDestination: '',
@@ -327,9 +350,13 @@ export default {
             await new OrganizationalUnit({}).list()
             .then(response => {
                 this.ouList = response.data.ldapObjectList
+                this.allowRefresh = true
+                if (this.ouPathExpansionPanel == false)
+                    this.ouPathExpansionPanel = 0
             })
             .catch(error => {
                 console.log(error)
+                this.allowRefresh = true
             })
         },
         closeDialog(refresh=false){
