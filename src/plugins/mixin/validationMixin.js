@@ -1,3 +1,7 @@
+// INTERLOCK IS LICENSED UNDER GNU GPLv3
+// ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L.
+// File: validationMixin.js
+
 import i18n from '@/i18n'
 
 function calculateCUITVerifierDigit(cuitNum) {

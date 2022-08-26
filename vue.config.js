@@ -1,3 +1,7 @@
+// INTERLOCK IS LICENSED UNDER GNU GPLv3
+// DBLANQUE & BR Consulting S.R.L.
+// File: vue.config.js
+
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: [

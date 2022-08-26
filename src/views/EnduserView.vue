@@ -3,8 +3,6 @@
 <!------------------------- File: EnduserView.vue ----------------------------->
 <template>
     <div class="enduser">
-        
-    <!------------------>
     <v-row justify="center"
     :class="'ma-0 pa-2 py-4 text-normal ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
         >

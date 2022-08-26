@@ -4,6 +4,8 @@ class ApiModel{
     /**
      * Abstract ApiModel Constructor.
      * Override.
+     * 
+     * This ApiModel stuff was made by mvilche, my great friend Martin Vilche! - Dylan
      */
     constructor() {
         if (this.constructor === ApiModel) {

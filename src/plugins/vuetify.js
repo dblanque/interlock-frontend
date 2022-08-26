@@ -1,3 +1,7 @@
+// INTERLOCK IS LICENSED UNDER GNU GPLv3
+// ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L.
+// File: vuetify.js
+
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
 

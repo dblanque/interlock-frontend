@@ -1,3 +1,10 @@
+// INTERLOCK IS LICENSED UNDER GNU GPLv3
+// ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L.
+// Contributors
+//  - Dylan Blanqué
+//  - Martín Vilche
+// File: index.js
+
 import authCalls from '@/providers/interlock_backend/modules/auth.js'
 import userCalls from '@/providers/interlock_backend/modules/user.js'
 import groupCalls from '@/providers/interlock_backend/modules/group.js'

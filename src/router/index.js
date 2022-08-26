@@ -1,3 +1,7 @@
+// INTERLOCK IS LICENSED UNDER GNU GPLv3
+// ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L.
+// File: router/index.js
+
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'

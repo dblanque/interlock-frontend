@@ -1,3 +1,10 @@
+// INTERLOCK IS LICENSED UNDER GNU GPLv3
+// ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L.
+// Contributors
+//  - Dylan Blanqué
+//  - Martín Vilche
+// File: config.js
+
 import axios from "axios";
 import router from "@/router/index.js"
 import localSettings from "@/providers/interlock_backend/local_settings.js";
