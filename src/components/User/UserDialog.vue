@@ -1110,12 +1110,18 @@ export default {
             this.changingGroups = true
         },
         async disableUser(){
-            await this.usercopy.disable(this.usercopy.username)
-            this.refreshUser();
+            await this.usercopy.disable(this.usercopy.username).then(() => {
+                this.$emit('save', this.viewKey, this.usercopy)
+                this.refreshUser()
+                this.syncUser()
+            })
         },
         async enableUser(){
-            await this.usercopy.enable(this.usercopy.username)
-            this.refreshUser();
+            await this.usercopy.enable(this.usercopy.username).then(() => {
+                this.$emit('save', this.viewKey, this.usercopy)
+                this.refreshUser()
+                this.syncUser()
+            })
         },
         editUser(){
             this.$emit('editToggle', true);
