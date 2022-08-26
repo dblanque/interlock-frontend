@@ -100,14 +100,29 @@
     </template>
 
     <template v-slot:[`item.affectedObject`]="{ item }">
-      <span v-if="Array.isArray(item.affectedObject)">
-        <v-chip class="mx-1" outlined v-for="i, k in item.affectedObject" :key="k">
-          {{ typeof i === 'object' ? i.name : i }}
+      <div class="py-2">
+        <v-menu top v-if="Array.isArray(item.affectedObject)">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" v-on="on"
+            style="min-width: 32px;" elevation="0" text class="pa-0 px-2 pr-3" color="primary">
+            <v-icon class="mr-2">
+              mdi-information
+            </v-icon>
+            {{ $t('section.logs.seeDetails') }}
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item v-for="i, k in item.affectedObject" :key="k">
+              <v-chip class="mx-1" outlined>
+                {{ typeof i === 'object' ? i.name : i }}
+              </v-chip>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        <v-chip class="mx-1" outlined v-else-if="item.affectedObject">
+          {{ item.affectedObject }}
         </v-chip>
-      </span>
-      <v-chip class="mx-1" outlined v-else-if="item.affectedObject">
-        {{ item.affectedObject }}
-      </v-chip>
+      </div>
     </template>
 
     <template v-slot:[`item.extraMessage`]="{ item }">

@@ -455,6 +455,7 @@
         "extraMessage":"Extra Details",
         "id":"Log ID"
       },
+      "seeDetails":"See Details",
       "viewAction":{
         "truncate":{
           "slider":"Range to Truncate",

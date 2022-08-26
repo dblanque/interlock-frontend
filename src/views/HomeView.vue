@@ -67,10 +67,11 @@
             :light="isThemeDark($vuetify)"
             :buttonIsSmall="true"
           />
-          <!-- <v-btn @click="debugAction"
+          <!-- Remove this in production -->
+          <v-btn @click="debugAction"
            outlined class="mx-3" rounded color="red">
             Debug
-          </v-btn> -->
+          </v-btn>
         </div>
       </v-col>
     </v-row>
@@ -401,9 +402,10 @@ export default {
       this.showNavTabs = true;
     }, 250);
     this.active_tab = this.selectedTab;
+    if (this.selectedTab == 0)
+      this.initLoad = true
     this.selectedTabTitle = this.navTabs[this.selectedTab].title;
     this.requestRefresh = this.selectedTabTitle
-    this.initLoad = true
     this.loadDomainData();
   },
   computed: {
@@ -496,7 +498,10 @@ export default {
       }, 250);
     },
     async updateSelectedTab(index) {
-      if (this.selectedTab != index) this.selectedTab = index;
+      if (this.selectedTab != index)
+        this.selectedTab = index;
+      if (this.selectedTab == 0)
+        this.initLoad = true
       this.active_tab = index;
       this.selectedTabTitle = this.navTabs[this.selectedTab].title;
       this.requestRefresh = this.selectedTabTitle;

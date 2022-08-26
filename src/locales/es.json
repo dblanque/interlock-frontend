@@ -461,6 +461,7 @@
         "extraMessage":"Detalles Extra",
         "id":"ID de Evento"
       },
+      "seeDetails":"Ver Detalles",
       "viewAction":{
         "truncate":{
           "slider":"Rango a Truncar",
