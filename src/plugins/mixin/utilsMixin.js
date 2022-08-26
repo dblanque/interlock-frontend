@@ -17,8 +17,8 @@ const utilsMixin = {
             var codeToUse
             if (typeof errorData === 'string')
                 codeToUse = errorData
-            else if ('code_ext' in errorData.response.data)
-                codeToUse = errorData.response.data.code_ext
+            else if ('ldap_response' in errorData.response.data)
+                codeToUse = errorData.response.data.ldap_response
             else if ('code' in errorData.response.data)
                 codeToUse = errorData.response.data.code
             else
