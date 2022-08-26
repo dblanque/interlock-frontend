@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!---------------------- File: DirtreeDeleteObject.vue ------------------------>
 <template>
     <v-card>
         <v-card-title class="ma-0 pa-0 card-title">

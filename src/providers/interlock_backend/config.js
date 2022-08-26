@@ -160,7 +160,7 @@ request.interceptors.response.use(
                         localStorage.removeItem('refresh')
                         localStorage.removeItem('user_initials')
                         localStorage.removeItem('user_fullname')
-                        if (router.app._route.path != "/login")
+                        if (router.app.$route.path != "/login")
                             router.push('/login')
                     }
                     return error.response

@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!------------------------- File: LogoutDialog.vue ---------------------------->
 <template>
     <v-card class="pa-6">
     <v-alert type="warning" :icon="false" class="ma-0 pa-6" style="border-radius: 1.25rem !important;">

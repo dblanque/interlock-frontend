@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!------------------------- File: LoginView.vue ------------------------------->
 <template>
   <v-container class="login ma-0 pa-0" fluid fill-height>
     <v-card style="min-width:100%;" flat class="py-4 px-6" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">

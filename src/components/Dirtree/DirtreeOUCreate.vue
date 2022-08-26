@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!------------------------ File: DirtreeOUCreate.vue -------------------------->
 <template>
     <v-card class="pa-0 ma-0">
         <!-- Title Bar -->

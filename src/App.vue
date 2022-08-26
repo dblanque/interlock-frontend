@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!------------------------- File: App.vue ------------------------------------->
 <template>
   <v-app id="app">
     <title>{{ $t("indexTitle") }}</title>

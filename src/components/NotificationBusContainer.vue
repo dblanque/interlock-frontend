@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!--------------------- File: NotificationBusContainer.vue -------------------->
 <template>
 <v-row justify="center">
     <!-- Snackbar -->

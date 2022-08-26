@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!------------------------ File: SettingsCard.vue ----------------------------->
 <template>
     <v-card outlined flat class="">
         <v-progress-linear :indeterminate="testing == true" :value="testFinished ? 100 : 0" :color="testFinished ? (!testError ? 'valid' : 'red') : 'primary'"/>

@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!----------------------- File: ModularViewContainer.vue ---------------------->
 <template>
 <v-container class="my-4 max-width-change">
   <v-row class="ma-2" justify="center" align="center">

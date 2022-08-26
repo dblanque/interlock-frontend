@@ -1,5 +1,6 @@
 <!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!------------------------- File: UserDialog.vue ------------------------------>
 <template>
     <v-card :loading="refreshLoading" class="pa-0 ma-0">
         <v-expand-transition>

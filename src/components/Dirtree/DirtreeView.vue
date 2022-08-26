@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!-------------------------- File: DirtreeView.vue ---------------------------->
 <template>
   <v-row justify="center" class="mt-2 mb-2">
     <v-card flat outlined class="pa-2" max-width="1200px">

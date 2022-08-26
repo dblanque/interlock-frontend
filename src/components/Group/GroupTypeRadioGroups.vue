@@ -1,3 +1,6 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
+<!--------------------- File: GroupTypeRadioGroups.vue ------------------------>
 <template>
     <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
         <v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
