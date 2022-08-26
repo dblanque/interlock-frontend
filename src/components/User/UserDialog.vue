@@ -1,3 +1,5 @@
+<!------------------ INTERLOCK IS LICENSED UNDER GNU GPLv3 -------------------->
+<!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <template>
     <v-card :loading="refreshLoading" class="pa-0 ma-0">
         <v-expand-transition>
@@ -613,7 +615,8 @@
                             {{ $t("actions.enable") }}
                         </v-btn>
                         <v-btn color="red" v-else-if="usercopy.is_enabled == true" @click="disableUser" 
-                        :class="(editFlag ? 'text-white ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" rounded :disabled="!editFlag || isLoggedInUser(usercopy.username)">
+                        :class="(editFlag ? 'text-white ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" rounded
+                        :disabled="!editFlag || isLoggedInUser(usercopy.username)">
                             <v-icon class="mr-1">
                                 mdi-close-circle-outline
                             </v-icon>
@@ -1111,16 +1114,12 @@ export default {
         },
         async disableUser(){
             await this.usercopy.disable(this.usercopy.username).then(() => {
-                this.$emit('save', this.viewKey, this.usercopy)
                 this.refreshUser()
-                this.syncUser()
             })
         },
         async enableUser(){
             await this.usercopy.enable(this.usercopy.username).then(() => {
-                this.$emit('save', this.viewKey, this.usercopy)
                 this.refreshUser()
-                this.syncUser()
             })
         },
         editUser(){

@@ -450,9 +450,11 @@ export default {
     },
     async refreshUser(item){
       await this.fetchUser(item, this.editableForm, false);
+      this.$refs.UserDialog.syncUser()
     },
     userSaved(){
       this.listUserItems(false)
+      this.$refs.UserDialog.syncUser()
       this.createSnackbar({message: (this.$t("classes.user.single") + " " + this.$t("words.saved.single.m")).toUpperCase(), type: 'success'})
     },
     // Fetch individual User
