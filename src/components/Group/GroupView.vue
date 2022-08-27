@@ -283,7 +283,8 @@ export default {
         this.listGroupItems()
     },
     groupSaved(){
-      this.listGroupItems()
+      this.listGroupItems(false)
+      this.createSnackbar({message: (this.$t("classes.group.single") + " " + this.$t("words.saved.single.m")).toUpperCase(), type: 'success'})
     },
     setViewToEdit(value){
       this.editableForm = value;
@@ -304,7 +305,7 @@ export default {
       this.tableData.items = []
     },
     // Group Actions
-    async listGroupItems(){
+    async listGroupItems(emitNotif=true){
       this.loading = true
       this.error = false
       this.tableData.headers = []
@@ -335,7 +336,8 @@ export default {
         this.tableData.items = groups
         this.loading = false
         this.error = false
-        this.createSnackbar({message: (this.$t("classes.group.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
+        if (emitNotif == true)
+          this.createSnackbar({message: (this.$t("classes.group.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
       })
       .catch(error => {
         console.log(error)

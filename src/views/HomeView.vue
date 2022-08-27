@@ -6,8 +6,23 @@
     <!------------------>
     <v-row
       justify="center"
-      :class="'ma-0 pa-2 py-4 text-normal transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
-      <h2 class="font-weight-medium">{{ domain.toUpperCase() }}</h2>
+      :class="'ma-0 pa-0 text-normal transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+      <h2 class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
+      <div id="top-header-div" style="display:none; width:100%;">
+        <svg version="1.1" id="top-header" x="0px" y="0px"
+          viewBox="0 0 612 60" style="enable-background:new 0 0 612 60;" xml:space="preserve">
+        <line id="XMLID_3_" class="st0" x1="0" y1="36.6" x2="612" y2="36.6"/>
+        </svg>
+        <svg id="top-header" x="0px" y="0px"
+          viewBox="0 0 612 60" style="enable-background:new 0 0 612 60;" xml:space="preserve">
+          <path id="XMLID_41_" class="st0" d="M612,36.6H463.2c-2.1,0-4.1-0.7-5.9-1.9l-9.1-6.6c-1.7-1.2-3.8-1.9-5.9-1.9l-272.9,0
+            c-2.1,0-4.1,0.7-5.9,1.9l-9.1,6.6c-1.7,1.2-3.8,1.9-5.9,1.9H0"/>
+        </svg>
+        <svg version="1.1" id="top-header" x="0px" y="0px"
+          viewBox="0 0 612 60" style="enable-background:new 0 0 612 60;" xml:space="preserve">
+        <line id="XMLID_3_" class="st0" x1="0" y1="36.6" x2="612" y2="36.6"/>
+        </svg>
+      </div>
     </v-row>
     <v-row
       :dark="!isThemeDark($vuetify)"
@@ -587,5 +602,24 @@ export default {
 
 .transition-speed-fix {
   transition: background-color var(--base-transition-speed-fast-5) ease-in-out !important;
+}
+
+#top-header-div {
+  position: absolute;
+  margin-top: 3vh;
+}
+
+#top-header {
+  stroke-width: 3px;
+  fill: transparent;
+  width: calc((100%)/3);
+}
+
+[theme=dark] #top-header {
+  stroke: var(--clr-accent);
+}
+
+[theme=light] #top-header {
+  stroke: var(--clr-primary);
 }
 </style>

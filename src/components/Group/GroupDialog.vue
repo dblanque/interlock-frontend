@@ -35,7 +35,7 @@
             </v-expand-transition>
             <!-- BODY -->
             <v-card-text class="ma-0 pa-0 py-4 pb-2">
-                <v-form>
+                <v-form ref="groupForm">
                     <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
                         <v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
                             <v-text-field
@@ -553,6 +553,7 @@ export default {
         },
         async saveGroup(closeDialog=false){
             this.loading = true
+            this.loadingColor = 'primary'
             this.groupcopy.groupType = this.radioGroupType
             this.groupcopy.groupScope = this.radioGroupScope
             // Set members
@@ -567,32 +568,37 @@ export default {
             else
                 delete this.groupcopy.membersToRemove
 
-            this.$emit('save', this.viewKey, this.groupcopy);
-            await new Group({}).update({group: this.groupcopy})
-            .then(() => {
-                if (closeDialog == true)
-                    this.closeDialog();
-                else
-                    this.refreshGroup();
-                this.loading = false
-                this.loadingColor = 'primary'
-            })
-            .catch(error => {
-                console.log(error)
-                if (error.response.data.code) {
-                    switch (error.response.data.code) {
-                        default:
-                            this.errorMsg = this.$t("error.unknown_short")
-                            break;
+            if (this.$refs.groupForm.validate()){
+                await new Group({}).update({group: this.groupcopy})
+                .then(() => {
+                    if (closeDialog == true)
+                        this.closeDialog();
+                    else
+                        this.refreshGroup();
+                    this.$emit('save', this.viewKey, this.groupcopy);
+                    this.loading = false
+                    this.loadingColor = 'primary'
+                })
+                .catch(error => {
+                    console.log(error)
+                    if (error.response.data.code) {
+                        switch (error.response.data.code) {
+                            default:
+                                this.errorMsg = this.$t("error.unknown_short")
+                                break;
+                        }
+                    } else {
+                        this.errorMsg = this.$t("error.unknown_short")
                     }
-                } else {
-                    this.errorMsg = this.$t("error.unknown_short")
-                }
-                this.userRefreshLoading = false;
+                    this.loading = false
+                    this.loadingColor = 'error'
+                    this.error = true;
+                })
+            } else {
                 this.loading = false
                 this.loadingColor = 'error'
                 this.error = true;
-            })
+            }
         },
         editGroup(){
             this.$emit('editToggle', true);

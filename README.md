@@ -1,5 +1,7 @@
 # Interlock LDAP Manager
 
+Logo Font:
+Matamata [@ dafont.com](https://www.dafont.com/matamata.font)
 ## Installation
 
   1. Install the following dependencies

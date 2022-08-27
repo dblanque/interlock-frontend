@@ -39,7 +39,7 @@
         <v-tabs v-model="tab" height="0">
             <v-tab-item :key="0">
                 <v-card-text class="ma-0 py-4">
-                    <v-form>
+                    <v-form ref="userForm">
                     <v-row align-content="center" class="mb-2">
                     <!-- User Basic Data Panel -->
                     <v-col class="ma-0 pa-0" cols="12" md="6">
@@ -1018,7 +1018,7 @@ export default {
                 }
             });
             this.closeInnerDialog('userAddToGroup')
-            this.logGroups()
+            // this.logGroups()
             this.$forceUpdate
         },
         removeFromGroup(groupDn) {
@@ -1040,7 +1040,7 @@ export default {
                     this.excludeGroups = this.excludeGroups.filter(e => e != groupDn)
     
                 this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
-                this.logGroups()
+                // this.logGroups()
                 this.$forceUpdate
             }
         },
@@ -1135,6 +1135,7 @@ export default {
         },
         async saveUser(closeDialog=false){
             this.loading = true
+            this.loadingColor = 'primary'
             // Set permissions array properly
             this.usercopy.permission_list = []
             for (const [key] of Object.entries(this.permissions)) {
@@ -1155,41 +1156,46 @@ export default {
 
             // Uncomment below to debug permissions list
             // console.log(this.usercopy.permission_list)
-            await new User({}).update({user: this.usercopy})
-            .then(() => {
-                if (closeDialog == true)
-                    this.closeDialog();
-                else
-                    this.refreshUser();
-                this.$emit('save', this.viewKey, this.usercopy);
-                this.loading = false
-                this.loadingColor = 'primary'
-            })
-            .catch(error => {
-                console.log(error)
-                if (error.response.data.code) {
-                    switch (error.response.data.code) {
-                        case 'user_permission_malformed':
-                            this.errorMsg = this.$t("error.codes.users.permissionMalformed")
-                            break;
-                        case 'user_update_error':
-                            this.errorMsg = this.$t("error.codes.users.couldNotSave")
-                            break;
-                        case 'user_country_error':
-                            this.errorMsg = this.$t("error.codes.users.countryMalformed")
-                            break;
-                        default:
-                            this.errorMsg = this.$t("error.unknown_short")
-                            break;
+            if (this.$refs.userForm.validate()){
+                await new User({}).update({user: this.usercopy})
+                .then(() => {
+                    if (closeDialog == true)
+                        this.closeDialog();
+                    else
+                        this.refreshUser();
+                    this.$emit('save', this.viewKey, this.usercopy);
+                    this.loading = false
+                    this.loadingColor = 'primary'
+                })
+                .catch(error => {
+                    console.log(error)
+                    if (error.response.data.code) {
+                        switch (error.response.data.code) {
+                            case 'user_permission_malformed':
+                                this.errorMsg = this.$t("error.codes.users.permissionMalformed")
+                                break;
+                            case 'user_update_error':
+                                this.errorMsg = this.$t("error.codes.users.couldNotSave")
+                                break;
+                            case 'user_country_error':
+                                this.errorMsg = this.$t("error.codes.users.countryMalformed")
+                                break;
+                            default:
+                                this.errorMsg = this.$t("error.unknown_short")
+                                break;
+                        }
+                    } else {
+                        this.errorMsg = this.$t("error.unknown_short")
                     }
-                } else {
-                    this.errorMsg = this.$t("error.unknown_short")
-                }
-                this.userRefreshLoading = false;
+                    this.loading = false
+                    this.loadingColor = 'error'
+                    this.error = true;
+                })
+            } else {
                 this.loading = false
                 this.loadingColor = 'error'
                 this.error = true;
-            })
+            }
         },
         isLoggedInUser(username){
             if (username == localStorage.getItem('username'))
