@@ -20,17 +20,23 @@ const utilsMixin = {
             var codeToUse
             if (typeof errorData === 'string')
                 codeToUse = errorData
-            else if ('ldap_response' in errorData.response.data)
-                codeToUse = errorData.response.data.ldap_response
-            else if ('code' in errorData.response.data)
-                codeToUse = errorData.response.data.code
+            else if (errorData.response.data != undefined && errorData.response.data != null){
+                if ('ldap_response' in errorData.response.data)
+                    codeToUse = errorData.response.data.ldap_response
+                else if ('code' in errorData.response.data)
+                    codeToUse = errorData.response.data.code
+            }
+            else if ('code' in errorData)
+                codeToUse = errorData.code
             else
                 codeToUse = errorData.status_code
 
-            if (codeToUse.length < 40)
-            suffix = " (" + codeToUse + ")"
-            else
-            suffix = " (" + codeToUse.substring(0, 40) + "...)"
+            if(codeToUse != undefined && codeToUse != null){
+                if (codeToUse.length < 40)
+                suffix = " (" + codeToUse + ")"
+                else
+                suffix = " (" + codeToUse.substring(0, 40) + "...)"
+            }
 
             switch(codeToUse){
             case 405:
@@ -70,8 +76,12 @@ const utilsMixin = {
             default:
                 if (codeToUse in this.$t('error.codes'))
                     return this.$t('error.codes.'+codeToUse)
-                else
-                    return this.$t("error.unknown_short") + suffix
+                else {
+                    var msg = this.$t("error.unknown_short")
+                    if (suffix != undefined && suffix != null)
+                        msg = msg + suffix
+                    return msg
+                }
             }
         },
 

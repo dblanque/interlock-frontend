@@ -3,8 +3,12 @@
 <!------------------------- File: LoginView.vue ------------------------------->
 <template>
   <v-container class="login ma-0 pa-0" fluid fill-height>
-    <v-card style="min-width:100%;" flat class="py-4 px-6" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
-      <h1>{{ $t("indexTitle") }}</h1>
+    <v-card outlined 
+    style="min-width:100%; border-radius: 0; border-left: 0; border-right:0;"
+    class="py-4 px-6" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
+      <v-row class="mt-2" justify="center">
+        <v-img max-width="450px" :aspect-ratio="16/9" :src="isThemeDark($vuetify) ? logoLight : logoDark"/>
+      </v-row>
       <v-row class="pa-0 ma-0" justify="center">
         <v-form
           id="login-form-container"
@@ -16,9 +20,9 @@
         >
           <v-col align="center">
             <!-- TITLE -->
-            <v-row class="text-md-h6 justify-center my-1">
+            <!-- <v-row class="text-md-h6 justify-center my-1">
               <span class="">{{ $t("section.login.title") }}</span>
-            </v-row>
+            </v-row> -->
             <v-row class="ma-0 pa-0 my-4" justify="center" align="center">
                 <v-btn class="ma-0 pa-0 px-2" small outlined color="primary" @click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
                   <span v-if="modeUser">
@@ -167,6 +171,8 @@ export default {
   },
   data() {
     return {
+      logoLight: require('@/assets/interlock-logo-wt-dark.svg'),
+      logoDark: require('@/assets/interlock-logo-wt-light.svg'),
       modeUser: true,
       loginForbiddenCount: 0,
       timeoutCounter: 30,
