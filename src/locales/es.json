@@ -91,6 +91,42 @@
     "passwordChanged": "Contraseña Modificada"
   },
   "words": {
+    "created":{
+      "single":{
+        "m":"Creado",
+        "f":"Creada",
+        "n":"Creado"
+      },
+      "plural":{
+        "m":"Creados",
+        "f":"Creadas",
+        "n":"Creados"
+      }
+    },
+    "updated":{
+      "single":{
+        "m":"Modificado",
+        "f":"Modificada",
+        "n":"Modificado"
+      },
+      "plural":{
+        "m":"Modificados",
+        "f":"Modificadas",
+        "n":"Modificados"
+      }
+    },
+    "deleted":{
+      "single":{
+        "m":"Eliminado",
+        "f":"Eliminada",
+        "n":"Eliminado"
+      },
+      "plural":{
+        "m":"Eliminados",
+        "f":"Eliminadas",
+        "n":"Eliminados"
+      }
+    },
     "saved":{
       "single":{
         "m":"Guardado",

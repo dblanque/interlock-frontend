@@ -102,6 +102,7 @@ import DNSRecord from '@/include/DNSRecord'
 import Domain from '@/include/Domain'
 import validationMixin from '@/plugins/mixin/validationMixin'
 import utilsMixin from '@/plugins/mixin/utilsMixin';
+import { notificationBus } from '@/main.js'
 
 export default {
     name: "confirmDialog",
@@ -180,29 +181,39 @@ export default {
                         this.error = false
                         this.errorMsg = ""
                         this.submitted = true
+                        notificationBus.$emit('createNotification', 
+                            {message: (this.$t("classes.dns.zone.single") + " " + this.$t("words.deleted.single.f")).toUpperCase(), type: 'info'}
+                        )
                     })
                     .catch(error => {
                         this.loading = false
                         this.error = true
                         this.errorMsg = this.getMessageForCode(error)
                         this.submitted = true
+                        notificationBus.$emit('createNotification', 
+                            {message: this.errorMsg.toUpperCase(), type: 'error'}
+                        )
                         console.log(error)
                     })
                 } else if (this.deleteMode == 'record' && record) {
                     await new DNSRecord({}).delete({record: record})
-                    .then(response => {
+                    .then(() => {
                         this.loading = false
                         this.error = false
                         this.errorMsg = ""
                         this.submitted = true
-                        if (response.data.distinguishedName == record.distinguishedName)
-                            console.log("Record Deleted Successfully")
+                        notificationBus.$emit('createNotification', 
+                            {message: (this.$t("classes.dns.record.single") + " " + this.$t("words.deleted.single.m")).toUpperCase(), type: 'info'}
+                        )
                     })
                     .catch(error => {
                         this.loading = false
                         this.error = true
                         this.errorMsg = this.getMessageForCode(error)
                         this.submitted = true
+                        notificationBus.$emit('createNotification', 
+                            {message: this.errorMsg.toUpperCase(), type: 'error'}
+                        )
                         console.log(error)
                     })
                 }

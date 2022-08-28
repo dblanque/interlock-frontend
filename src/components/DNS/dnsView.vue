@@ -21,7 +21,7 @@
     <template v-slot:top>
       <!-- Zone selection and operations -->
     <v-row align="center" class="px-2 mx-1 py-0 my-0">
-        <v-select v-model="zoneFilter['dnsZone']" @change="getDNSData" :items="dns.zones" class="mx-2"/>
+        <v-select v-model="zoneFilter['dnsZone']" @change="getDNSData(undefined, true)" :items="dns.zones" class="mx-2"/>
         <v-btn class="pa-2 mx-2" @click="showZoneAdd = !showZoneAdd" color="primary">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
             {{ $t('actions.addN') + ' ' + $t('classes.dns.zone.single') }}
@@ -64,7 +64,7 @@
             icon
             elevation="0"
             :loading="loading"
-            @click="getDNSData()"
+            @click="getDNSData(undefined, true)"
             >
                 <v-icon>
                     mdi-refresh
@@ -389,6 +389,7 @@ export default {
             errorMsg: "",
             readonly: false,
             deleteMode: 'record',
+            lastOperation: "",
             ldap: {},
             // Dialog States
             dialogs: {
@@ -437,11 +438,19 @@ export default {
                 .then(() => {
                     this.showZoneAdd = false
                     this.zoneFilter['dnsZone'] = this.zoneToCreate
-                    this.getDNSData()
+                    this.lastOperation = "createZone"
+                    this.getDNSData(undefined, false)
                     this.zoneToCreate = ""
+                    notificationBus.$emit('createNotification', 
+                        {message: (this.$t("classes.dns.zone.single") + " " + this.$t("words.created.single.f")).toUpperCase(), type: 'success'}
+                    )
                 })
                 .catch(error => {
                     console.log(error)
+                    this.errorMsg = this.getMessageForCode(error)
+                    notificationBus.$emit('createNotification', 
+                        {message: this.errorMsg.toUpperCase(), type: 'error'}
+                    )
                 })
             }
         },
@@ -526,10 +535,14 @@ export default {
                     this.errorMsg = message
                 else
                     this.errorMsg = this.getMessageForCode(error)
-                var msgToShow = this.errorMsg.length > 0 ? this.errorMsg.toUpperCase() : (this.$t("error.unableToLoad") + " " + this.viewTitle).toUpperCase()
-                this.createSnackbar({message: msgToShow, type: 'error'})
+                if (!this.lastOperation || this.lastOperation.length < 1) {
+                    var msgToShow = this.errorMsg.length > 0 ? this.errorMsg.toUpperCase() : (this.$t("error.unableToLoad") + " " + this.viewTitle).toUpperCase()
+                    this.createSnackbar({message: msgToShow, type: 'error'})
+                }
             } else {
-                this.createSnackbar({message: (this.$t("classes.dns.zone.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
+                if (!this.lastOperation || this.lastOperation.length < 1) {
+                    this.createSnackbar({message: (this.$t("classes.dns.zone.single") + " " + this.$t("words.loaded.single.m")).toUpperCase(), type: 'success'})
+                }
                 this.error = false
                 this.errorMsg = ""
             }
@@ -569,15 +582,19 @@ export default {
         },
         async closeDialog(key, refresh=false){
             this.dialogs[key] = false;
+            this.lastOperation = key;
             if (refresh == true && this.deleteMode == 'zone') {
                 this.zoneToCreate = ""
                 this.zoneFilter['dnsZone'] = this.ldap.domain
                 this.getDNSData(this.ldap.domain)
             } else if (refresh === true) {
-                this.getDNSData()
+                this.getDNSData(this.zoneFilter['dnsZone'])
             }
         },
-        async getDNSData(zoneToQuery=undefined) {
+        async getDNSData(zoneToQuery=undefined, refresh=false) {
+            if (refresh == true)
+                this.lastOperation = ""
+
             // Set DNS Zone Query
             if (zoneToQuery != undefined && zoneToQuery != null && zoneToQuery.length > 0)
                 this.zoneFilter['dnsZone'] = zoneToQuery

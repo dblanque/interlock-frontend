@@ -7,7 +7,7 @@
     <v-snackbar transition="slide-y-reverse-transition"
       :timeout="0"
       v-model="showSnackbar"
-      :class="'mb-12 ' + snackbarTextColor"
+      :class="'transition-snack-color mb-12 ' + snackbarTextColor"
       :color="snackbarColor"
       >
         <v-icon v-if="snackbarIcon.length > 0" class="mr-1" :color="snackbarTextColor">
@@ -83,6 +83,7 @@ export default {
                 case 'info':
                 default:
                     this.snackbarColor = 'primary'
+                    this.snackbarIcon = 'mdi-information'
                     break;
             }
             this.snackBarTimer = setTimeout(() => {
@@ -103,3 +104,9 @@ export default {
     },
 }
 </script>
+
+<style>
+.transition-snack-color .v-snack__wrapper{
+    transition: all var(--base-transition-speed-fast-5) ease-in-out;
+}
+</style>

@@ -91,6 +91,42 @@
     "passwordChanged": "Password Changed"
   },
   "words":{
+      "created":{
+        "single":{
+          "m":"Created",
+          "f":"Created",
+          "n":"Created"
+        },
+        "plural":{
+          "m":"Created",
+          "f":"Created",
+          "n":"Created"
+        }
+      },
+      "updated":{
+        "single":{
+          "m":"Updated",
+          "f":"Updated",
+          "n":"Updated"
+        },
+        "plural":{
+          "m":"Updated",
+          "f":"Updated",
+          "n":"Updated"
+        }
+      },
+      "deleted":{
+        "single":{
+          "m":"Deleted",
+          "f":"Deleted",
+          "n":"Deleted"
+        },
+        "plural":{
+          "m":"Deleted",
+          "f":"Deleted",
+          "n":"Deleted"
+        }
+      },
       "saved":{
         "single":{
           "m":"Saved",

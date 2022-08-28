@@ -258,6 +258,7 @@
 import validationMixin from '@/plugins/mixin/validationMixin'
 import utilsMixin from '@/plugins/mixin/utilsMixin';
 import DNSRecord from '@/include/DNSRecord'
+import { notificationBus } from '@/main.js'
 
 export default {
     mixins: [ validationMixin, utilsMixin ],
@@ -486,6 +487,9 @@ export default {
                     this.submitted = true
                     setTimeout(() => {
                         this.closeDialog(true)
+                        notificationBus.$emit('createNotification', 
+                            {message: (this.$t("classes.dns.record.single") + " " + this.$t("words.created.single.m")).toUpperCase(), type: 'success'}
+                        )
                     }, 250)
                 })
                 .catch(error => {
@@ -494,9 +498,9 @@ export default {
                     this.error = true
                     this.submitted = true
                     this.errorMsg = this.getMessageForCode(error)
-                    // this.resetSnackbar()
-                    // this.createSnackbar('red', this.errorMsg.toUpperCase() )
-                    // setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
+                    notificationBus.$emit('createNotification', 
+                        {message: this.errorMsg.toUpperCase(), type: 'error'}
+                    )
                 })
             }
         },
@@ -517,28 +521,31 @@ export default {
             }
 
             if (recordDiffers == true && this.$refs.RecordForm.validate()) {
-                    this.resetLoadingStatus()
-                    this.loading = true
-                    await new DNSRecord({}).update({record: this.recordCopy, oldRecord: this.originalRecord})
-                    .then(() => {
-                        this.loading = false
-                        this.error = false
-                        this.errorMsg = ""
-                        this.submitted = true
-                        setTimeout(() => {
-                            this.closeDialog(true)
-                        }, 250)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        this.loading = false
-                        this.error = true
-                        this.submitted = true
-                        this.errorMsg = this.getMessageForCode(error)
-                        // this.resetSnackbar()
-                        // this.createSnackbar('red', this.errorMsg.toUpperCase() )
-                        // setTimeout(() => {  this.resetSnackbar() }, this.snackbarTimeout);
-                    })
+                this.resetLoadingStatus()
+                this.loading = true
+                await new DNSRecord({}).update({record: this.recordCopy, oldRecord: this.originalRecord})
+                .then(() => {
+                    this.loading = false
+                    this.error = false
+                    this.errorMsg = ""
+                    this.submitted = true
+                    setTimeout(() => {
+                        this.closeDialog(true)
+                        notificationBus.$emit('createNotification', 
+                            {message: (this.$t("classes.dns.record.single") + " " + this.$t("words.updated.single.m")).toUpperCase(), type: 'success'}
+                        )
+                    }, 250)
+                })
+                .catch(error => {
+                    console.log(error)
+                    this.loading = false
+                    this.error = true
+                    this.submitted = true
+                    this.errorMsg = this.getMessageForCode(error)
+                    notificationBus.$emit('createNotification', 
+                        {message: this.errorMsg.toUpperCase(), type: 'error'}
+                    )
+                })
             } else {
                 this.closeDialog()
             }
