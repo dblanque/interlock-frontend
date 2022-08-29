@@ -4,9 +4,10 @@
 <template>
   <div class="home">
     <!------------------>
-    <v-row
-      justify="center"
-      :class="'ma-0 pa-0 text-normal transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+    <v-row align="center"
+      justify="space-between"
+      :class="'ma-0 pa-0 px-4 text-normal transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+      <v-img max-width="30ch" max-height="5em" class="my-3" contain :aspect-ratio="32/9" :src="!isThemeDark($vuetify) ? logoLight : logoDark"/>
       <h2 class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
       <div id="top-header-div" style="display:none; width:100%;">
         <svg version="1.1" id="top-header" x="0px" y="0px"
@@ -28,6 +29,7 @@
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
       align="center"
+      justify="space-between"
       :class="'ma-0 pa-2 transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
       style="height: fit-content">
       <v-col cols="12" md="auto">
@@ -38,7 +40,7 @@
           @updateTabSliders="refreshOnLanguageChange"
         />
       </v-col>
-      <v-divider light class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp" />
+      <v-divider style="border-color: var(--clr-primary)" class="ma-6" v-if="this.$vuetify.breakpoint.lgAndUp" />
       <v-col
         class="ma-0 pa-0 my-3"
         v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
@@ -132,6 +134,7 @@
       </v-fade-transition>
     </v-toolbar>
 
+    <!-- Mobile Nav -->
     <v-toolbar
       v-else
       dense
@@ -139,10 +142,8 @@
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
       style="z-index: 1"
-      :class="
-        'sticky-top ' +
-        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')
-      "
+      :class="'sticky-top ' +
+        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
     >
       <v-row justify="space-between" class="mx-12" align="center">
         <v-btn
@@ -161,7 +162,7 @@
             class="font-weight-medium clr-primary">
             {{ $t("category." + navTabs[active_tab].title + "_short").toUpperCase() }}
           </span>
-          <span class="font-weight-medium clr-primary">
+          <span v-else class="font-weight-medium clr-primary">
             {{ $t("category." + navTabs[active_tab].title).toUpperCase() }}
           </span>
         </span>
@@ -290,6 +291,8 @@ export default {
   },
   data() {
     return {
+      logoLight: require('@/assets/interlock-logo-wt-dark.svg'),
+      logoDark: require('@/assets/interlock-logo-wt-light.svg'),
       username: "",
       first_name: "",
       initLoad: false,

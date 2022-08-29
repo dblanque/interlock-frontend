@@ -7,7 +7,7 @@
     style="min-width:100%; border-radius: 0; border-left: 0; border-right:0;"
     class="py-4 px-6" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
       <v-row class="mt-2" justify="center">
-        <v-img max-width="450px" :aspect-ratio="16/9" :src="isThemeDark($vuetify) ? logoLight : logoDark"/>
+        <v-img contain max-width="450px" :aspect-ratio="14/3" :src="isThemeDark($vuetify) ? logoLight : logoDark"/>
       </v-row>
       <v-row class="pa-0 ma-0" justify="center">
         <v-form
