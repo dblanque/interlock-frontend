@@ -498,6 +498,8 @@
         "extraMessage":"Detalles Extra",
         "id":"ID de Evento"
       },
+      "prevValue":"Valor Anterior",
+      "newValue":"Nuevo Valor",
       "seeDetails":"Ver Detalles",
       "viewAction":{
         "truncate":{

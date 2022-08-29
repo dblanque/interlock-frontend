@@ -492,6 +492,8 @@
         "extraMessage":"Extra Details",
         "id":"Log ID"
       },
+      "prevValue":"Previous Value",
+      "newValue":"New Value",
       "seeDetails":"See Details",
       "viewAction":{
         "truncate":{
