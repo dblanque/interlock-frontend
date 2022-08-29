@@ -120,14 +120,14 @@
               <v-list-item-title>
                 {{ typeof i === 'object' ? i.name : i }}
               </v-list-item-title>
-              <v-list-item-subtitle class="my-2" v-if="typeof i === 'object' && i.previous_value">
+              <v-list-item-subtitle class="my-2" v-if="typeof i === 'object' && i.old_value">
                 <v-chip outlined class="ml-4">
-                  {{ $t("section.logs.prevValue") + ": " + i.previous_value }}
+                  {{ $t("section.logs.prevValue") + ": " + i.old_value }}
                 </v-chip>
               </v-list-item-subtitle>
-              <v-list-item-subtitle class="my-2" v-if="typeof i === 'object' && i.value">
+              <v-list-item-subtitle class="my-2" v-if="typeof i === 'object' && i.new_value">
                 <v-chip outlined class="ml-4">
-                  {{ $t("section.logs.newValue") + ": " + i.value }}
+                  {{ $t("section.logs.newValue") + ": " + i.new_value }}
                 </v-chip>
               </v-list-item-subtitle>
             </span>

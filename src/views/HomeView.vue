@@ -486,13 +486,11 @@ export default {
       });
     },
     async loadDomainData() {
-      if (!this.domain || !this.realm) {
-        await new Domain({}).getDetails().then(() => {
-          this.domain = localStorage.getItem("domain");
-          this.realm = localStorage.getItem("realm");
-          this.basedn = localStorage.getItem("basedn");
-        });
-      }
+      await new Domain({}).getDetails().then(() => {
+        this.domain = localStorage.getItem("domain");
+        this.realm = localStorage.getItem("realm");
+        this.basedn = localStorage.getItem("basedn");
+      });
     },
     ////////////////////////////////////////////////////////////////////////////
     // Logout Actions
