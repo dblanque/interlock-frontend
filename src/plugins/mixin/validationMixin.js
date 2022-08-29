@@ -38,7 +38,8 @@ const validationMixin = {
       inputRulesMax4: (v) => !v || /^.{1,4}$/.test(v) || i18n.t("error.validation.max4"),
       inputRulesMax6: (v) => !v || /^.{1,6}$/.test(v) || i18n.t("error.validation.max6"),
       inputRulesMax8: (v) => !v || /^.{1,8}$/.test(v) || i18n.t("error.validation.max8"),
-      inputRulesAlphanumeric: (v) => !v || /^[üöñóúíáéa-zA-Z0-9]{0,}$/.test(v) || i18n.t("error.validation.alphaNumeric"),
+      inputRulesNoDoubleQuotes: (v) => !v || /^[^"]+$/.test(v) || i18n.t("error.validation.doubleQuotes"),
+      inputRulesNoSingleQuotes: (v) => !v || /^[^']+$/.test(v) || i18n.t("error.validation.singleQuotes"),
       inputRulesalphaNumericSpaces: (v) => !v || /^[üöñóúíáéa-z0-9]+[üöñóúíáéa-z0-9\s]+$/i.test(v) || i18n.t("error.validation.alphaNumericSpaces"),
       inputRulesalphaNumericSpecial: (v) => !v || /^[üöñóúíáéa-z0-9]+[?¿!@üöñóúíáéa-z0-9,.\s_-]+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecial"),
       inputRulesalphaNumericPassword: (v) => !v || /^[!@#$%&*()üöñóúíáéa-z0-9]+([!@#$%&*()üöñóúíáéa-z0-9,._-]{7,})+$/i.test(v) || i18n.t("error.validation.alphaNumericPassword"),
@@ -242,13 +243,13 @@ const validationMixin = {
               rules.push(this.inputRulesNumbers)
             break;
           case "ge_address_floor": // Address Floor
-              rules.push(this.inputRulesAlphanumeric, this.inputRulesMax4)
+              rules.push(this.inputRulesalphaNumericSpaces, this.inputRulesMax4)
             break;
           case "ge_address_apartment": // Address Apartment
-              rules.push(this.inputRulesAlphanumeric, this.inputRulesMax6)
+              rules.push(this.inputRulesalphaNumericSpaces, this.inputRulesMax6)
             break;
           case "ge_address_postal_code": // Address Postal Code
-              rules.push(this.inputRulesAlphanumeric, this.inputRulesMax8)
+              rules.push(this.inputRulesalphaNumericSpaces, this.inputRulesMax8)
             break;
           case "ge_address_city": // Address City
               rules.push(this.inputRulesalphaNumericSpecial)
@@ -262,41 +263,50 @@ const validationMixin = {
           case "ge_country": // Country
               rules.push(this.inputRulesCountry)
             break;
-          case "ge_ascii": // Country
+          case "ge_ascii": // ASCII Only
               rules.push(this.inputRulesFullASCIISet)
             break;
-          case "dns_root": // Country
+          case "dns_stringData": // StringData
+              rules.push(this.inputRulesFullASCIISet, this.inputRulesNoDoubleQuotes)
+            break;
+          case "dns_root": // DNS Root Validation
               rules.push(this.inputRulesDomainRoot)
             break;
-
           default:
             break;
         }
 
-        for (var rule in rules) {
         // For every rule in rules array...
-          if (rule == this.inputRulesRequired) {
+        for (var rule in rules) {
+          try {
           // If the rule is inputRules Required
-            var val = Array.isArray(v) ? v[0] : v;
-            message = rules[rule](val);
-          } else {
+          if (rule == this.inputRulesRequired) {
+              var val = Array.isArray(v) ? v[0] : v;
+              message = rules[rule](val);
+          } 
           // Every other rule
-            if (Array.isArray(v)) {
-            // If an array of values is passed to the input rule - This was necessary to fix undefined / null errors
-              v_array = [ ...(v || []) ];
-              for (let index = 0; index < v_array.length; index++) {
-                if (!v_array[index])
-                  v_array[index] = '';
+          else {
+              // If an array of values is passed to the input rule - This was necessary to fix undefined / null errors
+              if (Array.isArray(v)) {
+                v_array = [ ...(v || []) ];
+                for (let index = 0; index < v_array.length; index++) {
+                  if (!v_array[index])
+                    v_array[index] = '';
+                }
+                if ( rules[rule](...v_array) != true && message == true )
+                  message = rules[rule](...v_array);
+              } 
+              // If a single value is passed to the input rule do the normal thing
+              else { 
+                if (!v)
+                  v = '';
+                if ( rules[rule](v) != true && message == true )
+                  message = rules[rule](v);
               }
-              if ( rules[rule](...v_array) != true && message == true )
-                message = rules[rule](...v_array);
-            } else { 
-            // If a single value is passed to the input rule do the normal thing
-              if (!v)
-                v = '';
-              if ( rules[rule](v) != true && message == true )
-                message = rules[rule](v);
             }
+          } catch (error) {
+            console.log(rule)
+            console.error(error)
           }
         }
         return message;

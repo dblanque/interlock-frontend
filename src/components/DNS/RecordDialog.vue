@@ -94,12 +94,17 @@
     <!-- TXT Record Types -->
     <v-row class="ma-0 pa-0 px-4 pb-4" v-if="isStringRecord(selectedType)">
         <v-col cols="12" class="ma-0 pa-0 mt-4">
+            <v-alert type="info" class="mx-2 mb-1">
+                {{ $t("dns.hints.quotesNotRequired") }}
+            </v-alert>
+        </v-col>
+        <v-col cols="12" class="ma-0 pa-0 mt-4">
             <v-textarea auto-grow outlined
             v-model="recordCopy.stringData"
             :hint="$t('dns.hints.stringData')"
             persistent-hint
             :label="$t('dns.attributes.stringData')"
-            :rules="[this.fieldRules(recordCopy.stringData, 'ge_ascii', true)]"
+            :rules="[this.fieldRules(recordCopy.stringData, 'dns_stringData', true)]"
             class="mx-2"
             ></v-textarea>
         </v-col>

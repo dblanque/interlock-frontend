@@ -104,7 +104,8 @@
 
     <template v-slot:[`item.affectedObject`]="{ item }">
       <div class="py-2">
-        <v-menu top v-if="Array.isArray(item.affectedObject)">
+        <v-menu :close-on-content-click="false" 
+        top v-if="Array.isArray(item.affectedObject) && item.affectedObject.length > 0">
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on"
             style="min-width: 32px;" elevation="0" text class="pa-0 px-2 pr-3" color="primary">
@@ -114,15 +115,20 @@
             {{ $t('section.logs.seeDetails') }}
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item v-for="i, k in item.affectedObject" :key="k">
-              <v-chip class="mx-1" outlined>
+          <v-list class="pa-2">
+            <span v-for="i, k in item.affectedObject" :key="k">
+              <v-list-item-title>
                 {{ typeof i === 'object' ? i.name : i }}
-              </v-chip>
-            </v-list-item>
+              </v-list-item-title>
+              <v-list-item-subtitle class="my-2" v-if="typeof i === 'object'">
+                <v-chip outlined class="ml-4">
+                  {{ i.value }}
+                </v-chip>
+              </v-list-item-subtitle>
+            </span>
           </v-list>
         </v-menu>
-        <v-chip class="mx-1" outlined v-else-if="item.affectedObject">
+        <v-chip class="mx-1" outlined v-else-if="item.affectedObject.length > 0">
           {{ item.affectedObject }}
         </v-chip>
       </div>

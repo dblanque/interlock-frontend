@@ -700,6 +700,8 @@
 import User from '@/include/User'
 import CNObjectList from '@/components/CNObjectList.vue'
 import validationMixin from '@/plugins/mixin/validationMixin';
+import utilsMixin from '@/plugins/mixin/utilsMixin';
+import { notificationBus } from '@/main.js'
 
 export default {
     name: 'UserDialog',
@@ -920,9 +922,7 @@ export default {
         }
       }
     },
-    mixins: [
-        validationMixin
-    ],
+    mixins: [ validationMixin, utilsMixin ],
     props: {
         viewKey: String,
         editFlag: Boolean,
@@ -1116,11 +1116,41 @@ export default {
         async disableUser(){
             await this.usercopy.disable(this.usercopy.username).then(() => {
                 this.refreshUser()
+                notificationBus.$emit('createNotification', 
+                    {
+                        message: (this.$t("classes.user.single") + " " + this.$t("words.disabled")).toUpperCase(), 
+                        type: 'warning'
+                    }
+                );
+            })
+            .catch(error => {
+                console.log(error)
+                notificationBus.$emit('createNotification', 
+                    {
+                        message: this.getMessageForCode(error), 
+                        type: 'error'
+                    }
+                );
             })
         },
         async enableUser(){
             await this.usercopy.enable(this.usercopy.username).then(() => {
                 this.refreshUser()
+                notificationBus.$emit('createNotification', 
+                    {
+                        message: (this.$t("classes.user.single") + " " + this.$t("words.enabled")).toUpperCase(), 
+                        type: 'success'
+                    }
+                );
+            })
+            .catch(error => {
+                console.log(error)
+                notificationBus.$emit('createNotification', 
+                    {
+                        message: this.getMessageForCode(error), 
+                        type: 'error'
+                    }
+                );
             })
         },
         editUser(){

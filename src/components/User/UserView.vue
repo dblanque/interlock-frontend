@@ -423,18 +423,36 @@ export default {
       this.openDialog('userDelete')
     },
     async enableUser(userObject){
+      this.loading = true
+      this.error = false
+      this.errorMsg = false
       this.data.selectedUser = {}
       this.data.selectedUser = userObject
       this.data.userdata = await new User({})
       await this.data.userdata.enable(this.data.selectedUser.username)
       .then(() => {
-        this.listUserItems();
+        this.loading = false
+        this.error = false
+        this.errorMsg = false
+        this.listUserItems(false);
+        notificationBus.$emit('createNotification', 
+          {
+            message: (this.$t("classes.user.single") + " " + this.$t("words.enabled")).toUpperCase(), 
+            type: 'success'
+          }
+        );
       })
       .catch(error => {
         console.log(error)
+        this.loading = false
+        this.error = true
+        this.errorMsg = this.getMessageForCode(error)
       })
     },
     async disableUser(userObject){
+      this.loading = true
+      this.error = false
+      this.errorMsg = false
       this.data.selectedUser = {}
       this.data.selectedUser = userObject
       if (localStorage.getItem('username') == this.data.selectedUser.username) {
@@ -444,10 +462,22 @@ export default {
         this.data.userdata = await new User({})
         await this.data.userdata.disable(this.data.selectedUser.username)
         .then(() => {
-          this.listUserItems();
+          this.loading = false
+          this.error = false
+          this.errorMsg = false
+          this.listUserItems(false);
+          notificationBus.$emit('createNotification', 
+            {
+              message: (this.$t("classes.user.single") + " " + this.$t("words.disabled")).toUpperCase(), 
+              type: 'warning'
+            }
+          );
         })
         .catch(error => {
           console.log(error)
+          this.loading = false
+          this.error = true
+          this.errorMsg = this.getMessageForCode(error)
         })
       }
     },

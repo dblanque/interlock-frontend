@@ -318,6 +318,8 @@
         "noCountryCode":"No country code set"
       },
       "validation":{
+          "doubleQuotes":"Double quotes are not allowed",
+          "singleQuotes":"Single quotes are not allowed",
           "domainRoot":"Must be a valid Domain Name (Exclude the DNS Zone, @ allowed for root)",
           "ascii": "String Data must contain only ASCII Characters",
           "fieldinvalid": "One or more fields are invalid",
@@ -352,7 +354,8 @@
   "dns":{
     "hints":{
       "name":"Use the character @ to identify your root zone",
-      "stringData":"Insert the record without double quotation marks"
+      "stringData":"Insert the record without double quotation marks",
+      "quotesNotRequired":"Double quotes are not required, they are automatically set by the system"
     },
     "attributes":{
       "index": "Record Index",
