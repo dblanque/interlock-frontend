@@ -29,16 +29,16 @@ Matamata [@ dafont.com](https://www.dafont.com/matamata.font)
 
 ### LDAP Directory Tree
  - [x] Recursive Read
- - [ ] Move Objects
- - [ ] Rename Objects
- - [ ] Delete Objects
+ - [x] Move Objects
+ - [x] Rename Objects
+ - [x] Delete Objects
 
 ### Organizational Unit Management
- - [ ] Create
+ - [x] Create
  - [x] Read
- - [ ] Update
-      - [ ] Move OU to another CN in the Dirtree
- - [ ] Delete
+ - [x] Update
+      - [x] Move OU to another CN in the Dirtree
+ - [x] Delete
 
 ### User & Permissions Management
  - [x] Create
@@ -92,7 +92,31 @@ This tab will require to have an ssh key or be the locally installed server
  - [ ] Remove Domain Controller?
 
 ## Project setup
-```
+```bash
+workpath="/var/lib/interlock"
+frontendPath="/var/lib/interlock/interlock_frontend"
+
+apt-get update -y
+
+# Install curl and fetch required script.
+apt-get install git curl -y
+
+curl -sL https://deb.nodesource.com/setup_16.x -o "$workpath/nodesource_setup.sh"
+
+# Add nodesource repo
+bash "$workpath/nodesource_setup.sh"
+
+# Add yarnpkg key and repo respectively
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+# Install NodeJS and Yarn
+apt-get update -y
+apt-get install nodejs yarn -y
+
+git clone https://github.com/dblanque/interlock_frontend $frontendPath
+
+cd $frontendPath
 yarn install
 ```
 
@@ -119,7 +143,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 *Interlock Copyright (C) 2022 | Dylan Blanqué, BR Consulting S.R.L.*
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
+it under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
@@ -129,6 +153,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://fsf.org/>.
 
 This program comes with ABSOLUTELY NO WARRANTY.
