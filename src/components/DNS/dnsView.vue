@@ -596,7 +596,7 @@ export default {
                 this.lastOperation = ""
 
             // Set DNS Zone Query
-            if (zoneToQuery != undefined && zoneToQuery != null && zoneToQuery.length > 0)
+            if (zoneToQuery != undefined && zoneToQuery != null && zoneToQuery.length > 0 && zoneToQuery != "")
                 this.zoneFilter['dnsZone'] = zoneToQuery
             else if (this.zoneFilter['dnsZone'] == "")
                 this.zoneFilter['dnsZone'] = this.ldap.domain
