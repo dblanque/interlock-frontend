@@ -105,7 +105,7 @@
     <template v-slot:[`item.affectedObject`]="{ item }">
       <div class="py-2">
         <v-menu :close-on-content-click="false" 
-        top v-if="Array.isArray(item.affectedObject) && item.affectedObject.length > 0">
+        top v-if="item.affectedObject && Array.isArray(item.affectedObject) && item.affectedObject.length > 0">
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on"
             style="min-width: 32px;" elevation="0" text class="pa-0 px-2 pr-3" color="primary">
@@ -133,7 +133,7 @@
             </span>
           </v-list>
         </v-menu>
-        <v-chip class="mx-1" outlined v-else-if="item.affectedObject.length > 0">
+        <v-chip class="mx-1" outlined v-else-if="item.affectedObject && item.affectedObject.length > 0">
           {{ item.affectedObject }}
         </v-chip>
       </div>
