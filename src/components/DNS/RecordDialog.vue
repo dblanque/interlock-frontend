@@ -397,9 +397,6 @@ export default {
             var defaultValidator = 'dns_root'
             if (this.recordCopy.type != undefined) {
                 switch (this.recordCopy.type) {
-                    case 2:
-                    case 5:
-                        return 'ldap_website'
                     default:
                         return defaultValidator
                 }
