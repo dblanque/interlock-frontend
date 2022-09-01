@@ -161,7 +161,7 @@ request.interceptors.response.use(
                 // on refresh request error catch
                 }).catch((e)=>{
                     console.log(e)
-                    if (e.status_code == 401 || e.status == 401) {
+                    if (e.response.status == 401) {
                         // erase local storage and go to Index Login.
                         localStorage.removeItem('token')
                         localStorage.removeItem('refresh')
