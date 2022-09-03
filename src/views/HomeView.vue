@@ -236,13 +236,6 @@
         </template>
         <span>{{ $t("footer.about").toUpperCase() }}</span>
       </v-tooltip>
-      <!-- Donate -->
-      <!-- <v-btn small
-        :dark="!isThemeDark($vuetify)" 
-        :light="isThemeDark($vuetify)" 
-        class="mx-2">
-        {{ $t("footer.donate") }}
-      </v-btn> -->
     </v-row>
     <!-- Footer -->
     <v-footer
@@ -252,13 +245,27 @@
       :light="isThemeDark($vuetify)"
       class="py-1"
     >
-      <v-row
+      <v-row align="center"
         justify="center"
         :class="
           'mx-4 my-1 ' + ($vuetify.breakpoint.mdAndDown ? '' : 'text-caption')">
-        <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4 mt-2"/>
+        <!-- <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4 mt-2"/> -->
         {{ $t("footer.copyright") }}
-        <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4 mt-2"/>
+        <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
+        <!-- Donate -->
+        <v-btn color="primary"
+          id="donateBtn"
+          outlined
+          href="https://www.paypal.com/donate/?hosted_button_id=FFR7CG7X477NL"
+          target="_blank"
+          :dark="isThemeDark($vuetify)" 
+          :light="!isThemeDark($vuetify)" 
+          class="mx-2 px-3">
+          <v-icon class="mr-1">
+            mdi-heart-outline
+          </v-icon>
+          {{ $t("footer.donate") }}
+        </v-btn>
       </v-row>
     </v-footer>
   </div>
@@ -622,5 +629,15 @@ export default {
 
 [theme=light] #top-header {
   stroke: var(--clr-primary);
+}
+
+#donateBtn .v-icon::before {
+  transition: color 50ms ease-in-out,
+  content 200ms ease-in-out;
+}
+
+#donateBtn:hover .v-icon::before {
+  content: "\F02D1";
+  color: var(--clr-red);
 }
 </style>

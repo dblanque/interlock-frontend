@@ -31,6 +31,8 @@ const utilsMixin = {
             else
                 codeToUse = errorData.status_code
 
+            console.log(codeToUse)
+
             if(codeToUse != undefined && codeToUse != null){
                 if (codeToUse.length < 40)
                 suffix = " (" + codeToUse + ")"
@@ -40,6 +42,7 @@ const utilsMixin = {
 
             switch(codeToUse){
             case 405:
+            case 'ERR_BAD_RESPONSE':
                 return this.$t('error.codes.badRequest')
             case 409:
                 return this.$t('error.codes.conflict')
@@ -48,6 +51,8 @@ const utilsMixin = {
             case 'entryAlreadyExists':
             case 'ldap_obj_exists':
                 return this.$t('error.codes.ldapObjectExists')
+            case 'namingViolation':
+                return this.$t('error.codes.namingViolation')
             // DNS ---------------------------------------------------------- //
             case 'dns_zone_missing':
             case 'dns_zone_in_record':

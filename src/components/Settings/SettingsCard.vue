@@ -309,6 +309,7 @@
                         <!-- Text Field Settings -->
                         <v-text-field :label="$t('section.settings.fields.' + key)"
                         v-else
+                        :class="item.extraClasses"
                         :readonly="item.readonly || readonly == true"
                         :hint="$t(item.hint)"
                         :rules="item.validator ? [fieldRules(item.value, item.validator, item.required)] : undefined"
@@ -363,8 +364,9 @@ export default {
                         // Log parameters
                         LDAP_LOG_MAX: {
                             value: 0,
-                            validator: 'ge_integer',
+                            validator: 'set_log_max',
                             type: "integer",
+                            extraClasses: "mb-4"
                         },
                         LDAP_LOG_CREATE: {
                             value: false,

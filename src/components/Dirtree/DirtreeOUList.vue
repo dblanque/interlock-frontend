@@ -8,6 +8,7 @@
     <v-expand-transition>
         <v-treeview v-if="this.ouList.length > 0"
         :items="this.ouList"
+        :active.sync="activeObject"
         dense
         hoverable
         activatable
@@ -46,6 +47,7 @@ import { objectRecursiveSearch } from '@/include/utils';
 export default {
     data() {
         return {
+            activeObject: [],
             ouList: [],
             objectDestination: "",
             loading: false,
@@ -98,6 +100,7 @@ export default {
         async fetchOUs(excludeDict=undefined){
             this.loading = true
             this.error = false
+            this.activeObject = []
             if (excludeDict)
                 await new OrganizationalUnit({}).dirtree(excludeDict)
                 .then(response => {

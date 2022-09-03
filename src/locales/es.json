@@ -314,7 +314,8 @@
         "groupExists":"El grupo ya existe",
         "couldNotSave":"El grupo no pudo ser guardado"
       },
-      "ldapObjectExists":"Un Objeto LDAP con ese Identificador ya existe"
+      "ldapObjectExists":"Un Objeto LDAP con ese Identificador ya existe",
+      "namingViolation":"Excepción de Violación de Nombre (Naming Violation)"
     },
     "settings": {
       "testInvalid":"Prueba de Conexión LDAP Fallida",
@@ -324,6 +325,8 @@
       "noCountryCode":"Sin código configurado"
     },
     "validation": {
+      "below10000":"El valor numérico debe ser menor a 10000",
+      "aboveZero":"El valor numérico debe ser mayor a 0",
       "doubleQuotes":"No se permiten las comillas dobles",
       "singleQuotes":"No se permiten las comillas simples",
       "domainRoot":"Debe ser un Nombre de Dominio válido (excluir la zona, se permite @ para la raíz)",
@@ -336,6 +339,7 @@
       "max4": "Máximo de 4 caracteres",
       "max6": "Máximo de 6 caracteres",
       "max8": "Máximo de 8 caracteres",
+      "max255": "Máximo de 255 caracteres",
       "alphaNumeric": "Debe ser alfanumérico",
       "alphaNumericSpecialUsername": "Debe contener solo letras (guiones permitidos)",
       "alphaNumericPassword": "8 caracteres mín., caracteres especiales permitidos: !@#$%&*()",
@@ -688,8 +692,8 @@
         "LDAP_LOG_CREATE":"Registrar Eventos de ALTA",
         "LDAP_LOG_UPDATE":"Registrar Eventos de MODIFICACIÓN",
         "LDAP_LOG_DELETE":"Registrar Eventos de BAJA",
-        "LDAP_LOG_OPEN_CONNECTION":"Registrar Eventos al ABRIR CONEXIÓN LDAP",
-        "LDAP_LOG_CLOSE_CONNECTION":"Registrar Evento al CERRAR CONEXIÓN LDAP",
+        "LDAP_LOG_OPEN_CONNECTION":"Registrar Eventos al ABRIR CONEXIÓN LDAP (No recomendado)",
+        "LDAP_LOG_CLOSE_CONNECTION":"Registrar Evento al CERRAR CONEXIÓN LDAP (No recomendado)",
         "LDAP_LOG_LOGIN":"Registrar Inicios de Sesión en Interlock",
         "LDAP_LOG_LOGOUT":"Registrar Cierres de Sesión en Interlock",
         "LDAP_URI_PREFIX":"Prefijo LDAP",

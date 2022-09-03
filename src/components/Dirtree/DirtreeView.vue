@@ -544,31 +544,36 @@ export default {
                 case 'dirtreeMove':
                     this.createFlag = false
                     this.selectedObject = item
-                    this.$refs.DirtreeMove.resetDialog(this.selectedObject.distinguishedName);
+                    if (this.$refs.DirtreeMove != undefined)
+                      this.$refs.DirtreeMove.resetDialog(this.selectedObject.distinguishedName);
                 break;
                 case 'dirtreeRename':
                     this.selectedObject = item
-                    this.$refs.DirtreeRename.clearData();
+                    if (this.$refs.DirtreeRename != undefined)
+                      this.$refs.DirtreeRename.clearData();
                 break;
                 case 'dirtreeOUCreate':
                   this.createType = 'ou'
-                  this.$refs.DirtreeOUCreate.newOU();
-                  this.$refs.DirtreeOUCreate.resetDialog();
-                  this.$refs.DirtreeOUCreate.setDestination();
+                  if (this.$refs.DirtreeOUCreate != undefined) {
+                    this.$refs.DirtreeOUCreate.newOU();
+                    this.$refs.DirtreeOUCreate.resetDialog();
+                  }
                 break;
                 case 'dirtreeComputerCreate':
                   this.dialogs['dirtreeOUCreate'] = true;
                   this.createType = 'computer'
-                  this.$refs.DirtreeOUCreate.newOU();
-                  this.$refs.DirtreeOUCreate.resetDialog();
-                  this.$refs.DirtreeOUCreate.setDestination();
+                  if (this.$refs.DirtreeOUCreate != undefined) {
+                    this.$refs.DirtreeOUCreate.newOU();
+                    this.$refs.DirtreeOUCreate.resetDialog();
+                  }
                 break;
                 case 'dirtreePrinterCreate':
                   this.dialogs['dirtreeOUCreate'] = true;
                   this.createType = 'printer'
-                  this.$refs.DirtreeOUCreate.newOU();
-                  this.$refs.DirtreeOUCreate.resetDialog();
-                  this.$refs.DirtreeOUCreate.setDestination();
+                  if (this.$refs.DirtreeOUCreate != undefined) {
+                    this.$refs.DirtreeOUCreate.newOU();
+                    this.$refs.DirtreeOUCreate.resetDialog();
+                  }
                 break;
                 case 'dirtreeDeleteObject':
                   this.selectedObject = item

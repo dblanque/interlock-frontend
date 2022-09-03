@@ -29,7 +29,8 @@ const validationMixin = {
 
       // * ------------------------------ Individual REGEX Input Rules ------------------------------ * //
       inputRulesRequired: (v) => (v != null && v != undefined && v.length != 0) ||  i18n.t("error.validation.fieldRequired"),
-      inputRulesAboveZero: (v) => (parseInt(v) > 0) || "Fields must be larger than 0",
+      inputRulesAboveZero: (v) => (parseInt(v) > 0) || i18n.t("error.validation.aboveZero"),
+      inputRulesBelow10000: (v) => (parseInt(v) < 10000) || i18n.t("error.validation.below10000"),
       inputRulesLetters: (v) => !v || /^[üöñóúíáéa-zA-Z ]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
       inputRulesLettersStrict: (v) => !v || /^[a-zA-Z ]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
       inputRulesLettersStrictUnderscore: (v) => !v || /^[a-zA-Z_ ]{0,}$/.test(v) || i18n.t("error.validation.alphabetic"),
@@ -38,6 +39,7 @@ const validationMixin = {
       inputRulesMax4: (v) => !v || /^.{1,4}$/.test(v) || i18n.t("error.validation.max4"),
       inputRulesMax6: (v) => !v || /^.{1,6}$/.test(v) || i18n.t("error.validation.max6"),
       inputRulesMax8: (v) => !v || /^.{1,8}$/.test(v) || i18n.t("error.validation.max8"),
+      inputRulesMax255: (v) => !v || /^.{1,255}$/.test(v) || i18n.t("error.validation.max255"),
       inputRulesNoDoubleQuotes: (v) => !v || /^[^"]+$/.test(v) || i18n.t("error.validation.doubleQuotes"),
       inputRulesNoSingleQuotes: (v) => !v || /^[^']+$/.test(v) || i18n.t("error.validation.singleQuotes"),
       inputRulesalphaNumericSpaces: (v) => !v || /^[üöñóúíáéa-z0-9]+[üöñóúíáéa-z0-9\s]+$/i.test(v) || i18n.t("error.validation.alphaNumericSpaces"),
@@ -267,10 +269,13 @@ const validationMixin = {
               rules.push(this.inputRulesFullASCIISet)
             break;
           case "dns_stringData": // StringData
-              rules.push(this.inputRulesFullASCIISet, this.inputRulesNoDoubleQuotes)
+              rules.push(this.inputRulesFullASCIISet, this.inputRulesNoDoubleQuotes, this.inputRulesMax255)
             break;
           case "dns_root": // DNS Root Validation
               rules.push(this.inputRulesDomainRoot)
+            break;
+          case "set_log_max": // DNS Root Validation
+              rules.push(this.inputRulesAboveZero, this.inputRulesBelow10000, this.inputRulesNumbers)
             break;
           default:
             break;

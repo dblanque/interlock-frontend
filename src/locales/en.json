@@ -308,7 +308,8 @@
             "groupExists":"Group already exists",
             "couldNotSave":"Group could not be saved"
           },
-          "ldapObjectExists":"An LDAP Object with that Identifier Exists"
+          "ldapObjectExists":"An LDAP Object with that Identifier Exists",
+          "namingViolation":"Naming Violation Exception"
       },
       "settings": {
         "testInvalid":"LDAP Bind Connection Failed",
@@ -318,6 +319,8 @@
         "noCountryCode":"No country code set"
       },
       "validation":{
+          "below10000":"Numeric value must be below 10000",
+          "aboveZero":"Numeric value must be above 0",
           "doubleQuotes":"Double quotes are not allowed",
           "singleQuotes":"Single quotes are not allowed",
           "domainRoot":"Must be a valid Domain Name (Exclude the DNS Zone, @ allowed for root)",
@@ -330,6 +333,7 @@
           "max4": "4 Characters Maximum",
           "max6": "6 Characters Maximum",
           "max8": "8 Characters Maximum",
+          "max255": "255 Characters Maximum",
           "alphaNumeric": "Must be Alphanumeric",
           "alphaNumericSpecialUsername": "Must contain only letters (hyphen allowed)",
           "alphaNumericPassword": "8 char. minimum, special characters allowed: !@#$%&*()",
@@ -683,8 +687,8 @@
         "LDAP_LOG_CREATE":"Log CREATE Events",
         "LDAP_LOG_UPDATE":"Log UPDATE Events",
         "LDAP_LOG_DELETE":"Log DELETE Events",
-        "LDAP_LOG_OPEN_CONNECTION":"Log OPEN LDAP CONNECTION Events",
-        "LDAP_LOG_CLOSE_CONNECTION":"Log CLOSE LDAP CONNECTION Events",
+        "LDAP_LOG_OPEN_CONNECTION":"Log OPEN LDAP CONNECTION Events (Not recommended)",
+        "LDAP_LOG_CLOSE_CONNECTION":"Log CLOSE LDAP CONNECTION Events (Not recommended)",
         "LDAP_LOG_LOGIN":"Log Interlock LOGIN Events",
         "LDAP_LOG_LOGOUT":"Log Interlock LOGOUT Events",
         "LDAP_URI_PREFIX":"LDAP Prefix",

@@ -56,7 +56,7 @@
                                     text
                                     :disabled="!allowOURefresh"
                                     elevation="0"
-                                    @click="fetchOUs"
+                                    @click="fetchOUs(true)"
                                     >
                                     {{ $t('actions.refresh') }}
                                     <v-icon>
@@ -548,13 +548,16 @@ export default {
     methods: {
         setDestination(destination=undefined){
             // Set default destination if undefined
-            if (destination == undefined || !destination)
+            if (destination == undefined || !destination) {
                 this.userDestination = this.basedn
+                this.userPathExpansionPanel = 0
+            }
             // Set destination from arg
-            else
+            else {
                 this.userDestination = destination
+                this.userPathExpansionPanel = false
+            }
 
-            this.userPathExpansionPanel = false
         },
         prevStep(){
             switch (this.createStage) {
@@ -641,11 +644,20 @@ export default {
             this.fetchOUs()
             this.userDestination = "CN=Users," + this.basedn
         },
-        async fetchOUs(){
-            this.userPathExpansionPanel = 0
-            setTimeout(()=>{
-                this.$refs.DirtreeOUList.fetchOUs()
-            },100)
+        async fetchOUs(refresh=false){
+            if (refresh == true)
+                this.userPathExpansionPanel = 0
+            if (this.$refs.DirtreeOUList != undefined) {
+                this.allowRefresh = false
+                this.$nextTick(()=>{
+                    if (refresh != true)
+                        this.setDestination()
+                    this.$refs.DirtreeOUList.fetchOUs()
+                    .then(() => {
+                        this.allowRefresh = true
+                    })
+                })
+            }
         },
         onClickPermission(key){
             this.permissions[key].value = !this.permissions[key].value

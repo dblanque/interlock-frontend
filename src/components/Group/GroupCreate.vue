@@ -46,6 +46,30 @@
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
+
+                            <v-row class="ma-0 pa-0 mt-4" align="center" justify="space-around">
+                                <v-btn small text color="primary" class="ma-1" @click="groupDestination = basedn">
+                                    {{ $t('section.dirtree.move.setToRoot')}}
+                                </v-btn>
+                                <v-btn small
+                                    class="ma-1"
+                                    text
+                                    :disabled="!allowRefresh"
+                                    elevation="0"
+                                    @click="fetchOUs(true)"
+                                    >
+                                    {{ $t('actions.refresh') }}
+                                    <v-icon>
+                                    mdi-refresh
+                                    </v-icon>
+                                    <template v-slot:loader>
+                                    <span class="custom-loader">
+                                        <v-icon color="white">mdi-cached</v-icon>
+                                    </span>
+                                    </template>
+                                </v-btn>
+                            </v-row>
+
                             <v-row class="ma-0 pa-0" justify="center">
                                 <v-col cols="12" lg="8">
                                         <v-expansion-panels 
@@ -221,7 +245,6 @@
 
 <script>
 import Group from '@/include/Group'
-import OrganizationalUnit from '@/include/OrganizationalUnit'
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
 import CNObjectList from '@/components/CNObjectList.vue'
 import GroupTypeRadioGroups from '@/components/Group/GroupTypeRadioGroups.vue'
@@ -237,6 +260,7 @@ export default {
     },
     data () {
       return {
+        allowRefresh: true,
         passwordHidden: true,
         domain: "",
         realm: "",
@@ -292,13 +316,16 @@ export default {
         },
         setDestination(destination=undefined){
             // Set default destination if undefined
-            if (destination == undefined || !destination)
+            if (destination == undefined || !destination){
                 this.groupDestination = this.basedn
+                this.groupPathExpansionPanel = 0
+            }
             // Set destination from arg
-            else
+            else {
                 this.groupDestination = destination
+                this.groupPathExpansionPanel = false
+            }
 
-            this.groupPathExpansionPanel = false
         },
         prevStep(){
             switch (this.createStage) {
@@ -392,14 +419,20 @@ export default {
         updateValue(key, value){
             this[key] = value
         },
-        async fetchOUs(){
-            await new OrganizationalUnit({}).list()
-            .then(response => {
-                this.ouList = response.data.ldapObjectList
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        async fetchOUs(refresh=false){
+            if (refresh == true)
+                this.groupPathExpansionPanel = 0
+            if (this.$refs.DirtreeOUList != undefined) {
+                this.allowRefresh = false
+                this.$nextTick(()=>{
+                    if (refresh != true)
+                        this.setDestination()
+                    this.$refs.DirtreeOUList.fetchOUs(this.filter)
+                    .then(() => {
+                        this.allowRefresh = true
+                    })
+                })
+            }
         },
         closeDialog(refresh=false){
             this.$emit('closeDialog', this.viewKey, refresh);

@@ -54,7 +54,7 @@
                                         text
                                         :disabled="!allowRefresh"
                                         elevation="0"
-                                        @click="fetchOUs"
+                                        @click="fetchOUs(true)"
                                         >
                                         {{ $t('actions.refresh') }}
                                         <v-icon>
@@ -224,12 +224,11 @@ export default {
         error: false,
         valid: false,
         errorMsg: "",
-        allowRefresh: false,
+        allowRefresh: true,
         showSnackbar: false,
         ouPathExpansionPanel: false,
         ouDestination: '',
         objectToCreate: {},
-        ouList: [],
         createStage: 1,
       }
     },
@@ -253,27 +252,19 @@ export default {
             this.domain = domainDetails.domain
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
-            this.allowRefresh = false
-            if (this.$refs.DirtreeOUList) {
-                this.$nextTick(()=>{
-                    this.setDestination()
-                    this.$refs.DirtreeOUList.fetchOUs(this.filter)
-                    .then(() => {
-                        this.allowRefresh = true
-                    })
-                })
-            }
             return
         },
         setDestination(destination=undefined){
             // Set default destination if undefined
-            if (destination == undefined || !destination)
+            if (destination == undefined || !destination){
                 this.ouDestination = this.basedn
+                this.ouPathExpansionPanel = 0
+            }
             // Set destination from arg
-            else
+            else {
                 this.ouDestination = destination
-
-            this.ouPathExpansionPanel = false
+                this.ouPathExpansionPanel = false
+            }
         },
         prevStep(){
             switch (this.createStage) {
@@ -330,6 +321,7 @@ export default {
         async newOU(){
             this.passwordHidden = true
             this.ouPathExpansionPanel = false
+            this.allowRefresh = true
             this.objectToCreate = new OrganizationalUnit({})
             this.createStage = 1
             this.error = false
@@ -346,18 +338,20 @@ export default {
         updateValue(key, value){
             this[key] = value
         },
-        async fetchOUs(){
-            await new OrganizationalUnit({}).list()
-            .then(response => {
-                this.ouList = response.data.ldapObjectList
-                this.allowRefresh = true
-                if (this.ouPathExpansionPanel == false)
-                    this.ouPathExpansionPanel = 0
-            })
-            .catch(error => {
-                console.log(error)
-                this.allowRefresh = true
-            })
+        async fetchOUs(refresh=false){
+            if (refresh == true)
+                this.ouPathExpansionPanel = 0
+            if (this.$refs.DirtreeOUList != undefined) {
+                this.allowRefresh = false
+                this.$nextTick(()=>{
+                    if (refresh != true)
+                        this.setDestination()
+                    this.$refs.DirtreeOUList.fetchOUs()
+                    .then(() => {
+                        this.allowRefresh = true
+                    })
+                })
+            }
         },
         closeDialog(refresh=false){
             this.$emit('closeDialog', this.viewKey, refresh);
