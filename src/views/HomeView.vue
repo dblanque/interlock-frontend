@@ -216,27 +216,9 @@
     </v-dialog>
 
     <!----- ABOUT AND DONATE BUTTONS ------>
-    <v-row id="home-footer-buttons" justify="end" align="center" class="pa-0 ma-0 px-2 mb-2">
-      <!-- About -->
-      <v-tooltip left color="primary">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            @click="showAboutDialog = true" 
-            small 
-            class="ma-0 mx-2"
-            color="primary"
-            v-bind="attrs"
-            v-on="on"
-            icon
-          >
-            <v-icon>
-              mdi-information
-            </v-icon>
-          </v-btn>
-        </template>
-        <span>{{ $t("footer.about").toUpperCase() }}</span>
-      </v-tooltip>
-    </v-row>
+    <!-- <v-row id="home-footer-buttons" justify="end" align="center" class="pa-0 ma-0 px-2 mb-2">
+    </v-row> -->
+
     <!-- Footer -->
     <v-footer
       padless
@@ -247,25 +229,45 @@
     >
       <v-row align="center"
         justify="center"
-        :class="
-          'mx-4 my-1 ' + ($vuetify.breakpoint.mdAndDown ? '' : 'text-caption')">
+        :class="'mx-4 my-1 ' + ($vuetify.breakpoint.mdAndDown ? '' : 'text-caption')">
         <!-- <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4 mt-2"/> -->
         {{ $t("footer.copyright") }}
         <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
         <!-- Donate -->
         <v-btn color="primary"
+          small
           id="donateBtn"
           outlined
           href="https://www.paypal.com/donate/?hosted_button_id=FFR7CG7X477NL"
           target="_blank"
           :dark="isThemeDark($vuetify)" 
           :light="!isThemeDark($vuetify)" 
-          class="mx-2 px-3">
+          class="mx-2 mr-1 px-3">
           <v-icon class="mr-1">
             mdi-heart-outline
           </v-icon>
           {{ $t("footer.donate") }}
         </v-btn>
+
+        <!-- About -->
+        <v-tooltip top color="primary">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              @click="showAboutDialog = true" 
+              small 
+              class="ma-0 mx-2"
+              color="primary"
+              v-bind="attrs"
+              v-on="on"
+              icon
+            >
+              <v-icon>
+                mdi-information
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>{{ $t("footer.about").toUpperCase() }}</span>
+        </v-tooltip>
       </v-row>
     </v-footer>
   </div>
