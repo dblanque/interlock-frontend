@@ -9,6 +9,10 @@ fi
 HEADERFILE="$workpath/../public/css/colors.css"
 FILE="$workpath/../public/css/colors.css.temp"
 
+if [[ ! -d "$workpath/../public/css" ]]; then
+    mkdir -p "$workpath/../public/css"
+fi
+
 newlineReplace(){
     tr '\n' ' ' < $FILE >> $FILE.tmp && mv $FILE.tmp $FILE # Remove newlines after autoparsed section
     cat $FILE >> $HEADERFILE && rm $FILE
