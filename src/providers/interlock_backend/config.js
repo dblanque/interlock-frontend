@@ -28,15 +28,15 @@ const base_url =  urlPrefix + localSettings.backend_url + "/";
 
 var request
 // Axios Instance.
-if (localSettings.ssl == true && localSettings.ilckSec == true) {
+if (localSettings.ilckSec != true) {
     request = axios.create({
-        baseURL: base_url
+        baseURL: base_url,
+        rejectUnauthorized: false
     });
 }
 else {
     request = axios.create({
-        baseURL: base_url,
-        rejectUnauthorized: false
+        baseURL: base_url
     });
 }
 
