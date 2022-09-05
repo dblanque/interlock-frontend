@@ -26,10 +26,19 @@ else {
 const base_url =  urlPrefix + localSettings.backend_url + "/";
 // const base_url =  "http://127.0.0.1:8000/";
 
+var request
 // Axios Instance.
-const request = axios.create({
+if (localSettings.ilckSec != true) {
+    request = axios.create({
+        baseURL: base_url,
+        rejectUnauthorized: false
+    });
+}
+else {
+    request = axios.create({
         baseURL: base_url
     });
+}
 
 // Sets token into request common again after page reload.
 var auth = localStorage.getItem('token');
