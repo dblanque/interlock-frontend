@@ -28,7 +28,7 @@ const base_url =  urlPrefix + localSettings.backend_url + "/";
 
 var request
 // Axios Instance.
-if (localSettings.ssl == true && localSettings.ilckSec != false) {
+if (localSettings.ssl == true && localSettings.ilckSec == true) {
     request = axios.create({
         baseURL: base_url
     });
