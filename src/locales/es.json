@@ -770,6 +770,7 @@
     "donate": "Donar"
   },
   "misc": {
+    "version":"Versión",
     "autocomputedField":"Campo con computado automático",
     "darkMode": "Activar Modo Oscuro",
     "logoutMsg":"¿Está seguro de cerrar su sesión?",

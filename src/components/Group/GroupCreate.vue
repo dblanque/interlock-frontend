@@ -403,6 +403,7 @@ export default {
             this.passwordHidden = true
             this.groupPathExpansionPanel = false
             this.groupToCreate = new Group({})
+            this.membersToAdd = []
             this.createStage = 1
             this.error = false
             this.radioGroupScope = 0

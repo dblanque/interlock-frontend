@@ -764,6 +764,7 @@
     "donate":"Donate"
   },
   "misc":{
+    "version":"Version",
     "autocomputedField":"Autocomputed Field",
     "darkMode":"Enable Dark Mode",
     "logoutMsg":"Are you sure you wish to Logout?",

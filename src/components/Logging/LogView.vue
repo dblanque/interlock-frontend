@@ -71,7 +71,7 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12" lg="2" xl="1" class="ma-0 my-4 pa-0">
+        <v-col cols="12" lg="3" xl="2" class="ma-0 my-4 pa-0">
           <v-btn @click="openTruncateLogsDialog"
           outlined 
           class="mx-4 pa-0 px-2" 

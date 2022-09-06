@@ -59,6 +59,10 @@
                     </li>
                 </ul>
             </v-row>
+
+            <v-row class="ma-0 pa-0" justify="center">
+                {{ $t('misc.version') }}: 0.74.34
+            </v-row>
         </v-card-text>
     </v-card>
 </template>

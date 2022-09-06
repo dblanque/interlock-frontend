@@ -3,10 +3,11 @@
 <!------------------------- File: EnduserView.vue ----------------------------->
 <template>
     <div class="enduser">
-    <v-row justify="center"
-    :class="'ma-0 pa-2 py-4 text-normal ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
-        >
-        <h2 class="font-weight-medium">{{ domain.toUpperCase() }}</h2>
+    <v-row align="center"
+      justify="space-between"
+      :class="'ma-0 pa-0 px-4 text-normal transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+      <v-img max-width="30ch" max-height="5em" class="my-3" contain :aspect-ratio="32/9" :src="!isThemeDark($vuetify) ? logoLight : logoDark"/>
+      <h2 class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
     </v-row>
     <v-row
         :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)" align="center"
@@ -15,7 +16,7 @@
         <v-col cols="12" md="auto">
             <LanguageSelector :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)" class=""/>
         </v-col>
-        <v-divider light class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
+        <v-divider style="border-color: var(--clr-primary)" class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
         <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
             <span class="text-normal" v-if="last_name && last_name != '' && first_name && first_name != ''">
             {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}
@@ -296,6 +297,7 @@
                     <v-row justify="center" class="pa-0 ma-0">
                         <!-- Reset Password Button -->
                         <v-btn color="primary" @click="openDialog('userResetPassword')"
+                        :disabled="!user.can_change_pwd"
                         class="ma-0 pa-0 pa-4 ma-1" 
                         rounded>
                             <v-icon class="mr-1">
@@ -379,6 +381,8 @@ export default {
     },
     data() {
         return {
+            logoLight: require('@/assets/interlock-logo-wt-dark.svg'),
+            logoDark: require('@/assets/interlock-logo-wt-light.svg'),
             // Dialog States
             dialogs: {
                 userResetPassword: false,

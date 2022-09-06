@@ -411,12 +411,12 @@ export default {
                 });
             }
             if (this.membersToAdd != undefined && this.membersToAdd.length > 0) {
-                console.log(this.membersToAdd)
                 this.membersToAdd.forEach(member => {
                     if (!this.excludeDNs.includes(member))
                         this.excludeDNs.push(member)
                 });
             }
+            // this.logGroups()
         },
         openDialog(key){
             this.dialogs[key] = true;
@@ -444,13 +444,14 @@ export default {
                     this.groupcopy.member.push(g)
 
                 if (this.membersToRemove != undefined) {
-                    console.log("MTR Includes this member, removing. " + g.distinguishedName)
+                    // console.log("MTR Includes this member, removing. " + g.distinguishedName)
                     this.membersToRemove = this.membersToRemove.filter(e => e != g.distinguishedName)
                 }
             });
             this.closeInnerDialog('addToGroup')
             // this.logGroups()
             this.showMemberTab = true
+            this.setupExclude()
             this.$forceUpdate
         },
         removeMember(memberDn) {
@@ -467,6 +468,7 @@ export default {
             // this.logGroups()
             if (this.groupcopy.member == undefined || this.groupcopy.member.length == 0)
                 this.showMemberTab = false
+            this.setupExclude()
             this.$forceUpdate
         },
         logGroups(){
@@ -526,6 +528,10 @@ export default {
         // next tick to avoid mutation errors
         syncGroup(){
             this.groupcopy = new Group({})
+            this.membersToRemove = []
+            this.membersToAdd = []
+            this.excludeDNs = []
+            this.showMemberTab = false
             this.$nextTick(() => {
                 this.groupcopy = this.group
                 this.setGroupTypeAndScope()

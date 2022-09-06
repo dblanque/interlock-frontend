@@ -619,7 +619,7 @@ export default {
                             this.showSnackbar = false
                         this.showSnackbar = true
                         this.error = true
-                        this.errorMsg = this.$t('section.users.userCreate.validationError')
+                        this.errorMsg = this.$t('error.validation.fieldinvalid')
                     }
                     break;
                 default:

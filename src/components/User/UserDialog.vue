@@ -994,7 +994,7 @@ export default {
             switch (key) {
                 case 'userAddToGroup':
                     this.setupExclude()
-                    this.$refs.UserAddToGroup.fetchLists()
+                    this.$refs.UserAddToGroup.fetchLists(this.excludeGroups)
                 break;
                 default:
                 break;
@@ -1013,12 +1013,13 @@ export default {
                 }
 
                 if (this.groupsToRemove != undefined) {
-                    console.log("MTR Includes this member, removing. " + g.distinguishedName)
+                    // console.log("MTR Includes this member, removing. " + g.distinguishedName)
                     this.groupsToRemove = this.groupsToRemove.filter(e => e != g.distinguishedName)
                 }
             });
             this.closeInnerDialog('userAddToGroup')
             // this.logGroups()
+            this.setupExclude()
             this.$forceUpdate
         },
         removeFromGroup(groupDn) {
@@ -1041,6 +1042,7 @@ export default {
     
                 this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
                 // this.logGroups()
+                this.setupExclude()
                 this.$forceUpdate
             }
         },
@@ -1243,6 +1245,7 @@ export default {
             this.tab = 0
             this.changingPerms = false
             this.changingGroups = false
+            this.excludeGroups = []
             this.getDomainDetails()
             this.usercopy = new User({})
             this.$nextTick(() => {

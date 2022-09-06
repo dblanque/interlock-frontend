@@ -9,21 +9,6 @@
       :class="'ma-0 pa-0 px-4 text-normal transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
       <v-img max-width="30ch" max-height="5em" class="my-3" contain :aspect-ratio="32/9" :src="!isThemeDark($vuetify) ? logoLight : logoDark"/>
       <h2 class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
-      <div id="top-header-div" style="display:none; width:100%;">
-        <svg version="1.1" id="top-header" x="0px" y="0px"
-          viewBox="0 0 612 60" style="enable-background:new 0 0 612 60;" xml:space="preserve">
-        <line id="XMLID_3_" class="st0" x1="0" y1="36.6" x2="612" y2="36.6"/>
-        </svg>
-        <svg id="top-header" x="0px" y="0px"
-          viewBox="0 0 612 60" style="enable-background:new 0 0 612 60;" xml:space="preserve">
-          <path id="XMLID_41_" class="st0" d="M612,36.6H463.2c-2.1,0-4.1-0.7-5.9-1.9l-9.1-6.6c-1.7-1.2-3.8-1.9-5.9-1.9l-272.9,0
-            c-2.1,0-4.1,0.7-5.9,1.9l-9.1,6.6c-1.7,1.2-3.8,1.9-5.9,1.9H0"/>
-        </svg>
-        <svg version="1.1" id="top-header" x="0px" y="0px"
-          viewBox="0 0 612 60" style="enable-background:new 0 0 612 60;" xml:space="preserve">
-        <line id="XMLID_3_" class="st0" x1="0" y1="36.6" x2="612" y2="36.6"/>
-        </svg>
-      </div>
     </v-row>
     <v-row
       :dark="!isThemeDark($vuetify)"
@@ -418,7 +403,7 @@ export default {
 
     this.setupTimers();
   },
-  mounted() {
+  async mounted() {
     var currentPath = this.$route.path;
     if (currentPath && currentPath.length > 0) {
       this.navTabs.forEach((item) => {
@@ -431,12 +416,16 @@ export default {
     setTimeout(() => {
       this.showNavTabs = true;
     }, 250);
+    await this.loadDomainData().then(() => {
+      if (this.domain == "example.com") {
+        this.updateSelectedTab(5)
+      }
+    });
     this.active_tab = this.selectedTab;
     if (this.selectedTab == 0)
       this.initLoad = true
     this.selectedTabTitle = this.navTabs[this.selectedTab].title;
     this.requestRefresh = this.selectedTabTitle
-    this.loadDomainData();
   },
   computed: {
     breakpointName() {
@@ -502,6 +491,7 @@ export default {
         this.domain = localStorage.getItem("domain");
         this.realm = localStorage.getItem("realm");
         this.basedn = localStorage.getItem("basedn");
+        return
       });
     },
     ////////////////////////////////////////////////////////////////////////////
