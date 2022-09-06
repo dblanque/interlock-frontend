@@ -229,8 +229,23 @@ export default {
                 return true
             return false
         },
+        resetFilter(){
+            this.filter = {
+                "iexact":{
+                    "organizationalUnit":{
+                        attr: "objectClass",
+                        or: true
+                    },
+                    "container":{
+                        attr: "objectClass",
+                        or: true
+                    }
+                }
+            }
+        },
         async fetchLists(excludeDNs=undefined){
             this.ldapList = []
+            this.resetFilter()
             var filter = this.filter
             // Gotta force update for the filter value refresh, Javascript LOL
             this.$forceUpdate
