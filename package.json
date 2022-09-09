@@ -1,6 +1,6 @@
 {
   "name": "vue-ldap-manager",
-  "version": "0.1.0",
+  "version": "0.74.4",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --host 127.0.0.1",
