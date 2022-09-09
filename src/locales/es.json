@@ -221,6 +221,10 @@
       "single":"Usuario",
       "plural":"Usuarios"
     },
+    "contact":{
+      "single":"Contacto",
+      "plural":"Contactos"
+    },
     "builtin-domain":{
       "single":"Objeto Integrado",
       "plural":"Objetos Integrados"
@@ -706,6 +710,8 @@
         "LDAP_DOMAIN_HINT":"Ejemplo: dominio.com",
         "LDAP_PORT":"Puerto del Servidor LDAP",
         "LDAP_PORT_HINT":"Pre-determinado: 389 (Non-TLS), 636 (TLS)",
+        "LDAP_DNS_LEGACY":"DNS Modo Legacy",
+        "LDAP_DNS_LEGACY_HINT":"Pruebe este parámetro si su sección de DNS no funciona correctamente",
         "LDAP_AUTH_SEARCH_BASE":"Base de Búsqueda de LDAP/AD",
         "LDAP_AUTH_SEARCH_BASE_HINT":"Ejemplo: dc=dominio,dc=com",
         "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN":"Reino / Dominio de Autenticación de AD",

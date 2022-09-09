@@ -166,8 +166,11 @@
               <v-icon v-else-if="item.type == 'Computer'">
                 {{ itemTypes[item.type.toLowerCase()]['icon'] }}
               </v-icon>
-              <v-icon v-else-if="item.type == 'Person' || item.type == 'User'">
+              <v-icon v-else-if="(item.type == 'Person' || item.type == 'User') && !item.objectClass.includes('contact')">
                 {{ itemTypes[item.type.toLowerCase()]['icon'] }}
+              </v-icon>
+              <v-icon v-else-if="item.objectClass.includes('contact')">
+                {{ itemTypes['contact']['icon'] }}
               </v-icon>
               <v-icon v-else-if="item.type == 'Group'">
                 {{ itemTypes[item.type.toLowerCase()]['icon'] }}
@@ -188,7 +191,7 @@
           <!-- ACTIONS -->
           <template v-slot:append="{ item }">
               <!-- User Buttons -->
-              <span v-if="(item.type == 'User' || item.type=='Person')">
+              <span v-if="(item.type == 'User' || item.type=='Person') && validForActions(item.objectClass)">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="goToUser(item)"
@@ -207,7 +210,7 @@
               </span>
 
               <!-- Group Buttons -->
-              <span v-else-if="item.type == 'Group'">
+              <span v-else-if="item.type == 'Group' && validForActions(item.objectClass)">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -231,7 +234,7 @@
               <span v-if="item.builtin != true">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn
+                    <v-btn v-if="validForActions(item.objectClass)"
                         @click="openDialog('dirtreeMove', item)"
                         color="primary"
                         icon
@@ -247,7 +250,7 @@
                 </v-tooltip>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn
+                    <v-btn v-if="validForActions(item.objectClass)"
                         @click="openDialog('dirtreeRename', item)"
                         color="primary"
                         icon
@@ -411,6 +414,11 @@ export default {
                     "show": false,
                     "icon":"mdi-account"
                 },
+                "contact":{
+                    "filtered": false,
+                    "show": true,
+                    "icon":"mdi-folder-account-outline"
+                },
                 "group":{
                     "filtered": false,
                     "icon":"mdi-google-circles-communities",
@@ -467,6 +475,12 @@ export default {
             default:
               return false
           }
+        },
+        validForActions(itemObjectClasses){
+          if (itemObjectClasses != undefined)
+            if (itemObjectClasses.includes('contact'))
+              return false
+          return true
         },
         getTranslationKey(o){
           var key = o.value

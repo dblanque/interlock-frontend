@@ -215,6 +215,10 @@
       "single":"User",
       "plural":"Users"
     },
+    "contact":{
+      "single":"Contact",
+      "plural":"Contacts"
+    },
     "builtin-domain":{
       "single":"Built-in",
       "plural":"Built-ins"
@@ -701,6 +705,8 @@
         "LDAP_DOMAIN_HINT":"Example: domain.com",
         "LDAP_PORT":"LDAP Server Port",
         "LDAP_PORT_HINT":"Defaults: 389 (Non-TLS), 636 (TLS)",
+        "LDAP_DNS_LEGACY":"Legacy DNS",
+        "LDAP_DNS_LEGACY_HINT":"Test this if your DNS Section is not working",
         "LDAP_AUTH_SEARCH_BASE":"LDAP/AD Search Base",
         "LDAP_AUTH_SEARCH_BASE_HINT":"Example: dc=domain,dc=com",
         "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN":"Active Directory Domain / Realm",

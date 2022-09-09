@@ -430,7 +430,13 @@ export default {
                             value: "",
                             hint: 'section.settings.fields.LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN_HINT',
                             validator: "ldap_realm"
-                        }
+                        },
+                        LDAP_DNS_LEGACY: {
+                            value: false,
+                            type: "boolean",
+                            hint: 'section.settings.fields.LDAP_DNS_LEGACY_HINT',
+                            persistentHint: true
+                        },
                     }
                 },
                 bindUser: {
