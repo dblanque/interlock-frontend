@@ -12,6 +12,15 @@
   </v-app>
 </template>
 
+<script>
+export default {
+  mounted () {
+    const html = document.documentElement
+    html.setAttribute('lang', this.$i18n.locale)
+  },
+}
+</script>
+
 <style lang="scss">
 #app {
   font-family: Montserrat !important; 

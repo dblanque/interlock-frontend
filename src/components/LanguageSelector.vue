@@ -91,6 +91,8 @@ export default {
             this.$i18n.locale = this.language
             localStorage.setItem('locale', this.language)
             this.$emit('updateTabSliders');
+            const html = document.documentElement
+            html.setAttribute('lang', this.$i18n.locale)
         },
     }
 }
