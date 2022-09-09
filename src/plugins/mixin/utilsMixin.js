@@ -71,6 +71,7 @@ const utilsMixin = {
             case 'dns_soa_increment':
             case 'dns_soa_record_root_only':
             case 'dns_root_servers_only_cli':
+            case 'dns_list_response_empty':
             case 'dns_field_validator_failed':
                 var result = this.$t('error.codes.dns.'+codeToUse)
                 return result

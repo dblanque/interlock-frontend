@@ -299,7 +299,8 @@
             "dns_soa_increment":"Unable to increment SOA Serial",
             "dns_soa_record_root_only":"A Start Of Authority Record can only be set for the root of your zone",
             "dns_root_servers_only_cli":"Root DNS Servers may only be modified by command-line",
-            "dns_field_validator_failed":"A Field in the Record has failed validation"
+            "dns_field_validator_failed":"A Field in the Record has failed validation",
+            "dns_list_response_empty":"LDAP Response does not contain the DNS List"
           },
           "users":{
             "userExists":"User already exists",
@@ -447,6 +448,8 @@
     "dns":{
       "zoneToAddName":"Name of the new DNS Zone",
       "confirmZoneCreation":"Confirm Zone Creation",
+      "legacyMode":"Using Legacy DNS Mode",
+      "legacyMode_hint":"Have you tried Legacy DNS Mode?",
       "createSuccess":"Record Created",
       "updateSuccess":"Record Updated",
       "deleteSuccess":"Record Deleted",

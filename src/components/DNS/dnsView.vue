@@ -407,7 +407,7 @@ export default {
             },
         }
     },
-    created () {
+    created() {
         this.ldap = getDomainDetails()
         this.getDNSData(this.defaultZone)
     },
@@ -538,6 +538,16 @@ export default {
                 if (!this.lastOperation || this.lastOperation.length < 1) {
                     var msgToShow = this.errorMsg.length > 0 ? this.errorMsg.toUpperCase() : (this.$t("error.unableToLoad") + " " + this.viewTitle).toUpperCase()
                     this.createSnackbar({message: msgToShow, type: 'error'})
+                    
+                    if ('response' in error && 'data' in error.response && 'code' in error.response.data)
+                        if (error.response.data.code == "dns_list_response_empty")
+                            setTimeout(() => {
+                                var legacyMessage = {
+                                    message: this.$t('section.dns.legacyMode_hint').toUpperCase(),
+                                    type: 'warning'
+                                }
+                                notificationBus.$emit('createNotification', legacyMessage);
+                            }, 3000)
                 }
             } else {
                 if (!this.lastOperation || this.lastOperation.length < 1) {
@@ -613,7 +623,7 @@ export default {
                 this.dns.zones = response.data.dnsZones
                 this.dns.records = response.data.records
                 // Add actions header
-                var headerDict = {}
+                var headerDict
 
                 dnsHeaders.forEach(header => {
                     headerDict = {}
@@ -630,10 +640,7 @@ export default {
                     if (header == 'displayName' || header == 'typeName')
                         headerDict.groupable = true
 
-                    if (header == 'ts' && this.zoneFilter['dnsZone'] != 'Root DNS Servers')
-                        this.dns.headers.push(headerDict)
-                    else if (header != 'ts')
-                        this.dns.headers.push(headerDict)
+                    this.dns.headers.push(headerDict)
                 });
                 // Add actions last
                 headerDict = {}
@@ -645,6 +652,16 @@ export default {
                 headerDict.sortable = false
                 this.dns.headers.push(headerDict)
                 this.loadFinished()
+
+                if (response.data.legacy == true) {
+                    setTimeout(() => {
+                        var legacyMessage = {
+                            message: this.$t('section.dns.legacyMode'),
+                            type: 'info'
+                        }
+                        notificationBus.$emit('createNotification', legacyMessage);
+                    }, 3000)
+                }
             })
             .catch(error => {
                 console.log(error)

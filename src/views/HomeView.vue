@@ -425,7 +425,8 @@ export default {
     if (this.selectedTab == 0)
       this.initLoad = true
     this.selectedTabTitle = this.navTabs[this.selectedTab].title;
-    this.requestRefresh = this.selectedTabTitle
+    // ! This refresh is redundant, commented it just in case
+    // this.requestRefresh = this.selectedTabTitle
   },
   computed: {
     breakpointName() {

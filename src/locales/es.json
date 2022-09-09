@@ -305,7 +305,8 @@
         "dns_soa_increment":"No se pudo Incrementar el Serial del SOA",
         "dns_soa_record_root_only":"Solo puede configurar un SOA para la raíz de su zona",
         "dns_root_servers_only_cli":"Los Servidores DNS de Raíz solo pueden ser modificados desde la consola",
-        "dns_field_validator_failed":"Un campo no fue validado correctamente"
+        "dns_field_validator_failed":"Un campo no fue validado correctamente",
+        "dns_list_response_empty":"La Respuesta del LDAP no contiene Zonas de DNS"
       },
       "users":{
         "userExists":"El usuario ya existe.",
@@ -453,6 +454,8 @@
     "dns":{
       "zoneToAddName":"Nombre de la nueva Zona de DNS",
       "confirmZoneCreation":"Confirmar Creación de Zona",
+      "legacyMode":"Utilizando DNS en Modo Legado",
+      "legacyMode_hint":"¿Intentó el Modo Legado de DNS?",
       "createSuccess":"Registro Creado",
       "updateSuccess":"Registro Modificado",
       "deleteSuccess":"Registro Eliminado",
