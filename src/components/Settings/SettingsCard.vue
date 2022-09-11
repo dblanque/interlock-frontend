@@ -467,10 +467,15 @@ export default {
                             type: "integer",
                             validator: "ge_numbers"
                         },
+                        LDAP_AUTH_FORCE_SSL: {
+                            value: false,
+                            type: "boolean",
+                            extraClasses: "mt-2"
+                        },
                     },
                     row2:{
                         LDAP_AUTH_USE_TLS: {
-                            value: "",
+                            value: false,
                             type: "boolean",
                         },
                         LDAP_AUTH_TLS_VERSION: { 
@@ -479,12 +484,8 @@ export default {
                                 "PROTOCOL_TLSv1",
                                 "PROTOCOL_TLSv1_1",
                                 "PROTOCOL_TLSv1_2",
-                                "PROTOCOL_SSLv2",
-                                "PROTOCOL_SSLv3",
-                                "PROTOCOL_SSLv23",
                                 "PROTOCOL_TLS",
-                                "PROTOCOL_TLS_CLIENT",
-                                "PROTOCOL_TLS_SERVER",
+                                "PROTOCOL_TLS_CLIENT"
                             ],
                             hint: 'section.settings.fields.LDAP_AUTH_TLS_VERSION_HINT',
                             persistentHint: true,
@@ -503,17 +504,17 @@ export default {
                     },
                     row2:{
                         EXCLUDE_COMPUTER_ACCOUNTS:{ 
-                            value: "",
+                            value: false,
                             type: "boolean"
                         }
                     },
-                    // row3:{
-                        // LDAP_AUTH_USER_FIELDS:{ 
-                        //     value: {},
-                        //     keyToAdd: "",
-                        //     valueToAdd: "",
-                        //     type: "object"
-                        // },
+                    row3:{
+                        LDAP_AUTH_USER_FIELDS:{ 
+                            value: {},
+                            keyToAdd: "",
+                            valueToAdd: "",
+                            type: "object"
+                        },
                         // LDAP_AUTH_USER_LOOKUP_FIELDS:{ 
                         //     value: [],
                         //     type: 'list',
@@ -521,7 +522,7 @@ export default {
                         //     required: true,
                         //     validator: "ge_lettersStrict"
                         // },
-                    // }
+                    }
                 }
             }
         }

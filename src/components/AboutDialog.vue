@@ -61,7 +61,7 @@
             </v-row>
 
             <v-row class="ma-0 pa-0" justify="center">
-                {{ $t('misc.version') }}: 0.74.4
+                {{ $t('misc.version') }}: 0.74.5
             </v-row>
         </v-card-text>
     </v-card>

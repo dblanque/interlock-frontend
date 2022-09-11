@@ -723,13 +723,14 @@
         "LDAP_AUTH_CONNECTION_PASSWORD":"Contraseña de Usuario de Conexión",
         "LDAP_AUTH_CONNECT_TIMEOUT":"Tiempo de Espera para la Conexión de Autenticación LDAP",
         "LDAP_AUTH_RECEIVE_TIMEOUT":"Tiempo de Espera para recibir la respuesta de Autenticación LDAP",
+        "LDAP_AUTH_FORCE_SSL":"Forzar el Uso de SSL en el Conector LDAP",
         "LDAP_AUTH_USE_TLS":"Usar TLS",
         "LDAP_AUTH_TLS_VERSION":"Versión de TLS",
         "LDAP_AUTH_TLS_VERSION_HINT":"El valor Pre-determinado es PROTOCOL_TLSv1_2",
         "ADMIN_GROUP_TO_SEARCH":"Filtro DN de Grupo Administrador",
         "LDAP_AUTH_OBJECT_CLASS":"Clase de Objeto de Autenticación",
         "EXCLUDE_COMPUTER_ACCOUNTS":"Excluir Objetos de Computadoras",
-        "LDAP_AUTH_USER_FIELDS":"Mappeo de Campos de Usuario de LDAP",
+        "LDAP_AUTH_USER_FIELDS":"Mappeo de Campos de LDAP",
         "LDAP_AUTH_USER_LOOKUP_FIELDS":"Campos de Búsqueda del Usuario"
       }
     }

@@ -5,7 +5,7 @@
 <v-row justify="center">
     <!-- Snackbar -->
     <v-snackbar transition="slide-y-reverse-transition"
-      :timeout="0"
+      :timeout="-1"
       v-model="showSnackbar"
       :class="'transition-snack-color mb-12 ' + snackbarTextColor"
       :color="snackbarColor"

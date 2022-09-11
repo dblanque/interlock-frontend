@@ -718,13 +718,14 @@
         "LDAP_AUTH_CONNECTION_PASSWORD":"Bind User Password",
         "LDAP_AUTH_CONNECT_TIMEOUT":"LDAP Auth Connect Timeout",
         "LDAP_AUTH_RECEIVE_TIMEOUT":"LDAP Auth Receive Timeout",
+        "LDAP_AUTH_FORCE_SSL":"Force LDAP Connector SSL",
         "LDAP_AUTH_USE_TLS":"Use TLS",
         "LDAP_AUTH_TLS_VERSION":"TLS Version",
         "LDAP_AUTH_TLS_VERSION_HINT":"Default is PROTOCOL_TLSv1_2",
         "ADMIN_GROUP_TO_SEARCH":"Admin Group DN Filter",
         "LDAP_AUTH_OBJECT_CLASS":"Authentication Object Class",
         "EXCLUDE_COMPUTER_ACCOUNTS":"Exclude Computer Accounts",
-        "LDAP_AUTH_USER_FIELDS":"LDAP User Field Mapping",
+        "LDAP_AUTH_USER_FIELDS":"LDAP Field Mapping",
         "LDAP_AUTH_USER_LOOKUP_FIELDS":"Authentication User Lookup Fields"
       }
     }
