@@ -536,7 +536,7 @@ export default {
                 else
                     this.errorMsg = this.getMessageForCode(error)
                 if (!this.lastOperation || this.lastOperation.length < 1) {
-                    var msgToShow = this.errorMsg.length > 0 ? this.errorMsg.toUpperCase() : (this.$t("error.unableToLoad") + " " + this.viewTitle).toUpperCase()
+                    var msgToShow = this.errorMsg.length > 0 ? this.errorMsg : this.$t("error.unableToLoad")
                     this.createSnackbar({message: msgToShow, type: 'error'})
                     
                     if ('response' in error && 'data' in error.response && 'code' in error.response.data)
@@ -547,7 +547,7 @@ export default {
                                     type: 'warning'
                                 }
                                 notificationBus.$emit('createNotification', legacyMessage);
-                            }, 3000)
+                            }, 4000)
                 }
             } else {
                 if (!this.lastOperation || this.lastOperation.length < 1) {
@@ -660,7 +660,7 @@ export default {
                             type: 'info'
                         }
                         notificationBus.$emit('createNotification', legacyMessage);
-                    }, 3000)
+                    }, 4000)
                 }
             })
             .catch(error => {

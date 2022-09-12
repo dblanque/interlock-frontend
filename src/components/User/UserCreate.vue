@@ -276,7 +276,9 @@
                             <v-col cols="12">
                                 <v-slide-y-transition>
                                     <v-col v-if="!this.loading && this.loading == false">
-                                        {{ this.error ? '' : $t('section.users.userCreate.step3_success') }}
+                                        <h3>
+                                            {{ this.error ? this.errorMsg : $t('section.users.userCreate.step3_success') }}
+                                        </h3>
                                     </v-col>
                                 </v-slide-y-transition>
                             </v-col>
@@ -358,6 +360,7 @@
 import User from '@/include/User'
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
 import validationMixin from '@/plugins/mixin/validationMixin';
+import utilsMixin from '@/plugins/mixin/utilsMixin';
 import { getDomainDetails } from '@/include/utils';
 
 export default {
@@ -500,7 +503,8 @@ export default {
       }
     },
     mixins: [
-        validationMixin
+        validationMixin,
+        utilsMixin
     ],
     props: {
         viewKey: String
@@ -691,29 +695,11 @@ export default {
                 }
             })
             .catch(error => {
-                this.error = true;
-                // Set Timeout to do circle animation
-                setTimeout(() => {
-                    this.loading = false;
-                }, 450)
-                if (error.response.data.code) {
-                    switch (error.response.data.code) {
-                        case 'user_passwords_dont_match':
-                            this.errorMsg = this.$t("error.codes.badRequest")
-                            break;
-                        case 'ldap_obj_exists':
-                            this.errorMsg = this.$t("error.codes.ldapObjectExists")
-                            break;
-                        case 'user_permission_malformed':
-                            this.errorMsg = this.$t("error.codes.users.permissionMalformed")
-                            break;
-                        default:
-                            this.errorMsg = this.$t("error.unknown_short")
-                            break;
-                    }
-                } else {
-                    this.errorMsg = this.$t("error.unknown_short")
-                }
+                console.log(error)
+                this.loading = false
+                this.error = true
+                this.success = true
+                this.errorMsg = this.getMessageForCode(error)
             })
         }
     }

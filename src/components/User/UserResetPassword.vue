@@ -3,6 +3,7 @@
 <!------------------------ File: UserResetPassword.vue ------------------------>
 <template>
     <v-card>
+        <v-progress-linear :color="error == true ? 'red' : 'primary'" :indeterminate="loading"/>
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
                 <h3 class="pa-0 ma-0 ma-2">
@@ -51,6 +52,29 @@
                     </v-col>
                 </v-row>
             </v-form>
+            <v-row class="ma-0 pa-0 pt-4 pb-4">
+                <v-col cols="12" class="ma-0 pa-0 pb-3">
+                    <h3>
+                        {{ $t('section.users.resetPasswordDialog.complexity.title') }}
+                    </h3>
+                </v-col>
+                <v-col cols="12" class="ma-0 pa-0">
+                    <ul>
+                        <li>
+                            {{ $t('section.users.resetPasswordDialog.complexity.letters') }}
+                        </li>
+                        <li>
+                            {{ $t('section.users.resetPasswordDialog.complexity.numbers') }}
+                        </li>
+                        <li>
+                            {{ $t('section.users.resetPasswordDialog.complexity.symbols') }}
+                        </li>
+                        <li>
+                            {{ $t('section.users.resetPasswordDialog.complexity.dontMatchUser') }}
+                        </li>
+                    </ul>
+                </v-col>
+            </v-row>
         </v-card-text>
         <!-- Actions -->
         <v-card-actions class="card-actions">
@@ -72,16 +96,22 @@
 
 <script>
 import validationMixin from '@/plugins/mixin/validationMixin';
+import utilsMixin from '@/plugins/mixin/utilsMixin';
+import { notificationBus } from '@/main.js'
 import User from '@/include/User'
 
 export default {
     name: "confirmDialog",
     mixins: [
-        validationMixin
+        validationMixin,
+        utilsMixin
     ],
     data () {
       return {
         passwordHidden: true,
+        loading: false,
+        error: false,
+        errorMsg: "",
         user: {
             "password":"",
             "passwordConfirm":"",
@@ -100,6 +130,9 @@ export default {
     },
     methods: {
         clearUser(){
+            this.loading = false
+            this.error = false
+            this.errorMsg = false
             this.user = {
                 "password":"",
                 "passwordConfirm":"",
@@ -112,30 +145,67 @@ export default {
 
             user.distinguishedName = this.userObject.distinguishedName
             user.username = this.userObject.username
-            console.log(this.isEndUser)
             if (this.isEndUser === true) {
                 if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
+                    this.loading = true
                     await new User({}).changePasswordSelf(user)
                     .then(response => {
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 100)
+                        this.error = false
+                        this.errorMsg = ""
                         if (response.data.username == user.username)
-                            console.log("User Password Changed Successfully")
+                            notificationBus.$emit('createNotification', {
+                                message: this.$t('section.logs.extras.changed_password'),
+                                type: "success"
+                            });
                         this.$emit('closeDialog', this.viewKey);
                     })
                     .catch(error => {
-                        console.log(error)
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 100)
+                        this.error = true
+                        this.errorMsg = this.getMessageForCode(error).toUpperCase()
+                        notificationBus.$emit('createNotification', {
+                            message: this.errorMsg,
+                            type: "error"
+                        });
                     })
                 }
             }
             else {
                 if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
+                    this.loading = true
                     await new User({}).changePassword(user)
                     .then(response => {
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 100)
+                        this.error = false
+                        this.errorMsg = ""
                         if (response.data.username == user.username)
-                            console.log("User Password Changed Successfully")
+                            notificationBus.$emit('createNotification', {
+                                message: this.$t('section.logs.extras.changed_password'),
+                                type: "success"
+                            });
                         this.$emit('closeDialog', this.viewKey, true);
                     })
                     .catch(error => {
-                        console.log(error)
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 100)
+                        this.error = true
+                        this.errorMsg = this.getResponseErrorCode(error)
+                        if (this.errorMsg.toLowerCase() == "unwillingtoperform")
+                            this.errorMsg = this.getMessageForCode(this.errorMsg + "Pwd").toUpperCase()
+                        else
+                            this.errorMsg = this.getMessageForCode(this.errorMsg).toUpperCase()
+                        notificationBus.$emit('createNotification', {
+                            message: this.errorMsg,
+                            type: "error"
+                        });
                     })
                 }
             }

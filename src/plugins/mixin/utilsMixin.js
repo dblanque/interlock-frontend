@@ -4,25 +4,19 @@
 
 const utilsMixin = {
     methods:{
-        getMessageForCode(errorData=undefined){
-            var suffix
-
+        getResponseErrorCode(errorData=undefined) {
             if (errorData == undefined) {
-            console.log('Error Data is undefined')
-            return this.$t("error.unknown_short")
+                console.log('Error Data is undefined')
+                return this.$t("error.unknown_short")
             }
 
             if (typeof errorData == "string")
-            console.error("The Error Data Object must be passed to this function, not a string")
-
-            console.log(errorData)
+                return errorData
 
             var codeToUse
-            if (typeof errorData === 'string')
-                codeToUse = errorData
-            else if (errorData.response.data != undefined && errorData.response.data != null){
+            if (errorData.response.data != undefined && errorData.response.data != null){
                 if ('ldap_response' in errorData.response.data)
-                    codeToUse = errorData.response.data.ldap_response
+                    codeToUse = errorData.response.data.ldap_response.description
                 else if ('code' in errorData.response.data)
                     codeToUse = errorData.response.data.code
             }
@@ -31,7 +25,11 @@ const utilsMixin = {
             else
                 codeToUse = errorData.status_code
 
-            console.log(codeToUse)
+            return(codeToUse)
+        },
+        getMessageForCode(error=undefined){
+            var codeToUse = this.getResponseErrorCode(error)
+            var suffix
 
             if(codeToUse != undefined && codeToUse != null){
                 if (codeToUse.length < 40)

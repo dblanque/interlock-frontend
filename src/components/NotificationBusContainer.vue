@@ -14,7 +14,7 @@
             {{ snackbarIcon }}
         </v-icon>
 
-      {{ snackbarMessage }}
+      {{ snackbarMessage.toUpperCase() }}
 
       <template v-slot:action="{ attrs }">
         <v-btn
@@ -46,7 +46,7 @@ export default {
             snackbarColor: 'primary',
             snackbarTextColor: '',
             snackbarIcon: "",
-            snackbarTimeout: 3000,
+            snackbarTimeout: 4500,
             snackBarTimer: 0
         }
     },

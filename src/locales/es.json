@@ -320,7 +320,9 @@
         "couldNotSave":"El grupo no pudo ser guardado"
       },
       "ldapObjectExists":"Un Objeto LDAP con ese Identificador ya existe",
-      "namingViolation":"Excepción de Violación de Nombre (Naming Violation)"
+      "namingViolation":"Excepción de Violación de Nombre (Naming Violation)",
+      "unwillingToPerform":"El Servidor LDAP no está dispuesto a realizar la acción",
+      "unwillingToPerformPwd":"Active Directory requiere SSL (LDAPS) modificar contraseñas"
     },
     "settings": {
       "testInvalid":"Prueba de Conexión LDAP Fallida",
@@ -586,7 +588,14 @@
       },
       "resetPasswordDialog":{
           "title":"Blanqueo de Contraseña",
-          "changePasswordForUser":"Cambiará la contraseña del usuario"
+          "changePasswordForUser":"Cambiará la contraseña del usuario",
+          "complexity":{
+            "title":"Recomendaciones de Complejidad de Contraseña",
+            "letters":"Letras mayúscula o minúsucla (A-Z / a-z)",
+            "numbers":"Caracteres Numéricos (0-9)",
+            "symbols":"Caracteres No-Alfanuméricos como $, # o %",
+            "dontMatchUser":"No más que dos símbolos del nombre de usuario o nombre visible"
+          }
       },
       "userDialog":{
         "noLastLogon":"El usuario aún no ha iniciado sesión",
@@ -723,7 +732,9 @@
         "LDAP_AUTH_CONNECTION_PASSWORD":"Contraseña de Usuario de Conexión",
         "LDAP_AUTH_CONNECT_TIMEOUT":"Tiempo de Espera para la Conexión de Autenticación LDAP",
         "LDAP_AUTH_RECEIVE_TIMEOUT":"Tiempo de Espera para recibir la respuesta de Autenticación LDAP",
-        "LDAP_AUTH_FORCE_SSL":"Forzar el Uso de SSL en el Conector LDAP",
+        "LDAP_AUTH_USE_SSL":"Usar SSL",
+        "LDAP_USE_SSL_HINT":"Requiere utilizar el prefijo ldaps://",
+        "LDAP_AUTH_USE_SASL":"Usar SASL (GSSAPI)",
         "LDAP_AUTH_USE_TLS":"Usar TLS",
         "LDAP_AUTH_TLS_VERSION":"Versión de TLS",
         "LDAP_AUTH_TLS_VERSION_HINT":"El valor Pre-determinado es PROTOCOL_TLSv1_2",

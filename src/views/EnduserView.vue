@@ -337,6 +337,9 @@
             </v-card>
         </v-container>
         
+        <!-- SNACKBAR / NOTIF. BUS -->
+        <NotificationBusContainer/>
+
         <!-- USER RESET PASSWORD DIALOG -->
         <v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']">
             <UserResetPassword
@@ -367,6 +370,7 @@ import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
+import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
 import utilsMixin from '@/plugins/mixin/utilsMixin'
 
@@ -376,6 +380,7 @@ export default {
     components: {
         LanguageSelector,
         UserResetPassword,
+        NotificationBusContainer,
         LogoutDialog,
         ThemeChanger
     },

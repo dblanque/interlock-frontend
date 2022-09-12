@@ -344,7 +344,7 @@ export default {
         console.log(error)
         this.loading = false
         this.error = true
-        this.createSnackbar({message: this.$t("error.unableToLoad").toUpperCase() + " " + this.viewTitle.toUpperCase(), type: 'error'})
+        this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
       })
     },
     openResetLogsDialog(){

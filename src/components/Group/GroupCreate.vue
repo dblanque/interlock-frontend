@@ -165,7 +165,9 @@
                             <v-col cols="12">
                                 <v-slide-y-transition>
                                     <v-col v-if="!this.loading && this.loading == false">
-                                        {{ this.error ? '' : $t('section.groups.groupCreate.step3_success') }}
+                                        <h3>
+                                            {{ this.error ? this.errorMsg : $t('section.groups.groupCreate.step3_success') }}
+                                        </h3>
                                     </v-col>
                                 </v-slide-y-transition>
                             </v-col>
@@ -249,6 +251,7 @@ import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
 import CNObjectList from '@/components/CNObjectList.vue'
 import GroupTypeRadioGroups from '@/components/Group/GroupTypeRadioGroups.vue'
 import validationMixin from '@/plugins/mixin/validationMixin';
+import utilsMixin from '@/plugins/mixin/utilsMixin';
 import { getDomainDetails } from '@/include/utils';
 
 export default {
@@ -282,7 +285,8 @@ export default {
       }
     },
     mixins: [
-        validationMixin
+        validationMixin,
+        utilsMixin
     ],
     props: {
         viewKey: String
@@ -305,13 +309,11 @@ export default {
                 });
             } 
             catch (error) {
-                console.error(error)
-                // Force snackbar to reappear if error was pre-existent
-                if (this.showSnackbar == true)
-                    this.showSnackbar = false
-                this.showSnackbar = true
+                console.log(error)
+                this.loading = false
                 this.error = true
-                this.errorMsg = this.$t('section.groups.groupCreate.memberAddError')
+                this.success = true
+                this.errorMsg = this.getMessageForCode(error)
             }
         },
         setDestination(destination=undefined){

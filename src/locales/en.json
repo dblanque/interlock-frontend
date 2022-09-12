@@ -314,7 +314,9 @@
             "couldNotSave":"Group could not be saved"
           },
           "ldapObjectExists":"An LDAP Object with that Identifier Exists",
-          "namingViolation":"Naming Violation Exception"
+          "namingViolation":"Naming Violation Exception",
+          "unwillingToPerform":"LDAP Server is Unwilling to Perform Action",
+          "unwillingToPerformPwd":"Active Directory requires SSL (LDAPS) to modify passwords"
       },
       "settings": {
         "testInvalid":"LDAP Bind Connection Failed",
@@ -580,7 +582,14 @@
       },
       "resetPasswordDialog":{
           "title":"Reset Password",
-          "changePasswordForUser":"Changing password for user"
+          "changePasswordForUser":"Changing password for user",
+          "complexity":{
+            "title":"Password Complexity Recommendations",
+            "letters":"Upper or lowercase letters (A-Z / a-z)",
+            "numbers":"Numeric characters (0–9)",
+            "symbols":"Non-alphanumeric characters like $, # or %",
+            "dontMatchUser":"No more than two symbols from the user's account name or display name"
+          }
       },
       "userDialog":{
         "noLastLogon":"User has not logged in yet",
@@ -718,7 +727,9 @@
         "LDAP_AUTH_CONNECTION_PASSWORD":"Bind User Password",
         "LDAP_AUTH_CONNECT_TIMEOUT":"LDAP Auth Connect Timeout",
         "LDAP_AUTH_RECEIVE_TIMEOUT":"LDAP Auth Receive Timeout",
-        "LDAP_AUTH_FORCE_SSL":"Force LDAP Connector SSL",
+        "LDAP_AUTH_USE_SSL":"Use SSL",
+        "LDAP_USE_SSL_HINT":"Requires the ldaps:// prefix",
+        "LDAP_AUTH_USE_SASL":"Use SASL (GSSAPI)",
         "LDAP_AUTH_USE_TLS":"Use TLS",
         "LDAP_AUTH_TLS_VERSION":"TLS Version",
         "LDAP_AUTH_TLS_VERSION_HINT":"Default is PROTOCOL_TLSv1_2",

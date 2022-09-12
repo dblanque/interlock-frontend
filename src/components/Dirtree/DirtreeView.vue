@@ -682,7 +682,7 @@ export default {
                 console.log(error)
                 this.loading = false;
                 this.error = true;
-                this.createSnackbar({message: (this.$t("error.unableToLoad") + " " + this.selectedTabTitle).toUpperCase(), type: 'error'})
+                this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
             })
         },
     },

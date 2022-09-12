@@ -105,9 +105,10 @@
                     <v-row class="ma-1 pa-1" align="center" justify="center" v-for="(row, key) in category" :key="key">
                         <v-col :class="'ma-0 pa-0 py-0 px-4'" cols="10" :md="getColSize(key, 'md')" :lg="getColSize(key, 'lg')" v-for="(item, key) in row" :key="key">
                         <!-- Checkbox Settings -->
-                        <v-checkbox :class="'pa-0 ma-0 ' + (key == 'LDAP_AUTH_USE_TLS' ? 'mt-4' : '')"
+                        <v-checkbox :class="'pa-0 ma-0 ' + (key == 'LDAP_AUTH_USE_TLS' ? 'mt-4' : '') + ' ' + item.extraClasses"
                         v-if="item.type == 'checkbox' || item.type == 'boolean' || item.type == 'bool'"
                         v-model="item.value"
+                        :disabled="item.disabled"
                         :readonly="item.readonly || readonly == true"
                         :hint="$t(item.hint)"
                         :persistent-hint="item.persistentHint"
@@ -467,16 +468,20 @@ export default {
                             type: "integer",
                             validator: "ge_numbers"
                         },
-                        LDAP_AUTH_FORCE_SSL: {
+                        LDAP_AUTH_USE_SSL: {
                             value: false,
                             type: "boolean",
-                            extraClasses: "mt-2"
+                            extraClasses: "mb-2",
+                            hint: "section.settings.fields.LDAP_USE_SSL_HINT",
+                            persistentHint: true
                         },
                     },
                     row2:{
                         LDAP_AUTH_USE_TLS: {
                             value: false,
                             type: "boolean",
+                            hint: "section.settings.fields.LDAP_USE_SSL_HINT",
+                            persistentHint: true
                         },
                         LDAP_AUTH_TLS_VERSION: { 
                             value: "PROTOCOL_TLSv1_2",
@@ -580,9 +585,9 @@ export default {
                     else
                         return 8
                 case 'LDAP_AUTH_USE_TLS':
-                    return 2
+                    return 3
                 case 'LDAP_AUTH_TLS_VERSION':
-                    return 6
+                    return 5
                 default:
                     return 8
             }
@@ -715,7 +720,7 @@ export default {
             .catch(error => {
                 console.log(error)
                 this.loading = false
-                this.createSnackbar({message: (this.$t("error.unableToLoad") + " " + this.$t('classes.setting.plural')).toUpperCase(), type: 'error'})
+                this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
                 setTimeout(()=>{
                     this.showSettings = false
                 }, 250)
