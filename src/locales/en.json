@@ -316,7 +316,7 @@
           "ldapObjectExists":"An LDAP Object with that Identifier Exists",
           "namingViolation":"Naming Violation Exception",
           "unwillingToPerform":"LDAP Server is Unwilling to Perform Action",
-          "unwillingToPerformPwd":"Active Directory requires SSL (LDAPS) to modify passwords"
+          "unwillingToPerformPwd":"Active Directory requires LDAPS to modify passwords"
       },
       "settings": {
         "testInvalid":"LDAP Bind Connection Failed",

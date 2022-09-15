@@ -322,7 +322,7 @@
       "ldapObjectExists":"Un Objeto LDAP con ese Identificador ya existe",
       "namingViolation":"Excepción de Violación de Nombre (Naming Violation)",
       "unwillingToPerform":"El Servidor LDAP no está dispuesto a realizar la acción",
-      "unwillingToPerformPwd":"Active Directory requiere SSL (LDAPS) modificar contraseñas"
+      "unwillingToPerformPwd":"Active Directory requiere LDAPS para modificar contraseñas"
     },
     "settings": {
       "testInvalid":"Prueba de Conexión LDAP Fallida",
