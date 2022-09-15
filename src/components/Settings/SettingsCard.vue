@@ -6,7 +6,7 @@
         <v-progress-linear :indeterminate="testing == true" :value="testFinished ? 100 : 0" :color="testFinished ? (!testError ? 'valid' : 'red') : 'primary'"/>
         <v-row class="ma-0 ma-1 px-4 py-0 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
-                @click="resetDialog = true" :disabled="readonly || getLoadingStatus"
+                @click="resetDialog = true" :disabled="readonly || loading"
                 elevation="0"
                 class="ma-0 pa-0 pa-4 ma-1 mx-1 text-normal"
                 color="red">
@@ -16,7 +16,7 @@
                     {{ $t("actions.restoreDefaultValues") }}
             </v-btn>
             <v-btn 
-                @click="testSettings" :disabled="readonly || getLoadingStatus"
+                @click="testSettings" :disabled="readonly || loading"
                 elevation="0"
                 class="ma-0 pa-0 pa-4 ma-1 mx-1 bg-white bg-lig-15">
                     <span class="text-normal">
@@ -39,7 +39,7 @@
         </v-row>
         <v-row class="ma-0 ma-1 px-4 py-0 mb-4 sticky-top" style="top: 6.3rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
-                @click="saveSettings" :disabled="readonly || getLoadingStatus"
+                @click="saveSettings" :disabled="readonly || loading"
                 elevation="0"
                 style="border-radius: 0; border-bottom-left-radius: 0.3rem; border-top-left-radius: 0.3rem;"
                 class="ma-0 pa-0 pa-4 ma-1 mr-0 bg-white bg-lig-15 text-normal" >
@@ -337,12 +337,13 @@
 
 <script>
 import validationMixin from '@/plugins/mixin/validationMixin';
+import utilsMixin from '@/plugins/mixin/utilsMixin';
 import Settings from '@/include/Settings';
 import SettingsResetDialog from '@/components/Settings/SettingsResetDialog.vue'
 import { notificationBus } from '@/main.js'
 
 export default {
-    mixins: [ validationMixin ],
+    mixins: [ validationMixin, utilsMixin ],
     components: {
         SettingsResetDialog
     },
@@ -535,11 +536,6 @@ export default {
     props: {
         viewTitle: String
     },
-    computed: {
-        getLoadingStatus(){
-            return this.loading
-        }
-    },
     mounted(){
         this.refreshSettings();
     },
@@ -621,18 +617,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error)
-                    var errorResponseData = error.response.data
-                    var errorMsg
-                    var code = errorResponseData.code
-                    switch (code) {
-                        case 'ldap_port_err':
-                            errorMsg = this.$t("error.settings.serverUnreachable") + " (" + errorResponseData.ipAddress + ":" + errorResponseData.port + ")"
-                            break;
-                        default:
-                            errorMsg = this.$t("error.settings.testInvalid")
-                            break;
-                    }
-                    this.createSnackbar({message: errorMsg.toUpperCase(), type: 'error'})
+                    this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
                     setTimeout(() => {
                         this.testing = false
                         this.testFinished = true
@@ -659,7 +644,7 @@ export default {
                 })
                 .catch(error => {
                     console.log(error)
-                    this.createSnackbar({message: this.$t("error.codes.badRequest").toUpperCase(), type: 'error'})
+                    this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
                 })
                 this.refreshSettings
             }
@@ -686,6 +671,9 @@ export default {
         },
         async refreshSettings(){
             this.invalid = false
+            this.testing = false
+            this.testError = false
+            this.testFinished = false
             await new Settings({}).list()
             .then(response => {
                 var settings = response.data.settings
@@ -730,9 +718,13 @@ export default {
         },
         async restoreDefaultValues(){
             this.resetDialog = false
+            this.loading = true
             await new Settings({}).reset()
             .then(() => {
-                this.refreshSettings();
+                setTimeout(() => {
+                    this.refreshSettings();
+                    this.loading = false
+                }, 550)
             })
             .catch(error => {
                 console.log(error)
