@@ -32,7 +32,7 @@
                 <v-stepper-items>
                     <!-- Basics -->
                     <v-stepper-content step="1">
-                        <v-form ref="ouCreateForm1">
+                        <v-form ref="ouCreateForm1" @submit.prevent>
                             <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
                                 <v-col cols="12" lg="5">
                                     <v-text-field

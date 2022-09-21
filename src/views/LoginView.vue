@@ -10,7 +10,7 @@
         <v-img contain max-width="450px" :aspect-ratio="14/3" :src="isThemeDark($vuetify) ? logoLight : logoDark"/>
       </v-row>
       <v-row class="pa-0 ma-0" justify="center">
-        <v-form
+        <v-form @submit.prevent
           id="login-form-container"
           v-model="valid"
           class=""

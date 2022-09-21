@@ -32,7 +32,7 @@
             {{ $t('actions.delete') + ' ' + $t('classes.dns.zone.single') }}
         </v-btn>
     </v-row>
-    <v-form ref="zoneCreateForm">
+    <v-form ref="zoneCreateForm" @submit.prevent>
     <v-expand-transition>
         <v-row v-show="showZoneAdd" align="center" class="px-2 mx-6 py-0 my-0">
                 <v-text-field
@@ -551,7 +551,7 @@ export default {
                 }
             } else {
                 if (!this.lastOperation || this.lastOperation.length < 1) {
-                    this.createSnackbar({message: (this.$t("classes.dns.zone.single") + " " + this.$t("words.loaded.single.m")).toUpperCase(), type: 'success'})
+                    this.createSnackbar({message: (this.$t("classes.dns.zone.single") + " " + this.$t("words.loaded.single.f")).toUpperCase(), type: 'success'})
                 }
                 this.error = false
                 this.errorMsg = ""

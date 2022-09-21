@@ -16,7 +16,7 @@
         </v-row>
     </v-card-title>
 
-    <v-form ref="RecordForm">
+    <v-form ref="RecordForm" @submit.prevent>
     <v-row class="ma-0 pa-0 pa-4 pb-1" align="center" justify="center">
         <v-col cols="10" md="8" class="ma-0 pa-0" v-if="updateFlag != true">
             <v-select @change="resetRecord" :label="$t('dns.attributes.typeName')"

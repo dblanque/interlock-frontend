@@ -4,8 +4,8 @@
 <template>
 <div>
   <v-data-table
-    :headers="this.tableData.headers"
-    :items="this.tableData.items"
+    :headers="tableData.headers"
+    :items="tableData.items"
     :custom-sort="sortNullLast"
     :loading="loading"
     :search="searchString"
@@ -265,7 +265,8 @@ export default {
     return {
       tableData: {
         headers: [],
-        items: []
+        items: [],
+        selected: []
       },
       searchString: "",
       loading: false,

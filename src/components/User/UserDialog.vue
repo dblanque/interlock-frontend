@@ -39,7 +39,7 @@
         <v-tabs v-model="tab" height="0">
             <v-tab-item :key="0">
                 <v-card-text class="ma-0 py-4">
-                    <v-form ref="userForm">
+                    <v-form ref="userForm" @submit.prevent>
                     <v-row align-content="center" class="mb-2">
                     <!-- User Basic Data Panel -->
                     <v-col class="ma-0 pa-0" cols="12" md="6">

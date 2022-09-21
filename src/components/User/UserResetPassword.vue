@@ -19,7 +19,7 @@
         </v-card-title>
 
         <v-card-text class="pa-0 ma-0">
-            <v-form ref="userResetPasswordForm">
+            <v-form ref="userResetPasswordForm" @submit.prevent>
                 <v-row class="pa-0 ma-0 mt-8 mb-4 text-uppercase font-weight-normal text-inverted" style="font-size: medium !important;" justify="center">
                     {{ $t('section.users.resetPasswordDialog.changePasswordForUser') + " " }}
                 </v-row>

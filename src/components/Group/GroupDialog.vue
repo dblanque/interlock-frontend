@@ -35,7 +35,7 @@
             </v-expand-transition>
             <!-- BODY -->
             <v-card-text class="ma-0 pa-0 py-4 pb-2">
-                <v-form ref="groupForm">
+                <v-form ref="groupForm" @submit.prevent>
                     <v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
                         <v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
                             <v-text-field

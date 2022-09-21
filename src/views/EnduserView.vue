@@ -66,7 +66,7 @@
                     </v-alert>
                 </v-row>
 
-                <v-form>
+                <v-form @submit.prevent>
                 <!-- Details Row -->
                 <v-row align-content="center" class="ma-2 mt-0">
                     <!-- User Basic Data Panel -->

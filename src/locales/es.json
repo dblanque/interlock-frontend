@@ -545,7 +545,7 @@
       "ouCreate":{
         "step1":"Detalles de la Unidad Organizacional",
         "step2":"Unidad Organizacional Creada",
-        "step2_success":"Organizational Unit Created Successfully",
+        "step2_success":"Unidad Organizacional Creada Exitosamente",
         "ouCreatedIn":"La Unidad será creada en"
       },
       "computerCreate":{
@@ -672,6 +672,7 @@
         "step1":"Detalles del Grupo",
         "step2":"Miembros del Grupo",
         "step3":"Grupo Creado",
+        "step3_success":"Grupo Creado Exitosamente",
         "optionalsHeader":"Detalles Opcionales",
         "groupCreatedIn":"El Grupo será creado en",
         "memberAddError":"Error al añadir el miembro, por favor intente nuevamente"

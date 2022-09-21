@@ -91,7 +91,7 @@
         </v-slide-y-transition>
         <v-slide-y-transition>
             <div v-if="showSettings == true">
-                <v-form ref="settingsForm">
+                <v-form ref="settingsForm" @submit.prevent>
                 <v-row>
                 <v-col cols="12" v-for="(category, categoryKey) in config" :key="categoryKey">
                     <!-- Category Header -->

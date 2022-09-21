@@ -34,7 +34,7 @@
                 <v-stepper-items>
                     <!-- Basics -->
                     <v-stepper-content step="1">
-                        <v-form ref="groupCreateForm1">
+                        <v-form ref="groupCreateForm1" @submit.prevent>
                             <v-row justify="center" class="pa-0 ma-0 font-weight-medium">
                                 <v-col cols="12" lg="5">
                                     <v-text-field
@@ -133,7 +133,7 @@
                     </v-stepper-content>
                     <!-- Members -->
                     <v-stepper-content step="2">
-                        <v-form ref="groupCreateForm2">
+                        <v-form ref="groupCreateForm2" @submit.prevent>
                             <CNObjectList
                             ref="AddToGroup"
                             @addDNs="addMembers"
