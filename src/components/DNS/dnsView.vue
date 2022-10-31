@@ -9,6 +9,9 @@
     :custom-sort="sortNullLast"
     :loading="loading"
     :search="searchString"
+    :footer-props="{
+      'items-per-page-options': [10, 25, 50, 100, -1]
+    }"
     show-expand
     show-select
     v-model="selectedRecords"
@@ -26,9 +29,11 @@
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
             {{ $t('actions.addN') + ' ' + $t('classes.dns.zone.single') }}
         </v-btn>
-        <v-btn class="text-white pa-2 mx-2" @click="openDeleteDialog(null, 'zone')"
+        <v-btn 
+        :class="(loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain ? undefined : 'text-white') + ' pa-2 mx-2'" 
+        @click="openDeleteDialog(null, 'zone')"
         :disabled="loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain" color="red">
-            <v-icon class="clr-white ma-0 pa-0">mdi-delete</v-icon>
+            <v-icon class="ma-0 pa-0">mdi-delete</v-icon>
             {{ $t('actions.delete') + ' ' + $t('classes.dns.zone.single') }}
         </v-btn>
     </v-row>
@@ -81,8 +86,9 @@
                 {{ $t('actions.addN') + ' ' + $t('classes.dns.record.single') }}
             </v-btn>
             <v-btn @click="openDialog('recordMassAction')"
-             class="clr-white pa-2 mr-2" :disabled="selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="red">
-                <v-icon class="clr-white ma-0 pa-0">mdi-delete</v-icon>
+             :class="(selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers' ? undefined : 'clr-white') + ' pa-2 mr-2'" 
+             :disabled="selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="red">
+                <v-icon class="ma-0 pa-0">mdi-delete</v-icon>
                 {{ $t('actions.delete') + ' ' + $t('words.selected') }}
             </v-btn>
             <v-menu offset-y left nudge-bottom="1rem" :close-on-content-click="false" v-model="filterListOpen">

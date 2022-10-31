@@ -9,6 +9,9 @@
     :custom-sort="sortNullLast"
     :loading="loading"
     :search="searchString"
+    :footer-props="{
+      'items-per-page-options': [10, 25, 50, 100, -1]
+    }"
     sort-by="cn"
     class="py-3 px-2 mt-2 mb-2">
     <!-- Table Header -->
