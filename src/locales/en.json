@@ -612,7 +612,8 @@
         "title":"User Bulk Import",
         "fileToUpload":"Attach User List File",
         "supportedExtensions":"File must be a .csv, .tsv, or .txt file separated by commas or tabs",
-        "fileReady":"File ready to import"
+        "fileReady":"File ready to import",
+        "fileCleared":"File Cleared"
       },
       "export":{
         "title":"User Bulk Export"

@@ -183,6 +183,12 @@ export default {
     methods: {
         previewFile(file){
             if (!file) {
+                if (!this.json_result.length) {
+                    notificationBus.$emit('createNotification', { 
+                        message: this.$t("section.users.import.fileCleared"), 
+                        type: 'info'
+                    });
+                }
                 return
             }
             this.json_loading = true

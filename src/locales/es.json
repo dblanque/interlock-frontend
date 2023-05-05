@@ -618,7 +618,8 @@
         "title":"Importación de Usuarios",
         "fileToUpload":"Cargar Listado de Usuarios",
         "supportedExtensions":"El Archivo debe ser un .csv, .tsv, o .txt separado por comas o tabs",
-        "fileReady":"Archivo listo para importar"
+        "fileReady":"Archivo listo para importar",
+        "fileCleared":"Archivo Eliminado"
       },
       "export":{
         "title":"Exportación de Usuarios"
