@@ -42,6 +42,10 @@ const utilsMixin = {
             case 405:
             case 'ERR_BAD_RESPONSE':
                 return this.$t('error.codes.badRequest')
+            case 'ERR_INVALID_CSV':
+                return this.$t('error.codes.invalidCSV')
+            case 'ERR_FILEREADER':
+                return this.$t('error.codes.fileReader')
             case 409:
                 return this.$t('error.codes.conflict')
             case 'ERR_NETWORK':

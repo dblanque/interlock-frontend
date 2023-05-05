@@ -47,6 +47,24 @@
           </v-btn>
         </v-row>
       </v-row>
+      <v-row class="ma-0 pa-0 px-4" justify="end">
+          <!-- Import Button -->
+          <v-btn class="pa-2 mx-2" small
+          :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
+          :disabled="loading" 
+          @click="openDialog('userImport')">
+            <v-icon class="ma-0 pa-0 mr-1">mdi-import</v-icon>
+            {{ $t('actions.import') + ' ' + $t('classes.user.plural') }}
+          </v-btn>
+          <!-- Export Button -->
+          <v-btn class="pa-2 mx-2" small
+          :dark="!isThemeDark($vuetify)" 
+          :light="isThemeDark($vuetify)"
+          :disabled="loading || true">
+            <v-icon class="ma-0 pa-0 mr-1">mdi-export</v-icon>
+            {{ $t('actions.export') + ' ' + $t('classes.user.plural') }}
+          </v-btn>
+      </v-row>
     </template>
     <!-- USER IS ENABLED STATUS -->
     <template v-slot:[`item.is_enabled`]="{ item }">
@@ -243,12 +261,32 @@
       @closeDialog="closeDialog"
       />
   </v-dialog>
+
+  <!-- USER IMPORT DIALOG -->
+  <v-dialog eager max-width="1200px" v-model="dialogs['userImport']">
+    <UserImport
+      :viewKey="'userImport'"
+      ref="UserImport"
+      @closeDialog="closeDialog"
+      />
+  </v-dialog>
+
+  <!-- USER EXPORT DIALOG -->
+  <!-- <v-dialog eager max-width="1200px" v-model="dialogs['userExport']">
+    <UserExport
+      :viewKey="'userExport'"
+      ref="UserExport"
+      @closeDialog="closeDialog"
+      />
+  </v-dialog> -->
 </div>
 </template>
 
 <script>
 import User from '@/include/User'
 import UserCreate from '@/components/User/UserCreate.vue'
+import UserImport from '@/components/User/UserImport.vue'
+// import UserExport from '@/components/User/UserExport.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
@@ -260,6 +298,8 @@ export default {
   mixins: [ validationMixin, utilsMixin ],
   components: {
     UserCreate,
+    UserImport,
+    // UserExport,
     UserDialog,
     UserResetPassword,
     UserDelete
@@ -290,6 +330,8 @@ export default {
       // Dialog States
       dialogs: {
         userDialog: false,
+        userImport: false,
+        userExport: false,
         userDelete: false,
         userResetPassword: false,
         userCreate: false,
@@ -328,6 +370,10 @@ export default {
         case 'userResetPassword':
           if (this.$refs.UserResetPassword != undefined)
             this.$refs.UserResetPassword.clearUser()
+          break;
+        case 'userImport':
+          if (this.$refs.UserImport != undefined)
+            this.$refs.UserImport.clearData()
           break;
         default:
           break;

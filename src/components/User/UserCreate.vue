@@ -561,7 +561,6 @@ export default {
                 this.userDestination = destination
                 this.userPathExpansionPanel = false
             }
-
         },
         prevStep(){
             switch (this.createStage) {

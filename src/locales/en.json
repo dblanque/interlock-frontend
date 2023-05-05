@@ -23,6 +23,8 @@
     }
   },
   "actions":{
+    "import":"Import",
+    "export":"Export",
     "groupBy":"Group by",
     "filter":"Filter",
     "rename":"Rename",
@@ -274,6 +276,8 @@
       "codes":{
           "conflict": "HTTP 409: Conflict",
           "badRequest": "HTTP 405: Bad Request",
+          "invalidCSV": "Invalid CSV File",
+          "fileReader": "File Reader Exception",
           "networkError": "AXIOS: Network Error",
           "auth":{
               "invalid_credentials": "Incorrect Email or Password",
@@ -603,6 +607,15 @@
           "addObjectClass":"You better know what you're doing",
           "primaryGroupID":"Only change this if you have Macintosh Clients or POSIX Compliant Applications"
         }
+      },
+      "import":{
+        "title":"User Bulk Import",
+        "fileToUpload":"Attach User List File",
+        "supportedExtensions":"File must be a .csv, .tsv, or .txt file separated by commas or tabs",
+        "fileReady":"File ready to import"
+      },
+      "export":{
+        "title":"User Bulk Export"
       },
       "userUnlocked": "User unlocked Successfully",
       "errorUserUnlock": "Error unlocking User",
