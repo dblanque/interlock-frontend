@@ -450,6 +450,9 @@
       "sAMAccountType":"Account Type"
     }
   },
+  "components":{
+    "objectEditor":"Object Editor"
+  },
   "section":{
     "dns":{
       "zoneToAddName":"Name of the new DNS Zone",
@@ -614,10 +617,16 @@
         "supportedExtensions":"File must be a .csv, .tsv, or .txt file separated by commas or tabs,<br> it must also contain the header line",
         "fileReady":"File ready to import",
         "fileCleared":"File Cleared",
+        "importOptions":"Import Options",
+        "usePlaceholderPassword":"Use Placeholder Password",
+        "dataMapping":"User Field Mapping",
+        "editUserMappings":"Edit Field Mappings",
+        "uploadFile":"Upload File",
         "previewData":"Preview Data",
         "previewDataOff":"Hide Preview",
         "previewMode":"User Bulk Import Preview",
-        "downloadTemplate":"Download Template CSV"
+        "downloadTemplate":"Download Template CSV",
+        "bulkImportSuccess":"Users Imported Successfully"
       },
       "export":{
         "title":"User Bulk Export"

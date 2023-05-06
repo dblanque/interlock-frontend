@@ -456,6 +456,9 @@
       "sAMAccountType":"Tipo de Cuenta"
     }
   },
+  "components":{
+    "objectEditor":"Editor de Objeto"
+  },
   "section": {
     "dns":{
       "zoneToAddName":"Nombre de la nueva Zona de DNS",
@@ -620,10 +623,16 @@
         "supportedExtensions":"El Archivo debe ser un .csv, .tsv, o .txt separado por comas o tabs",
         "fileReady":"Archivo listo para importar",
         "fileCleared":"Archivo Eliminado",
+        "importOptions":"Opciones de Importación",
+        "usePlaceholderPassword":"Usar Password Temporaria",
+        "dataMapping":"Mappeo de Campos de Usuario",
+        "editUserMappings":"Editar Mappeo de Campos",
+        "uploadFile":"Cargar Archivo",
         "previewData":"Pre-visualizar Datos",
         "previewDataOff":"Esconder Pre-visualización",
         "previewMode":"Pre-visualizacion de Usuarios a Importar",
-        "downloadTemplate":"Descargar Plantilla CSV"
+        "downloadTemplate":"Descargar Plantilla CSV",
+        "bulkImportSuccess":"Usuarios Importados Exitosamente"
       },
       "export":{
         "title":"Exportación de Usuarios"
