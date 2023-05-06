@@ -54,7 +54,7 @@
                                 <v-btn small
                                     class="ma-1"
                                     text
-                                    :disabled="!allowOURefresh"
+                                    :disabled="!allowRefresh"
                                     elevation="0"
                                     @click="fetchOUs(true)"
                                     >
@@ -379,7 +379,7 @@ export default {
         error: false,
         errorMsg: "",
         valid: false,
-        allowOURefresh: true,
+        allowRefresh: true,
         showSnackbar: false,
         userPathExpansionPanel: false,
         userDestination: '',
@@ -657,7 +657,9 @@ export default {
                         this.setDestination()
                     this.$refs.DirtreeOUList.fetchOUs()
                     .then(() => {
-                        this.allowRefresh = true
+                        setTimeout(()=>{
+                            this.allowRefresh = true
+                        }, 50)
                     })
                 })
             }

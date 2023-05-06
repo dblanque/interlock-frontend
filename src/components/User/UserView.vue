@@ -57,7 +57,7 @@
             {{ $t('actions.import') + ' ' + $t('classes.user.plural') }}
           </v-btn>
           <!-- Export Button -->
-          <v-btn class="pa-2 mx-2" small
+          <v-btn class="pa-2 mx-2" small v-show="false"
           :dark="!isThemeDark($vuetify)" 
           :light="isThemeDark($vuetify)"
           :disabled="loading || true">

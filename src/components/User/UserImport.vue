@@ -33,7 +33,7 @@ webpage
             </v-row>
         </v-card-title>
 
-        <v-card-text class="pa-0 ma-0">
+        <v-card-text class="pa-0 ma-0" v-show="!previewData">
             <v-row class="ma-0 pa-0 mt-4" align="center" justify="space-around">
                 <v-btn small text color="primary" class="ma-1" @click="userDestination = basedn">
                     {{ $t('section.dirtree.move.setToRoot')}}
@@ -41,7 +41,7 @@ webpage
                 <v-btn small
                     class="ma-1"
                     text
-                    :disabled="!allowOURefresh"
+                    :disabled="!allowRefresh"
                     elevation="0"
                     @click="fetchOUs(true)"
                     >
@@ -61,7 +61,7 @@ webpage
                 <v-col cols="12" lg="8">
                         <v-expansion-panels 
                         v-model="userPathExpansionPanel"
-                        flat 
+                        flat
                         hover 
                         style="border: 1px solid var(--clr-primary);">
                             <v-expansion-panel>
@@ -94,6 +94,7 @@ webpage
                     <v-file-input :label="$t('section.users.import.fileToUpload')"
                         outlined
                         @change="previewFile"
+                        v-model="inputFile"
                         clearable
                         prepend-icon=""
                         prepend-inner-icon="mdi-upload"
@@ -101,30 +102,68 @@ webpage
                         class="ma-0 pa-0"
                         accept=".csv,.tsv,.txt"/>
                     <v-progress-linear
-                    :indeterminate="this.json_loading"
+                    :indeterminate="this.loading"
                     class="ma-0 pa-0 my-1"/>
                 </v-col>
             </v-row>
             <v-row class="ma-0 pa-0" justify="center">
-                <v-alert type="info" dense>
-                    {{ $t("section.users.import.supportedExtensions") }}
+                <v-alert type="warning" dense>
+                    <span v-html="$t('section.users.import.supportedExtensions')"/>
                 </v-alert>
+            </v-row>
+        </v-card-text>
+        <v-card-text class="pa-0 ma-0" v-show="previewData">
+            <v-row class="pa-0 ma-0" justify="center">
+                <v-alert class="ma-4" icon="mdi-alert-box" dense type="warning" close-icon="text-uppercase">
+                    {{ $t("section.users.import.previewMode").toUpperCase() }}
+                </v-alert>
+            </v-row>
+            <v-row class="pa-0 ma-0" justify="center">
+                <v-data-table
+                    :headers="this.tableData.headers"
+                    :items="this.tableData.items"
+                    :loading="this.loading"
+                    :footer-props="{
+                    'items-per-page-options': [10, 25, 50, 100, -1]
+                    }"
+                    class="py-3 px-2 mt-2 mb-2">
+                </v-data-table>
             </v-row>
         </v-card-text>
         <!-- Actions -->
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn @click="closeDialog()"
-                class="ma-0 pa-0 pa-2 ma-1" color="primary"
+                <v-btn @click="downloadTemplate"
+                class="ma-0 pa-0 pa-2 ma-1 bg-secondary text-normal"
+                rounded>
+                    <v-icon class="mr-1">
+                        mdi-download
+                    </v-icon>
+                    <span class="pr-1">
+                        {{ $t("section.users.import.downloadTemplate") }}
+                    </span>
+                </v-btn>
+                <v-btn @click="previewData = !previewData"
+                class="ma-0 pa-0 pa-2 ma-1" :color="previewData ? 'secondary' : 'primary'"
                 rounded>
                     <v-icon class="mr-1" color="white">
-                        mdi-check-circle
+                        {{ !previewData ? 'mdi-eye' : 'mdi-eye-off'}}
                     </v-icon>
                     <span class="pr-1 text-white">
+                        {{ !previewData ? $t("section.users.import.previewData") : $t("section.users.import.previewDataOff")}}
+                    </span>
+                </v-btn>
+                <v-btn @click="closeDialog(true)" :disabled="loading || !json_loaded || error"
+                class="ma-0 pa-0 pa-2 ma-1" color="primary"
+                rounded>
+                    <v-icon class="mr-1">
+                        mdi-check-circle
+                    </v-icon>
+                    <span class="pr-1">
                         {{ $t("actions.import") + " " + $t("classes.user.plural")}}
                     </span>
                 </v-btn>
-                <v-btn @click="closeDialog()"
+                <v-btn @click="closeDialog"
                 class="ma-0 pa-0 pa-2 ma-1 bg-secondary text-normal"
                 rounded>
                     <v-icon class="mr-1" color="white">
@@ -161,14 +200,18 @@ export default {
         loading: false,
         error: false,
         errorMsg: "",
+        inputFile: null,
         json_result: {},
         json_loaded: false,
-        json_valid: false,
-        json_loading: false,
         status_color: 'blue',
-        allowOURefresh: true,
+        allowRefresh: true,
         userPathExpansionPanel: false,
+        previewData: false,
         userDestination: '',
+        tableData: {
+            headers: [],
+            items: []
+        }
       }
     },
     props: {
@@ -181,9 +224,33 @@ export default {
         DirtreeOUList
     },
     methods: {
-        previewFile(file){
+        downloadTemplate(){
+            const t_headers = this.getUserImportHeaders()
+            CSV.export(
+                t_headers,
+                [],
+                "ilck_user_import_template"
+            )
+        },
+        refreshDataTable(){
+            this.tableData.headers = []
+            for (let i = 0; i < this.json_result.headers.length; i++) {
+                this.tableData.headers.push({
+                    title: this.json_result.headers[i],
+                    align: 'center',
+                    key: this.json_result.headers[i],
+                })
+            }
+            this.tableData.items = this.json_result.data
+        },
+        clearDataTable(){
+            this.tableData.headers = []
+            this.tableData.items = []
+        },
+        async previewFile(file){
             if (!file) {
                 if (!this.json_result.length) {
+                    this.clearData()
                     notificationBus.$emit('createNotification', { 
                         message: this.$t("section.users.import.fileCleared"), 
                         type: 'info'
@@ -191,44 +258,56 @@ export default {
                 }
                 return
             }
-            this.json_loading = true
-            const csvToJSON = this.csvToJSON
-            const getMessageForCode = this.getMessageForCode
-            const successMsg = this.$t("section.users.import.fileReady")
+
+            this.loading = true
+            const t_headers = this.getUserImportHeaders()
+
             var reader = new FileReader();
             reader.readAsText(file, "UTF-8");
-            reader.onload = async function (event) {
+            reader.onload = async (event) => {
                 // notificationBus.$emit('send', {type: "success", text:"File Uploaded Successfully!"});
                 var csv_file = event.target.result
                 csv_file = csv_file.replace(/\r\n/g, '\n'); // Replaces windows new line to linux.
                 var csv_delimiter = CSV.guessDelimiters(csv_file, [",","\t"])
 
-                this.json_result = csvToJSON(event.target.result, csv_delimiter)
+                this.json_result = await this.csvToJSON(csv_file, csv_delimiter)
+
+                // Validate headers
+                if (this.json_result.headers[0] != t_headers[0] || this.json_result.headers.slice[-1] != t_headers.slice[-1])
+                    this.json_result = false
+
                 if (this.json_result == false) {
-                    this.json_valid = false
+                    this.error = true
+                    this.loading = false
                     notificationBus.$emit('createNotification', { 
-                        message: getMessageForCode('ERR_INVALID_CSV'), 
+                        message: this.getMessageForCode('ERR_INVALID_CSV'), 
                         type: 'error'
                     });
+                    this.clearDataTable()
                 } else {
-                    this.json_valid = true
+                    this.error = false
                     notificationBus.$emit('createNotification', { 
-                        message: successMsg, 
+                        message: this.$t("section.users.import.fileReady"), 
                         type: 'success'
                     });
+                    this.refreshDataTable()
                 }
                 this.json_loaded = true
             }
-            reader.onerror = function (event) {
+            reader.onerror = (event) => {
                 console.log(event)
+                this.error = true
+                this.loading = false
                 notificationBus.$emit('createNotification', { 
-                    message: getMessageForCode('ERR_FILEREADER'), 
+                    message: this.getMessageForCode('ERR_FILEREADER'), 
                     type: 'error'
                 });
+                this.clearDataTable()
             }
+
             setTimeout(() => {
-                this.json_loading = false
-            }, 1000)
+                this.loading = false
+            }, 500)
         },
         clearData(){
             this.loading = false
@@ -238,13 +317,13 @@ export default {
             this.domain = domainDetails.domain
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
+            this.previewData = false
             this.fetchOUs()
+            this.clearDataTable()
+            this.inputFile = null
+            this.userDestination = "CN=Users," + this.basedn
             this.json_result = {}
             this.json_loaded = false
-            this.json_valid = false
-            this.json_loading = false
-            this.userDestination = "CN=Users," + this.basedn
-            // this.$refs.userImport.resetValidation()
         },
         async fetchOUs(refresh=false){
             if (refresh == true)
@@ -256,7 +335,9 @@ export default {
                         this.setDestination()
                     this.$refs.DirtreeOUList.fetchOUs()
                     .then(() => {
-                        this.allowRefresh = true
+                        setTimeout(()=>{
+                            this.allowRefresh = true
+                        }, 50)
                     })
                 })
             }
@@ -274,11 +355,16 @@ export default {
             }
         },
         async closeDialog(importConfirm=false) {
-            if(importConfirm != true)
+            if(importConfirm != true){
                 this.$emit('closeDialog', this.viewKey);
+                return
+            }
 
             this.loading = true
-            await new User({}).bulkImport()
+            await new User({}).bulkInsert({
+                headers: this.json_result.headers, 
+                users: this.json_result.data
+            })
             .then(response => {
                 setTimeout(() => {
                     this.loading = false
