@@ -263,7 +263,7 @@
   </v-dialog>
 
   <!-- USER IMPORT DIALOG -->
-  <v-dialog eager max-width="1200px" v-model="dialogs['userImport']">
+  <v-dialog eager persistent max-width="1200px" v-model="dialogs['userImport']">
     <UserImport
       :viewKey="'userImport'"
       ref="UserImport"

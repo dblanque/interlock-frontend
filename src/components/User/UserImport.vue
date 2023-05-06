@@ -102,7 +102,7 @@ webpage
 
                     <v-row class="ma-0 pa-0 mb-2" justify="center">
                         <v-btn @click="downloadTemplate"
-                        class="ma-0 pa-0 pa-2 ma-1 bg-primary">
+                        class="ma-0 pa-0 pa-2 ma-1 bg-primary text-white">
                             <v-icon class="mr-1">
                                 mdi-download
                             </v-icon>
@@ -111,7 +111,7 @@ webpage
                             </span>
                         </v-btn>
                         <v-btn @click="showUserMappings = !showUserMappings"
-                        class="ma-0 pa-0 pa-2 ma-1 bg-primary">
+                        class="ma-0 pa-0 pa-2 ma-1 bg-primary text-white">
                             <v-icon class="mr-1">
                                 mdi-cog
                             </v-icon>
@@ -127,18 +127,20 @@ webpage
                                 @change="resetPlaceholderPassword"
                                 v-model="usePlaceholderPassword" 
                                 :label="$t('section.users.import.usePlaceholderPassword')"/>
-                                <v-text-field v-show="usePlaceholderPassword"
-                                ref="importPlaceholderPasswordField"
-                                :type="passwordHidden ? 'password' : 'text'"
-                                :required="usePlaceholderPassword"
-                                @keydown.enter="nextStep"
-                                :append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
-                                @click:append="() => (passwordHidden = !passwordHidden)"
-                                dense
-                                :label="$t('ldap.attributes.password')"
-                                v-model="placeholderPassword"
-                                :rules="[this.fieldRules(placeholderPassword, 'ge_password', usePlaceholderPassword ? true : false)]"
-                                ></v-text-field>
+                                <v-expand-transition>
+                                    <v-text-field v-show="usePlaceholderPassword"
+                                    ref="importPlaceholderPasswordField"
+                                    :type="passwordHidden ? 'password' : 'text'"
+                                    :required="usePlaceholderPassword"
+                                    @keydown.enter="nextStep"
+                                    :append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
+                                    @click:append="() => (passwordHidden = !passwordHidden)"
+                                    dense
+                                    :label="$t('ldap.attributes.password')"
+                                    v-model="placeholderPassword"
+                                    :rules="[this.fieldRules(placeholderPassword, 'ge_password', usePlaceholderPassword ? true : false)]"
+                                    ></v-text-field>
+                                </v-expand-transition>
                             </v-form>
                         </v-col>
                     </v-row>
@@ -148,9 +150,14 @@ webpage
                             <ObjectEditor :value="this.import_fields"
                             :label="$t('section.users.import.dataMapping')"
                             ref="importFieldsEditor"
-                            :allowAddDelete="false"
+                            dense
+                            resettable
+                            disableAddDelete
                             :keyReadonly="true"
                             :required="true"
+                            :deletableFields="deletableFields"
+                            :disabledFields="usePlaceholderPassword ? ['password'] : []"
+                            @reset="setDefaultImportFields"
                             @update="d => this.import_fields = d"/>
                         </v-row>
                     </v-expand-transition>
@@ -204,7 +211,7 @@ webpage
         <!-- Actions -->
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn @click="import_tab < 1 ? closeDialog : import_tab -= 1"
+                <v-btn @click="import_tab < 1 ? closeDialog() : import_tab -= 1"
                 class="ma-0 pa-0 pa-2 ma-1 bg-secondary text-normal"
                 rounded>
                     <v-icon class="mr-1" color="white">
@@ -227,12 +234,13 @@ webpage
                     </span>
                 </v-btn>
                 <v-btn @click="nextStep" v-show="import_tab < 2"
-                class="ma-0 pa-0 pa-2 ma-1 bg-secondary text-normal"
+                :disabled="!isStepValid()"
+                class="ma-0 pa-0 pa-2 ma-1 bg-secondary"
                 rounded>
-                    <span class="pl-2 text-white">
+                    <span class="pl-2 text-normal">
                         {{ $t("actions.next") }}
                     </span>
-                    <v-icon color="white">
+                    <v-icon :class="'clr-primary' + (!isStepValid() ? ' clr-sat-0 clr-lig-90' : '')">
                         mdi-chevron-right
                     </v-icon>
                 </v-btn>
@@ -269,6 +277,16 @@ export default {
         json_loaded: false,
         status_color: 'blue',
         allowRefresh: true,
+        deletableFields: [
+            "initials",
+            "telephoneNumber",
+            "webpage",
+            "streetAddress",
+            "postalCode",
+            "l",
+            "st",
+            "co"
+        ],
         showUserMappings: false,
         userPathExpansionPanel: false,
         import_tab: 0,
@@ -308,6 +326,19 @@ export default {
         }
     },
     methods: {
+        isStepValid(){
+            switch (this.import_tab) {
+                case 0:
+                    if (this.userDestination.length == 0 || !this.userDestination)
+                        return false
+                    break;
+                case 1:
+                    if (!this.json_loaded || this.json_result == false || this.error)
+                        return false
+                    break;
+            }
+            return true
+        },
         nextStep(){
             switch (this.import_tab + 1) {
                 case 1:

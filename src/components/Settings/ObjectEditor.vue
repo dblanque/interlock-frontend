@@ -6,29 +6,34 @@
             {{ label || $t("components.objectEditor") }}
         </span>
     </v-row>
-    <v-row class="ma-0 pa-0" v-show="allowAddDelete">
+    <v-row class="ma-0 pa-0 my-2" v-if="resettable" justify="center">
+        <v-btn x-small outlined @click="emitReset">
+            {{ $t("actions.reset") }}
+        </v-btn>
+    </v-row>
+    <v-row class="ma-0 pa-0 px-4" v-show="!disableAddDelete">
         <v-text-field :label="$t('words.key')"
-        class="px-2"
+        class="pa-0 ma-0 ml-2 mr-4"
         :readonly="readonly"
         :hint="$t(keyHint)"
         :persistent-hint="persistentHint"
         @keydown.enter="addToObject(keyToAdd, valueToAdd)"
         v-model="keyToAdd"
         :required="required && keyToAdd.length == 0 ? true : false"
-        :rules="complexValidator ? [fieldRules(valueToAdd, complexValidator.keyToAdd.k)] : valueValidator"
+        :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.k)] : valueValidator"
         />
         <v-text-field :label="$t('words.value')"
-        class="px-2"
+        class="pa-0 ma-0 mr-2"
         :readonly="readonly"
         :hint="$t(valueHint)"
         :persistent-hint="persistentHint"
         @keydown.enter="addToObject(keyToAdd, valueToAdd)"
         v-model="valueToAdd"
         :required="required && valueToAdd.length == 0 ? true : false"
-        :rules="complexValidator ? [fieldRules(valueToAdd, complexValidator.keyToAdd.v)] : valueValidator"
+        :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.v)] : valueValidator"
         />
-        <v-btn class="bg-primary text-white mt-3 ml-5"
-        :disabled="readonly == true"
+        <v-btn class="bg-primary text-white mt-2 ml-1" small
+        :disabled="readonly == true || this.isFieldDisabled(keyToAdd) || keyToAdd in this.objectToEdit"
         @click="addToObject(keyToAdd, valueToAdd)"
         rounded
         icon>
@@ -43,6 +48,7 @@
                 <v-text-field outlined
                     @change="updateSubItem(subItemKey, subItem)"
                     :dense="dense"
+                    :disabled="isFieldDisabled(subItemKey)"
                     :hide-details="!complexValidator"
                     :hint="complexValidator ? complexValidator.subItemKey.kHint : undefined"
                     :required="required && subItemKey.length == 0 ? true : false"
@@ -54,6 +60,7 @@
                 <v-text-field outlined
                     @change="updateSubItem(subItemKey, subItem)"
                     :dense="dense"
+                    :disabled="isFieldDisabled(subItemKey)"
                     :hide-details="!complexValidator"
                     :hint="complexValidator ? complexValidator.subItemKey.vHint : undefined"
                     :required="required && subItem.length == 0 ? true : false"
@@ -63,9 +70,9 @@
             </v-col>
         </v-list-item-content>
         <v-list-item-action class="ma-0 pa-0">
-            <v-btn class="bg-primary text-white ml-2 mb-7"
-            :disabled="readonly == true || !allowAddDelete"
-            v-show="allowAddDelete"
+            <v-btn :class="'bg-primary text-white ml-2 ' + (complexValidator ? 'mb-7' : '')"
+            :disabled="readonly == true || isFieldDisabled(subItemKey) || disableAddDelete && !isFieldDeletable(subItemKey)"
+            v-show="!disableAddDelete || isFieldDeletable(subItemKey)"
             @click="removeFromObject(subItemKey)"
             rounded small
             icon>
@@ -82,6 +89,16 @@
 import validationMixin from '@/plugins/mixin/validationMixin';
 import utilsMixin from '@/plugins/mixin/utilsMixin';
 
+// Complex Validator Object Structure:
+// validators: {
+// 'password':{
+//      'k':'keyValidatorName',
+//      'v':'valueValidatorName',
+//      'kHint':'keyHint',
+//      'vHint':'valueHint',
+//  }
+// }
+
 export default {
     mixins: [ validationMixin, utilsMixin ],
     data() {
@@ -96,11 +113,11 @@ export default {
         label: String,
         dense: {
             type: Boolean,
-            default: true
+            default: false
         },
-        allowAddDelete: {
+        disableAddDelete: {
             type: Boolean,
-            default: true
+            default: false
         },
         required: Boolean,
         readonly: Boolean,
@@ -110,6 +127,13 @@ export default {
         persistentHint: Boolean,
         keyValidator: Function,
         valueValidator: Function,
+        disabledFields: {
+            type: Array
+        },
+        deletableFields: {
+            type: Array
+        },
+        resettable: Boolean,
         complexValidator: Object
     },
     emits: ['update:value'],
@@ -127,6 +151,18 @@ export default {
                 this.objectToEdit = this.value
             this.$forceUpdate()
         },
+        isFieldInComplexValidators(key){
+            if (this.complexValidator != undefined)
+                return key in this.complexValidator
+        },
+        isFieldDisabled(key){
+            if (this.disabledFields != undefined)
+                return this.disabledFields.includes(key)
+        },
+        isFieldDeletable(key){
+            if (this.deletableFields != undefined)
+                return this.deletableFields.includes(key)
+        },
         updateSubItem(key, value){
             if (this.keyToAdd.length < 1 || this.valueToAdd.length < 1)
                 return
@@ -135,6 +171,8 @@ export default {
         },
         addToObject(key, value){
             if (this.keyToAdd.length < 1 || this.valueToAdd.length < 1)
+                return
+            if (this.isFieldDisabled(key))
                 return
             this.objectToEdit[key] = value
             this.valueToAdd = ""
@@ -146,6 +184,9 @@ export default {
             this.$emit('update', this.objectToEdit)
             // For some reason the v-bind isn't registering when removing an item
             this.$forceUpdate()
+        },
+        emitReset(){
+            this.$emit('reset')
         }
     }
 }
