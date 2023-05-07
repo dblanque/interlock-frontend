@@ -400,6 +400,7 @@
                             :justify="$vuetify.breakpoint.mdAndUp ? 'start' : 'center'">
                                 <!-- Items -->
                                 <v-list-item
+                                :disabled="disabled_permissions.includes(key)"
                                 two-line
                                 @click="onClickPermission(key)"
                                 :value="permissions[key].value"
@@ -794,6 +795,10 @@ export default {
             "simpleSecurityObject",
             "strongAuthenticationUser"
         ],
+        disabled_permissions: [
+            "LDAP_UF_LOCKOUT",
+            "LDAP_UF_PASSWD_CANT_CHANGE",
+        ],
         permissions: {
             "LDAP_UF_SCRIPT" : {
                 value: false,
@@ -807,10 +812,10 @@ export default {
                 value: false,
                 int: 8
             },
-            // "LDAP_UF_LOCKOUT" : {
-            //     value: false,
-            //     int: 16
-            // },
+            "LDAP_UF_LOCKOUT" : {
+                value: false,
+                int: 16
+            },
             "LDAP_UF_PASSWD_NOTREQD" : {
                 value: false,
                 int: 32

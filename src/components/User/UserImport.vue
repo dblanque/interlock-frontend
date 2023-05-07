@@ -36,8 +36,8 @@ webpage
             centered grow>
                 <v-tabs-slider/>
                 <v-tab :key="0">{{ $t("section.users.import.importOptions") }}</v-tab>
-                <v-tab :disabled="import_tab < 1" :key="1">{{ $t("section.users.import.uploadFile") }}</v-tab>
-                <v-tab :disabled="import_tab < 2" :key="2">{{ $t("section.users.import.previewData") }}</v-tab>
+                <v-tab :disabled="completed_tab < 1" :key="1">{{ $t("section.users.import.uploadFile") }}</v-tab>
+                <v-tab :disabled="completed_tab < 2" :key="2">{{ $t("section.users.import.previewData") }}</v-tab>
             </v-tabs>
         </v-card-title>
 
@@ -178,15 +178,25 @@ webpage
                                 show-size
                                 class="ma-0 pa-0"
                                 accept=".csv,.tsv,.txt"/>
-                            <v-progress-linear
-                            :indeterminate="this.loading"
-                            class="ma-0 pa-0 my-1"/>
+                            <v-progress-linear class="ma-0 pa-0 my-1"
+                            :color="json_loaded ? (error == true ? 'red' : 'green') : 'primary'"
+                            :indeterminate="loading"/>
+                            <v-fade-transition>
+                                <v-alert :icon="false" v-if="!json_loaded" type="warning" dense>
+                                    <span v-html="$t('section.users.import.supportedExtensions').toUpperCase()"/>
+                                </v-alert>
+                                <v-alert v-else-if="json_loaded && !error" icon="mdi-check-circle" 
+                                    dense type="success" 
+                                    close-icon="text-uppercase">
+                                    {{ $t("section.users.import.readyToImport").toUpperCase() }}
+                                </v-alert>
+                                <v-alert v-else icon="mdi-close-circle" 
+                                    dense type="error" color="red"
+                                    close-icon="text-uppercase">
+                                    {{ errorMsg.toUpperCase() }}
+                                </v-alert>
+                            </v-fade-transition>
                         </v-col>
-                    </v-row>
-                    <v-row class="ma-0 pa-0" justify="center">
-                        <v-alert type="warning" dense>
-                            <span v-html="$t('section.users.import.supportedExtensions')"/>
-                        </v-alert>
                     </v-row>
                 </v-tab-item>
 
@@ -292,6 +302,7 @@ export default {
         showUserMappings: false,
         userPathExpansionPanel: false,
         import_tab: 0,
+        completed_tab: 0,
         import_fields: {},
         usePlaceholderPassword: false,
         placeholderPassword: "",
@@ -347,13 +358,18 @@ export default {
         nextStep(){
             switch (this.import_tab + 1) {
                 case 1:
-                    if (this.usePlaceholderPassword && this.$refs.importPlaceholderPassword.validate())
-                            this.import_tab += 1
-                    else if (!this.usePlaceholderPassword)
+                    if (this.usePlaceholderPassword && this.$refs.importPlaceholderPassword.validate()){
                         this.import_tab += 1
+                        this.completed_tab += 1
+                    }
+                    else if (!this.usePlaceholderPassword) {
+                        this.import_tab += 1
+                        this.completed_tab += 1
+                    }
                     break;
                 default:
                     this.import_tab += 1
+                    this.completed_tab += 1
                     break;
             }
         },
@@ -395,7 +411,7 @@ export default {
         async previewFile(file){
             if (!file) {
                 if (!this.json_result.length) {
-                    this.clearData()
+                    this.clearFile()
                     notificationBus.$emit('createNotification', { 
                         message: this.$t("section.users.import.fileCleared"), 
                         type: 'info'
@@ -404,6 +420,7 @@ export default {
                 return
             }
 
+            this.clearFile()
             this.loading = true
             const t_headers = this.getLocalUserImportHeaders()
 
@@ -418,14 +435,29 @@ export default {
                 this.json_result = await this.csvToJSON(csv_file, csv_delimiter)
 
                 // Validate headers
-                if (this.json_result.headers[0] != t_headers[0] || this.json_result.headers.slice[-1] != t_headers.slice[-1])
+                if (this.json_result.headers.length != t_headers.length){
                     this.json_result = false
+                    this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV_HEADERS')
+                } else {
+                    for (let i = 0; i < this.json_result.headers.length; i++)
+                        if (this.json_result.headers[i] != t_headers[i]) {
+                            this.json_result = false
+                            this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV_HEADERS')
+                        }
+                }
+
+                if (this.json_result.data.length < 1) {
+                    this.json_result = false
+                    this.errorMsg = this.getMessageForCode('noUsersInImport')
+                }
 
                 if (this.json_result == false) {
                     this.error = true
+                    if (!this.errorMsg || this.errorMsg.length < 1)
+                        this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV')
                     this.loading = false
                     notificationBus.$emit('createNotification', { 
-                        message: this.getMessageForCode('ERR_INVALID_CSV'), 
+                        message: this.errorMsg, 
                         type: 'error'
                     });
                     this.clearDataTable()
@@ -442,9 +474,10 @@ export default {
             reader.onerror = (event) => {
                 console.log(event)
                 this.error = true
+                this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV')
                 this.loading = false
                 notificationBus.$emit('createNotification', { 
-                    message: this.getMessageForCode('ERR_FILEREADER'), 
+                    message: this.errorMsg, 
                     type: 'error'
                 });
                 this.clearDataTable()
@@ -453,6 +486,14 @@ export default {
             setTimeout(() => {
                 this.loading = false
             }, 500)
+        },
+        clearFile(){
+            this.loading = false
+            this.error = false
+            this.errorMsg = false
+            this.inputFile = null
+            this.json_result = {}
+            this.json_loaded = false
         },
         clearData(){
             this.loading = false
@@ -469,6 +510,7 @@ export default {
             this.json_result = {}
             this.json_loaded = false
             this.import_tab = 0
+            this.completed_tab = 0
             this.usePlaceholderPassword = false
             this.passwordHidden = true
             this.placeholderPassword = ""
@@ -544,12 +586,17 @@ export default {
                 }, 100)
                 this.error = false
                 this.errorMsg = ""
-                if (response.data.success == true)
+                if (response.data.code == 0)
+                    this.$emit('closeDialog', this.viewKey, true);
+                else
                     notificationBus.$emit('createNotification', {
-                        message: this.$t('section.users.import.bulkImportSuccess'),
-                        type: "success"
+                        message: this.$t('error.unknown_short'),
+                        type: "error"
                     });
-                this.$emit('closeDialog', this.viewKey, true);
+                    // notificationBus.$emit('createNotification', {
+                    //     message: this.$t('section.users.import.bulkImportSuccess'),
+                    //     type: "success"
+                    // });
             })
             .catch(error => {
                 setTimeout(() => {

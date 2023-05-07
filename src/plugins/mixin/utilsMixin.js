@@ -44,6 +44,8 @@ const utilsMixin = {
                 return this.$t('error.codes.badRequest')
             case 'ERR_INVALID_CSV':
                 return this.$t('error.codes.invalidCSV')
+            case 'ERR_INVALID_CSV_HEADERS':
+                return this.$t('error.codes.invalidCSVHeaders')
             case 'ERR_FILEREADER':
                 return this.$t('error.codes.fileReader')
             case 409:
@@ -55,6 +57,9 @@ const utilsMixin = {
                 return this.$t('error.codes.ldapObjectExists')
             case 'namingViolation':
                 return this.$t('error.codes.namingViolation')
+                // Users -------------------------------------------------------- //
+            case 'noUsersInImport':
+                return this.$t('error.codes.users.noUsersInImport')
             // DNS ---------------------------------------------------------- //
             case 'dns_zone_missing':
             case 'dns_zone_in_record':

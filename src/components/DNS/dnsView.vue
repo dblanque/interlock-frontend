@@ -304,7 +304,7 @@
   </v-data-table>
 
   <!-- RECORD VIEW/EDIT DIALOG -->
-  <v-dialog eager max-width="800px" v-model="dialogs['recordDialog']">
+  <v-dialog eager :max-width="this.updateFlag ? '800px':'1200px'" v-model="dialogs['recordDialog']">
     <RecordDialog
         :zoneHasSOA="zoneHasSOA()"
         :currentZone="this.zoneFilter.dnsZone"
@@ -330,7 +330,7 @@
       />
   </v-dialog>
 
-  <!-- RECORD DELETE DIALOG -->
+  <!-- RECORD MASS ACTION DIALOG -->
   <v-dialog eager max-width="800px" v-model="dialogs['recordMassAction']">
     <RecordMassAction
         :actionType="'delete'"

@@ -263,7 +263,7 @@
   </v-dialog>
 
   <!-- USER IMPORT DIALOG -->
-  <v-dialog eager persistent max-width="1200px" v-model="dialogs['userImport']">
+  <v-dialog eager persistent max-width="1600px" v-model="dialogs['userImport']">
     <UserImport
       :viewKey="'userImport'"
       ref="UserImport"
@@ -383,8 +383,22 @@ export default {
       this.dialogs[key] = false;
       if (refresh) {
         await this.listUserItems()
-        if (key == 'userResetPassword')
-          this.createSnackbar({message: this.$t("actions.passwordChanged").toUpperCase(), type: 'success'})
+        switch (key) {
+          case 'userResetPassword':
+              this.createSnackbar({
+                message: this.$t("actions.passwordChanged").toUpperCase(), 
+                type: 'success'
+              })
+            break;
+          case 'userImport':
+              this.createSnackbar({
+                message: this.$t('section.users.import.bulkImportSuccess').toUpperCase(), 
+                type: 'success'
+              })
+            break;
+          default:
+            break;
+        }
       }
     },
     setViewToEdit(value){

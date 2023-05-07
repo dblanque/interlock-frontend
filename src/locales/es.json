@@ -283,6 +283,7 @@
       "conflict": "HTTP 409: Conflicto",
       "badRequest": "HTTP 405: Request Erróneo",
       "invalidCSV": "Archivo CSV Inválido",
+      "invalidCSVHeaders": "Cabecera de CSV Inválida",
       "fileReader": "Excepción del Lector de Archivos",
       "networkError": "AXIOS: Error de Red",
       "auth": {
@@ -317,7 +318,8 @@
         "couldNotSave":"El usuario no pudo ser guardado",
         "countryMalformed":"Campo de País mal formado",
         "couldNotFetchGroups":"Error obteniendo Grupos del Usuario",
-        "permissionMalformed":"Diccionario de Permisos mal formado"
+        "permissionMalformed":"Diccionario de Permisos mal formado",
+        "noUsersInImport":"No hay usuarios en el archivo"
       },
       "groups":{
         "groupExists":"El grupo ya existe",
@@ -620,7 +622,7 @@
       "import":{
         "title":"Importación de Usuarios",
         "fileToUpload":"Cargar Listado de Usuarios",
-        "supportedExtensions":"El Archivo debe ser un .csv, .tsv, o .txt separado por comas o tabs",
+        "supportedExtensions":"<b>.csv</b>, <b>.tsv</b>, o <b>.txt</b> separado por <b>comas</b> o <b>tabs</b><br> no borre la cabecera",
         "fileReady":"Archivo listo para importar",
         "fileCleared":"Archivo Eliminado",
         "importOptions":"Opciones de Importación",
@@ -629,8 +631,9 @@
         "editUserMappings":"Editar Mappeo de Campos",
         "uploadFile":"Cargar Archivo",
         "previewData":"Pre-visualizar Datos",
-        "previewDataOff":"Esconder Pre-visualización",
+        "result":"Resultado",
         "previewMode":"Pre-visualizacion de Usuarios a Importar",
+        "readyToImport":"Archivo listo para Importar",
         "downloadTemplate":"Descargar Plantilla CSV",
         "bulkImportSuccess":"Usuarios Importados Exitosamente"
       },

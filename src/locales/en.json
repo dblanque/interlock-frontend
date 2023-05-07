@@ -277,6 +277,7 @@
           "conflict": "HTTP 409: Conflict",
           "badRequest": "HTTP 405: Bad Request",
           "invalidCSV": "Invalid CSV File",
+          "invalidCSVHeaders": "Invalid CSV Headers",
           "fileReader": "File Reader Exception",
           "networkError": "AXIOS: Network Error",
           "auth":{
@@ -311,7 +312,8 @@
             "couldNotSave":"User could not be saved",
             "countryMalformed":"User Country field is malformed",
             "couldNotFetchGroups":"Error fetching User Groups",
-            "permissionMalformed":"Malformed Permissions Dictionary"
+            "permissionMalformed":"Malformed Permissions Dictionary",
+            "noUsersInImport":"No Users detected in File"
           },
           "groups":{
             "groupExists":"Group already exists",
@@ -614,7 +616,7 @@
       "import":{
         "title":"User Bulk Import",
         "fileToUpload":"Attach User List File",
-        "supportedExtensions":"File must be a .csv, .tsv, or .txt file separated by commas or tabs,<br> it must also contain the header line",
+        "supportedExtensions":"<b>.csv</b>, <b>.tsv</b>, or <b>.txt</b> file separated by <b>commas</b> or <b>tabs</b><br> do not delete the headers",
         "fileReady":"File ready to import",
         "fileCleared":"File Cleared",
         "importOptions":"Import Options",
@@ -623,8 +625,9 @@
         "editUserMappings":"Edit Field Mappings",
         "uploadFile":"Upload File",
         "previewData":"Preview Data",
-        "previewDataOff":"Hide Preview",
+        "result":"Result",
         "previewMode":"User Bulk Import Preview",
+        "readyToImport":"File Ready to Import",
         "downloadTemplate":"Download Template CSV",
         "bulkImportSuccess":"Users Imported Successfully"
       },
