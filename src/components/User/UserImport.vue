@@ -101,26 +101,6 @@ webpage
                     </v-row>
 
                     <v-row class="ma-0 pa-0 mb-2" justify="center">
-                        <v-btn @click="downloadTemplate"
-                        class="ma-0 pa-0 pa-2 ma-1 bg-primary text-white">
-                            <v-icon class="mr-1">
-                                mdi-download
-                            </v-icon>
-                            <span class="pr-1">
-                                {{ $t("section.users.import.downloadTemplate") }}
-                            </span>
-                        </v-btn>
-                        <v-btn @click="showUserMappings = !showUserMappings"
-                        class="ma-0 pa-0 pa-2 ma-1 bg-primary text-white">
-                            <v-icon class="mr-1">
-                                mdi-cog
-                            </v-icon>
-                            <span class="pr-1">
-                                {{ $t("section.users.import.editUserMappings") }}
-                            </span>
-                        </v-btn>
-                    </v-row>
-                    <v-row class="ma-0 pa-0 mb-2" justify="center">
                         <v-col class="ma-0 pa-0" cols="12" md="6">
                             <v-form ref="importPlaceholderPassword" @submit.prevent>
                                 <v-checkbox 
@@ -150,17 +130,39 @@ webpage
                             <ObjectEditor :value="this.import_fields"
                             :label="$t('section.users.import.dataMapping')"
                             ref="importFieldsEditor"
+                            @update="v => import_fields = v"
                             dense
+                            reorder
                             resettable
+                            @reset="setDefaultImportFields"
                             disableAddDelete
-                            :keyReadonly="true"
                             :required="true"
                             :deletableFields="deletableFields"
                             :disabledFields="usePlaceholderPassword ? ['password'] : []"
-                            @reset="setDefaultImportFields"
-                            @update="d => this.import_fields = d"/>
+                            />
                         </v-row>
                     </v-expand-transition>
+                    
+                    <v-row class="ma-0 pa-0 mb-2" justify="center">
+                        <v-btn @click="downloadTemplate"
+                        class="ma-0 pa-0 pa-2 ma-1 bg-primary text-white">
+                            <v-icon class="mr-1">
+                                mdi-download
+                            </v-icon>
+                            <span class="pr-1">
+                                {{ $t("section.users.import.downloadTemplate") }}
+                            </span>
+                        </v-btn>
+                        <v-btn @click="showUserMappings = !showUserMappings"
+                        class="ma-0 pa-0 pa-2 ma-1 bg-primary text-white">
+                            <v-icon class="mr-1">
+                                mdi-cog
+                            </v-icon>
+                            <span class="pr-1">
+                                {{ $t("section.users.import.editUserMappings") }}
+                            </span>
+                        </v-btn>
+                    </v-row>
                 </v-tab-item>
 
                 <v-tab-item :key="1">
@@ -280,7 +282,7 @@ export default {
         deletableFields: [
             "initials",
             "telephoneNumber",
-            "webpage",
+            "wWWHomePage",
             "streetAddress",
             "postalCode",
             "l",
@@ -293,6 +295,7 @@ export default {
         import_fields: {},
         usePlaceholderPassword: false,
         placeholderPassword: "",
+        placeholderPassword_idx: 1,
         passwordHidden: true,
         userDestination: '',
         tableData: {
@@ -314,11 +317,13 @@ export default {
     },
     watch: {
         usePlaceholderPassword(new_value){
-            if (new_value == true)
+            if (new_value == true) {
+                this.placeholderPassword_idx = Object.keys(this.import_fields).indexOf('password')
                 delete this.import_fields['password'];
+            }
             else {
                 let keyValues = Object.entries(this.import_fields); //convert object to keyValues ["key1", "value1"] ["key2", "value2"]
-                keyValues.splice(1,0, ["password","password"]); // insert key value at the index you want like 1.
+                keyValues.splice(this.placeholderPassword_idx, 0, ["password","password"]); // insert key value at the index you want like 1.
                 this.import_fields = Object.fromEntries(keyValues) // convert key values to obj {key1: "value1", newKey: "newValue", key2: "value2"}
             }
 
@@ -467,6 +472,7 @@ export default {
             this.usePlaceholderPassword = false
             this.passwordHidden = true
             this.placeholderPassword = ""
+            this.placeholderPassword_idx = 1
             this.setDefaultImportFields()
             this.resetPlaceholderPassword()
             this.$refs.importTabs.callSlider()
@@ -481,7 +487,7 @@ export default {
                 "sn":"last_name",
                 "initials":"initials",
                 "telephoneNumber":"phone_number",
-                "webpage":"wWWHomePage",
+                "wWWHomePage":"webpage",
                 "streetAddress":"street_address",
                 "postalCode":"postal_code",
                 "l":"town",
@@ -529,7 +535,8 @@ export default {
                 headers: this.json_result.headers,
                 placeholder_password: this.placeholderPassword,
                 mapping: this.import_fields,
-                users: this.json_result.data
+                users: this.json_result.data,
+                path: this.userDestination
             })
             .then(response => {
                 setTimeout(() => {

@@ -43,29 +43,34 @@
         </v-btn>
     </v-row>
     <v-list-item v-bind="objectToEdit" v-for="subItem, subItemKey in objectToEdit" :key="subItemKey">
+        <v-list-item-icon>
+            <v-btn v-if="reorder" @click="moveItem(subItemKey)"
+            x-small icon><v-icon>mdi-arrow-up</v-icon></v-btn>
+            <v-btn v-if="reorder" @click="moveItem(subItemKey, false)"
+            x-small icon><v-icon>mdi-arrow-down</v-icon></v-btn>
+        </v-list-item-icon>
         <v-list-item-content class="ma-0 pa-0">
             <v-col class="ma-0 pa-0 px-2 py-1" cols="6">
                 <v-text-field outlined
-                    @change="updateSubItem(subItemKey, subItem)"
                     :dense="dense"
                     :disabled="isFieldDisabled(subItemKey)"
                     :hide-details="!complexValidator"
                     :hint="complexValidator ? complexValidator.subItemKey.kHint : undefined"
                     :required="required && subItemKey.length == 0 ? true : false"
                     :label="$t('words.key')"
-                    :value="subItemKey" 
-                    :readonly="keyReadonly || readonly"/>
+                    :value="subItemKey"
+                    readonly/>
             </v-col>
             <v-col class="ma-0 pa-0" cols="6">
                 <v-text-field outlined
-                    @change="updateSubItem(subItemKey, subItem)"
                     :dense="dense"
+                    @change="updateValue(subItemKey, $event)"
                     :disabled="isFieldDisabled(subItemKey)"
                     :hide-details="!complexValidator"
                     :hint="complexValidator ? complexValidator.subItemKey.vHint : undefined"
                     :required="required && subItem.length == 0 ? true : false"
                     :label="$t('words.value')"
-                    :value="subItem" 
+                    :value="subItem"
                     :readonly="readonly"/>
             </v-col>
         </v-list-item-content>
@@ -110,6 +115,7 @@ export default {
     },
     props: {
         value: Object,
+        reorder: Boolean,
         label: String,
         dense: {
             type: Boolean,
@@ -121,7 +127,6 @@ export default {
         },
         required: Boolean,
         readonly: Boolean,
-        keyReadonly: Boolean,
         keyHint: String,
         valueHint: String,
         persistentHint: Boolean,
@@ -141,15 +146,20 @@ export default {
         this.setObject()
     },
     watch: {
-        value(new_value){
-            this.objectToEdit = new_value
-        }
+        value(new_v){
+            this.objectToEdit = new_v
+        },
     },
     methods: {
+        forceUpdate(){
+            this.$nextTick(()=>{
+                this.$forceUpdate()
+            })
+        },
         setObject(){
-            if (this.value)
+            if (this.value != undefined)
                 this.objectToEdit = this.value
-            this.$forceUpdate()
+            this.forceUpdate()
         },
         isFieldInComplexValidators(key){
             if (this.complexValidator != undefined)
@@ -163,11 +173,9 @@ export default {
             if (this.deletableFields != undefined)
                 return this.deletableFields.includes(key)
         },
-        updateSubItem(key, value){
-            if (this.keyToAdd.length < 1 || this.valueToAdd.length < 1)
-                return
-            this.objectToEdit[key] = value
-            this.$emit('update', this.objectToEdit)
+        updateValue(k, v){
+            this.objectToEdit[k] = v
+            this.updateObject()
         },
         addToObject(key, value){
             if (this.keyToAdd.length < 1 || this.valueToAdd.length < 1)
@@ -177,17 +185,42 @@ export default {
             this.objectToEdit[key] = value
             this.valueToAdd = ""
             this.keyToAdd = ""
-            this.$emit('update', this.objectToEdit)
+            this.updateObject()
         },
         removeFromObject(key){
             delete this.objectToEdit[key];
-            this.$emit('update', this.objectToEdit)
-            // For some reason the v-bind isn't registering when removing an item
-            this.$forceUpdate()
+            this.updateObject()
         },
         emitReset(){
             this.$emit('reset')
-        }
+        },
+        updateObject(){
+            this.$emit('update', this.objectToEdit)
+            this.forceUpdate()
+        },
+        moveItem(k, up=true){
+            var v = this.objectToEdit[k]
+            var idx = Object.keys(this.objectToEdit).indexOf(k)
+            // Convert Object to Key Value Array
+            let keyValues = Object.entries(this.objectToEdit);
+            // Remove item from Key Value pairs
+            keyValues.splice(idx, 1);
+
+            if (up){
+                idx -= 1
+                if (idx < 0)
+                    idx = Object.keys(this.objectToEdit).length
+            } else {
+                idx += 1
+                if (idx >= Object.keys(this.objectToEdit).length)
+                    idx = 0
+            }
+            console.log(idx)
+            // Re-add at new index
+            keyValues.splice(idx, 0, [k, v]);
+            this.objectToEdit = Object.fromEntries(keyValues)
+            this.updateObject()
+        },
     }
 }
 </script>
