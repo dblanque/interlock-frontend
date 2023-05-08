@@ -553,20 +553,14 @@ export default {
             this.json_loaded = false
         },
         clearData(){
-            this.loading = false
-            this.showResult = false
-            this.error = false
-            this.errorMsg = ""
+            this.clearFile()
             var domainDetails = getDomainDetails()
             this.domain = domainDetails.domain
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
             this.fetchOUs()
             this.clearDataTable()
-            this.inputFile = null
             this.userDestination = "CN=Users," + this.basedn
-            this.json_result = {}
-            this.json_loaded = false
             this.import_tab = 0
             this.completed_tab = 0
             this.usePlaceholderPassword = false
