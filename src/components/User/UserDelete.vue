@@ -107,7 +107,8 @@ export default {
                     })
                 }
                 this.$emit('closeDialog', this.viewKey, true);
-            }
+            } else
+                this.$emit('closeDialog', this.viewKey);
         },
     }
 }
