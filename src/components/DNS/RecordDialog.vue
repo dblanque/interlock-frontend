@@ -20,7 +20,9 @@
         <v-row class="ma-0 pa-0">
         <v-col class="ma-0 pa-0" cols="4" lg="3" v-if="useSidebar && updateFlag != true">
             <v-list class="pa-0 ma-0 dnssidebar">
-                <v-radio-group class="ma-0 pa-0 pt-4" column v-model="selectedType">
+                <v-radio-group class="ma-0 pa-0 pt-4" column
+                @change="resetRecord"
+                v-model="selectedType">
                     <v-list-item v-for="element, index in getRecordTypes" :key="element.value">
                         <v-radio 
                         :key="index" 
