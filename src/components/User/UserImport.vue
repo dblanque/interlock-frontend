@@ -172,7 +172,9 @@ webpage
                         <v-col cols="6">
                             <v-file-input :label="$t('section.users.import.fileToUpload')"
                                 outlined
+                                ref="importFileInput"
                                 @change="previewFile"
+                                @click:clear="clearFile()"
                                 v-model="inputFile"
                                 clearable
                                 prepend-icon=""
@@ -184,7 +186,7 @@ webpage
                             :color="json_loaded ? (error == true ? 'red' : 'green') : 'primary'"
                             :indeterminate="loading"/>
                             <v-fade-transition>
-                                <v-alert :icon="false" v-if="!json_loaded" type="warning" dense>
+                                <v-alert :icon="false" v-if="json_loaded != true" type="warning" dense>
                                     <span v-html="$t('section.users.import.supportedExtensions').toUpperCase()"/>
                                 </v-alert>
                                 <v-alert v-else-if="json_loaded && !error" icon="mdi-check-circle" 
@@ -273,7 +275,7 @@ webpage
                     </span>
                 </v-btn>
                 <v-btn @click="importUsers()" 
-                :disabled="loading || !json_loaded || error"
+                :disabled="loading || json_loaded != true || error"
                 v-if="import_tab > 1 && !showResult"
                 class="ma-0 pa-0 pa-2 ma-1" color="primary"
                 rounded>
@@ -379,6 +381,14 @@ export default {
             }
 
             this.$refs.importFieldsEditor.setObject()
+        },
+        inputFile(v){
+            if (v == null || v == undefined) {
+                notificationBus.$emit('createNotification', { 
+                    message: this.$t("section.users.import.fileCleared"), 
+                    type: 'info'
+                });
+            }
         }
     },
     methods: {
@@ -449,16 +459,8 @@ export default {
             this.tableData.items = []
         },
         async previewFile(file){
-            if (!file || file == null || file == undefined) {
-                this.clearFile()
-                notificationBus.$emit('createNotification', { 
-                    message: this.$t("section.users.import.fileCleared"), 
-                    type: 'info'
-                });
+            if (!file || file == undefined || file == null || file.length == 0)
                 return
-            }
-
-            this.clearFile()
             this.loading = true
             const t_headers = this.getLocalUserImportHeaders()
 
@@ -548,6 +550,8 @@ export default {
             this.showResult = false
             this.error = false
             this.errorMsg = ""
+            if (this.$refs.importFileInput)
+                this.$refs.importFileInput.reset()
             this.inputFile = null
             this.json_result = {}
             this.json_loaded = false
@@ -570,7 +574,9 @@ export default {
             this.setDefaultImportFields()
             this.resetPlaceholderPassword()
             this.showUserMappings = false
-            this.$refs.importTabs.callSlider()
+            if (this.$refs.importTabs)
+                if (this.$refs.items)
+                    this.$refs.importTabs.callSlider()
         },
         setDefaultImportFields(){
             this.import_fields = {
