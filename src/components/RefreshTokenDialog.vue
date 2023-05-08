@@ -6,7 +6,7 @@
     <v-row class="ma-0 pa-0">
         <v-col>
             <v-alert dense 
-                :type="alertType" 
+                :type="alertType"
                 :icon="alertIcon" 
                 class="ma-0 pa-6">
                 <span class="mr-7">
@@ -42,8 +42,8 @@ export default {
             timer: "00:00",
             intervalId: 0,
             allowRefresh: true,
-            alertType: "",
-            alertIcon: ""
+            alertType: "info",
+            alertIcon: "mdi-information"
         }
     },
     props: {

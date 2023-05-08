@@ -668,7 +668,9 @@
       "advancedDetails":"Detalles Avanzados",
       "deleteUser":{
         "title":"Borrar Usuario",
-        "message":"¿Está seguro de borrar el usuario"
+        "message":"¿Está seguro de borrar el usuario",
+        "mass":"¿Está seguro de borrar en masa los usuarios seleccionados",
+        "success":"Operación de Borrado Completa"
       },
       "permissions":{
         "LDAP_UF_SCRIPT" : "Usuario de Script",

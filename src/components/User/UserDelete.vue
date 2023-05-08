@@ -19,9 +19,12 @@
 
         <v-card-text class="pa-0 ma-0">
             <v-row class="pa-0 ma-8 text-subtitle-1 text-inverted" justify="center">
-                {{ $t('section.users.deleteUser.message') }}
-                <span class="font-weight-medium" style="padding-left: 0.5ch;">
+                {{ !multipleUsers ? $t('section.users.deleteUser.message') : '' }}
+                <span v-if="!multipleUsers" class="font-weight-medium" style="padding-left: 0.5ch;">
                     {{ (userObject.givenName && userObject.sn ? userObject.givenName + " " + userObject.sn + " (" + userObject.username + ")" : userObject.username) + "?" }}
+                </span>
+                <span v-else-if="multipleUsers" class="font-weight-medium" style="padding-left: 0.5ch;">
+                    {{ $t('section.users.deleteUser.mass') + "?" }}
                 </span>
             </v-row>
         </v-card-text>
@@ -61,28 +64,50 @@ export default {
     name: "confirmDialog",
     props: {
         userObject: Object,
-        viewKey: String
+        userMassDeleteArray: Array,
+        viewKey: String,
+        massDelete: Boolean
     },
     created() {
     },
+    computed: {
+        multipleUsers() {
+            return this.userMassDeleteArray.length > 0
+        }
+    },
     methods: {
         async closeDialog(deleteConfirm=false, user={}) {
-            if (user != {}) {
-                user.distinguishedName = this.userObject.distinguishedName
-                user.username = this.userObject.username
+            if (!this.multipleUsers) {
+                if (user != {}) {
+                    user.distinguishedName = this.userObject.distinguishedName
+                    user.username = this.userObject.username
+                }
             }
             if (deleteConfirm == true) {
-                await new User({}).delete(user)
-                .then(response => {
-                    if (response.data.username == user.username)
-                        console.log("User Deleted Successfully")
-                    this.$emit('refresh');
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+                if (this.multipleUsers) {
+                    for (let i = 0; i < this.userMassDeleteArray.length; i++) {
+                        const element = this.userMassDeleteArray[i];
+                        await new User({}).delete(element)
+                        .then(response => {
+                            if (response.data.username == element.username)
+                                console.log("User Deleted Successfully")
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                    }
+                } else {
+                    await new User({}).delete(user)
+                    .then(response => {
+                        if (response.data.username == user.username)
+                            console.log("User Deleted Successfully")
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                this.$emit('closeDialog', this.viewKey, true);
             }
-            this.$emit('closeDialog', this.viewKey);
         },
     }
 }

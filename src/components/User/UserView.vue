@@ -5,7 +5,7 @@
 <div>
   <v-data-table
     :headers="tableData.headers"
-    :show-select="false"
+    :show-select="true"
     item-key="distinguishedName"
     v-model="tableData.selected"
     :items="tableData.items"
@@ -56,16 +56,15 @@
           :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
           :disabled="loading" 
           @click="openDialog('userImport')">
-            <v-icon class="ma-0 pa-0 mr-1">mdi-import</v-icon>
+            <v-icon small class="ma-0 pa-0 mr-1">mdi-import</v-icon>
             {{ $t('actions.import') + ' ' + $t('classes.user.plural') }}
           </v-btn>
-          <!-- Export Button -->
-          <v-btn class="pa-2 mx-2" small v-show="false"
-          :dark="!isThemeDark($vuetify)" 
-          :light="isThemeDark($vuetify)"
-          :disabled="loading || true">
-            <v-icon class="ma-0 pa-0 mr-1">mdi-export</v-icon>
-            {{ $t('actions.export') + ' ' + $t('classes.user.plural') }}
+          <!-- Mass Delete Button -->
+          <v-btn class="pa-2 mx-2 text-white" small
+          color="red" @click="openDeleteDialog()"
+          :disabled="loading || tableData.selected.length < 1">
+            <v-icon small class="ma-0 pa-0 mr-1 clr-white">mdi-delete</v-icon>
+            {{ $t('actions.delete') + ' ' + $t('classes.user.plural') }}
           </v-btn>
       </v-row>
     </template>
@@ -239,6 +238,7 @@
   <v-dialog eager max-width="800px" v-model="dialogs['userDelete']">
     <UserDelete
       :userObject="this.data.selectedUser"
+      :userMassDeleteArray="tableData.selected"
       :viewKey="'userDelete'"
       ref="UserDelete"
       @closeDialog="closeDialog"
@@ -373,23 +373,34 @@ export default {
     async closeDialog(key, refresh=false){
       this.dialogs[key] = false;
       if (refresh) {
-        await this.listUserItems()
+        var emitNotif
         switch (key) {
           case 'userResetPassword':
+              emitNotif = false
               this.createSnackbar({
                 message: this.$t("actions.passwordChanged").toUpperCase(), 
                 type: 'success'
               })
             break;
           case 'userImport':
+              emitNotif = false
               this.createSnackbar({
                 message: this.$t('section.users.import.bulkImportSuccess').toUpperCase(), 
                 type: 'success'
               })
             break;
+          case 'userDelete':
+              emitNotif = false
+              this.createSnackbar({
+                message: this.$t('section.users.deleteUser.success').toUpperCase(), 
+                type: 'info'
+              })
+            break;
           default:
+              emitNotif = true
             break;
         }
+        await this.listUserItems(emitNotif)
       }
     },
     setViewToEdit(value){
@@ -416,6 +427,7 @@ export default {
       this.error = false
       this.tableData.headers = []
       this.tableData.items = []
+      this.tableData.selected = []
       await new User({}).list()
       .then(response => {
         var userHeaders = response.headers
@@ -478,8 +490,12 @@ export default {
     },
     openDeleteDialog(userObject) {
       this.data.selectedUser = {}
-      this.data.selectedUser = userObject
-      this.openDialog('userDelete')
+      if (userObject) {
+        this.tableData.selected = []
+        this.data.selectedUser = userObject
+      }
+      if (this.data.selectedUser || this.tableData.selected.length > 0)
+        this.openDialog('userDelete')
     },
     async enableUser(userObject){
       this.loading = true

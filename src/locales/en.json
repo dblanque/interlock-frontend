@@ -662,7 +662,9 @@
       "advancedDetails":"Advanced Details",
       "deleteUser":{
         "title":"Delete User",
-        "message":"Are you sure you wish to delete the user"
+        "message":"Are you sure you wish to delete the user",
+        "mass":"Are you sure you wish to mass delete the selected users",
+        "success":"Delete Operation Complete"
       },
       "permissions":{
         "LDAP_UF_SCRIPT" : "Script Account",
