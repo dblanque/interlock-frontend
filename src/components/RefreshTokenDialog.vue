@@ -72,7 +72,7 @@ export default {
             this.clearCountdown()
             this.getTimeInMinutes()
             this.intervalId = setInterval(() => {
-                console.log(this.timeRemaining)
+                // console.log(this.timeRemaining)
                 this.thresholdPassed = this.timeRemaining < this.threshold
                 this.alertType = this.thresholdPassed ? 'warning' : 'info'
                 this.alertIcon = this.thresholdPassed ? 'mdi-alert-box' :'mdi-information'
