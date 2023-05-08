@@ -249,10 +249,10 @@ webpage
                                 <v-chip :class="getClassForError(item.error)" v-if="item.error != 'none'">
                                     {{ $t("section.users.import.error."+item.error) }}
                                 </v-chip>
-                                <v-chip :class="'bg-blue text-white'" v-else-if="item.status > 0">
+                                <v-chip :class="'bg-blue text-normal'" v-else-if="item.status > 0">
                                     {{ $t("words.skipped") }}
                                 </v-chip>
-                                <v-chip :class="'bg-valid text-white'" v-else>
+                                <v-chip :class="'bg-valid text-normal'" v-else>
                                     {{ $t("words.success") }}
                                 </v-chip>
                             </template>
@@ -457,6 +457,7 @@ export default {
         clearDataTable(){
             this.tableData.headers = []
             this.tableData.items = []
+            this.completed_tab -= 1
         },
         async previewFile(file){
             if (!file || file == undefined || file == null || file.length == 0)
@@ -555,6 +556,7 @@ export default {
             this.inputFile = null
             this.json_result = {}
             this.json_loaded = false
+            this.clearDataTable()
         },
         clearData(){
             this.clearFile()
@@ -563,7 +565,6 @@ export default {
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
             this.fetchOUs()
-            this.clearDataTable()
             this.userDestination = "CN=Users," + this.basedn
             this.import_tab = 0
             this.completed_tab = 0
@@ -628,9 +629,9 @@ export default {
             switch (key) {
                 case "password":
                 case "country":
-                    return "bg-orange text-white"
+                    return "bg-orange text-normal"
                 default:
-                    return "bg-red text-white"
+                    return "bg-red text-normal"
             }
         },
         closeDialog(){

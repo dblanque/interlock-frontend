@@ -74,9 +74,9 @@ const actions = {
             interlock_backend.request.get(interlock_backend.urls.user.base + 'me/')
             .then(response => {
                 resolve(response);
-                localStorage.setItem("username", response.data.user.username)
-                localStorage.setItem("first_name", response.data.user.first_name)
-                localStorage.setItem("last_name", response.data.user.last_name)
+                for (const key in response.data.user) {
+                    localStorage.setItem(key, response.data.user[key])
+                }
             }).catch((e) => reject(e))
         })
     },

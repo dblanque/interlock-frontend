@@ -23,6 +23,7 @@
     }
   },
   "actions":{
+    "refreshToken":"Refresh Access Token",
     "import":"Import",
     "export":"Export",
     "groupBy":"Group by",
@@ -832,7 +833,10 @@
     "loggedOut":"Logout Successful",
     "logoutForbiddenMsg":"Please Log in Again",
     "logoutTooltip":"Logout",
-    "themerTooltip":"Change Theme"
+    "themerTooltip":"Change Theme",
+    "tokenRefreshed":"Access Token Refreshed",
+    "actionRequired":"Action Required",
+    "refreshTokenTimer":"Refresh Token will expire in"
   },
   "contrib":{
     "title":"About Interlock",

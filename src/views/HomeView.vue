@@ -193,11 +193,25 @@
     <!-- LOGOUT DIALOG  -->
     <v-dialog
       persistent
-      content-class="rounded-dialog"
+      content-class=""
       max-width="40rem"
       v-model="showLogoutDialog">
         <LogoutDialog
-        @logoutAction="logoutAction"/>
+        @logoutAction="logoutAction(true)"/>
+    </v-dialog>
+
+    <!-- REFRESH TOKEN DIALOG  -->
+    <v-dialog
+      persistent
+      eager
+      content-class=""
+      max-width="40rem"
+      v-model="showRefreshTokenDialog">
+        <RefreshTokenDialog 
+          ref="RefreshTokenDialog"
+          :countdown="showRefreshTokenDialog"
+          @closeDialog="closeRefreshDialog"
+          @logoutAction="logoutAction()"/>
     </v-dialog>
 
     <!----- ABOUT AND DONATE BUTTONS ------>
@@ -264,6 +278,7 @@ import ModularViewContainer from "@/components/ModularViewContainer.vue"
 import LanguageSelector from "@/components/LanguageSelector.vue"
 import ThemeChanger from "@/components/ThemeChanger.vue"
 import LogoutDialog from "@/components/LogoutDialog.vue"
+import RefreshTokenDialog from "@/components/RefreshTokenDialog.vue"
 import AboutDialog from "@/components/AboutDialog.vue"
 import User from "@/include/User"
 import Test from "@/include/Test"
@@ -279,6 +294,7 @@ export default {
     ModularViewContainer,
     LanguageSelector,
     LogoutDialog,
+    RefreshTokenDialog,
     ThemeChanger,
     NotificationBusContainer,
     AboutDialog
@@ -298,6 +314,7 @@ export default {
       error: false,
       showAboutDialog: false,
       showLogoutDialog: false,
+      showRefreshTokenDialog: false,
       requestRefresh: "",
       selectedTab: 0,
       selectedTabTitle: "",
@@ -308,8 +325,6 @@ export default {
         headers: [],
         items: [],
       },
-      timeoutInS: 900,
-    //   timeoutInS: 1, // For testing
       timeoutId: 0,
       navTabs: [
         {
@@ -379,6 +394,8 @@ export default {
         this.first_name = localStorage.getItem("first_name");
         this.last_name = localStorage.getItem("last_name");
         this.email = localStorage.getItem("email");
+        this.access_token_lifetime = localStorage.getItem("access_token_lifetime");
+        this.refresh_token_lifetime = localStorage.getItem("refresh_token_lifetime");
 
         new Domain({}).getDetails().then(() => {
           this.domain = localStorage.getItem("domain");
@@ -448,6 +465,10 @@ export default {
     closeAbout(){
       this.showAboutDialog = false
     },
+    closeRefreshDialog(){
+      this.showRefreshTokenDialog = false
+      this.resetTimer()
+    },
     goToPrevTab(){
       var counter = this.selectedTab - 1
       this.navTabs.forEach(() => {
@@ -498,12 +519,8 @@ export default {
     ////////////////////////////////////////////////////////////////////////////
     // Logout Actions
     ////////////////////////////////////////////////////////////////////////////
-    openLogoutDialog() {
-      this.showLogoutDialog = true;
-      console.log("openlogout")
-    },
-    async logoutAction() {
-      await new User({}).logout().then(() => {
+    async logoutAction(timeout=false) {
+      await new User({}).logout(timeout).then(() => {
         localStorage.setItem("logoutMessage", true);
         this.$router.push("/login");
       });
@@ -545,17 +562,26 @@ export default {
     // What happens when the timer stops
     ////////////////////////////////////////////////////////////////////////////
     handleInactive() {
-      var refreshClock = Date.parse(localStorage.getItem("refreshClock"));
-      var refreshClockLimit = refreshClock + this.timeoutInS * 1000;
-      if (Date.now() >= refreshClockLimit) {
-        this.openLogoutDialog();
-      } else {
-        this.resetTimer();
+      const refreshClock = Date.parse(localStorage.getItem("refreshClock"));
+      const accessClockLimit = refreshClock + (this.access_token_lifetime * 1000)
+      const refreshClockLimit = refreshClock + (this.refresh_token_lifetime * 1000)
+      const clockDifference = this.refresh_token_lifetime - this.access_token_lifetime
+      if (Date.now() >= accessClockLimit && Date.now() < refreshClockLimit) {
+        this.showRefreshTokenDialog = true
+        if (this.$refs.RefreshTokenDialog != undefined)
+          this.$refs.RefreshTokenDialog.startCountdown()
+        this.timeoutId = setTimeout(this.handleInactive, clockDifference * 1000)
+      } else if (Date.now() >= refreshClockLimit) {
+        this.showLogoutDialog = true
+        this.showRefreshTokenDialog = false
+      }
+      else {
+        this.resetTimer()
       }
     },
     startTimer() {
       // setTimeout returns an ID (can be used to start or clear a timer)
-      this.timeoutId = setTimeout(this.handleInactive, this.timeoutInS * 1000);
+      this.timeoutId = setTimeout(this.handleInactive, this.access_token_lifetime * 1000);
     },
     resetTimer() {
       clearTimeout(this.timeoutId);
