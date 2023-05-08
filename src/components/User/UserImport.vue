@@ -31,14 +31,16 @@ webpage
                     </v-icon>
                 </v-btn>
             </v-row>
-            <v-tabs class="ma-0 pa-0" v-model="import_tab" :key="import_tab"
-            ref="importTabs"
-            centered grow>
-                <v-tabs-slider/>
-                <v-tab :key="0">{{ $t("section.users.import.importOptions") }}</v-tab>
-                <v-tab :disabled="completed_tab < 1" :key="1">{{ $t("section.users.import.uploadFile") }}</v-tab>
-                <v-tab :disabled="completed_tab < 2" :key="2">{{ $t("section.users.import.previewData") }}</v-tab>
-            </v-tabs>
+            <v-expand-transition>
+                <v-tabs class="ma-0 pa-0" v-model="import_tab" :key="import_tab"
+                ref="importTabs" v-if="!showResult"
+                centered grow>
+                    <v-tabs-slider/>
+                    <v-tab :key="0">{{ $t("section.users.import.importOptions") }}</v-tab>
+                    <v-tab :disabled="completed_tab < 1" :key="1">{{ $t("section.users.import.uploadFile") }}</v-tab>
+                    <v-tab :disabled="completed_tab < 2" :key="2">{{ $t("section.users.import.previewData") }}</v-tab>
+                </v-tabs>
+            </v-expand-transition>
         </v-card-title>
 
         <v-card-text class="pa-0 ma-0">
@@ -525,7 +527,7 @@ export default {
                 this.json_loaded = true
             }
             reader.onerror = (event) => {
-                console.log(event)
+                console.error(event)
                 this.error = true
                 this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV')
                 this.json_loaded = true
@@ -703,15 +705,13 @@ export default {
                             "error": "none"
                         })
                     })
-                console.log(this.tableData.headers)
-                console.log(this.tableData.items)
                     // notificationBus.$emit('createNotification', {
                     //     message: this.$t('section.users.import.bulkImportSuccess'),
                     //     type: "success"
                     // });
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
                 setTimeout(() => {
                     this.loading = false
                 }, 100)

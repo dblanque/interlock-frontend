@@ -26,6 +26,7 @@ const csvMixin = {
 
         for (var i = 1; i < lines.length - 1; i++) {
             var obj = {}
+            var empty_line = true
             var currentline = lines[i].split(delimiter)
 
             // Loop for each column in the line
@@ -33,7 +34,13 @@ const csvMixin = {
                 obj[headers[j]] = currentline[j]
             }
 
-            result.push(obj)
+            for (const k in obj) {
+                if (obj[k].length > 0)
+                    empty_line = false
+            }
+
+            if (!empty_line)
+                result.push(obj)
         }
         return { headers: headers, data: result }
     },
