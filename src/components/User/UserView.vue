@@ -5,6 +5,9 @@
 <div>
   <v-data-table
     :headers="tableData.headers"
+    :show-select="false"
+    item-key="distinguishedName"
+    v-model="tableData.selected"
     :items="tableData.items"
     :custom-sort="sortNullLast"
     :loading="loading"
