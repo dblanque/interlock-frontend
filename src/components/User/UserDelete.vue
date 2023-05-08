@@ -85,17 +85,12 @@ export default {
             }
             if (deleteConfirm == true) {
                 if (this.multipleUsers) {
-                    for (let i = 0; i < this.userMassDeleteArray.length; i++) {
-                        const element = this.userMassDeleteArray[i];
-                        await new User({}).delete(element)
-                        .then(response => {
-                            if (response.data.username == element.username)
-                                console.log("User Deleted Successfully")
-                        })
-                        .catch(error => {
-                            console.log(error)
-                        })
-                    }
+                    await new User({}).bulkDelete(this.userMassDeleteArray)
+                    .then(() => {
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
                 } else {
                     await new User({}).delete(user)
                     .then(response => {

@@ -59,6 +59,7 @@ const urls = {
         fetchme: 'api/users/fetchme/',
         insert: 'api/users/insert/',
         bulkInsert: 'api/users/bulkInsert/',
+        bulkDelete: 'api/users/bulkDelete/',
         update: 'api/users/update/',
         updateSelf: 'api/users/updateSelf/',
         delete: 'api/users/delete/',

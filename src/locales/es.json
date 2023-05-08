@@ -322,7 +322,8 @@
         "couldNotSave":"El usuario no pudo ser guardado",
         "countryMalformed":"Campo de País mal formado",
         "couldNotFetchGroups":"Error obteniendo Grupos del Usuario",
-        "permissionMalformed":"Diccionario de Permisos mal formado"
+        "permissionMalformed":"Diccionario de Permisos mal formado",
+        "noUsersInImport":"No hay usuarios en el archivo"
       },
       "groups":{
         "groupExists":"El grupo ya existe",
@@ -639,7 +640,6 @@
         "downloadTemplate":"Descargar Plantilla CSV",
         "bulkImportSuccess":"Usuarios Importados Exitosamente",
         "bulkImportPartial":"Usuarios Importados con Errores",
-        "noUsersInImport":"No hay usuarios en el archivo",
         "error":{
           "validation":"Error de Validación de Campo",
           "permission":"Error de Parseo (Permisos)",

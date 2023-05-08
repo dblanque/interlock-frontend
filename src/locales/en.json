@@ -316,7 +316,8 @@
             "couldNotSave":"User could not be saved",
             "countryMalformed":"User Country field is malformed",
             "couldNotFetchGroups":"Error fetching User Groups",
-            "permissionMalformed":"Malformed Permissions Dictionary"
+            "permissionMalformed":"Malformed Permissions Dictionary",
+            "noUsersInImport":"No Users detected in File"
           },
           "groups":{
             "groupExists":"Group already exists",
@@ -633,7 +634,6 @@
         "downloadTemplate":"Download Template CSV",
         "bulkImportSuccess":"Users Imported Successfully",
         "bulkImportPartial":"Users Imported with Errors",
-        "noUsersInImport":"No Users detected in File",
         "error":{
           "validation":"Field Validation Error",
           "permission":"Permission Parsing Error",

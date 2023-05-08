@@ -24,7 +24,17 @@ const actions = {
             })
         })
     },
-    
+
+    bulkDelete: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.bulkDelete, data).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
     enable: (username)=>{
         const data = {}
         data['username'] = username

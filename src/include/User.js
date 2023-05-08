@@ -87,6 +87,10 @@ class User extends ApiModel{
         return await interlock_backend.call('user/bulkInsert', data)
     }
 
+    async bulkDelete(data){
+        return await interlock_backend.call('user/bulkDelete', data)
+    }
+
     async enable(data){
         return await interlock_backend.call('user/enable', data)
     }
