@@ -270,15 +270,6 @@
       @closeDialog="closeDialog"
       />
   </v-dialog>
-
-  <!-- USER EXPORT DIALOG -->
-  <!-- <v-dialog eager max-width="1200px" v-model="dialogs['userExport']">
-    <UserExport
-      :viewKey="'userExport'"
-      ref="UserExport"
-      @closeDialog="closeDialog"
-      />
-  </v-dialog> -->
 </div>
 </template>
 
@@ -286,7 +277,6 @@
 import User from '@/include/User'
 import UserCreate from '@/components/User/UserCreate.vue'
 import UserImport from '@/components/User/UserImport.vue'
-// import UserExport from '@/components/User/UserExport.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
@@ -299,7 +289,6 @@ export default {
   components: {
     UserCreate,
     UserImport,
-    // UserExport,
     UserDialog,
     UserResetPassword,
     UserDelete
@@ -331,7 +320,6 @@ export default {
       dialogs: {
         userDialog: false,
         userImport: false,
-        userExport: false,
         userDelete: false,
         userResetPassword: false,
         userCreate: false,
