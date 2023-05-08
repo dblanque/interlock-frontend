@@ -16,6 +16,11 @@ const csvMixin = {
         var headers = lines[0].split(delimiter)
         var last_line = lines.slice(-1)[0]
 
+        for (let i = 0; i < headers.length; i++) {
+            if (headers[i].length < 1)
+                return "ERR_INVALID_CSV_HEADERS"
+        }
+
         if (last_line.length > 1)
             return false
 

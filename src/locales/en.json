@@ -160,6 +160,9 @@
           "n":"None"
         }
       },
+      "success":"Success",
+      "skipped":"Skipped",
+      "status":"Status",
       "selected":"Selected",
       "readOnly":"Read Only",
       "member":"Member",
@@ -312,8 +315,7 @@
             "couldNotSave":"User could not be saved",
             "countryMalformed":"User Country field is malformed",
             "couldNotFetchGroups":"Error fetching User Groups",
-            "permissionMalformed":"Malformed Permissions Dictionary",
-            "noUsersInImport":"No Users detected in File"
+            "permissionMalformed":"Malformed Permissions Dictionary"
           },
           "groups":{
             "groupExists":"Group already exists",
@@ -568,7 +570,7 @@
       "rename":{
         "title":"Rename LDAP Object",
         "originalDistinguishedName":"Original Distinguished Name",
-        "success":"lDAP Object renamed successfully"
+        "success":"LDAP Object renamed successfully"
       },
       "move":{
         "setToRoot":"Select Domain Root",
@@ -629,7 +631,16 @@
         "previewMode":"User Bulk Import Preview",
         "readyToImport":"File Ready to Import",
         "downloadTemplate":"Download Template CSV",
-        "bulkImportSuccess":"Users Imported Successfully"
+        "bulkImportSuccess":"Users Imported Successfully",
+        "bulkImportPartial":"Users Imported with Errors",
+        "noUsersInImport":"No Users detected in File",
+        "error":{
+          "validation":"Field Validation Error",
+          "permission":"Permission Parsing Error",
+          "country":"Country Parsing Error, see ISO-3166",
+          "create":"Could not create User Object",
+          "password":"Could not modify LDAP Password"
+        }
       },
       "export":{
         "title":"User Bulk Export"

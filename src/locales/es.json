@@ -160,6 +160,9 @@
         "n":"Ninguno"
       }
     },
+    "success":"Éxito",
+    "skipped":"Omitido",
+    "status":"Estado",
     "selected":"Seleccionados",
     "readOnly":"Solo Lectura",
     "member":"Miembro",
@@ -318,8 +321,7 @@
         "couldNotSave":"El usuario no pudo ser guardado",
         "countryMalformed":"Campo de País mal formado",
         "couldNotFetchGroups":"Error obteniendo Grupos del Usuario",
-        "permissionMalformed":"Diccionario de Permisos mal formado",
-        "noUsersInImport":"No hay usuarios en el archivo"
+        "permissionMalformed":"Diccionario de Permisos mal formado"
       },
       "groups":{
         "groupExists":"El grupo ya existe",
@@ -635,7 +637,16 @@
         "previewMode":"Pre-visualizacion de Usuarios a Importar",
         "readyToImport":"Archivo listo para Importar",
         "downloadTemplate":"Descargar Plantilla CSV",
-        "bulkImportSuccess":"Usuarios Importados Exitosamente"
+        "bulkImportSuccess":"Usuarios Importados Exitosamente",
+        "bulkImportPartial":"Usuarios Importados con Errores",
+        "noUsersInImport":"No hay usuarios en el archivo",
+        "error":{
+          "validation":"Error de Validación de Campo",
+          "permission":"Error de Parseo (Permisos)",
+          "country":"Error de Parseo (País), ver ISO-3166",
+          "create":"No se pudo crear el Usuario LDAP",
+          "password":"No se pudo modificar la Contraseña LDAP"
+        }
       },
       "export":{
         "title":"Exportación de Usuarios"

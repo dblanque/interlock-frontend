@@ -202,8 +202,17 @@ webpage
 
                 <v-tab-item :key="2">
                     <v-row class="pa-0 ma-0" justify="center">
-                        <v-alert class="ma-4" icon="mdi-alert-box" dense type="warning" close-icon="text-uppercase">
+                        <v-alert v-if="!showResult"
+                        class="ma-4" dense type="info" close-icon="text-uppercase">
                             {{ $t("section.users.import.previewMode").toUpperCase() }}
+                        </v-alert>
+                        <v-alert v-else-if="!error && showResult"
+                        class="ma-4" icon="mdi-check-circle" dense type="success" close-icon="text-uppercase">
+                            {{ $t("section.users.import.bulkImportSuccess").toUpperCase() }}
+                        </v-alert>
+                        <v-alert v-else
+                        class="ma-4" icon="mdi-alert-circle" dense type="warning" close-icon="text-uppercase">
+                            {{ $t("section.users.import.bulkImportPartial").toUpperCase() }}
                         </v-alert>
                     </v-row>
                     <v-row class="pa-0 ma-0" justify="center">
@@ -215,6 +224,34 @@ webpage
                             'items-per-page-options': [10, 25, 50, 100, -1]
                             }"
                             class="py-3 px-2 mt-2 mb-2">
+                            <template v-slot:[`item.status`]="{ item }">
+                                <!-- Failed -->
+                                <v-icon class="clr-orange" v-if="item.status < 0 && item.error == 'password'">
+                                    mdi-alert-circle
+                                </v-icon>
+                                <v-icon class="clr-red" v-else-if="item.status < 0">
+                                    mdi-close-circle
+                                </v-icon>
+                                <!-- Success -->
+                                <v-icon class="clr-valid" v-else-if="item.status == 0">
+                                    mdi-check-circle
+                                </v-icon>
+                                <!-- Skipped -->
+                                <v-icon class="clr-primary" v-else-if="item.status > 0">
+                                    mdi-share
+                                </v-icon>
+                            </template>
+                            <template v-slot:[`item.error`]="{ item }">
+                                <v-chip :class="getClassForError(item.error)" v-if="item.error != 'none'">
+                                    {{ $t("section.users.import.error."+item.error) }}
+                                </v-chip>
+                                <v-chip :class="'bg-blue text-white'" v-else-if="item.status > 0">
+                                    {{ $t("words.skipped") }}
+                                </v-chip>
+                                <v-chip :class="'bg-valid text-white'" v-else>
+                                    {{ $t("words.success") }}
+                                </v-chip>
+                            </template>
                         </v-data-table>
                     </v-row>
                 </v-tab-item>
@@ -223,19 +260,19 @@ webpage
         <!-- Actions -->
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn @click="import_tab < 1 ? closeDialog() : import_tab -= 1"
+                <v-btn @click="import_tab < 1 || showResult && import_tab > 1 ? closeDialog() : import_tab -= 1"
                 class="ma-0 pa-0 pa-2 ma-1 bg-secondary text-normal"
                 rounded>
                     <v-icon class="mr-1" color="white">
-                        {{ import_tab < 1 ? 'mdi-close-circle' : 'mdi-chevron-left' }}
+                        {{ import_tab < 1 || showResult && import_tab > 1 ? 'mdi-close-circle' : 'mdi-chevron-left' }}
                     </v-icon>
                     <span class="pr-1 text-white">
-                        {{ import_tab < 1 ? $t("actions.close") : $t("actions.back") }}
+                        {{ import_tab < 1 || showResult && import_tab > 1 ? $t("actions.close") : $t("actions.back") }}
                     </span>
                 </v-btn>
-                <v-btn @click="closeDialog(true)" 
+                <v-btn @click="importUsers()" 
                 :disabled="loading || !json_loaded || error"
-                v-show="import_tab > 1"
+                v-if="import_tab > 1 && !showResult"
                 class="ma-0 pa-0 pa-2 ma-1" color="primary"
                 rounded>
                     <v-icon class="mr-1">
@@ -245,7 +282,7 @@ webpage
                         {{ $t("actions.import") + " " + $t("classes.user.plural")}}
                     </span>
                 </v-btn>
-                <v-btn @click="nextStep" v-show="import_tab < 2"
+                <v-btn @click="nextStep" v-else-if="import_tab < 2"
                 :disabled="!isStepValid()"
                 class="ma-0 pa-0 pa-2 ma-1 bg-secondary"
                 rounded>
@@ -282,6 +319,7 @@ export default {
     data () {
       return {
         loading: false,
+        showResult: false,
         error: false,
         errorMsg: "",
         inputFile: null,
@@ -409,14 +447,12 @@ export default {
             this.tableData.items = []
         },
         async previewFile(file){
-            if (!file) {
-                if (!this.json_result.length) {
-                    this.clearFile()
-                    notificationBus.$emit('createNotification', { 
-                        message: this.$t("section.users.import.fileCleared"), 
-                        type: 'info'
-                    });
-                }
+            if (!file || file == null || file == undefined) {
+                this.clearFile()
+                notificationBus.$emit('createNotification', { 
+                    message: this.$t("section.users.import.fileCleared"), 
+                    type: 'info'
+                });
                 return
             }
 
@@ -434,26 +470,44 @@ export default {
 
                 this.json_result = await this.csvToJSON(csv_file, csv_delimiter)
 
-                // Validate headers
-                if (this.json_result.headers.length != t_headers.length){
-                    this.json_result = false
-                    this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV_HEADERS')
-                } else {
-                    for (let i = 0; i < this.json_result.headers.length; i++)
-                        if (this.json_result.headers[i] != t_headers[i]) {
-                            this.json_result = false
-                            this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV_HEADERS')
-                        }
+                // csvToJSON can return invalid headers error
+                if (typeof(this.json_result) === 'string') {
+                    this.error = true
+                    this.errorMsg = this.getMessageForCode(this.json_result)
                 }
 
-                if (this.json_result.data.length < 1) {
+                // Validate headers
+                if (!this.error && !this.json_result.headers) {
+                    this.json_result = false
+                    this.error = true
+                    this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV_HEADERS')
+                }
+
+                // Header Cross Checking
+                if (!this.error) {
+                    if (this.json_result.headers.length != t_headers.length){
+                        this.json_result = false
+                        this.error = true
+                        this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV_HEADERS')
+                    } else {
+                        for (let i = 0; i < this.json_result.headers.length; i++)
+                            if (this.json_result.headers[i] != t_headers[i]) {
+                                this.json_result = false
+                                this.error = true
+                                this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV_HEADERS')
+                            }
+                    }
+                }
+
+                if (!this.error && this.json_result.data.length < 1) {
+                    this.error = true
                     this.json_result = false
                     this.errorMsg = this.getMessageForCode('noUsersInImport')
                 }
 
-                if (this.json_result == false) {
+                if (this.error) {
                     this.error = true
-                    if (!this.errorMsg || this.errorMsg.length < 1)
+                    if (this.errorMsg.length < 1)
                         this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV')
                     this.loading = false
                     notificationBus.$emit('createNotification', { 
@@ -462,7 +516,6 @@ export default {
                     });
                     this.clearDataTable()
                 } else {
-                    this.error = false
                     notificationBus.$emit('createNotification', { 
                         message: this.$t("section.users.import.fileReady"), 
                         type: 'success'
@@ -475,6 +528,7 @@ export default {
                 console.log(event)
                 this.error = true
                 this.errorMsg = this.getMessageForCode('ERR_INVALID_CSV')
+                this.json_loaded = true
                 this.loading = false
                 notificationBus.$emit('createNotification', { 
                     message: this.errorMsg, 
@@ -489,16 +543,18 @@ export default {
         },
         clearFile(){
             this.loading = false
+            this.showResult = false
             this.error = false
-            this.errorMsg = false
+            this.errorMsg = ""
             this.inputFile = null
             this.json_result = {}
             this.json_loaded = false
         },
         clearData(){
             this.loading = false
+            this.showResult = false
             this.error = false
-            this.errorMsg = false
+            this.errorMsg = ""
             var domainDetails = getDomainDetails()
             this.domain = domainDetails.domain
             this.realm = domainDetails.realm
@@ -517,8 +573,8 @@ export default {
             this.placeholderPassword_idx = 1
             this.setDefaultImportFields()
             this.resetPlaceholderPassword()
-            this.$refs.importTabs.callSlider()
             this.showUserMappings = false
+            this.$refs.importTabs.callSlider()
         },
         setDefaultImportFields(){
             this.import_fields = {
@@ -566,12 +622,22 @@ export default {
                 this.userPathExpansionPanel = false
             }
         },
-        async closeDialog(importConfirm=false) {
-            if(importConfirm != true){
-                this.$emit('closeDialog', this.viewKey);
-                return
+        getClassForError(key){
+            switch (key) {
+                case "password":
+                case "country":
+                    return "bg-orange text-white"
+                default:
+                    return "bg-red text-white"
             }
-
+        },
+        closeDialog(){
+            var refresh = false
+            if (this.showResult)
+                refresh = true
+            return this.$emit('closeDialog', this.viewKey, refresh);
+        },
+        async importUsers() {
             this.loading = true
             await new User({}).bulkInsert({
                 headers: this.json_result.headers,
@@ -586,25 +652,74 @@ export default {
                 }, 100)
                 this.error = false
                 this.errorMsg = ""
-                if (response.data.code == 0)
-                    this.$emit('closeDialog', this.viewKey, true);
-                else
+                if (response.data.code != 0)
                     notificationBus.$emit('createNotification', {
                         message: this.$t('error.unknown_short'),
                         type: "error"
                     });
+                this.showResult = true
+                this.tableData = {
+                    headers: [],
+                    items: []
+                }
+                this.tableData.headers.push({
+                    text: this.$t("classes.user.single"),
+                    align: 'center',
+                    value: this.import_fields['username'],
+                })
+                this.tableData.headers.push({
+                    text: this.$t("words.status"),
+                    align: 'center',
+                    value: 'status',
+                })
+                this.tableData.headers.push({
+                    text: this.$t("words.error"),
+                    align: 'center',
+                    value: 'error',
+                })
+                if (response.data.failed_users.length > 0) {
+                    response.data.failed_users.forEach(u => {
+                        this.tableData.items.push({
+                            "username": u.username,
+                            "status": -1,
+                            "error": u.stage
+                        })
+                    });
+                    this.error = true
+                }
+                if (response.data.skipped_users.length > 0)
+                    response.data.skipped_users.forEach(u => {
+                        this.tableData.items.push({
+                            "username": u,
+                            "status": 1,
+                            "error": "none"
+                        })
+                    })
+                if (response.data.imported_users.length > 0)
+                    response.data.imported_users.forEach(u => {
+                        this.tableData.items.push({
+                            "username": u,
+                            "status": 0,
+                            "error": "none"
+                        })
+                    })
+                console.log(this.tableData.headers)
+                console.log(this.tableData.items)
                     // notificationBus.$emit('createNotification', {
                     //     message: this.$t('section.users.import.bulkImportSuccess'),
                     //     type: "success"
                     // });
             })
             .catch(error => {
+                console.log(error)
                 setTimeout(() => {
                     this.loading = false
                 }, 100)
                 this.error = true
-                this.errorMsg = this.getResponseErrorCode(error)
-                this.errorMsg = this.getMessageForCode(this.errorMsg).toUpperCase()
+                if (this.errorMsg.length < 1) {
+                    this.errorMsg = this.getResponseErrorCode(error)
+                    this.errorMsg = this.getMessageForCode(this.errorMsg).toUpperCase()
+                }
                 notificationBus.$emit('createNotification', {
                     message: this.errorMsg,
                     type: "error"
