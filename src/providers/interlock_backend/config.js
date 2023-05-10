@@ -60,6 +60,8 @@ const urls = {
         insert: 'api/users/insert/',
         bulkInsert: 'api/users/bulkInsert/',
         bulkDelete: 'api/users/bulkDelete/',
+        bulkAccountStatusChange: 'api/users/bulkAccountStatusChange/',
+        bulkUnlock: 'api/users/bulkUnlock/',
         update: 'api/users/update/',
         updateSelf: 'api/users/updateSelf/',
         delete: 'api/users/delete/',

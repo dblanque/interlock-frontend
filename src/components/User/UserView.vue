@@ -50,29 +50,80 @@
           </v-btn>
         </v-row>
       </v-row>
-      <v-row class="ma-0 pa-0 px-4" justify="end">
+      <v-row class="ma-0 pa-0 px-4" justify="center">
           <!-- Import Button -->
           <v-btn class="pa-2 mx-2" small
-          :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
+          :dark="!loading && !isThemeDark($vuetify)" 
+          :light="!loading && isThemeDark($vuetify)"
           :disabled="loading" 
           @click="openDialog('userImport')">
             <v-icon small class="ma-0 pa-0 mr-1">mdi-import</v-icon>
-            {{ $t('actions.import') + ' ' + $t('classes.user.plural') }}
+            {{ $t('actions.import') }}
+          </v-btn>
+          <!-- Mass Enable Button -->
+          <v-btn class="pa-2 mx-2" small
+          :dark="!actionButtonsDisabled && !isThemeDark($vuetify)" 
+          :light="!actionButtonsDisabled && isThemeDark($vuetify)"
+          color="green" @click="massAccountStatusChange(false)"
+          :disabled="loading || tableData.selected.length < 1">
+            <v-icon small class="ma-0 pa-0 mr-1">mdi-check</v-icon>
+            {{ $t('actions.enable') }}
+          </v-btn>
+          <!-- Mass Disable Button -->
+          <v-btn class="pa-2 mx-2" small
+          :dark="!actionButtonsDisabled && !isThemeDark($vuetify)" 
+          :light="!actionButtonsDisabled && isThemeDark($vuetify)"
+          @click="massAccountStatusChange(true)"
+          :disabled="loading || tableData.selected.length < 1">
+            <v-icon small :class="(!actionButtonsDisabled ? 'clr-red' : '') + ' clr-slig-70 ma-0 pa-0 mr-1'">mdi-close</v-icon>
+            <span :class="!actionButtonsDisabled ? 'clr-red clr-slig-70' : ''">
+              {{ $t('actions.disable') }}
+            </span>
+          </v-btn>
+          <!-- Mass Unlock Button -->
+          <v-btn class="pa-2 mx-2" small
+          @click="massUnlock()"
+          :dark="!actionButtonsDisabled && !isThemeDark($vuetify)" 
+          :light="!actionButtonsDisabled && isThemeDark($vuetify)"
+          :disabled="actionButtonsDisabled">
+          <span>
+            <v-icon small class="ma-0 pa-0 mr-1">mdi-lock-open</v-icon>
+            {{ $t('actions.unlock') }}
+          </span>
           </v-btn>
           <!-- Mass Delete Button -->
-          <v-btn class="pa-2 mx-2 text-white" small
+          <v-btn class="pa-2 mx-2" small
+          :dark="!actionButtonsDisabled && !isThemeDark($vuetify)" 
+          :light="!actionButtonsDisabled && isThemeDark($vuetify)"
           color="red" @click="openDeleteDialog()"
-          :disabled="loading || tableData.selected.length < 1">
-            <v-icon small class="ma-0 pa-0 mr-1 clr-white">mdi-delete</v-icon>
-            {{ $t('actions.delete') + ' ' + $t('classes.user.plural') }}
+          :disabled="actionButtonsDisabled">
+            <v-icon small :class="(actionButtonsDisabled ? '' : 'clr-white') + ' ma-0 pa-0 mr-1'">mdi-delete</v-icon>
+            <span :class="actionButtonsDisabled ? '' : 'text-white'">
+              {{ $t('actions.delete') }}
+            </span>
           </v-btn>
       </v-row>
     </template>
     <!-- USER IS ENABLED STATUS -->
     <template v-slot:[`item.is_enabled`]="{ item }">
 
-        <!-- Enable User Button -->
-        <v-tooltip color="red" bottom v-if="item.is_enabled">
+        <!-- Same User Icon -->
+        <v-tooltip bottom v-if="isLoggedInUser(item.username)">
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            v-on="on"
+            class="clr-primary">
+            mdi-account
+          </v-icon>
+        </template>
+        <span>{{ $t('section.users.youAreHere') }} 
+          <v-icon class="clr-white">mdi-emoticon</v-icon>
+        </span>
+      </v-tooltip>
+
+      <!-- Enable User Button -->
+      <v-tooltip color="red" bottom v-else-if="item.is_enabled">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon
             rounded
@@ -332,6 +383,11 @@ export default {
   created() {
     this.listUserItems();
   },
+  computed: {
+    actionButtonsDisabled() {
+      return this.loading || this.tableData.selected.length < 1
+    }
+  },
   props: {
     viewTitle: String,
     snackbarTimeout: Number
@@ -452,6 +508,13 @@ export default {
         headerDict.sortable = false
         this.tableData.headers.push(headerDict)
         this.tableData.items = users
+        for (let i = 0; i < this.tableData.items.length; i++) {
+          const user = this.tableData.items[i];
+          if (user.username == localStorage.getItem('username')) {
+            this.tableData.items[i]["isSelectable"] = false
+            break
+          }
+        }
         this.loading = false
         this.error = false
         if (emitNotif == true)
@@ -559,6 +622,68 @@ export default {
     async refreshUser(item){
       await this.fetchUser(item, this.editableForm, false);
       this.$refs.UserDialog.syncUser()
+    },
+    async massAccountStatusChange(disable){
+      this.loading = true
+      this.error = false
+      this.errorMsg = false
+      const current_user = localStorage.getItem('username')
+      const actionMsg = disable ? this.$t("words.disabled") : this.$t("words.enabled")
+      const actionType = disable ? 'warning' : 'success'
+      if (this.tableData.selected.find(v => v == current_user)) {
+        this.openDialog('userAntilockout');
+      }
+      else {
+        await new User({}).bulkAccountStatusChange({
+          "disable": disable,
+          "users": this.tableData.selected
+        })
+        .then(() => {
+          this.loading = false
+          this.error = false
+          this.errorMsg = false
+          this.listUserItems(false);
+          notificationBus.$emit('createNotification', 
+            {
+              message: (this.$t("classes.user.plural") + " " + actionMsg).toUpperCase(), 
+              type: actionType
+            }
+          );
+        })
+        .catch(error => {
+          console.log(error)
+          this.loading = false
+          this.error = true
+          this.errorMsg = this.getMessageForCode(error)
+          this.listUserItems(false);
+        })
+      }
+    },
+    async massUnlock(){
+      this.loading = true
+      this.error = false
+      this.errorMsg = false
+      await new User({}).bulkUnlock(this.tableData.selected)
+      .then(() => {
+        this.loading = false
+        this.error = false
+        this.errorMsg = false
+        this.listUserItems(false);
+        notificationBus.$emit('createNotification', 
+          {
+            message: (this.$t("classes.user.plural") + " " + this.$t("words.unlocked.plural.n").toUpperCase()).toUpperCase(),
+            icon: 'mdi-lock-open',
+            type: 'info'
+          }
+        );
+      })
+      .catch(error => {
+        console.log(error)
+        this.loading = false
+        this.error = true
+        this.errorMsg = this.getMessageForCode(error)
+        this.listUserItems(false);
+      })
     },
     userSaved(){
       this.listUserItems(false)

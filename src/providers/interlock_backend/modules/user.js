@@ -35,6 +35,26 @@ const actions = {
         })
     },
 
+    bulkAccountStatusChange: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.bulkAccountStatusChange, data).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
+    bulkUnlock: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.bulkUnlock, data).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
     enable: (username)=>{
         const data = {}
         data['username'] = username

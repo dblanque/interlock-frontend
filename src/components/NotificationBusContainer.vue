@@ -70,7 +70,7 @@ export default {
                     break;
                 case 'warning':
                     this.snackbarColor = 'orange'
-                    this.snackbarIcon = 'mdi-alert-circle'
+                    this.snackbarIcon = 'mdi-alert-box'
                     break;
                 case 'error':
                     this.snackbarColor = 'red'
@@ -86,6 +86,8 @@ export default {
                     this.snackbarIcon = 'mdi-information'
                     break;
             }
+            if (notifObj.icon)
+                this.snackbarIcon = notifObj.icon
             this.snackBarTimer = setTimeout(() => {
                 this.showSnackbar = false
             }, this.snackbarTimeout)

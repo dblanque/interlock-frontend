@@ -206,6 +206,18 @@
           "f":"Loaded",
           "n":"Loaded"
         }
+      },
+      "unlocked": {
+        "single":{
+          "m":"Unlocked",
+          "f":"Unlocked",
+          "n":"Unlocked"
+        },
+        "plural":{
+          "m":"Unlocked",
+          "f":"Unlocked",
+          "n":"Unlocked"
+        }
       }
   },
   "classes":{
@@ -645,6 +657,7 @@
       "export":{
         "title":"User Bulk Export"
       },
+      "youAreHere":"You are here",
       "userUnlocked": "User unlocked Successfully",
       "errorUserUnlock": "Error unlocking User",
       "tryingToDisable": "You're trying to disable",

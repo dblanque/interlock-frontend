@@ -212,6 +212,18 @@
         "f":"Cargadas",
         "n":"Cargado"
       }
+    },
+    "unlocked": {
+      "single":{
+        "m":"Desbloqueado",
+        "f":"Desbloqueada",
+        "n":"Desbloqueado"
+      },
+      "plural":{
+        "m":"Desbloqueados",
+        "f":"Desbloqueadas",
+        "n":"Desbloqueados"
+      }
     }
   },
   "classes":{
@@ -651,6 +663,7 @@
       "export":{
         "title":"Exportación de Usuarios"
       },
+      "youAreHere":"Usted está aquí",
       "userUnlocked": "Usuario desbloqueado Exitosamente",
       "errorUserUnlock": "Error al desbloquear el Usuario",
       "tryingToDisable": "Está intentando des-habilitar",
