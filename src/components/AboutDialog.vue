@@ -61,14 +61,21 @@
             </v-row>
 
             <v-row class="ma-0 pa-0" justify="center">
-                {{ $t('misc.version') }}: 0.74.5
+                {{ $t('misc.version') + ": " + version }}
             </v-row>
         </v-card-text>
     </v-card>
 </template>
 
 <script>
+import ilckVersion from "@/providers/interlock_backend/version.js";
+
 export default {
+    data(){
+        return {
+            version: ilckVersion
+        }
+    },
     methods: {
         closeDialog() {
             this.$emit('close')
