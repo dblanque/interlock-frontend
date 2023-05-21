@@ -63,6 +63,7 @@ const validationMixin = {
       inputRulesIP: (v) => !v || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[1]?[0-9][0-9]?)$/.test(v) || i18n.t("error.validation.ipAddress"),
       inputRulesREALM: (v) => !v || /^[A-Z]{1,15}$/.test(v) || i18n.t("error.validation.realm"),
       inputRulesPORT: (v) => !v || /^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/.test(v) || i18n.t("error.validation.ldapURI_PORT"),
+      inputRuleTOTP: (v) => !v || /^[0-9]{6}$/.test(v) || i18n.t("error.validation.totpLength"),
 
       // Phone Regex Rules
       //inputRulesPhone: (v) => !v || /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(v) || /.+[0-9]{2}[0-9]{1,2}[0-9]{2}[0-9]{4}[0-9]{4}/.test(v) || i18n.t("error.validation.phone"),
@@ -151,7 +152,7 @@ const validationMixin = {
        *
        * fieldName naming convention: class + field
        * Example: Generic Email => ge_email
-       * Example: Customer Email => cu_email 
+       * Example: Customer Email => cu_email
       */
       fieldRules(v, fieldName, isRequired) {
         var message = true;
@@ -174,108 +175,111 @@ const validationMixin = {
         switch (fieldName) {
           // Generic Field Rules
           case "ge_lettersStrictUnderscore": // Generic
-              rules.push(this.inputRulesLettersStrictUnderscore)
+            rules.push(this.inputRulesLettersStrictUnderscore)
             break;
           case "ge_lettersStrict": // Generic
-              rules.push(this.inputRulesLettersStrict)
+            rules.push(this.inputRulesLettersStrict)
             break;
           case "ge_numbers": // Generic INT Field
-              rules.push(this.inputRulesNumbers)
+            rules.push(this.inputRulesNumbers)
             break;
           case "ge_name": // Generic Name Field
-              rules.push(this.inputRulesalphaNumericSpecialName)
+            rules.push(this.inputRulesalphaNumericSpecialName)
             break;
           case "ge_cn": // Generic Common Name
-              rules.push(this.inputRulesalphaNumericSpecialCN)
+            rules.push(this.inputRulesalphaNumericSpecialCN)
             break;
           case "ge_integer": // Generic Integer Field
-              rules.push(this.inputRulesAboveZero)
+            rules.push(this.inputRulesAboveZero)
             break;
           case "ge_username": // Generic Username Field
-              rules.push(this.inputRulesalphaNumericSpecialUsername)
+            rules.push(this.inputRulesalphaNumericSpecialUsername)
             break;
           case "ge_password": // Generic Password Field
-              rules.push(this.inputRulesalphaNumericPassword)
+            rules.push(this.inputRulesalphaNumericPassword)
             break;
           case "ldap_dn": // LDAP Distinguished Name validator
-              rules.push(this.inputRulesDN)
+            rules.push(this.inputRulesDN)
             break;
           case "net_ip": // LDAP Realm validator
-              rules.push(this.inputRulesIP)
+            rules.push(this.inputRulesIP)
             break;
           case "net_port": // LDAP Realm validator
-              rules.push(this.inputRulesPORT)
+            rules.push(this.inputRulesPORT)
             break;
           case "net_domain_canonical": // LDAP Domain validator
-              rules.push(this.inputRulesDomainCanonical)
+            rules.push(this.inputRulesDomainCanonical)
             break;
           case "ldap_realm": // LDAP Realm validator
-              rules.push(this.inputRulesREALM)
+            rules.push(this.inputRulesREALM)
             break;
           case "ldap_website": // LDAP Domain validator
-              rules.push(this.inputRulesDomainNonTLD)
+            rules.push(this.inputRulesDomainNonTLD)
             break;
           case "ldap_usn": // LDAP User Principal Name validator
-              rules.push(this.inputRulesUSN)
+            rules.push(this.inputRulesUSN)
             break;
           case "ge_message": // Generic Name Field
-              rules.push(this.inputRulesalphaNumericSpecial)
+            rules.push(this.inputRulesalphaNumericSpecial)
             break;
           case "ge_topic": // Generic Name Field
-              rules.push(this.inputRulesalphaNumericSpecial)
+            rules.push(this.inputRulesalphaNumericSpecial)
             break;
           case "ge_email": // E-mail
           case "ge_mail":
-              rules.push(this.inputRulesEmail);
+            rules.push(this.inputRulesEmail);
             break;
           case "ge_fiscal_number": // CUIT
-              rules.push(this.inputRulesDNIMatchesCUIT)
+            rules.push(this.inputRulesDNIMatchesCUIT)
               break;
           case "ge_phone":
-              rules.push(this.inputRulesPhone_ext)
+            rules.push(this.inputRulesPhone_ext)
             break;
           case "ge_website":
-              rules.push(this.inputRulesDomain)
+            rules.push(this.inputRulesDomain)
             break;
           case "ge_address_street": // Address Street
-              rules.push(this.inputRulesalphaNumericSpecial)
+            rules.push(this.inputRulesalphaNumericSpecial)
             break;
           case "ge_price":
           case "ge_address_number": // Address Number
-              rules.push(this.inputRulesNumbers)
+            rules.push(this.inputRulesNumbers)
             break;
           case "ge_address_floor": // Address Floor
-              rules.push(this.inputRulesalphaNumericSpaces, this.inputRulesMax4)
+            rules.push(this.inputRulesalphaNumericSpaces, this.inputRulesMax4)
             break;
           case "ge_address_apartment": // Address Apartment
-              rules.push(this.inputRulesalphaNumericSpaces, this.inputRulesMax6)
+            rules.push(this.inputRulesalphaNumericSpaces, this.inputRulesMax6)
             break;
           case "ge_address_postal_code": // Address Postal Code
-              rules.push(this.inputRulesalphaNumericSpaces, this.inputRulesMax8)
+            rules.push(this.inputRulesalphaNumericSpaces, this.inputRulesMax8)
             break;
           case "ge_address_city": // Address City
-              rules.push(this.inputRulesalphaNumericSpecial)
+            rules.push(this.inputRulesalphaNumericSpecial)
             break;
           case "ge_state": // State
-              rules.push(this.inputRulesalphaNumericSpecial)
+            rules.push(this.inputRulesalphaNumericSpecial)
             break;
           case "ge_type":
-              rules.push(this.inputRulesLetters)
+            rules.push(this.inputRulesLetters)
             break;
           case "ge_country": // Country
-              rules.push(this.inputRulesCountry)
+            rules.push(this.inputRulesCountry)
             break;
           case "ge_ascii": // ASCII Only
-              rules.push(this.inputRulesFullASCIISet)
+            rules.push(this.inputRulesFullASCIISet)
             break;
           case "dns_stringData": // StringData
-              rules.push(this.inputRulesFullASCIISet, this.inputRulesNoDoubleQuotes, this.inputRulesMax255)
+            rules.push(this.inputRulesFullASCIISet, this.inputRulesNoDoubleQuotes, this.inputRulesMax255)
             break;
           case "dns_root": // DNS Root Validation
-              rules.push(this.inputRulesDomainRoot)
+            rules.push(this.inputRulesDomainRoot)
             break;
           case "set_log_max": // DNS Root Validation
-              rules.push(this.inputRulesAboveZero, this.inputRulesBelow10000, this.inputRulesNumbers)
+            rules.push(this.inputRulesAboveZero, this.inputRulesBelow10000, this.inputRulesNumbers)
+            break;
+          case "auth_totp":
+            rules.push(this.inputRulesNumbers, this.inputRuleTOTP)
             break;
           default:
             break;

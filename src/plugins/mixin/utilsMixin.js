@@ -4,6 +4,15 @@
 
 const utilsMixin = {
     methods:{
+        isNumber: function(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();
+            } else {
+                return true;
+            }
+        },
         getResponseErrorCode(errorData=undefined) {
             if (errorData == undefined) {
                 console.log('Error Data is undefined')
@@ -60,6 +69,12 @@ const utilsMixin = {
                 // Users -------------------------------------------------------- //
             case 'noUsersInImport':
                 return this.$t('error.codes.users.noUsersInImport')
+            // OTP ---------------------------------------------------------- //
+            case 'otp_invalid_code':
+            case 'otp_invalid_data':
+            case 'otp_required':
+            case 'otp_no_device_registered':
+                return this.$t('error.codes.otp.'+codeToUse)
             // DNS ---------------------------------------------------------- //
             case 'dns_zone_missing':
             case 'dns_zone_in_record':
@@ -80,8 +95,7 @@ const utilsMixin = {
             case 'dns_root_servers_only_cli':
             case 'dns_list_response_empty':
             case 'dns_field_validator_failed':
-                var result = this.$t('error.codes.dns.'+codeToUse)
-                return result
+                return this.$t('error.codes.dns.'+codeToUse)
             // -------------------------------------------------------------- //
             case null:
             case undefined:

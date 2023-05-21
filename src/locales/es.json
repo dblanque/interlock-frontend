@@ -308,6 +308,12 @@
         "verified_successfully": "Verificado Exitosamente",
         "verification_expired": "Intentos de Verificación acabados, contacte un administrador"
       },
+      "otp":{
+        "otp_invalid_code":"Código OTP inválido",
+        "otp_invalid_data":"Datos OTP inválidos",
+        "otp_required":"Se requiere el Código OTP",
+        "otp_no_device_registered":"No se registró el Dispositivo OTP"
+      },
       "dns":{
         "dns_zone_missing":"Valor de Zona DNS Inválido",
         "dns_zone_in_record":"El Registro no debe incluir la Zona",
@@ -382,7 +388,8 @@
       "ipAddress":"Dirección de IP inválida",
       "distinguishedName":"Nombre Distinguido inválido",
       "realm":"Reino NT inválido",
-      "domainCanonical":"Debe ser un Dominio en formato Canónico (con un punto al final)"
+      "domainCanonical":"Debe ser un Dominio en formato Canónico (con un punto al final)",
+      "totpLength":"El Código TOTP debe tener 6 dígitos"
     },
     "unableToLoad":"No se pudo cargar la sección",
     "notDisplayedCorrectly": "No se pudo obtener un código de error",
@@ -825,7 +832,7 @@
       "password": "Contraseña",
       "passwordConfirm": "Confirmar Contraseña",
       "role": "Permisos",
-	  "totp_code":"Código TOTP"
+	    "totp_code":"Código TOTP"
     },
     "phone": "Teléfono",
     "phoneNumber": "Número Telefónico",
@@ -852,10 +859,20 @@
   },
   "userAccountDropdown":{
     "title":"Cuenta",
+    "title_long":"Preferencias de la Cuenta",
     "logout":"Cerrar Sesión",
     "changePreferences":"Cambiar Preferencias",
     "two_factor_title":"Autenticación de Doble Factor",
-    "enable_two_factor":"Habilitar 2FA TOTP"
+    "enable_two_factor":"Habilitar 2FA TOTP",
+    "showQR":"Ver Código QR de TOTP",
+    "hideQR":"Esconder Código QR",
+    "validateTOTP":"Validar Código QR TOTP",
+    "totpCodeFieldLabel":"Código TOTP de 6 dígitos",
+    "totpCreated":"Código TOTP Creado",
+    "totpDeleted":"Código TOTP Eliminado",
+    "totpValidated":"Código TOTP Validado",
+    "qrIsEnabled":"TOTP 2FA está habilitado",
+    "qrInfo":"Escanee el Código QR con una App de Autenticación TOTP"
   },
   "misc": {
     "version":"Versión",

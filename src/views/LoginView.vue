@@ -42,7 +42,6 @@
             <!-- USER / EMAIL FIELD -->
             <v-row v-if="modeUser" justify="center" class="ma-0 pa-0">
               <v-text-field
-                autofocus
                 outlined
                 dense
                 v-model="username"
@@ -95,6 +94,8 @@
               <v-text-field
                 outlined
                 dense
+                :rules="[this.fieldRules(totp_code, 'auth_totp')]"
+                @keypress="isNumber($event)"
                 :label="$t('attribute.users.totp_code')"
                 type="text"
                 prepend-inner-icon="mdi-qrcode"
@@ -294,7 +295,13 @@ export default {
       else {
         this.submitted = true;
         var user = new User({})
-        await user.login(this.username, this.password)
+        var data = {
+          username: this.username,
+          password: this.password
+        }
+        if (this.totp_code.length > 0)
+          data.totp_code = this.totp_code
+        await user.login(data)
         .then(response =>{
           if(response.data.access != undefined) {
             this.error = false

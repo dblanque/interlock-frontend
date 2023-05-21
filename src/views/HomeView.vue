@@ -53,10 +53,10 @@
             :buttonIsSmall="true"
           />
           <!-- Remove this in production -->
-          <!-- <v-btn @click="debugAction"
+          <v-btn @click="debugAction" v-if="false"
            outlined class="mx-3" rounded color="red">
             Debug
-          </v-btn> -->
+          </v-btn>
         </div>
       </v-col>
     </v-row>
@@ -603,7 +603,7 @@ export default {
     },
     async debugAction() {
       console.log('This button should be removed and/or disabled in production')
-      await new Test({}).post()
+      await new Test({}).delete()
       .then(response => {
         console.log(response)
       })

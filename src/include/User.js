@@ -59,13 +59,14 @@ class User extends ApiModel{
 
     /**
      * Logins as User, Standard Call.
+     * Data contains:
      * @param {String} username 
-     * @param {String} password 
+     * @param {String} password
+     * @param {Integer} totp_code [Optional]
      * @returns Response Promise, Exception on Failure.
      */
-    async login(username, password){
-        const params = {username: username,password: password}
-        return await interlock_backend.call('auth/login', params)
+    async login(data){
+        return await interlock_backend.call('auth/login', data)
     }
 
     /**

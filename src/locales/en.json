@@ -302,6 +302,12 @@
               "verified_successfully": "Verified Successfully",
               "verification_expired": "Verification codes have been exhausted, contact an admin"
           },
+          "otp":{
+            "otp_invalid_code":"OTP Code is invalid",
+            "otp_invalid_data":"OTP Data is invalid",
+            "otp_required":"OTP Code is Required",
+            "otp_no_device_registered":"No OTP Device Registered"
+          },
           "dns":{
             "dns_zone_missing":"Zone Value is invalid",
             "dns_zone_in_record":"Zone must not be included in Record Name",
@@ -376,7 +382,8 @@
           "ipAddress":"Invalid IP Address",
           "distinguishedName":"Distinguished Name is invalid",
           "realm":"NT Realm is invalid",
-          "domainCanonical":"Must be a valid Domain in Canonical format (with a dot at the end)"
+          "domainCanonical":"Must be a valid Domain in Canonical format (with a dot at the end)",
+          "totpLength":"TOTP Code must be 6 digits long"
       },
       "unableToLoad":"Unable to load",
       "notDisplayedCorrectly": "Could not get error message to display",
@@ -818,7 +825,7 @@
           "password": "Password",
           "passwordConfirm": "Confirm Password",
           "role": "Role",
-		  "totp_code":"TOTP Code"
+		      "totp_code":"TOTP Code"
       },
       "phone": "Phone",
       "phoneNumber": "Phone Number",
@@ -845,10 +852,20 @@
   },
   "userAccountDropdown":{
     "title":"Account",
+    "title_long":"Account Preferences",
     "logout":"Logout",
     "changePreferences":"Change Preferences",
     "two_factor_title":"Two-Factor Authentication",
-    "enable_two_factor":"Enable TOTP 2FA"
+    "enable_two_factor":"Enable TOTP 2FA",
+    "showQR":"Show TOTP QR Code",
+    "hideQR":"Hide QR Code",
+    "validateTOTP":"Validate TOTP QR Code",
+    "totpCodeFieldLabel":"6-digit TOTP Code",
+    "totpCreated":"TOTP Code Created",
+    "totpDeleted":"TOTP Code Deleted",
+    "totpValidated":"TOTP Code Validated",
+    "qrIsEnabled":"TOTP 2FA is enabled",
+    "qrInfo":"Scan this QR Code with a TOTP Authenticator App"
   },
   "misc":{
     "version":"Version",
