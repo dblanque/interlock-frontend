@@ -13,6 +13,7 @@ import domainCalls from '@/providers/interlock_backend/modules/domain.js'
 import dnsRecordCalls from '@/providers/interlock_backend/modules/dnsrecord.js'
 import settingCalls from '@/providers/interlock_backend/modules/settings.js'
 import logCalls from '@/providers/interlock_backend/modules/log.js'
+import totpCalls from '@/providers/interlock_backend/modules/totp.js'
 import testCalls from '@/providers/interlock_backend/modules/test.js'
 
 const modules = {
@@ -24,6 +25,7 @@ const modules = {
     log: logCalls,
     domain: domainCalls,
     dnsr: dnsRecordCalls,
+    totp: totpCalls,
     test: testCalls,
 }
 

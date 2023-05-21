@@ -429,6 +429,8 @@
   },
   "ldap":{
     "attributes":{
+      "realm":"Reino NT",
+      "domain":"Dominio",
       "name":"Nombre",
       "objectRid":"Identificador Relativo del Objeto (RID)",
       "objectSid":"Identificador de Seguridad del Objeto (SID)",
@@ -822,7 +824,8 @@
       "permissionsProfile": "Perfil de Permisos",
       "password": "Contraseña",
       "passwordConfirm": "Confirmar Contraseña",
-      "role": "Permisos"
+      "role": "Permisos",
+	  "totp_code":"Código TOTP"
     },
     "phone": "Teléfono",
     "phoneNumber": "Número Telefónico",
@@ -847,6 +850,13 @@
     "about": "Más Información",
     "donate": "Donar"
   },
+  "userAccountDropdown":{
+    "title":"Cuenta",
+    "logout":"Cerrar Sesión",
+    "changePreferences":"Cambiar Preferencias",
+    "two_factor_title":"Autenticación de Doble Factor",
+    "enable_two_factor":"Habilitar 2FA TOTP"
+  },
   "misc": {
     "version":"Versión",
     "autocomputedField":"Campo con computado automático",
@@ -854,7 +864,6 @@
     "logoutMsg":"¿Está seguro de cerrar su sesión?",
     "loggedOut":"Sesión cerrada exitosamente",
     "logoutForbiddenMsg":"Por favor Inicie Sesión nuevamente",
-    "logoutTooltip":"Cerrar Sesión",
     "themerTooltip":"Cambiar Tema",
     "tokenRefreshed":"Token de Acceso Refrescado",
     "actionRequired":"Acción Requerida",

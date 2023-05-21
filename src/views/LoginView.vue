@@ -90,6 +90,22 @@
                 @click:append="() => (value = !value)"
               ></v-text-field>
             </v-row>
+            <!-- TOTP FIELD -->
+            <v-row justify="center" class="ma-0 pa-0 mt-3">
+              <v-text-field
+                outlined
+                dense
+                :label="$t('attribute.users.totp_code')"
+                type="text"
+                prepend-inner-icon="mdi-qrcode"
+                v-model="totp_code"
+                :disabled="submitted"
+                @keydown.enter="submit()"
+                class="login-pwd-field login-field font-weight-bold mb-2"
+                required
+                @click:append="() => (value = !value)"
+              ></v-text-field>
+            </v-row>
             <v-row justify="center">
               <LanguageSelector class="font-weight-medium"/>
             </v-row>
@@ -183,6 +199,7 @@ export default {
       errorMsg: "",
       username: "",
       password: "",
+      totp_code: "",
       submitted: false,
       logoutSnackbar: false,
       snackbarMessage: "",

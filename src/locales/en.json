@@ -423,12 +423,14 @@
   },
   "ldap":{
     "attributes":{
+      "realm":"NT Realm",
+      "domain":"Domain",
       "name":"Name",
       "objectRid":"Object Relative Identifier (RID)",
       "objectSid":"Object Security Identifier (SID)",
       "hasMembers":"Populated",
       "sAMAccountName":"Account Name",
-      "username":"User Name",
+      "username":"Username",
       "givenName":"First Name",
       "sn":"Last Name",
       "cn":"Common Name",
@@ -815,7 +817,8 @@
       "users":{
           "password": "Password",
           "passwordConfirm": "Confirm Password",
-          "role": "Role"
+          "role": "Role",
+		  "totp_code":"TOTP Code"
       },
       "phone": "Phone",
       "phoneNumber": "Phone Number",
@@ -840,6 +843,13 @@
     "about":"About",
     "donate":"Donate"
   },
+  "userAccountDropdown":{
+    "title":"Account",
+    "logout":"Logout",
+    "changePreferences":"Change Preferences",
+    "two_factor_title":"Two-Factor Authentication",
+    "enable_two_factor":"Enable TOTP 2FA"
+  },
   "misc":{
     "version":"Version",
     "autocomputedField":"Autocomputed Field",
@@ -847,7 +857,7 @@
     "logoutMsg":"Are you sure you wish to Logout?",
     "loggedOut":"Logout Successful",
     "logoutForbiddenMsg":"Please Log in Again",
-    "logoutTooltip":"Logout",
+    "changePreferences":"Change Preferences",
     "themerTooltip":"Change Theme",
     "tokenRefreshed":"Access Token Refreshed",
     "actionRequired":"Action Required",
