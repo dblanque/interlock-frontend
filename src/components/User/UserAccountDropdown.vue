@@ -31,9 +31,8 @@
         </v-list-item-group>
         <v-divider class="my-1 mx-4"/>
         <v-list-item-group>
-            <v-list-item v-for="v, k in entries" :key="k" link>
-                <v-list-item-action
-                    class="ma-0 pa-0" @click="doFn(v.action)">
+            <v-list-item v-for="v, k in entries" :key="k" link @click="doFn(v.action)">
+                <v-list-item-action class="ma-0 pa-0">
                     <v-row>
                         <v-icon v-if="v.prepend_icon.length > 0" class="mr-2">
                             {{ v.prepend_icon }}
