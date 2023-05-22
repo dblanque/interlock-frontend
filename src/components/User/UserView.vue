@@ -57,7 +57,7 @@
           :light="!loading && isThemeDark($vuetify)"
           :disabled="loading" 
           @click="openDialog('userImport')">
-            <v-icon small class="ma-0 pa-0 mr-1">mdi-import</v-icon>
+            <v-icon small class="ma-0 pa-0 mr-1">mdi-file-import</v-icon>
             {{ $t('actions.import') }}
           </v-btn>
           <!-- Mass Enable Button -->
