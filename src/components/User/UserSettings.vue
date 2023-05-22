@@ -122,7 +122,7 @@
             <v-form @submit.prevent style="width: 100%;"
                 class="ma-0 pa-0" ref="TOTPForm" v-if="!noTotp && !totp_confirmed">
             <v-row class="ma-0 pa-0" justify="center" align="center">
-                <v-col cols="4" class="ma-0 pa-0 mb-2">
+                <v-col cols="auto" class="ma-0 pa-0 mb-2">
                     <v-text-field 
                         v-model="totp_code"
                         :label="$t('userAccountDropdown.totpCodeFieldLabel')"
@@ -132,7 +132,7 @@
                         outlined
                         dense/>
                 </v-col>
-                <v-col cols="3" class="ma-0 pa-0 mb-2 mx-2">
+                <v-col cols="auto" class="ma-0 pa-0 mb-2 mx-2">
                     <v-btn color="primary" outlined
                     class="mb-6"
                     :disabled="noTotp || loading"
@@ -142,11 +142,14 @@
                 </v-col>
             </v-row>
             </v-form>
-            <v-col cols="12" v-if="totp_uri.length > 0 && two_factor_auth && showQR" 
+            <v-row cols="12" v-if="totp_uri.length > 0 && two_factor_auth && showQR"
                 class="ma-0 pa-0" 
                 justify="center">
-                <QrcodeVue :value="totp_uri" :size="225" level="H" />
-            </v-col>
+                <v-card class="pa-2 pb-0" elevation="0"
+                light width="fit-content" :outlined="!isThemeDark($vuetify)">
+                    <QrcodeVue class="ma-0 pa-0" :value="totp_uri" :size="225" level="H" />
+                </v-card>
+            </v-row>
         </v-row>
 
         <!-- Actions -->

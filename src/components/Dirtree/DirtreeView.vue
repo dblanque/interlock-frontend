@@ -3,7 +3,7 @@
 <!-------------------------- File: DirtreeView.vue ---------------------------->
 <template>
   <v-row justify="center" class="mt-2 mb-2">
-    <v-card flat outlined class="pa-2" max-width="1200px">
+    <v-card flat outlined class="pa-2" max-width="1200px" width="90%">
       <!-- Actions Row -->
       <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-text-field clearable
@@ -31,8 +31,11 @@
           </v-btn>
         </v-row>
       </v-row>
-      <v-row justify="center" justify-lg="end" class="ma-0 pa-0 mx-6 mb-4" style="position: relative;">
-        <v-btn elevation="0" rounded class="pa-2 mx-2 mr-0 pill-start" color="primary" @click="openDialog('dirtreeOUCreate')">
+      <v-row 
+        :justify="$vuetify.breakpoint.lgAndUp ? 'end':'center'" 
+        class="ma-0 pa-0 mx-6 mb-4" 
+        style="position: relative;">
+        <v-btn elevation="0" class="pa-2 mx-2 mr-0 pill-start" color="primary" @click="openDialog('dirtreeOUCreate')">
           <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
           {{ $t('actions.addN') + " " + $t("classes.organizational-unit.single") }}
         </v-btn>
@@ -41,7 +44,7 @@
         v-model="actionListOpen" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)" offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on"
-            style="min-width: 32px;" elevation="0" rounded class="pa-0 px-2 pr-3 pill-end" color="primary">
+            style="min-width: 32px;" elevation="0" class="pa-0 px-2 pr-3 pill-end" color="primary">
               <v-icon id="floatingActionListButton" :class="actionListOpen == true  ? 'active' : ''">
                 mdi-chevron-down
               </v-icon>
@@ -67,61 +70,85 @@
   
       <!-- Item Legends -->
       <v-card flat outlined class="ma-1 pa-2">
-        <v-col cols="12">
-          <h4>{{ $t('words.legend') }}</h4>
-        </v-col>
-        <v-row :justify="$vuetify.breakpoint.mdAndUp ? 'end': 'center'" class="mx-7 my-2" align="center">
-          <v-alert color="secondary" class="ma-0" type="info" dense rounded="xl">
-            {{ $t("section.dirtree.filterHint") }}
-          </v-alert>
-          <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
+        <v-row :justify="$vuetify.breakpoint.mdAndUp ? 'end': 'center'" class="ma-0 pa-0 my-1" align="center">
           <v-btn @click="resetDirtree"
-          outlined rounded color="primary" class="ma-0 pa-0 px-3">
-            <v-icon class="mr-1">
+          outlined small color="primary" class="ma-0 pa-0 pa-1">
+            <v-icon class="ma-0 pa-0 mr-1">
               mdi-filter-remove-outline
             </v-icon>
             {{ $t('actions.resetFilters') }}
           </v-btn>
           
-          <v-btn rounded :disabled="!this.tableData.items || this.tableData.items.length < 1"
-          outlined color="primary" @click="toggleOpenAll" class="ml-2">
+          <v-btn small :disabled="!this.tableData.items || this.tableData.items.length < 1"
+          outlined color="primary" @click="toggleOpenAll" class="ma-0 pa-0 pa-1 ml-2">
               <v-fab-transition>
-              <v-icon v-if="listOpenAll">
+              <v-icon class="ma-0 pa-0" v-if="listOpenAll || dirtreeOpen.length > 0">
                   mdi-chevron-double-up
               </v-icon>
-              <v-icon v-else>
+              <v-icon class="ma-0 pa-0" v-else>
                   mdi-chevron-double-down
               </v-icon>
               </v-fab-transition>
-              {{ listOpenAll ? $t("actions.closeAll") : $t("actions.openAll") }}
+              {{ listOpenAll || dirtreeOpen.length > 0 ? $t("actions.closeAll") : $t("actions.openAll") }}
           </v-btn>
-        </v-row>
-        <v-row class="px-4 ma-1" justify="center">
-          <v-col v-for="(item, key) in itemTypes" :key="item.id" cols="12" md="auto" lg="auto" class="ma-0 pa-0">
-            <v-chip v-if="item.show != false && !item.required" class="mx-2 my-1"
-            :id="'legend-'+key"
-            :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark" 
-            :color="item.filtered == true ? 'secondary' : 'primary'"
-            @click="setFilter(key)"
-            >
-              <v-icon>
-                {{ item.icon }}
-              </v-icon>
-              <span class="text-overline ml-1">
-                {{ $t('classes.' + key + '.single') }}
-              </span>
-            </v-chip>
-            <v-chip v-else-if="item.show != false && item.required" class="mx-2 my-1"
-            :light="!$vuetify.theme.dark" :dark="$vuetify.theme.dark"
-            >
-              <v-icon>
-                {{ item.icon }}
-              </v-icon>
-              <span class="text-overline ml-1">
-                {{ $t('classes.' + key + '.single') }}
-              </span>
-            </v-chip>
-          </v-col>
+
+          <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
+
+          <v-menu 
+            offset-y left 
+            nudge-bottom="1rem" 
+            :close-on-content-click="false" 
+            v-model="filterListOpen">
+              <template v-slot:activator="{ on, attrs }">
+                  <v-btn v-bind="attrs" v-on="on" small elevation="0"
+                  style="min-width: 32px;" class="pa-0 px-2 pr-1" :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)">
+                  {{ $t("actions.filter") }}
+                  <v-icon id="filterListButton" :class="filterListOpen == true  ? 'active' : ''">
+                      mdi-chevron-down
+                  </v-icon>
+                  </v-btn>
+              </template>
+              <v-list dense :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)">
+                  <v-list-item>
+                      <v-btn @click="filterAll" class="mx-1" color="primary">
+                          <v-icon>
+                              mdi-filter
+                          </v-icon>
+                          {{ $t('words.all.single.m') }}
+                      </v-btn>
+                      <v-btn @click="filterNone" class="mx-1">
+                          <v-icon>
+                              mdi-filter-outline
+                          </v-icon>
+                          {{ $t('words.none.single.m') }}
+                      </v-btn>
+                  </v-list-item>
+                  <v-list-item v-for="(item, key) in itemTypes" :key="item.id">
+                          <v-list-item-action class="ma-0 pa-0 mr-2">
+                              <v-checkbox
+                              :disabled="item.show != false && item.required"
+                              @change="setFilter(key, true)"
+                              on-icon="mdi-checkbox-blank-off-outline"
+                              color="primary"
+                              v-model="item.filtered"
+                              class="ma-0 pa-0" dense/>
+                          </v-list-item-action>
+                          <v-list-item-title class="font-weight-medium">
+                            <v-row class="ma-0 pa-0" justify="start">
+                                <v-icon>
+                                {{ item.icon }}
+                                </v-icon>
+                                <span class="text-overline ml-1">
+                                {{ $t('classes.' + key + '.single') }}
+                                </span>
+                                <v-icon class="ml-1" small v-if="key == 'person' || key == 'user'">
+                                    mdi-link
+                                </v-icon>
+                            </v-row>
+                          </v-list-item-title>
+                  </v-list-item>
+              </v-list>
+          </v-menu>
         </v-row>
         <v-progress-linear 
         :indeterminate="loading" size="100" width="7"
@@ -145,7 +172,9 @@
           >
           <!-- ICONS -->
           <template v-slot:prepend="{ item, open }">
-            <div @click="getObjectIsClickable ? changeOpenStatus(item.id) : undefined" :class="getObjectIsClickable(item) + ' '">
+            <div 
+                @click="getObjectIsClickable ? changeOpenStatus(item.id) : undefined" 
+                :class="getObjectIsClickable(item) + ' '">
               <v-icon v-if="item.builtin == true && item.type != 'Container' && item.type != 'Computer'" :color="open ? 'primary' : undefined">
                 mdi-hammer
               </v-icon>
@@ -182,8 +211,8 @@
           </template>
           <!-- LABEL -->
           <template v-slot:label="{ item }">
-          <v-row align="start" @click="getObjectIsClickable ? changeOpenStatus(item.id) : undefined" :class="getObjectIsClickable(item) + ' '">
-            <v-col cols="11" md="auto">
+          <v-row justify="start" @click="getObjectIsClickable ? changeOpenStatus(item.id) : undefined" :class="getObjectIsClickable(item) + ' '">
+            <v-col cols="auto">
               {{ item.name }}
             </v-col>
           </v-row>
@@ -379,6 +408,7 @@ export default {
             ],
             searchString: "",
             selectedObject: {},
+            filterListOpen: false,
             loading: false,
             error: false,
             dirtreeSelection: [],
@@ -404,15 +434,20 @@ export default {
                     "icon":"mdi-archive",
                     "required": false,
                 },
-                "builtin-domain":{
-                    "filtered": false,
-                    "icon": "mdi-hammer",
-                    "required": true,
-                },
+                // "builtin-domain":{
+                //     "filtered": false,
+                //     "icon": "mdi-hammer",
+                //     "required": true,
+                // },
                 "person":{
                     "filtered": false,
                     "show": false,
                     "icon":"mdi-account"
+                },
+                "user":{
+                    "filtered": false,
+                    "icon":"mdi-account",
+                    "required": false,
                 },
                 "contact":{
                     "filtered": false,
@@ -424,21 +459,16 @@ export default {
                     "icon":"mdi-google-circles-communities",
                     "required": false,
                 },
-                "user":{
-                    "filtered": false,
-                    "icon":"mdi-account",
-                    "required": false,
-                },
                 "computer":{
                     "filtered": false,
                     "icon":"mdi-monitor",
                     "required": false,
                 },
-                "organizational-unit":{
-                    "filtered":false,
-                    "icon":"mdi-folder",
-                    "required": true,
-                },
+                // "organizational-unit":{
+                //     "filtered":false,
+                //     "icon":"mdi-folder",
+                //     "required": true,
+                // },
             },
         }
     },
@@ -446,14 +476,6 @@ export default {
       this.fetchDirtree();
     },
     watch: {
-      // dirtreeSelection(newValue, oldValue) {
-      //   console.log(oldValue)
-      //   console.log(newValue)
-      // },
-      // dirtreeOpen(newValue, oldValue) {
-      //   console.log(oldValue)
-      //   console.log(newValue)
-      // },
       'dialogs': {
           handler: function (newValue) {
             if (!newValue['dirtreeMove'] || newValue['dirtreeMove'] == false)
@@ -504,6 +526,8 @@ export default {
         },
         toggleOpenAll(){
             this.listOpenAll = !this.listOpenAll
+            if (this.dirtreeOpen.length > 0)
+              this.listOpenAll = false
             if (this.$refs.dirTreeviewList != undefined)
                 this.$refs.dirTreeviewList.updateAll(this.listOpenAll)
         },
@@ -607,41 +631,41 @@ export default {
         goToGroup(item){
             this.$emit('goToGroup', item)
         },
-        setFilter(key){
-            this.filters = {
-              'exclude':{}
+        filterAll(){
+            for (const i in this.itemTypes) {
+                this.itemTypes[i].filtered = true
             }
-            var itemTypeAmount = 0
-            this.itemTypes[key].filtered = !this.itemTypes[key].filtered
-
-            if (key == 'user'){
-                itemTypeAmount += 2
-                this.itemTypes['person'].filtered = !this.itemTypes['person'].filtered
-                this.filters['exclude']['organizationalPerson'] = 'objectClass'
+            this.buildFilter()
+        },
+        filterNone(){
+            for (const i in this.itemTypes) {
+                this.itemTypes[i].filtered = false
             }
-
-            for (const type in this.itemTypes) {
-                itemTypeAmount += 1
-                if (this.itemTypes[type].filtered == true){
-                  if (type.includes('-')) {
-                    var typeToSend = type.split('-')
-                    if (typeToSend.length > 2)
-                      console.log('Warning, filter typeToSend has more than 2 words in it ( ' + type + ' )')
-                    typeToSend = typeToSend[0].toLowerCase() + typeToSend[1].charAt(0).toUpperCase() + typeToSend[1].slice(1)
-                  }
-                  else {
-                    typeToSend = type
-                  }
-                  this.filters['exclude'][typeToSend] = 'objectClass'
-                  
-                }
+            this.buildFilter()
+        },
+        buildFilter(){
+            for (const i in this.itemTypes) {
+                if (this.itemTypes[i].filtered == true)
+                    this.filters['exclude'][i] = 'objectClass'
+                else
+                  delete this.filters['exclude'][i]
             }
-
-            if (itemTypeAmount == this.filters.length)
-              this.filters = {  
-                'exclude':{}
-              }
             this.fetchDirtree()
+        },
+        setFilter(key, build_filter=false){
+            const filter_status = this.itemTypes[key].filtered
+            switch (key) {
+              case 'user':
+              case 'person':
+                  this.itemTypes['person'].filtered = filter_status
+                  this.itemTypes['user'].filtered = filter_status
+                break;
+              default:
+                  this.itemTypes[key].filtered = filter_status
+                break;
+            }
+            if (build_filter)
+                this.buildFilter()
             // console.log('Feature not enabled, filter for ' + key.toUpperCase() + ' objects should toggle')
         },
         getObjectIsClickable(item){
