@@ -46,7 +46,7 @@ export default {
             snackbarColor: 'primary',
             snackbarTextColor: '',
             snackbarIcon: "",
-            snackbarTimeout: 4500,
+            snackbarTimeout: 10000,
             snackBarTimer: 0
         }
     },

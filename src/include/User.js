@@ -59,13 +59,14 @@ class User extends ApiModel{
 
     /**
      * Logins as User, Standard Call.
+     * Data contains:
      * @param {String} username 
-     * @param {String} password 
+     * @param {String} password
+     * @param {Integer} totp_code [Optional]
      * @returns Response Promise, Exception on Failure.
      */
-    async login(username, password){
-        const params = {username: username,password: password}
-        return await interlock_backend.call('auth/login', params)
+    async login(data){
+        return await interlock_backend.call('auth/login', data)
     }
 
     /**
@@ -153,8 +154,8 @@ class User extends ApiModel{
         )
     }
 
-    async fetchme(username){
-        return await interlock_backend.call('user/fetchme', {username: username}).then(
+    async fetchme(){
+        return await interlock_backend.call('user/fetchme').then(
             response => {
                 if(!response)
                         throw Error("Error fetching user data. Provider returned: " + response);

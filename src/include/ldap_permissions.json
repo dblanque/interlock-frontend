@@ -1,0 +1,96 @@
+{
+	"disabled_permissions": [
+		"LDAP_UF_LOCKOUT",
+		"LDAP_UF_PASSWORD_EXPIRED"
+	],
+	"permissions": {
+		"LDAP_UF_SCRIPT" : {
+			"value": false,
+			"int": 1
+		},
+		"LDAP_UF_ACCOUNT_DISABLE" : {
+			"value": false,
+			"int": 2
+		},
+		"LDAP_UF_HOMEDIR_REQUIRED" : {
+			"value": false,
+			"int": 8
+		},
+		"LDAP_UF_LOCKOUT" : {
+			"value": false,
+			"int": 16
+		},
+		"LDAP_UF_PASSWD_NOTREQD" : {
+			"value": false,
+			"int": 32
+		},
+		"LDAP_UF_PASSWD_CANT_CHANGE" : {
+			"value": false,
+			"int": 64
+		},
+		"LDAP_UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED" : {
+			"value": false,
+			"int": 128
+		},
+		"LDAP_UF_NORMAL_ACCOUNT" : {
+			"value": false,
+			"int": 512
+		},
+		"LDAP_UF_INTERDOMAIN_TRUST_ACCOUNT" : {
+			"value": false,
+			"int": 2048
+		},
+		"LDAP_UF_WORKSTATION_TRUST_ACCOUNT" : {
+			"value": false,
+			"int": 4096
+		},
+		"LDAP_UF_SERVER_TRUST_ACCOUNT" : {
+			"value": false,
+			"int": 8192
+		},
+		"LDAP_UF_DONT_EXPIRE_PASSWD" : {
+			"value": false,
+			"int": 65536
+		},
+		"LDAP_UF_MNS_LOGON_ACCOUNT" : {
+			"value": false,
+			"int": 131072
+		},
+		"LDAP_UF_SMARTCARD_REQUIRED" : {
+			"value": false,
+			"int": 262144
+		},
+		"LDAP_UF_TRUSTED_FOR_DELEGATION" : {
+			"value": false,
+			"int": 524288
+		},
+		"LDAP_UF_NOT_DELEGATED" : {
+			"value": false,
+			"int": 1048576
+		},
+		"LDAP_UF_USE_DES_KEY_ONLY" : {
+			"value": false,
+			"int": 2097152
+		},
+		"LDAP_UF_DONT_REQUIRE_PREAUTH" : {
+			"value": false,
+			"int": 4194304
+		},
+		"LDAP_UF_PASSWORD_EXPIRED" : {
+		    "value": false,
+		    "int": 8388608
+		},
+		"LDAP_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION" : {
+			"value": false,
+			"int": 16777216
+		},
+		"LDAP_UF_NO_AUTH_DATA_REQUIRED" : {
+			"value": false,
+			"int": 33554432
+		},
+		"LDAP_UF_PARTIAL_SECRETS_ACCOUNT" : {
+			"value": false,
+			"int": 67108864
+		}
+	}
+}

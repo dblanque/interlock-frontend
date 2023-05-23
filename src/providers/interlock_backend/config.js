@@ -116,6 +116,12 @@ const urls = {
         move: "api/ou/move/",
         rename: "api/ou/rename/"
     },
+    totp: {
+        list: "api/totp/",
+        create: "api/totp/create_device/",
+        validate: "api/totp/validate_device/",
+        delete: "api/totp/delete_device/",
+    },
     test: {
         get: "api/test/",
         post: "api/test/post/",

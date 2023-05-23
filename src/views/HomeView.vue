@@ -40,43 +40,24 @@
       </v-col>
       <v-col class="ma-0 pa-0" cols="12" md="auto">
         <div class="mt-2 mr-4">
-          <span
-            class="text-normal"
-            v-if="this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
-            <span
-              class="text-normal"
-              v-if="last_name && last_name != '' && first_name && first_name != ''">
-              {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + "@" + username }}
-            </span>
-            <span class="text-normal" v-else>
-              {{ realm.toUpperCase() + "@" + username }}
-            </span>
-          </span>
-          <v-tooltip bottom color="primary">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                :dark="!isThemeDark($vuetify)"
-                :light="isThemeDark($vuetify)"
-                @click="logoutAction"
-                icon
-                class="mx-2"
-                v-bind="attrs"
-                v-on="on">
-                <v-icon> mdi-logout </v-icon>
-              </v-btn>
-            </template>
-            <span>{{ $t("misc.logoutTooltip") }}</span>
-          </v-tooltip>
+          <UserAccountDropdown 
+            :extraClasses="'mr-3 px-2'"
+            icon="mdi-account-cog"
+            color="primary"
+            showPreferencesMenu
+            @logout="logoutAction"
+            @openSettings="openSettings"
+            :username="activeUserName"/>
           <ThemeChanger
             :dark="!isThemeDark($vuetify)"
             :light="isThemeDark($vuetify)"
             :buttonIsSmall="true"
           />
           <!-- Remove this in production -->
-          <!-- <v-btn @click="debugAction"
+          <v-btn @click="debugAction" v-if="false"
            outlined class="mx-3" rounded color="red">
             Debug
-          </v-btn> -->
+          </v-btn>
         </div>
       </v-col>
     </v-row>
@@ -190,6 +171,20 @@
         <AboutDialog @close='closeAbout'/>
     </v-dialog>
 
+    <!-- SETTINGS DIALOG  -->
+    <v-dialog
+      max-width="48rem"
+      v-model="showSettingsDialog">
+        <UserSettings
+        ref="UserSettings"
+        :username="username"
+        :first_name="first_name"
+        :last_name="last_name"
+        :domain="domain"
+        :realm="realm"
+        @close='showSettingsDialog = !showSettingsDialog'/>
+    </v-dialog>
+  
     <!-- LOGOUT DIALOG  -->
     <v-dialog
       persistent
@@ -276,6 +271,8 @@
 // @ is an alias to /src
 import ModularViewContainer from "@/components/ModularViewContainer.vue"
 import LanguageSelector from "@/components/LanguageSelector.vue"
+import UserAccountDropdown from "@/components/User/UserAccountDropdown.vue"
+import UserSettings from "@/components/User/UserSettings.vue"
 import ThemeChanger from "@/components/ThemeChanger.vue"
 import LogoutDialog from "@/components/LogoutDialog.vue"
 import RefreshTokenDialog from "@/components/RefreshTokenDialog.vue"
@@ -293,6 +290,8 @@ export default {
   components: {
     ModularViewContainer,
     LanguageSelector,
+    UserAccountDropdown,
+    UserSettings,
     LogoutDialog,
     RefreshTokenDialog,
     ThemeChanger,
@@ -315,6 +314,7 @@ export default {
       showAboutDialog: false,
       showLogoutDialog: false,
       showRefreshTokenDialog: false,
+      showSettingsDialog: false,
       requestRefresh: "",
       selectedTab: 0,
       selectedTabTitle: "",
@@ -449,6 +449,13 @@ export default {
     breakpointName() {
       return this.$vuetify.breakpoint.name;
     },
+    activeUserName() {
+        if(	this.last_name && this.last_name.length > 0 &&
+            this.first_name && this.first_name.length > 0)
+            return this.last_name + ", " + this.first_name + " | " + this.username
+            // return this.last_name + ", " + this.first_name + " | " + this.realm.toUpperCase() + "@" + this.username
+        return this.realm.toUpperCase() + "@" + this.username
+    }
   },
   watch: {
     breakpointName() {
@@ -462,6 +469,11 @@ export default {
     ////////////////////////////////////////////////////////////////////////////
     // General Component Methods
     ////////////////////////////////////////////////////////////////////////////
+    openSettings(){
+      this.showSettingsDialog = true
+      if (this.$refs.UserSettings)
+        this.$refs.UserSettings.loadSettings()
+    },
     closeAbout(){
       this.showAboutDialog = false
     },
@@ -592,7 +604,7 @@ export default {
     },
     async debugAction() {
       console.log('This button should be removed and/or disabled in production')
-      await new Test({}).get()
+      await new Test({}).delete()
       .then(response => {
         console.log(response)
       })

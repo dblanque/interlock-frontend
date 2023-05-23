@@ -42,7 +42,6 @@
             <!-- USER / EMAIL FIELD -->
             <v-row v-if="modeUser" justify="center" class="ma-0 pa-0">
               <v-text-field
-                autofocus
                 outlined
                 dense
                 v-model="username"
@@ -74,7 +73,7 @@
             </v-row>
             
             <!-- PASSWORD FIELD -->
-            <v-row justify="center" class="ma-0 pa-0 mt-3">
+            <v-row justify="center" class="ma-0 pa-0">
               <v-text-field
                 outlined
                 dense
@@ -90,6 +89,49 @@
                 @click:append="() => (value = !value)"
               ></v-text-field>
             </v-row>
+
+            <!-- TOTP FIELD -->
+            <v-row justify="center" class="ma-0 pa-0">
+              <v-text-field
+                v-if="!recovery_mode"
+                outlined
+                dense
+                :rules="[this.fieldRules(totp_code, 'auth_totp')]"
+                @keypress="isNumber($event)"
+                :label="$t('attribute.users.totp_code')"
+                type="text"
+                prepend-inner-icon="mdi-qrcode"
+                v-model="totp_code"
+                :disabled="submitted"
+                @keydown.enter="submit()"
+                class="login-pwd-field login-field font-weight-bold mb-2"
+                required
+              ></v-text-field>
+            </v-row>
+
+            <!-- RECOVERY FIELD -->
+            <v-row justify="center" class="ma-0 pa-0">
+              <v-text-field
+                v-if="recovery_mode"
+                outlined
+                dense
+                :rules="[this.fieldRules(recovery_code, 'auth_recovery')]"
+                :label="$t('attribute.users.recovery_code')"
+                type="text"
+                prepend-inner-icon="mdi-code-array"
+                v-model="recovery_code"
+                :disabled="submitted"
+                @keydown.enter="submit()"
+                class="login-pwd-field login-field font-weight-bold mb-2"
+                required
+              ></v-text-field>
+            </v-row>
+            <v-row justify="center" class="ma-0 pa-0">
+              <v-checkbox :label="$t('section.login.useRecoveryCode')"
+              class="ma-0 pa-0"
+              v-model="recovery_mode"/>
+            </v-row>
+
             <v-row justify="center">
               <LanguageSelector class="font-weight-medium"/>
             </v-row>
@@ -171,6 +213,8 @@ export default {
   },
   data() {
     return {
+      recovery_mode: false,
+      recovery_code: "",
       logoLight: require('@/assets/interlock-logo-wt-dark.svg'),
       logoDark: require('@/assets/interlock-logo-wt-light.svg'),
       modeUser: true,
@@ -183,6 +227,7 @@ export default {
       errorMsg: "",
       username: "",
       password: "",
+      totp_code: "",
       submitted: false,
       logoutSnackbar: false,
       snackbarMessage: "",
@@ -270,14 +315,31 @@ export default {
       this.loginForbiddenCount = 0
     },
     async submit() {
+      if (!this.$refs.loginform.validate())
+        return
       if (this.username == "" || this.password == "") {
         this.error = true;
         this.errorMsg = "";
       }
       else {
         this.submitted = true;
+        setTimeout(() => {
+          if (this.submitted && !this.error) {
+            this.submitted = false
+            this.error = true
+            this.errorMsg = this.getMessageForCode("ERR_LDAP_GW")
+          }
+        }, 10000)
         var user = new User({})
-        await user.login(this.username, this.password)
+        var data = {
+          username: this.username,
+          password: this.password
+        }
+        if (this.totp_code.length > 0 && !this.recovery_mode)
+          data.totp_code = this.totp_code
+        else if (this.recovery_code.length > 0)
+          data.recovery_code = this.recovery_code
+        await user.login(data)
         .then(response =>{
           if(response.data.access != undefined) {
             this.error = false
