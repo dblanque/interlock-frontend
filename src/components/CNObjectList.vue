@@ -239,6 +239,10 @@ export default {
                     "container":{
                         attr: "objectClass",
                         or: true
+                    },
+                    "Builtin":{
+                        attr: "name",
+                        or: true
                     }
                 }
             }

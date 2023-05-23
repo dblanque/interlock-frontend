@@ -644,13 +644,17 @@ export default {
             this.buildFilter()
         },
         buildFilter(){
-            for (const i in this.itemTypes) {
-                if (this.itemTypes[i].filtered == true)
-                    this.filters['exclude'][i] = 'objectClass'
-                else
-                  delete this.filters['exclude'][i]
-            }
-            this.fetchDirtree()
+          if (!this.filters) {
+            this.filters = { 'exclude': {} }
+            return this.fetchDirtree()
+          }
+          for (const i in this.itemTypes) {
+              if (this.itemTypes[i].filtered == true)
+                  this.filters['exclude'][i] = 'objectClass'
+              else
+                delete this.filters['exclude'][i]
+          }
+          return this.fetchDirtree()
         },
         setFilter(key, build_filter=false){
             const filter_status = this.itemTypes[key].filtered
@@ -675,7 +679,7 @@ export default {
             return 'notclickable'
         },
         resetDirtree(forceReload=false){
-            this.filters = {}
+            this.filters = { 'exclude': {} }
             var filterReset = false
             var value
             for (const type in this.itemTypes){

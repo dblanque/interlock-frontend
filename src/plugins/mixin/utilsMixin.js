@@ -48,6 +48,8 @@ const utilsMixin = {
             }
 
             switch(codeToUse){
+            case 'ERR_LDAP_GW':
+                return this.$t('error.codes.ldapGwError')
             case 405:
             case 'ERR_BAD_RESPONSE':
                 return this.$t('error.codes.badRequest')
@@ -74,6 +76,7 @@ const utilsMixin = {
             case 'otp_invalid_data':
             case 'otp_required':
             case 'otp_no_device_registered':
+            case 'otp_invalid_recovery_code':
                 return this.$t('error.codes.otp.'+codeToUse)
             // DNS ---------------------------------------------------------- //
             case 'dns_zone_missing':

@@ -699,15 +699,6 @@ export default {
 </script>
 
 <style>
-
-#filterListButton.active{
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-
 .v-data-table > .v-data-table__wrapper tbody tr.v-data-table__expanded__content {
     box-shadow: none !important;
 }

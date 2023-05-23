@@ -4,8 +4,8 @@
     "home":"Home",
     "users":"Users",
     "groups":"Security Groups",
-    "dns":"DNS (Domain Name Server)",
-    "gpo":"GPO (Group Policy Objects)",
+    "dns":"DNS",
+    "gpo":"GPO",
     "dns_short":"DNS",
     "gpo_short":"GPO",
     "server":"Server",
@@ -23,6 +23,9 @@
     }
   },
   "actions":{
+    "expirePwd":"Expire Password",
+    "extra":"Extra",
+    "moreActions":"More Actions",
     "refreshToken":"Refresh Access Token",
     "import":"Import",
     "export":"Export",
@@ -89,6 +92,7 @@
     "download":"Download",
     "downloadLatest":"Download Latest",
     "changeUserPerms": "View Permissions",
+    "massChangeUserPerms":"Change Permissions",
     "changeUserGroups":"View Groups",
     "addObjectClass": "Add Object Class",
     "passwordChanged": "Password Changed"
@@ -292,6 +296,7 @@
       "codes":{
           "conflict": "HTTP 409: Conflict",
           "badRequest": "HTTP 405: Bad Request",
+          "ldapGwError": "LDAP Server is Unreachable",
           "invalidCSV": "Invalid CSV File",
           "invalidCSVHeaders": "Invalid CSV Headers",
           "fileReader": "File Reader Exception",
@@ -304,6 +309,7 @@
           },
           "otp":{
             "otp_invalid_code":"OTP Code is invalid",
+            "otp_invalid_recovery_code":"Recovery Code is invalid",
             "otp_invalid_data":"OTP Data is invalid",
             "otp_required":"OTP Code is Required",
             "otp_no_device_registered":"No OTP Device Registered"
@@ -372,8 +378,8 @@
           "alphaNumeric": "Must be Alphanumeric",
           "alphaNumericSpecialUsername": "Must contain only letters (hyphen allowed)",
           "alphaNumericPassword": "8 char. minimum, special characters allowed: !@#$%&*()",
-          "alphaNumericSpaces": "Must be Alphanumeric (Spaces allowed, 2 characters min.)",
-          "alphaNumericSpecial": "Must be Alphanumeric (Spaces and hyphen/underscores allowed, 2 characters min.)",
+          "alphaNumericSpaces": "a-z A-Z 0-9 and Spaces, 2 char. min",
+          "alphaNumericSpecial": "a-z A-Z 0-9 -_ and Spaces, 2 char. min",
           "domain": "Must be a valid Top-Level Domain ( example.tld | domain.com )",
           "email": "Must be a valid E-Mail (E.g.: john@domain.com)",
           "phone": "Must be a valid Phone",
@@ -506,6 +512,7 @@
       "useEmail":"Use E-Mail",
       "useLDAPUser":"Use LDAP Account",
       "loginBtn":"Log-in",
+      "useRecoveryCode":"Use Recovery Code",
       "forgotMyPassword":"I forgot my password",
       "tooManyLogins": "You've been timed out",
       "tryAgain": "You may now try again",
@@ -675,6 +682,7 @@
       "basicDetails":"Basic Details",
       "location":"Location",
       "editFlagWarning":"You are now editing this user",
+      "viewFlagWarning":"You are viewing this user",
       "perms":"User Permissions",
       "groups":"User Groups",
       "permsRaw":"Raw Output",
@@ -825,7 +833,8 @@
           "password": "Password",
           "passwordConfirm": "Confirm Password",
           "role": "Role",
-		      "totp_code":"TOTP Code"
+		      "totp_code":"TOTP Code",
+          "recovery_code":"Recovery Code"
       },
       "phone": "Phone",
       "phoneNumber": "Phone Number",
@@ -860,6 +869,8 @@
     "showQR":"Show TOTP QR Code",
     "hideQR":"Hide QR Code",
     "validateTOTP":"Validate TOTP QR Code",
+    "TOTPnotConfirmed":"Please Confirm your TOTP 2FA",
+    "recoveryCodes":"Consumable Recovery Codes",
     "totpCodeFieldLabel":"6-digit TOTP Code",
     "totpCreated":"TOTP Code Created",
     "totpDeleted":"TOTP Code Deleted",

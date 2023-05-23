@@ -24,13 +24,23 @@
         </v-card-title>
 
         <v-expand-transition>
-            <v-row v-if="editFlag" justify="center" class="pa-0 ma-0">
+            <v-row v-if="editFlag && showAlert" justify="center" class="pa-0 ma-0">
                 <v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
                     <v-icon class="mdso mr-2">warning</v-icon>
                     {{ $t('section.users.editFlagWarning') }}
                     <v-btn @click="viewUser" small class="ma-0 pa-0 ml-2 pr-2 pl-1">
                         <v-icon color="orange" class="">mdi-chevron-left</v-icon>
                         {{ $t('actions.back') }}
+                    </v-btn>
+                </v-alert>
+            </v-row>
+            <v-row v-else-if="showAlert" justify="center" class="pa-0 ma-0">
+                <v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="info" :icon="false">
+                    <v-icon class="mr-2">mdi-eye-circle</v-icon>
+                    {{ $t('section.users.viewFlagWarning') }}
+                    <v-btn @click="editUser" small class="ma-0 pa-0 ml-2 pr-2 pl-1">
+                        <v-icon color="blue" class="mx-1" small>mdi-pencil</v-icon>
+                        {{ $t('actions.edit') }}
                     </v-btn>
                 </v-alert>
             </v-row>
@@ -585,7 +595,80 @@
     
         <!-- Actions -->
         <v-card-actions class="card-actions">
-            <v-row class="ma-1 pa-0" align="center" align-content="center" :justify="this.$vuetify.breakpoint.mdAndDown ? 'center' : 'end'">
+            <v-row class="ma-1 pa-0" 
+                align="center" 
+                align-content="center" 
+                :justify="this.$vuetify.breakpoint.mdAndDown ? 'center' : 'space-between'">
+                <v-menu top
+                    offset-y right
+                    nudge-top="3rem" 
+                    :close-on-content-click="false" 
+                    v-model="extraListOpen">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn v-bind="attrs" v-on="on" elevation="0"
+                        :disabled="!editFlag"
+                        style="min-width: 32px;" class="pa-0 px-4 pr-1 mx-1" 
+                        color="primary" outlined>
+                        {{ $t("actions.moreActions") }}
+                        <v-icon id="filterListButton" :class="extraListOpen == true  ? 'active' : ''">
+                            mdi-chevron-up
+                        </v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list elevation="0"
+                        dense :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
+                        <v-list-item class="ma-0 pa-0 px-2" v-if="false"
+                            :disabled="!editFlag || isLoggedInUser(usercopy.username)"
+                            @click="expirePwd"
+                            :dark="isThemeDark($vuetify)" 
+                            :light="!isThemeDark($vuetify)"
+                            >
+                            <v-list-item-icon class="mx-0 pa-0 mr-2 clr-primary">
+                                <v-icon> mdi-key-change </v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content class="v-list-btn v-btn clr-primary">
+                                {{ $t("actions.expirePwd").toUpperCase() }}
+                            </v-list-item-content>
+                        </v-list-item>
+
+                        <!-- Enable/Disable Buttons -->
+                        <v-list-item class="ma-0 pa-0 px-2" 
+                            v-if="!usercopy.is_enabled"
+                            :disabled="!editFlag || isLoggedInUser(usercopy.username)"
+                            @click="enableUser"
+                            :dark="isThemeDark($vuetify)" 
+                            :light="!isThemeDark($vuetify)"
+                            >
+                            <v-list-item-icon class="mx-0 pa-0 mr-2 clr-valid">
+                                <v-icon> 
+                                    mdi-checkbox-marked-circle-outline
+                                </v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content class="v-list-btn v-btn clr-valid">
+                                {{ $t("actions.enable").toUpperCase() }}
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item class="ma-0 pa-0 px-2"
+                            v-else-if="usercopy.is_enabled == true" 
+                            :disabled="!editFlag || isLoggedInUser(usercopy.username)"
+                            @click="disableUser"
+                            :dark="isThemeDark($vuetify)" 
+                            :light="!isThemeDark($vuetify)"
+                            >
+                            <v-list-item-icon class="mx-0 pa-0 mr-2 clr-red">
+                                <v-icon color="primary"> 
+                                    mdi-close-circle-outline
+                                </v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content class="v-list-btn v-btn clr-red">
+                                {{ $t("actions.disable").toUpperCase() }}
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+                <v-row 
+                    :justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'end'"
+                    class="ma-0 pa-0">
                 <!-- Go Back button (Permissions View) -->
                 <v-slide-x-reverse-transition>
                         <v-btn v-if="changingPerms || changingGroups" @click="goBackToDetails"
@@ -604,25 +687,6 @@
                                     mdi-chevron-right
                                 </v-icon>
                             </v-fab-transition>
-                        </v-btn>
-                </v-slide-x-reverse-transition>
-                <!-- Enable/Disable Buttons -->
-                <v-slide-x-reverse-transition>
-                        <v-btn color="green" v-if="!usercopy.is_enabled" @click="enableUser" 
-                        :class="(editFlag ? 'text-white ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" 
-                        rounded :disabled="!editFlag || isLoggedInUser(usercopy.username)">
-                            <v-icon class="mr-1">
-                                mdi-checkbox-marked-circle-outline
-                            </v-icon>
-                            {{ $t("actions.enable") }}
-                        </v-btn>
-                        <v-btn color="red" v-else-if="usercopy.is_enabled == true" @click="disableUser" 
-                        :class="(editFlag ? 'text-white ' : '' ) + 'ma-0 pa-0 pa-3 pr-4 ma-1'" rounded
-                        :disabled="!editFlag || isLoggedInUser(usercopy.username)">
-                            <v-icon class="mr-1">
-                                mdi-close-circle-outline
-                            </v-icon>
-                            {{ $t("actions.disable") }}
                         </v-btn>
                 </v-slide-x-reverse-transition>
                 <!-- Edit User Button -->
@@ -680,6 +744,7 @@
                         </template>
                     </v-btn>
                 </v-progress-circular>
+                </v-row>
             </v-row>
         </v-card-actions>
 
@@ -711,9 +776,11 @@ export default {
     },
     data () {
       return {
+        showAlert: false,
         panel: [],
         loading: false,
         loadingColor: 'accent',
+        extraListOpen: false,
         tab: 0,
         error: false,
         errorMsg: "",
@@ -1120,7 +1187,13 @@ export default {
             this.changingPerms = false
             this.changingGroups = true
         },
+        async expirePwd(){
+            this.extraListOpen = false
+            this.usercopy.pwdLastSet = 0
+            await this.saveUser()
+        },
         async disableUser(){
+            this.extraListOpen = false
             await this.usercopy.disable(this.usercopy.username).then(() => {
                 this.refreshUser()
                 notificationBus.$emit('createNotification', 
@@ -1141,6 +1214,7 @@ export default {
             })
         },
         async enableUser(){
+            this.extraListOpen = false
             await this.usercopy.enable(this.usercopy.username).then(() => {
                 this.refreshUser()
                 notificationBus.$emit('createNotification', 
@@ -1161,11 +1235,19 @@ export default {
             })
         },
         editUser(){
+            this.showAlert = false
             this.$emit('editToggle', true);
+            setTimeout(() => {
+                this.showAlert = true
+            }, 500)
         },
         viewUser(){
+            this.showAlert = false
             this.$emit('editToggle', false);
             this.refreshUser();
+            setTimeout(() => {
+                this.showAlert = true
+            }, 500)
         },
         closeDialog() {
             this.$emit('closeDialog', this.viewKey);
@@ -1247,12 +1329,14 @@ export default {
         // Sync the usercopy object to the parent view user object on the
         // next tick to avoid mutation errors
         syncUser(){
+            this.showAlert = true
             this.tab = 0
             this.changingPerms = false
             this.changingGroups = false
             this.excludeGroups = []
             this.getDomainDetails()
             this.usercopy = new User({})
+            this.extraListOpen = false
             this.$nextTick(() => {
                 this.usercopy = this.user
                 this.setUserGroups()
@@ -1313,5 +1397,16 @@ export default {
 }
 .groupSelected::before {
     background-color: rgba(0,0,0,0.3);
+}
+.border-no-sides {
+    border-left: 0;
+    border-right: 0;
+}
+</style>
+
+<style scoped>
+.v-list-btn{
+    font-size: 0.875rem;
+    justify-content: start;
 }
 </style>

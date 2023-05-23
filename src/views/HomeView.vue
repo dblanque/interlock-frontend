@@ -44,6 +44,7 @@
             :extraClasses="'mr-3 px-2'"
             icon="mdi-account-cog"
             color="primary"
+            showPreferencesMenu
             @logout="logoutAction"
             @openSettings="openSettings"
             :username="activeUserName"/>

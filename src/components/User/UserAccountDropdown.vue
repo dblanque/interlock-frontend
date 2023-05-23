@@ -64,24 +64,30 @@ export default {
             default: true
         },
         username: String,
-        icon: String
+        icon: String,
+        showPreferencesMenu: Boolean
+    },
+    created(){
+        if (this.showPreferencesMenu)
+            this.entries.unshift(
+                {
+                    i18n_string: "userAccountDropdown.changePreferences",
+                    action: "this.openAccountSettings",
+                    prepend_icon: "mdi-cog",
+                    append_icon: ""
+                }
+            )
     },
     data(){
         return {
             menu_expanded: false,
             entries: [
                 {
-                    i18n_string: "userAccountDropdown.changePreferences",
-                    action: "this.openAccountSettings",
-                    prepend_icon: "mdi-cog",
-                    append_icon: ""
-                },
-                {
                     i18n_string: "userAccountDropdown.logout",
                     action: "this.emitLogout",
                     prepend_icon: "mdi-logout",
                     append_icon: ""
-                },
+                }
             ]
         }
     },

@@ -4,8 +4,8 @@
     "home": "Inicio",
     "users": "Usuarios",
     "groups": "Grupos de Seguridad",
-    "dns": "DNS (Servidor de Nombre de Dominio)",
-    "gpo": "GPO (Objetos de Política de Grupo)",
+    "dns": "DNS",
+    "gpo": "GPO",
     "dns_short": "DNS",
     "gpo_short": "GPO",
     "server": "Servidor",
@@ -23,6 +23,9 @@
     }
   },
   "actions": {
+    "expirePwd":"Expirar Contraseña",
+    "extra":"Extra",
+    "moreActions":"Más Acciones",
     "refreshToken":"Refrescar Token de Acceso",
     "import":"Importar",
     "export":"Exportar",
@@ -89,6 +92,7 @@
     "download": "Descargar",
     "downloadLatest": "Descargar Último",
     "changeUserPerms": "Ver Permisos",
+    "massChangeUserPerms":"Cambiar Permisos",
     "changeUserGroups":"Ver Grupos",
     "addObjectClass": "Añadir Clase de Objeto",
     "passwordChanged": "Contraseña Modificada"
@@ -298,6 +302,7 @@
     "codes": {
       "conflict": "HTTP 409: Conflicto",
       "badRequest": "HTTP 405: Request Erróneo",
+      "ldapGwError": "Servidor de LDAP Inalcanzable",
       "invalidCSV": "Archivo CSV Inválido",
       "invalidCSVHeaders": "Cabecera de CSV Inválida",
       "fileReader": "Excepción del Lector de Archivos",
@@ -310,6 +315,7 @@
       },
       "otp":{
         "otp_invalid_code":"Código OTP inválido",
+        "otp_invalid_recovery_code":"Código de Respaldo inválido",
         "otp_invalid_data":"Datos OTP inválidos",
         "otp_required":"Se requiere el Código OTP",
         "otp_no_device_registered":"No se registró el Dispositivo OTP"
@@ -378,8 +384,8 @@
       "alphaNumeric": "Debe ser alfanumérico",
       "alphaNumericSpecialUsername": "Debe contener solo letras (guiones permitidos)",
       "alphaNumericPassword": "8 caracteres mín., caracteres especiales permitidos: !@#$%&*()",
-      "alphaNumericSpaces": "Debe ser alfanumérico (Espacios permitidos, 2 caracteres mín.)",
-      "alphaNumericSpecial": "Debe ser alfanumérico (Espacios y guiones permitidos, 2 caracteres mín.)",
+      "alphaNumericSpaces": "a-z A-Z 0-9 y Espacios, 2 car. min",
+      "alphaNumericSpecial": "a-z A-Z 0-9 -_ y Espacios, 2 car. min",
       "domain": "Debe ser un Dominio de NSG válido ( ejemplo.tld | dominio.com )",
       "email": "Debe ser un E-Mail válido (Ej.: juan@dominio.com)",
       "phone": "Debe ser un Teléfono válido",
@@ -512,6 +518,7 @@
       "useEmail":"Usar E-Mail",
       "useLDAPUser":"Usar Cuenta LDAP",
       "loginBtn": "Iniciar Sesión",
+      "useRecoveryCode":"Usar Código de Respaldo",
       "forgotMyPassword": "Olvidé mi Contraseña",
       "tooManyLogins": "Ha sido deshabilitado",
       "tryAgain": "Inténtelo nuevamente",
@@ -683,6 +690,7 @@
       "perms":"Permisos del Usuario",
       "groups":"Grupos del Usuario",
       "editFlagWarning":"Está editando el usuario",
+      "viewFlagWarning":"Está viendo el usuario",
       "permsRaw":"Salida en Crudo",
       "permsRawHint":"Clickee aquí para abrir documentación de Microsoft sobre Permisos de LDAP",
       "permsCalc":"Número Int. de Permisos Calculado",
@@ -832,7 +840,8 @@
       "password": "Contraseña",
       "passwordConfirm": "Confirmar Contraseña",
       "role": "Permisos",
-	    "totp_code":"Código TOTP"
+	    "totp_code":"Código TOTP",
+      "recovery_code":"Código de Respaldo"
     },
     "phone": "Teléfono",
     "phoneNumber": "Número Telefónico",
@@ -867,6 +876,8 @@
     "showQR":"Ver Código QR de TOTP",
     "hideQR":"Esconder Código QR",
     "validateTOTP":"Validar Código QR TOTP",
+    "TOTPnotConfirmed":"Por favor confirme su 2FA TOTP",
+    "recoveryCodes":"Códigos de Respaldo Consumibles",
     "totpCodeFieldLabel":"Código TOTP de 6 dígitos",
     "totpCreated":"Código TOTP Creado",
     "totpDeleted":"Código TOTP Eliminado",

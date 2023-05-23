@@ -154,8 +154,8 @@ class User extends ApiModel{
         )
     }
 
-    async fetchme(username){
-        return await interlock_backend.call('user/fetchme', {username: username}).then(
+    async fetchme(){
+        return await interlock_backend.call('user/fetchme').then(
             response => {
                 if(!response)
                         throw Error("Error fetching user data. Provider returned: " + response);

@@ -2,5 +2,5 @@
 // ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L.
 // File: version.js
 
-const ilckVersion = "0.75.24"
+const ilckVersion = "0.77.1"
 export default ilckVersion

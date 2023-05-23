@@ -102,6 +102,20 @@
               {{ $t('actions.delete') }}
             </span>
           </v-btn>
+          <!-- Bulk Change User Permissions Button -->
+          <v-btn class="pa-2 mx-2" small v-if="false"
+          :dark="!actionButtonsDisabled && !isThemeDark($vuetify)" 
+          :light="!actionButtonsDisabled && isThemeDark($vuetify)"
+          color="primary" @click="openDialog('bulkUserPermissions')"
+          :disabled="actionButtonsDisabled">
+            <v-icon small 
+              :class="(actionButtonsDisabled ? '' : 'clr-white') + ' ma-0 pa-0 mr-1'">
+              mdi-shield-account
+            </v-icon>
+            <span :class="actionButtonsDisabled ? '' : 'text-white'">
+              {{ $t('actions.massChangeUserPerms') }}
+            </span>
+          </v-btn>
       </v-row>
     </template>
     <!-- USER IS ENABLED STATUS -->
@@ -324,6 +338,33 @@
       @closeDialog="closeDialog"
       />
   </v-dialog>
+
+  <!-- USER PERMISSION LIST DIALOG -->
+  <v-dialog eager max-width="1600px" v-model="dialogs['bulkUserPermissions']">
+    <v-card>
+      <!-- Title Bar -->
+      <v-card-title class="ma-0 pa-0 card-title">
+          <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
+              <h3 class="pa-0 ma-0 ma-2">
+                  bulkUserPermissionsView
+              </h3>
+              <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
+              <v-btn icon color="red" class="ma-2" rounded 
+                @click="closeDialog('bulkUserPermissions')">
+                  <v-icon>
+                      mdi-close
+                  </v-icon>
+              </v-btn>
+          </v-row>
+      </v-card-title>
+      <UserPermissionList
+        :viewKey="'bulkUserPermissions'"
+        ref="BulkUserPermissions"
+        :editFlag="true"
+        @closeDialog="closeDialog"
+        />
+    </v-card>
+  </v-dialog>
 </div>
 </template>
 
@@ -333,6 +374,7 @@ import UserCreate from '@/components/User/UserCreate.vue'
 import UserImport from '@/components/User/UserImport.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
+import UserPermissionList from '@/components/User/UserPermissionList.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
 import validationMixin from '@/plugins/mixin/validationMixin'
 import utilsMixin from '@/plugins/mixin/utilsMixin'
@@ -345,6 +387,7 @@ export default {
     UserImport,
     UserDialog,
     UserResetPassword,
+    UserPermissionList,
     UserDelete
   },
   data() {
@@ -377,6 +420,7 @@ export default {
         userDelete: false,
         userResetPassword: false,
         userCreate: false,
+        bulkUserPermissions: false
       }
     }
   },
@@ -421,6 +465,10 @@ export default {
         case 'userImport':
           if (this.$refs.UserImport != undefined)
             this.$refs.UserImport.clearData()
+          break;
+        case 'bulkUserPermissions':
+          if (this.$refs.BulkUserPermissions != undefined)
+            this.$refs.BulkUserPermissions.init()
           break;
         default:
           break;
@@ -684,6 +732,9 @@ export default {
         this.errorMsg = this.getMessageForCode(error)
         this.listUserItems(false);
       })
+    },
+    openPermChangeDialog(){
+      console.log('Permissions Change WIP')
     },
     userSaved(){
       this.listUserItems(false)

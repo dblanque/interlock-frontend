@@ -27,25 +27,13 @@
         </v-col>
         <v-col class="ma-0 pa-0" cols="12" md="auto">
             <div class="mt-2 mr-4">
-            <span class="text-normal" v-if="this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
-                <span class="text-normal" v-if="last_name && last_name != '' && first_name && first_name != ''">
-                {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}
-                </span>
-                <span class="text-normal" v-else>
-                {{ realm.toUpperCase() + '@' + username }}
-                </span>
-            </span>
-            <v-btn
-            :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
-            @click="logoutAction"
-            class="pa-0 mx-2 pl-2 pr-1"
-            text
-            >
-            {{ $t("misc.logoutTooltip") }}
-            <v-icon class="ml-2">
-                mdi-logout
-            </v-icon>
-            </v-btn>
+            <UserAccountDropdown 
+                :extraClasses="'mr-3 px-2'"
+                icon="mdi-account-cog"
+                color="primary"
+                @logout="logoutAction"
+                @openSettings="openSettings"
+                :username="activeUserName"/>
             <ThemeChanger :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)" :buttonIsSmall="true"/>
             </div>
         </v-col>
@@ -381,6 +369,7 @@
 import User from '@/include/User'
 import Domain from '@/include/Domain'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
+import UserAccountDropdown from '@/components/User/UserAccountDropdown.vue'
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
@@ -395,6 +384,7 @@ export default {
     components: {
         LanguageSelector,
         UserResetPassword,
+        UserAccountDropdown,
         NotificationBusContainer,
         RefreshTokenDialog,
         LogoutDialog,
@@ -458,12 +448,11 @@ export default {
             if (admin_allowed == true)
                 this.$router.push("/home");
         })
-
         this.setupTimers()
     },
-    mounted () {
+    async mounted () {
         this.loading = true
-        this.user.fetchme(this.username)
+        this.user.fetchme()
         .then(() => {
             this.loading = false
         })
@@ -481,8 +470,20 @@ export default {
             else
                 return "@" + this.domain
         },
+        activeUserName() {
+            if(	this.last_name && this.last_name.length > 0 &&
+                this.first_name && this.first_name.length > 0)
+                return this.last_name + ", " + this.first_name + " | " + this.username
+                // return this.last_name + ", " + this.first_name + " | " + this.realm.toUpperCase() + "@" + this.username
+            return this.realm.toUpperCase() + "@" + this.username
+        }
     },
     methods: {
+        openSettings(){
+            this.showSettingsDialog = true
+            if (this.$refs.UserSettings)
+                this.$refs.UserSettings.loadSettings()
+        },
         async saveUser(){
             this.loading = true
             // Uncomment below to debug permissions list

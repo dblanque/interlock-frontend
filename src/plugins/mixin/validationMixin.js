@@ -46,8 +46,8 @@ const validationMixin = {
       inputRulesalphaNumericSpecial: (v) => !v || /^[üöñóúíáéa-z0-9]+[?¿!@üöñóúíáéa-z0-9,.\s_-]+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecial"),
       inputRulesalphaNumericPassword: (v) => !v || /^[!@#$%&*()üöñóúíáéa-z0-9]+([!@#$%&*()üöñóúíáéa-z0-9,._-]{7,})+$/i.test(v) || i18n.t("error.validation.alphaNumericPassword"),
       inputRulesalphaNumericSpecialUsername: (v) => !v || /^[a-z0-9]+([a-z0-9_-]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecialUsername"),
-      inputRulesalphaNumericSpecialCN: (v) => !v || /^[a-z0-9]+([a-z0-9_-\s]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecialUsername"),
-      inputRulesalphaNumericSpecialName: (v) => !v || /^[a-z0-9]+([a-z0-9_-\s]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecialUsername"),
+      inputRulesalphaNumericSpecialCN: (v) => !v || /^[a-z0-9]+([a-z0-9_-\s]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecial"),
+      inputRulesalphaNumericSpecialName: (v) => !v || /^[a-z0-9]+([a-z0-9_-\s]{2,})+$/i.test(v) || i18n.t("error.validation.alphaNumericSpecial"),
 
       // ASCII Source
       // https://stackoverflow.com/questions/14313183/javascript-regex-how-do-i-check-if-the-string-is-ascii-only
@@ -280,6 +280,9 @@ const validationMixin = {
             break;
           case "auth_totp":
             rules.push(this.inputRulesNumbers, this.inputRuleTOTP)
+            break;
+          case "auth_recovery":
+            rules.push(this.inputRulesalphaNumericSpecialCN)
             break;
           default:
             break;
