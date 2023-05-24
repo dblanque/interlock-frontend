@@ -1,10 +1,10 @@
 {
   "name": "vue-ldap-manager",
-  "version": "0.74.4",
+  "version": "0.77.11",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --host 127.0.0.1",
-    "build": "vue-cli-service build",
+    "build": "rm -rf ./dist/ && vue-cli-service build",
     "lint": "vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },

@@ -119,6 +119,12 @@
                     {{ !showQR ? $t("userAccountDropdown.showQR") : $t("userAccountDropdown.hideQR")}}
                 </v-btn>
             </v-col>
+            <v-col cols="12" class="pa-0 ma-0" v-if="hasTotp && !this.totp_confirmed"
+            justify="center">
+                <v-alert class="mt-1 mx-10" type="warning" dense border="top" icon="mdi-alert-box">
+                    {{ $t("userAccountDropdown.TOTPnotConfirmed") }}
+                </v-alert>
+            </v-col>
             <v-form @submit.prevent style="width: 100%;"
                 class="ma-0 pa-0" ref="TOTPForm" v-if="showValidator && showQR">
             <v-row class="ma-0 pa-0" justify="center" align="center">
@@ -142,22 +148,17 @@
                 </v-col>
             </v-row>
             </v-form>
-            <v-row class="pa-0 ma-0" v-else-if="hasTotp && !this.totp_confirmed"
-            justify="center">
-                <v-alert class="mt-1" type="warning" dense border="top" icon="mdi-alert-box">
-                    {{ $t("userAccountDropdown.TOTPnotConfirmed") }}
-                </v-alert>
-            </v-row>
-            <v-row cols="12" v-if="totp_uri.length > 0 && two_factor_auth && showQR"
-                class="ma-0 pa-0" 
-                justify="center">
-                <v-card class="pa-2 pb-0" elevation="0"
-                light width="fit-content" :outlined="!isThemeDark($vuetify)">
-                    <QrcodeVue class="ma-0 pa-0" :value="totp_uri" :size="225" level="H" />
-                </v-card>
+            <v-row justify="center" class="ma-0 pa-0">
+                <v-col cols="auto" v-if="totp_uri.length > 0 && two_factor_auth && showQR"
+                    class="ma-0 pa-0">
+                    <v-card class="ma-0 pa-0 pa-2 pb-0" elevation="0"
+                    light width="fit-content" :outlined="!isThemeDark($vuetify)">
+                        <QrcodeVue class="ma-0 pa-0" :value="totp_uri" :size="225" level="H" />
+                    </v-card>
+                </v-col>
             </v-row>
             <v-card class="ma-0 pa-0 mx-10" v-if="recovery_codes.length > 0 && !showQR" outlined>
-                <v-row cols="12"
+                <v-row
                     class="ma-0 pa-0" 
                     justify="center">
                     <v-col>
@@ -278,7 +279,8 @@ export default {
             if (r)
                 if (r.totp_uri) {
                     this.totp_uri = r.totp_uri
-                    this.totp_confirmed = r.totp_confirmed[0]
+                    if ('totp_confirmed' in r)
+                        this.totp_confirmed = r.totp_confirmed[0]
                     this.totp_code = ""
                     this.two_factor_auth = true
                     if (this.hasTotp && this.totp_confirmed != true)
@@ -305,6 +307,8 @@ export default {
                 await new TOTPDevice({}).create()
                 .then(response => {
                     this.setTotp(response)
+                    this.loadSettings()
+                    this.showValidator = true
                     this.showQR = true
                     this.loading = false
                     this.error = false
@@ -332,6 +336,9 @@ export default {
                 await new TOTPDevice({}).delete()
                 .then(() => {
                     this.setTotp()
+                    this.loadSettings()
+                    this.showValidator = false
+                    this.showQR = false
                     this.loading = false
                     this.error = false
                     this.message = this.$t("userAccountDropdown.totpDeleted")
