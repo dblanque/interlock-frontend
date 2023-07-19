@@ -457,7 +457,7 @@ export default {
             this.loading = false
         })
         .catch(error => {
-            console.log(error)
+            console.error(error)
             this.loading = false
             this.error = true
         });
@@ -495,7 +495,7 @@ export default {
                 this.loadingColor = 'primary'
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
                 this.userRefreshLoading = false;
                 this.loading = false
                 this.loadingColor = 'error'
@@ -527,7 +527,7 @@ export default {
                 }, 50)
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
                 this.loading = false
                 this.error = true
             })

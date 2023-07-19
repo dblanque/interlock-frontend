@@ -309,7 +309,7 @@ export default {
                 });
             } 
             catch (error) {
-                console.log(error)
+                console.error(error)
                 this.loading = false
                 this.error = true
                 this.success = true

@@ -49,7 +49,7 @@ const calls = {
                     });
                     resolve()
                 }).catch(error => {
-                    console.log(error)
+                    console.error(error)
                     removeKeys.forEach(element => {
                         localStorage.removeItem(element)
                     });

@@ -343,7 +343,7 @@ export default {
           this.createSnackbar({message: (this.$t("classes.group.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         this.loading = false
         this.error = true
         this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
@@ -380,7 +380,7 @@ export default {
         this.fetchingData = false
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         this.loading = false
         this.fetchingData = false
         this.error = true

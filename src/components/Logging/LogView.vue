@@ -344,7 +344,7 @@ export default {
         this.logTruncateRange = [ this.getLogTruncateMin, this.getLogTruncateMax ]
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         this.loading = false
         this.error = true
         this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
@@ -366,7 +366,7 @@ export default {
         this.listLogs()
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         this.resetDialog = false
         this.logAction = ""
       })
@@ -382,7 +382,7 @@ export default {
         this.listLogs()
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         this.resetDialog = false
         this.logAction = ""
       })

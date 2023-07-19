@@ -1204,7 +1204,7 @@ export default {
                 );
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
                 notificationBus.$emit('createNotification', 
                     {
                         message: this.getMessageForCode(error), 
@@ -1225,7 +1225,7 @@ export default {
                 );
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
                 notificationBus.$emit('createNotification', 
                     {
                         message: this.getMessageForCode(error), 
@@ -1287,7 +1287,7 @@ export default {
                     this.loadingColor = 'primary'
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                     if (error.response.data.code) {
                         switch (error.response.data.code) {
                             case 'user_permission_malformed':

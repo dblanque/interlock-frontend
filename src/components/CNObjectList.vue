@@ -201,7 +201,7 @@ export default {
                         }
                         // Once done push it and set the result to undefined for the next object
                         if (searchResult != undefined) {
-                            console.log(searchResult)
+                            // console.log(searchResult)
                             finalGroupArray.push(searchResult)
                             searchResult = undefined
                         }
@@ -285,16 +285,16 @@ export default {
             .catch(error => {
                 this.loading = false
                 this.error = true
-                console.log(error)
+                console.error(error)
                 return error
             })
         },
         clearList(){
             this.ldapList = []
         },
-        setDestination(destination){
-            console.log(destination)
-        },
+        // setDestination(destination){
+            // console.log(destination)
+        // },
         closeDialog() {
             this.$emit('closeDialog', this.viewKey)
         }

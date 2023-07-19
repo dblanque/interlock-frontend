@@ -89,7 +89,7 @@ export default {
                     .then(() => {
                     })
                     .catch(error => {
-                        console.log(error)
+                        console.error(error)
                     })
                 } else {
                     await new User({}).delete(user)
@@ -98,7 +98,7 @@ export default {
                             console.log("User Deleted Successfully")
                     })
                     .catch(error => {
-                        console.log(error)
+                        console.error(error)
                     })
                 }
                 this.$emit('closeDialog', this.viewKey, true);

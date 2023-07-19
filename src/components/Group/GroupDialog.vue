@@ -586,7 +586,7 @@ export default {
                     this.loadingColor = 'primary'
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                     if (error.response.data.code) {
                         switch (error.response.data.code) {
                             default:

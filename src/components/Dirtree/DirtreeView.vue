@@ -549,7 +549,7 @@ export default {
                 this.createSnackbar({message: this.$t("section.dirtree.move.success").toUpperCase(), type: 'success'})
           })
           .catch(error => {
-                console.log(error)
+                console.error(error)
                 this.loading = false
                 this.error = true
                 this.errorMsg = this.getMessageForCode(error)
@@ -568,7 +568,7 @@ export default {
                 this.createSnackbar({message: this.$t("section.dirtree.rename.success").toUpperCase(), type: 'success'})
           })
           .catch(error => {
-                console.log(error)
+                console.error(error)
                 this.loading = false
                 this.error = true
                 this.errorMsg = this.getMessageForCode(error)
@@ -707,7 +707,7 @@ export default {
                 this.createSnackbar({message: (this.$t("category.header.home") + " " + this.$t("words.loaded.single.m")).toUpperCase(), type: 'success'})
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
                 this.loading = false;
                 this.error = true;
                 this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})

@@ -79,7 +79,7 @@ export default {
                     this.$emit('refresh');
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                 })
             }
             this.$emit('closeDialog', this.viewKey);

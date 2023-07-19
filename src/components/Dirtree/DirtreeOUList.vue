@@ -111,7 +111,7 @@ export default {
                 .catch(error => {
                     this.loading = false
                     this.error = true
-                    console.log(error)
+                    console.error(error)
                     return error
                 })
             else
@@ -124,7 +124,7 @@ export default {
                 .catch(error => {
                     this.loading = false
                     this.error = true
-                    console.log(error)
+                    console.error(error)
                     return error
                 })
         },

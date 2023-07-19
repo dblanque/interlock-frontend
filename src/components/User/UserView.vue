@@ -569,7 +569,7 @@ export default {
           this.createSnackbar({message: (this.$t("classes.user.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         this.loading = false
         this.error = true
         this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
@@ -583,7 +583,7 @@ export default {
         this.createSnackbar({message: this.$t("section.users.userUnlocked").toUpperCase(), type: 'success'})
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         this.loading = false
         this.error = true
         this.createSnackbar({message: this.$t("section.users.errorUserUnlock").toUpperCase(), type: 'error'})
@@ -629,7 +629,7 @@ export default {
         );
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         this.loading = false
         this.error = true
         this.errorMsg = this.getMessageForCode(error)
@@ -660,7 +660,7 @@ export default {
           );
         })
         .catch(error => {
-          console.log(error)
+          console.error(error)
           this.loading = false
           this.error = true
           this.errorMsg = this.getMessageForCode(error)
@@ -699,7 +699,7 @@ export default {
           );
         })
         .catch(error => {
-          console.log(error)
+          console.error(error)
           this.loading = false
           this.error = true
           this.errorMsg = this.getMessageForCode(error)
@@ -726,7 +726,7 @@ export default {
         );
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         this.loading = false
         this.error = true
         this.errorMsg = this.getMessageForCode(error)
@@ -766,7 +766,7 @@ export default {
         this.fetchingData = false
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
         if (error.response.data.code) {
             switch (error.response.data.code) {
                 case 'user_group_fetch_error':

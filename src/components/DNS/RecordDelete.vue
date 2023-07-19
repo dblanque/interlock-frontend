@@ -193,7 +193,7 @@ export default {
                         notificationBus.$emit('createNotification', 
                             {message: this.errorMsg.toUpperCase(), type: 'error'}
                         )
-                        console.log(error)
+                        console.error(error)
                     })
                 } else if (this.deleteMode == 'record' && record) {
                     await new DNSRecord({}).delete({record: record})
@@ -214,7 +214,7 @@ export default {
                         notificationBus.$emit('createNotification', 
                             {message: this.errorMsg.toUpperCase(), type: 'error'}
                         )
-                        console.log(error)
+                        console.error(error)
                     })
                 }
             }
