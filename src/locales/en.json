@@ -333,7 +333,9 @@
             "dns_soa_record_root_only":"A Start Of Authority Record can only be set for the root of your zone",
             "dns_root_servers_only_cli":"Root DNS Servers may only be modified by command-line",
             "dns_field_validator_failed":"A Field in the Record has failed validation",
-            "dns_list_response_empty":"LDAP Response does not contain the DNS List"
+            "dns_list_response_empty":"LDAP Response does not contain the DNS List",
+            "dns_field_validator_exception":"Unhandled DNS Field Validator Exception",
+            "dns_record_create":"Record could not be created"
           },
           "users":{
             "userExists":"User already exists",
@@ -385,7 +387,11 @@
           "phone": "Must be a valid Phone",
           "date": "Date is invalid",
           "dayDate":"Day Date is invalid",
-          "ipAddress":"Invalid IP Address",
+          "ipv4Address":"Invalid IPv4 Address",
+          "ipv6Address":"Invalid IPv6 Address [0-9a-fA-F]",
+          "ipv6AddressUri":"IPv6 URI must be enclosed by brackets",
+          "ipv6AddressLength":"Invalid IPv6 Address Length",
+          "ipv6AddressAmbiguous":"Ambiguous IPv6 Address",
           "distinguishedName":"Distinguished Name is invalid",
           "realm":"NT Realm is invalid",
           "domainCanonical":"Must be a valid Domain in Canonical format (with a dot at the end)",
@@ -412,7 +418,8 @@
       "name":"Record Name",
       "nameNode":"Node Name",
       "nameTarget":"Target Name",
-      "ipAddress":"IP Address",
+      "ipv4Address":"IPv4 Address",
+      "ipv6Address":"IPv6 Address",
       "address":"Address",
       "type":"Record Type (Internal)",
       "typeName":"Record Type",

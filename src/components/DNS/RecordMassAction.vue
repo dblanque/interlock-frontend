@@ -24,6 +24,7 @@
                 <v-col cols="12" class="font-weight-medium pa-0 ma-0" style="padding-left: 0.5ch;" 
                     v-for="record, index in selectedRecords" :key="index">
                     {{ record.displayName + " (" + record.typeName + ")" }}
+                    {{ print_record_value(record) }}
                     <v-divider class="mx-12 my-1"/>
                 </v-col>
             </v-row>
@@ -82,6 +83,21 @@ export default {
     mixins: [ validationMixin, utilsMixin ],
     data() {
         return {
+            record_value_fields: {
+                'A':'address',
+                'AAAA':'ipv6Address',
+                'NS':'nameNode',
+                'CNAME':'nameNode',
+                'DNAME':'nameNode',
+                'TXT':'stringData',
+                'X25':'stringData',
+                'ISDN':'stringData',
+                'LOC':'stringData',
+                'HINFO':'stringData',
+                'MX':'nameExchange',
+                'SRV':'nameTarget',
+                'PTR':'nameNode',
+            },
             excludeAttr: [
                 'ts',
                 'type',
@@ -111,6 +127,10 @@ export default {
             this.error = false
             this.submitted = false
         },
+        print_record_value(record){
+            if (record.typeName in this.record_value_fields)
+                return ' - '+record[this.record_value_fields[record.typeName]]
+        },
         async closeDialog(deleteConfirm=false) {
             if (deleteConfirm == true) {
                 this.loading = true
@@ -138,7 +158,7 @@ export default {
                     this.error = true
                     this.errorMsg = this.getMessageForCode(error)
                     this.submitted = true
-                    console.log(error)
+                    console.error(error)
                 })
             }
 

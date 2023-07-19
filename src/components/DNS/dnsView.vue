@@ -9,6 +9,7 @@
     :custom-sort="sortNullLast"
     :loading="loading"
     :search="searchString"
+    :custom-filter="searchDnsTable"
     :footer-props="{
       'items-per-page-options': [10, 25, 50, 100, -1]
     }"
@@ -57,10 +58,10 @@
     </v-form>
     <v-row align="center" class="px-2 mx-1 py-0 my-0">
         <v-text-field
-          v-model="searchString"
-          clearable
-          :label="$t('actions.search')"
-          class="mx-2"
+            v-model="searchString"
+            clearable
+            :label="$t('actions.search')"
+            class="mx-2"
         ></v-text-field>
         <v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end">
             <v-btn 
@@ -189,8 +190,11 @@
         <span v-else-if="item.typeName == 'SOA'">
             {{ item.namePrimaryServer + " " + item.zoneAdminEmail + " " + item.dwSerialNo + " " + item.dwRefresh + " " + item.dwRetry + " " + item.dwExpire + " " + item.dwMinimumTtl }}
         </span>
-        <span v-else-if="item.address">
+        <span v-else-if="item.typeName == 'A'">
             {{ item.address }}
+        </span>
+        <span v-else-if="item.typeName == 'AAAA'">
+            {{ item.ipv6Address }}
         </span>
         <v-divider class="mx-10" v-else/>
     </template>
@@ -452,7 +456,7 @@ export default {
                     )
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                     this.errorMsg = this.getMessageForCode(error)
                     notificationBus.$emit('createNotification', 
                         {message: this.errorMsg.toUpperCase(), type: 'error'}
@@ -508,6 +512,15 @@ export default {
                     this.filteredData.push(...filteredItems)
                 }
             }
+        },
+        searchDnsTable(value, search, item){
+            const excludedKeys = ['record_bytes', 'type']
+            var result = []
+            for (const key in item){
+                if (!excludedKeys.includes(key))
+                    result.push(item[key])
+            }
+            return result.some(v=>v&&v.toString().toLowerCase().includes(this.searchString.toLowerCase()))
         },
         resetData(resetFilter=false){
             this.enabledRecordTypes = {
@@ -670,7 +683,7 @@ export default {
                 }
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
                 this.reloadDataTableHeaders()
                 this.loadFinished(error, "")
             })

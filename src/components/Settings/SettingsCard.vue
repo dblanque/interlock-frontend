@@ -173,7 +173,7 @@
                                     v-model="item.addIP"
                                     ref="ldapUriIP"
                                     :required="item.required && item.value.length == 0 ? true : false"
-                                    :rules="[fieldRules(item.addIP, 'net_ip', (item.required && item.value.length == 0 || item.addPORT.length > 0 ? true : false))]"
+                                    :rules="[fieldRules(item.addIP, 'net_ip_uri', (item.required && item.value.length == 0 || item.addPORT.length > 0 ? true : false))]"
                                     id="ldapUriIP"
                                     />
                                 </v-col>
@@ -616,7 +616,7 @@ export default {
                     }, 500)
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                     this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
                     setTimeout(() => {
                         this.testing = false
@@ -643,17 +643,14 @@ export default {
                     this.createSnackbar({message: (this.$t("classes.setting.plural") + " " + this.$t("words.saved.plural.m")).toUpperCase(), type: 'success'})
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                     this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
                 })
-                this.refreshSettings
+                this.loading = true
+                setTimeout(() => {
+                    this.refreshSettings()
+                }, 1500)
             }
-        },
-        async clearLogs(){
-
-        },
-        async pruneLogs(){
-
         },
         validateSettings(){
             if (this.$refs.settingsForm != undefined)
@@ -706,7 +703,7 @@ export default {
                 this.error = false
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
                 this.loading = false
                 this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
                 setTimeout(()=>{
@@ -727,7 +724,7 @@ export default {
                 }, 550)
             })
             .catch(error => {
-                console.log(error)
+                console.error(error)
             })
         },
         getConfigValues(log=false){

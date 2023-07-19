@@ -47,72 +47,52 @@ const utilsMixin = {
                 suffix = " (" + codeToUse.substring(0, 40) + "...)"
             }
 
-            switch(codeToUse){
-            case 'ERR_LDAP_GW':
-                return this.$t('error.codes.ldapGwError')
-            case 405:
-            case 'ERR_BAD_RESPONSE':
-                return this.$t('error.codes.badRequest')
-            case 'ERR_INVALID_CSV':
-                return this.$t('error.codes.invalidCSV')
-            case 'ERR_INVALID_CSV_HEADERS':
-                return this.$t('error.codes.invalidCSVHeaders')
-            case 'ERR_FILEREADER':
-                return this.$t('error.codes.fileReader')
-            case 409:
-                return this.$t('error.codes.conflict')
-            case 'ERR_NETWORK':
-                return this.$t('error.codes.networkError')
-            case 'entryAlreadyExists':
-            case 'ldap_obj_exists':
-                return this.$t('error.codes.ldapObjectExists')
-            case 'namingViolation':
-                return this.$t('error.codes.namingViolation')
-                // Users -------------------------------------------------------- //
-            case 'noUsersInImport':
-                return this.$t('error.codes.users.noUsersInImport')
             // OTP ---------------------------------------------------------- //
-            case 'otp_invalid_code':
-            case 'otp_invalid_data':
-            case 'otp_required':
-            case 'otp_no_device_registered':
-            case 'otp_invalid_recovery_code':
+            if (/otp_.*/.test(codeToUse))
                 return this.$t('error.codes.otp.'+codeToUse)
             // DNS ---------------------------------------------------------- //
-            case 'dns_zone_missing':
-            case 'dns_zone_in_record':
-            case 'dns_zone_not_deletable':
-            case 'dns_zone_exists':
-            case 'dns_zone_does_not_exist':
-            case 'dns_record_not_in_request':
-            case 'dns_record_dn_missing':
-            case 'dns_record_type_conflict':
-            case 'dns_record_exists_conflict':
-            case 'dns_record_type_unsupported':
-            case 'dns_record_attr_missing':
-            case 'dns_record_type_missing':
-            case 'dns_record_data_does_not_match':
-            case 'dns_record_entry_does_not_exist':
-            case 'dns_soa_increment':
-            case 'dns_soa_record_root_only':
-            case 'dns_root_servers_only_cli':
-            case 'dns_list_response_empty':
-            case 'dns_field_validator_failed':
+            else if (/dns_.*/.test(codeToUse))
                 return this.$t('error.codes.dns.'+codeToUse)
-            // -------------------------------------------------------------- //
-            case null:
-            case undefined:
-            case "":
-            default:
-                if (codeToUse in this.$t('error.codes'))
-                    return this.$t('error.codes.'+codeToUse)
-                else {
-                    var msg = this.$t("error.unknown_short")
-                    if (suffix != undefined && suffix != null)
-                        msg = msg + suffix
-                    return msg
+            else
+                switch(codeToUse){
+                case 'ERR_LDAP_GW':
+                    return this.$t('error.codes.ldapGwError')
+                case 405:
+                case 'ERR_BAD_RESPONSE':
+                    return this.$t('error.codes.badRequest')
+                case 'ERR_INVALID_CSV':
+                    return this.$t('error.codes.invalidCSV')
+                case 'ERR_INVALID_CSV_HEADERS':
+                    return this.$t('error.codes.invalidCSVHeaders')
+                case 'ERR_FILEREADER':
+                    return this.$t('error.codes.fileReader')
+                case 409:
+                    return this.$t('error.codes.conflict')
+                case 'ERR_NETWORK':
+                    return this.$t('error.codes.networkError')
+                case 'entryAlreadyExists':
+                case 'ldap_obj_exists':
+                    return this.$t('error.codes.ldapObjectExists')
+                case 'namingViolation':
+                    return this.$t('error.codes.namingViolation')
+                    // Users -------------------------------------------------------- //
+                case 'noUsersInImport':
+                    return this.$t('error.codes.users.noUsersInImport')
+                // -------------------------------------------------------------- //
+                case null:
+                case undefined:
+                case "":
+                default:
+                    console.log("Unknown Error Code:"+codeToUse)
+                    if (codeToUse in this.$t('error.codes'))
+                        return this.$t('error.codes.'+codeToUse)
+                    else {
+                        var msg = this.$t("error.unknown_short")
+                        if (suffix != undefined && suffix != null)
+                            msg = msg + suffix
+                        return msg
+                    }
                 }
-            }
         },
 
         // Check if theme is dark

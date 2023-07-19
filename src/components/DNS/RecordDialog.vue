@@ -70,8 +70,20 @@
                     <v-col cols="12" class="ma-0 pa-0">
                         <v-text-field
                         v-model="recordCopy.address"
-                        :label="$t('dns.attributes.ipAddress')"
-                        :rules="[this.fieldRules(recordCopy.address, 'net_ip', true)]"
+                        :label="$t('dns.attributes.ipv4Address')"
+                        :rules="[this.fieldRules(recordCopy.address, 'net_ipv4', true)]"
+                        class="mx-2"
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
+
+                <!-- AAAA Record Type -->
+                <v-row class="ma-0 pa-0 px-4 pb-4" v-if="selectedType == 28">
+                    <v-col cols="12" class="ma-0 pa-0">
+                        <v-text-field
+                        v-model="recordCopy.ipv6Address"
+                        :label="$t('dns.attributes.ipv6Address')"
+                        :rules="[this.fieldRules(recordCopy.ipv6Address, 'net_ipv6', true)]"
                         class="mx-2"
                         ></v-text-field>
                     </v-col>
@@ -322,6 +334,11 @@ export default {
                     supported: true
                 },
                 {
+                    name: "AAAA",
+                    value: 28,
+                    supported: true
+                },
+                {
                     name: "NS",
                     value: 2,
                     supported: true
@@ -370,11 +387,6 @@ export default {
                     name: "ISDN",
                     value: 20,
                     supported: true
-                },
-                {
-                    name: "AAAA",
-                    value: 28,
-                    supported: false
                 },
                 {
                     name: "LOC",
@@ -520,7 +532,7 @@ export default {
                     }, 250)
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                     this.loading = false
                     this.error = true
                     this.submitted = true
@@ -564,7 +576,7 @@ export default {
                     }, 250)
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                     this.loading = false
                     this.error = true
                     this.submitted = true

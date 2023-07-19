@@ -339,7 +339,9 @@
         "dns_soa_record_root_only":"Solo puede configurar un SOA para la raíz de su zona",
         "dns_root_servers_only_cli":"Los Servidores DNS de Raíz solo pueden ser modificados desde la consola",
         "dns_field_validator_failed":"Un campo no fue validado correctamente",
-        "dns_list_response_empty":"La Respuesta del LDAP no contiene Zonas de DNS"
+        "dns_list_response_empty":"La Respuesta del LDAP no contiene Zonas de DNS",
+        "dns_field_validator_exception":"Excepción de Validación de Campos DNS",
+        "dns_record_create":"No se pudo crear el Registro DNS"
       },
       "users":{
         "userExists":"El usuario ya existe.",
@@ -391,7 +393,11 @@
       "phone": "Debe ser un Teléfono válido",
       "date": "Fecha inválida",
       "dayDate": "Fecha de Día inválida",
-      "ipAddress":"Dirección de IP inválida",
+      "ipv4Address":"Dirección IPv4 inválida",
+      "ipv6Address":"Dirección IPv6 inválida [0-9a-fA-F]",
+      "ipv6AddressUri":"La URI IPv6 debe estar encapsulada por corchetes",
+      "ipv6AddressLength":"Longitud de Dirección IPv6 Inválida",
+      "ipv6AddressAmbiguous":"Dirección IPv6 Ambigua",
       "distinguishedName":"Nombre Distinguido inválido",
       "realm":"Reino NT inválido",
       "domainCanonical":"Debe ser un Dominio en formato Canónico (con un punto al final)",
@@ -418,7 +424,8 @@
       "name":"Nombre del Registro",
       "nameNode":"Nombre del Nodo",
       "nameTarget":"Nombre del Objetivo",
-      "ipAddress":"Dirección IP",
+      "ipv4Address":"Dirección IPv4",
+      "ipv6Address":"Dirección IPv6",
       "address":"Dirección",
       "type":"Tipo de Registro (Interno)",
       "typeName":"Tipo de Registro",
