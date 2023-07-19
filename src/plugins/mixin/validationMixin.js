@@ -24,6 +24,56 @@ function calculateCUITVerifierDigit(cuitNum) {
   return validateModEleven;
 }
 
+function validateIPv4Address(v){
+  return !v || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[1]?[0-9][0-9]?)$/.test(v) || i18n.t("error.validation.ipv4Address")
+}
+
+/**
+ * 
+ * @param {string} v 
+ * @param {boolean} brackets 
+ * @returns true || i18n string
+ */
+function validateIPv6Address(v, brackets=false) {
+  var ipv6_array
+  var regex_ipv6 = /^[0-9a-fA-F]{0,4}:([0-9a-fA-F]{0,4}:){1,6}[0-9a-fA-F]{1,4}$/
+  var regex_ipv6_ambiguity = /^.*::.*(::.*){1,}$/;
+  ipv6_array = v.split(":");
+
+  // URI Brackets Check
+  if (brackets === true) {
+    regex_ipv6 = /^\[{0,1}[0-9a-fA-F]{0,4}:([0-9a-fA-F]{0,4}:){1,6}[0-9a-fA-F]{1,4}\]{0,1}$/;
+    if (!v.includes("[") || !v.includes("]"))
+      return i18n.t("error.validation.ipv6AddressUri")
+  }
+
+  // Basic REGEX Check
+  if (!regex_ipv6.test(v)) 
+    return i18n.t("error.validation.ipv6Address")
+
+  // Length Check
+  if (ipv6_array.length > 8 || (ipv6_array.length <= 7 && !v.includes("::")) ) 
+    return i18n.t("error.validation.ipv6AddressLength")
+
+  // Ambiguity Check
+  if (regex_ipv6_ambiguity.test(v)) 
+    return i18n.t("error.validation.ipv6AddressAmbiguous")
+
+  return true
+}
+
+/**
+ * 
+ * @param {string} v 
+ * @param {boolean} uri 
+ * @returns true || i18n string
+ */
+function validateIPAddress(v, uri=false) {
+  if (/^.*[a-fA-F].*$/.test(v) || v.includes("[") || v.includes("]"))
+    return validateIPv6Address(v, uri)
+  return validateIPv4Address(v)
+}
+
 const validationMixin = {
     methods:{
 
@@ -60,7 +110,8 @@ const validationMixin = {
       inputRulesDomainRoot: (v) => !v || /^(((?:[a-zA-Z0-9-.]){2,61}(?:\.[a-zA-Z]{2,})+|(?:[a-zA-Z0-9-]){2,64})|[@]{1})?$/.test(v) || i18n.t("error.validation.domainRoot"),
       inputRulesEmail: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+$/.test(v) || i18n.t("error.validation.email"),
       inputRulesUSN: (v) => !v || /^([a-zA-Z0-9._-]{2,64})@(?:[a-zA-Z0-9-\\.]){2,61}((?:[a-zA-Z0-9-]){2,61})+$/.test(v) || i18n.t("error.validation.usn"),
-      inputRulesIP: (v) => !v || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[1]?[0-9][0-9]?)$/.test(v) || i18n.t("error.validation.ipAddress"),
+      // inputRulesIPv4: (v) => !v || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[1]?[0-9][0-9]?)$/.test(v) || i18n.t("error.validation.ipv4Address"),
+      // inputRulesIPv6: (v) => !v || /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/.test(v) || i18n.t("error.validation.ipv6Address"),
       inputRulesREALM: (v) => !v || /^[A-Z]{1,15}$/.test(v) || i18n.t("error.validation.realm"),
       inputRulesPORT: (v) => !v || /^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/.test(v) || i18n.t("error.validation.ldapURI_PORT"),
       inputRuleTOTP: (v) => !v || /^[0-9]{6}$/.test(v) || i18n.t("error.validation.totpLength"),
@@ -88,6 +139,26 @@ const validationMixin = {
           message = i18n.t("error.validation.cbu");
         }
         return message;
+      },
+
+      inputRulesIPv4: (v) => {
+        return validateIPv4Address(v)
+      },
+
+      inputRulesIPv6: (v) => {
+        return validateIPv6Address(v)
+      },
+
+      inputRulesIPv6Brackets: (v) => {
+        return validateIPv6Address(v, true)
+      },
+
+      inputRulesIP: (v) => {
+        return validateIPAddress(v)
+      },
+
+      inputRulesIP_URI: (v) => {
+        return validateIPAddress(v, true)
       },
       
       // inputRulesCUITFormat: (v) => !v || /(^([0-9]{2})-([0-9]{8})-([0-9]{1}))|(^[0-9]{11})$/i.test(v) || i18n.t("error.validation.cuitFormat"),
@@ -201,7 +272,16 @@ const validationMixin = {
           case "ldap_dn": // LDAP Distinguished Name validator
             rules.push(this.inputRulesDN)
             break;
-          case "net_ip": // LDAP Realm validator
+          case "net_ipv4": // IPv4 Validation
+            rules.push(this.inputRulesIPv4)
+            break;
+          case "net_ipv6": // IPv6 Validation
+            rules.push(this.inputRulesIPv6)
+            break;
+          case "net_ip_uri": // IPv4/6 Validation (IPv6 with brackets)
+            rules.push(this.inputRulesIP_URI)
+            break;
+          case "net_ip": // IPv4/6 Validation
             rules.push(this.inputRulesIP)
             break;
           case "net_port": // LDAP Realm validator
