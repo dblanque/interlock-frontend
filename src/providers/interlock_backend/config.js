@@ -129,6 +129,9 @@ const urls = {
         delete: "api/test/delete/",
         options: "api/test/options/"
     },
+    liveness: {
+        check: "api/liveness/check/"
+    },
 }
 
 // Adds Axios Response Interceptor.
@@ -176,7 +179,7 @@ request.interceptors.response.use(
                         // 3) Return re-sent request through new axios.
                         return axios(originalRequest);
                     }
-                    else throw "No token recieved.";
+                    else throw "No token received.";
                 // on refresh request error catch
                 }).catch((e)=>{
                     console.log(e)
@@ -189,11 +192,11 @@ request.interceptors.response.use(
                         if (router.app.$route.path != "/login")
                             router.push('/login')
                     }
-                    return error.response
+                    return Promise.reject(error.response)
                 })
             }
         // Else, if the error is other than Unauthorized...
-        }else
+        } else
             // Return error response.
             return Promise.reject(error)
     }

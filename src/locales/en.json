@@ -763,6 +763,7 @@
       }
     },
     "settings":{
+      "waitingServiceRestart":"Waiting for Service Restart",
       "defaultAdminIs":"Default Admin is",
       "resetDialog":{
         "header":"Reset Settings",
@@ -887,6 +888,7 @@
   },
   "misc":{
     "version":"Version",
+    "clickToRefreshBackendStatus":"Click to refresh the Interlock Back-end Status",
     "autocomputedField":"Autocomputed Field",
     "darkMode":"Enable Dark Mode",
     "logoutMsg":"Are you sure you wish to Logout?",

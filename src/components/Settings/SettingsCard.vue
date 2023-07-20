@@ -353,6 +353,7 @@ export default {
             testError: false,
             testFinished: false,
             readonly: true,
+            saveTimerId: 0,
             invalid: false,
             loading: true,
             resetDialog: false,
@@ -626,6 +627,10 @@ export default {
                 })
             }
         },
+        async sleep(time_in_milliseconds){
+            clearTimeout(this.saveTimerId)
+            await new Promise(r => this.saveTimerId = setTimeout(r, time_in_milliseconds));
+        },
         async saveSettings(){
             if (this.$refs.settingsForm.validate('settingsForm') && 
                 this.$refs.defaultAdminPwd.validate() && 
@@ -635,6 +640,7 @@ export default {
                 this.invalid = true
 
             if (!this.invalid) {
+                this.loading = true
                 var dataToSend = {}
                 dataToSend = this.getConfigValues()
                 dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
@@ -646,10 +652,12 @@ export default {
                     console.error(error)
                     this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
                 })
-                this.loading = true
-                setTimeout(() => {
-                    this.refreshSettings()
-                }, 1500)
+                await this.sleep(1000);
+                this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
+
+                // Wait until Back-end service is active to refresh
+                await this.sleep(2000);
+                this.refreshSettings()
             }
         },
         validateSettings(){

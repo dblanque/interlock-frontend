@@ -15,6 +15,7 @@ import settingCalls from '@/providers/interlock_backend/modules/settings.js'
 import logCalls from '@/providers/interlock_backend/modules/log.js'
 import totpCalls from '@/providers/interlock_backend/modules/totp.js'
 import testCalls from '@/providers/interlock_backend/modules/test.js'
+import livenessCalls from '@/providers/interlock_backend/modules/liveness.js'
 
 const modules = {
     auth: authCalls,
@@ -27,6 +28,7 @@ const modules = {
     dnsr: dnsRecordCalls,
     totp: totpCalls,
     test: testCalls,
+    liveness: livenessCalls,
 }
 
 const interlock_backend = {

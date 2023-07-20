@@ -769,6 +769,7 @@
       }
     },
     "settings":{
+      "waitingServiceRestart":"Aguardando que re-inicie el servicio",
       "defaultAdminIs":"Administrador Pre-determinado",
       "resetDialog":{
         "header":"Re-establecer Configuración",
@@ -894,6 +895,7 @@
   },
   "misc": {
     "version":"Versión",
+    "clickToRefreshBackendStatus":"Haga click para refrescar el estado del Back-end",
     "autocomputedField":"Campo con computado automático",
     "darkMode": "Activar Modo Oscuro",
     "logoutMsg":"¿Está seguro de cerrar su sesión?",
