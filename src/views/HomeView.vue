@@ -423,12 +423,13 @@ export default {
   async mounted() {
     var currentPath = this.$route.path;
     if (currentPath && currentPath.length > 0) {
-      this.navTabs.forEach((item) => {
-        if ("/" + item.route == this.$route.path) {
-          this.selectedTab = item.index;
-          this.active_tab = item.index;
-        }
-      });
+      var validRoute = this.navTabs.filter(item => "/" + item.route == currentPath && item.enabled == true)[0]
+      if (validRoute) {
+        this.selectedTab = validRoute.index;
+        this.active_tab = validRoute.index;
+      } else {
+        this.$router.push("/")
+      }
     }
     setTimeout(() => {
       this.showNavTabs = true;
@@ -556,7 +557,7 @@ export default {
       await this.loadDomainData();
       var routeToPush = "";
       this.navTabs.forEach((item) => {
-        if (item.index == index) {
+        if (item.index == index && item.enabled == true) {
           if (item.route.length > 0) {
             routeToPush = item.route;
           } else {
