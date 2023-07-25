@@ -44,7 +44,18 @@
                         item-value="value"
                         item-text="name"/>
                     </v-col>
-                    <v-col cols="12" class="ma-0 pa-0 px-2 mt-4">
+                    <v-col cols="12" class="ma-0 pa-0 mt-4 mb-4" v-if="selectedType != 6">
+                        <v-text-field
+                        v-model="recordCopy.serial"
+                        clearable
+                        :hint="$t('dns.hints.serial' + ( updateFlag ? '_edit' : '_create' ))"
+                        persistent-hint
+                        :label="$t('dns.attributes.serial')"
+                        :rules="[this.fieldRules(recordCopy.serial, 'ge_int32', false)]"
+                        class="mx-2"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" class="ma-0 pa-0 px-2 mt-0">
                         <v-combobox @change="setTTL"
                         :label="$t('dns.attributes.ttl')"
                         :items="ttlPresets"
@@ -423,7 +434,20 @@ export default {
                 16, // TXT
                 19, // X25
                 29  // LOC
-            ]
+            ],
+            intFields:[
+                "serial",
+                "ttl",
+                "wPreference",
+                "dwSerialNo",
+                "dwRefresh",
+                "dwRetry",
+                "dwExpire",
+                "dwMinimumTtl",
+                "wPriority",
+                "wWeight",
+                "wPort"
+            ],
         }
     },
     computed: {
@@ -518,6 +542,10 @@ export default {
             if (this.$refs.RecordForm.validate()) {
                 this.resetLoadingStatus()
                 this.loading = true
+                Object.keys(this.recordCopy).forEach(key => {
+                    if (this.intFields.includes(key))
+                        this.recordCopy[key] = parseInt(this.recordCopy[key])
+                })
                 await new DNSRecord({}).insert(this.recordCopy)
                 .then(() => {
                     this.loading = false
@@ -544,8 +572,6 @@ export default {
             }
         },
         async updateRecord() {
-            // console.log('Update Record')
-            // console.log(this.recordCopy)
             this.recordCopy.zone = this.currentZone
             var recordDiffers = false
 
@@ -562,6 +588,14 @@ export default {
             if (recordDiffers == true && this.$refs.RecordForm.validate()) {
                 this.resetLoadingStatus()
                 this.loading = true
+                Object.keys(this.recordCopy).forEach(key => {
+                    if (this.intFields.includes(key))
+                        this.recordCopy[key] = parseInt(this.recordCopy[key])
+                })
+                Object.keys(this.originalRecord).forEach(key => {
+                    if (this.intFields.includes(key))
+                        this.originalRecord[key] = parseInt(this.originalRecord[key])
+                })
                 await new DNSRecord({}).update({record: this.recordCopy, oldRecord: this.originalRecord})
                 .then(() => {
                     this.loading = false
