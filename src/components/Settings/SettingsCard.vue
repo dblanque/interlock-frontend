@@ -59,6 +59,19 @@
                     {{ $t("actions.refresh") }}
             </v-btn>
         </v-row>
+        <v-row class="mx-1" justify="center" v-if="false">
+            <v-select :label="$t('actions.ldap.operation')"
+                @input="changeManualOpType(manual_cmd.operation)"
+                :v-model="manual_cmd.operation"
+                :items="ldap.operations">
+                <template slot="selection" slot-scope="data">
+                    {{ $t("actions.ldap.operation_list."+data.item) }}
+                </template>
+                <template slot="item" slot-scope="data">
+                    {{ $t("actions.ldap.operation_list."+data.item) }}
+                </template>
+            </v-select>
+        </v-row>
         <v-row class="mx-1" justify="center">
             <v-checkbox off-icon="mdi-close-box"
             :label="$t('section.settings.defaultAdminIs') + ' ' + (defaultAdminEnabled ? $t('words.enabled') : $t('words.disabled'))"
@@ -219,71 +232,14 @@
                         </v-card>
                         <!-- Object Type Settings -->
                         <v-card flat outlined class="ma-0 px-6 py-2 pt-4" v-else-if="item.type == 'object'">
-                            <span class="font-weight-normal">
-                                {{ $t('section.settings.fields.' + key) }}
-                            </span>
-                            <v-row class="ma-0 pa-0">
-                                <v-text-field :label="$t('words.key')"
-                                class="px-2"
-                                :readonly="item.readonly || readonly == true"
-                                :hint="$t(item.hint)"
-                                :ref="'OBJ_KEY_'+key"
-                                :persistent-hint="item.persistentHint"
-                                @keydown.enter="addToObject(item, item.keyToAdd, item.valueToAdd)"
-                                v-model="item.keyToAdd"
-                                :required="item.required && item.value.length == 0 ? true : false"
-                                :rules="item.validator ? [fieldRules(item.keyToAdd, item.validator, getRequired(item.required, true))] : undefined"
-                                :id="'OBJ_KEY_'+key"
-                                />
-                                <v-text-field :label="$t('words.value')"
-                                class="px-2"
-                                :ref="'OBJ_VAL_'+key"
-                                :readonly="item.readonly || readonly == true"
-                                :hint="$t(item.hint)"
-                                :persistent-hint="item.persistentHint"
-                                @keydown.enter="addToObject(item, item.keyToAdd, item.valueToAdd)"
-                                v-model="item.valueToAdd"
-                                :required="item.required && item.value.length == 0 ? true : false"
-                                :rules="item.validator ? [fieldRules(item.valueToAdd, item.validator, getRequired(item.required, true, true))] : undefined"
-                                :id="'OBJ_VAL_'+key"
-                                />
-                                <v-btn class="bg-primary text-white mt-3 ml-5"
-                                :disabled="item.readonly || readonly == true"
-                                @click="addToObject(item, item.keyToAdd, item.valueToAdd)"
-                                rounded
-                                icon>
-                                    <v-icon>
-                                        mdi-plus
-                                    </v-icon>
-                                </v-btn>
-                            </v-row>
-                            <v-list-item v-bind="item.value" v-for="subItem, subItemKey in item.value" :key="subItemKey">
-                                <v-list-item-content class="ma-0 pa-0">
-                                    <v-col class="ma-0 pa-0 px-2 py-1" cols="6">
-                                        <v-text-field outlined
-                                            :label="$t('words.key')"
-                                            :value="subItemKey" 
-                                            readonly/>
-                                    </v-col>
-                                    <v-col class="ma-0 pa-0 px-2 py-1" cols="6">
-                                        <v-text-field outlined
-                                            :label="$t('words.value')"
-                                            :value="subItem" 
-                                            readonly/>
-                                    </v-col>
-                                </v-list-item-content>
-                                <v-list-item-action class="ma-0 pa-0">
-                                    <v-btn class="bg-primary text-white ml-2 mb-7"
-                                    :disabled="item.readonly || readonly == true"
-                                    @click="removeFromObject(item, subItemKey)"
-                                    rounded small
-                                    icon>
-                                        <v-icon small>
-                                            mdi-minus
-                                        </v-icon>
-                                    </v-btn>
-                                </v-list-item-action>
-                            </v-list-item>
+                            <ObjectEditor :value="item.value"
+                            :label="$t('section.users.import.dataMapping')"
+                            ref="settingFieldsEditor"
+                            @update="v => item.value = v"
+                            dense
+                            :disableAddDelete="!item.allow_add_delete"
+                            :required="item.required"
+                            />
                         </v-card>
                         <!-- Select Settings -->
                         <v-select :label="$t('section.settings.fields.' + key)"
@@ -340,15 +296,73 @@ import validationMixin from '@/plugins/mixin/validationMixin';
 import utilsMixin from '@/plugins/mixin/utilsMixin';
 import Settings from '@/include/Settings';
 import SettingsResetDialog from '@/components/Settings/SettingsResetDialog.vue'
+import ObjectEditor from '@/components/Settings/ObjectEditor'
 import { notificationBus } from '@/main.js'
 
 export default {
     mixins: [ validationMixin, utilsMixin ],
     components: {
-        SettingsResetDialog
+        SettingsResetDialog,
+        ObjectEditor
     },
     data() {
         return {
+            ldap:{
+                operations:[
+                    "ADD",
+                    "DELETE",
+                    "MODIFY",
+                    "MODIFYDN",
+                    "SEARCH",
+                    "COMPARE",
+                    "EXTENDED"
+                ],
+                object_classes:[
+                    'user',
+                    'person',
+                    'organizationalPerson',
+                    'container',
+                    'organizational-unit'
+                ],
+                object_attributes:[
+                    'distinguishedName',
+                    'givenName', 
+                    'sn', 
+                    'displayName', 
+                    'sAMAccountName', 
+                    'mail',
+                    'telephoneNumber',
+                    'streetAddress',
+                    'postalCode',
+                    'l', // Local / City
+                    'st', // State/Province
+                    'countryCode', // INT
+                    'co', // 2 Letter Code for Country
+                    'c', // Full Country Name
+                    'wWWHomePage',
+                    'distinguishedName',
+                    'userPrincipalName',
+                    'userAccountControl', // Permission ACLs
+                    'whenCreated',
+                    'whenChanged',
+                    'lastLogon',
+                    'badPwdCount',
+                    'pwdLastSet',
+                    'primaryGroupID',
+                    'objectClass',
+                    'objectCategory',
+                    'objectSid',
+                    'sAMAccountType',
+                    'memberOf',
+                    'cn',
+                    'member',
+                    'groupType'
+                ]
+            },
+            manual_cmd: {
+                operation: "ADD",
+                filters: []
+            },
             testing: false,
             testError: false,
             testFinished: false,
@@ -520,7 +534,8 @@ export default {
                             value: {},
                             keyToAdd: "",
                             valueToAdd: "",
-                            type: "object"
+                            type: "object",
+                            allow_add_delete: false
                         },
                         // LDAP_AUTH_USER_LOOKUP_FIELDS:{ 
                         //     value: [],
@@ -541,6 +556,9 @@ export default {
         this.refreshSettings();
     },
     methods:{
+        changeManualOpType(v){
+            console.log(v)
+        },
         createSnackbar(notifObj){
             notificationBus.$emit('createNotification', notifObj);
         },

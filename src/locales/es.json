@@ -23,6 +23,20 @@
     }
   },
   "actions": {
+    "ldap":{
+      "manual_command":"Comando LDAP Manual",
+      "operation":"Operación LDAP",
+      "operation_list":{
+        "ADD":"Añadir (Add)",
+        "DELETE":"Eliminar (Delete)",
+        "MODIFY":"Modificar (Modify)",
+        "MODIFYDN":"Modificar DN (Modify-dn)",
+        "SEARCH":"Buscar (Search)",
+        "COMPARE":"Comparar (Compare)",
+        "EXTENDED":"Extendida (Extended)"
+      },
+      "filter":"Filtro LDAP"
+    },
     "expirePwd":"Expirar Contraseña",
     "extra":"Extra",
     "moreActions":"Más Acciones",
@@ -335,7 +349,10 @@
         "dns_record_type_missing":"Falta el tipo de Registro DNS en el Request",
         "dns_record_data_does_not_match":"Los datos del Registro no coinciden con los datos del servidor",
         "dns_record_entry_does_not_exist":"La Entrada LDAP del Registro no existe",
-        "dns_soa_increment":"No se pudo Incrementar el Serial del SOA",
+        "dns_record_data_malformed":"El Registro de DNS está mal formado",
+        "dns_record_serial":"No se pudo establecer el Serial del Registro",
+        "dns_soa_fetch":"No se pudo obtener el Registro SOA de la Zona",
+        "dns_soa_serial_increment":"No se pudo Incrementar el Serial del SOA",
         "dns_soa_record_root_only":"Solo puede configurar un SOA para la raíz de su zona",
         "dns_root_servers_only_cli":"Los Servidores DNS de Raíz solo pueden ser modificados desde la consola",
         "dns_field_validator_failed":"Un campo no fue validado correctamente",
@@ -368,6 +385,7 @@
       "noCountryCode":"Sin código configurado"
     },
     "validation": {
+      "int32":"Debe ser un número entero de 32 bits",
       "below10000":"El valor numérico debe ser menor a 10000",
       "aboveZero":"El valor numérico debe ser mayor a 0",
       "doubleQuotes":"No se permiten las comillas dobles",
@@ -412,6 +430,8 @@
   "dns":{
     "hints":{
       "name":"Utilice el caracter @ para identificar su zona raíz",
+      "serial_create":"Deje el campo vacío para auto-generar el serial",
+      "serial_edit":"Si el serial no es modificado, este será auto-incrementado",
       "stringData":"Inserte el registro sin doble comilla",
       "quotesNotRequired":"Las comillas dobles no son requeridas, son puestas en forma automática"
     },

@@ -23,6 +23,20 @@
     }
   },
   "actions":{
+    "ldap":{
+      "manual_command":"Manual LDAP Command",
+      "operation":"LDAP Operation",
+      "operation_list":{
+        "ADD":"Add",
+        "DELETE":"Delete",
+        "MODIFY":"Modify",
+        "MODIFYDN":"Modify-dn",
+        "SEARCH":"Search",
+        "COMPARE":"Compare",
+        "EXTENDED":"Extended"
+      },
+      "filter":"LDAP Filter"
+    },
     "expirePwd":"Expire Password",
     "extra":"Extra",
     "moreActions":"More Actions",
@@ -329,7 +343,10 @@
             "dns_record_type_missing":"Record Type not in Request",
             "dns_record_data_does_not_match":"Record Data does not match server-side entry",
             "dns_record_entry_does_not_exist":"Record LDAP Entry does not exist",
-            "dns_soa_increment":"Unable to increment SOA Serial",
+            "dns_record_data_malformed":"DNS Record is Malformed",
+            "dns_record_serial":"Unable to set Record Serial",
+            "dns_soa_fetch":"Could not fetch Record Zone SOA",
+            "dns_soa_serial_increment":"Unable to increment SOA Serial",
             "dns_soa_record_root_only":"A Start Of Authority Record can only be set for the root of your zone",
             "dns_root_servers_only_cli":"Root DNS Servers may only be modified by command-line",
             "dns_field_validator_failed":"A Field in the Record has failed validation",
@@ -362,6 +379,7 @@
         "noCountryCode":"No country code set"
       },
       "validation":{
+          "int32":"Must be a 32-bit Integer",
           "below10000":"Numeric value must be below 10000",
           "aboveZero":"Numeric value must be above 0",
           "doubleQuotes":"Double quotes are not allowed",
@@ -406,6 +424,8 @@
   "dns":{
     "hints":{
       "name":"Use the character @ to identify your root zone",
+      "serial_create":"Leave empty to auto-generate the serial",
+      "serial_edit":"If this is not modified the serial will be auto-incremented",
       "stringData":"Insert the record without double quotation marks",
       "quotesNotRequired":"Double quotes are not required, they are automatically set by the system"
     },

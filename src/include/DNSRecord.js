@@ -5,6 +5,7 @@ class DNSRecord extends ApiModel{
 
     name;
     nameExchange;
+    ttl;
     address;
     typeName;
     serial;
