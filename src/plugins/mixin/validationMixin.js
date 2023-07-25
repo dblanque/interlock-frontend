@@ -90,6 +90,7 @@ const validationMixin = {
       inputRulesMax6: (v) => !v || /^.{1,6}$/.test(v) || i18n.t("error.validation.max6"),
       inputRulesMax8: (v) => !v || /^.{1,8}$/.test(v) || i18n.t("error.validation.max8"),
       inputRulesMax255: (v) => !v || /^.{1,255}$/.test(v) || i18n.t("error.validation.max255"),
+      inputRulesInt32: (v) => !v || /[0-9]{1,10}$/.test(v) && v < 4294967296 || i18n.t("error.validation.int32"),
       inputRulesNoDoubleQuotes: (v) => !v || /^[^"]+$/.test(v) || i18n.t("error.validation.doubleQuotes"),
       inputRulesNoSingleQuotes: (v) => !v || /^[^']+$/.test(v) || i18n.t("error.validation.singleQuotes"),
       inputRulesalphaNumericSpaces: (v) => !v || /^[üöñóúíáéa-z0-9]+[üöñóúíáéa-z0-9\s]+$/i.test(v) || i18n.t("error.validation.alphaNumericSpaces"),
@@ -262,6 +263,9 @@ const validationMixin = {
             break;
           case "ge_integer": // Generic Integer Field
             rules.push(this.inputRulesAboveZero)
+            break;
+          case "ge_int32":
+            rules.push(this.inputRulesInt32)
             break;
           case "ge_username": // Generic Username Field
             rules.push(this.inputRulesalphaNumericSpecialUsername)
