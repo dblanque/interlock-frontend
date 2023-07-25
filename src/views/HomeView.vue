@@ -428,7 +428,7 @@ export default {
         this.selectedTab = validRoute.index;
         this.active_tab = validRoute.index;
       } else {
-        this.$router.push("/")
+        this.$router.push("/home")
       }
     }
     setTimeout(() => {
