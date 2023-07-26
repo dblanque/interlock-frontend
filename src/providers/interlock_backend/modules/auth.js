@@ -35,6 +35,7 @@ const calls = {
         const removeKeys = [
             "token",
             "refresh",
+            "refreshClock",
             "username",
             "first_name",
             "last_name",
