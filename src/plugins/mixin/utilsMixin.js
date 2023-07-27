@@ -53,6 +53,12 @@ const utilsMixin = {
             // DNS ---------------------------------------------------------- //
             else if (/dns_.*/.test(codeToUse))
                 return this.$t('error.codes.dns.'+codeToUse)
+            else if (/user_.*/.test(codeToUse))
+                return this.$t('error.codes.users.'+codeToUse)
+            else if (/ldap_.*/.test(codeToUse))
+                return this.$t('error.codes.ldap.'+codeToUse)
+            else if (/group_.*/.test(codeToUse))
+                return this.$t('error.codes.groups.'+codeToUse)
             else
                 switch(codeToUse){
                 case 'ERR_LDAP_GW':
@@ -70,12 +76,9 @@ const utilsMixin = {
                     return this.$t('error.codes.conflict')
                 case 'ERR_NETWORK':
                     return this.$t('error.codes.networkError')
-                case 'entryAlreadyExists':
-                case 'ldap_obj_exists':
-                    return this.$t('error.codes.ldapObjectExists')
                 case 'namingViolation':
                     return this.$t('error.codes.namingViolation')
-                    // Users -------------------------------------------------------- //
+                // Users -------------------------------------------------------- //
                 case 'noUsersInImport':
                     return this.$t('error.codes.users.noUsersInImport')
                 // -------------------------------------------------------------- //

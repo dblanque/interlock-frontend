@@ -471,18 +471,7 @@ export default {
                 setTimeout(() => {
                     this.loading = false;
                 }, 450)
-                if (error.response.data.code) {
-                    switch (error.response.data.code) {
-                        case 'ldap_obj_exists':
-                            this.errorMsg = this.$t("error.codes.ldapObjectExists")
-                            break;
-                        default:
-                            this.errorMsg = this.$t("error.unknown_short")
-                            break;
-                    }
-                } else {
-                    this.errorMsg = this.$t("error.unknown_short")
-                }
+                this.errorMsg = this.getMessageForCode(error)
             })
         }
     }

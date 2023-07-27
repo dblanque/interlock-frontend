@@ -572,7 +572,10 @@ export default {
         console.error(error)
         this.loading = false
         this.error = true
-        this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
+        this.errorMsg = this.getMessageForCode(error)
+        notificationBus.$emit('createNotification', 
+            {message: this.errorMsg.toUpperCase(), type: 'error'}
+        )
       })
     },
     async unlockUser(userObject){
@@ -590,7 +593,7 @@ export default {
       })
     },
     isLoggedInUser(username){
-      if (username == localStorage.getItem('username'))
+      if (username == localStorage.getItem('username') || username == 'Administrator' && localStorage.getItem('username') == 'admin' )
         return true
       return false
     },
@@ -650,7 +653,7 @@ export default {
         .then(() => {
           this.loading = false
           this.error = false
-          this.errorMsg = false
+          this.errorMsg = ""
           this.listUserItems(false);
           notificationBus.$emit('createNotification', 
             {
@@ -664,6 +667,9 @@ export default {
           this.loading = false
           this.error = true
           this.errorMsg = this.getMessageForCode(error)
+          notificationBus.$emit('createNotification', 
+              {message: this.errorMsg.toUpperCase(), type: 'error'}
+          )
         })
       }
     },
@@ -674,7 +680,7 @@ export default {
     async massAccountStatusChange(disable){
       this.loading = true
       this.error = false
-      this.errorMsg = false
+      this.errorMsg = ""
       const current_user = localStorage.getItem('username')
       const actionMsg = disable ? this.$t("words.disabled") : this.$t("words.enabled")
       const actionType = disable ? 'warning' : 'success'
@@ -689,7 +695,7 @@ export default {
         .then(() => {
           this.loading = false
           this.error = false
-          this.errorMsg = false
+          this.errorMsg = ""
           this.listUserItems(false);
           notificationBus.$emit('createNotification', 
             {
@@ -704,6 +710,9 @@ export default {
           this.error = true
           this.errorMsg = this.getMessageForCode(error)
           this.listUserItems(false);
+          notificationBus.$emit('createNotification', 
+              {message: this.errorMsg.toUpperCase(), type: 'error'}
+          )
         })
       }
     },
@@ -730,6 +739,9 @@ export default {
         this.loading = false
         this.error = true
         this.errorMsg = this.getMessageForCode(error)
+        notificationBus.$emit('createNotification', 
+            {message: this.errorMsg.toUpperCase(), type: 'error'}
+        )
         this.listUserItems(false);
       })
     },
@@ -767,18 +779,10 @@ export default {
       })
       .catch(error => {
         console.error(error)
-        if (error.response.data.code) {
-            switch (error.response.data.code) {
-                case 'user_group_fetch_error':
-                    this.errorMsg = this.$t("error.codes.users.couldNotFetchGroups")
-                    break;
-                default:
-                    this.errorMsg = this.$t("error.unknown_short")
-                    break;
-            }
-        } else {
-            this.errorMsg = this.$t("error.unknown_short")
-        }
+        this.errorMsg = this.getMessageForCode(error)
+        notificationBus.$emit('createNotification', 
+            {message: this.errorMsg.toUpperCase(), type: 'error'}
+        )
         this.loading = false
         this.fetchingData = false
         this.error = true;

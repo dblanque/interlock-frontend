@@ -361,16 +361,45 @@
         "dns_record_create":"No se pudo crear el Registro DNS"
       },
       "users":{
-        "userExists":"El usuario ya existe.",
-        "couldNotSave":"El usuario no pudo ser guardado",
-        "countryMalformed":"Campo de País mal formado",
-        "couldNotFetchGroups":"Error obteniendo Grupos del Usuario",
-        "permissionMalformed":"Diccionario de Permisos mal formado",
-        "noUsersInImport":"No hay usuarios en el archivo"
+        "noUsersInImport":"No hay usuarios en el archivo",
+        "user_permission_malformed":"Permisos de Usuario mal-formados",
+        "user_passwords_dont_match":"No coinciden las contraseñas del Usuario",
+        "user_create_error":"No se pudo crear el Usuario",
+        "user_bulk_create_error":"No se pudo crear un Usuario",
+        "user_bulk_mapping_error":"Falta o es inválida una relación de los cabezales",
+        "user_bulk_length_error":"Una fila no tiene la cantidad de campos o delimitadores correcta",
+        "user_update_error":"No se pudo modificar el Usuario",
+        "user_field_validator_error":"No se pudo validar el Usuario",
+        "user_dn_does_not_exist":"No existe un Usuario con ese Nombre Distinguido",
+        "user_dn_path_exception":"Excepción de Parseo de DN de Usuario",
+        "user_anti_lockout":"Excepción de Anti-bloqueo de Usuario",
+        "user_unlock_error":"No se pudo des-bloquear el Usuario",
+        "user_country_error":"No se pudo actualizar el país del Usuario",
+        "user_group_fetch_error":"No se pudieron obtener las membresías de Grupo",
+        "user_group_primary_err":"No se puede eliminar el Grupo Primario del Usuario",
+        "user_group_bad":"Operación de Miembro de Grupo Inválida"
+      },
+      "ldap":{
+        "ldap_obj_exists":"Ya existe un objeto con este Nombre Común",
+        "ldap_connection_not_open":"No se abrió una Conexión LDAP previo a esta Operación",
+        "ldap_perm_insufficient":"Permisos de LDAP Insuficientes",
+        "ldap_obj_doesnt_exist":"No existe un Objeto LDAP con este Nombre",
+        "ldap_bind_err":"No se pudo emparejar con el Servidor LDAP",
+        "ldap_tree_err":"No se pudo obtener el Directorio del Servidor LDAP",
+        "ldap_port_err":"Puerto de LDAP Inalcanzable",
+        "ldap_bind_test_failed":"Conexión de Emparejamiento Fallida"
       },
       "groups":{
-        "groupExists":"El grupo ya existe",
-        "couldNotSave":"El grupo no pudo ser guardado"
+        "group_does_not_exist":"El Grupo no existe",
+        "group_create":"No se pudo el crear Grupo",
+        "group_delete":"No se pudo el eliminar Grupo",
+        "group_update":"No se pudo el modificar Grupo",
+        "group_member_add":"No se pudieron añadir miembros al Grupo",
+        "group_member_remove":"No se pudieron eliminar miembros del Grupo",
+        "group_scope_or_type":"Falta el Alcance o Tipo del Grupo en el Request",
+        "group_dn_missing":"Falta el Nombre Distinguido en el Request",
+        "group_builtin_protect":"El Grupo especificado es integrado a LDAP y no puede ser eliminado",
+        "group_members_bad":"Los mismos miembros estan siendo eliminados y añadidos"
       },
       "ldapObjectExists":"Un Objeto LDAP con ese Identificador ya existe",
       "namingViolation":"Excepción de Violación de Nombre (Naming Violation)",

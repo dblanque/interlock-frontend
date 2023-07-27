@@ -355,16 +355,45 @@
             "dns_record_create":"Record could not be created"
           },
           "users":{
-            "userExists":"User already exists",
-            "couldNotSave":"User could not be saved",
-            "countryMalformed":"User Country field is malformed",
-            "couldNotFetchGroups":"Error fetching User Groups",
-            "permissionMalformed":"Malformed Permissions Dictionary",
-            "noUsersInImport":"No Users detected in File"
+            "noUsersInImport":"No Users detected in File",
+            "user_permission_malformed":"User permissions in request are malformed",
+            "user_passwords_dont_match":"User passwords do not match",
+            "user_create_error":"User could not be created",
+            "user_bulk_create_error":"A user could not be created",
+            "user_bulk_mapping_error":"A required header mapping is invalid or missing",
+            "user_bulk_length_error":"A row does not have the correct field amount or delimitation",
+            "user_update_error":"User could not be updated",
+            "user_field_validator_error":"User could not be validated",
+            "user_dn_does_not_exist":"User Distinguished Name does not exist",
+            "user_dn_path_exception":"User DN Path Parsing Stage Exception",
+            "user_anti_lockout":"User Anti-lockout Exception",
+            "user_unlock_error":"User could not be unlocked",
+            "user_country_error":"User country could not be updated",
+            "user_group_fetch_error":"User Group Memberships could not be fetched",
+            "user_group_primary_err":"Primary Group for User cannot be Deleted",
+            "user_group_bad":"Bad User Group Member Operations"
+          },
+          "ldap":{
+            "ldap_obj_exists":"An object with this Common Name already exists",
+            "ldap_connection_not_open":"No LDAP Connection was open prior to this operation",
+            "ldap_perm_insufficient":"Insufficient LDAP Permissions",
+            "ldap_obj_doesnt_exist":"An object with this Distinguished Name does not exist",
+            "ldap_bind_err":"Could not bind to LDAP Server",
+            "ldap_tree_err":"Could not fetch Directory Tree from LDAP Server",
+            "ldap_port_err":"LDAP Server Port unreachable",
+            "ldap_bind_test_failed":"Bind Connection Failed"
           },
           "groups":{
-            "groupExists":"Group already exists",
-            "couldNotSave":"Group could not be saved"
+            "group_does_not_exist":"Specified Group does not exist",
+            "group_create":"Group could not be Created",
+            "group_delete":"Group could not be Deleted",
+            "group_update":"Group could not be Updated",
+            "group_member_add":"Members could not be added to Group",
+            "group_member_remove":"Members could not be removed from Group",
+            "group_scope_or_type":"Group Scope or Type missing from Request",
+            "group_dn_missing":"Group Distinguished Name missing from Request",
+            "group_builtin_protect":"Specified Group cannot be Deleted as it is builtin",
+            "group_members_bad":"The same members are in the Add Member and Remove Member lists"
           },
           "ldapObjectExists":"An LDAP Object with that Identifier Exists",
           "namingViolation":"Naming Violation Exception",

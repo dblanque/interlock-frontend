@@ -1288,27 +1288,13 @@ export default {
                 })
                 .catch(error => {
                     console.error(error)
-                    if (error.response.data.code) {
-                        switch (error.response.data.code) {
-                            case 'user_permission_malformed':
-                                this.errorMsg = this.$t("error.codes.users.permissionMalformed")
-                                break;
-                            case 'user_update_error':
-                                this.errorMsg = this.$t("error.codes.users.couldNotSave")
-                                break;
-                            case 'user_country_error':
-                                this.errorMsg = this.$t("error.codes.users.countryMalformed")
-                                break;
-                            default:
-                                this.errorMsg = this.$t("error.unknown_short")
-                                break;
-                        }
-                    } else {
-                        this.errorMsg = this.$t("error.unknown_short")
-                    }
                     this.loading = false
                     this.loadingColor = 'error'
                     this.error = true;
+                    this.errorMsg = this.getMessageForCode(error)
+                    notificationBus.$emit('createNotification', 
+                        {message: this.errorMsg.toUpperCase(), type: 'error'}
+                    )
                 })
             } else {
                 this.loading = false

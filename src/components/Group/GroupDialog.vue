@@ -587,15 +587,7 @@ export default {
                 })
                 .catch(error => {
                     console.error(error)
-                    if (error.response.data.code) {
-                        switch (error.response.data.code) {
-                            default:
-                                this.errorMsg = this.$t("error.unknown_short")
-                                break;
-                        }
-                    } else {
-                        this.errorMsg = this.$t("error.unknown_short")
-                    }
+                    this.errorMsg = this.getMessageForCode(error)
                     this.loading = false
                     this.loadingColor = 'error'
                     this.error = true;
