@@ -68,12 +68,12 @@
 </template>
 
 <script>
-import ilckVersion from "@/providers/interlock_backend/version.js";
+import local_config from "../../public/config/local.json";
 
 export default {
     data(){
         return {
-            version: ilckVersion
+            version: local_config.version
         }
     },
     methods: {

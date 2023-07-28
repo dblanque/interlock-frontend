@@ -7,7 +7,21 @@
 
 import axios from "axios";
 import router from "@/router/index.js"
-import config from "../../../public/config/local.js";
+
+const getRuntimeConfig = async () => {
+    const runtimeConfig = await fetch('/config/local.json');
+    return await runtimeConfig.json()
+}
+
+const local_config = await getRuntimeConfig()
+.then(function(json) {
+    return {
+        backend_url: json.backend_url,
+        ssl: json.ssl,
+        reject_unauthorized: json.reject_unauthorized,
+        version: json.version
+    }
+})
 
 // Sets content type to json utf-8 default.
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
@@ -17,18 +31,18 @@ var urlPrefix
 
 // Default back-end provider urls.
 // ! PLEASE INCLUDE '/' at the end of URL.
-if (config.ssl == true) {
+if (local_config.ssl == true) {
     urlPrefix = "https://"
 }
 else {
     urlPrefix = "http://"
 }
-const base_url =  urlPrefix + config.backend_url + "/";
+const base_url =  urlPrefix + local_config.backend_url + "/";
 // const base_url =  "http://127.0.0.1:8000/";
 
 var request
 // Axios Instance.
-if (config.ilckSec != true) {
+if (local_config.reject_unauthorized != true) {
     request = axios.create({
         baseURL: base_url,
         rejectUnauthorized: false

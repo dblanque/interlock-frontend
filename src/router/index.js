@@ -63,7 +63,7 @@ const routes = [
     path: '/enduser',
     name: 'enduser',
     component: EnduserView
-  }
+  },
 ]
 
 const router = new VueRouter({
