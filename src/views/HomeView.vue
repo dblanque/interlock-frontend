@@ -54,7 +54,7 @@
             :buttonIsSmall="true"
           />
           <!-- Remove this in production -->
-          <v-btn @click="debugAction" v-if="true"
+          <v-btn @click="debugAction" v-if="false"
            outlined class="mx-3" rounded color="red">
             Debug
           </v-btn>
