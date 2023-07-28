@@ -558,7 +558,8 @@ export default {
         this.tableData.items = users
         for (let i = 0; i < this.tableData.items.length; i++) {
           const user = this.tableData.items[i];
-          if (user.username == localStorage.getItem('username')) {
+          if (user.username == localStorage.getItem('username') ||
+              user.username == 'Administrator' && localStorage.getItem('username') == 'admin') {
             this.tableData.items[i]["isSelectable"] = false
             break
           }
