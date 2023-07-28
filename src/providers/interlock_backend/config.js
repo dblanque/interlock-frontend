@@ -7,7 +7,7 @@
 
 import axios from "axios";
 import router from "@/router/index.js"
-import config from "../../../config/local.js";
+import config from "../../../public/config/local.js";
 
 // Sets content type to json utf-8 default.
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
