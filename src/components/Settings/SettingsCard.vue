@@ -744,8 +744,13 @@ export default {
             this.loading = true
             await new Settings({}).reset()
             .then(() => {
-                setTimeout(() => {
-                    this.refreshSettings();
+                setTimeout(async () => {
+                    await this.sleep(1000);
+                    this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
+
+                    // Wait until Back-end service is active to refresh
+                    await this.sleep(2000);
+                    this.refreshSettings()
                     this.loading = false
                 }, 550)
             })
