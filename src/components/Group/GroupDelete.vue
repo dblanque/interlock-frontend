@@ -56,9 +56,12 @@
 
 <script>
 import Group from '@/include/Group'
+import utilsMixin from '@/plugins/mixin/utilsMixin'
+import { notificationBus } from '@/main.js'
 
 export default {
     name: "confirmDialog",
+    mixins: [utilsMixin],
     props: {
         groupObject: Object,
         viewKey: String
@@ -75,11 +78,19 @@ export default {
                 await new Group({}).delete({group: group})
                 .then(response => {
                     if (response.data.groupname == group.groupname)
-                        console.log("Group Deleted Successfully")
+                        notificationBus.$emit('createNotification', {
+                                message: (this.$t("classes.group.single") + " " + this.$t("words.deleted.single.m")).toUpperCase(), 
+                                type: 'info'
+                        });
                     this.$emit('refresh');
                 })
                 .catch(error => {
                     console.error(error)
+                    this.errorMsg = this.getMessageForCode(error)
+                    notificationBus.$emit('createNotification', {
+                            message: (this.errorMsg).toUpperCase(),
+                            type: 'error'
+                    });
                 })
             }
             this.$emit('closeDialog', this.viewKey);

@@ -188,7 +188,7 @@
       :viewKey="'groupDelete'"
       ref="GroupDelete"
       @closeDialog="closeDialog"
-      @refresh="listGroupItems"
+      @refresh="listGroupItems(false)"
     />
   </v-dialog>
 
