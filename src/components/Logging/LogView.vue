@@ -94,6 +94,10 @@
         </v-chip>
     </template>
 
+    <template v-slot:[`item.date`]="{ item }">
+          {{ parseDateToLocalTZ(item.date) }}
+    </template>
+
     <template v-slot:[`item.objectClass`]="{ item }">
         <v-row justify="center" align="center" class="px-6 my-2">
             <v-icon class="mr-2" :small="$vuetify.breakpoint.mdAndDown" :color="getIconForObjectClass(item.objectClass)[1] || undefined">
@@ -215,6 +219,16 @@ export default {
     viewTitle: String
   },
   methods: {
+    parseDateToLocalTZ(dateStr){
+      var dateObject = new Date(dateStr)
+      var dateString = ""
+      dateString += dateObject.toLocaleDateString(this.$i18n.locale, {day: 'numeric'}).padStart(2, '0') + "-"
+      dateString += dateObject.toLocaleDateString(this.$i18n.locale, {month: 'numeric'}).padStart(2, '0') + "-"
+      dateString += dateObject.toLocaleDateString(this.$i18n.locale, {year: 'numeric'}) + " "
+      dateString += dateObject.toLocaleTimeString(this.$i18n.locale, {hour12: false})
+      dateString += " UTC " + (dateObject.getTimezoneOffset() / 60) * -1
+      return dateString
+    },
     createSnackbar(notifObj){
       notificationBus.$emit('createNotification', notifObj);
     },
