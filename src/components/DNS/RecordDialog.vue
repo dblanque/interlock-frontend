@@ -573,6 +573,7 @@ export default {
         },
         async updateRecord() {
             this.recordCopy.zone = this.currentZone
+            this.originalRecord.zone = this.currentZone
             var recordDiffers = false
 
             if (this.recordCopy.type == 6)

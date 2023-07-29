@@ -143,15 +143,15 @@ export default {
                     tempRec['zone'] = this.currentZone
                     recordsToSend.push(tempRec)
                 });
-                console.log(recordsToSend)
+                // console.log(recordsToSend)
                 await new DNSRecord({}).delete({records: recordsToSend})
-                .then(response => {
+                .then(() => {
                     this.loading = false
                     this.error = false
                     this.errorMsg = ""
                     this.submitted = true
-                    if (response.data.length == this.selectedRecords.length)
-                        console.log("Records Deleted Successfully")
+                    // if (response.data.length == this.selectedRecords.length)
+                    //     console.log("Records Deleted Successfully")
                 })
                 .catch(error => {
                     this.loading = false
