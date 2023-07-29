@@ -226,7 +226,7 @@ export default {
       dateString += dateObject.toLocaleDateString(this.$i18n.locale, {month: 'numeric'}).padStart(2, '0') + "-"
       dateString += dateObject.toLocaleDateString(this.$i18n.locale, {year: 'numeric'}) + " "
       dateString += dateObject.toLocaleTimeString(this.$i18n.locale, {hour12: false})
-      dateString += " UTC " + (dateObject.getTimezoneOffset() / 60) * -1
+      dateString += " UTC" + (dateObject.getTimezoneOffset() / 60) * -1
       return dateString
     },
     createSnackbar(notifObj){
