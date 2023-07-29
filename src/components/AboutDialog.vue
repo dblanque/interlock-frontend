@@ -68,15 +68,24 @@
 </template>
 
 <script>
-import local_config from "../../public/config/local.json";
+import { getRuntimeConfig } from "@/providers/interlock_backend/config";
 
 export default {
     data(){
         return {
-            version: local_config.version
+            version: {}
         }
     },
+    created() {
+        this.getLocalConfig()
+    },
     methods: {
+        async getLocalConfig(){
+            this.version = await getRuntimeConfig()
+            .then(function(json) {
+                return json.version
+            })  
+        },
         closeDialog() {
             this.$emit('close')
         }
