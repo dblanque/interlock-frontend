@@ -891,6 +891,7 @@
           "passwordConfirm": "Confirm Password",
           "role": "Role",
 		      "totp_code":"TOTP Code",
+		      "totp_code_opt":"Required if Enabled on Account Preferences",
           "recovery_code":"Recovery Code"
       },
       "phone": "Phone",
