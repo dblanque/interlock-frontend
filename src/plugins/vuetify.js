@@ -44,54 +44,28 @@ import '@fontsource/montserrat/900-italic.css';
 
 // Ripple fix
 import Ripple from 'vuetify/lib/directives/ripple';
+import parseVueColors from './colors';
+
+const colors = parseVueColors()
 
 Vue.use(Vuetify, {
-  directives: {
-    Ripple,
-  },
+    directives: {
+        Ripple,
+    },
 });
 
 export default new Vuetify({
     options: {
         customProperties: true
-        },
-        icons: {
+    },
+    icons: {
         iconfont: 'mdi', // default - only for display purposes
-        },
-        theme: {
+    },
+    theme: {
         dark: false,
         themes: {
-            light: {
-            // Please don't comment these, I want to avoid overriding unnecessary classes - Dylan
-            primary: '#528dcc',
-            primary_strong: '#2077d3',
-            text_normal: '#000000',
-            text_inverted: '#FFFFFF',
-            accent: '#ffc389',
-            accent_alt: '#Efb379',
-            secondary: "#32363a",
-            secondary_alt: "#4e535c",
-            valid: "#21ae67",
-            background: "#FFFFFF",
-            background_alt: "#f7fbff",
-            error: "#E01111",
-            cancel: "#ff1616"
-            },
-            dark: {
-            text_normal: '#FFFFFF',
-            text_inverted: '#000000',
-            primary: '#528dcc',
-            primary_strong: '#5895d6',
-            accent: '#ffc389',
-            accent_alt: '#Efb379',
-            secondary: "#32363a",
-            secondary_alt: "#4e535c",
-            valid: "#21ae67",
-            background: "#32363a",
-            background_alt: "#42474d",
-            error: "#E01111",
-            cancel: "#ff1616"
-            }
+            light: colors.light,
+            dark: colors.dark
         },
     },
 });
