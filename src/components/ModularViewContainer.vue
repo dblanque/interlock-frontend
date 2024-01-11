@@ -85,7 +85,7 @@ import DirtreeView from '@/components/Dirtree/DirtreeView.vue'
 import dnsView from '@/components/DNS/dnsView.vue'
 import SettingsCard from '@/components/Settings/SettingsCard.vue'
 import LogView from '@/components/Logging/LogView.vue'
-import validationMixin from '@/plugins/mixin/validationMixin';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
 
   export default {
     name: 'ModularViewContainer',

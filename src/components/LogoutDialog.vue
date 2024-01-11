@@ -23,6 +23,7 @@
 
 <script>
 export default {
+    name: 'LogoutDialog',
     methods: {
         emitLogoutAction() {
             this.$emit('logoutAction')

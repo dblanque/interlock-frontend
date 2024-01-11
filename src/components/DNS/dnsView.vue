@@ -352,15 +352,16 @@
 
 <script>
 import { notificationBus } from '@/main.js'
-import { getDomainDetails } from '@/include/utils'
-import Domain, { default as DNS } from '@/include/Domain'
+import { getDomainDetails } from '@/include/utils.js'
+import Domain, { default as DNS } from '@/include/Domain.js'
 import RecordDialog from '@/components/DNS/RecordDialog.vue'
 import RecordDelete from '@/components/DNS/RecordDelete.vue'
 import RecordMassAction from '@/components/DNS/RecordMassAction.vue'
-import validationMixin from '@/plugins/mixin/validationMixin'
-import utilsMixin from '@/plugins/mixin/utilsMixin'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
 export default {
+    name: 'dnsView',
     mixins: [ validationMixin, utilsMixin ],
     components: {
         RecordDialog,

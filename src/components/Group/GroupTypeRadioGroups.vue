@@ -44,6 +44,7 @@
 
 <script>
 export default {
+    name: 'GroupTypeRadioGroups',
     props: {
         editFlag: Boolean,
         radioGroupType: Number,

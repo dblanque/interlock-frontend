@@ -369,16 +369,17 @@
 </template>
 
 <script>
-import OrganizationalUnit from '@/include/OrganizationalUnit'
+import OrganizationalUnit from '@/include/OrganizationalUnit.js'
 import DirtreeOUCreate from '@/components/Dirtree/DirtreeOUCreate.vue';
 import DirtreeMove from '@/components/Dirtree/DirtreeMove.vue';
 import DirtreeRename from '@/components/Dirtree/DirtreeRename.vue';
 import DirtreeDeleteObject from '@/components/Dirtree/DirtreeDeleteObject.vue';
-import validationMixin from '@/plugins/mixin/validationMixin';
-import utilsMixin from '@/plugins/mixin/utilsMixin';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { notificationBus } from '@/main.js'
 
 export default {
+    name: 'DirtreeView',
     mixins: [ validationMixin, utilsMixin ],
     components: {
         DirtreeMove,

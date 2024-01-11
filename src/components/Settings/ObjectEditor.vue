@@ -91,8 +91,8 @@
 </template>
 
 <script>
-import validationMixin from '@/plugins/mixin/validationMixin';
-import utilsMixin from '@/plugins/mixin/utilsMixin';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 
 // Complex Validator Object Structure:
 // validators: {
@@ -105,6 +105,7 @@ import utilsMixin from '@/plugins/mixin/utilsMixin';
 // }
 
 export default {
+    name: 'ObjectEditor',
     mixins: [ validationMixin, utilsMixin ],
     data() {
         return {

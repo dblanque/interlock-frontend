@@ -75,11 +75,12 @@
 </template>
 
 <script>
-import DNSRecord from '@/include/DNSRecord'
-import validationMixin from '@/plugins/mixin/validationMixin'
-import utilsMixin from '@/plugins/mixin/utilsMixin';
+import DNSRecord from '@/include/DNSRecord.js'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 
 export default {
+    name: 'RecordMassAction',
     mixins: [ validationMixin, utilsMixin ],
     data() {
         return {

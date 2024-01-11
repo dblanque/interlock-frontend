@@ -120,11 +120,12 @@
 </template>
 
 <script>
-import OrganizationalUnit from '@/include/OrganizationalUnit'
+import OrganizationalUnit from '@/include/OrganizationalUnit.js'
 import Refresh from '@/components/RefreshButton.vue'
-import { objectRecursiveSearch } from '@/include/utils';
+import { objectRecursiveSearch } from '@/include/utils.js';
 
 export default {
+    name: 'CNObjectList',
     components: {
         Refresh
     },

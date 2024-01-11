@@ -25,6 +25,7 @@
 
 <script>
 export default {
+    name: 'ThemeChanger',
     props:{
         dark: Boolean,
         light: Boolean,

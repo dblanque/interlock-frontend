@@ -303,18 +303,18 @@ webpage
 </template>
 
 <script>
-import validationMixin from '@/plugins/mixin/validationMixin';
-import utilsMixin from '@/plugins/mixin/utilsMixin';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import csvMixin from '@/plugins/mixin/csvMixin';
-import CSV from '@/include/csv';
+import CSV from '@/include/csv.js';
 import { notificationBus } from '@/main.js'
-import User from '@/include/User'
-import { getDomainDetails } from '@/include/utils';
-import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
-import ObjectEditor from '@/components/Settings/ObjectEditor'
+import User from '@/include/User.js'
+import { getDomainDetails } from '@/include/utils.js';
+import DirtreeOUList from '@/components/Dirtree/DirtreeOUList.vue'
+import ObjectEditor from '@/components/Settings/ObjectEditor.vue'
 
 export default {
-    name: "userImport",
+    name: "UserImport",
     mixins: [
         validationMixin,
         utilsMixin,

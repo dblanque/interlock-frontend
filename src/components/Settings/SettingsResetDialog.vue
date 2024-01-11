@@ -52,7 +52,7 @@
 
 <script>
 export default {
-    name: "settingsResetDialog",
+    name: "SettingsResetDialog",
     methods: {
         async resetConfirm() {
             this.$emit('resetConfirm');

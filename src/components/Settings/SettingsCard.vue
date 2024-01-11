@@ -292,14 +292,15 @@
 </template>
 
 <script>
-import validationMixin from '@/plugins/mixin/validationMixin';
-import utilsMixin from '@/plugins/mixin/utilsMixin';
-import Settings from '@/include/Settings';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import Settings from '@/include/Settings.js';
 import SettingsResetDialog from '@/components/Settings/SettingsResetDialog.vue'
-import ObjectEditor from '@/components/Settings/ObjectEditor'
+import ObjectEditor from '@/components/Settings/ObjectEditor.vue'
 import { notificationBus } from '@/main.js'
 
 export default {
+    name: 'SettingsCard',
     mixins: [ validationMixin, utilsMixin ],
     components: {
         SettingsResetDialog,

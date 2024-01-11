@@ -56,7 +56,7 @@
 <script>
 
 export default {
-    name: "confirmDialog",
+    name: "UserAntilockoutWarning",
     props: {
         userObject: Object,
         viewKey: String

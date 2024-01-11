@@ -41,10 +41,11 @@
 </template>
 
 <script>
-import OrganizationalUnit from '@/include/OrganizationalUnit'
-import { objectRecursiveSearch } from '@/include/utils';
+import OrganizationalUnit from '@/include/OrganizationalUnit.js'
+import { objectRecursiveSearch } from '@/include/utils.js';
 
 export default {
+    name: 'DirtreeOUList',
     data() {
         return {
             activeObject: [],

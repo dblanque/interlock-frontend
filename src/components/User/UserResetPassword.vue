@@ -95,13 +95,13 @@
 </template>
 
 <script>
-import validationMixin from '@/plugins/mixin/validationMixin';
-import utilsMixin from '@/plugins/mixin/utilsMixin';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { notificationBus } from '@/main.js'
-import User from '@/include/User'
+import User from '@/include/User.js'
 
 export default {
-    name: "confirmDialog",
+    name: "UserResetPassword",
     mixins: [
         validationMixin,
         utilsMixin

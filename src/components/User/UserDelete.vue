@@ -58,10 +58,10 @@
 </template>
 
 <script>
-import User from '@/include/User'
+import User from '@/include/User.js'
 
 export default {
-    name: "confirmDialog",
+    name: "UserDelete",
     props: {
         userObject: Object,
         userMassDeleteArray: Array,

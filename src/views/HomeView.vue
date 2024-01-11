@@ -281,8 +281,8 @@ import User from "@/include/User"
 import Test from "@/include/Test"
 import Domain from "@/include/Domain"
 import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
-import validationMixin from '@/plugins/mixin/validationMixin'
-import utilsMixin from '@/plugins/mixin/utilsMixin'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
 export default {
   name: "HomeView",
@@ -300,8 +300,8 @@ export default {
   },
   data() {
     return {
-      logoLight: getImageURL('@/assets/interlock-logo-wt-dark.svg'),
-      logoDark: getImageURL('@/assets/interlock-logo-wt-light.svg'),
+      logoLight: 'logo/interlock-logo-wt-dark.svg',
+      logoDark: 'logo/interlock-logo-wt-light.svg',
       username: "",
       first_name: "",
       initLoad: false,

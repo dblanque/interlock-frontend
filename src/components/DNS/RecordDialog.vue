@@ -304,12 +304,13 @@
 </template>
 
 <script>
-import validationMixin from '@/plugins/mixin/validationMixin'
-import utilsMixin from '@/plugins/mixin/utilsMixin';
-import DNSRecord from '@/include/DNSRecord'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import DNSRecord from '@/include/DNSRecord.js'
 import { notificationBus } from '@/main.js'
 
 export default {
+    name: 'RecordDialog',
     mixins: [ validationMixin, utilsMixin ],
     props: {
         viewKey: String,

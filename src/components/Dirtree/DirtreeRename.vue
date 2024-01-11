@@ -79,9 +79,10 @@
 </template>
 
 <script>
-import validationMixin from '@/plugins/mixin/validationMixin'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
 
 export default {
+    name: 'DirtreeRename',
     mixins: [ validationMixin ],
     props: {
         viewKey: String,

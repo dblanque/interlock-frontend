@@ -28,6 +28,7 @@
 </template>
 <script>
 export default {
+    name: 'RefreshButton',
     props: {
         loadingColor: {
             type: String,

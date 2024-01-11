@@ -3,17 +3,18 @@
 // File: vite.config.js
 
 import { defineConfig } from 'vite'
-import { createVuePlugin as vue } from "vite-plugin-vue2";
+import { createVuePlugin } from "vite-plugin-vue2";
+import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
+import Components from 'unplugin-vue-components/vite';
 const path = require("path");
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
-        vue({
+        createVuePlugin({
             transpileDependencies: [
                 'vuetify'
             ],
-
             pluginOptions: {
                 i18n: {
                     locale: 'en',
@@ -23,12 +24,19 @@ export default defineConfig({
                     enableBridge: false
                 }
             }
-        })],
-        resolve: {
-            extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
-            alias: { "@": path.resolve(__dirname, "./src") },
-        },
-        build: {
-            target: 'esnext'
-        },
-    })
+        }),
+        Components({
+            resolvers: [
+              // Vuetify
+              VuetifyResolver(),
+            ],
+        }),
+    ],
+    resolve: {
+        extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+        alias: { "@": path.resolve(__dirname, "./src") },
+    },
+    build: {
+        target: 'esnext'
+    },
+})

@@ -131,10 +131,10 @@
 
 <script>
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList.vue'
-// import OrganizationalUnit from '@/include/OrganizationalUnit'
-import { getDomainDetails } from '@/include/utils';
+import { getDomainDetails } from '@/include/utils.js';
 
 export default {
+    name: 'DirtreeMove',
     components: {
         DirtreeOUList
     },

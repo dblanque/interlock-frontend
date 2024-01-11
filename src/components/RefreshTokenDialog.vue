@@ -36,6 +36,7 @@ import User from "@/include/User"
 import { notificationBus } from '@/main.js'
 
 export default {
+    name: 'RefreshTokenDialog',
     data() {
         return {
             timeRemaining: 0,

@@ -357,11 +357,11 @@
 </template>
 
 <script>
-import User from '@/include/User'
-import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
-import validationMixin from '@/plugins/mixin/validationMixin';
-import utilsMixin from '@/plugins/mixin/utilsMixin';
-import { getDomainDetails } from '@/include/utils';
+import User from '@/include/User.js'
+import DirtreeOUList from '@/components/Dirtree/DirtreeOUList.vue'
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import { getDomainDetails } from '@/include/utils.js';
 
 export default {
     name: 'UserCreate',

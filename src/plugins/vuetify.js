@@ -42,7 +42,14 @@ import '@fontsource/montserrat/500-italic.css';
 import '@fontsource/montserrat/700-italic.css';
 import '@fontsource/montserrat/900-italic.css';
 
-Vue.use(Vuetify);
+// Ripple fix
+import Ripple from 'vuetify/lib/directives/ripple';
+
+Vue.use(Vuetify, {
+  directives: {
+    Ripple,
+  },
+});
 
 export default new Vuetify({
     options: {

@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import utilsMixin from '@/plugins/mixin/utilsMixin'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
 export default {
     name: "UserAccountDropdown",

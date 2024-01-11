@@ -52,7 +52,7 @@
 
 <script>
 export default {
-    name: "settingsResetDialog",
+    name: "LogResetDialog",
     props: {
         logAction: String
     },

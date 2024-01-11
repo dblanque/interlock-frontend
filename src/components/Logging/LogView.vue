@@ -166,12 +166,13 @@
 
 <script>
 import { notificationBus } from '@/main.js'
-import Log from '@/include/Log';
+import Log from '@/include/Log.js';
 import LogResetDialog from '@/components/Logging/LogResetDialog.vue'
-import validationMixin from '@/plugins/mixin/validationMixin'
-import utilsMixin from '@/plugins/mixin/utilsMixin'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
 export default {
+  name: 'LogView',
   mixins: [ validationMixin, utilsMixin ],
   components: {
     LogResetDialog

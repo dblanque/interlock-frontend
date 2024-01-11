@@ -55,12 +55,12 @@
 </template>
 
 <script>
-import Group from '@/include/Group'
-import utilsMixin from '@/plugins/mixin/utilsMixin'
+import Group from '@/include/Group.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 import { notificationBus } from '@/main.js'
 
 export default {
-    name: "confirmDialog",
+    name: "GroupDelete",
     mixins: [utilsMixin],
     props: {
         groupObject: Object,

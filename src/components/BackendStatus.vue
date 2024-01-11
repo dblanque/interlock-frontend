@@ -13,8 +13,9 @@
 </template>
 
 <script>
-import Liveness from '@/include/Liveness'
+import Liveness from '@/include/Liveness.js'
 export default {
+    name: 'BackendStatus',
     props:{
         showText: Boolean
     },

@@ -198,11 +198,11 @@
 </template>
 
 <script>
-import User from '@/include/User'
+import User from '@/include/User.js'
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue';
-import validationMixin from '@/plugins/mixin/validationMixin';
-import utilsMixin from '@/plugins/mixin/utilsMixin';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 
 export default {
   name: "LoginView",
@@ -217,8 +217,8 @@ export default {
     return {
       recovery_mode: false,
       recovery_code: "",
-      logoLight: getImageURL('@/assets/interlock-logo-wt-dark.svg'),
-      logoDark: getImageURL('@/assets/interlock-logo-wt-light.svg'),
+      logoLight: 'logo/interlock-logo-wt-dark.svg',
+      logoDark: 'logo/interlock-logo-wt-light.svg',
       modeUser: true,
       loginForbiddenCount: 0,
       timeoutCounter: 30,

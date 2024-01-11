@@ -33,10 +33,11 @@
 </template>
 
 <script>
-import validationMixin from '@/plugins/mixin/validationMixin';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
 import { notificationBus } from '@/main.js'
 
 export default {
+    name: 'NotificationBusContainer',
     mixins: [ validationMixin ],
     data() {
         return {

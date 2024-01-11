@@ -205,14 +205,15 @@
 
 <script>
 import { notificationBus } from '@/main.js'
-import Group from '@/include/Group';
+import Group from '@/include/Group.js';
 import GroupDialog from '@/components/Group/GroupDialog.vue'
 import GroupCreate from '@/components/Group/GroupCreate.vue'
 import GroupDelete from '@/components/Group/GroupDelete.vue'
-import validationMixin from '@/plugins/mixin/validationMixin'
-import utilsMixin from '@/plugins/mixin/utilsMixin'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
 export default {
+  name: 'GroupView',
   mixins: [ validationMixin, utilsMixin ],
   components: {
     GroupDialog,

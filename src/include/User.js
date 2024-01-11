@@ -1,6 +1,6 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
-import { dateLdapToString, dateFromFiletime } from '@/include/utils'
+import { dateLdapToString, dateFromFiletime } from '@/include/utils.js'
 
 class User extends ApiModel{
 

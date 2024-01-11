@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import OrganizationalUnit from '@/include/OrganizationalUnit'
+import OrganizationalUnit from '@/include/OrganizationalUnit.js'
 
 export default {
-    name: "confirmDialog",
+    name: "DirtreeDeleteObject",
     props: {
         ldapObject: Object,
         viewKey: String

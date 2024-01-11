@@ -193,12 +193,13 @@
 
 <script>
 import QrcodeVue from 'qrcode.vue'
-import TOTPDevice from '@/include/TOTP'
-import utilsMixin from '@/plugins/mixin/utilsMixin'
-import validationMixin from '@/plugins/mixin/validationMixin'
+import TOTPDevice from '@/include/TOTP.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
 import { notificationBus } from '@/main.js'
 
 export default {
+    name: 'UserSettings',
     components: {
       QrcodeVue
     },

@@ -246,13 +246,13 @@
 </template>
 
 <script>
-import Group from '@/include/Group'
-import DirtreeOUList from '@/components/Dirtree/DirtreeOUList'
+import Group from '@/include/Group.js'
+import DirtreeOUList from '@/components/Dirtree/DirtreeOUList.vue'
 import CNObjectList from '@/components/CNObjectList.vue'
 import GroupTypeRadioGroups from '@/components/Group/GroupTypeRadioGroups.vue'
-import validationMixin from '@/plugins/mixin/validationMixin';
-import utilsMixin from '@/plugins/mixin/utilsMixin';
-import { getDomainDetails } from '@/include/utils';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import { getDomainDetails } from '@/include/utils.js';
 
 export default {
     name: 'GroupCreate',

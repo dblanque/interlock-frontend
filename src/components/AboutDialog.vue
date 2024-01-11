@@ -71,6 +71,7 @@
 import { getRuntimeConfig } from "@/providers/interlock_backend/config";
 
 export default {
+    name: 'AboutDialog',
     data(){
         return {
             version: {}

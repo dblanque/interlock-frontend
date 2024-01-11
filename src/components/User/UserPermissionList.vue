@@ -73,6 +73,7 @@
 <script>
 import ldap_perm_json from '@/include/ldap_permissions.json'
 export default {
+    name: 'UserPermissionList',
 	props: {
 		editFlag: Boolean
 	},

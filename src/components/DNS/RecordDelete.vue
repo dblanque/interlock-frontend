@@ -98,14 +98,14 @@
 </template>
 
 <script>
-import DNSRecord from '@/include/DNSRecord'
-import Domain from '@/include/Domain'
-import validationMixin from '@/plugins/mixin/validationMixin'
-import utilsMixin from '@/plugins/mixin/utilsMixin';
+import DNSRecord from '@/include/DNSRecord.js'
+import Domain from '@/include/Domain.js'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { notificationBus } from '@/main.js'
 
 export default {
-    name: "confirmDialog",
+    name: "RecordDelete",
     mixins: [ validationMixin, utilsMixin ],
     data() {
         return {

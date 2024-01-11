@@ -328,11 +328,12 @@
 </template>
 
 <script>
-import Group from '@/include/Group';
+import Group from '@/include/Group.js';
 import CNObjectList from '@/components/CNObjectList.vue'
-import validationMixin from '@/plugins/mixin/validationMixin';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
 
 export default {
+    name: 'GroupDialog',
     components: {
         CNObjectList,
     },

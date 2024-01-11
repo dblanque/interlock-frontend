@@ -763,10 +763,10 @@
 </template>
 
 <script>
-import User from '@/include/User'
+import User from '@/include/User.js'
 import CNObjectList from '@/components/CNObjectList.vue'
-import validationMixin from '@/plugins/mixin/validationMixin';
-import utilsMixin from '@/plugins/mixin/utilsMixin';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { notificationBus } from '@/main.js'
 
 export default {

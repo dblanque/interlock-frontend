@@ -369,18 +369,19 @@
 </template>
 
 <script>
-import User from '@/include/User'
+import User from '@/include/User.js'
 import UserCreate from '@/components/User/UserCreate.vue'
 import UserImport from '@/components/User/UserImport.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import UserPermissionList from '@/components/User/UserPermissionList.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
-import validationMixin from '@/plugins/mixin/validationMixin'
-import utilsMixin from '@/plugins/mixin/utilsMixin'
+import validationMixin from '@/plugins/mixin/validationMixin.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 import { notificationBus } from '@/main.js'
 
 export default {
+  name: 'UserView',
   mixins: [ validationMixin, utilsMixin ],
   components: {
     UserCreate,

@@ -10,6 +10,7 @@
 
 <script>
 export default {
+  name: 'App',
   mounted () {
     const html = document.documentElement
     html.setAttribute('lang', this.$i18n.locale)
