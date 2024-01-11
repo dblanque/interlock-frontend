@@ -217,8 +217,8 @@ export default {
     return {
       recovery_mode: false,
       recovery_code: "",
-      logoLight: require('@/assets/interlock-logo-wt-dark.svg'),
-      logoDark: require('@/assets/interlock-logo-wt-light.svg'),
+      logoLight: getImageURL('@/assets/interlock-logo-wt-dark.svg'),
+      logoDark: getImageURL('@/assets/interlock-logo-wt-light.svg'),
       modeUser: true,
       loginForbiddenCount: 0,
       timeoutCounter: 30,

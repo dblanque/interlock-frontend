@@ -300,8 +300,8 @@ export default {
   },
   data() {
     return {
-      logoLight: require('@/assets/interlock-logo-wt-dark.svg'),
-      logoDark: require('@/assets/interlock-logo-wt-light.svg'),
+      logoLight: getImageURL('@/assets/interlock-logo-wt-dark.svg'),
+      logoDark: getImageURL('@/assets/interlock-logo-wt-light.svg'),
       username: "",
       first_name: "",
       initLoad: false,
