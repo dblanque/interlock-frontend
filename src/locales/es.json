@@ -898,6 +898,7 @@
       "passwordConfirm": "Confirmar Contraseña",
       "role": "Permisos",
 	    "totp_code":"Código TOTP",
+      "totp_code_opt":"Requerido si se habilitó en las Preferencias de Cuenta",
       "recovery_code":"Código de Respaldo"
     },
     "phone": "Teléfono",

@@ -5,6 +5,12 @@
 Logo Font:
 Matamata [@ dafont.com](https://www.dafont.com/matamata.font)
 
+## UPDATE: 2024-01-11
+
+The Interlock Front-end has been migrated to Vite instead of Webpack/Vue-CLI,
+hence there will be performance improvements when running the dev-server and on the
+final compiled version. YARN PKG is no longer used, use NPM instead.
+
 # Interlock Documentation
 
 For information and official Interlock Documentation go to:
@@ -12,25 +18,25 @@ For information and official Interlock Documentation go to:
 
 ## Installation from Source
 
-  1. Install the following dependencies
+  1. Install the following dependencies, for more info see
+  [Installing Node.js via package manager](https://nodejs.org/en/download/package-manager).
   ```bash
   apt-get install git nodejs nginx
-
-  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
-  sudo apt update && sudo apt install yarn
   ```
 
   2. Clone the repository: git clone https://github.com/dblanque/interlock-ldap-manager /opt/interlock-ldap-manager
   3. Change Directory onto the cloned repository
   ```bash
   cd /opt/interlock-ldap-manager
-  yarn install
+  npm install
   ```
-  4. Once the required dependencies are installed you'll need to modify your local settings to match your domain:
+  4. Once the required dependencies are installed you'll need to modify your local settings to match your back-end IP/Port:
   ```bash
-  nano ./src/providers/interlock_backend/local_settings.js
+  # On the Dev Server Version
+  nano ./public/config/local.json
+
+  # On the Compiled Version
+  nano ./dist/config/local.json
   ```
 
 ## LDAP Manager Checkpoints | ROAD-MAP & Features
@@ -87,9 +93,13 @@ For information and official Interlock Documentation go to:
 
 ### GPO Management
 
-TBD
+Group Policy Object Management is one of the main reasons as to why I started this project,
+albeit the scope is a bit out of my reach due to time constraints, hopefully I might
+get to finish it one day. If you're interested in contributing, feel free to do so!
+*This might never be implemented or may take a long time due to other commitments.*
 
 ### Server Management
+*This might never be implemented or may take a long time due to other commitments.*
 This tab will require to have an ssh key or be the locally installed server
  - [ ] Start Service
  - [ ] Stop Service
@@ -109,38 +119,34 @@ apt-get update -y
 # Install curl and fetch required script.
 apt-get install git curl -y
 
-curl -sL https://deb.nodesource.com/setup_16.x -o "$workpath/nodesource_setup.sh"
+curl -sL https://deb.nodesource.com/setup_18.x -o "$workpath/nodesource_setup.sh"
 
 # Add nodesource repo
 bash "$workpath/nodesource_setup.sh"
 
-# Add yarnpkg key and repo respectively
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
-# Install NodeJS and Yarn
+# Install NodeJS
 apt-get update -y
-apt-get install nodejs yarn -y
+apt-get install nodejs -y
 
 git clone https://github.com/dblanque/interlock_frontend $frontendPath
 
 cd $frontendPath
-yarn install
+npm install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-yarn serve
+npm serve
 ```
 
 ### Compiles and minifies for production
 ```
-yarn build
+npm build
 ```
 
 ### Lints and fixes files
 ```
-yarn lint
+npm lint
 ```
 
 ### Customize configuration

@@ -104,6 +104,8 @@
                 v-model="totp_code"
                 :disabled="submitted"
                 @keydown.enter="submit()"
+                persistent-hint
+                :hint="$t('attribute.users.totp_code_opt')"
                 class="login-pwd-field login-field font-weight-bold mb-2"
                 required
               ></v-text-field>
