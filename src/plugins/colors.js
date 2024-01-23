@@ -25,26 +25,28 @@ function parseVueColors() {
 		light:{}
 	}
 	let limit = 95
-	// Light
+
+	// Get the root element
 	for (const color_key in vueColorList) {
 		const color_hue = vueColorList[color_key][0]
 		const color_sat = vueColorList[color_key][1]
 		const color_lig = vueColorList[color_key][2]
-		// default
-		colors.dark[color_key] = hslToHex(color_hue, color_sat, color_lig)
-		colors.light[color_key] = hslToHex(color_hue, color_sat, color_lig)
+		let default_color = hslToHex(color_hue, color_sat, color_lig)
+		// dark
+		colors.dark[color_key] = default_color
+		// light
+		colors.light[color_key] = default_color
 		// Step saturation and lightness every 10
 		for (var sat = 5; sat <= limit; sat +=5){
-			colors.light[`${color_key}-${sat}-${lig}-s`] = hslToHex(color_hue, sat, lig)
-			colors.dark[`${color_key}-${sat}-${lig}-s`] = hslToHex(color_hue, sat, lig)
+			let cur_clr = hslToHex(color_hue, sat, lig)
+			colors.light[`${color_key}-${sat}-${lig}-s`] = cur_clr
+			colors.dark[`${color_key}-${sat}-${lig}-s`] = cur_clr
 			for (var lig = 5; lig <= limit; lig +=5){
-				colors.light[`${color_key}-${sat}-${lig}`] = hslToHex(color_hue, sat, lig)
+				colors.light[`${color_key}-${sat}-${lig}`] = cur_clr
 				colors.dark[`${color_key}-${sat}-${lig}`] = hslToHex(color_hue, sat, 100-lig)
 			}
 		}
 	}
-
-	// Dark
 	return colors
 }
 
