@@ -316,6 +316,7 @@
     "codes": {
       "conflict": "HTTP 409: Conflicto",
       "badRequest": "HTTP 405: Request Erróneo",
+      "serverError": "HTTP 500: Error de Servidor",
       "ldapGwError": "Servidor de LDAP Inalcanzable",
       "invalidCSV": "Archivo CSV Inválido",
       "invalidCSVHeaders": "Cabecera de CSV Inválida",

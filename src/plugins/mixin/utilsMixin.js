@@ -13,9 +13,9 @@ const utilsMixin = {
                 return true;
             }
         },
-        getResponseErrorCode(errorData=undefined) {
-            if (errorData == undefined) {
-                console.log('Error Data is undefined')
+        getResponseErrorCode(errorData) {
+            if (errorData === undefined) {
+                console.log("getResponseErrorCode(): No error data passed.")
                 return this.$t("error.unknown_short")
             }
 
@@ -24,10 +24,11 @@ const utilsMixin = {
 
             var codeToUse
             if (errorData.response.data != undefined && errorData.response.data != null){
-                if ('ldap_response' in errorData.response.data)
-                    codeToUse = errorData.response.data.ldap_response.description
-                else if ('code' in errorData.response.data)
-                    codeToUse = errorData.response.data.code
+                if (typeof errorData.response.data === Object)
+                    if ('ldap_response' in errorData.response.data)
+                        codeToUse = errorData.response.data.ldap_response.description
+                    else if ('code' in errorData.response.data)
+                        codeToUse = errorData.response.data.code
             }
             else if ('code' in errorData)
                 codeToUse = errorData.code
@@ -63,9 +64,13 @@ const utilsMixin = {
                 switch(codeToUse){
                 case 'ERR_LDAP_GW':
                     return this.$t('error.codes.ldapGwError')
-                case 405:
-                case 'ERR_BAD_RESPONSE':
+                case 400:
+                case 'ERR_BAD_REQUEST':
                     return this.$t('error.codes.badRequest')
+                case 500:
+                case 'ERR_SERV_ERROR':
+                case 'ERR_BAD_RESPONSE':
+                    return this.$t('error.codes.serverError')
                 case 'ERR_INVALID_CSV':
                     return this.$t('error.codes.invalidCSV')
                 case 'ERR_INVALID_CSV_HEADERS':
@@ -91,7 +96,7 @@ const utilsMixin = {
                         return this.$t('error.codes.'+codeToUse)
                     else {
                         var msg = this.$t("error.unknown_short")
-                        if (suffix != undefined && suffix != null)
+                        if (suffix != undefined && suffix != null && codeToUse != msg)
                             msg = msg + suffix
                         return msg
                     }
