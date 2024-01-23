@@ -32,6 +32,11 @@ export default defineConfig({
             ],
         }),
     ],
+    server: {
+        watch: {
+            usePolling: false,
+        }
+    },
     resolve: {
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
         alias: { "@": path.resolve(__dirname, "./src") },
