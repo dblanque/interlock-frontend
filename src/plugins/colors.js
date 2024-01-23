@@ -2,6 +2,7 @@
 // Martin Vilche & Dylan Blanqué
 
 function hslToHex(h, s, l) {
+	console.log(h, s, l)
 	l /= 100;
 	const a = s * Math.min(l, 1 - l) / 100;
 	const f = n => {
@@ -9,7 +10,10 @@ function hslToHex(h, s, l) {
 	  const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
 	  return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
 	};
-	return `#${f(0)}${f(8)}${f(4)}`;
+	let r = `#${f(0)}${f(8)}${f(4)}`;
+	if (r == "#NaNNaNNaN")
+		throw new Error(`Color parse error (Values: ${h}, ${s}, ${l}`);
+	return r;
 }
 
 const vueColorList = {
@@ -38,10 +42,10 @@ function parseVueColors() {
 		colors.light[color_key] = default_color
 		// Step saturation and lightness every 10
 		for (var sat = 5; sat <= limit; sat +=5){
-			let cur_clr = hslToHex(color_hue, sat, lig)
-			colors.light[`${color_key}-${sat}-${lig}-s`] = cur_clr
-			colors.dark[`${color_key}-${sat}-${lig}-s`] = cur_clr
 			for (var lig = 5; lig <= limit; lig +=5){
+				let cur_clr = hslToHex(color_hue, sat, lig)
+				colors.light[`${color_key}-${sat}-${lig}-s`] = cur_clr
+				colors.dark[`${color_key}-${sat}-${lig}-s`] = cur_clr
 				colors.light[`${color_key}-${sat}-${lig}`] = cur_clr
 				colors.dark[`${color_key}-${sat}-${lig}`] = hslToHex(color_hue, sat, 100-lig)
 			}
