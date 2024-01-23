@@ -112,10 +112,9 @@ const utilsMixin = {
 
         // Check if theme is dark
         isThemeDark(vuetify) {
-        if (vuetify.theme.dark === true) {
-            return true;
-        }
-        return false;
+            if (vuetify.theme.dark === true)
+                return true;
+            return false;
         },
 
         sortNullLast(items, index, isDesc) {
