@@ -111,7 +111,7 @@
                                     id="telephoneNumber"
                                     :label="$t('ldap.attributes.telephoneNumber')"
                                     v-model="user.telephoneNumber"
-                                    :rules="[this.fieldRules(user.telephoneNumber, 'ge_phone')]"
+                                    :rules="[this.fieldRules(user.telephoneNumber, 'ge_phone_intl')]"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" lg="6">

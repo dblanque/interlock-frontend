@@ -46,6 +46,7 @@ declare module 'vue' {
     UserDelete: typeof import('./src/components/User/UserDelete.vue')['default']
     UserDialog: typeof import('./src/components/User/UserDialog.vue')['default']
     UserImport: typeof import('./src/components/User/UserImport.vue')['default']
+    UserModifyBulk: typeof import('./src/components/User/UserModifyBulk.vue')['default']
     UserPermissionList: typeof import('./src/components/User/UserPermissionList.vue')['default']
     UserResetPassword: typeof import('./src/components/User/UserResetPassword.vue')['default']
     UserSettings: typeof import('./src/components/User/UserSettings.vue')['default']

@@ -119,7 +119,7 @@ const validationMixin = {
 
       // Phone Regex Rules
       //inputRulesPhone: (v) => !v || /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(v) || /.+[0-9]{2}[0-9]{1,2}[0-9]{2}[0-9]{4}[0-9]{4}/.test(v) || i18n.t("error.validation.phone"),
-      inputRulesPhone: (v) => !v || /^\+?\d$/.test(v) || i18n.t("error.validation.phone"), // Basic phone validation (Has a plus and digits?)
+      inputRulesPhone: (v) => !v || /^\+?[\d-]+$/.test(v) || i18n.t("error.validation.phone"), // Basic phone validation (Has a plus and digits?)
       inputRulesPhone_ext: (v) => {
         var message = true;
         if  ( v && 
@@ -317,7 +317,10 @@ const validationMixin = {
             rules.push(this.inputRulesDNIMatchesCUIT)
               break;
           case "ge_phone":
-            rules.push(this.inputRulesPhone_ext)
+            rules.push(this.inputRulesPhone)
+            break;
+          case "ge_phone_intl":
+            rules.push(this.inputRulesPhone)
             break;
           case "ge_website":
             rules.push(this.inputRulesDomain)
