@@ -264,7 +264,7 @@ webpage
         <!-- Actions -->
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn @click="import_tab < 1 || showResult && import_tab > 1 ? closeDialog() : import_tab -= 1"
+                <v-btn @click="prevStep"
                 class="ma-0 pa-0 pa-2 ma-1 bg-secondary text-normal"
                 rounded>
                     <v-icon class="mr-1" color="white">
@@ -404,6 +404,22 @@ export default {
                     break;
             }
             return true
+        },
+        prevStep(){
+            if (this.import_tab < 1 || this.showResult && this.import_tab > 1)
+                this.closeDialog()
+            switch (this.import_tab - 1) {
+                case 0:
+                    this.error = false
+                    this.errorMsg = ""
+                    this.clearFile()
+                    this.clearDataTable()
+                    this.import_tab -= 1
+                    break;
+                default:
+                    this.import_tab -= 1
+                    break;
+            }
         },
         nextStep(){
             switch (this.import_tab + 1) {
@@ -655,11 +671,13 @@ export default {
                 }, 100)
                 this.error = false
                 this.errorMsg = ""
-                if (response.data.code != 0)
+                if (response.data.code != 0){
                     notificationBus.$emit('createNotification', {
                         message: this.$t('error.unknown_short'),
                         type: "error"
                     });
+                    throw new Error(this.$t('error.unknown_short'));
+                }
                 this.showResult = true
                 this.tableData = {
                     headers: [],
@@ -711,16 +729,15 @@ export default {
                     //     type: "success"
                     // });
             })
-            .catch(error => {
-                console.error(error)
+            .catch(e => {
+                console.error(e)
+                let errorCode = this.getResponseErrorCode(e)
                 setTimeout(() => {
                     this.loading = false
                 }, 100)
                 this.error = true
-                if (this.errorMsg.length < 1) {
-                    this.errorMsg = this.getResponseErrorCode(error)
-                    this.errorMsg = this.getMessageForCode(this.errorMsg).toUpperCase()
-                }
+                if (this.errorMsg.length < 1)
+                    this.errorMsg = this.getMessageForCode(errorCode).toUpperCase()
                 notificationBus.$emit('createNotification', {
                     message: this.errorMsg,
                     type: "error"
