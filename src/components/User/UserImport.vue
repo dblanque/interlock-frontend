@@ -731,13 +731,12 @@ export default {
             })
             .catch(e => {
                 console.error(e)
-                let errorCode = this.getResponseErrorCode(e)
                 setTimeout(() => {
                     this.loading = false
                 }, 100)
                 this.error = true
                 if (this.errorMsg.length < 1)
-                    this.errorMsg = this.getMessageForCode(errorCode).toUpperCase()
+                    this.errorMsg = this.getMessageForCode(e).toUpperCase()
                 notificationBus.$emit('createNotification', {
                     message: this.errorMsg,
                     type: "error"
