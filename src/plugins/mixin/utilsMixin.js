@@ -6,7 +6,7 @@ const utilsMixin = {
     methods:{
         isNumber: function(evt) {
             evt = (evt) ? evt : window.event;
-            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            let charCode = (evt.which) ? evt.which : evt.keyCode;
             if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
                 evt.preventDefault();
             } else {
@@ -14,38 +14,41 @@ const utilsMixin = {
             }
         },
         getResponseErrorCode(errorData) {
-            if (errorData === undefined) {
+            let codeToUse = "ERR_UNKNOWN_SHORT"
+            if (errorData === undefined)
                 console.log("getResponseErrorCode(): No error data passed.")
-                return this.$t("error.unknown_short")
-            }
 
-            if (typeof errorData == "string")
+            if (typeof errorData === "string")
                 return errorData
 
-            var codeToUse
-            if (errorData.response.data != undefined && errorData.response.data != null){
-                if (typeof errorData.response.data === Object)
-                    if ('ldap_response' in errorData.response.data)
-                        codeToUse = errorData.response.data.ldap_response.description
-                    else if ('code' in errorData.response.data)
-                        codeToUse = errorData.response.data.code
+            if (typeof errorData === "object") {
+                if (errorData.response.data != undefined &&
+                    errorData.response.data != null &&
+                    errorData.response.data instanceof Object) {
+                        if ('ldap_response' in errorData.response.data)
+                            codeToUse = errorData.response.data.ldap_response.description
+                        else if ('code' in errorData.response.data)
+                            codeToUse = errorData.response.data.code
+                    }
+                else if ('status' in errorData.response)
+                    codeToUse = errorData.response.status
+                else if ('code' in errorData)
+                    codeToUse = errorData.code
+                else if ('status_code' in errorData)
+                    codeToUse = errorData.status_code
             }
-            else if ('code' in errorData)
-                codeToUse = errorData.code
-            else
-                codeToUse = errorData.status_code
 
             return(codeToUse)
         },
-        getMessageForCode(error=undefined){
-            var codeToUse = this.getResponseErrorCode(error)
-            var suffix
+        getMessageForCode(error){
+            let codeToUse = this.getResponseErrorCode(error)
+            let suffix
 
             if(codeToUse != undefined && codeToUse != null){
                 if (codeToUse.length < 40)
-                suffix = " (" + codeToUse + ")"
+                suffix = " (" + toString(codeToUse) + ")"
                 else
-                suffix = " (" + codeToUse.substring(0, 40) + "...)"
+                suffix = " (" + toString(codeToUse).substring(0, 40) + "...)"
             }
 
             // OTP ---------------------------------------------------------- //
@@ -62,6 +65,10 @@ const utilsMixin = {
                 return this.$t('error.codes.groups.'+codeToUse)
             else
                 switch(codeToUse){
+                case 'ERR_UNKNOWN':
+                    return this.$t("error.unknown")
+                case 'ERR_UNKNOWN_SHORT':
+                    return this.$t("error.unknown_short")
                 case 'ERR_LDAP_GW':
                     return this.$t('error.codes.ldapGwError')
                 case 400:
@@ -91,7 +98,7 @@ const utilsMixin = {
                 case undefined:
                 case "":
                 default:
-                    console.log("Unknown Error Code:"+codeToUse)
+                    console.log("Unknown Error Code: "+codeToUse)
                     if (codeToUse in this.$t('error.codes'))
                         return this.$t('error.codes.'+codeToUse)
                     else {
