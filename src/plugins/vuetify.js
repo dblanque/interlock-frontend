@@ -55,17 +55,12 @@ Vue.use(Vuetify, {
 });
 
 export default new Vuetify({
-    options: {
-        customProperties: true
-    },
     icons: {
         iconfont: 'mdi', // default - only for display purposes
     },
     theme: {
+        options: { customProperties: true },
         dark: false,
-        themes: {
-            light: colors.light,
-            dark: colors.dark
-        },
+        themes: { light: colors.light, dark: colors.dark },
     },
 });
