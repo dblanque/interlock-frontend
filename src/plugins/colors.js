@@ -20,8 +20,9 @@ const vueColorList = {
 	primary: [211, 54.5, 56.1],
 	accent: [29.5, 100, 76.9],
 	secondary: [210, 7.4, 21.2],
+	valid: [150, 86.9, 41.8],
+	error: [0, 85.9, 59.6],
 }
-
 
 // To get a Vue Color as a CSS Variable
 // var(--v-variablename-base)
@@ -46,10 +47,22 @@ function parseVueColors() {
 		for (var sat = 5; sat <= limit; sat +=5){
 			for (var lig = 5; lig <= limit; lig +=5){
 				let cur_clr = hslToHex(color_hue, sat, lig)
+				let cur_clr_default_sat = hslToHex(color_hue, color_sat, lig)
+				let cur_clr_default_lig = hslToHex(color_hue, sat, color_lig)
+				// Static Lightness (Ignores Theme)
+				colors.light[`${color_key}-d-${lig}-s`] = cur_clr_default_sat
+				colors.dark[`${color_key}-d-${lig}-s`] = cur_clr_default_sat
+				colors.light[`${color_key}-${sat}-d-s`] = cur_clr_default_lig
+				colors.dark[`${color_key}-${sat}-d-s`] = cur_clr_default_lig
 				colors.light[`${color_key}-${sat}-${lig}-s`] = cur_clr
 				colors.dark[`${color_key}-${sat}-${lig}-s`] = cur_clr
+				// Dynamic Lightness (Theme Dependant)
 				colors.light[`${color_key}-${sat}-${lig}`] = cur_clr
 				colors.dark[`${color_key}-${sat}-${lig}`] = hslToHex(color_hue, sat, 100-lig)
+				colors.light[`${color_key}-d-${lig}`] = cur_clr_default_sat
+				colors.dark[`${color_key}-d-${lig}`] = hslToHex(color_hue, color_sat, 100-lig)
+				colors.light[`${color_key}-${sat}-d`] = cur_clr_default_lig
+				colors.dark[`${color_key}-${sat}-d`] = hslToHex(color_hue, sat, 100-color_lig)
 			}
 		}
 	}
