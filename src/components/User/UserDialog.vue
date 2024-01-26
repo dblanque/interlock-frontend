@@ -15,6 +15,16 @@
                     {{ $t('classes.user.single') + ': ' + usercopy.givenName + " " + usercopy.sn }}
                 </h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
+                <v-btn outlined small color="primary" @click="goToGroups"
+                class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
+                    {{ $t("actions.changeUserGroups") }}
+                    <v-icon>mdi-chevron-left</v-icon>
+                </v-btn>
+                <v-btn outlined small color="primary" @click="goToPerms"
+                class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
+                    {{ $t("actions.changeUserPerms") }}
+                    <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
                     <v-icon>
                         mdi-close
@@ -259,7 +269,7 @@
                                     </v-row>
                                     <v-row :justify="$vuetify.breakpoint.lgAndUp ? 'start':'center'" align="center">
                                         <v-col cols="12" md="3">
-                                            <v-btn outlined color="primary" @click="goToGroups"
+                                            <v-btn outlined dense color="primary" @click="goToGroups"
                                             class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
                                                 {{ $t("actions.changeUserGroups") }}
                                                 <v-icon>mdi-chevron-left</v-icon>

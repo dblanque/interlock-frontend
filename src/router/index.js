@@ -52,6 +52,11 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/debug',
+    name: 'debug',
+    component: HomeView
+  },
+  {
     path: '/login',
     name: 'login',
     // route level code-splitting

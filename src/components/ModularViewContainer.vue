@@ -75,28 +75,39 @@
       ref="LogView"
     />
   </v-container>
+
+  <!-- Debugging -->
+  <v-container v-if="viewTitle == 'debug'" class="max-width-change">
+    <DebugView
+      :viewTitle="viewTitle"
+      class="my-2 mb-4"
+      ref="DebugView"
+    />
+  </v-container>
 </v-container>
 </template>
 
 <script>
-import UserView from '@/components/User/UserView.vue'
-import GroupView from '@/components/Group/GroupView.vue'
-import DirtreeView from '@/components/Dirtree/DirtreeView.vue'
-import dnsView from '@/components/DNS/dnsView.vue'
-import SettingsCard from '@/components/Settings/SettingsCard.vue'
-import LogView from '@/components/Logging/LogView.vue'
+import UserView from '@/components/User/UserView.vue';
+import GroupView from '@/components/Group/GroupView.vue';
+import DirtreeView from '@/components/Dirtree/DirtreeView.vue';
+import dnsView from '@/components/DNS/dnsView.vue';
+import SettingsCard from '@/components/Settings/SettingsCard.vue';
+import LogView from '@/components/Logging/LogView.vue';
+import DebugView from '@/components/Debug/DebugView.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 
   export default {
     name: 'ModularViewContainer',
     mixins: [ validationMixin ],
     components:{
-    UserView,
-    GroupView,
-    DirtreeView,
-    dnsView,
-    SettingsCard,
-    LogView
+      UserView,
+      GroupView,
+      DirtreeView,
+      dnsView,
+      SettingsCard,
+      LogView,
+      DebugView
     },
     props: {
       viewTitle: String,

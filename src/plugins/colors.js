@@ -22,6 +22,9 @@ const vueColorList = {
 	secondary: [210, 7.4, 21.2],
 }
 
+
+// To get a Vue Color as a CSS Variable
+// var(--v-variablename-base)
 function parseVueColors() {
 	let colors = {
 		dark:{},

@@ -11,6 +11,7 @@
     "server":"Server",
     "settings": "Settings",
     "logs":"Event Logs",
+    "debug":"Debugging",
     "header": {
       "home":"Full Directory Tree",
       "users":"Users",
@@ -19,7 +20,8 @@
       "gpo":"Group Policy Objects",
       "server":"Server Management",
       "settings": "Settings",
-      "logs":"Event Logs"
+      "logs":"Event Logs",
+      "debug":"Debugging for Developers"
     }
   },
   "actions":{

@@ -11,6 +11,7 @@
     "server": "Servidor",
     "settings": "Configuración",
     "logs":"Registro de Eventos",
+    "debug":"Debugging",
     "header": {
       "home":"Árbol de Directorio",
       "users":"Usuarios",
@@ -19,7 +20,8 @@
       "gpo":"Objetos de Política de Grupo",
       "server":"Administración de Servidor",
       "settings": "Configuración",
-      "logs":"Registro de Eventos"
+      "logs":"Registro de Eventos",
+      "debug":"Debugging para Desarrolladores"
     }
   },
   "actions": {

@@ -378,6 +378,13 @@ export default {
           icon: "mdi-flag-outline",
           route: "logs",
         },
+        {
+          index: 7,
+          title: "debug",
+          enabled: true,
+          icon: "mdi-xml",
+          route: "debug",
+        },
       ],
     };
   },

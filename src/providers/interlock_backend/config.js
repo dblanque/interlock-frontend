@@ -146,6 +146,9 @@ const urls = {
     liveness: {
         check: "api/liveness/check/"
     },
+    debug: {
+        list: "api/debug/list/"
+    },
 }
 
 // Adds Axios Response Interceptor.
