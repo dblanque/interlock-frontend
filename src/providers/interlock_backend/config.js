@@ -6,7 +6,7 @@
 // File: config.js
 
 import axios from "axios";
-import router from "@/router/index.js"
+import router from "@/router.js"
 
 export const getRuntimeConfig = async () => {
     const runtimeConfig = await fetch('/config/local.json');

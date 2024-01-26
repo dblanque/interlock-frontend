@@ -4,9 +4,9 @@
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import EnduserView from '../views/EnduserView.vue'
+import HomeView from './views/HomeView.vue'
+import LoginView from './views/LoginView.vue'
+import EnduserView from './views/EnduserView.vue'
 
 Vue.use(VueRouter)
 
@@ -71,7 +71,7 @@ const routes = [
   },
 ]
 
-const router = new VueRouter({
+export default new VueRouter({
   mode: 'history',
   base: import.meta.env.BASE_URL,
   routes: routes,
@@ -80,5 +80,3 @@ const router = new VueRouter({
     return { top: 0 }
   }
 })
-
-export default router
