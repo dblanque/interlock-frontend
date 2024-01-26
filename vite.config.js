@@ -30,18 +30,31 @@ export default defineConfig({
               // Vuetify
               VuetifyResolver(),
             ],
+            // Needed if we ever use TS and require VueRouter
+            types: [{
+                from: 'vue-router',
+                names: ['RouterLink', 'RouterView'],
+            }],
         }),
+        // Required to fix strange HMR issue with Vue 2 Router Initialization
+        // There is some Circular Dependency Screwing things up.
+        // https://github.com/vitejs/vite/issues/2466
+        {
+            name: "singleHMR",
+            handleHotUpdate({ modules }) {
+              modules.map((m) => {
+                m.importedModules = new Set();
+                m.importers = new Set();
+              });
+              return modules;
+            },
+        },
     ],
-    server: {
-        watch: {
-            usePolling: true,
-        }
-    },
     resolve: {
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
         alias: { "@": path.resolve(__dirname, "./src") },
     },
     build: {
-        target: 'esnext'
+        target: 'esnext',
     },
 })

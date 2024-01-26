@@ -2,6 +2,7 @@
 <div>
 	<v-container>
 		<v-row>
+			<v-btn></v-btn>
 		</v-row>
 	</v-container>
 </div>
@@ -10,8 +11,7 @@
 <script>
 import Debug from '@/include/Debug.js';
 export default {
-	mounted: {
-
+	mounted() {
 	}
 }
 </script>
