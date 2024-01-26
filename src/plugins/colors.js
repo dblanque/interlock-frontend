@@ -48,21 +48,18 @@ function parseVueColors() {
 			for (var lig = 5; lig <= limit; lig +=5){
 				let cur_clr = hslToHex(color_hue, sat, lig)
 				let cur_clr_default_sat = hslToHex(color_hue, color_sat, lig)
-				let cur_clr_default_lig = hslToHex(color_hue, sat, color_lig)
 				// Static Lightness (Ignores Theme)
-				colors.light[`${color_key}-d-${lig}-s`] = cur_clr_default_sat
-				colors.dark[`${color_key}-d-${lig}-s`] = cur_clr_default_sat
-				colors.light[`${color_key}-${sat}-d-s`] = cur_clr_default_lig
-				colors.dark[`${color_key}-${sat}-d-s`] = cur_clr_default_lig
-				colors.light[`${color_key}-${sat}-${lig}-s`] = cur_clr
-				colors.dark[`${color_key}-${sat}-${lig}-s`] = cur_clr
+				colors.light[`${color_key}-${lig}-${sat}-s`] = cur_clr
+				colors.dark[`${color_key}-${lig}-${sat}-s`] = cur_clr
+				// Varying Lightness, default saturation
+				colors.light[`${color_key}-${lig}-s`] = cur_clr_default_sat
+				colors.dark[`${color_key}-${lig}-s`] = cur_clr_default_sat
 				// Dynamic Lightness (Theme Dependant)
-				colors.light[`${color_key}-${sat}-${lig}`] = cur_clr
-				colors.dark[`${color_key}-${sat}-${lig}`] = hslToHex(color_hue, sat, 100-lig)
-				colors.light[`${color_key}-d-${lig}`] = cur_clr_default_sat
-				colors.dark[`${color_key}-d-${lig}`] = hslToHex(color_hue, color_sat, 100-lig)
-				colors.light[`${color_key}-${sat}-d`] = cur_clr_default_lig
-				colors.dark[`${color_key}-${sat}-d`] = hslToHex(color_hue, sat, 100-color_lig)
+				colors.light[`${color_key}-${lig}-${sat}`] = cur_clr
+				colors.dark[`${color_key}-${lig}-${sat}`] = hslToHex(color_hue, sat, 100-lig)
+				// Varying Lightness, Default Saturation
+				colors.light[`${color_key}-${lig}`] = cur_clr_default_sat
+				colors.dark[`${color_key}-${lig}`] = hslToHex(color_hue, color_sat, 100-lig)
 			}
 		}
 	}

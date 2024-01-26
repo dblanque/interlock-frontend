@@ -4,9 +4,7 @@ import vuetify from './plugins/vuetify'
 import i18n from './i18n'
 import router from './router'
 
-// Vue.config.productionTip = false
-
-console.log(router)
+Vue.config.productionTip = false
 const notificationBus = new Vue()
 
 const app = new Vue({
