@@ -38,6 +38,7 @@ export default defineConfig({
         }),
         // Required to fix strange HMR issue with Vue 2 Router Initialization
         // There is some Circular Dependency Screwing things up.
+        // https://github.com/vitejs/vite/issues/3033
         // https://github.com/vitejs/vite/issues/2466
         {
             name: "singleHMR",
