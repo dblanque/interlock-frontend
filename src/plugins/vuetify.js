@@ -44,7 +44,7 @@ import '@fontsource/montserrat/900-italic.css';
 
 // Ripple fix
 import Ripple from 'vuetify/lib/directives/ripple';
-import parseVueColors from './colors';
+import { parseVueColors } from './colors';
 
 const colors = parseVueColors()
 
@@ -59,8 +59,14 @@ export default new Vuetify({
         iconfont: 'mdi', // default - only for display purposes
     },
     theme: {
-        options: { customProperties: true },
+        options: {
+            customProperties: true, // Enable Color Variables in CSS
+            variations: false // Handled manually
+        },
         dark: false,
-        themes: { light: colors.light, dark: colors.dark },
+        themes: {
+            light: colors.light,
+            dark: colors.dark
+        },
     },
 });
