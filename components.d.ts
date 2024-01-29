@@ -10,7 +10,6 @@ declare module 'vue' {
     AboutDialog: typeof import('./src/components/AboutDialog.vue')['default']
     BackendStatus: typeof import('./src/components/BackendStatus.vue')['default']
     CNObjectList: typeof import('./src/components/CNObjectList.vue')['default']
-    Debug: typeof import('./src/components/Debug/Debug.vue')['default']
     DebugView: typeof import('./src/components/Debug/DebugView.vue')['default']
     DirtreeDeleteObject: typeof import('./src/components/Dirtree/DirtreeDeleteObject.vue')['default']
     DirtreeMove: typeof import('./src/components/Dirtree/DirtreeMove.vue')['default']
