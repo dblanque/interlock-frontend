@@ -196,6 +196,12 @@ import validationMixin from '@/plugins/mixin/validationMixin.js';
                 this.$refs.dnsView.getDNSData()
               }
               break;
+            case 'debug':
+              if (this.$refs.DebugView != undefined) {
+                console.log("Requested refresh for component "+ newValue)
+                this.$refs.DebugView.refreshAction()
+              }
+              break;
             default:
               if (newValue)
                 console.log("Requested refresh for component "+ newValue)

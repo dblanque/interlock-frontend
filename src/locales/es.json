@@ -878,6 +878,9 @@
         "LDAP_AUTH_USER_FIELDS":"Mappeo de Campos de LDAP",
         "LDAP_AUTH_USER_LOOKUP_FIELDS":"Campos de Búsqueda del Usuario"
       }
+    },
+    "debug":{
+      "ldapOperation":"Operación de LDAP | Operaciones de LDAP"
     }
   },
   "attribute": {

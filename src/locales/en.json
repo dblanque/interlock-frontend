@@ -872,6 +872,9 @@
         "LDAP_AUTH_USER_FIELDS":"LDAP Field Mapping",
         "LDAP_AUTH_USER_LOOKUP_FIELDS":"Authentication User Lookup Fields"
       }
+    },
+    "debug":{
+      "ldapOperation":"LDAP Operation | LDAP Operations"
     }
   },
   "attribute":{
