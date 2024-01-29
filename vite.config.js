@@ -7,6 +7,7 @@ import { createVuePlugin } from "vite-plugin-vue2";
 import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 const path = require("path");
+const random_hash = Math.floor(Math.random() * 90000) + 10000;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -57,5 +58,12 @@ export default defineConfig({
     },
     build: {
         target: 'esnext',
+        // rollupOptions: {
+        //     output: {
+        //         entryFileNames: `[name]` + random_hash + `.js`,
+        //         chunkFileNames: `[name]` + random_hash + `.js`,
+        //         assetFileNames: `[name]` + random_hash + `.[ext]`
+        //     }
+        // }
     },
 })
