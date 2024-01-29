@@ -30,12 +30,12 @@ const utilsMixin = {
                         else if ('code' in errorData.response.data)
                             codeToUse = errorData.response.data.code
                     }
-                else if ('status' in errorData.response)
-                    codeToUse = errorData.response.status
                 else if ('code' in errorData)
                     codeToUse = errorData.code
                 else if ('status_code' in errorData)
                     codeToUse = errorData.status_code
+                else if ('status' in errorData.response)
+                    codeToUse = errorData.response.status
             }
 
             return(codeToUse)
