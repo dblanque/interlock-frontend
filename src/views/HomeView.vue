@@ -6,17 +6,24 @@
     <!------------------>
     <v-row align="center"
       justify="space-between"
-      :class="'ma-0 pa-0 px-4 text-normal transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
-      <v-img max-width="30ch" max-height="5em" class="my-3" contain :aspect-ratio="32/9" :src="!isThemeDark($vuetify) ? logoLight : logoDark"/>
-      <h2 class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
+      style="background: var(--v-secondary-10-base)"
+      class="ma-0 pa-0 px-4 transition-speed-fix">
+      <v-img
+        max-width="30ch"
+        max-height="5em"
+        class="my-3"
+        contain
+        :aspect-ratio="32/9"
+        :src="!isThemeDark($vuetify) ? logoLight : logoDark"/>
+      <h2 style="color: var(--v-text-background-base)" class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
     </v-row>
     <v-row
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
       align="center"
       justify="space-between"
-      :class="'ma-0 pa-2 transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
-      style="height: fit-content">
+      class="ma-0 pa-2 transition-speed-fix"
+      style="background: var(--v-secondary-10-base); height: fit-content">
       <v-col cols="12" md="auto">
         <LanguageSelector
           :dark="!isThemeDark($vuetify)"
@@ -64,13 +71,14 @@
 
     <!-- Tabs Bar -->
     <v-toolbar
+      color="secondary-10"
       v-if="this.$vuetify.breakpoint.mdAndUp"
       dense
       id="tabs-nav-bar"
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
       style="z-index: 1"
-      :class="'sticky-top transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+      :class="'sticky-top transition-speed-fix'">
       <v-fade-transition>
         <v-tabs
           v-model="active_tab"
@@ -83,7 +91,7 @@
         >
           <v-tab
             class="px-4"
-            v-for="tab in navTabs"
+            v-for="tab in getVisibleTabs"
             :key="tab.index"
             @click="updateSelectedTab(tab.index)"
             :disabled="!tab.enabled"
@@ -124,19 +132,19 @@
         </v-btn>
         <span>
           <span
-            v-if="navTabs[active_tab].enableShortName == true"
+            v-if="getVisibleTabs[active_tab].enableShortName == true"
             class="font-weight-medium clr-primary">
-            {{ $t("category." + navTabs[active_tab].title + "_short").toUpperCase() }}
+            {{ $t("category." + getVisibleTabs[active_tab].title + "_short").toUpperCase() }}
           </span>
           <span v-else class="font-weight-medium clr-primary">
-            {{ $t("category." + navTabs[active_tab].title).toUpperCase() }}
+            {{ $t("category." + getVisibleTabs[active_tab].title).toUpperCase() }}
           </span>
         </span>
         <v-btn
           text
           color="primary"
           @click="goToNextTab"
-          :disabled="active_tab == navTabs.length - 1">
+          :disabled="active_tab == getVisibleTabs.length - 1">
           <span>
             {{ $t("actions.next") }}
           </span>
@@ -146,7 +154,7 @@
     </v-toolbar>
 
     <v-tabs-items v-model="active_tab" class="transparent-body">
-      <v-tab-item v-for="tab in navTabs" :key="tab.index">
+      <v-tab-item v-for="tab in getVisibleTabs" :key="tab.index">
         <ModularViewContainer
           :initLoad="initLoad"
           :viewTitle="tab.title"
@@ -360,6 +368,7 @@ export default {
           index: 4,
           title: "gpo",
           enabled: false,
+          hidden: false,
           enableShortName: true,
           icon: "mdi-google-circles-extended",
           route: "gpo",
@@ -381,7 +390,8 @@ export default {
         {
           index: 7,
           title: "debug",
-          enabled: true,
+          enabled: false,
+          hidden: true,
           icon: "mdi-xml",
           route: "debug",
         },
@@ -454,6 +464,9 @@ export default {
     // this.requestRefresh = this.selectedTabTitle
   },
   computed: {
+    getVisibleTabs(){
+      return this.navTabs.filter(x => !x.hidden)
+    },
     breakpointName() {
       return this.$vuetify.breakpoint.name;
     },
