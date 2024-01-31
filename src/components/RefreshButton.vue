@@ -4,10 +4,10 @@
 <template>
 <div>
     <!-- Refresh User Button -->
-    <v-progress-circular :class="'pa-0 ma-0 ' + componentClasses" :color="loadingColor || buttonColor" :value="loadingValue" :indeterminate="loading || fetchingData" 
-        :size="38" :width="!dense ? 7 : 4">
-        <v-btn small
-        :class="buttonClasses" 
+    <v-progress-circular :class="'pa-0 ma-0 ' + componentClass" :color="loadingColor || buttonColor" :value="loadingValue" :indeterminate="loading || fetchingData" 
+        :size="dense ? 36 : 38" :width="!dense ? 7 : 4">
+        <v-btn :small="small && !dense" :x-small="dense"
+        :class="buttonClass" 
         :color="buttonColor"
         :icon="buttonIcon"
         :fab="!buttonIcon"
@@ -16,12 +16,12 @@
         :loading="loading"
         @click="emitRefresh"
         >
-            <v-icon :color="iconColor">
+            <v-icon :color="iconColor" :size="dense ? 24 : undefined">
             mdi-refresh
             </v-icon>        
             <template v-slot:loader>
             <span class="custom-loader">
-                <v-icon :color="iconColor">mdi-cached</v-icon>
+                <v-icon :color="iconColor" :size="dense ? 24 : undefined">mdi-cached</v-icon>
             </span>
             </template>
         </v-btn>
@@ -44,7 +44,7 @@ export default {
             type: String,
             default: 'primary'
         },
-        buttonClasses: {
+        buttonClass: {
             type: String,
             default: ''
         },
@@ -52,11 +52,15 @@ export default {
             type: Boolean,
             default: false
         },
+        small: {
+            type: Boolean,
+            default: true
+        },
         dense: {
             type: Boolean,
             default: false
         },
-        componentClasses: {
+        componentClass: {
             type: String,
             default: ''
         },

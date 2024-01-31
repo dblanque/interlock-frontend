@@ -24,23 +24,9 @@
           class="mx-2"
         ></v-text-field>
         <v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end">
-          <v-btn 
-            class="mx-2 bg-primary" 
-            color="white" 
-            icon
-            elevation="0"
+          <refresh-button dense
             :loading="loading"
-            @click="listGroupItems"
-            >
-            <v-icon>
-              mdi-refresh
-            </v-icon>
-            <template v-slot:loader>
-              <span class="custom-loader">
-                <v-icon>mdi-cached</v-icon>
-              </span>
-            </template>
-          </v-btn>
+            @refresh="listGroupItems"/>
           <v-btn class="pa-2 mx-2" :disabled="loading || readonly" color="primary" @click="openDialog('groupCreate')">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
             {{ $t('actions.addN') + ' ' + $tc('classes.group', 1) }}
@@ -209,6 +195,7 @@ import Group from '@/include/Group.js';
 import GroupDialog from '@/components/Group/GroupDialog.vue'
 import GroupCreate from '@/components/Group/GroupCreate.vue'
 import GroupDelete from '@/components/Group/GroupDelete.vue'
+import RefreshButton from '@/components/RefreshButton.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
@@ -218,7 +205,8 @@ export default {
   components: {
     GroupDialog,
     GroupCreate,
-    GroupDelete
+    GroupDelete,
+    RefreshButton
   },
   data() {
     return {

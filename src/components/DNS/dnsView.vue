@@ -64,23 +64,9 @@
             class="mx-2"
         ></v-text-field>
         <v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end">
-            <v-btn 
-            class="mx-2 bg-primary" 
-            color="white" 
-            icon
-            elevation="0"
-            :loading="loading"
-            @click="getDNSData(undefined, true)"
-            >
-                <v-icon>
-                    mdi-refresh
-                </v-icon>
-                <template v-slot:loader>
-                    <span class="custom-loader">
-                    <v-icon>mdi-cached</v-icon>
-                    </span>
-                </template>
-            </v-btn>
+            <refresh-button dense
+                :loading="loading"
+                @refresh="getDNSData(undefined, true)"/>
             <v-btn @click="openDialog('recordDialog')"
              class="pa-2 mx-2" :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="primary">
                 <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
@@ -357,6 +343,7 @@ import Domain, { default as DNS } from '@/include/Domain.js'
 import RecordDialog from '@/components/DNS/RecordDialog.vue'
 import RecordDelete from '@/components/DNS/RecordDelete.vue'
 import RecordMassAction from '@/components/DNS/RecordMassAction.vue'
+import RefreshButton from '@/components/RefreshButton.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
@@ -366,7 +353,8 @@ export default {
     components: {
         RecordDialog,
         RecordDelete,
-        RecordMassAction
+        RecordMassAction,
+        RefreshButton
     },
     data() {
         return {

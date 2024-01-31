@@ -27,23 +27,9 @@
           class="mx-2"
         ></v-text-field>
         <v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end">
-          <v-btn 
-            class="mx-2 bg-primary" 
-            color="white" 
-            icon
-            elevation="0"
+          <refresh-button dense
             :loading="loading"
-            @click="listUserItems"
-            >
-            <v-icon>
-              mdi-refresh
-            </v-icon>
-            <template v-slot:loader>
-              <span class="custom-loader">
-                <v-icon>mdi-cached</v-icon>
-              </span>
-            </template>
-          </v-btn>
+            @refresh="listUserItems"/>
           <v-btn class="pa-2 mx-2" :disabled="loading" color="primary" @click="openDialog('userCreate')">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
             {{ $t('actions.addN') + ' ' + $tc('classes.user', 1) }}
@@ -376,6 +362,7 @@ import UserDialog from '@/components/User/UserDialog.vue'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import UserPermissionList from '@/components/User/UserPermissionList.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
+import RefreshButton from '@/components/RefreshButton.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 import { notificationBus } from '@/main.js'
@@ -389,7 +376,8 @@ export default {
     UserDialog,
     UserResetPassword,
     UserPermissionList,
-    UserDelete
+    UserDelete,
+    RefreshButton
   },
   data() {
     return {

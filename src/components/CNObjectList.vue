@@ -52,9 +52,9 @@
                     </v-icon>
                     {{ $t('actions.addN') }}
                 </v-btn>
-                <Refresh
+                <refresh-button
                     :loading="loading"
-                    buttonClasses="ma-1 bg-primary"
+                    button-class="ma-1"
                     @refresh="fetchLists"
                 />
             </v-row>
@@ -121,13 +121,13 @@
 
 <script>
 import OrganizationalUnit from '@/include/OrganizationalUnit.js'
-import Refresh from '@/components/RefreshButton.vue'
+import RefreshButton from '@/components/RefreshButton.vue'
 import { objectRecursiveSearch } from '@/include/utils.js';
 
 export default {
     name: 'CNObjectList',
     components: {
-        Refresh
+        RefreshButton
     },
     data() {
         return {

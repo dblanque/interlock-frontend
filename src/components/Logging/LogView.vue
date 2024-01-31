@@ -25,9 +25,9 @@
           class="mx-2"
         ></v-text-field>
         <v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end" align="center">
-          <Refresh dense
-            :loading="loading"
-            @refresh="listLogs"/>
+            <refresh-button dense
+              :loading="loading"
+              @refresh="listLogs"/>
             <v-btn class="pa-2 mx-2" :disabled="loading" color="primary" @click="openResetLogsDialog()">
               <v-icon class="ma-0 pa-0 mr-1">mdi-fire</v-icon>
               {{ $t('actions.delete') + ' ' + $tc('classes.log', 5) }}
@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import Refresh from '@/components/RefreshButton.vue'
+import RefreshButton from '@/components/RefreshButton.vue'
 import { notificationBus } from '@/main.js'
 import Log from '@/include/Log.js';
 import LogResetDialog from '@/components/Logging/LogResetDialog.vue'
@@ -163,7 +163,7 @@ export default {
   mixins: [ validationMixin, utilsMixin ],
   components: {
     LogResetDialog,
-    Refresh
+    RefreshButton
   },
   data() {
     return {

@@ -12,23 +12,9 @@
           class="mx-2"
         ></v-text-field>
         <v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end">
-          <v-btn 
-            class="mx-2 bg-primary" 
-            color="white" 
-            icon
-            elevation="0"
+          <refresh-button dense
             :loading="loading"
-            @click="fetchDirtree"
-            >
-            <v-icon>
-              mdi-refresh
-            </v-icon>
-            <template v-slot:loader>
-              <span class="custom-loader">
-                <v-icon light>mdi-cached</v-icon>
-              </span>
-            </template>
-          </v-btn>
+            @refresh="fetchDirtree"/>
         </v-row>
       </v-row>
       <v-row 
@@ -374,6 +360,7 @@ import DirtreeOUCreate from '@/components/Dirtree/DirtreeOUCreate.vue';
 import DirtreeMove from '@/components/Dirtree/DirtreeMove.vue';
 import DirtreeRename from '@/components/Dirtree/DirtreeRename.vue';
 import DirtreeDeleteObject from '@/components/Dirtree/DirtreeDeleteObject.vue';
+import RefreshButton from '@/components/RefreshButton.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { notificationBus } from '@/main.js'
@@ -385,7 +372,8 @@ export default {
         DirtreeMove,
         DirtreeRename,
         DirtreeOUCreate,
-        DirtreeDeleteObject
+        DirtreeDeleteObject,
+        RefreshButton
     },
     props: {
         viewTitle: String,

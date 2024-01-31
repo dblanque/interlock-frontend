@@ -734,26 +734,10 @@
                     {{ $t("actions.saveClose") }}
                 </v-btn>
                 <!-- Refresh User Button -->
-                <v-progress-circular class="pa-0 ma-0" :color="loadingColor" value="100" :indeterminate="loading || fetchingData" size="38" width="7">
-                    <v-btn small
-                    class="ma-1 bg-primary" 
-                    color="white" 
-                    icon
-                    :disabled="loading || fetchingData"
-                    elevation="0"
+                <refresh-button
+                    component-class="ma-0 pa-0"
                     :loading="refreshLoading"
-                    @click="refreshUser"
-                    >
-                        <v-icon>
-                        mdi-refresh
-                        </v-icon>
-                        <template v-slot:loader>
-                        <span class="custom-loader">
-                            <v-icon color="white">mdi-cached</v-icon>
-                        </span>
-                        </template>
-                    </v-btn>
-                </v-progress-circular>
+                    @refresh="refreshUser"/>
                 </v-row>
             </v-row>
         </v-card-actions>
@@ -775,6 +759,7 @@
 <script>
 import User from '@/include/User.js'
 import CNObjectList from '@/components/CNObjectList.vue'
+import RefreshButton from '@/components/RefreshButton.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { notificationBus } from '@/main.js'
@@ -783,6 +768,7 @@ export default {
     name: 'UserDialog',
     components: {
         CNObjectList,
+        RefreshButton
     },
     data () {
       return {
