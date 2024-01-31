@@ -6,7 +6,7 @@
     <!-- Title Bar -->
     <v-card-title class="ma-0 pa-0 card-title">
         <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-            <h3 class="ma-2">{{ (updateFlag ? $t('actions.edit') : $t('actions.create')) + " " + $t("classes.dns.record.single") }}</h3>
+            <h3 class="ma-2">{{ (updateFlag ? $t('actions.edit') : $t('actions.create')) + " " + $tc("classes.dns.record", 1) }}</h3>
             <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
             <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
                 <v-icon>
@@ -27,7 +27,7 @@
                         <v-radio 
                         :key="index" 
                         :value="element.value"
-                        :label="$t('classes.dns.record.single') + ' ' + element.name"/>
+                        :label="$tc('classes.dns.record', 1) + ' ' + element.name"/>
                     </v-list-item>
                 </v-radio-group>
             </v-list>
@@ -556,7 +556,7 @@ export default {
                     setTimeout(() => {
                         this.closeDialog(true)
                         notificationBus.$emit('createNotification', 
-                            {message: (this.$t("classes.dns.record.single") + " " + this.$t("words.created.single.m")).toUpperCase(), type: 'success'}
+                            {message: (this.$tc("classes.dns.record", 1) + " " + this.$tc("words.created.m", 1)).toUpperCase(), type: 'success'}
                         )
                     }, 250)
                 })
@@ -607,7 +607,7 @@ export default {
                     setTimeout(() => {
                         this.closeDialog(true)
                         notificationBus.$emit('createNotification', 
-                            {message: (this.$t("classes.dns.record.single") + " " + this.$t("words.updated.single.m")).toUpperCase(), type: 'success'}
+                            {message: (this.$tc("classes.dns.record", 1) + " " + this.$tc("words.updated.m", 1)).toUpperCase(), type: 'success'}
                         )
                     }, 250)
                 })

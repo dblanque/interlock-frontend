@@ -6,7 +6,7 @@
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
                 <h3 class="pa-0 ma-0 ma-2">
-                {{ $t('actions.delete') + ' ' + $t('classes.dns.'+ deleteMode +'.single') }}
+                {{ $t('actions.delete') + ' ' + $tc('classes.dns.'+ deleteMode, 1) }}
                 </h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
@@ -182,7 +182,7 @@ export default {
                         this.errorMsg = ""
                         this.submitted = true
                         notificationBus.$emit('createNotification', 
-                            {message: (this.$t("classes.dns.zone.single") + " " + this.$t("words.deleted.single.f")).toUpperCase(), type: 'info'}
+                            {message: (this.$tc("classes.dns.zone", 1) + " " + this.$tc("words.deleted.f", 1)).toUpperCase(), type: 'info'}
                         )
                     })
                     .catch(error => {
@@ -203,7 +203,7 @@ export default {
                         this.errorMsg = ""
                         this.submitted = true
                         notificationBus.$emit('createNotification', 
-                            {message: (this.$t("classes.dns.record.single") + " " + this.$t("words.deleted.single.m")).toUpperCase(), type: 'info'}
+                            {message: (this.$tc("classes.dns.record", 1) + " " + this.$tc("words.deleted.m", 1)).toUpperCase(), type: 'info'}
                         )
                     })
                     .catch(error => {

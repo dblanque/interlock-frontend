@@ -101,7 +101,7 @@ export default {
 				this.resetError()
                 notificationBus.$emit('createNotification', 
                     {
-                        message: (this.$tc("section.debug.ldapOperation", this.data.ldapOperations.length) + " " + this.$t("words.loaded.single.n")).toUpperCase(), 
+                        message: (this.$tc("section.debug.ldapOperation", this.data.ldapOperations.length) + " " + this.$tc("words.loaded.f", this.data.ldapOperations.length)).toUpperCase(), 
                         type: 'success'
                     }
                 );

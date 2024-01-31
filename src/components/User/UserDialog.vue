@@ -9,10 +9,10 @@
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
                 <h3 v-if="!usercopy.givenName || usercopy.givenName == '' || !usercopy.sn || usercopy.sn == ''" class="pa-0 ma-0 ma-2">
-                    {{ usercopy.username ? $t('classes.user.single') + ': ' + usercopy.username.toUpperCase() : '' }}
+                    {{ usercopy.username ? $tc('classes.user', 1) + ': ' + usercopy.username.toUpperCase() : '' }}
                 </h3>
                 <h3 v-else class="pa-0 ma-0 ma-2">
-                    {{ $t('classes.user.single') + ': ' + usercopy.givenName + " " + usercopy.sn }}
+                    {{ $tc('classes.user', 1) + ': ' + usercopy.givenName + " " + usercopy.sn }}
                 </h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn outlined small color="primary" @click="goToGroups"
@@ -539,7 +539,7 @@
                                                     </v-icon>
                                                     </v-btn>
                                                 </template>
-                                                <span> {{ $t("actions.goTo") + " " + $t("classes.group.single") }} </span>
+                                                <span> {{ $t("actions.goTo") + " " + $tc("classes.group", 1) }} </span>
                                                 </v-tooltip>
                                             </v-list-item-action>
                                             <v-list-item-action class="ma-0">
@@ -1208,7 +1208,7 @@ export default {
                 this.refreshUser()
                 notificationBus.$emit('createNotification', 
                     {
-                        message: (this.$t("classes.user.single") + " " + this.$t("words.disabled")).toUpperCase(), 
+                        message: (this.$tc("classes.user", 1) + " " + this.$t("words.disabled")).toUpperCase(), 
                         type: 'warning'
                     }
                 );
@@ -1229,7 +1229,7 @@ export default {
                 this.refreshUser()
                 notificationBus.$emit('createNotification', 
                     {
-                        message: (this.$t("classes.user.single") + " " + this.$t("words.enabled")).toUpperCase(), 
+                        message: (this.$tc("classes.user", 1) + " " + this.$t("words.enabled")).toUpperCase(), 
                         type: 'success'
                     }
                 );

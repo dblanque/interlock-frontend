@@ -684,7 +684,7 @@ export default {
                     items: []
                 }
                 this.tableData.headers.push({
-                    text: this.$t("classes.user.single"),
+                    text: this.$tc("classes.user", 1),
                     align: 'center',
                     value: this.import_fields['username'],
                 })

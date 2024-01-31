@@ -37,10 +37,10 @@
         style="position: relative;">
         <v-btn elevation="0" class="pa-2 mx-2 mr-0 pill-start" color="primary" @click="openDialog('dirtreeOUCreate')">
           <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-          {{ $t('actions.addN') + " " + $t("classes.organizational-unit.single") }}
+          {{ $t('actions.addN') + " " + $tc("classes.organizational-unit", 1) }}
         </v-btn>
         <v-menu :close-on-content-click="false" left
-        :nudge-left="(($t('actions.addN') + ' ' + $t('classes.organizational-unit.single')).length * 2)+'ch'"
+        :nudge-left="(($t('actions.addN') + ' ' + $tc('classes.organizational-unit', 1)).length * 2)+'ch'"
         v-model="actionListOpen" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)" offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on"
@@ -114,13 +114,13 @@
                           <v-icon>
                               mdi-filter
                           </v-icon>
-                          {{ $t('words.all.single.m') }}
+                          {{ $tc('words.all.m', 1) }}
                       </v-btn>
                       <v-btn @click="filterNone" class="mx-1">
                           <v-icon>
                               mdi-filter-outline
                           </v-icon>
-                          {{ $t('words.none.single.m') }}
+                          {{ $tc('words.none.m', 1) }}
                       </v-btn>
                   </v-list-item>
                   <v-list-item v-for="(item, key) in itemTypes" :key="item.id">
@@ -139,7 +139,7 @@
                                 {{ item.icon }}
                                 </v-icon>
                                 <span class="text-overline ml-1">
-                                {{ $t('classes.' + key + '.single') }}
+                                {{ $tc('classes.' + key, 1) }}
                                 </span>
                                 <v-icon class="ml-1" small v-if="key == 'person' || key == 'user'">
                                     mdi-link
@@ -234,7 +234,7 @@
                       </v-icon>
                     </v-btn>
                   </template>
-                  <span>{{ $t('actions.goTo') + ' ' + $t('classes.user.single') }}</span>
+                  <span>{{ $t('actions.goTo') + ' ' + $tc('classes.user', 1) }}</span>
                 </v-tooltip>
               </span>
 
@@ -254,7 +254,7 @@
                       </v-icon>
                     </v-btn>
                   </template>
-                  <span>{{ $t('actions.goTo') + ' ' + $t('classes.group.single') }}</span>
+                  <span>{{ $t('actions.goTo') + ' ' + $tc('classes.group', 1) }}</span>
                 </v-tooltip>
               </span>
 
@@ -509,15 +509,15 @@ export default {
           var key = o.value
           switch (key) {
             case "dirtreeOUCreate":
-              return this.$t("actions.addN") + " " + this.$t("classes.organizational-unit.single")
+              return this.$t("actions.addN") + " " + this.$tc("classes.organizational-unit", 1)
             case "dirtreeMove":
-              return this.$t("actions.move") + " " + this.$t("classes.ldap.single")
+              return this.$t("actions.move") + " " + this.$tc("classes.ldap", 1)
             case "dirtreePrinterCreate":
-              return this.$t("actions.addN") + " " + this.$t("classes.printer.single")
+              return this.$t("actions.addN") + " " + this.$tc("classes.printer", 1)
             case "dirtreeComputerCreate":
-              return this.$t("actions.addN") + " " + this.$t("classes.computer.single")
+              return this.$t("actions.addN") + " " + this.$tc("classes.computer", 1)
             case "dirtreeDelete":
-              return this.$t("actions.delete") + " " + this.$t("classes.ldap.single")
+              return this.$t("actions.delete") + " " + this.$tc("classes.ldap", 1)
             default:
               return "No Translation Key"
           }
@@ -705,7 +705,7 @@ export default {
                 this.tableData.items = response.data.ldapObjectList
                 this.error = false;
                 this.loading = false;
-                this.createSnackbar({message: (this.$t("category.header.home") + " " + this.$t("words.loaded.single.m")).toUpperCase(), type: 'success'})
+                this.createSnackbar({message: (this.$t("category.header.home") + " " + this.$tc("words.loaded.m", 1)).toUpperCase(), type: 'success'})
             })
             .catch(error => {
                 console.error(error)

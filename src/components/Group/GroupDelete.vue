@@ -79,7 +79,7 @@ export default {
                 .then(response => {
                     if (response.data.groupname == group.groupname)
                         notificationBus.$emit('createNotification', {
-                                message: (this.$t("classes.group.single") + " " + this.$t("words.deleted.single.m")).toUpperCase(), 
+                                message: (this.$tc("classes.group", 1) + " " + this.$tc("words.deleted.m", 1)).toUpperCase(), 
                                 type: 'info'
                         });
                     this.$emit('refresh');

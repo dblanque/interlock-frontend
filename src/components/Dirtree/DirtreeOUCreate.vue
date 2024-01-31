@@ -6,7 +6,7 @@
         <!-- Title Bar -->
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-                <h3 class="ma-2">{{$t("actions.create") + " " + $t("classes."+createType+".single")}}</h3>
+                <h3 class="ma-2">{{$t("actions.create") + " " + $tc("classes."+createType, 1)}}</h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
                     <v-icon>
@@ -38,7 +38,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('classes.'+createType+'.single') + ' ' + $t('ldap.attributes.name')"
+                                    :label="$tc('classes.'+createType, 1) + ' ' + $t('ldap.attributes.name')"
                                     v-model="objectToCreate.name"
                                     :rules="[this.fieldRules(objectToCreate.name, 'ge_cn', true)]"
                                     ></v-text-field>

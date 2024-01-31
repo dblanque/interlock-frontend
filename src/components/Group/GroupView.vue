@@ -43,7 +43,7 @@
           </v-btn>
           <v-btn class="pa-2 mx-2" :disabled="loading || readonly" color="primary" @click="openDialog('groupCreate')">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-            {{ $t('actions.addN') + ' ' + $t('classes.group.single') }}
+            {{ $t('actions.addN') + ' ' + $tc('classes.group', 1) }}
           </v-btn>
         </v-row>
       </v-row>
@@ -288,7 +288,7 @@ export default {
     },
     groupSaved(){
       this.listGroupItems(false)
-      this.createSnackbar({message: (this.$t("classes.group.single") + " " + this.$t("words.saved.single.m")).toUpperCase(), type: 'success'})
+      this.createSnackbar({message: (this.$tc("classes.group", 1) + " " + this.$tc("words.saved.m", 1)).toUpperCase(), type: 'success'})
     },
     setViewToEdit(value){
       this.editableForm = value;

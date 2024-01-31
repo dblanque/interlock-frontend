@@ -46,7 +46,7 @@
           </v-btn>
           <v-btn class="pa-2 mx-2" :disabled="loading" color="primary" @click="openDialog('userCreate')">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-            {{ $t('actions.addN') + ' ' + $t('classes.user.single') }}
+            {{ $t('actions.addN') + ' ' + $tc('classes.user', 1) }}
           </v-btn>
         </v-row>
       </v-row>
@@ -628,7 +628,7 @@ export default {
         this.listUserItems(false);
         notificationBus.$emit('createNotification', 
           {
-            message: (this.$t("classes.user.single") + " " + this.$t("words.enabled")).toUpperCase(), 
+            message: (this.$tc("classes.user", 1) + " " + this.$t("words.enabled")).toUpperCase(), 
             type: 'success'
           }
         );
@@ -659,7 +659,7 @@ export default {
           this.listUserItems(false);
           notificationBus.$emit('createNotification', 
             {
-              message: (this.$t("classes.user.single") + " " + this.$t("words.disabled")).toUpperCase(), 
+              message: (this.$tc("classes.user", 1) + " " + this.$t("words.disabled")).toUpperCase(), 
               type: 'warning'
             }
           );
@@ -753,7 +753,7 @@ export default {
     userSaved(){
       this.listUserItems(false)
       this.$refs.UserDialog.syncUser()
-      this.createSnackbar({message: (this.$t("classes.user.single") + " " + this.$t("words.saved.single.m")).toUpperCase(), type: 'success'})
+      this.createSnackbar({message: (this.$tc("classes.user", 1) + " " + this.$tc("words.saved.m", 1)).toUpperCase(), type: 'success'})
     },
     // Fetch individual User
     async fetchUser(item, isEditable=false, refreshAnim=true){

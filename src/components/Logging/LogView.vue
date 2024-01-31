@@ -104,7 +104,7 @@
                 {{ getIconForObjectClass(item.objectClass)[0] }}
             </v-icon>
             <span>
-                {{ $t('classes.' + getObjectClassTranslationKey(item.objectClass) + '.single') }}
+                {{ $tc('classes.' + getObjectClassTranslationKey(item.objectClass), 1) }}
             </span>
         </v-row>
     </template>

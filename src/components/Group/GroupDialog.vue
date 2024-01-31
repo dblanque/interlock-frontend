@@ -9,7 +9,7 @@
             <v-card-title class="ma-0 pa-0 card-title">
                 <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
                     <h3 class="pa-0 ma-0 ma-2">
-                        {{ $t('classes.group.single') + ': ' + groupcopy.cn }}
+                        {{ $tc('classes.group', 1) + ': ' + groupcopy.cn }}
                     </h3>
                     <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                     <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
@@ -171,7 +171,7 @@
                                                     align="center" justify="center">
                                                         <v-col cols="12" class="pa-0 ma-0 px-1">
                                                             <span class="ma-0 pa-0">
-                                                                {{ $t('classes.user.single') + ": " + ((member.givenName && member.sn) ? member.givenName + " " + member.sn + " (" + member.username + ")" : member.username) }}
+                                                                {{ $tc('classes.user', 1) + ": " + ((member.givenName && member.sn) ? member.givenName + " " + member.sn + " (" + member.username + ")" : member.username) }}
                                                             </span>
                                                         </v-col>
                                                     </v-row>
@@ -179,7 +179,7 @@
                                                     align="center" justify="center">
                                                         <v-col cols="12" class="pa-0 ma-0 px-1">
                                                             <span class="ma-0 pa-0">
-                                                                {{ $t('classes.group.single') + ": " + member.cn }}
+                                                                {{ $tc('classes.group', 1) + ": " + member.cn }}
                                                             </span>
                                                         </v-col>
                                                     </v-row>

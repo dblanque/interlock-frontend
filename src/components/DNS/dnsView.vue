@@ -28,14 +28,14 @@
         <v-select v-model="zoneFilter['dnsZone']" @change="getDNSData(undefined, true)" :items="dns.zones" class="mx-2"/>
         <v-btn class="pa-2 mx-2" @click="showZoneAdd = !showZoneAdd" color="primary">
             <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-            {{ $t('actions.addN') + ' ' + $t('classes.dns.zone.single') }}
+            {{ $t('actions.addN') + ' ' + $tc('classes.dns.zone', 1) }}
         </v-btn>
         <v-btn 
         :class="(loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain ? undefined : 'text-white') + ' pa-2 mx-2'" 
         @click="openDeleteDialog(null, 'zone')"
         :disabled="loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain" color="red">
             <v-icon class="ma-0 pa-0">mdi-delete</v-icon>
-            {{ $t('actions.delete') + ' ' + $t('classes.dns.zone.single') }}
+            {{ $t('actions.delete') + ' ' + $tc('classes.dns.zone', 1) }}
         </v-btn>
     </v-row>
     <v-form ref="zoneCreateForm" @submit.prevent>
@@ -84,7 +84,7 @@
             <v-btn @click="openDialog('recordDialog')"
              class="pa-2 mx-2" :disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="primary">
                 <v-icon class="ma-0 pa-0">mdi-plus</v-icon>
-                {{ $t('actions.addN') + ' ' + $t('classes.dns.record.single') }}
+                {{ $t('actions.addN') + ' ' + $tc('classes.dns.record', 1) }}
             </v-btn>
             <v-btn @click="openDialog('recordMassAction')"
              :class="(selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers' ? undefined : 'clr-white') + ' pa-2 mr-2'" 
@@ -108,13 +108,13 @@
                             <v-icon>
                                 mdi-filter
                             </v-icon>
-                            {{ $t('words.all.single.m') }}
+                            {{ $tc('words.all.m', 1) }}
                         </v-btn>
                         <v-btn @click="filterNone" class="mx-1">
                             <v-icon>
                                 mdi-filter-outline
                             </v-icon>
-                            {{ $t('words.none.single.m') }}
+                            {{ $tc('words.none.m', 1) }}
                         </v-btn>
                     </v-list-item>
                     <v-list-item v-for="enabled, key in enabledRecordTypes" :key="key">
@@ -216,7 +216,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.clickTo') + ' ' + $t('actions.enable') + ' ' + $t('classes.dns.record.single') }}</span>
+        <span>{{ $t('actions.clickTo') + ' ' + $t('actions.enable') + ' ' + $tc('classes.dns.record', 1) }}</span>
       </v-tooltip>
 
       <!-- Disable Record Button -->
@@ -233,7 +233,7 @@
           </v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('actions.clickTo') + " " + $t('actions.disable') + ' ' + $t('classes.dns.record.single') }}</span>
+        <span>{{ $t('actions.clickTo') + " " + $t('actions.disable') + ' ' + $tc('classes.dns.record', 1) }}</span>
       </v-tooltip>
     </template>
 
@@ -453,7 +453,7 @@ export default {
                     this.getDNSData(undefined, false)
                     this.zoneToCreate = ""
                     notificationBus.$emit('createNotification', 
-                        {message: (this.$t("classes.dns.zone.single") + " " + this.$t("words.created.single.f")).toUpperCase(), type: 'success'}
+                        {message: (this.$tc("classes.dns.zone", 1) + " " + this.$tc("words.created.f", 1)).toUpperCase(), type: 'success'}
                     )
                 })
                 .catch(error => {
@@ -571,7 +571,7 @@ export default {
                 }
             } else {
                 if (!this.lastOperation || this.lastOperation.length < 1) {
-                    this.createSnackbar({message: (this.$t("classes.dns.zone.single") + " " + this.$t("words.loaded.single.f")).toUpperCase(), type: 'success'})
+                    this.createSnackbar({message: (this.$tc("classes.dns.zone", 1) + " " + this.$tc("words.loaded.f", 1)).toUpperCase(), type: 'success'})
                 }
                 this.error = false
                 this.errorMsg = ""
