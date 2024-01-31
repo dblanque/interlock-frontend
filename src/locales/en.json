@@ -115,71 +115,44 @@
   },
   "words":{
       "created":{
-        "single":{
-          "m":"Created",
-          "f":"Created",
-          "n":"Created"
-        },
-        "plural":{
-          "m":"Created",
-          "f":"Created",
-          "n":"Created"
-        }
+        "m":"Created",
+        "f":"Created",
+        "n":"Created"
       },
       "updated":{
-        "single":{
-          "m":"Updated",
-          "f":"Updated",
-          "n":"Updated"
-        },
-        "plural":{
-          "m":"Updated",
-          "f":"Updated",
-          "n":"Updated"
-        }
+        "m":"Updated",
+        "f":"Updated",
+        "n":"Updated"
       },
       "deleted":{
-        "single":{
-          "m":"Deleted",
-          "f":"Deleted",
-          "n":"Deleted"
-        },
-        "plural":{
-          "m":"Deleted",
-          "f":"Deleted",
-          "n":"Deleted"
-        }
+        "m":"Deleted",
+        "f":"Deleted",
+        "n":"Deleted"
       },
       "saved":{
-        "single":{
-          "m":"Saved",
-          "f":"Saved",
-          "n":"Saved"
-        },
-        "plural":{
-          "m":"Saved",
-          "f":"Saved",
-          "n":"Saved"
-        }
+        "m":"Saved",
+        "f":"Saved",
+        "n":"Saved"
       },
       "all":{
-        "single":{
-          "m":"All",
-          "f":"All",
-          "n":"All"
-        },
-        "plural":{
-          "m":"All",
-          "f":"All",
-          "n":"All"
-        }
+        "m":"All",
+        "f":"All",
+        "n":"All"
       },
       "none":{
-        "single":{
-          "m":"None",
-          "f":"None",
-          "n":"None"
-        }
+        "m":"None",
+        "f":"None",
+        "n":"None"
+      },
+      "loaded": {
+        "m":"Loaded",
+        "f":"Loaded",
+        "n":"Loaded"
+      },
+      "unlocked": {
+        "m":"Unlocked",
+        "f":"Unlocked",
+        "n":"Unlocked"
       },
       "success":"Success",
       "skipped":"Skipped",
@@ -214,98 +187,26 @@
       "secondaryF": "Secondary",
       "others": "Others",
       "processing": "Processing",
-      "date": "Date",
-      "loaded": {
-        "single":{
-          "m":"Loaded",
-          "f":"Loaded",
-          "n":"Loaded"
-        },
-        "plural":{
-          "m":"Loaded",
-          "f":"Loaded",
-          "n":"Loaded"
-        }
-      },
-      "unlocked": {
-        "single":{
-          "m":"Unlocked",
-          "f":"Unlocked",
-          "n":"Unlocked"
-        },
-        "plural":{
-          "m":"Unlocked",
-          "f":"Unlocked",
-          "n":"Unlocked"
-        }
-      }
+      "date": "Date"
   },
   "classes":{
-    "log":{
-      "single":"Log",
-      "plural":"Logs"
-    },
-    "connection":{
-      "single":"Connection",
-      "plural":"Connections"
-    },
-    "user":{
-      "single":"User",
-      "plural":"Users"
-    },
-    "contact":{
-      "single":"Contact",
-      "plural":"Contacts"
-    },
-    "builtin-domain":{
-      "single":"Built-in",
-      "plural":"Built-ins"
-    },
-    "container":{
-      "single":"Container",
-      "plural":"Containers"
-    },
-    "person":{
-      "single":"Person",
-      "plural":"Persons"
-    },
-    "group":{
-      "single":"Group",
-      "plural":"Groups"
-    },
-    "computer":{
-      "single":"Computer",
-      "plural":"Computers"
-    },
-    "printer":{
-      "single":"Printer",
-      "plural":"Printers"
-    },
-    "organizational-unit":{
-      "single":"Organizational Unit",
-      "plural":"Organizational Units"
-    },
-    "ou":{
-      "single":"Organizational Unit",
-      "plural":"Organizational Units"
-    },
-    "setting":{
-      "single":"Setting",
-      "plural":"Settings"
-    },
-    "ldap":{
-      "single":"LDAP Object",
-      "plural":"LDAP Objects"
-    },
+    "log": "Log | Logs",
+    "connection": "Connection | Connections",
+    "user": "User | Users",
+    "contact": "Contact | Contacts",
+    "builtin-domain": "Built-in | Built-ins",
+    "container":"Container | Containers",
+    "person":"Person | People",
+    "group": "Group | Groups",
+    "computer":"Computer | Computers",
+    "printer":"Printer | Printers",
+    "organizational-unit": "Organizational Unit | Organizational Units",
+    "ou":"OU | OUs",
+    "setting":"Setting | Settings",
+    "ldap":"LDAP Object | LDAP Objects",
     "dns":{
-      "zone":{
-        "single":"DNS Zone",
-        "plural":"DNS Zones"
-      },
-      "record":{
-        "single":"DNS Record",
-        "plural":"DNS Records"
-      }
+      "zone":"DNS Zone | DNS Zones",
+      "record":"DNS Record | DNS Records"
     }
   },
   "error":{

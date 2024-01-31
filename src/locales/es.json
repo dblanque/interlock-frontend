@@ -115,71 +115,44 @@
   },
   "words": {
     "created":{
-      "single":{
-        "m":"Creado",
-        "f":"Creada",
-        "n":"Creado"
-      },
-      "plural":{
-        "m":"Creados",
-        "f":"Creadas",
-        "n":"Creados"
-      }
+      "m":"Creado | Creados",
+      "f":"Creada | Creadas",
+      "n":"Creado | Creados"
     },
     "updated":{
-      "single":{
-        "m":"Modificado",
-        "f":"Modificada",
-        "n":"Modificado"
-      },
-      "plural":{
-        "m":"Modificados",
-        "f":"Modificadas",
-        "n":"Modificados"
-      }
+      "m":"Modificado | Modificados",
+      "f":"Modificada | Modificadas",
+      "n":"Modificado | Modificados"
     },
     "deleted":{
-      "single":{
-        "m":"Eliminado",
-        "f":"Eliminada",
-        "n":"Eliminado"
-      },
-      "plural":{
-        "m":"Eliminados",
-        "f":"Eliminadas",
-        "n":"Eliminados"
-      }
+      "m":"Eliminado | Eliminados",
+      "f":"Eliminada | Eliminadas",
+      "n":"Eliminado | Eliminados"
     },
     "saved":{
-      "single":{
-        "m":"Guardado",
-        "f":"Guardada",
-        "n":"Guardado"
-      },
-      "plural":{
-        "m":"Guardados",
-        "f":"Guardadas",
-        "n":"Guardados"
-      }
+      "m":"Guardado | Guardados",
+      "f":"Guardada | Guardadas",
+      "n":"Guardado | Guardados"
     },
     "all":{
-      "single":{
-        "m":"Todo",
-        "f":"Toda",
-        "n":"Todo"
-      },
-      "plural":{
-        "m":"Todos",
-        "f":"Todas",
-        "n":"Todos"
-      }
+      "m":"Todo | Todos",
+      "f":"Toda | Todas",
+      "n":"Todo | Todos"
     },
     "none":{
-      "single":{
-        "m":"Ninguno",
-        "f":"Ninguna",
-        "n":"Ninguno"
-      }
+      "m":"Ninguno",
+      "f":"Ninguna",
+      "n":"Ninguno"
+    },
+    "loaded": {
+      "m":"Cargado | Cargados",
+      "f":"Cargada | Cargadas",
+      "n":"Cargado | Cargados"
+    },
+    "unlocked": {
+      "m":"Desbloqueado | Desbloqueados",
+      "f":"Desbloqueada | Desbloqueadas",
+      "n":"Desbloqueado | Desbloqueados"
     },
     "success":"Éxito",
     "skipped":"Omitido",
@@ -220,98 +193,26 @@
     "others": "Otros",
     "processing": "Procesando",
     "date": "Fecha",
-    "total": "Total",
-    "loaded": {
-      "single":{
-        "m":"Cargado",
-        "f":"Cargada",
-        "n":"Cargado"
-      },
-      "plural":{
-        "m":"Cargados",
-        "f":"Cargadas",
-        "n":"Cargado"
-      }
-    },
-    "unlocked": {
-      "single":{
-        "m":"Desbloqueado",
-        "f":"Desbloqueada",
-        "n":"Desbloqueado"
-      },
-      "plural":{
-        "m":"Desbloqueados",
-        "f":"Desbloqueadas",
-        "n":"Desbloqueados"
-      }
-    }
+    "total": "Total"
   },
   "classes":{
-    "log":{
-      "single":"Evento",
-      "plural":"Eventos"
-    },
-    "connection":{
-      "single":"Conexión",
-      "plural":"Conexiones"
-    },
-    "user":{
-      "single":"Usuario",
-      "plural":"Usuarios"
-    },
-    "contact":{
-      "single":"Contacto",
-      "plural":"Contactos"
-    },
-    "builtin-domain":{
-      "single":"Objeto Integrado",
-      "plural":"Objetos Integrados"
-    },
-    "container":{
-      "single":"Contenedor",
-      "plural":"Contenedores"
-    },
-    "person":{
-      "single":"Persona",
-      "plural":"Personas"
-    },
-    "group":{
-      "single":"Grupo",
-      "plural":"Grupos"
-    },
-    "computer":{
-      "single":"Computadora",
-      "plural":"Computadoras"
-    },
-    "printer":{
-      "single":"Impresora",
-      "plural":"Impresoras"
-    },
-    "organizational-unit":{
-      "single":"Unidad Organizacional",
-      "plural":"Unidades Organizacionales"
-    },
-    "ou":{
-      "single":"Unidad Organizacional",
-      "plural":"Unidades Organizacionales"
-    },
-    "setting":{
-      "single":"Parámetro",
-      "plural":"Parámetros"
-    },
-    "ldap":{
-      "single":"Objeto LDAP",
-      "plural":"Objetos LDAP"
-    },
+    "log":"Evento | Eventos",
+    "connection":"Conexión | Conexiones",
+    "user":"Usuario | Usuarios",
+    "contact":"Contacto | Contactos",
+    "builtin-domain":"Objeto Integrado | Objetos Integrados",
+    "container":"Contenedor | Contenedores",
+    "person":"Persona | Personas",
+    "group":"Grupo | Grupos",
+    "computer":"Computadora | Computadoras",
+    "printer":"Impresora | Impresoras",
+    "organizational-unit":"Unidad Organizacional | Unidades Organizacionales",
+    "ou":"OU | OUs",
+    "setting":"Parámetro | Parámetros",
+    "ldap":"Objeto LDAP | Objetos LDAP",
     "dns":{
-      "zone":{
-        "single":"Zona de DNS",
-        "plural":"Zonas de DNS"
-      },
-      "record":{
-        "single":"Registro de DNS",
-        "plural":"Registros de DNS"
-      }
+        "zone":"Zona de DNS | Zonas de DNS",
+        "record":"Registro de DNS | Registros de DNS"
     }
   },
   "error":{
