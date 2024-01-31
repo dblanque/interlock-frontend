@@ -147,7 +147,8 @@ const urls = {
         check: "api/liveness/check/"
     },
     debug: {
-        list: "api/debug/"
+        list: "api/debug/",
+        action: "api/debug/action/",
     },
 }
 

@@ -390,8 +390,8 @@ export default {
         {
           index: 7,
           title: "debug",
-          enabled: false,
-          hidden: true,
+          enabled: true,
+          hidden: false,
           icon: "mdi-xml",
           route: "debug",
         },

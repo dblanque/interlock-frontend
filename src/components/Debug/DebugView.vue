@@ -11,15 +11,45 @@
 				<v-select
 					filled
 					:placeholder="getSelectTitle()"
+					clearable
 					class="ma-0 pa-0 mx-4"
 					hide-details
 					dense
 					:items="data.ldapOperations"
+					v-model="data.selectedLdapOperation"
 					v-if="!loading && data.ldapOperations.length >= 1"
 				/>
 			</v-expand-transition>
 			<v-progress-circular size="24" :indeterminate="loading" color="primary">
 			</v-progress-circular>
+		</v-row>
+		<v-divider class="mx-6"/>
+		<v-row class="ma-0 pa-0 px-2 py-2" align="center">
+			<v-col class="ma-0 pa-0 mx-2" cols="auto">
+				<v-btn outlined class="ma-0 pa-0 px-2"
+					small
+					:disabled="disableRun"
+					color="primary">
+					<v-icon>
+						mdi-play
+					</v-icon>
+					RUN
+				</v-btn>
+			</v-col>
+			<v-col class="ma-0 pa-0 mx-2" cols="auto">
+				<v-checkbox class="ma-0 pa-0"
+					label="AsRoot"
+					hide-details
+					dense>
+				</v-checkbox>
+			</v-col>
+			<v-col class="ma-0 pa-0 mx-2" cols="auto">
+				<v-checkbox class="ma-0 pa-0"
+					label="AsUser"
+					hide-details
+					dense>
+				</v-checkbox>
+			</v-col>
 		</v-row>
 	</v-card>
 </div>
@@ -42,6 +72,15 @@ export default {
 		}
 	},
 	mixins: [ utilsMixin ],
+	computed: {
+		disableRun() {
+			if ((!this.data.selectedLdapOperation || this.data.selectedLdapOperation.length < 1) 
+				&& this.data.ldapOperations.length < 1) 
+				return true
+			if (!this.data.ldapOperations.includes(this.data.selectedLdapOperation)) return true
+			return false
+		},
+	},
 	mounted() {
 		this.refreshAction()
 	},
@@ -55,8 +94,8 @@ export default {
 		},
 		async getLDAPOperations(){
 			this.loading = true
-      		this.data.ldapOperations = await new Debug({})
-			await this.data.ldapOperations.list()
+			let operationList = await new Debug({})
+			await operationList.list()
 			.then(response => {
 				this.data.ldapOperations = response.data
 				this.resetError()

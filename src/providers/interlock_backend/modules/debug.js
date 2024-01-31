@@ -14,6 +14,15 @@ const actions = {
                 reject(e)
             })
         })
+    },
+    action: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.get(interlock_backend.urls.debug.action, data).then(response => {
+                resolve(response.data)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
     }
 }
 

@@ -17,6 +17,10 @@ class Debug extends ApiModel{
     async list(){
         return await interlock_backend.call('debug/list')
     }
+
+    async action(data){
+        return await interlock_backend.call('debug/action', data)
+    }
 }
 
 export default Debug
