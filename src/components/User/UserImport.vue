@@ -75,7 +75,7 @@ webpage
                                 v-model="userPathExpansionPanel"
                                 flat
                                 hover 
-                                style="border: 1px solid var(--clr-primary);">
+                                style="border: 1px solid var(--v-primary-base);">
                                     <v-expansion-panel>
                                         <v-expansion-panel-header>
                                             <span>
@@ -230,18 +230,18 @@ webpage
                             class="py-3 px-2 mt-2 mb-2">
                             <template v-slot:[`item.status`]="{ item }">
                                 <!-- Failed -->
-                                <v-icon class="clr-orange" v-if="item.status < 0 && item.error == 'password'">
+                                <v-icon color="orange" v-if="item.status < 0 && item.error == 'password'">
                                     mdi-alert-circle
                                 </v-icon>
-                                <v-icon class="clr-red" v-else-if="item.status < 0">
+                                <v-icon color="red" v-else-if="item.status < 0">
                                     mdi-close-circle
                                 </v-icon>
                                 <!-- Success -->
-                                <v-icon class="clr-valid" v-else-if="item.status == 0">
+                                <v-icon color="valid" v-else-if="item.status == 0">
                                     mdi-check-circle
                                 </v-icon>
                                 <!-- Skipped -->
-                                <v-icon class="clr-primary" v-else-if="item.status > 0">
+                                <v-icon color="primary" v-else-if="item.status > 0">
                                     mdi-share
                                 </v-icon>
                             </template>
@@ -293,7 +293,7 @@ webpage
                     <span class="pl-2 text-normal">
                         {{ $t("actions.next") }}
                     </span>
-                    <v-icon :class="'clr-primary' + (!isStepValid() ? ' clr-sat-0 clr-lig-90' : '')">
+                    <v-icon :color="!isStepValid() ? 'primary-90-0' : 'primary'">
                         mdi-chevron-right
                     </v-icon>
                 </v-btn>

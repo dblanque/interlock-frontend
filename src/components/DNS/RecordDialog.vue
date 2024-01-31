@@ -635,15 +635,15 @@ export default {
 <style>
 .card-actions {
     border-radius: 4px;
-    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-100));
+    background: var(--v-white-dynamic-base);
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
+    border-top: thin solid hsla(0, 0, 0, 0.12)
 }
 
 [theme=dark] .card-actions {
-    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-85));
+    background: var(--v-gray-85-base);
 }
 
 .dnssidebar {

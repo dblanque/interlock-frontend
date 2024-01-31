@@ -16,7 +16,7 @@
         <v-col cols="12" md="auto">
             <LanguageSelector :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)" class=""/>
         </v-col>
-        <v-divider style="border-color: var(--clr-primary)" class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
+        <v-divider style="border-color: var(--v-primary-base)" class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
         <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
             <span class="text-normal" v-if="last_name && last_name != '' && first_name && first_name != ''">
             {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}

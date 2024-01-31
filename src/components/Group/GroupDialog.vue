@@ -145,7 +145,7 @@
                     <v-row v-if="showMemberTab" align-content="center" justify="center" class="ma-0 pa-0 my-4">
                         <v-col cols="10" md="8" class="ma-0 pa-0">
                             <v-expansion-panels v-model="memberPanelExpanded" flat 
-                            :style="memberPanelExpanded == [0] ? 'border: 1px solid var(--clr-primary);' : 'border: 1px solid hsl(var(--clr-white-hue),var(--clr-white-sat),var(--clr-lig-80));'">
+                            :style="memberPanelExpanded == [0] ? 'border: 1px solid var(--v-primary-base);' : 'border: 1px solid hsl(0,0,var(--clr-lig-80));'">
                                 <v-expansion-panel>
                                     <v-expansion-panel-header>
                                         {{ $t('section.groups.groupDialog.members') }}

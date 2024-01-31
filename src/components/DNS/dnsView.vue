@@ -31,7 +31,8 @@
             {{ $t('actions.addN') + ' ' + $tc('classes.dns.zone', 1) }}
         </v-btn>
         <v-btn 
-        :class="(loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain ? undefined : 'text-white') + ' pa-2 mx-2'" 
+        class="pa-2 mx-2"
+        :dark="!(loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain)"
         @click="openDeleteDialog(null, 'zone')"
         :disabled="loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain" color="red">
             <v-icon class="ma-0 pa-0">mdi-delete</v-icon>
@@ -73,8 +74,9 @@
                 {{ $t('actions.addN') + ' ' + $tc('classes.dns.record', 1) }}
             </v-btn>
             <v-btn @click="openDialog('recordMassAction')"
-             :class="(selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers' ? undefined : 'clr-white') + ' pa-2 mr-2'" 
-             :disabled="selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="red">
+             class="pa-2 mr-2" color="red"
+             :dark="!(selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers')"
+             :disabled="selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers'">
                 <v-icon class="ma-0 pa-0">mdi-delete</v-icon>
                 {{ $t('actions.delete') + ' ' + $t('words.selected') }}
             </v-btn>
@@ -197,7 +199,7 @@
             v-on="on"
             :disabled="loading || true"
           >
-          <v-icon class="clr-valid clr-lig-40">
+          <v-icon color="valid-40">
             mdi-check
           </v-icon>
           </v-btn>
@@ -214,7 +216,7 @@
             v-on="on"
             :disabled="loading || true"
           >
-          <v-icon class="clr-error clr-lig-40">
+          <v-icon color="error">
             mdi-close
           </v-icon>
           </v-btn>

@@ -56,7 +56,7 @@
                 v-model="userPathExpansionPanel"
                 flat
                 hover 
-                style="border: 1px solid var(--clr-primary);">
+                style="border: 1px solid var(--v-primary-base);">
                     <v-expansion-panel :key="0">
                         <v-expansion-panel-header>
                             <span>

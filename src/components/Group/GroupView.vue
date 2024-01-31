@@ -56,7 +56,7 @@
           <v-icon
             v-bind="attrs"
             v-on="on"
-            class="clr-primary">
+            color="primary">
             mdi-account-multiple
           </v-icon>
         </template>

@@ -102,16 +102,16 @@
                                     <v-col cols="12" lg="6">
                                         <v-fade-transition>
                                             <v-card v-ripple outlined class="pa-1 py-2">
-                                                <span :class="(usercopy.is_enabled ? 'clr-valid' : 'clr-error') + ' clr-lig-40'">
+                                                <span :color="(usercopy.is_enabled ? 'valid-40' : 'error')">
                                                     {{ usercopy.is_enabled ? $t('ldap.attributes.is_enabled') : $t('ldap.attributes.is_disabled') }}
                                                 </span>
                                                 <div elevation="0" v-if="usercopy.is_enabled == true">
-                                                    <v-icon class="clr-valid clr-lig-40">
+                                                    <v-icon color="valid-40">
                                                         mdi-check
                                                     </v-icon>
                                                 </div>
                                                 <div elevation="0" icon rounded v-else-if="usercopy.is_enabled == false">
-                                                    <v-icon class="clr-error clr-lig-40">
+                                                    <v-icon color="error">
                                                         mdi-close
                                                     </v-icon>
                                                 </div>
@@ -633,10 +633,10 @@
                             :dark="isThemeDark($vuetify)" 
                             :light="!isThemeDark($vuetify)"
                             >
-                            <v-list-item-icon class="mx-0 pa-0 mr-2 clr-primary">
+                            <v-list-item-icon color="primary" class="mx-0 pa-0 mr-2">
                                 <v-icon> mdi-key-change </v-icon>
                             </v-list-item-icon>
-                            <v-list-item-content class="v-list-btn v-btn clr-primary">
+                            <v-list-item-content color="primary" class="v-list-btn v-btn">
                                 {{ $t("actions.expirePwd").toUpperCase() }}
                             </v-list-item-content>
                         </v-list-item>
@@ -649,12 +649,12 @@
                             :dark="isThemeDark($vuetify)" 
                             :light="!isThemeDark($vuetify)"
                             >
-                            <v-list-item-icon class="mx-0 pa-0 mr-2 clr-valid">
+                            <v-list-item-icon color="valid" class="mx-0 pa-0 mr-2">
                                 <v-icon> 
                                     mdi-checkbox-marked-circle-outline
                                 </v-icon>
                             </v-list-item-icon>
-                            <v-list-item-content class="v-list-btn v-btn clr-valid">
+                            <v-list-item-content color="error" class="v-list-btn v-btn">
                                 {{ $t("actions.enable").toUpperCase() }}
                             </v-list-item-content>
                         </v-list-item>
@@ -1345,37 +1345,37 @@ export default {
 
 <style>
 .outlined {
-    border: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
+    border: thin solid hsla(0, 0, 0, 0.12)
 }
 
 .card-title {
     border-radius: 4px;
-    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-100));
+    background: var(--v-white-dynamic-base);
     position: sticky !important;
     top: 0 !important;
     z-index: 100;
-    border-bottom: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
+    border-bottom: thin solid hsla(0, 0, 0, 0.12)
 }
 
 [theme=dark] .card-title {
-    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-85));
+    background: var(--v-gray-85-base);
 }
 
 .card-actions {
     border-radius: 4px;
-    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-100));
+    background: var(--v-white-dynamic-base);
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
+    border-top: thin solid hsla(0, 0, 0, 0.12)
 }
 
 [theme=dark] .card-actions {
-    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-85));
+    background: var(--v-gray-85-base);
 }
 
 .groupSelected {
-    border-left: 4px solid var(--clr-primary);
+    border-left: 4px solid var(--v-primary-base);
 }
 .groupSelected::before {
     background-color: rgba(0,0,0,0.3);

@@ -18,6 +18,23 @@ function hslToHex(h, s, l) {
 	return r;
 }
 
+const default_theme_colors = {
+	dark:{
+		"white-dynamic":"#FFFFFF",
+		"black-dynamic":"#000000",
+		"background":hslToHex(210, 7.4, 21.2),
+		"text-background":hslToHex(0,0,0),
+		"text-inverted":hslToHex(0,0,100)
+	},
+	light:{
+		"white-dynamic":"#000000",
+		"black-dynamic":"#FFFFFF",
+		"background":hslToHex(0,0,94.5),
+		"text-background":hslToHex(0,0,100),
+		"text-inverted":hslToHex(0,0,0)
+	},
+}
+
 const vueColorList = {
 	// color_name: [h, s, v]
 	default_themes:{
@@ -26,6 +43,7 @@ const vueColorList = {
 		secondary: [210, 7.4, 21.2],
 		valid: [150, 86.9, 41.8],
 		error: [0, 85.9, 45.5],
+		gray: [0, 0, 50]
 	},
 	custom_themes:{
 		// raven: {
@@ -58,7 +76,7 @@ function generateDefaultColorVariants(color_key, hsv_array, colors, parser_optio
 		// Varying Lightness, default Saturation, dynamic
 		colors.light[`${color_key}-${lig}`] = cur_clr_default_sat
 		colors.dark[`${color_key}-${lig}`] = hslToHex(default_hue, default_sat, 100-lig)
-		if (parser_options.add_saturation_variants) {
+		if (parser_options.add_saturation_variants && default_sat != 0) {
 			for (let sat = parser_options.sat_steps; sat <= parser_options.limit; sat += parser_options.sat_steps) {
 				let cur_clr_light = hslToHex(default_hue, sat, lig)
 				let cur_clr_dark = hslToHex(default_hue, sat, lig)
@@ -104,16 +122,7 @@ function generateCustomColorVariants(color_key, hsv_array, colors, parser_option
 // var(--v-variablename-base)
 function parseVueColors() {
 	let colors = {
-		dark:{
-			"background":hslToHex(210, 7.4, 21.2),
-			"text-background":hslToHex(0,0,0),
-			"text-inverted":hslToHex(0,0,100)
-		},
-		light:{
-			"background":hslToHex(0,0,94.5),
-			"text-background":hslToHex(0,0,100),
-			"text-inverted":hslToHex(0,0,0)
-		},
+		...default_theme_colors
 	}
 	let parser_options = {
 		limit: 100,

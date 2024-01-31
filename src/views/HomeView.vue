@@ -32,7 +32,7 @@
           @updateTabSliders="refreshOnLanguageChange"
         />
       </v-col>
-      <v-divider style="border-color: var(--clr-primary)" class="ma-6" v-if="this.$vuetify.breakpoint.lgAndUp" />
+      <v-divider style="border-color: var(--v-primary-base)" class="ma-6" v-if="this.$vuetify.breakpoint.lgAndUp" />
       <v-col
         class="ma-0 pa-0 my-3"
         v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
@@ -133,10 +133,11 @@
         <span>
           <span
             v-if="getVisibleTabs[active_tab].enableShortName == true"
-            class="font-weight-medium clr-primary">
+            color="primary"
+            class="font-weight-medium">
             {{ $t("category." + getVisibleTabs[active_tab].title + "_short").toUpperCase() }}
           </span>
-          <span v-else class="font-weight-medium clr-primary">
+          <span v-else color="primary" class="font-weight-medium">
             {{ $t("category." + getVisibleTabs[active_tab].title).toUpperCase() }}
           </span>
         </span>
@@ -676,11 +677,11 @@ export default {
 }
 
 [theme=dark] #top-header {
-  stroke: var(--clr-accent);
+  stroke: var(--v-accent-base);
 }
 
 [theme=light] #top-header {
-  stroke: var(--clr-primary);
+  stroke: var(--v-primary-base);
 }
 
 #donateBtn .v-icon::before {
@@ -690,6 +691,6 @@ export default {
 
 #donateBtn:hover .v-icon::before {
   content: "\F02D1";
-  color: var(--clr-red);
+  color: var(--v-red);
 }
 </style>

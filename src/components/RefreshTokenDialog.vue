@@ -24,7 +24,7 @@
     </v-row>
     <v-card-actions class="">
         <v-row class="ma-1 pa-0" justify="center">
-        <v-btn dark class="ma-2 clr-valid" rounded @click="emitLogoutAction">{{ $t("actions.backToLogin") }}</v-btn>
+        <v-btn dark color="valid" class="ma-2" rounded @click="emitLogoutAction">{{ $t("actions.backToLogin") }}</v-btn>
         <v-btn class="ma-2 text-normal bg-primary" :disabled="!allowRefresh" rounded @click="refreshAccessToken">{{ $t('actions.refreshToken') }}</v-btn>
         </v-row>
     </v-card-actions>

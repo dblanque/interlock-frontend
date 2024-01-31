@@ -24,7 +24,7 @@
                 <v-stepper-header class="px-16">
                     <!-- Basics -->
                     <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.dirtree.' + createType + 'Create.step1') }}</v-stepper-step>
-                    <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
+                    <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
                     <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.dirtree.' + createType + 'Create.step2') }}</v-stepper-step>
                 </v-stepper-header>
 
@@ -72,7 +72,7 @@
                                         v-model="ouPathExpansionPanel"
                                         flat 
                                         hover 
-                                        style="border: 1px solid var(--clr-primary);">
+                                        style="border: 1px solid var(--v-primary-base);">
                                             <v-expansion-panel>
                                                 <v-expansion-panel-header>
                                                     <span>

@@ -24,9 +24,9 @@
                 <v-stepper-header class="px-16">
                     <!-- Basics -->
                     <v-stepper-step :complete="createStage > 1" step="1">{{ $t('section.users.userCreate.step1') }}</v-stepper-step>
-                    <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
+                    <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
                     <v-stepper-step :complete="createStage > 2" step="2">{{ $t('section.users.userCreate.step2') }}</v-stepper-step>
-                    <v-divider class="mx-3" :style="createStage > 2 ? 'border-color: var(--clr-primary) !important' : ''"></v-divider>
+                    <v-divider class="mx-3" :style="createStage > 2 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
                     <v-stepper-step :complete="createStage > 3" step="3">{{ $t('section.users.userCreate.step3') }}</v-stepper-step>
                 </v-stepper-header>
 
@@ -76,7 +76,7 @@
                                         v-model="userPathExpansionPanel"
                                         flat 
                                         hover 
-                                        style="border: 1px solid var(--clr-primary);">
+                                        style="border: 1px solid var(--v-primary-base);">
                                             <v-expansion-panel>
                                                 <v-expansion-panel-header>
                                                     <span>
@@ -710,14 +710,14 @@ export default {
 <style>
 .card-actions {
     border-radius: 4px;
-    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-100));
+    background: var(--v-white-dynamic-base);
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-0), 0.12)
+    border-top: thin solid hsla(0, 0, 0, 0.12)
 }
 
 [theme=dark] .card-actions {
-    background: hsl(var(--clr-white-hue), var(--clr-white-sat), var(--clr-lig-85));
+    background: var(--v-gray-85-base);
 }
 </style>

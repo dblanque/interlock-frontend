@@ -61,8 +61,8 @@
           :light="!actionButtonsDisabled && isThemeDark($vuetify)"
           @click="massAccountStatusChange(true)"
           :disabled="loading || tableData.selected.length < 1">
-            <v-icon small :class="(!actionButtonsDisabled ? 'clr-red' : '') + ' clr-slig-70 ma-0 pa-0 mr-1'">mdi-close</v-icon>
-            <span :class="!actionButtonsDisabled ? 'clr-red clr-slig-70' : ''">
+            <v-icon small :color="actionButtonsDisabled ? 'error' : 'error-70-s'" class="ma-0 pa-0 mr-1">mdi-close</v-icon>
+            <span :color="actionButtonsDisabled ? 'error' : 'error-70-s'">
               {{ $t('actions.disable') }}
             </span>
           </v-btn>
@@ -83,8 +83,8 @@
           :light="!actionButtonsDisabled && isThemeDark($vuetify)"
           color="red" @click="openDeleteDialog()"
           :disabled="actionButtonsDisabled">
-            <v-icon small :class="(actionButtonsDisabled ? '' : 'clr-white') + ' ma-0 pa-0 mr-1'">mdi-delete</v-icon>
-            <span :class="actionButtonsDisabled ? '' : 'text-white'">
+            <v-icon small dark :color="actionButtonsDisabled ? undefined : 'white'" class="ma-0 pa-0 mr-1">mdi-delete</v-icon>
+            <span :color="actionButtonsDisabled ? undefined : 'white'">
               {{ $t('actions.delete') }}
             </span>
           </v-btn>
@@ -94,11 +94,11 @@
           :light="!actionButtonsDisabled && isThemeDark($vuetify)"
           color="primary" @click="openDialog('bulkUserPermissions')"
           :disabled="actionButtonsDisabled">
-            <v-icon small 
-              :class="(actionButtonsDisabled ? '' : 'clr-white') + ' ma-0 pa-0 mr-1'">
+            <v-icon small :color="actionButtonsDisabled ? undefined : 'white'"
+              class="ma-0 pa-0 mr-1">
               mdi-shield-account
             </v-icon>
-            <span :class="actionButtonsDisabled ? '' : 'text-white'">
+            <span :color="actionButtonsDisabled ? undefined : 'white'">
               {{ $t('actions.massChangeUserPerms') }}
             </span>
           </v-btn>
@@ -113,12 +113,12 @@
           <v-icon
             v-bind="attrs"
             v-on="on"
-            class="clr-primary">
+            color="primary">
             mdi-account
           </v-icon>
         </template>
         <span>{{ $t('section.users.youAreHere') }} 
-          <v-icon class="clr-white">mdi-emoticon</v-icon>
+          <v-icon color="white">mdi-emoticon</v-icon>
         </span>
       </v-tooltip>
 
@@ -132,7 +132,7 @@
             :disabled="loading || isLoggedInUser(item.username)"
             @click="disableUser(item)"
           >
-          <v-icon :class="!isLoggedInUser(item.username) ? 'clr-valid clr-lig-40': ''">
+          <v-icon :color="!isLoggedInUser(item.username) ? 'valid': ''">
             mdi-check
           </v-icon>
           </v-btn>
@@ -150,7 +150,7 @@
             :disabled="loading || isLoggedInUser(item.username)"
             @click="enableUser(item)"
           >
-          <v-icon :class="!isLoggedInUser(item.username) ? 'clr-error clr-lig-40': ''">
+          <v-icon :color="!isLoggedInUser(item.username) ? 'error': ''">
             mdi-close
           </v-icon>
           </v-btn>
@@ -220,8 +220,7 @@
       <!-- UNLOCK USER BUTTON -->
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon
-            class="clr-secondary clr-lig-20"
+          <v-btn icon color="secondary-20"
             rounded
             v-bind="attrs"
             v-on="on"

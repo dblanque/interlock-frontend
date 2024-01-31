@@ -7,7 +7,7 @@
         <v-row class="ma-0 ma-1 px-4 py-0 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
                 @click="resetDialog = true" :disabled="readonly || loading"
-                elevation="0"
+                elevation="0" dark
                 class="ma-0 pa-0 pa-4 ma-1 mx-1 text-normal"
                 color="red">
                     <v-icon class="mr-1">
@@ -17,8 +17,8 @@
             </v-btn>
             <v-btn 
                 @click="testSettings" :disabled="readonly || loading"
-                elevation="0"
-                class="ma-0 pa-0 pa-4 ma-1 mx-1 bg-white bg-lig-15">
+                elevation="0" :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
+                class="ma-0 pa-0 pa-4 ma-1 mx-1">
                     <span class="text-normal">
                         {{ $t("actions.testSettings") }}
                     </span>
@@ -40,9 +40,9 @@
         <v-row class="ma-0 ma-1 px-4 py-0 mb-4 sticky-top" style="top: 6.3rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
                 @click="saveSettings" :disabled="readonly || loading"
-                elevation="0"
+                elevation="0" :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
                 style="border-radius: 0; border-bottom-left-radius: 0.3rem; border-top-left-radius: 0.3rem;"
-                class="ma-0 pa-0 pa-4 ma-1 mr-0 bg-white bg-lig-15 text-normal" >
+                class="ma-0 pa-0 pa-4 ma-1 mr-0 text-normal" >
                     <v-icon class="mr-1">
                         mdi-content-save
                     </v-icon>
