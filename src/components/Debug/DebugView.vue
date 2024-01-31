@@ -28,27 +28,22 @@
 			<v-col class="ma-0 pa-0 mx-2" cols="auto">
 				<v-btn outlined class="ma-0 pa-0 px-2"
 					small
+					@click="runLDAPOperation()"
 					:disabled="disableRun"
 					color="primary">
 					<v-icon>
 						mdi-play
 					</v-icon>
-					RUN
+					{{ $t("actions.runExecute") }}
 				</v-btn>
 			</v-col>
 			<v-col class="ma-0 pa-0 mx-2" cols="auto">
-				<v-checkbox class="ma-0 pa-0"
-					label="AsRoot"
+				<v-switch class="ma-0 pa-0"
+					:label="data.useAdmin ? $t('section.debug.asAdmin') : $t('section.debug.asUser')"
+					v-model="data.useAdmin"
 					hide-details
 					dense>
-				</v-checkbox>
-			</v-col>
-			<v-col class="ma-0 pa-0 mx-2" cols="auto">
-				<v-checkbox class="ma-0 pa-0"
-					label="AsUser"
-					hide-details
-					dense>
-				</v-checkbox>
+				</v-switch>
 			</v-col>
 		</v-row>
 	</v-card>
@@ -66,6 +61,7 @@ export default {
 			error: false,
 			errorMsg: "",
 			data:{
+				useAdmin: true,
 				selectedLdapOperation: "",
 				ldapOperations: []
 			}
@@ -91,6 +87,20 @@ export default {
 		resetError(){
 			this.error = false
 			this.errorMsg = ""
+		},
+		async runLDAPOperation(){
+			let opExec = await new Debug({})
+			await opExec.action({
+				operation: this.data.selectedLdapOperation,
+				use_admin: this.data.useAdmin,
+				extra_args: {}
+			})
+			.then(response => {
+				console.log(response)
+			})
+			.catch(e => {
+				console.error(e)
+			})
 		},
 		async getLDAPOperations(){
 			this.loading = true

@@ -25,7 +25,7 @@ const vueColorList = {
 		accent: [29.5, 100, 76.9],
 		secondary: [210, 7.4, 21.2],
 		valid: [150, 86.9, 41.8],
-		error: [0, 85.9, 59.6],
+		error: [0, 85.9, 45.5],
 	},
 	custom_themes:{
 		// raven: {
@@ -105,10 +105,12 @@ function generateCustomColorVariants(color_key, hsv_array, colors, parser_option
 function parseVueColors() {
 	let colors = {
 		dark:{
+			"background":hslToHex(210, 7.4, 21.2),
 			"text-background":hslToHex(0,0,0),
 			"text-inverted":hslToHex(0,0,100)
 		},
 		light:{
+			"background":hslToHex(0,0,94.5),
 			"text-background":hslToHex(0,0,100),
 			"text-inverted":hslToHex(0,0,0)
 		},

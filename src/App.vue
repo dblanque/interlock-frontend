@@ -24,13 +24,13 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background-color: var(--body-bg);
-  transition: background-color var(--base-transition-speed);
+  // background-color: var(--body-bg);
+  transition: background-color var(--base-transition-speed-5);
 }
 
-[theme=light] #app {
-  color: #2f353b;
-}
+// [theme=light] #app {
+//   color: #2f353b;
+// }
 
 nav {
   padding: 30px;

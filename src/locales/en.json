@@ -39,6 +39,7 @@
       },
       "filter":"LDAP Filter"
     },
+    "runExecute":"Run",
     "expirePwd":"Expire Password",
     "extra":"Extra",
     "moreActions":"More Actions",
@@ -775,7 +776,9 @@
       }
     },
     "debug":{
-      "ldapOperation":"LDAP Operation | LDAP Operations"
+      "ldapOperation":"LDAP Operation | LDAP Operations",
+      "asAdmin":"Run as Root LDAP Bind Connection User",
+      "asUser":"Run as Current User"
     }
   },
   "attribute":{

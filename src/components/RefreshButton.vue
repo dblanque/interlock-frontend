@@ -4,17 +4,19 @@
 <template>
 <div>
     <!-- Refresh User Button -->
-    <v-progress-circular :class="'pa-0 ma-0 ' + componentClasses" :color="loadingColor" :value="loadingValue" :indeterminate="loading || fetchingData" size="38" width="7">
+    <v-progress-circular :class="'pa-0 ma-0 ' + componentClasses" :color="loadingColor || buttonColor" :value="loadingValue" :indeterminate="loading || fetchingData" 
+        :size="38" :width="!dense ? 7 : 4">
         <v-btn small
         :class="buttonClasses" 
-        :color="iconColor"
-        icon
+        :color="buttonColor"
+        :icon="buttonIcon"
+        :fab="!buttonIcon"
         :disabled="loading || fetchingData"
         elevation="0"
         :loading="loading"
         @click="emitRefresh"
         >
-            <v-icon>
+            <v-icon :color="iconColor">
             mdi-refresh
             </v-icon>        
             <template v-slot:loader>
@@ -32,15 +34,27 @@ export default {
     props: {
         loadingColor: {
             type: String,
-            default: 'primary'
+            default: undefined
         },
         iconColor:{
             type: String,
             default: 'white'
         },
+        buttonColor:{
+            type: String,
+            default: 'primary'
+        },
         buttonClasses: {
             type: String,
-            default: 'bg-primary'
+            default: ''
+        },
+        buttonIcon: {
+            type: Boolean,
+            default: false
+        },
+        dense: {
+            type: Boolean,
+            default: false
         },
         componentClasses: {
             type: String,

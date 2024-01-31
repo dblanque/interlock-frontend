@@ -39,6 +39,7 @@
       },
       "filter":"Filtro LDAP"
     },
+    "runExecute":"Ejecutar",
     "expirePwd":"Expirar Contraseña",
     "extra":"Extra",
     "moreActions":"Más Acciones",
@@ -781,7 +782,9 @@
       }
     },
     "debug":{
-      "ldapOperation":"Operación de LDAP | Operaciones de LDAP"
+      "ldapOperation":"Operación de LDAP | Operaciones de LDAP",
+      "asAdmin":"Ejecutar como Usuario Raíz de Conexión LDAP",
+      "asUser":"Ejecutar como Usuario Actual"
     }
   },
   "attribute": {

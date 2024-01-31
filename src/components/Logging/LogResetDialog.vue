@@ -18,7 +18,7 @@
         </v-card-title>
 
         <v-card-text class="pa-0 ma-0 my-8">
-            <span class="font-weight-medium text-inverted" 
+            <span class="font-weight-medium" 
             v-html="$t('section.logs.' + this.logAction + 'Dialog.message')">
             </span>
         </v-card-text>
@@ -26,7 +26,9 @@
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
                 <v-btn @click="resetConfirm"
-                class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25 text-normal"
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
+                class="ma-0 pa-0 pa-2 ma-1"
                 rounded>
                     <v-icon class="mr-2">
                         mdi-checkbox-marked-circle
@@ -38,7 +40,7 @@
                 <v-btn @click="closeDialog"
                 class="ma-0 pa-0 pa-2 ma-1" color="primary"
                 rounded>
-                    <span class="pl-1 text-white">
+                    <span class="pl-1">
                         {{ $t("actions.no" )}}
                     </span>
                     <v-icon class="ml-2" color="white">
@@ -51,8 +53,11 @@
 </template>
 
 <script>
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
+
 export default {
     name: "LogResetDialog",
+    mixins: [ utilsMixin ],
     props: {
         logAction: String
     },
