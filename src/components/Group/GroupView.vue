@@ -341,7 +341,7 @@ export default {
         this.loading = false
         this.error = false
         if (emitNotif == true)
-          this.createSnackbar({message: (this.$t("classes.group.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
+          this.createSnackbar({message: (this.$tc("classes.group", groups.length) + " " + this.$tc("words.loaded.m", groups.length)).toUpperCase(), type: 'success'})
       })
       .catch(error => {
         console.error(error)

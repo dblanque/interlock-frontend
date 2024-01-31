@@ -665,7 +665,7 @@ export default {
                 dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
                 dataToSend['DEFAULT_ADMIN_PWD'] = this.defaultAdminPwd
                 await new Settings({}).save(dataToSend).then(() => {
-                    this.createSnackbar({message: (this.$t("classes.setting.plural") + " " + this.$t("words.saved.plural.m")).toUpperCase(), type: 'success'})
+                    this.createSnackbar({message: (this.$tc("classes.setting", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
                 })
                 .catch(error => {
                     console.error(error)
@@ -722,7 +722,7 @@ export default {
                     }
                 }
                 this.loading = false
-                this.createSnackbar({message: (this.$t("classes.setting.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
+                this.createSnackbar({message: (this.$tc("classes.setting", 5) + " " + this.$tc("words.loaded.m", 5)).toUpperCase(), type: 'success'})
                 setTimeout(()=>{
                     this.showSettings = true
                     this.readonly = false

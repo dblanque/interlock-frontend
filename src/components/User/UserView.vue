@@ -568,7 +568,7 @@ export default {
         this.loading = false
         this.error = false
         if (emitNotif == true)
-          this.createSnackbar({message: (this.$t("classes.user.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
+          this.createSnackbar({message: (this.$tc("classes.user", users.length) + " " + this.$tc("words.loaded.m", users.length)).toUpperCase(), type: 'success'})
       })
       .catch(error => {
         console.error(error)
@@ -701,7 +701,7 @@ export default {
           this.listUserItems(false);
           notificationBus.$emit('createNotification', 
             {
-              message: (this.$t("classes.user.plural") + " " + actionMsg).toUpperCase(), 
+              message: (this.$tc("classes.user", this.tableData.selected.length) + " " + actionMsg).toUpperCase(), 
               type: actionType
             }
           );
@@ -730,7 +730,7 @@ export default {
         this.listUserItems(false);
         notificationBus.$emit('createNotification', 
           {
-            message: (this.$t("classes.user.plural") + " " + this.$t("words.unlocked.plural.n").toUpperCase()).toUpperCase(),
+            message: (this.$tc("classes.user", this.tableData.selected.length) + " " + this.$tc("words.unlocked.n", this.tableData.selected.length).toUpperCase()).toUpperCase(),
             icon: 'mdi-lock-open',
             type: 'info'
           }

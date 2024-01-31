@@ -6,7 +6,7 @@
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
                 <h3 class="pa-0 ma-0 ma-2">
-                {{ $t('actions.delete') + ' ' + $t('classes.dns.record.plural') }}
+                {{ $t('actions.delete') + ' ' + $tc('classes.dns.record', this.selectedRecords.length || 1) }}
                 </h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">

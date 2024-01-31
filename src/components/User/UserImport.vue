@@ -283,7 +283,7 @@ webpage
                         mdi-check-circle
                     </v-icon>
                     <span class="pr-1">
-                        {{ $t("actions.import") + " " + $t("classes.user.plural")}}
+                        {{ $t("actions.import") + " " + $tc("classes.user", tableData.items.length || 1)}}
                     </span>
                 </v-btn>
                 <v-btn @click="nextStep" v-else-if="import_tab < 2"

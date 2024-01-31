@@ -44,7 +44,7 @@
             </v-btn>
             <v-btn class="pa-2 mx-2" :disabled="loading" color="primary" @click="openResetLogsDialog()">
               <v-icon class="ma-0 pa-0 mr-1">mdi-fire</v-icon>
-              {{ $t('actions.delete') + ' ' + $t('classes.log.plural') }}
+              {{ $t('actions.delete') + ' ' + $tc('classes.log', 5) }}
             </v-btn>
           </v-row>
       </v-row>
@@ -355,7 +355,7 @@ export default {
         this.tableData.items = logs
         this.loading = false
         this.error = false
-        this.createSnackbar({message: (this.$t("classes.log.plural") + " " + this.$t("words.loaded.plural.m")).toUpperCase(), type: 'success'})
+        this.createSnackbar({message: (this.$tc("classes.log", logs.length) + " " + this.$tc("words.loaded.m", logs.length)).toUpperCase(), type: 'success'})
         this.logTruncateRange = [ this.getLogTruncateMin, this.getLogTruncateMax ]
       })
       .catch(error => {
