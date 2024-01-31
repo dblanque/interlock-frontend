@@ -77,7 +77,7 @@ a {
 }
 
 .custom-loader i::before {
-    color: var(--clr-text-white);
+    color: #FFFFFF;
 }
 
 #filterListButton.active{
@@ -151,19 +151,19 @@ to {
 }
 
 .pill-start {
-    border-color: var(--clr-white) !important;
+    border-color: var(--v-white-base) !important;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
 
 .pill-center {
-    border-color: var(--clr-white) !important;
+    border-color: var(--v-white-base) !important;
     border-left: 0 !important;
     border-radius: 0 !important;
 }
 
 .pill-end {
-    border-color: var(--clr-white) !important;
+    border-color: var(--v-white-base) !important;
     border-left: 0 !important;
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
