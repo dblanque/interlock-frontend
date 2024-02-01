@@ -269,12 +269,14 @@ webpage
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
                 <v-btn @click="prevStep"
-                class="ma-0 pa-0 pa-2 ma-1 bg-secondary text-normal"
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
+                class="ma-0 pa-0 pa-2 ma-1"
                 rounded>
-                    <v-icon class="mr-1" color="white">
+                    <v-icon class="mr-1">
                         {{ import_tab < 1 || showResult && import_tab > 1 ? 'mdi-close-circle' : 'mdi-chevron-left' }}
                     </v-icon>
-                    <span class="pr-1 text-white">
+                    <span class="pr-1">
                         {{ import_tab < 1 || showResult && import_tab > 1 ? $t("actions.close") : $t("actions.back") }}
                     </span>
                 </v-btn>
@@ -292,12 +294,14 @@ webpage
                 </v-btn>
                 <v-btn @click="nextStep" v-else-if="import_tab < 2"
                 :disabled="!isStepValid()"
-                class="ma-0 pa-0 pa-2 ma-1 bg-secondary"
+                :dark="!isThemeDark($vuetify) && isStepValid()"
+                :light="isThemeDark($vuetify) && isStepValid()"
+                class="ma-0 pa-0 pa-2 ma-1"
                 rounded>
-                    <span class="pl-2 text-normal">
+                    <span class="pl-2">
                         {{ $t("actions.next") }}
                     </span>
-                    <v-icon :color="!isStepValid() ? 'primary-90-0' : 'primary'">
+                    <v-icon color="primary">
                         mdi-chevron-right
                     </v-icon>
                 </v-btn>

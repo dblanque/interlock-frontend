@@ -132,7 +132,7 @@
             :disabled="loading || isLoggedInUser(item.username)"
             @click="disableUser(item)"
           >
-          <v-icon :color="!isLoggedInUser(item.username) ? 'valid': ''">
+          <v-icon :color="!isLoggedInUser(item.username) ? 'valid-40-s': ''">
             mdi-check
           </v-icon>
           </v-btn>
@@ -150,7 +150,7 @@
             :disabled="loading || isLoggedInUser(item.username)"
             @click="enableUser(item)"
           >
-          <v-icon :color="!isLoggedInUser(item.username) ? 'error': ''">
+          <v-icon :color="!isLoggedInUser(item.username) ? 'error-60-s': ''">
             mdi-close
           </v-icon>
           </v-btn>
