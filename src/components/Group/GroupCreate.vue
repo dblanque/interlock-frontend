@@ -485,7 +485,7 @@ export default {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(0, 0, 0, 0.12)
+    border-top: thin solid hsla(0, 0, 0, 0.12);
 }
 
 [theme=dark] .card-actions {

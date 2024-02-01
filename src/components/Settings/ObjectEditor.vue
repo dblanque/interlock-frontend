@@ -32,7 +32,8 @@
         :required="required && valueToAdd.length == 0 ? true : false"
         :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.v)] : valueValidator"
         />
-        <v-btn class="bg-primary text-white mt-2 ml-1" small
+        <v-btn class="mt-2 ml-1" small
+        color="primary"
         :disabled="readonly == true || this.isFieldDisabled(keyToAdd) || keyToAdd in this.objectToEdit"
         @click="addToObject(keyToAdd, valueToAdd)"
         rounded
@@ -75,7 +76,7 @@
             </v-col>
         </v-list-item-content>
         <v-list-item-action class="ma-0 pa-0">
-            <v-btn :class="'bg-primary text-white ml-2 ' + (complexValidator ? 'mb-7' : '')"
+            <v-btn color="primary" :class="'ml-2 ' + (complexValidator ? 'mb-7' : '')"
             :disabled="readonly == true || isFieldDisabled(subItemKey) || disableAddDelete && !isFieldDeletable(subItemKey)"
             v-show="!disableAddDelete || isFieldDeletable(subItemKey)"
             @click="removeFromObject(subItemKey)"

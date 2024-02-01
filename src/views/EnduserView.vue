@@ -304,8 +304,8 @@
                         </v-btn>
                         <!-- Refresh User Button -->
                         <v-btn 
-                        class="ma-0 pa-0 pa-4 ma-1 bg-primary" 
-                        color="white" 
+                        class="ma-0 pa-0 pa-4 ma-1" 
+                        color="primary"
                         icon
                         elevation="0"
                         :loading="loading"

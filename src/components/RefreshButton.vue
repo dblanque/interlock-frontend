@@ -4,7 +4,7 @@
 <template>
 <div>
     <!-- Refresh User Button -->
-    <v-progress-circular :class="'pa-0 ma-0 ' + componentClass" :color="loadingColor || buttonColor" :value="loadingValue" :indeterminate="loading || fetchingData" 
+    <v-progress-circular :class="`ma-0 pa-0 ${contentClass} ${componentClass}`" :color="loadingColor || buttonColor" :value="loadingValue" :indeterminate="loading || fetchingData" 
         :size="dense ? 36 : 38" :width="!dense ? 7 : 4">
         <v-btn :small="small && !dense" :x-small="dense"
         :class="buttonClass" 
@@ -61,6 +61,10 @@ export default {
             default: false
         },
         componentClass: {
+            type: String,
+            default: ''
+        },
+        contentClass: {
             type: String,
             default: ''
         },

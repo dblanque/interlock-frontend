@@ -140,7 +140,7 @@
                                 :rules="item.validator ? [fieldRules(item.add, item.validator, (item.required && item.value.length == 0 ? true : false))] : undefined"
                                 :id="'LIST_KEY_'+key"
                                 />
-                                <v-btn class="bg-primary text-white mt-3 ml-5"
+                                <v-btn color="primary" class="mt-3 ml-5"
                                 @click="addToArray(item.add, item, 'LIST_KEY_'+key)"
                                 :disabled="item.readonly || readonly == true"
                                 rounded
@@ -155,7 +155,7 @@
                                     {{ subItem }}
                                 </v-list-item-content>
                                 <v-list-item-action>
-                                    <v-btn class="bg-primary text-white ml-5"
+                                    <v-btn color="primary" class="ml-5"
                                     :disabled="item.readonly || readonly == true"
                                     @click="removeFromArray(subItem, item)"
                                     rounded small
@@ -203,7 +203,7 @@
                                     id="ldapUriPort"
                                     />
                                 </v-col>
-                                <v-btn class="bg-primary text-white mt-3 ml-5"
+                                <v-btn color="primary" class="mt-3 ml-5"
                                 @click="addServer(item)"
                                 :disabled="item.readonly || readonly == true"
                                 rounded
@@ -218,7 +218,7 @@
                                     {{ subItem }}
                                 </v-list-item-content>
                                 <v-list-item-action>
-                                    <v-btn class="bg-primary text-white ml-5"
+                                    <v-btn color="primary" class="ml-5"
                                     @click="removeFromArray(subItem, item)"
                                     :disabled="item.readonly || readonly == true"
                                     rounded small

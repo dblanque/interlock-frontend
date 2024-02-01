@@ -111,7 +111,7 @@ export default {
 
 <style>
 .outlined {
-    border: thin solid hsla(0, 0, 0, 0.12)
+    border: thin solid hsla(0, 0, 0, 0.12);
 }
 
 .card-title {
@@ -120,7 +120,7 @@ export default {
     position: sticky !important;
     top: 0 !important;
     z-index: 100;
-    border-bottom: thin solid hsla(0, 0, 0, 0.12)
+    border-bottom: thin solid hsla(0, 0, 0, 0.12);
 }
 
 [theme=dark] .card-title {
@@ -133,7 +133,7 @@ export default {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(0, 0, 0, 0.12)
+    border-top: thin solid hsla(0, 0, 0, 0.12);
 }
 
 [theme=dark] .card-actions {

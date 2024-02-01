@@ -258,9 +258,9 @@ export default {
             case 'UPDATE':
                 return ['orange','white']
             case 'DELETE':
-                return ['secondary','white']
+                return ['secondary-s','white']
             default:
-                return ['secondary','white']
+                return ['secondary-s','white']
         }
     },
     getIconForObjectClass(objectClass){
@@ -268,9 +268,9 @@ export default {
             case 'USER':
                 return ['mdi-account', 'primary']
             case 'GROUP':
-                return ['mdi-account-multiple', 'blue']
+                return ['mdi-account-multiple', 'primary-30']
             case 'OU':
-                return ['mdi-folder']
+                return ['mdi-folder', 'secondary']
             case 'DOM':
                 return ['mdi-dns']
             case 'GPO':

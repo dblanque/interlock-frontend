@@ -291,26 +291,9 @@
                     {{ $t("actions.saveClose") }}
                 </v-btn>
                 <!-- Refresh Group Button -->
-                <v-progress-circular class="pa-0 ma-0" :color="loadingColor" value="100" :indeterminate="loading || fetchingData" size="38" width="7">
-                    <v-btn small
-                    class="ma-1 bg-primary" 
-                    color="white" 
-                    icon
-                    :disabled="loading || fetchingData"
-                    elevation="0"
+                <refresh-button dense
                     :loading="refreshLoading"
-                    @click="refreshGroup"
-                    >
-                        <v-icon>
-                        mdi-refresh
-                        </v-icon>
-                        <template v-slot:loader>
-                        <span class="custom-loader">
-                            <v-icon color="white">mdi-cached</v-icon>
-                        </span>
-                        </template>
-                    </v-btn>
-                </v-progress-circular>
+                    @refresh="refreshGroup"/>
             </v-row>
         </v-card-actions>
         
@@ -329,13 +312,15 @@
 
 <script>
 import Group from '@/include/Group.js';
-import CNObjectList from '@/components/CNObjectList.vue'
+import RefreshButton from '@/components/RefreshButton.vue';
+import CNObjectList from '@/components/CNObjectList.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 
 export default {
     name: 'GroupDialog',
     components: {
         CNObjectList,
+        RefreshButton
     },
     data() {
         return {

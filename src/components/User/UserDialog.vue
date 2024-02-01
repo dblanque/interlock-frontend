@@ -517,7 +517,8 @@
                                                 :hint="$t('section.users.userDialog.hint.addObjectClass')"
                                                 :items="objectClasses">
                                                 </v-autocomplete>
-                                                <v-btn :class="(editFlag != true ? 'bg-white bg-lig-90' : 'bg-primary text-white') + ' ml-3'"
+                                                <v-btn color="primary"
+                                                class="ml-3"
                                                 :disabled="editFlag != true"
                                                 @click="addObjectClassToArray"
                                                 rounded
@@ -696,7 +697,7 @@
                         </v-list-item>
                     </v-list>
                 </v-menu>
-                <v-row 
+                <v-row align="center"
                     :justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'end'"
                     class="ma-0 pa-0">
                 <!-- Edit User Button -->
@@ -736,8 +737,7 @@
                     {{ $t("actions.saveClose") }}
                 </v-btn>
                 <!-- Refresh User Button -->
-                <refresh-button
-                    component-class="ma-0 pa-0"
+                <refresh-button dense
                     :loading="refreshLoading"
                     @refresh="refreshUser"/>
                 </v-row>
@@ -1364,7 +1364,7 @@ export default {
 
 <style>
 .outlined {
-    border: thin solid hsla(0, 0, 0, 0.12)
+    border: thin solid hsla(0, 0, 0, 0.12);
 }
 
 .card-title {
@@ -1373,7 +1373,7 @@ export default {
     position: sticky !important;
     top: 0 !important;
     z-index: 100;
-    border-bottom: thin solid hsla(0, 0, 0, 0.12)
+    border-bottom: thin solid hsla(0, 0, 0, 0.12);
 }
 
 [theme=dark] .card-title {

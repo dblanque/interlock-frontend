@@ -147,7 +147,10 @@ webpage
                     
                     <v-row class="ma-0 pa-0 mb-2" justify="center">
                         <v-btn @click="downloadTemplate"
-                        class="ma-0 pa-0 pa-2 ma-1 bg-primary text-white">
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
+                        color="primary"
+                        class="ma-0 pa-0 pa-2 ma-1">
                             <v-icon class="mr-1">
                                 mdi-download
                             </v-icon>
@@ -156,7 +159,8 @@ webpage
                             </span>
                         </v-btn>
                         <v-btn @click="showUserMappings = !showUserMappings"
-                        class="ma-0 pa-0 pa-2 ma-1 bg-primary text-white">
+                        color="primary"
+                        class="ma-0 pa-0 pa-2 ma-1">
                             <v-icon class="mr-1">
                                 mdi-cog
                             </v-icon>
