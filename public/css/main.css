@@ -13,6 +13,13 @@
     --base-transition-speed-slow-5: 750ms;
 }
 
+[theme=light] {
+    --border-d-base: #00000020;
+}
+[theme=dark] {
+    --border-d-base: #ffffff20;
+}
+
 a {
     text-decoration: none !important;
 }

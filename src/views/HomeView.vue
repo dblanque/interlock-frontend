@@ -40,7 +40,7 @@
           v-if="last_name && last_name != '' && first_name && first_name != ''">
           {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + "@" + username }}
         </span>
-        <span class="text-normal" v-else>
+        <span v-else>
           {{ realm.toUpperCase() + "@" + username }}
         </span>
       </v-col>

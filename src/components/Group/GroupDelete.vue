@@ -18,7 +18,7 @@
         </v-card-title>
 
         <v-card-text class="pa-0 ma-0">
-            <v-row class="pa-0 ma-8 text-subtitle-1 text-inverted" justify="center">
+            <v-row class="pa-0 ma-8 text-subtitle-1" justify="center">
                 {{ $t('section.groups.deleteGroup.message') }}
                 <span class="font-weight-medium" style="padding-left: 0.5ch;">
                     {{ (groupObject.cn ? groupObject.cn : groupObject.distinguishedName) + "?" }}
@@ -35,14 +35,14 @@
                     <v-icon class="mr-1" color="green">
                         mdi-checkbox-marked-circle-outline
                     </v-icon>
-                    <span class="pr-1 text-normal">
+                    <span class="pr-1">
                         {{ $t("actions.yes" )}}
                     </span>
                 </v-btn>
                 <v-btn @click="closeDialog"
                 class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25" 
                 rounded>
-                    <span class="pl-1 text-normal">
+                    <span class="pl-1">
                         {{ $t("actions.no" )}}
                     </span>
                     <v-icon class="ml-1" color="red">
@@ -101,7 +101,7 @@ export default {
 
 <style>
 .outlined {
-    border: thin solid hsla(0, 0, 0, 0.12);
+    border: thin solid var(--border-d-base);
 }
 
 .card-title {
@@ -110,7 +110,7 @@ export default {
     position: sticky !important;
     top: 0 !important;
     z-index: 100;
-    border-bottom: thin solid hsla(0, 0, 0, 0.12);
+    border-bottom: thin solid var(--border-d-base);
 }
 
 [theme=dark] .card-title {
@@ -123,7 +123,7 @@ export default {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(0, 0, 0, 0.12);
+    border-top: thin solid var(--border-d-base);
 }
 
 [theme=dark] .card-actions {

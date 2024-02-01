@@ -8,7 +8,7 @@
             <v-btn 
                 @click="resetDialog = true" :disabled="readonly || loading"
                 elevation="0" dark
-                class="ma-0 pa-0 pa-4 ma-1 mx-1 text-normal"
+                class="ma-0 pa-0 pa-4 ma-1 mx-1"
                 color="red">
                     <v-icon class="mr-1">
                         mdi-backup-restore
@@ -19,7 +19,7 @@
                 @click="testSettings" :disabled="readonly || loading"
                 elevation="0" :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
                 class="ma-0 pa-0 pa-4 ma-1 mx-1">
-                    <span class="text-normal">
+                    <span>
                         {{ $t("actions.testSettings") }}
                     </span>
                     <v-progress-circular :indeterminate="testing == true" :value="testFinished ? 100 : 0" :color="testFinished ? (!testError ? 'green' : 'red') : 'primary'" size="26" class="ml-3">
@@ -42,7 +42,7 @@
                 @click="saveSettings" :disabled="readonly || loading"
                 elevation="0" :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
                 style="border-radius: 0; border-bottom-left-radius: 0.3rem; border-top-left-radius: 0.3rem;"
-                class="ma-0 pa-0 pa-4 ma-1 mr-0 text-normal" >
+                class="ma-0 pa-0 pa-4 ma-1 mr-0" >
                     <v-icon class="mr-1">
                         mdi-content-save
                     </v-icon>
@@ -51,7 +51,7 @@
             <v-btn @click="refreshSettings"
                 style="border-radius: 0; border-bottom-right-radius: 0.3rem; border-top-right-radius: 0.3rem;"
                 elevation="0"
-                class="ma-0 pa-0 pa-4 ma-1 ml-0 text-normal"
+                class="ma-0 pa-0 pa-4 ma-1 ml-0"
                 color="primary">
                     <v-icon :class="(loading == true ? 'custom-loader' : '' ) + ' mr-1'">
                         mdi-cached

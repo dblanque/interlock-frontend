@@ -272,7 +272,7 @@
                 </v-btn>
                 <!-- Save Group Changes Button -->
                 <v-btn @click="saveGroup"
-                :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
+                :class="(editFlag ? '' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
                 rounded 
                 :disabled="!editFlag">
                     <v-icon class="mr-1">
@@ -282,7 +282,7 @@
                 </v-btn>
                 <!-- Save Group Changes Button -->
                 <v-btn @click="saveGroup(true)"
-                :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
+                :class="(editFlag ? '' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
                 rounded 
                 :disabled="!editFlag">
                     <v-icon class="mr-1">

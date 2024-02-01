@@ -310,7 +310,7 @@
                         <v-btn elevation="0" @click="newUser" v-if="this.createStage < 2"
                         :dark="!isThemeDark($vuetify)"
                         :light="isThemeDark($vuetify)"
-                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4" 
+                        class="ma-0 pa-0 pa-2 ma-1 pr-4" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
                                 mdi-cached
@@ -324,7 +324,7 @@
                     @keydown.enter="prevStep"
                     :dark="!isThemeDark($vuetify)"
                     :light="isThemeDark($vuetify)"
-                    class="text-normal ma-0 pa-0 pa-2 pr-4 ma-1" 
+                    class="ma-0 pa-0 pa-2 pr-4 ma-1" 
                     rounded>
                         <v-icon class="ma-0" color="primary">
                             mdi-chevron-double-left
@@ -337,7 +337,7 @@
                         @keydown.enter="nextStep"
                         :dark="!isThemeDark($vuetify)"
                         :light="isThemeDark($vuetify)"
-                        class="text-normal ma-0 pa-0 pa-2 ma-1 pl-4" 
+                        class="ma-0 pa-0 pa-2 ma-1 pl-4" 
                         rounded>
                             {{ $t("actions.next" )}}
                             <v-icon class="ma-0" color="primary">
@@ -350,7 +350,7 @@
                         @keydown.enter="closeDialog(true)"
                         :dark="!isThemeDark($vuetify)"
                         :light="isThemeDark($vuetify)"
-                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4" 
+                        class="ma-0 pa-0 pa-2 ma-1 pr-4" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
                                 mdi-checkbox-marked-circle-outline
@@ -722,7 +722,7 @@ export default {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(0, 0, 0, 0.12);
+    border-top: thin solid var(--border-d-base);
 }
 
 [theme=dark] .card-actions {

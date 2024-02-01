@@ -19,7 +19,7 @@
 
         <v-card-text class="pa-0 ma-0">
             <v-row class="pa-0 ma-8 mb-0 font-weight-medium text-uppercase" justify="center">
-                <v-alert class="ma-0 text-normal" color="primary">
+                <v-alert class="ma-0" color="primary">
                     {{ $t('section.users.tryingToDisable') }}
                     <span class="font-weight-bold" style="padding-left: 0.5ch;">
                         {{ userObject.givenName && userObject.sn ? userObject.givenName + " " + userObject.sn + " (" + userObject.username + ")" : userObject.username }}
@@ -41,7 +41,7 @@
                     <v-icon class="" color="primary">
                         mdi-chevron-double-right
                     </v-icon>
-                    <span class="ma-0 text-normal">
+                    <span class="ma-0">
                         {{ $t("actions.back" )}}
                     </span>
                     <v-icon class="" color="primary">
@@ -73,7 +73,7 @@ export default {
 
 <style>
 .outlined {
-    border: thin solid hsla(0, 0, 0, 0.12);
+    border: thin solid var(--border-d-base);
 }
 
 .card-title {
@@ -82,7 +82,7 @@ export default {
     position: sticky !important;
     top: 0 !important;
     z-index: 100;
-    border-bottom: thin solid hsla(0, 0, 0, 0.12);
+    border-bottom: thin solid var(--border-d-base);
 }
 
 [theme=dark] .card-title {
@@ -95,7 +95,7 @@ export default {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(0, 0, 0, 0.12);
+    border-top: thin solid var(--border-d-base);
 }
 
 [theme=dark] .card-actions {

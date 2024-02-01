@@ -20,10 +20,10 @@
 
         <v-card-text class="pa-0 ma-0">
             <v-form ref="userResetPasswordForm" @submit.prevent>
-                <v-row class="pa-0 ma-0 mt-8 mb-4 text-uppercase font-weight-normal text-inverted" style="font-size: medium !important;" justify="center">
+                <v-row class="pa-0 ma-0 mt-8 mb-4 text-uppercase font-weight-normal" style="font-size: medium !important;" justify="center">
                     {{ $t('section.users.resetPasswordDialog.changePasswordForUser') + " " }}
                 </v-row>
-                <v-row class="pa-0 ma-0 mt-4 mb-5 text-uppercase font-weight-bold text-inverted" style="font-size: large !important;" justify="center">
+                <v-row class="pa-0 ma-0 mt-4 mb-5 text-uppercase font-weight-bold" style="font-size: large !important;" justify="center">
                     {{ userObject.givenName && userObject.sn ? userObject.givenName + " " + userObject.sn + " (" + userObject.username + ")" : userObject.username }}
                 </v-row>
                 <v-row justify="center" class="pa-0 ma-0 font-weight-medium">

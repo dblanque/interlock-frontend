@@ -18,13 +18,13 @@
         </v-card-title>
 
         <v-card-text class="pa-0 ma-0 pb-4">
-            <v-row v-if="deleteMode == 'record'" class="pa-0 ma-8 mb-2 text-subtitle-1 text-inverted" justify="center">
+            <v-row v-if="deleteMode == 'record'" class="pa-0 ma-8 mb-2 text-subtitle-1" justify="center">
                 {{ $t('section.dns.deleteRecord.message') }}
                 <span class="font-weight-medium" style="padding-left: 0.5ch;">
                     {{ recordObject.displayName + " (" + recordObject.typeName + ")?" }}
                 </span>
             </v-row>
-            <v-row v-else-if="deleteMode == 'zone'" class="pa-0 ma-8 mb-2 text-subtitle-1 text-inverted" justify="center">
+            <v-row v-else-if="deleteMode == 'zone'" class="pa-0 ma-8 mb-2 text-subtitle-1" justify="center">
                 {{ $t('section.dns.deleteRecord.message') }}
                 <span class="font-weight-medium" style="padding-left: 0.5ch;">
                     {{ currentZone + "?" }}
@@ -32,7 +32,7 @@
             </v-row>
             <v-divider class="mx-8 mb-3"/>
             <span v-if="deleteMode == 'record'">
-                <v-row class="pa-0 ma-0 text-subtitle-1 text-inverted" justify="center" v-for="value, attr_key in recordObject" :key="attr_key">
+                <v-row class="pa-0 ma-0 text-subtitle-1" justify="center" v-for="value, attr_key in recordObject" :key="attr_key">
                     <span class="ma-0 pa-0" style="padding-left: 0.5ch;" 
                     v-if="showAttribute(attr_key)">
                         {{ $t('dns.attributes.' + attr_key) + ": " + value }}
@@ -78,14 +78,14 @@
                         </v-icon>
                     </v-fab-transition>
                     </v-progress-circular>
-                    <span class="pr-1 text-normal">
+                    <span class="pr-1">
                         {{ $t("actions.yes" )}}
                     </span>
                 </v-btn>
                 <v-btn @click="closeDialog"
                 class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25" 
                 rounded>
-                    <span class="pl-1 text-normal">
+                    <span class="pl-1">
                         {{ $t("actions.no" )}}
                     </span>
                     <v-icon class="ml-1" color="red">
@@ -233,7 +233,7 @@ export default {
 
 <style>
 .outlined {
-    border: thin solid hsla(0, 0, 0, 0.12);
+    border: thin solid var(--border-d-base);
 }
 
 .card-title {
@@ -242,7 +242,7 @@ export default {
     position: sticky !important;
     top: 0 !important;
     z-index: 100;
-    border-bottom: thin solid hsla(0, 0, 0, 0.12);
+    border-bottom: thin solid var(--border-d-base);
 }
 
 [theme=dark] .card-title {
@@ -255,7 +255,7 @@ export default {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(0, 0, 0, 0.12);
+    border-top: thin solid var(--border-d-base);
 }
 
 [theme=dark] .card-actions {

@@ -153,7 +153,7 @@
 
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="newOU" v-if="this.createStage < 2"
-                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                        class="ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
                                 mdi-cached
@@ -165,7 +165,7 @@
                     <v-slide-x-reverse-transition>
                     <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && this.error"
                     @keydown.enter="prevStep"
-                    class="text-normal ma-0 pa-0 pa-2 pr-4 ma-1 bg-white bg-lig-25" 
+                    class="ma-0 pa-0 pa-2 pr-4 ma-1 bg-white bg-lig-25" 
                     rounded>
                         <v-icon class="ma-0" color="primary">
                             mdi-chevron-double-left
@@ -176,7 +176,7 @@
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="nextStep" v-if="this.createStage < 2"
                         @keydown.enter="nextStep"
-                        class="text-normal ma-0 pa-0 pa-2 ma-1 pl-4 bg-white bg-lig-25" 
+                        class="ma-0 pa-0 pa-2 ma-1 pl-4 bg-white bg-lig-25" 
                         rounded>
                             {{ $t("actions.next" )}}
                             <v-icon class="ma-0" color="primary">
@@ -187,7 +187,7 @@
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="closeDialog(true)" v-if="this.createStage > 1 && this.error === false"
                         @keydown.enter="closeDialog"
-                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                        class="ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
                                 mdi-checkbox-marked-circle-outline

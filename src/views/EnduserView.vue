@@ -5,23 +5,24 @@
     <div class="enduser">
     <v-row align="center"
       justify="space-between"
-      :class="'ma-0 pa-0 px-4 text-normal transition-speed-fix ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')">
+      style="background: var(--v-secondary-10-base)"
+      class="ma-0 pa-0 px-4 transition-speed-fix">
       <v-img max-width="30ch" max-height="5em" class="my-3" contain :aspect-ratio="32/9" :src="!isThemeDark($vuetify) ? logoLight : logoDark"/>
-      <h2 class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
+      <h2 style="color: var(--v-text-background-base)" class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
     </v-row>
     <v-row
         :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)" align="center"
-        :class="'ma-0 pa-2 ' + (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
-        style="height: fit-content;">
+        class="ma-0 pa-2 transition-speed-fix"
+        style="background: var(--v-secondary-10-base); height: fit-content;">
         <v-col cols="12" md="auto">
             <LanguageSelector :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)" class=""/>
         </v-col>
         <v-divider style="border-color: var(--v-primary-base)" class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
         <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
-            <span class="text-normal" v-if="last_name && last_name != '' && first_name && first_name != ''">
+            <span v-if="last_name && last_name != '' && first_name && first_name != ''">
             {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}
             </span>
-            <span class="text-normal" v-else>
+            <span v-else>
             {{ realm.toUpperCase() + '@' + username }}
             </span>
         </v-col>
@@ -282,7 +283,7 @@
                 </v-form>
 
                 <v-card-actions>
-                    <v-row justify="center" class="pa-0 ma-0">
+                    <v-row justify="center" class="pa-0 ma-0" align="center">
                         <!-- Reset Password Button -->
                         <v-btn color="primary" @click="openDialog('userResetPassword')"
                         :disabled="!user.can_change_pwd"
@@ -295,7 +296,9 @@
                         </v-btn>
                         <!-- Save User Changes Button -->
                         <v-btn @click="saveUser"
-                        class="ma-0 pa-0 pa-4 ma-1 bg-secondary text-normal" 
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
+                        class="ma-0 pa-0 pa-4 ma-1" 
                         rounded>
                             <v-icon class="mr-1">
                                 mdi-content-save
@@ -303,23 +306,9 @@
                             {{ $t("actions.save") }}
                         </v-btn>
                         <!-- Refresh User Button -->
-                        <v-btn 
-                        class="ma-0 pa-0 pa-4 ma-1" 
-                        color="primary"
-                        icon
-                        elevation="0"
-                        :loading="loading"
-                        @click="refreshUser"
-                        >
-                        <v-icon>
-                            mdi-refresh
-                        </v-icon>
-                        <template v-slot:loader>
-                            <span class="custom-loader">
-                            <v-icon>mdi-cached</v-icon>
-                            </span>
-                        </template>
-                        </v-btn>
+                        <refresh-button dense
+                            :loading="loading"
+                            @refresh="refreshUser"/>
                     </v-row>
                 </v-card-actions>
             </v-card>
@@ -374,6 +363,7 @@ import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
 import RefreshTokenDialog from "@/components/RefreshTokenDialog.vue"
+import RefreshButton from '@/components/RefreshButton.vue'
 import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
@@ -387,6 +377,7 @@ export default {
         UserAccountDropdown,
         NotificationBusContainer,
         RefreshTokenDialog,
+        RefreshButton,
         LogoutDialog,
         ThemeChanger
     },
@@ -586,3 +577,9 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+.outlined {
+    border: thin solid var(--border-d-base);
+}
+</style>

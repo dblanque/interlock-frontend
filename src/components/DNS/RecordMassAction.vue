@@ -18,7 +18,7 @@
         </v-card-title>
 
         <v-card-text class="pa-0 ma-0 pb-4">
-            <v-row class="pa-0 ma-4 mb-2 text-subtitle-1 text-inverted" justify="center">
+            <v-row class="pa-0 ma-4 mb-2 text-subtitle-1" justify="center">
                 <v-col cols="12" class="ma-0 pa-0"> {{ $t('section.dns.massAction.delete') }} </v-col>
                 <v-divider class="mx-12 my-1"/>
                 <v-col cols="12" class="font-weight-medium pa-0 ma-0" style="padding-left: 0.5ch;" 
@@ -55,14 +55,14 @@
                         </v-icon>
                     </v-fab-transition>
                     </v-progress-circular>
-                    <span class="pr-1 text-normal">
+                    <span class="pr-1">
                         {{ $t("actions.yes" )}}
                     </span>
                 </v-btn>
                 <v-btn @click="closeDialog"
                 class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25" 
                 rounded>
-                    <span class="pl-1 text-normal">
+                    <span class="pl-1">
                         {{ $t("actions.no" )}}
                     </span>
                     <v-icon class="ml-1" color="red">
