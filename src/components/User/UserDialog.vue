@@ -15,14 +15,34 @@
                     {{ $tc('classes.user', 1) + ': ' + usercopy.givenName + " " + usercopy.sn }}
                 </h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
-                <v-btn outlined small color="primary" @click="goToGroups"
+                <v-btn small color="primary" @click="goToTargetTab(tab-1)"
                 class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
-                    {{ $t("actions.changeUserGroups") }}
+                    <v-fade-transition>
+                        <span v-if="tab-1 == TABS.PERMS || tab-1 < 0">
+                            {{ $t("actions.changeUserPerms") }}
+                        </span>
+                        <span v-else-if="tab-1 == TABS.GROUPS">
+                            {{ $t("actions.changeUserGroups")}}
+                        </span>
+                        <span v-else>
+                            {{ $t("section.users.userDialog.userDetails" ) }}
+                        </span>
+                    </v-fade-transition>
                     <v-icon>mdi-chevron-left</v-icon>
                 </v-btn>
-                <v-btn outlined small color="primary" @click="goToPerms"
+                <v-btn small color="primary" @click="goToTargetTab(tab+1)"
                 class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
-                    {{ $t("actions.changeUserPerms") }}
+                    <v-fade-transition>
+                        <span v-if="tab+1 == TABS.PERMS">
+                            {{ $t("actions.changeUserPerms") }}
+                        </span>
+                        <span v-else-if="tab+1 == TABS.GROUPS || tab+1 > Object.keys(TABS).length-1">
+                            {{ $t("actions.changeUserGroups")}}
+                        </span>
+                        <span v-else>
+                            {{ $t("section.users.userDialog.userDetails" ) }}
+                        </span>
+                    </v-fade-transition>
                     <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
@@ -57,7 +77,131 @@
         </v-expand-transition>
         <!-- Body -->
         <v-tabs v-model="tab" height="0">
+            <!-- GROUPS SCREEN -->
             <v-tab-item :key="0">
+                <v-card-text class="my-3 py-4">
+                    <v-row justify="center">
+                        <v-col cols="12" md="10">
+                            <v-select
+                            dense
+                            id="primaryGroupID"
+                            :label="$t('ldap.attributes.primaryGroupID')"
+                            :readonly="editFlag != true"
+                            v-model="usercopy.primaryGroupID"
+                            :items="this.usercopy.memberOfObjects"
+                            :hint="$t('section.users.userDialog.hint.primaryGroupID')"
+                            persistent-hint
+                            :item-text="getNameForPID"
+                            item-value="objectRid"
+                            ></v-select>
+                        </v-col>
+                    </v-row>
+                    <v-row justify="center" align-content="center" class="mb-2">
+                    <v-col class="ma-0 pa-0" cols="12" md="10">
+                        <v-card outlined height="100%" class="ma-1 pa-0 pt-4">
+                            <v-row justify="center"
+                            class="pa-0 ma-0 text-h6 mx-4 mb-2">
+                                {{ $t('section.users.groups') }}
+                            </v-row>
+                            <v-divider class="mx-12"/>
+                            <v-list dense>
+                                <v-row class="ma-0 pa-0 mx-6 my-3" justify="end">
+                                        <v-btn color="primary" outlined
+                                            :disabled="editFlag != true"
+                                            @click="openDialog('userAddToGroup')">
+                                            <v-icon small>
+                                                mdi-plus
+                                            </v-icon>
+                                            {{ $t("section.users.userDialog.addToGroup") }}
+                                        </v-btn>
+                                </v-row>
+                                <v-list-item-group active-class="groupSelected">
+                                    <v-list-item v-for="group, key in usercopy.memberOfObjects" :key="key">
+                                        <template v-slot:default="{ }">
+                                            <v-list-item-action/>
+
+                                            <v-list-item-content>
+                                                <v-list-item-title>
+                                                    {{ group.name + " (" + group.objectRid + ")" }}
+                                                </v-list-item-title>
+                                            </v-list-item-content>
+
+                                            <v-list-item-action class="ma-0">
+                                                <v-tooltip bottom>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-btn small icon 
+                                                    @click="goToGroup(group.distinguishedName)"
+                                                    @click.stop
+                                                    color="primary"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >
+                                                    <v-icon small>
+                                                        mdi-arrow-right-bold
+                                                    </v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span> {{ $t("actions.goTo") + " " + $tc("classes.group", 1) }} </span>
+                                                </v-tooltip>
+                                            </v-list-item-action>
+                                            <v-list-item-action class="ma-0">
+                                                <v-tooltip bottom>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-btn small icon 
+                                                    @click="copyText(group.distinguishedName)"
+                                                    @click.stop
+                                                    color="primary"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >
+                                                    <v-icon small>
+                                                        mdi-content-copy
+                                                    </v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span> {{ $t("section.groups.groupDialog.copyDistinguishedName") }} </span>
+                                                </v-tooltip>
+                                            </v-list-item-action>
+                                            <v-list-item-action class="ma-0">
+                                                <v-tooltip bottom>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-btn small icon v-show="group.objectRid != usercopy.primaryGroupID"
+                                                    :disabled="editFlag != true"
+                                                    @click="removeFromGroup(group.distinguishedName)"
+                                                    @click.stop
+                                                    color="red"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >
+                                                    <v-icon small>
+                                                        mdi-close
+                                                    </v-icon>
+                                                    </v-btn>
+                                                    <v-btn small icon v-show="group.objectRid == usercopy.primaryGroupID"
+                                                    @click.stop
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                    >
+                                                    <v-icon small>
+                                                        mdi-close
+                                                    </v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span v-if="group.objectRid != usercopy.primaryGroupID"> {{ $t("section.users.userDialog.removeFromGroup") }} </span>
+                                                <span v-else> {{ $t("section.users.userDialog.primaryGroupRemoveDisabled") }} </span>
+                                                </v-tooltip>
+                                            </v-list-item-action>
+                                        </template>
+                                    </v-list-item>
+                                </v-list-item-group>
+                            </v-list>
+                        </v-card>
+                    </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-tab-item>
+
+            <v-tab-item :key="1">
                 <v-card-text class="ma-0 py-4">
                     <v-form ref="userForm" @submit.prevent>
                     <v-row align-content="center" class="mb-2">
@@ -269,7 +413,7 @@
                                     </v-row>
                                     <v-row :justify="$vuetify.breakpoint.lgAndUp ? 'start':'center'" align="center">
                                         <v-col cols="12" md="3">
-                                            <v-btn outlined dense color="primary" @click="goToGroups"
+                                            <v-btn outlined dense color="primary" @click="goToTargetTab(TABS.GROUPS)"
                                             class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
                                                 {{ $t("actions.changeUserGroups") }}
                                                 <v-icon>mdi-chevron-left</v-icon>
@@ -300,7 +444,7 @@
                                             ></v-text-field>
                                         </v-col>
                                         <v-col cols="12" md="3">
-                                            <v-btn outlined color="primary" @click="goToPerms"
+                                            <v-btn outlined color="primary" @click="goToTargetTab(TABS.PERMS)"
                                             class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
                                                 {{ $t("actions.changeUserPerms") }}
                                                 <v-icon>mdi-chevron-right</v-icon>
@@ -404,7 +548,7 @@
             </v-tab-item>
 
             <!-- PERMISSIONS SCREEN -->
-            <v-tab-item :key="1">
+            <v-tab-item :key="2">
                 <v-card-text class="my-3 py-4">
                     <v-row align-content="center" class="mb-2">
                     <!-- Disabled Permissions Panel -->
@@ -474,130 +618,6 @@
                     </v-row>
                 </v-card-text>
             </v-tab-item>
-
-            <!-- GROUPS SCREEN -->
-            <v-tab-item :key="2">
-                <v-card-text class="my-3 py-4">
-                    <v-row justify="center">
-                        <v-col cols="12" md="10">
-                            <v-select
-                            dense
-                            id="primaryGroupID"
-                            :label="$t('ldap.attributes.primaryGroupID')"
-                            :readonly="editFlag != true"
-                            v-model="usercopy.primaryGroupID"
-                            :items="this.usercopy.memberOfObjects"
-                            :hint="$t('section.users.userDialog.hint.primaryGroupID')"
-                            persistent-hint
-                            :item-text="getNameForPID"
-                            item-value="objectRid"
-                            ></v-select>
-                        </v-col>
-                    </v-row>
-                    <v-row justify="center" align-content="center" class="mb-2">
-                    <v-col class="ma-0 pa-0" cols="12" md="10">
-                        <v-card outlined height="100%" class="ma-1 pa-0 pt-4">
-                            <v-row justify="center"
-                            class="pa-0 ma-0 text-h6 mx-4 mb-2">
-                                {{ $t('section.users.groups') }}
-                            </v-row>
-                            <v-divider class="mx-12"/>
-                            <v-list dense>
-                                <v-row class="ma-0 pa-0 mx-6 my-3" justify="end">
-                                        <v-btn color="primary" outlined
-                                            :disabled="editFlag != true"
-                                            @click="openDialog('userAddToGroup')">
-                                            <v-icon small>
-                                                mdi-plus
-                                            </v-icon>
-                                            {{ $t("section.users.userDialog.addToGroup") }}
-                                        </v-btn>
-                                </v-row>
-                                <v-list-item-group active-class="groupSelected">
-                                    <v-list-item v-for="group, key in usercopy.memberOfObjects" :key="key">
-                                        <template v-slot:default="{ }">
-                                            <v-list-item-action/>
-
-                                            <v-list-item-content>
-                                                <v-list-item-title>
-                                                    {{ group.name + " (" + group.objectRid + ")" }}
-                                                </v-list-item-title>
-                                            </v-list-item-content>
-
-                                            <v-list-item-action class="ma-0">
-                                                <v-tooltip bottom>
-                                                <template v-slot:activator="{ on, attrs }">
-                                                    <v-btn small icon 
-                                                    @click="goToGroup(group.distinguishedName)"
-                                                    @click.stop
-                                                    color="primary"
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                    >
-                                                    <v-icon small>
-                                                        mdi-arrow-right-bold
-                                                    </v-icon>
-                                                    </v-btn>
-                                                </template>
-                                                <span> {{ $t("actions.goTo") + " " + $tc("classes.group", 1) }} </span>
-                                                </v-tooltip>
-                                            </v-list-item-action>
-                                            <v-list-item-action class="ma-0">
-                                                <v-tooltip bottom>
-                                                <template v-slot:activator="{ on, attrs }">
-                                                    <v-btn small icon 
-                                                    @click="copyText(group.distinguishedName)"
-                                                    @click.stop
-                                                    color="primary"
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                    >
-                                                    <v-icon small>
-                                                        mdi-content-copy
-                                                    </v-icon>
-                                                    </v-btn>
-                                                </template>
-                                                <span> {{ $t("section.groups.groupDialog.copyDistinguishedName") }} </span>
-                                                </v-tooltip>
-                                            </v-list-item-action>
-                                            <v-list-item-action class="ma-0">
-                                                <v-tooltip bottom>
-                                                <template v-slot:activator="{ on, attrs }">
-                                                    <v-btn small icon v-show="group.objectRid != usercopy.primaryGroupID"
-                                                    :disabled="editFlag != true"
-                                                    @click="removeFromGroup(group.distinguishedName)"
-                                                    @click.stop
-                                                    color="red"
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                    >
-                                                    <v-icon small>
-                                                        mdi-close
-                                                    </v-icon>
-                                                    </v-btn>
-                                                    <v-btn small icon v-show="group.objectRid == usercopy.primaryGroupID"
-                                                    @click.stop
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                    >
-                                                    <v-icon small>
-                                                        mdi-close
-                                                    </v-icon>
-                                                    </v-btn>
-                                                </template>
-                                                <span v-if="group.objectRid != usercopy.primaryGroupID"> {{ $t("section.users.userDialog.removeFromGroup") }} </span>
-                                                <span v-else> {{ $t("section.users.userDialog.primaryGroupRemoveDisabled") }} </span>
-                                                </v-tooltip>
-                                            </v-list-item-action>
-                                        </template>
-                                    </v-list-item>
-                                </v-list-item-group>
-                            </v-list>
-                        </v-card>
-                    </v-col>
-                    </v-row>
-                </v-card-text>
-            </v-tab-item>
         </v-tabs>
         <!-- End of Details Page -->
         </div>
@@ -654,7 +674,7 @@
                                     mdi-checkbox-marked-circle-outline
                                 </v-icon>
                             </v-list-item-icon>
-                            <v-list-item-content color="error" class="v-list-btn v-btn">
+                            <v-list-item-content class="v-list-btn v-btn">
                                 {{ $t("actions.enable").toUpperCase() }}
                             </v-list-item-content>
                         </v-list-item>
@@ -665,12 +685,12 @@
                             :dark="isThemeDark($vuetify)" 
                             :light="!isThemeDark($vuetify)"
                             >
-                            <v-list-item-icon class="mx-0 pa-0 mr-2 clr-red">
-                                <v-icon color="primary"> 
+                            <v-list-item-icon class="mx-0 pa-0 mr-2">
+                                <v-icon color="red">
                                     mdi-close-circle-outline
                                 </v-icon>
                             </v-list-item-icon>
-                            <v-list-item-content class="v-list-btn v-btn clr-red">
+                            <v-list-item-content class="v-list-btn v-btn">
                                 {{ $t("actions.disable").toUpperCase() }}
                             </v-list-item-content>
                         </v-list-item>
@@ -679,26 +699,6 @@
                 <v-row 
                     :justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'end'"
                     class="ma-0 pa-0">
-                <!-- Go Back button (Permissions View) -->
-                <v-slide-x-reverse-transition>
-                        <v-btn v-if="changingPerms || changingGroups" @click="goBackToDetails"
-                        class="text-normal ma-0 pa-0 pa-3 ma-1 px-1 bg-white bg-lig-25" 
-                        rounded>
-                            <v-fab-transition>
-                                <v-icon class="ml-0" v-if="changingPerms">
-                                    mdi-chevron-left
-                                </v-icon>
-                            </v-fab-transition>
-                            <span :class="changingPerms ? 'mr-2' : 'ml-2'">
-                                {{ $t("section.users.userDialog.userDetails" )}}
-                            </span>
-                            <v-fab-transition>
-                                <v-icon class="mr-0" v-if="changingGroups">
-                                    mdi-chevron-right
-                                </v-icon>
-                            </v-fab-transition>
-                        </v-btn>
-                </v-slide-x-reverse-transition>
                 <!-- Edit User Button -->
                 <v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag != true" @click="editUser">
                     <v-icon class="mr-1">
@@ -714,8 +714,9 @@
                     {{ $t("actions.view") }}
                 </v-btn>
                 <!-- Save User Changes Button -->
-                <v-btn @click="saveUser"
-                :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
+                <v-btn @click="saveUser" 
+                :dark="!isThemeDark($vuetify) && editFlag" :light="isThemeDark($vuetify) && editFlag"
+                class="ma-0 pa-0 pa-4 ma-1"
                 rounded 
                 :disabled="!editFlag">
                     <v-icon class="mr-1">
@@ -724,8 +725,9 @@
                     {{ $t("actions.save") }}
                 </v-btn>
                 <!-- Save User Changes Button -->
-                <v-btn @click="saveUser(true)"
-                :class="(editFlag ? 'text-normal ' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
+                <v-btn @click="saveUser(true)" 
+                :dark="!isThemeDark($vuetify) && editFlag" :light="isThemeDark($vuetify) && editFlag"
+                class='ma-0 pa-0 pa-4 ma-1'
                 rounded 
                 :disabled="!editFlag">
                     <v-icon class="mr-1">
@@ -772,6 +774,11 @@ export default {
     },
     data () {
       return {
+        TABS: {
+            GROUPS: 0,
+            DEFAULT: 1,
+            PERMS: 2,
+        },
         showAlert: false,
         panel: [],
         loading: false,
@@ -1157,7 +1164,7 @@ export default {
             }
         },
         goBackToDetails(){
-            this.tab = 0
+            this.tab = this.TABS.DEFAULT
             this.changingPerms = false
             this.changingGroups = false
         },
@@ -1173,15 +1180,27 @@ export default {
                 });
             }
         },
-        goToPerms(){
-            this.tab = 1
-            this.changingPerms = true
-            this.changingGroups = false
+        delay(t, val) {
+            return new Promise(resolve => setTimeout(resolve, t, val));
         },
-        goToGroups(){
-            this.tab = 2
-            this.changingPerms = false
-            this.changingGroups = true
+        goToTargetTab(targetTab){
+            if (targetTab > Object.keys(this.TABS).length-1) targetTab = 0
+            if (targetTab < 0) targetTab = 2
+            this.tab = targetTab
+            switch (targetTab) {
+                case this.TABS.GROUPS:
+                    this.changingPerms = false
+                    this.changingGroups = true
+                    break;
+                case this.TABS.PERMS:
+                    this.changingPerms = true
+                    this.changingGroups = false
+                    break;
+                default:
+                    this.changingPerms = false
+                    this.changingGroups = false
+                    break;
+            }
         },
         async expirePwd(){
             this.extraListOpen = false
@@ -1312,7 +1331,7 @@ export default {
         // next tick to avoid mutation errors
         syncUser(){
             this.showAlert = true
-            this.tab = 0
+            this.tab = this.TABS.DEFAULT
             this.changingPerms = false
             this.changingGroups = false
             this.excludeGroups = []
@@ -1367,7 +1386,7 @@ export default {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;
-    border-top: thin solid hsla(0, 0, 0, 0.12)
+    border-top: thin solid hsla(0, 0, 0, 0.12);
 }
 
 [theme=dark] .card-actions {

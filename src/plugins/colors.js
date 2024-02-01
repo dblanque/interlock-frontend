@@ -19,19 +19,19 @@ function hslToHex(h, s, l) {
 }
 
 const default_theme_colors = {
-	dark:{
+	light:{
 		"white-dynamic":"#FFFFFF",
 		"black-dynamic":"#000000",
-		"background":hslToHex(210, 7.4, 21.2),
-		"text-background":hslToHex(0,0,0),
-		"text-inverted":hslToHex(0,0,100)
-	},
-	light:{
-		"white-dynamic":"#000000",
-		"black-dynamic":"#FFFFFF",
 		"background":hslToHex(0,0,94.5),
 		"text-background":hslToHex(0,0,100),
 		"text-inverted":hslToHex(0,0,0)
+	},
+	dark:{
+		"white-dynamic":"#000000",
+		"black-dynamic":"#FFFFFF",
+		"background":hslToHex(210, 7.4, 21.2),
+		"text-background":hslToHex(0,0,0),
+		"text-inverted":hslToHex(0,0,100)
 	},
 }
 
@@ -154,9 +154,10 @@ function parseVueColors() {
 			)
 		}
 	}
-	console.log("Vue Default Theme Colors Generated")
-	console.log(colors)
-	console.log(Object.keys(colors.dark).length + Object.keys(colors.light).length)
+	// ! Log Colors
+	// console.log("Vue Default Theme Colors Generated")
+	// console.log(colors)
+	// console.log(Object.keys(colors.dark).length + Object.keys(colors.light).length)
 	return colors
 }
 

@@ -38,8 +38,11 @@
     <!-- GROUP TYPE -->
     <template v-slot:[`item.groupType`]="{ item }">
       <div class="pt-2">
-        <v-chip 
-        :class="getColorForGroupType(type)['color'] + ' text-' + getColorForGroupType(type)['text'] + ' mx-1 mb-2'" 
+        <v-chip
+        :dark="getColorForGroupType(type)['dark']"
+        :light="!getColorForGroupType(type)['dark']"
+        :color="getColorForGroupType(type)['color']"
+        class="mx-1 mb-2"
         v-for="type in item.groupType" 
         :key="type">
           {{ $t('section.groups.types.'+type) }}
@@ -380,32 +383,32 @@ export default {
         case 'GROUP_DISTRIBUTION':
           return {
             "color":'orange',
-            "text":'black'
+            "dark": false // Uses black text
             }
         case 'GROUP_SYSTEM':
           return {
-            "color":'secondary',
-            "text":'white'
+            "color":'secondary-10',
+            "dark": this.isThemeDark(this.$vuetify) ? false : true
             }
         case 'GROUP_GLOBAL':
           return {
-            "color":'secondary',
-            "text":'white'
+            "color":'secondary-10',
+            "dark": this.isThemeDark(this.$vuetify) ? false : true // Uses white text
             }
         case 'GROUP_DOMAIN_LOCAL':
           return {
             "color":'green',
-            "text":'white'
+            "dark": true
             }
         case 'GROUP_UNIVERSAL':
           return {
             "color":'blue-grey',
-            "text":'white'
+            "dark": true
             }
         default:
           return {
             "color":'primary',
-            "text":'white'
+            "dark": true
             }
       }
     },
