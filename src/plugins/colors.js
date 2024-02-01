@@ -20,15 +20,15 @@ function hslToHex(h, s, l) {
 
 const default_theme_colors = {
 	light:{
-		"white-dynamic":"#FFFFFF",
-		"black-dynamic":"#000000",
+		"white-d":"#FFFFFF",
+		"black-d":"#000000",
 		"background":hslToHex(0,0,94.5),
 		"text-background":hslToHex(0,0,100),
 		"text-inverted":hslToHex(0,0,0)
 	},
 	dark:{
-		"white-dynamic":"#000000",
-		"black-dynamic":"#FFFFFF",
+		"white-d":"#000000",
+		"black-d":"#FFFFFF",
 		"background":hslToHex(210, 7.4, 21.2),
 		"text-background":hslToHex(0,0,0),
 		"text-inverted":hslToHex(0,0,100)

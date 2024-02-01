@@ -41,7 +41,7 @@
             </v-row>
 
             <v-row cols="12" class="ma-0 pa-0" justify="center">
-                {{ first_name + " " + last_name }}
+                {{ firstName + " " + lastName }}
             </v-row>
 
             <v-row class="ma-0 pa-0" justify="center">
@@ -58,6 +58,27 @@
 
             <v-row cols="12" class="ma-0 pa-0" justify="center">
                 {{ domain }}
+            </v-row>
+
+            <v-row class="ma-0 pa-0" justify="center">
+                <v-col cols="6" sm="10" md="8">
+                    <v-divider/>
+                </v-col>
+            </v-row>
+
+            <v-row cols="12" class="ma-0 pa-0" justify="center">
+                <h4>
+                    {{ $t("userAccountDropdown.auto_refresh_token") }}
+                </h4>
+            </v-row>
+
+            <v-row cols="12" class="ma-0 pa-0" justify="center">
+                <v-checkbox class="ma-0 pa-0"
+                    v-model="auto_refresh_token"
+                    hide-details
+                    :disabled="art_input_disabled"
+                    @change="toggleAutoRefresh"
+                    :label="`${$t('userAccountDropdown.auto_refresh_token')} ${auto_refresh_token ? $t('words.enabled') : $t('words.disabled')}`"/>
             </v-row>
 
             <v-row class="ma-0 pa-0" justify="center">
@@ -178,8 +199,10 @@
             <v-row class="ma-1 pa-0" align="center" align-content="center" 
             :justify="this.$vuetify.breakpoint.mdAndDown ? 'center' : 'end'">
                 <!-- Save User Changes Button -->
-                <v-btn @click="closeDialog"
-                :class="'ma-0 pa-0 pa-4 ma-1 text-normal bg-white bg-lig-25'" 
+                <v-btn @click="closeDialog" 
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
+                class="ma-0 pa-0 pa-4 ma-1" 
                 rounded>
                     <v-icon class="mr-1">
                         mdi-close
@@ -206,6 +229,8 @@ export default {
     mixins: [ utilsMixin, validationMixin ],
     data(){
         return {
+            auto_refresh_token: false,
+            art_input_disabled: false,
             loading: false,
             error: false,
             message: "",
@@ -235,10 +260,14 @@ export default {
     },
     props: {
         username: String,
-        first_name: String,
-        last_name: String,
+        firstName: String,
+        lastName: String,
         domain: String,
         realm: String,
+        adminMode: {
+            type: Boolean,
+            default: false
+        }
     },
     mounted() {
         this.loadSettings()
@@ -251,13 +280,20 @@ export default {
             if (this.totp_uri)
                 return this.totp_uri.length > 0
             return false
-        }
+        },
     },
     methods: {
+        toggleAutoRefresh(){
+            this.art_input_disabled = true
+            let v = localStorage.getItem('auto_refresh_token') == 'true'
+            localStorage.setItem('auto_refresh_token', !v)
+            this.art_input_disabled = false
+        },
         closeDialog(){
             this.$emit("close")
         },
         async loadSettings(){
+            this.auto_refresh_token = localStorage.getItem('auto_refresh_token') == 'true'
             this.loading = true
             this.recovery_codes = []
             this.setTotp()

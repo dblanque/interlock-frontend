@@ -36,8 +36,7 @@
       <v-col
         class="ma-0 pa-0 my-3"
         v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
-        <span
-          class="text-normal"
+        <span style="color: var(--v-white-d-base)"
           v-if="last_name && last_name != '' && first_name && first_name != ''">
           {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + "@" + username }}
         </span>
@@ -48,10 +47,10 @@
       <v-col class="ma-0 pa-0" cols="12" md="auto">
         <div class="mt-2 mr-4">
           <UserAccountDropdown 
-            :extraClasses="'mr-3 px-2'"
+            extra-classes="mr-3 px-2"
             icon="mdi-account-cog"
             color="primary"
-            showPreferencesMenu
+            show-preferences-menu
             @logout="logoutAction"
             @openSettings="openSettings"
             :username="activeUserName"/>
@@ -187,8 +186,9 @@
         <UserSettings
         ref="UserSettings"
         :username="username"
-        :first_name="first_name"
-        :last_name="last_name"
+        :first-name="first_name"
+        :last-name="last_name"
+        admin-mode
         :domain="domain"
         :realm="realm"
         @close='showSettingsDialog = !showSettingsDialog'/>
@@ -289,6 +289,7 @@ import AboutDialog from "@/components/AboutDialog.vue"
 import User from "@/include/User"
 import Test from "@/include/Test"
 import Domain from "@/include/Domain"
+import { notificationBus } from '@/main.js';
 import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
@@ -595,16 +596,22 @@ export default {
     // Refresh Token Timers
     // What happens when the timer stops
     ////////////////////////////////////////////////////////////////////////////
-    handleInactive() {
+    async handleInactive() {
       const refreshClock = Date.parse(localStorage.getItem("refreshClock"));
       const accessClockLimit = refreshClock + (this.access_token_lifetime * 1000)
       const refreshClockLimit = refreshClock + (this.refresh_token_lifetime * 1000)
       const clockDifference = this.refresh_token_lifetime - this.access_token_lifetime
       if (Date.now() >= accessClockLimit && Date.now() < refreshClockLimit) {
-        this.showRefreshTokenDialog = true
-        if (this.$refs.RefreshTokenDialog != undefined)
-          this.$refs.RefreshTokenDialog.startCountdown()
-        this.timeoutId = setTimeout(this.handleInactive, clockDifference * 1000)
+        if (localStorage.getItem('auto_refresh_token') == 'true') {
+            await new User({}).getCurrentUserData()
+            .then(() => { this.resetTimer() })
+            .catch((error) => { console.error(error) })
+        } else {
+          this.showRefreshTokenDialog = true
+          if (this.$refs.RefreshTokenDialog != undefined)
+            this.$refs.RefreshTokenDialog.startCountdown()
+          this.timeoutId = setTimeout(this.handleInactive, clockDifference * 1000)
+        }
       } else if (Date.now() >= refreshClockLimit) {
         this.showLogoutDialog = true
         this.showRefreshTokenDialog = false
@@ -685,12 +692,12 @@ export default {
 }
 
 #donateBtn .v-icon::before {
-  transition: color 50ms ease-in-out,
+  transition: color 75ms ease-in-out,
   content 200ms ease-in-out;
 }
 
 #donateBtn:hover .v-icon::before {
   content: "\F02D1";
-  color: var(--v-red);
+  color: var(--v-error-60-s-base);
 }
 </style>

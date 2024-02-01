@@ -116,7 +116,7 @@ export default {
 
 .card-title {
     border-radius: 4px;
-    background: var(--v-white-dynamic-base);
+    background: var(--v-white-d-base);
     position: sticky !important;
     top: 0 !important;
     z-index: 100;
@@ -129,7 +129,7 @@ export default {
 
 .card-actions {
     border-radius: 4px;
-    background: var(--v-white-dynamic-base);
+    background: var(--v-white-d-base);
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;

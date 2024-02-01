@@ -840,6 +840,7 @@
     "logout":"Cerrar Sesión",
     "changePreferences":"Cambiar Preferencias",
     "two_factor_title":"Autenticación de Doble Factor",
+    "auto_refresh_token":"Auto-Refrescar Token",
     "enable_two_factor":"Habilitar 2FA TOTP",
     "showQR":"Ver Código QR de TOTP",
     "hideQR":"Esconder Código QR",

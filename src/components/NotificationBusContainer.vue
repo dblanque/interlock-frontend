@@ -6,8 +6,9 @@
     <!-- Snackbar -->
     <v-snackbar transition="slide-y-reverse-transition"
       :timeout="-1"
+      :top="$vuetify.breakpoint.mdAndDown"
       v-model="showSnackbar"
-      :class="'transition-snack-color mb-12 ' + snackbarTextColor"
+      :class="`transition-snack-color m${$vuetify.breakpoint.mdAndDown ? 't-8' : 'b-12' } ${snackbarTextColor}`"
       :color="snackbarColor"
       >
         <v-icon v-if="snackbarIcon.length > 0" class="mr-1" :color="snackbarTextColor">

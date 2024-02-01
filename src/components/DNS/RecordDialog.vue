@@ -635,7 +635,7 @@ export default {
 <style>
 .card-actions {
     border-radius: 4px;
-    background: var(--v-white-dynamic-base);
+    background: var(--v-white-d-base);
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;

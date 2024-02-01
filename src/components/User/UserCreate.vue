@@ -308,7 +308,9 @@
 
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="newUser" v-if="this.createStage < 2"
-                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
+                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
                                 mdi-cached
@@ -320,7 +322,9 @@
                     <v-slide-x-reverse-transition>
                     <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && (createStage < 4 && this.error == true)"
                     @keydown.enter="prevStep"
-                    class="text-normal ma-0 pa-0 pa-2 pr-4 ma-1 bg-white bg-lig-25" 
+                    :dark="!isThemeDark($vuetify)"
+                    :light="isThemeDark($vuetify)"
+                    class="text-normal ma-0 pa-0 pa-2 pr-4 ma-1" 
                     rounded>
                         <v-icon class="ma-0" color="primary">
                             mdi-chevron-double-left
@@ -331,7 +335,9 @@
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="nextStep" v-if="this.createStage < 3"
                         @keydown.enter="nextStep"
-                        class="text-normal ma-0 pa-0 pa-2 ma-1 pl-4 bg-white bg-lig-25" 
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
+                        class="text-normal ma-0 pa-0 pa-2 ma-1 pl-4" 
                         rounded>
                             {{ $t("actions.next" )}}
                             <v-icon class="ma-0" color="primary">
@@ -342,7 +348,9 @@
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="closeDialog(true)" v-if="this.createStage > 2 && this.error === false"
                         @keydown.enter="closeDialog(true)"
-                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
+                        class="text-normal ma-0 pa-0 pa-2 ma-1 pr-4" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
                                 mdi-checkbox-marked-circle-outline
@@ -710,7 +718,7 @@ export default {
 <style>
 .card-actions {
     border-radius: 4px;
-    background: var(--v-white-dynamic-base);
+    background: var(--v-white-d-base);
     position: sticky !important;
     bottom: 0 !important;
     z-index: 100;

@@ -24,7 +24,8 @@
     </v-row>
     <v-card-actions class="">
         <v-row class="ma-1 pa-0" justify="center">
-        <v-btn dark color="valid" class="ma-2" rounded @click="emitLogoutAction">{{ $t("actions.backToLogin") }}</v-btn>
+        <v-btn dark
+        color="valid-35-s" class="ma-2" rounded @click="emitLogoutAction">{{ $t("actions.backToLogin") }}</v-btn>
         <v-btn color="primary" class="ma-2 text-normal" :disabled="!allowRefresh" rounded @click="refreshAccessToken">{{ $t('actions.refreshToken') }}</v-btn>
         </v-row>
     </v-card-actions>
@@ -32,11 +33,13 @@
 </template>
 
 <script>
-import User from "@/include/User"
-import { notificationBus } from '@/main.js'
+import User from "@/include/User";
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import { notificationBus } from '@/main.js';
 
 export default {
     name: 'RefreshTokenDialog',
+    mixins: [ utilsMixin ],
     data() {
         return {
             timeRemaining: 0,

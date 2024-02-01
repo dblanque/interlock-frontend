@@ -833,6 +833,7 @@
     "logout":"Logout",
     "changePreferences":"Change Preferences",
     "two_factor_title":"Two-Factor Authentication",
+    "auto_refresh_token":"Auto-Refresh Token",
     "enable_two_factor":"Enable TOTP 2FA",
     "showQR":"Show TOTP QR Code",
     "hideQR":"Hide QR Code",
