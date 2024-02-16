@@ -113,7 +113,9 @@
                     <v-slide-y-reverse-transition>
                         <v-btn elevation="0" @click="closeDialog"
                         @keydown.enter="closeDialog"
-                        class="ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-slig-25" 
+                        class="ma-0 pa-0 pa-2 ma-1 pr-4" 
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
                         rounded>
                             <v-icon class="ma-0 mr-1" color="red">
                                 mdi-close-circle
@@ -132,9 +134,11 @@
 <script>
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList.vue'
 import { getDomainDetails } from '@/include/utils.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 
 export default {
     name: 'DirtreeMove',
+    mixins: [ utilsMixin ],
     components: {
         DirtreeOUList
     },

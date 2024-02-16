@@ -48,7 +48,7 @@
           </v-btn>
           <!-- Mass Enable Button -->
           <v-btn class="pa-2 mx-2" small
-          :dark="!actionButtonsDisabled && !isThemeDark($vuetify)" 
+          :dark="!actionButtonsDisabled" 
           :light="!actionButtonsDisabled && isThemeDark($vuetify)"
           color="green" @click="massAccountStatusChange(false)"
           :disabled="loading || tableData.selected.length < 1">
@@ -79,7 +79,7 @@
           </v-btn>
           <!-- Mass Delete Button -->
           <v-btn class="pa-2 mx-2" small
-          :dark="!actionButtonsDisabled && !isThemeDark($vuetify)" 
+          :dark="!actionButtonsDisabled" 
           :light="!actionButtonsDisabled && isThemeDark($vuetify)"
           color="red" @click="openDeleteDialog()"
           :disabled="actionButtonsDisabled">
@@ -281,6 +281,7 @@
       @goToGroup="goToGroup"
       @editToggle="setViewToEdit"
       @refreshUser="refreshUser"
+      @refreshUserList="listUserItems(false)"
       />
   </v-dialog>
 

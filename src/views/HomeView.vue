@@ -118,14 +118,14 @@
       :class="'sticky-top ' +
         (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
     >
-      <v-row justify="space-between" class="mx-12" align="center">
+      <v-row justify="space-between" :class="$vuetify.breakpoint.xs ? 'mx-0':'mx-12'" align="center">
         <v-btn
           text
           color="primary"
           @click="goToPrevTab"
           :disabled="active_tab == 0">
           <v-icon> mdi-chevron-double-left </v-icon>
-          <span>
+          <span v-if="$vuetify.breakpoint.smAndUp">
             {{ $t("actions.back_short") }}
           </span>
         </v-btn>
@@ -145,7 +145,7 @@
           color="primary"
           @click="goToNextTab"
           :disabled="active_tab == getVisibleTabs.length - 1">
-          <span>
+          <span v-if="$vuetify.breakpoint.smAndUp">
             {{ $t("actions.next") }}
           </span>
           <v-icon> mdi-chevron-double-right </v-icon>
@@ -289,7 +289,6 @@ import AboutDialog from "@/components/AboutDialog.vue"
 import User from "@/include/User"
 import Test from "@/include/Test"
 import Domain from "@/include/Domain"
-import { notificationBus } from '@/main.js';
 import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
@@ -392,8 +391,8 @@ export default {
         {
           index: 7,
           title: "debug",
-          enabled: true,
-          hidden: false,
+          enabled: false,
+          hidden: true,
           icon: "mdi-xml",
           route: "debug",
         },

@@ -98,7 +98,9 @@
                             </v-icon>
                             {{ $tc('words.all.m', 1) }}
                         </v-btn>
-                        <v-btn @click="filterNone" class="mx-1">
+                        <v-btn @click="filterNone" class="mx-1"
+                            :dark="isThemeDark($vuetify)"
+                            :light="!isThemeDark($vuetify)">
                             <v-icon>
                                 mdi-filter-outline
                             </v-icon>

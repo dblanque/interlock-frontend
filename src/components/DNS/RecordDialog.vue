@@ -277,7 +277,9 @@
 
                 <v-slide-x-reverse-transition>
                     <v-btn elevation="0" @click="syncRecord"
-                    class="ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                    :dark="!isThemeDark($vuetify)"
+                    :light="isThemeDark($vuetify)"
+                    class="ma-0 pa-0 pa-2 ma-1 pr-4" 
                     rounded>
                         <v-icon class="ma-0 mr-1" color="primary">
                             mdi-cached
@@ -289,7 +291,9 @@
                 <v-slide-x-reverse-transition>
                     <v-btn elevation="0" @click="updateFlag == true ? updateRecord() : createRecord()"
                     @keydown.enter="updateFlag == true ? updateRecord() : createRecord()"
-                    class="ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                    :dark="!isThemeDark($vuetify)"
+                    :light="isThemeDark($vuetify)"
+                    class="ma-0 pa-0 pa-2 ma-1 pr-4" 
                     rounded>
                         <v-icon class="ma-0 mr-1" color="primary">
                             mdi-checkbox-marked-circle-outline

@@ -670,8 +670,8 @@
                             :dark="isThemeDark($vuetify)" 
                             :light="!isThemeDark($vuetify)"
                             >
-                            <v-list-item-icon color="valid" class="mx-0 pa-0 mr-2">
-                                <v-icon> 
+                            <v-list-item-icon class="mx-0 pa-0 mr-2">
+                                <v-icon color="valid"> 
                                     mdi-checkbox-marked-circle-outline
                                 </v-icon>
                             </v-list-item-icon>
@@ -1207,10 +1207,14 @@ export default {
             this.usercopy.pwdLastSet = 0
             await this.saveUser()
         },
+        refreshUserList(){
+            this.$emit('refreshUserList');
+        },
         async disableUser(){
             this.extraListOpen = false
             await this.usercopy.disable(this.usercopy.username).then(() => {
                 this.refreshUser()
+                this.refreshUserList()
                 notificationBus.$emit('createNotification', 
                     {
                         message: (this.$tc("classes.user", 1) + " " + this.$t("words.disabled")).toUpperCase(), 
@@ -1232,6 +1236,7 @@ export default {
             this.extraListOpen = false
             await this.usercopy.enable(this.usercopy.username).then(() => {
                 this.refreshUser()
+                this.refreshUserList()
                 notificationBus.$emit('createNotification', 
                     {
                         message: (this.$tc("classes.user", 1) + " " + this.$t("words.enabled")).toUpperCase(), 

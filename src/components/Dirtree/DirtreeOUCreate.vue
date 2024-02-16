@@ -153,7 +153,9 @@
 
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="newOU" v-if="this.createStage < 2"
-                        class="ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                        class="ma-0 pa-0 pa-2 ma-1 pr-4"
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
                                 mdi-cached
@@ -165,7 +167,9 @@
                     <v-slide-x-reverse-transition>
                     <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && this.error"
                     @keydown.enter="prevStep"
-                    class="ma-0 pa-0 pa-2 pr-4 ma-1 bg-white bg-lig-25" 
+                    class="ma-0 pa-0 pa-2 pr-4 ma-1"
+                    :dark="!isThemeDark($vuetify)"
+                    :light="isThemeDark($vuetify)"
                     rounded>
                         <v-icon class="ma-0" color="primary">
                             mdi-chevron-double-left
@@ -176,7 +180,9 @@
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="nextStep" v-if="this.createStage < 2"
                         @keydown.enter="nextStep"
-                        class="ma-0 pa-0 pa-2 ma-1 pl-4 bg-white bg-lig-25" 
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
+                        class="ma-0 pa-0 pa-2 ma-1 pl-4" 
                         rounded>
                             {{ $t("actions.next" )}}
                             <v-icon class="ma-0" color="primary">
@@ -187,7 +193,9 @@
                     <v-slide-x-reverse-transition>
                         <v-btn elevation="0" @click="closeDialog(true)" v-if="this.createStage > 1 && this.error === false"
                         @keydown.enter="closeDialog"
-                        class="ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-lig-25" 
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
+                        class="ma-0 pa-0 pa-2 ma-1 pr-4" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="primary">
                                 mdi-checkbox-marked-circle-outline

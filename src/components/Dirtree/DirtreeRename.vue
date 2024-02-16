@@ -62,7 +62,9 @@
                     <v-slide-y-reverse-transition>
                         <v-btn elevation="0" @click="closeDialog"
                         @keydown.enter="closeDialog"
-                        class="ma-0 pa-0 pa-2 ma-1 pr-4 bg-white bg-slig-25" 
+                        :dark="!isThemeDark($vuetify)"
+                        :light="isThemeDark($vuetify)"
+                        class="ma-0 pa-0 pa-2 ma-1 pr-4" 
                         rounded>
                             <v-icon class="ma-0 mr-1" color="red">
                                 mdi-close-circle
@@ -80,10 +82,11 @@
 
 <script>
 import validationMixin from '@/plugins/mixin/validationMixin.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
 export default {
     name: 'DirtreeRename',
-    mixins: [ validationMixin ],
+    mixins: [ validationMixin, utilsMixin ],
     props: {
         viewKey: String,
         objectDn: String,

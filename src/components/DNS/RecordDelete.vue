@@ -54,16 +54,19 @@
         </v-card-text>
         <!-- Actions -->
         <v-card-actions class="card-actions">
+            <!-- ! TODO Make this a component -->
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
                 <v-btn @keydown.enter="closeDialog(true)" 
                 @click="closeDialog(true)" 
                 :disabled="getAllowConfirmStatus"
-                class="ma-0 pa-0 pa-2 pl-1 ma-1 bg-white bg-lig-25" 
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
+                class="ma-0 pa-0 pa-2 pl-1 ma-1" 
                 rounded>
                     <v-icon class="mr-1" color="green">
                     </v-icon>
                     <v-progress-circular :indeterminate="loading == true" :value="submitted ? 100 : 0" 
-                    :color="error ? 'red' : 'green'" 
+                    :color="error ? 'red' : 'green'"
                     size="26" 
                     class="ma-0 mr-1">
                     <v-fab-transition>
@@ -83,7 +86,9 @@
                     </span>
                 </v-btn>
                 <v-btn @click="closeDialog"
-                class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25" 
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
+                class="ma-0 pa-0 pa-2 ma-1" 
                 rounded>
                     <span class="pl-1">
                         {{ $t("actions.no" )}}

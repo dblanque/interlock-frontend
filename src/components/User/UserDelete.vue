@@ -33,7 +33,9 @@
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
                 <v-btn @keydown.enter="closeDialog(true)" 
                 @click="closeDialog(true)"
-                class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25" 
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
+                class="ma-0 pa-0 pa-2 ma-1" 
                 rounded>
                     <v-icon class="mr-1" color="green">
                         mdi-checkbox-marked-circle-outline
@@ -43,7 +45,9 @@
                     </span>
                 </v-btn>
                 <v-btn @click="closeDialog"
-                class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25" 
+                class="ma-0 pa-0 pa-2 ma-1"
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
                 rounded>
                     <span class="pl-1">
                         {{ $t("actions.no" )}}
@@ -59,9 +63,11 @@
 
 <script>
 import User from '@/include/User.js'
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
 export default {
     name: "UserDelete",
+    mixins: [ utilsMixin ],
     props: {
         userObject: Object,
         userMassDeleteArray: Array,

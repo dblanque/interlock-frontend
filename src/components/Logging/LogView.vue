@@ -38,6 +38,7 @@
       <v-row class="ma-0 pa-0 px-4 mt-4" justify="center" align="center">
         <v-col cols="12" lg="6" class="ma-0 pa-0">
           <v-range-slider v-model="logTruncateRange"
+          :disabled="getLogTruncateMax<1"
           :label="$t('section.logs.viewAction.truncate.slider')"
           class="mx-4"
           :min="getLogTruncateMin"
@@ -48,12 +49,18 @@
           <v-row class="ma-0 pa-0">
             <v-col class="ma-0 pa-0" cols="6">
             <v-text-field class="mx-4"
+            :disabled="getLogTruncateMax<1"
+            @keypress="isNumber($event)"
+            :rules="[validMinimumLog]"
             :label="$t('section.logs.viewAction.truncate.min')"
             v-model="logTruncateRange[0]">
             </v-text-field>
             </v-col>
             <v-col class="ma-0 pa-0" cols="6">
             <v-text-field class="mx-4"
+            :disabled="getLogTruncateMax<1"
+            @keypress="isNumber($event)"
+            :rules="[validMaximumLog]"
             :label="$t('section.logs.viewAction.truncate.max')"
             v-model="logTruncateRange[1]">
             </v-text-field>
@@ -188,13 +195,17 @@ export default {
   },
   computed: {
     getLogTruncateMin(){
-      var ids = this.tableData.items.map(log => {
+      if (this.tableData.items.length < 1)
+        return 0
+      let ids = this.tableData.items.map(log => {
         return log.id;
       });
       return ids.sort((a, b) => a > b)[0]
     },
     getLogTruncateMax(){
-      var ids = this.tableData.items.map(log => {
+      if (this.tableData.items.length < 1)
+        return 0
+      let ids = this.tableData.items.map(log => {
         return log.id;
       });
       ids = ids.sort((a, b) => a > b)
@@ -208,6 +219,14 @@ export default {
     viewTitle: String
   },
   methods: {
+    validMinimumLog(v){
+      if (isNaN(v)) return false
+      return v >= this.getLogTruncateMin
+    },
+    validMaximumLog(v){
+      if (isNaN(v)) return false
+      return v <= this.getLogTruncateMax
+    },
     parseDateToLocalTZ(dateStr){
       var dateObject = new Date(dateStr)
       var dateString = ""

@@ -3,7 +3,7 @@
 <!------------------------ File: SettingsCard.vue ----------------------------->
 <template>
     <v-card outlined flat class="ma-0 pa-0">
-        <v-progress-linear :indeterminate="testing == true" :value="testFinished ? 100 : 0" :color="testFinished ? (!testError ? 'valid' : 'red') : 'primary'"/>
+        <v-progress-linear :indeterminate="testing == true" :value="testFinished ? 100 : 0" :color="testFinished ? (!testError ? 'valid-40-s' : 'red') : 'primary'"/>
         <v-row class="ma-0 ma-1 px-4 py-0 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
                 @click="resetDialog = true" :disabled="readonly || loading"
