@@ -93,13 +93,12 @@ For information and official Interlock Documentation go to:
 
 ### GPO Management
 
-Group Policy Object Management is one of the main reasons as to why I started this project,
-albeit the scope is a bit out of my reach due to time constraints, hopefully I might
-get to finish it one day. If you're interested in contributing, feel free to do so!
-*This might never be implemented or may take a long time due to other commitments.*
+Group Policy Object Management is one of the main reasons as to why I started this project.
+I still haven't found a way to make this work from a Django Backend through an LDAP Connector.
+If you're interested in contributing, feel free to do so!
 
 ### Server Management
-*This might never be implemented or may take a long time due to other commitments.*
+*This might never be implemented.*
 This tab will require to have an ssh key or be the locally installed server
  - [ ] Start Service
  - [ ] Stop Service
@@ -136,17 +135,17 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm serve
+npm run dev
 ```
 
 ### Compiles and minifies for production
 ```
-npm build
+npm run build
 ```
 
 ### Lints and fixes files
 ```
-npm lint
+npm run lint
 ```
 
 ### Customize configuration
@@ -154,7 +153,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 # PROJECT LICENSE
 
-*Interlock Copyright (C) 2022 | Dylan Blanqué, BR Consulting S.R.L.*
+*Interlock Copyright (C) 2022-2024 | Dylan Blanqué, BR Consulting S.R.L.*
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
