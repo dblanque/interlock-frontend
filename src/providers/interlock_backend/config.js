@@ -27,8 +27,7 @@ const local_config = await getRuntimeConfig()
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
 
 // SSL
-var urlPrefix
-
+let urlPrefix
 // Default back-end provider urls.
 // ! PLEASE INCLUDE '/' at the end of URL.
 if (local_config.ssl == true) {
@@ -41,30 +40,30 @@ const base_url =  urlPrefix + local_config.backend_url + "/";
 // const base_url =  "http://127.0.0.1:8000/";
 
 var request
+let axios_opts
 // Axios Instance.
 if (local_config.reject_unauthorized != true) {
-    request = axios.create({
+    axios_opts = {
         baseURL: base_url,
+        withCredentials: true,
         rejectUnauthorized: false
-    });
+    }
 }
 else {
-    request = axios.create({
-        baseURL: base_url
-    });
+    axios_opts = {
+        baseURL: base_url,
+        withCredentials: true,
+        rejectUnauthorized: true
+    }
 }
-
-// Sets token into request common again after page reload.
-var auth = localStorage.getItem('token');
-if(auth != null && auth != undefined && auth.length > 0)
-    request.defaults.headers.common.Authorization = auth;
+request = axios.create(axios_opts);
 
 // LIST OF URL PATTERNS.
 const urls = {
     auth: {
         token: 'api/token/',
         tokenRefresh: 'api/token/refresh/',
-        logout: 'api/users/logout/'
+        logout: 'api/token/revoke/'
     },
     user: {
         base: 'api/users/',
@@ -163,56 +162,39 @@ request.interceptors.response.use(
     async (error) => {
         // Get Configuration of failed request.
         const originalRequest = error.config;
+        if (error?.response?.status == undefined) {
+            // erase local storage and go to Index Login.
+            localStorage.removeItem('user_initials')
+            localStorage.removeItem('user_fullname')
+            if (router.app.$route.path != "/login")
+                router.push('/login')
+        }
         // If the request error code is 403 and the request hasn't been retried...
         if (error.response.status === 403 || error.response.status === 401 && !originalRequest._retry) {
-            // Obtain Refresh token saved.
-            var refreshToken = localStorage.getItem('refresh')
-            // If there's no refresh token, erase local storage and go to Index Login.
-            if(refreshToken == null || refreshToken == undefined){
-                localStorage.removeItem('token')
-                localStorage.removeItem('refresh')
-                localStorage.removeItem('user_initials')
-                localStorage.removeItem('user_fullname')
-                if (router.app._route.path != "/login")
-                    router.push('/login')
-                return error.response
-            }
-            // Else, if there's refresh token...
-            else {
-                // Check flag for request being retried.
-                originalRequest._retry = true;
-                // Send refresh token request.
-                return axios.post(base_url+urls.auth.tokenRefresh,{refresh: refreshToken.slice(7)})
-                // then, if refresh request succeeds.
-                .then(res => {
-                    if (res.data.access) {
-                        var date = new Date()
-                        // 1) Set tokens on LocalStorage.
-                        localStorage.setItem('token', 'Bearer ' + res.data.access)
-                        localStorage.setItem('refresh', 'Bearer ' + res.data.refresh)
-                        localStorage.setItem('refreshClock', date.toISOString())
-                        // 2) Change Authorization header.
-                        originalRequest.headers.Authorization = 'Bearer ' + res.data.access;
-                        request.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.access;
-                        // 3) Return re-sent request through new axios.
-                        return axios(originalRequest);
-                    }
-                    else throw "No token received.";
-                // on refresh request error catch
-                }).catch((e)=>{
-                    console.log(e)
-                    if (e.response.status == 401) {
-                        // erase local storage and go to Index Login.
-                        localStorage.removeItem('token')
-                        localStorage.removeItem('refresh')
-                        localStorage.removeItem('user_initials')
-                        localStorage.removeItem('user_fullname')
-                        if (router.app.$route.path != "/login")
-                            router.push('/login')
-                    }
-                    return Promise.reject(error.response)
-                })
-            }
+            // Check flag for request being retried.
+            originalRequest._retry = true;
+            // Send refresh token request.
+            let tokenRefreshAxios = axios.create(axios_opts)
+            return tokenRefreshAxios.post(base_url+urls.auth.tokenRefresh)
+            // then, if refresh request succeeds.
+            .then(() => {
+                var date = new Date()
+                // 1) Set tokens on LocalStorage.
+                localStorage.setItem('refreshClock', date.toISOString())
+                // 2) Return re-sent request through new axios.
+                return axios(originalRequest);
+            // on refresh request error catch
+            }).catch((e)=>{
+                console.log(e)
+                if (e?.response?.status != 200) {
+                    // erase local storage and go to Index Login.
+                    localStorage.removeItem('user_initials')
+                    localStorage.removeItem('user_fullname')
+                    if (router.app.$route.path != "/login")
+                        router.push('/login')
+                }
+                return Promise.reject(error.response)
+            })
         // Else, if the error is other than Unauthorized...
         } else
             // Return error response.

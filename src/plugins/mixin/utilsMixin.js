@@ -14,6 +14,7 @@ const utilsMixin = {
             }
         },
         getResponseErrorCode(errorData) {
+            console.log(errorData)
             let codeToUse = "ERR_UNKNOWN_SHORT"
             if (errorData === undefined)
                 console.log("getResponseErrorCode(): No error data passed.")
@@ -22,7 +23,8 @@ const utilsMixin = {
                 return errorData
 
             if (typeof errorData === "object") {
-                if (errorData.response.data != undefined &&
+                if (errorData.response &&
+                    errorData.response.data != undefined &&
                     errorData.response.data != null &&
                     errorData.response.data instanceof Object) {
                         if ('ldap_response' in errorData.response.data)
@@ -34,7 +36,7 @@ const utilsMixin = {
                     codeToUse = errorData.code
                 else if ('status_code' in errorData)
                     codeToUse = errorData.status_code
-                else if ('status' in errorData.response)
+                else if ('response' in errorData && 'status' in errorData.response)
                     codeToUse = errorData.response.status
             }
 

@@ -8,23 +8,17 @@ const calls = {
     login: (data)=>{
         return new Promise((resolve, reject) => {
             backend.request.post(backend.urls.auth.token, data).then(response => {
-                if(!response || !response.data.access || response.status == 401) {
+                if(!response || response.status == 401) {
                     reject(response)
                     console.log('Authentication Rejected')
                 }
-                backend.request.defaults.headers.common.Authorization = 'Bearer ' + response.data.access
-
                 var date = new Date()
 
-                localStorage.setItem("token", 'Bearer ' + response.data.access)
-                localStorage.setItem("refresh", 'Bearer ' + response.data.refresh)
                 localStorage.setItem('refreshClock', date.toISOString())
                 localStorage.setItem("username", response.data.username)
                 localStorage.setItem("admin_allowed", response.data.admin_allowed)
                 resolve(response)
             }).catch((e) => {
-                localStorage.removeItem('token')
-                localStorage.removeItem('refresh')
                 localStorage.removeItem('admin_allowed')
                 console.log('Authentication Error')
                 reject(e)
@@ -33,8 +27,6 @@ const calls = {
     },
     logout: (timeout=false) => {
         const removeKeys = [
-            "token",
-            "refresh",
             "refreshClock",
             "username",
             "first_name",
@@ -44,7 +36,7 @@ const calls = {
         ]
         if (!timeout)
             return new Promise(resolve => {
-                backend.request.get(backend.urls.auth.logout).then(() => {
+                backend.request.post(backend.urls.auth.logout).then(() => {
                     removeKeys.forEach(element => {
                         localStorage.removeItem(element)
                     });

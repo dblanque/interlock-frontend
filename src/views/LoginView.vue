@@ -343,7 +343,7 @@ export default {
           data.recovery_code = this.recovery_code
         await user.login(data)
         .then(response =>{
-          if(response.data.access != undefined) {
+          if(response.data != undefined) {
             this.error = false
             this.errorMsg = "";
             localStorage.removeItem('loginForbiddenCount')
