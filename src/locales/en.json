@@ -606,6 +606,9 @@
           "primaryGroupID":"Only change this if you have Macintosh Clients or POSIX Compliant Applications"
         }
       },
+      "bulkEdit":{
+        "title": "User Bulk Edit"
+      },
       "import":{
         "title":"User Bulk Import",
         "fileToUpload":"Attach User List File",

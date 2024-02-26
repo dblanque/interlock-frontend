@@ -50,7 +50,8 @@
                 </v-card-title>
 
                 <v-row justify="center" class="pa-0 ma-0">
-                    <v-alert type="info" dismissible close-icon="mdi-close">
+                    <v-alert type="info" dismissible close-icon="mdi-close"
+                    @input="disableEnduserHelpMessage()" v-if="showEnduserHelpMessage">
                         {{ $t("section.enduser.helpMessage") }}
                     </v-alert>
                 </v-row>
@@ -467,9 +468,15 @@ export default {
                 return this.last_name + ", " + this.first_name + " | " + this.username
                 // return this.last_name + ", " + this.first_name + " | " + this.realm.toUpperCase() + "@" + this.username
             return this.realm.toUpperCase() + "@" + this.username
+        },
+        showEnduserHelpMessage() {
+            return (localStorage.getItem('enduserHelpMessage') === 'true')
         }
     },
     methods: {
+        disableEnduserHelpMessage(){
+            localStorage.setItem('enduserHelpMessage', false)
+        },
         openSettings(){
             this.showSettingsDialog = true
             if (this.$refs.UserSettings)

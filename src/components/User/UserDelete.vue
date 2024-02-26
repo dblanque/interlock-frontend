@@ -25,6 +25,10 @@
                 </span>
                 <span v-else-if="multipleUsers" class="font-weight-medium" style="padding-left: 0.5ch;">
                     {{ $t('section.users.deleteUser.mass') + "?" }}
+                    <span v-for="user in userObjectList" :key="user.username">
+                        <br>
+                        {{ `${user.givenName} ${user.sn} (${user.username})` }}
+                    </span>
                 </span>
             </v-row>
         </v-card-text>
@@ -70,7 +74,7 @@ export default {
     mixins: [ utilsMixin ],
     props: {
         userObject: Object,
-        userMassDeleteArray: Array,
+        userObjectList: Array,
         viewKey: String,
         massDelete: Boolean
     },
@@ -78,7 +82,7 @@ export default {
     },
     computed: {
         multipleUsers() {
-            return this.userMassDeleteArray.length > 0
+            return this.userObjectList.length > 0
         }
     },
     methods: {
@@ -91,21 +95,16 @@ export default {
             }
             if (deleteConfirm == true) {
                 if (this.multipleUsers) {
-                    await new User({}).bulkDelete(this.userMassDeleteArray)
-                    .then(() => {
-                    })
-                    .catch(error => {
-                        console.error(error)
-                    })
+                    await new User({}).bulkDelete(this.userObjectList)
+                    .then(() => {})
+                    .catch(error => { console.error(error) })
                 } else {
                     await new User({}).delete(user)
                     .then(response => {
                         if (response.data.username == user.username)
                             console.log("User Deleted Successfully")
                     })
-                    .catch(error => {
-                        console.error(error)
-                    })
+                    .catch(error => { console.error(error) })
                 }
                 this.$emit('closeDialog', this.viewKey, true);
             } else

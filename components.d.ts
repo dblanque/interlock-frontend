@@ -43,6 +43,7 @@ declare module 'vue' {
     ThemeChanger: typeof import('./src/components/ThemeChanger.vue')['default']
     UserAccountDropdown: typeof import('./src/components/User/UserAccountDropdown.vue')['default']
     UserAntilockoutWarning: typeof import('./src/components/User/UserAntilockoutWarning.vue')['default']
+    UserBulkEdit: typeof import('./src/components/User/UserBulkEdit.vue')['default']
     UserCreate: typeof import('./src/components/User/UserCreate.vue')['default']
     UserDelete: typeof import('./src/components/User/UserDelete.vue')['default']
     UserDialog: typeof import('./src/components/User/UserDialog.vue')['default']

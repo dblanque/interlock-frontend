@@ -57,11 +57,12 @@
           </v-btn>
           <!-- Mass Disable Button -->
           <v-btn class="pa-2 mx-2" small
-          :dark="!actionButtonsDisabled && !isThemeDark($vuetify)" 
+          color="red"
+          :dark="!actionButtonsDisabled"
           :light="!actionButtonsDisabled && isThemeDark($vuetify)"
           @click="massAccountStatusChange(true)"
           :disabled="loading || tableData.selected.length < 1">
-            <v-icon small :color="actionButtonsDisabled ? 'error' : 'error-70-s'" class="ma-0 pa-0 mr-1">mdi-close</v-icon>
+            <v-icon small class="ma-0 pa-0 mr-1">mdi-close</v-icon>
             <span :color="actionButtonsDisabled ? 'error' : 'error-70-s'">
               {{ $t('actions.disable') }}
             </span>
@@ -77,11 +78,22 @@
             {{ $t('actions.unlock') }}
           </span>
           </v-btn>
+          <!-- Mass Edit Button -->
+          <v-btn class="pa-2 mx-2" small v-if="false"
+          :dark="!actionButtonsDisabled"
+          :light="!actionButtonsDisabled && isThemeDark($vuetify)"
+          color="primary" @click="openBulkOperationDialog('userBulkEdit')"
+          :disabled="actionButtonsDisabled">
+            <v-icon small dark :color="actionButtonsDisabled ? undefined : 'white'" class="ma-0 pa-0 mr-1">mdi-pencil</v-icon>
+            <span :color="actionButtonsDisabled ? undefined : 'white'">
+              {{ $t('actions.edit') }}
+            </span>
+          </v-btn>
           <!-- Mass Delete Button -->
           <v-btn class="pa-2 mx-2" small
           :dark="!actionButtonsDisabled" 
           :light="!actionButtonsDisabled && isThemeDark($vuetify)"
-          color="red" @click="openDeleteDialog()"
+          color="red" @click="openBulkOperationDialog('userDelete')"
           :disabled="actionButtonsDisabled">
             <v-icon small dark :color="actionButtonsDisabled ? undefined : 'white'" class="ma-0 pa-0 mr-1">mdi-delete</v-icon>
             <span :color="actionButtonsDisabled ? undefined : 'white'">
@@ -244,7 +256,7 @@
             v-on="on"
             small
             :disabled="loading"
-            @click="openDeleteDialog(item)"
+            @click="openBulkOperationDialog('userDelete', item)"
             v-if="!isLoggedInUser(item.username)"
           >
           <v-icon small color="red">
@@ -289,7 +301,7 @@
   <v-dialog eager max-width="800px" v-model="dialogs['userDelete']">
     <UserDelete
       :userObject="this.data.selectedUser"
-      :userMassDeleteArray="tableData.selected"
+      :userObjectList="tableData.selected"
       :viewKey="'userDelete'"
       ref="UserDelete"
       @closeDialog="closeDialog"
@@ -321,6 +333,16 @@
     <UserImport
       :viewKey="'userImport'"
       ref="UserImport"
+      @closeDialog="closeDialog"
+      />
+  </v-dialog>
+
+  <!-- USER EDIT DIALOG -->
+  <v-dialog eager max-width="1600px" v-model="dialogs['userBulkEdit']">
+    <UserBulkEdit
+      :viewKey="'userBulkEdit'"
+      ref="UserBulkEdit"
+      :refreshLoading="loading"
       @closeDialog="closeDialog"
       />
   </v-dialog>
@@ -359,6 +381,7 @@ import User from '@/include/User.js'
 import UserCreate from '@/components/User/UserCreate.vue'
 import UserImport from '@/components/User/UserImport.vue'
 import UserDialog from '@/components/User/UserDialog.vue'
+import UserBulkEdit from '@/components/User/UserBulkEdit.vue';
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import UserPermissionList from '@/components/User/UserPermissionList.vue'
 import UserDelete from '@/components/User/UserDelete.vue'
@@ -409,7 +432,8 @@ export default {
         userDelete: false,
         userResetPassword: false,
         userCreate: false,
-        bulkUserPermissions: false
+        bulkUserPermissions: false,
+        userBulkEdit: false
       }
     }
   },
@@ -592,14 +616,14 @@ export default {
       this.data.selectedUser = userObject
       this.openDialog('userResetPassword')
     },
-    openDeleteDialog(userObject) {
+    openBulkOperationDialog(dialogRef, userObject) {
       this.data.selectedUser = {}
       if (userObject) {
         this.tableData.selected = []
         this.data.selectedUser = userObject
       }
       if (this.data.selectedUser || this.tableData.selected.length > 0)
-        this.openDialog('userDelete')
+        this.openDialog(dialogRef)
     },
     async enableUser(userObject){
       this.loading = true
