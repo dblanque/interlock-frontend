@@ -1,7 +1,7 @@
 <template>
 <!-- Object Type Settings -->
 <v-card flat outlined class="ma-0 px-6 py-2 pt-4">
-    <v-row class="ma-0 pa-0 mb-2" justify="center">
+    <v-row v-if="showTitle" class="ma-0 pa-0 mb-2" justify="center">
         <span class="font-weight-normal">
             {{ label || $t("components.objectEditor") }}
         </span>
@@ -124,6 +124,10 @@ export default {
             default: false
         },
         disableAddDelete: {
+            type: Boolean,
+            default: false
+        },
+        showTitle: {
             type: Boolean,
             default: false
         },
