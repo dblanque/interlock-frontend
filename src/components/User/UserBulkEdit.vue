@@ -1,6 +1,6 @@
 <!----------------- INTERLOCK IS LICENSED UNDER GNU AGPLv3 -------------------->
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
-<!------------------------- File: UserModifyBulk.vue ------------------------------>
+<!------------------------- File: UserBulkEdit.vue ------------------------------>
 <template>
     <v-card :loading="refreshLoading" class="pa-0 ma-0">
         <v-card-title class="ma-0 pa-0 card-title">
