@@ -214,6 +214,10 @@
     "dns":{
         "zone":"Zona de DNS | Zonas de DNS",
         "record":"Registro de DNS | Registros de DNS"
+    },
+    "gpo": {
+      "normal":"Objetos de Políticas de Grupo | Objeto de Políticas de Grupo",
+      "short":"GPO | GPOs"
     }
   },
   "error":{

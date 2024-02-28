@@ -208,6 +208,10 @@
     "dns":{
       "zone":"DNS Zone | DNS Zones",
       "record":"DNS Record | DNS Records"
+    },
+    "gpo": {
+      "normal":"Group Policy Object | Group Policy Objects",
+      "short":"GPO | GPOs"
     }
   },
   "error":{
