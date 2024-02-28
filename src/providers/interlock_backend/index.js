@@ -11,6 +11,7 @@ import groupCalls from '@/providers/interlock_backend/modules/group.js'
 import ouCalls from '@/providers/interlock_backend/modules/organizationalUnit.js'
 import domainCalls from '@/providers/interlock_backend/modules/domain.js'
 import dnsRecordCalls from '@/providers/interlock_backend/modules/dnsrecord.js'
+import gpoCalls from '@/providers/interlock_backend/modules/gpo.js'
 import settingCalls from '@/providers/interlock_backend/modules/settings.js'
 import logCalls from '@/providers/interlock_backend/modules/log.js'
 import totpCalls from '@/providers/interlock_backend/modules/totp.js'
@@ -27,6 +28,7 @@ const modules = {
     log: logCalls,
     domain: domainCalls,
     dnsr: dnsRecordCalls,
+    gpo: gpoCalls,
     totp: totpCalls,
     test: testCalls,
     liveness: livenessCalls,

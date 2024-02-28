@@ -19,6 +19,7 @@ declare module 'vue' {
     DirtreeView: typeof import('./src/components/Dirtree/DirtreeView.vue')['default']
     DnsView: typeof import('./src/components/DNS/dnsView.vue')['default']
     GpoView: typeof import('./src/components/GPO/gpoView.vue')['default']
+    GPOView: typeof import('./src/components/GPO/GPOView.vue')['default']
     GroupCreate: typeof import('./src/components/Group/GroupCreate.vue')['default']
     GroupDelete: typeof import('./src/components/Group/GroupDelete.vue')['default']
     GroupDialog: typeof import('./src/components/Group/GroupDialog.vue')['default']

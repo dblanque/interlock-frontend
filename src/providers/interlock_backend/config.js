@@ -112,6 +112,9 @@ const urls = {
         update: "api/record/update/",
         delete: "api/record/delete/"
     },
+    gpo: {
+        list: 'api/gpo/',
+    },
     settings: {
         base: "api/settings/",
         list: "api/settings/",
