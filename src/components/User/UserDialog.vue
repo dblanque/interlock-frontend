@@ -1131,11 +1131,13 @@ export default {
             else
                 delete this.usercopy.groupsToRemove
 
-            for (const key in this.user) {
-                if (key in this.usercopy && this.usercopy[key] == this.user[key]) {
-                    console.log(`${key} hasn't changed (${this.usercopy[key]} == ${this.user[key]})`)
-                }
-            }
+            // ! Uncomment below to log all modified user data values
+            // ONLY USE THIS FOR DEVELOPMENT
+            // for (const key in this.user) {
+            //     if (key in this.usercopy && this.usercopy[key] == this.user[key]) {
+            //         console.log(`${key} hasn't changed (${this.usercopy[key]} == ${this.user[key]})`)
+            //     }
+            // }
 
             // Uncomment below to debug permissions list
             // console.log(this.usercopy.permission_list)
