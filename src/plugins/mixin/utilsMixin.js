@@ -4,6 +4,31 @@
 
 const utilsMixin = {
     methods:{
+        // ----------------------------- LDAP Permissions ----------------------------- //
+        calcEnabledPermissions(permissionList) {
+            let result = 0
+			if (!permissionList) return result
+            for (const [key] of Object.entries(permissionList)) {
+                if (permissionList[key].value == true) {
+                    result += permissionList[key].int
+                }
+            }
+            return result
+        },
+        getEnabledPermissions(permissionList) {
+			let result = []
+			if (!permissionList) return result
+            for (const [key] of Object.entries(permissionList)) {
+				if (!(key in permissionList)) {
+					console.error(`${key} not in Permission list.`)
+					continue
+				}
+                if (permissionList[key].value == true)
+                    result.push(key)
+            }
+            return result
+        },
+        // ---------------------------------------------------------------------------- //
         isNumber: function(evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;

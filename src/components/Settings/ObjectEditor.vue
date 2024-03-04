@@ -1,6 +1,6 @@
 <template>
 <!-- Object Type Settings -->
-<v-card flat outlined class="ma-0 px-6 py-2 pt-4">
+<div :class="contentClass">
     <v-row v-if="showTitle" class="ma-0 pa-0 mb-2" justify="center">
         <span class="font-weight-normal">
             {{ label || $t("components.objectEditor") }}
@@ -11,37 +11,43 @@
             {{ $t("actions.reset") }}
         </v-btn>
     </v-row>
-    <v-row class="ma-0 pa-0 px-4" v-show="!disableAddDelete">
-        <v-text-field :label="$t('words.key')"
-        class="pa-0 ma-0 ml-2 mr-4"
-        :readonly="readonly"
-        :hint="$t(keyHint)"
-        :persistent-hint="persistentHint"
-        @keydown.enter="addToObject(keyToAdd, valueToAdd)"
-        v-model="keyToAdd"
-        :required="required && keyToAdd.length == 0 ? true : false"
-        :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.k)] : valueValidator"
-        />
-        <v-text-field :label="$t('words.value')"
-        class="pa-0 ma-0 mr-2"
-        :readonly="readonly"
-        :hint="$t(valueHint)"
-        :persistent-hint="persistentHint"
-        @keydown.enter="addToObject(keyToAdd, valueToAdd)"
-        v-model="valueToAdd"
-        :required="required && valueToAdd.length == 0 ? true : false"
-        :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.v)] : valueValidator"
-        />
-        <v-btn class="mt-2 ml-1" small
-        color="primary"
-        :disabled="readonly == true || this.isFieldDisabled(keyToAdd) || keyToAdd in this.objectToEdit"
-        @click="addToObject(keyToAdd, valueToAdd)"
-        rounded
-        icon>
-            <v-icon>
-                mdi-plus
-            </v-icon>
-        </v-btn>
+    <v-row align="center" justify="center" class="ma-0 pa-0" v-show="!disableAddDelete">
+        <v-col class="ma-0 pa-0" cols="5">
+            <v-text-field :label="$t('words.key')"
+            class="pa-0 ma-0 ml-2 mr-4"
+            :readonly="readonly"
+            :hint="$t(keyHint)"
+            :persistent-hint="persistentHint"
+            @keydown.enter="addToObject(keyToAdd, valueToAdd)"
+            v-model="keyToAdd"
+            :required="required && keyToAdd.length == 0 ? true : false"
+            :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.k)] : valueValidator"
+            />
+        </v-col>
+        <v-col class="ma-0 pa-0" cols="5">
+            <v-text-field :label="$t('words.value')"
+            class="pa-0 ma-0 mr-2"
+            :readonly="readonly"
+            :hint="$t(valueHint)"
+            :persistent-hint="persistentHint"
+            @keydown.enter="addToObject(keyToAdd, valueToAdd)"
+            v-model="valueToAdd"
+            :required="required && valueToAdd.length == 0 ? true : false"
+            :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.v)] : valueValidator"
+            />
+        </v-col>
+        <v-col class="ma-0 pa-0" cols="auto">
+            <v-btn small
+            color="primary"
+            :disabled="readonly == true || this.isFieldDisabled(keyToAdd) || keyToAdd in this.objectToEdit"
+            @click="addToObject(keyToAdd, valueToAdd)"
+            rounded
+            icon>
+                <v-icon>
+                    mdi-plus
+                </v-icon>
+            </v-btn>
+        </v-col>
     </v-row>
     <v-list-item v-bind="objectToEdit" v-for="subItem, subItemKey in objectToEdit" :key="subItemKey">
         <v-list-item-icon>
@@ -88,7 +94,7 @@
             </v-btn>
         </v-list-item-action>
     </v-list-item>
-</v-card>
+</div>
 </template>
 
 <script>
@@ -131,6 +137,10 @@ export default {
             type: Boolean,
             default: false
         },
+        choices: {
+            type: Object,
+            default: () => { return {} }
+        },
         required: Boolean,
         readonly: Boolean,
         keyHint: String,
@@ -144,8 +154,16 @@ export default {
         deletableFields: {
             type: Array
         },
+        allowEmptyFields: {
+            type: Boolean,
+            default: false
+        },
         resettable: Boolean,
-        complexValidator: Object
+        complexValidator: Object,
+		contentClass: {
+			type: String,
+			default: "ma-0 px-6 py-2 pt-4"
+		}
     },
     emits: ['update:value'],
     created() {
@@ -184,8 +202,11 @@ export default {
             this.updateObject()
         },
         addToObject(key, value){
-            if (this.keyToAdd.length < 1 || this.valueToAdd.length < 1)
+            if (this.keyToAdd.length < 1)
                 return
+            if (this.allowEmptyFields !== true)
+                if (this.valueToAdd.length < 1)
+                    return
             if (this.isFieldDisabled(key))
                 return
             this.objectToEdit[key] = value

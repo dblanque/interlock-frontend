@@ -439,8 +439,8 @@
                                             id="userAccountControl"
                                             :label="$t('ldap.attributes.userAccountControl')"
                                             readonly
-                                            v-model="calcEnabledPerms"
-                                            :rules="[this.fieldRules(calcEnabledPerms, 'ge_numbers')]"
+                                            v-model="enabledPermInts"
+                                            :rules="[this.fieldRules(enabledPermInts, 'ge_numbers')]"
                                             ></v-text-field>
                                         </v-col>
                                         <v-col cols="12" md="3">
@@ -550,74 +550,10 @@
 
             <!-- PERMISSIONS SCREEN -->
             <v-tab-item :key="2">
-                <v-card-text class="my-3 py-4">
-                    <v-row align-content="center" class="mb-2">
-                    <!-- Disabled Permissions Panel -->
-                    <v-col class="ma-0 pa-0" cols="12" md="8">
-                        <v-card outlined height="100%" class="ma-1 pa-4">
-                            <v-row justify="center"
-                            class="pa-0 ma-0 text-h6 mx-4 mb-5">
-                                {{ $t('section.users.perms') }}
-                            </v-row>
-                            <!-- List -->
-                            <v-list
-                            class="pa-0 ma-0 font-weight-medium" 
-                            :justify="$vuetify.breakpoint.mdAndUp ? 'start' : 'center'">
-                                <!-- Items -->
-                                <v-list-item
-                                :disabled="disabled_permissions.includes(key)"
-                                two-line
-                                @click="onClickPermission(key)"
-                                :value="permissions[key].value"
-                                v-for="(value, key) in permissions"
-                                :key="key">
-                                    <v-list-item-content class="pl-10">
-                                        <!-- Title -->
-                                        <v-list-item-title class="font-weight-bold">
-                                        {{ $t('section.users.permissions.' + key) }}
-                                        </v-list-item-title>
-                                        <v-list-item-subtitle>
-                                            {{ key }}
-                                        </v-list-item-subtitle>
-                                    </v-list-item-content>
-                                        <v-list-item-action>
-                                        <v-checkbox :disabled="!editFlag" @click="onClickPermission(key)" v-model="permissions[key].value"></v-checkbox>
-                                        </v-list-item-action>
-                                    </v-list-item>
-                            </v-list>
-                        </v-card>
-                    </v-col>
-                    <!-- Enabled Permissions Panel -->
-                    <v-col class="ma-0 pa-0" cols="12" md="4">
-                        <v-card outlined height="100%" class="ma-1 pa-4">
-                            <v-row justify="center" 
-                            class="pa-0 ma-0 text-h6 mx-4 mb-5">
-                                {{ $t('section.users.permsRaw') }}
-                            </v-row>
-                            <v-row class="pa-0 ma-0 font-weight-medium">
-                                <a href="https://docs.microsoft.com/en-US/troubleshoot/windows-server/identity/useraccountcontrol-manipulate-account-properties"
-                                target="_blank" class="text-white">
-                                <v-alert type="info">
-                                    {{ $t('section.users.permsRawHint') }}
-                                </v-alert>
-                                </a>
-                            </v-row>
-                            <v-row>
-                                <v-col cols="12">
-                                    <v-textarea hide-details :label="$t('section.users.permsOutputArray')"
-                                    outlined readonly v-model="getEnabledPerms" auto-grow>
-                                    </v-textarea>
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-text-field hide-details :label="$t('section.users.permsCalc')"
-                                    outlined readonly v-model="calcEnabledPerms">
-                                    </v-text-field>
-                                </v-col>
-                            </v-row>
-                        </v-card>
-                    </v-col>
-                    </v-row>
-                </v-card-text>
+                <UserPermissionList content-class="ma-0 pa-0 mx-2 pb-4"
+                    :permissions="this.permissions"
+                    @update="onClickPermission"
+                    :edit-flag="editFlag"/>
             </v-tab-item>
         </v-tabs>
         <!-- End of Details Page -->
@@ -761,16 +697,19 @@
 <script>
 import User from '@/include/User.js';
 import CNObjectList from '@/components/CNObjectList.vue';
+import UserPermissionList from '@/components/User/UserPermissionList.vue';
 import RefreshButton from '@/components/RefreshButton.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import ldap_perm_json from '@/include/ldap_permissions.json';
 import { notificationBus } from '@/main.js';
 
 export default {
     name: 'UserDialog',
     components: {
         CNObjectList,
-        RefreshButton
+        RefreshButton,
+        UserPermissionList
     },
     data () {
       return {
@@ -801,6 +740,7 @@ export default {
         dialogs: {
             userAddToGroup: false
         },
+        permissions: ldap_perm_json.permissions,
         objectClasses: [
             "accessControlSubentry",
             "account",
@@ -865,100 +805,6 @@ export default {
             "simpleSecurityObject",
             "strongAuthenticationUser"
         ],
-        disabled_permissions: [
-            "LDAP_UF_LOCKOUT",
-            "LDAP_UF_PASSWD_CANT_CHANGE",
-        ],
-        permissions: {
-            "LDAP_UF_SCRIPT" : {
-                value: false,
-                int: 1
-            },
-            "LDAP_UF_ACCOUNT_DISABLE" : {
-                value: false,
-                int: 2
-            },
-            "LDAP_UF_HOMEDIR_REQUIRED" : {
-                value: false,
-                int: 8
-            },
-            "LDAP_UF_LOCKOUT" : {
-                value: false,
-                int: 16
-            },
-            "LDAP_UF_PASSWD_NOTREQD" : {
-                value: false,
-                int: 32
-            },
-            "LDAP_UF_PASSWD_CANT_CHANGE" : {
-                value: false,
-                int: 64
-            },
-            "LDAP_UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED" : {
-                value: false,
-                int: 128
-            },
-            "LDAP_UF_NORMAL_ACCOUNT" : {
-                value: false,
-                int: 512
-            },
-            "LDAP_UF_INTERDOMAIN_TRUST_ACCOUNT" : {
-                value: false,
-                int: 2048
-            },
-            "LDAP_UF_WORKSTATION_TRUST_ACCOUNT" : {
-                value: false,
-                int: 4096
-            },
-            "LDAP_UF_SERVER_TRUST_ACCOUNT" : {
-                value: false,
-                int: 8192
-            },
-            "LDAP_UF_DONT_EXPIRE_PASSWD" : {
-                value: false,
-                int: 65536
-            },
-            "LDAP_UF_MNS_LOGON_ACCOUNT" : {
-                value: false,
-                int: 131072
-            },
-            "LDAP_UF_SMARTCARD_REQUIRED" : {
-                value: false,
-                int: 262144
-            },
-            "LDAP_UF_TRUSTED_FOR_DELEGATION" : {
-                value: false,
-                int: 524288
-            },
-            "LDAP_UF_NOT_DELEGATED" : {
-                value: false,
-                int: 1048576
-            },
-            "LDAP_UF_USE_DES_KEY_ONLY" : {
-                value: false,
-                int: 2097152
-            },
-            "LDAP_UF_DONT_REQUIRE_PREAUTH" : {
-                value: false,
-                int: 4194304
-            },
-            // "LDAP_UF_PASSWORD_EXPIRED" : {
-            //     value: false,
-            //     int: 8388608
-            // },
-            "LDAP_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION" : {
-                value: false,
-                int: 16777216
-            },
-            "LDAP_UF_NO_AUTH_DATA_REQUIRED" : {
-                value: false,
-                int: 33554432
-            },
-            "LDAP_UF_PARTIAL_SECRETS_ACCOUNT" : {
-                value: false,
-                int: 67108864
-            }
-        },
         categories: {
             basic: [
                 "sAMAccountName",
@@ -1009,23 +855,9 @@ export default {
         this.syncUser();
     },
     computed:{
-        calcEnabledPerms() {
-            var result = 0
-            for (const [key] of Object.entries(this.permissions)) {
-                if (this.permissions[key].value == true) {
-                    result += this.permissions[key].int
-                }
-            }
-            return result
-        },
-        getEnabledPerms() {
-            var array = []
-            for (const [key] of Object.entries(this.permissions)) {
-                if (this.permissions[key].value == true)
-                    array.push(key)
-            }
-            return array
-        },
+		enabledPermInts(){
+			return this.calcEnabledPermissions(this.permissions)
+		},
         getUSN(){
             if (this.usercopy.username != undefined)
                 return this.usercopy.username + "@" + this.domain
@@ -1040,7 +872,13 @@ export default {
                 this.$refs.UserAddToGroup.clearList();
             },
             deep: true
-        }
+        },
+        // 'permissions': {
+        //     handler: function (newValue) {
+        //         console.log(newValue)
+        //     },
+        //     deep: true
+        // }
         // Monitor changes in usercopy
         // usercopy(newValue) {
         // }
@@ -1292,6 +1130,12 @@ export default {
                 this.usercopy.groupsToRemove = this.groupsToRemove
             else
                 delete this.usercopy.groupsToRemove
+
+            for (const key in this.user) {
+                if (key in this.usercopy && this.usercopy[key] == this.user[key]) {
+                    console.log(`${key} hasn't changed (${this.usercopy[key]} == ${this.user[key]})`)
+                }
+            }
 
             // Uncomment below to debug permissions list
             // console.log(this.usercopy.permission_list)

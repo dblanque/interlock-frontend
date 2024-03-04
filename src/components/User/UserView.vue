@@ -79,11 +79,11 @@
           </span>
           </v-btn>
           <!-- Mass Edit Button -->
-          <v-btn class="pa-2 mx-2" small v-if="false"
+          <v-btn class="pa-2 mx-2" small
           :dark="!actionButtonsDisabled"
           :light="!actionButtonsDisabled && isThemeDark($vuetify)"
           color="primary" @click="openBulkOperationDialog('userBulkEdit')"
-          :disabled="actionButtonsDisabled">
+          :disabled="actionButtonsDisabled || true">
             <v-icon small dark :color="actionButtonsDisabled ? undefined : 'white'" class="ma-0 pa-0 mr-1">mdi-pencil</v-icon>
             <span :color="actionButtonsDisabled ? undefined : 'white'">
               {{ $t('actions.edit') }}
