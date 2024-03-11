@@ -175,7 +175,7 @@
       <!-- Snackbar -->
       <v-snackbar
         v-model="logoutSnackbar"
-        timeout="1500"
+        timeout="3e3"
         class="mb-12"
         :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
       >
@@ -263,21 +263,21 @@ export default {
       this.snackbarMessage = this.$t("misc.loggedOut").toUpperCase()
       this.logoutSnackbar = true;
       localStorage.removeItem('auth.logoutMessage')
+    } else {
+      let admin_allowed = localStorage.getItem('user.admin_allowed')
+      new User({}).fetchme()
+      .then(() => {
+        console.log("User is already logged in.")
+        if (admin_allowed === 'true')
+          this.$router.push("/home")
+        else
+          this.$router.push("/enduser")
+      })
+      .catch(e=>{
+        if (!ignoreErrorCodes.includes(e.status))
+          console.error(e)
+      })
     }
-
-    let admin_allowed = localStorage.getItem('user.admin_allowed')
-    new User({}).fetchme()
-    .then(() => {
-      console.log("User is already logged in.")
-      if (admin_allowed === 'true')
-        this.$router.push("/home")
-      else
-        this.$router.push("/enduser")
-    })
-    .catch(e=>{
-      if (!ignoreErrorCodes.includes(e.status))
-        console.error(e)
-    })
   },
   watch: {
     validateForm(){
