@@ -56,7 +56,7 @@
                     </v-alert>
                 </v-row>
 
-                <v-form @submit.prevent>
+                <v-form ref="endUserForm" @submit.prevent>
                 <!-- Details Row -->
                 <v-row align-content="center" class="ma-2 mt-0">
                     <!-- User Basic Data Panel -->
@@ -72,8 +72,8 @@
                                     dense
                                     id="givenName"
                                     :label="$t('ldap.attributes.givenName')"
-                                    v-model="user.givenName"
-                                    :rules="[this.fieldRules(user.givenName, 'ge_name')]"
+                                    v-model="usercopy.givenName"
+                                    :rules="[this.fieldRules(usercopy.givenName, 'ge_name')]"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" lg="6">
@@ -81,8 +81,8 @@
                                     dense
                                     id="sn"
                                     :label="$t('ldap.attributes.sn')"
-                                    v-model="user.sn"
-                                    :rules="[this.fieldRules(user.sn, 'ge_name')]"
+                                    v-model="usercopy.sn"
+                                    :rules="[this.fieldRules(usercopy.sn, 'ge_name')]"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" lg="6">
@@ -90,7 +90,7 @@
                                     dense
                                     id="username"
                                     :label="$t('ldap.attributes.username')"
-                                    v-model="user.username"
+                                    v-model="usercopy.username"
                                     :hint="$t('words.readOnly')"
                                     readonly
                                     ></v-text-field>
@@ -100,8 +100,8 @@
                                     dense
                                     id="mail"
                                     :label="$t('ldap.attributes.mail')"
-                                    v-model="user.mail"
-                                    :rules="[this.fieldRules(user.mail, 'ge_mail')]"
+                                    v-model="usercopy.mail"
+                                    :rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" v-if="user.last_login != undefined && user.last_login != ''">
@@ -112,8 +112,8 @@
                                     dense
                                     id="telephoneNumber"
                                     :label="$t('ldap.attributes.telephoneNumber')"
-                                    v-model="user.telephoneNumber"
-                                    :rules="[this.fieldRules(user.telephoneNumber, 'ge_phone_intl')]"
+                                    v-model="usercopy.telephoneNumber"
+                                    :rules="[this.fieldRules(usercopy.telephoneNumber, 'ge_phone_intl')]"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" lg="6">
@@ -121,8 +121,8 @@
                                     dense
                                     id="wWWHomePage"
                                     :label="$t('ldap.attributes.wWWHomePage')"
-                                    v-model="user.wWWHomePage"
-                                    :rules="[this.fieldRules(user.wWWHomePage, 'ge_website')]"
+                                    v-model="usercopy.wWWHomePage"
+                                    :rules="[this.fieldRules(usercopy.wWWHomePage, 'ge_website')]"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -141,8 +141,8 @@
                                         dense
                                         id="streetAddress"
                                         :label="$t('ldap.attributes.streetAddress')"
-                                        v-model="user.streetAddress"
-                                        :rules="[this.fieldRules(user.streetAddress, 'ge_address_street')]"
+                                        v-model="usercopy.streetAddress"
+                                        :rules="[this.fieldRules(usercopy.streetAddress, 'ge_address_street')]"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6">
@@ -150,8 +150,8 @@
                                         dense
                                         id="postalCode"
                                         :label="$t('ldap.attributes.postalCode')"
-                                        v-model="user.postalCode"
-                                        :rules="[this.fieldRules(user.postalCode, 'ge_address_postal_code')]"
+                                        v-model="usercopy.postalCode"
+                                        :rules="[this.fieldRules(usercopy.postalCode, 'ge_address_postal_code')]"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6" 
@@ -160,8 +160,8 @@
                                         dense
                                         id="l"
                                         :label="$t('ldap.attributes.l')"
-                                        v-model="user.l"
-                                        :rules="[this.fieldRules(user.l, 'ge_address_city')]"
+                                        v-model="usercopy.l"
+                                        :rules="[this.fieldRules(usercopy.l, 'ge_address_city')]"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6">
@@ -189,8 +189,8 @@
                                         dense
                                         id="st"
                                         :label="$t('ldap.attributes.st')"
-                                        v-model="user.st"
-                                        :rules="[this.fieldRules(user.st, 'ge_state')]"
+                                        v-model="usercopy.st"
+                                        :rules="[this.fieldRules(usercopy.st, 'ge_state')]"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6">
@@ -198,9 +198,9 @@
                                         dense
                                         id="co"
                                         :label="$t('ldap.attributes.co')"
-                                        v-model="user.co"
+                                        v-model="usercopy.co"
                                         :items="getCountryList()"
-                                        :rules="[this.fieldRules(user.co, 'ge_country')]">
+                                        :rules="[this.fieldRules(usercopy.co, 'ge_country')]">
                                         </v-autocomplete>
                                     </v-col>
                             </v-row>
@@ -222,8 +222,8 @@
                                         id="distinguishedName"
                                         :label="$t('ldap.attributes.distinguishedName')"
                                         readonly
-                                        v-model="user.distinguishedName"
-                                        :rules="[this.fieldRules(user.distinguishedName, 'ldap_dn')]"
+                                        v-model="usercopy.distinguishedName"
+                                        :rules="[this.fieldRules(usercopy.distinguishedName, 'ldap_dn')]"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="4">
@@ -233,7 +233,7 @@
                                         :label="$t('ldap.attributes.userPrincipalName')"
                                         readonly
                                         v-model="getUSN"
-                                        :rules="[this.fieldRules(user.userPrincipalName, 'ldap_usn')]"
+                                        :rules="[this.fieldRules(usercopy.userPrincipalName, 'ldap_usn')]"
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
@@ -244,7 +244,7 @@
                                         id="whenCreated"
                                         :label="$t('ldap.attributes.whenCreated')"
                                         readonly
-                                        v-model="user.whenCreated"
+                                        v-model="usercopy.whenCreated"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6">
@@ -253,7 +253,7 @@
                                         id="whenChanged"
                                         :label="$t('ldap.attributes.whenChanged')"
                                         readonly
-                                        v-model="user.whenChanged"
+                                        v-model="usercopy.whenChanged"
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
@@ -264,7 +264,7 @@
                                         id="lastLogon"
                                         :label="$t('ldap.attributes.lastLogon')"
                                         readonly
-                                        v-model="user.lastLogon"
+                                        v-model="usercopy.lastLogon"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" lg="6">
@@ -273,7 +273,7 @@
                                         id="pwdLastSet"
                                         :label="$t('ldap.attributes.pwdLastSet')"
                                         readonly
-                                        v-model="user.pwdLastSet"
+                                        v-model="usercopy.pwdLastSet"
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
@@ -335,8 +335,7 @@
             content-class=""
             max-width="40rem"
             v-model="showLogoutDialog">
-            <LogoutDialog
-            @logoutAction="logoutAction(true)"/>
+            <LogoutDialog @logoutAction="logoutAction()"/>
         </v-dialog>
 
         <!-- REFRESH TOKEN DIALOG  -->
@@ -397,8 +396,8 @@ export default {
             first_name: "",
             last_name: "",
             email: "",
-            user: {
-            },
+            user: {},
+            usercopy: {},
             domain: "",
             realm: "",
             basedn: "",
@@ -411,7 +410,7 @@ export default {
         this.user = new User({})
         this.user.getCurrentUserData().then(response => {
             let responseStatus = response.status
-            let admin_allowed = (localStorage.getItem('admin_allowed') === 'true')
+            let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
             response = response.data
 
             // If response code is valid
@@ -443,23 +442,11 @@ export default {
     },
     async mounted () {
         this.loading = true
-        this.user.fetchme()
-        .then(() => {
-            this.loading = false
-        })
-        .catch(error => {
-            console.error(error)
-            this.loading = false
-            this.error = true
-        });
-        this.setDomainDetails();
+        this.refreshUser()
     },
     computed: {
         getUSN(){
-            if (this.user.username != undefined)
-                return this.user.username + "@" + this.domain
-            else
-                return "@" + this.domain
+            return `${this.user.username}@${this.domain}`
         },
         activeUserName() {
             if(	this.last_name && this.last_name.length > 0 &&
@@ -473,6 +460,32 @@ export default {
         }
     },
     methods: {
+        getModifiedValues(){
+            let v = []
+            for (const key in this.user) {
+                if (!(key in this.user) ||
+                    !(key in this.usercopy)) {
+                    continue
+                }
+                if (Array.isArray(this.user[key])) {
+                    // Compare Values for Partial Update
+                    let orig_list = structuredClone(this.user[key])
+                    orig_list.sort()
+                    this.usercopy[key].sort()
+                    if (JSON.stringify(orig_list) !== JSON.stringify(this.usercopy[key]))
+                        v.push(key)
+                }
+                else if (this.usercopy[key] != this.user[key]) {
+                    v.push(key)
+                }
+            }
+            return v
+        },
+        getIsUserModified(){
+            // Check the rest of the user data.
+            if (this.getModifiedValues().length > 0) return true
+            return false
+        },
         disableEnduserHelpMessage(){
             localStorage.setItem('user.tips.enduserHelp', false)
         },
@@ -482,22 +495,33 @@ export default {
                 this.$refs.UserSettings.loadSettings()
         },
         async saveUser(){
+            if (!this.getIsUserModified()) {
+                console.log("User was not modified, ignoring request.")
+                return
+            }
             this.loading = true
-            // Uncomment below to debug permissions list
-            this.$emit('save', this.viewKey, this.user);
-            await new User({}).updateSelf(this.user)
-            .then(() => {
-                this.refreshUser();
-                this.loading = false
-                this.loadingColor = 'primary'
+            let modifiedValues = this.getModifiedValues()
+            let partialUpdateData = {}
+            modifiedValues.forEach(k => {
+                partialUpdateData[k] = this.usercopy[k]
             })
-            .catch(error => {
-                console.error(error)
-                this.userRefreshLoading = false;
+            if (this.$refs.endUserForm.validate()){
+                await new User({}).updateSelf(partialUpdateData)
+                .then(() => {
+                    this.refreshUser();
+                    this.loading = false
+                    this.loadingColor = 'primary'
+                })
+                .catch(error => {
+                    console.error(error)
+                    this.userRefreshLoading = false;
+                    this.loading = false
+                    this.loadingColor = 'error'
+                    this.error = true;
+                })
+            } else {
                 this.loading = false
-                this.loadingColor = 'error'
-                this.error = true;
-            })
+            }
         },
         openDialog(key){
             this.dialogs[key] = true;
@@ -515,10 +539,18 @@ export default {
             this.showRefreshTokenDialog = false
             this.resetTimer()
         },
+        // Sync the usercopy object to the parent view user object on the
+        // next tick to avoid mutation errors
+        syncUser(){
+            this.setDomainDetails()
+            this.usercopy = new User({})
+            this.$nextTick(() => { this.usercopy = Object.assign({}, this.user) })
+        },
         async refreshUser(){
             this.loading = true
             this.error = false
             await this.user.fetchme().then(() => {
+                this.syncUser()
                 setTimeout(() => {
                     this.loading = false
                 }, 50)
@@ -543,10 +575,14 @@ export default {
         ////////////////////////////////////////////////////////////////////////
         // Logout Actions
         ////////////////////////////////////////////////////////////////////////
-        async logoutAction(timeout=false) {
-            await new User({}).logout(timeout).then(() => {
+        async logoutAction() {
+            await new User({}).logout()
+            .then(() => {
                 localStorage.setItem("auth.logoutMessage", true);
                 this.$router.push("/login");
+            })
+            .catch(e => {
+                console.error(e)
             });
         },
         ////////////////////////////////////////////////////////////////////////

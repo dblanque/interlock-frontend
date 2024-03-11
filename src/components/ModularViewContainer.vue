@@ -160,60 +160,58 @@ export default {
 				}
 			}
 		},
-		requestRefresh: {
-			handler: function (newValue) {
-				switch (newValue) {
-					case 'home':
-						if (this.$refs.DirtreeView != undefined) {
-							console.log("Requested refresh for view component "+ newValue)
-							this.$refs.DirtreeView.resetSearch()
-							this.$refs.DirtreeView.resetDirtree(true)
-						}
-						break;
-					case 'users':
-						if (this.$refs.UserView != undefined) {
-							console.log("Requested refresh for component "+ newValue)
-							this.$refs.UserView.resetSearch()
-							this.$refs.UserView.listUserItems()
-						}
-						break;
-					case 'groups':
-						if (this.$refs.GroupView != undefined) {
-							console.log("Requested refresh for component "+ newValue)
-							this.$refs.GroupView.resetSearch()
-							this.$refs.GroupView.listGroupItems()
-						}
-						break;
-					case 'settings':
-						if (this.$refs.SettingsView != undefined) {
-							console.log("Requested refresh for component "+ newValue)
-							this.$refs.SettingsView.refreshSettings()
-						}
-						break;
-					case 'logs':
-						if (this.$refs.LogView != undefined) {
-							console.log("Requested refresh for component "+ newValue)
-							this.$refs.LogView.resetSearch()
-							this.$refs.LogView.listLogs()
-						}
-						break;
-					case 'dns':
-						if (this.$refs.dnsView != undefined) {
-							console.log("Requested refresh for component "+ newValue)
-							this.$refs.dnsView.getDNSData()
-						}
-						break;
-					case 'debug':
-						if (this.$refs.DebugView != undefined) {
-							console.log("Requested refresh for component "+ newValue)
-							this.$refs.DebugView.refreshAction()
-						}
-						break;
-					default:
-						if (newValue)
-							console.log("Requested refresh for component "+ newValue)
-						break;
-				}
+		requestRefresh(newValue) {
+			switch (newValue) {
+				case 'home':
+					if (this.$refs.DirtreeView != undefined) {
+						console.log("Requested refresh for view component "+ newValue)
+						this.$refs.DirtreeView.resetSearch()
+						this.$refs.DirtreeView.resetDirtree(true)
+					}
+					break;
+				case 'users':
+					if (this.$refs.UserView != undefined) {
+						console.log("Requested refresh for component "+ newValue)
+						this.$refs.UserView.resetSearch()
+						this.$refs.UserView.listUserItems()
+					}
+					break;
+				case 'groups':
+					if (this.$refs.GroupView != undefined) {
+						console.log("Requested refresh for component "+ newValue)
+						this.$refs.GroupView.resetSearch()
+						this.$refs.GroupView.listGroupItems()
+					}
+					break;
+				case 'settings':
+					if (this.$refs.SettingsView != undefined) {
+						console.log("Requested refresh for component "+ newValue)
+						this.$refs.SettingsView.refreshSettings()
+					}
+					break;
+				case 'logs':
+					if (this.$refs.LogView != undefined) {
+						console.log("Requested refresh for component "+ newValue)
+						this.$refs.LogView.resetSearch()
+						this.$refs.LogView.listLogs()
+					}
+					break;
+				case 'dns':
+					if (this.$refs.dnsView != undefined) {
+						console.log("Requested refresh for component "+ newValue)
+						this.$refs.dnsView.getDNSData()
+					}
+					break;
+				case 'debug':
+					if (this.$refs.DebugView != undefined) {
+						console.log("Requested refresh for component "+ newValue)
+						this.$refs.DebugView.refreshAction()
+					}
+					break;
+				default:
+					if (newValue)
+						console.log("Requested refresh for component "+ newValue)
+					break;
 			}
 		},
 	},

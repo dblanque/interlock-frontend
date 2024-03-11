@@ -59,8 +59,8 @@ else {
 request = axios.create(axios_opts);
 
 export const ignoreErrorCodes = [
-    401,
-    403
+    401, // Unauthorized
+    403 // Forbidden
 ]
 
 // LIST OF URL PATTERNS.
@@ -192,7 +192,7 @@ request.interceptors.response.use(
                 router.push('/login')
         }
         // If the request error code is 403 and the request hasn't been retried...
-        if (error.response.status === 403 || error.response.status === 401 && !originalRequest._retry) {
+        if (error.response.status === 401 && !originalRequest._retry) {
             // Check flag for request being retried.
             originalRequest._retry = true;
             // Send refresh token request.
@@ -209,7 +209,7 @@ request.interceptors.response.use(
             }).catch((e)=>{
                 if (e.status != undefined && !ignoreErrorCodes.includes(e.status))
                     console.error(e)
-                if (e?.response?.status != 200) {
+                if (e?.response?.status == 401) {
                     // erase local storage and go to Index Login.
                     eraseLocalUserData()
                     if (router.app.$route.path != "/login")

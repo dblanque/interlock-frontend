@@ -93,7 +93,7 @@
             v-for="tab in getVisibleTabs"
             :key="tab.index"
             @click="updateSelectedTab(tab.index)"
-            :disabled="!tab.enabled"
+            :disabled="!tab.enabled || lockNavTabs"
           >
             <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
             <span v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
@@ -123,7 +123,7 @@
           text
           color="primary"
           @click="goToPrevTab"
-          :disabled="active_tab == 0">
+          :disabled="active_tab == 0 || lockNavTabs">
           <v-icon> mdi-chevron-double-left </v-icon>
           <span v-if="$vuetify.breakpoint.smAndUp">
             {{ $t("actions.back_short") }}
@@ -144,7 +144,7 @@
           text
           color="primary"
           @click="goToNextTab"
-          :disabled="active_tab == getVisibleTabs.length - 1">
+          :disabled="active_tab == getVisibleEnabledTabs.length || lockNavTabs">
           <span v-if="$vuetify.breakpoint.smAndUp">
             {{ $t("actions.next") }}
           </span>
@@ -201,7 +201,7 @@
       max-width="40rem"
       v-model="showLogoutDialog">
         <LogoutDialog
-        @logoutAction="logoutAction(true)"/>
+        @logoutAction="logoutAction()"/>
     </v-dialog>
 
     <!-- REFRESH TOKEN DIALOG  -->
@@ -329,6 +329,7 @@ export default {
       selectedTab: 0,
       selectedTabTitle: "",
       showNavTabs: false,
+      lockNavTabs: false,
       langChanged: false,
       active_tab: 0,
       tableData: {
@@ -465,6 +466,9 @@ export default {
     getVisibleTabs(){
       return this.navTabs.filter(x => !x.hidden)
     },
+    getVisibleEnabledTabs(){
+      return this.getVisibleTabs.filter(x => x.enabled)
+    },
     breakpointName() {
       return this.$vuetify.breakpoint.name;
     },
@@ -548,10 +552,14 @@ export default {
     ////////////////////////////////////////////////////////////////////////////
     // Logout Actions
     ////////////////////////////////////////////////////////////////////////////
-    async logoutAction(timeout=false) {
-      await new User({}).logout(timeout).then(() => {
+    async logoutAction() {
+      await new User({}).logout()
+      .then(() => {
         localStorage.setItem("auth.logoutMessage", true);
         this.$router.push("/login");
+      })
+      .catch(e => {
+        console.error(e)
       });
     },
     refreshOnLanguageChange() {
@@ -560,7 +568,7 @@ export default {
       setTimeout(() => {
         this.showNavTabs = true;
         this.langChanged = false;
-      }, 250);
+      }, 300);
     },
     async updateSelectedTab(index) {
       if (this.selectedTab != index)
@@ -570,6 +578,7 @@ export default {
       this.active_tab = index;
       this.selectedTabTitle = this.navTabs[this.selectedTab].title;
       this.requestRefresh = this.selectedTabTitle;
+      this.lockNavTabs = true;
       getDomainDetails();
       let routeToPush = "";
       this.navTabs.forEach((item) => {
@@ -584,7 +593,11 @@ export default {
       if (this.$route.path != "/" + routeToPush) {
         this.$router.push("/" + routeToPush);
       }
-      this.requestRefresh = "";
+      // Wait for watch to register requestRefresh prop change
+      setTimeout(()=>{
+        this.requestRefresh = "";
+        this.lockNavTabs = false;
+      }, 1e2)
     },
     ////////////////////////////////////////////////////////////////////////////
     // Refresh Token Timers

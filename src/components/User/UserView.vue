@@ -644,14 +644,18 @@ export default {
           {
             message: (this.$tc("classes.user", 1) + " " + this.$t("words.enabled")).toUpperCase(), 
             type: 'success'
-          }
-        );
+          });
       })
       .catch(error => {
         console.error(error)
         this.loading = false
         this.error = true
         this.errorMsg = this.getMessageForCode(error)
+        notificationBus.$emit('createNotification', 
+        {
+          message: this.errorMsg.toUpperCase(), 
+          type: 'error'
+        });
       })
     },
     async disableUser(userObject){
@@ -684,8 +688,10 @@ export default {
           this.error = true
           this.errorMsg = this.getMessageForCode(error)
           notificationBus.$emit('createNotification', 
-              {message: this.errorMsg.toUpperCase(), type: 'error'}
-          )
+          {
+            message: this.errorMsg.toUpperCase(), 
+            type: 'error'
+          });
         })
       }
     },

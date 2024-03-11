@@ -72,8 +72,8 @@ class User extends ApiModel{
     /**
      * Logs out the current User, Standard Call.
      */
-    async logout(timeout){
-        return await interlock_backend.call('auth/logout', timeout)
+    async logout(){
+        return await interlock_backend.call('auth/logout')
     }
 
     async list(){

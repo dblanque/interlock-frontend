@@ -105,12 +105,23 @@ const utilsMixin = {
                 case 'ERR_LDAP_GW':
                     return this.$t('error.codes.ldapGwError')
                 case 400:
+                case 'bad_request':
                 case 'ERR_BAD_REQUEST':
-                    return this.$t('error.codes.badRequest')
+                    return this.$t('error.codes.400')
+                case 403:
+                case 'permission_denied':
+                    return this.$t('error.codes.403')
+                case 406:
+                case 'not_acceptable':
+                    return this.$t('error.codes.406')
                 case 500:
                 case 'ERR_SERV_ERROR':
                 case 'ERR_BAD_RESPONSE':
-                    return this.$t('error.codes.serverError')
+                    return this.$t('error.codes.500')
+                case 'access_token_invalid':
+                case 'refresh_token_expired':
+                case 'unauthorized':
+                    return this.$t('error.codes.401')
                 case 'ERR_INVALID_CSV':
                     return this.$t('error.codes.invalidCSV')
                 case 'ERR_INVALID_CSV_HEADERS':

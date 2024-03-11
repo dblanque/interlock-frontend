@@ -222,9 +222,12 @@
   },
   "error":{
     "codes": {
-      "conflict": "HTTP 409: Conflicto",
-      "badRequest": "HTTP 405: Request Erróneo",
-      "serverError": "HTTP 500: Error de Servidor",
+      "400": "HTTP 400: Request Erróneo",
+      "401": "HTTP 401: No Autorizado",
+      "403": "HTTP 403: Prohibido",
+      "406": "HTTP 406: Inaceptable",
+      "409": "HTTP 409: Conflicto",
+      "500": "HTTP 500: Error de Servidor",
       "ldapGwError": "Servidor de LDAP Inalcanzable",
       "invalidCSV": "Archivo CSV Inválido",
       "invalidCSVHeaders": "Cabecera de CSV Inválida",
@@ -535,8 +538,8 @@
         "DELETE":"Baja",
         "LOGIN":"Inicio de Sesión",
         "LOGOUT":"Cierre de Sesión",
-        "OPEN":"Apertura de Conexión",
-        "CLOSE":"Cierre de Conexión"
+        "OPEN":"Apertura",
+        "CLOSE":"Cierre"
       }
     },
     "enduser":{
@@ -751,8 +754,8 @@
         "LDAP_LOG_CREATE":"Registrar Eventos de ALTA",
         "LDAP_LOG_UPDATE":"Registrar Eventos de MODIFICACIÓN",
         "LDAP_LOG_DELETE":"Registrar Eventos de BAJA",
-        "LDAP_LOG_OPEN_CONNECTION":"Registrar Eventos al ABRIR CONEXIÓN LDAP (No recomendado)",
-        "LDAP_LOG_CLOSE_CONNECTION":"Registrar Evento al CERRAR CONEXIÓN LDAP (No recomendado)",
+        "LDAP_LOG_OPEN_CONNECTION":"Registrar Eventos al ABRIR CONEXIÓN LDAP",
+        "LDAP_LOG_CLOSE_CONNECTION":"Registrar Evento al CERRAR CONEXIÓN LDAP",
         "LDAP_LOG_LOGIN":"Registrar Inicios de Sesión en Interlock",
         "LDAP_LOG_LOGOUT":"Registrar Cierres de Sesión en Interlock",
         "LDAP_URI_PREFIX":"Prefijo LDAP",

@@ -14,15 +14,17 @@
     </v-row>
     <v-card-actions class="">
         <v-row class="ma-1 pa-0 mb-0" justify="center">
-        <v-btn dark color="valid" class="ma-0" rounded @click="emitLogoutAction">{{ $t("actions.backToLogin") }}</v-btn>
+        <v-btn color="valid-65" class="ma-0" rounded @click="emitLogoutAction">{{ $t("actions.backToLogin") }}</v-btn>
         </v-row>
     </v-card-actions>
     </v-card>
 </template>
 
 <script>
+import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 export default {
     name: 'LogoutDialog',
+    mixins: [ utilsMixin ],
     methods: {
         emitLogoutAction() {
             this.$emit('logoutAction')

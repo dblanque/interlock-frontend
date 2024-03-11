@@ -864,20 +864,6 @@ export default {
         getUSN(){
             return `${this.usercopy.username}@${this.domain}`
         },
-        isUserModified() {
-            // Check Group Changes
-            if (this.groupsToAdd.length > 0 || this.groupsToRemove.length > 0)
-                return true
-            //  Check Permissions Changes
-            let p = []
-            for (const [key] of Object.entries(this.permissions)) {
-                if (this.permissions[key].value == true)
-                    p.push(key)
-            }
-            if (!this.arraysAreEqual(p, this.user.permission_list)) return true
-            // Check the rest of the user data.
-            return this.getModifiedValues().length > 0
-        },
     },
     watch: {
         'dialogs': {
@@ -887,17 +873,16 @@ export default {
             },
             deep: true
         },
-        isUserModified(new_v) {
-            console.log(new_v)
-        }
         // 'permissions': {
         //     handler: function (newValue) {
-        //         console.log(newValue)
         //     },
         //     deep: true
         // }
         // Monitor changes in usercopy
-        // usercopy(newValue) {
+        // 'usercopy': {
+        //     handler: function (newValue) {
+        //     },
+        //     deep: true
         // }
     },
     methods: {
@@ -905,9 +890,7 @@ export default {
             let v = []
             for (const key in this.user) {
                 if (!(key in this.user) ||
-                    !(key in this.usercopy) ||
-                    this.user[key] == undefined ||
-                    this.usercopy[key] == undefined) {
+                    !(key in this.usercopy)) {
                     continue
                 }
                 if (Array.isArray(this.user[key])) {
@@ -923,6 +906,21 @@ export default {
                 }
             }
             return v
+        },
+        getIsUserModified(){
+            // Check Group Changes
+            if (this.groupsToAdd.length > 0 || this.groupsToRemove.length > 0)
+                return true
+            //  Check Permissions Changes
+            let p = []
+            for (const [key] of Object.entries(this.permissions)) {
+                if (this.permissions[key].value == true)
+                    p.push(key)
+            }
+            if (!this.arraysAreEqual(p, this.user.permission_list)) return true
+            // Check the rest of the user data.
+            if (this.getModifiedValues().length > 0) return true
+            return false
         },
         goToGroup(groupDn) {
             this.$emit('goToGroup', { distinguishedName: groupDn })
@@ -1152,7 +1150,7 @@ export default {
             this.$emit('closeDialog', this.viewKey);
         },
         async saveUser(closeDialog=false){
-            if (this.isUserModified != true) {
+            if (this.getIsUserModified() != true) {
                 console.log("User was not modified, ignoring user save request.")
                 return
             }

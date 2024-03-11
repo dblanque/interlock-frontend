@@ -143,8 +143,6 @@ export default {
             if(resetConfirm != true)
                 this.$emit('closeDialog', this.viewKey);
 
-            user.distinguishedName = this.userObject.distinguishedName
-            user.username = this.userObject.username
             if (this.isEndUser === true) {
                 if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
                     this.loading = true

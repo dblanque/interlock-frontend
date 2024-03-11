@@ -216,9 +216,12 @@
   },
   "error":{
       "codes":{
-          "conflict": "HTTP 409: Conflict",
-          "badRequest": "HTTP 405: Bad Request",
-          "serverError": "HTTP 500: Server Error",
+          "400": "HTTP 400: Bad Request",
+          "401": "HTTP 401: Unauthorized",
+          "403": "HTTP 403: Forbidden",
+          "406": "HTTP 406: Not Acceptable",
+          "409": "HTTP 409: Conflict",
+          "500": "HTTP 500: Server Error",
           "ldapGwError": "LDAP Server is Unreachable",
           "invalidCSV": "Invalid CSV File",
           "invalidCSVHeaders": "Invalid CSV Headers",
@@ -529,8 +532,8 @@
         "DELETE":"Delete",
         "LOGIN":"Login",
         "LOGOUT":"Logout",
-        "OPEN":"Opened LDAP Connection",
-        "CLOSE":"Closed LDAP Connection"
+        "OPEN":"Opened",
+        "CLOSE":"Closed"
       }
     },
     "enduser":{
@@ -745,8 +748,8 @@
         "LDAP_LOG_CREATE":"Log CREATE Events",
         "LDAP_LOG_UPDATE":"Log UPDATE Events",
         "LDAP_LOG_DELETE":"Log DELETE Events",
-        "LDAP_LOG_OPEN_CONNECTION":"Log OPEN LDAP CONNECTION Events (Not recommended)",
-        "LDAP_LOG_CLOSE_CONNECTION":"Log CLOSE LDAP CONNECTION Events (Not recommended)",
+        "LDAP_LOG_OPEN_CONNECTION":"Log OPEN LDAP CONNECTION Events",
+        "LDAP_LOG_CLOSE_CONNECTION":"Log CLOSE LDAP CONNECTION Events",
         "LDAP_LOG_LOGIN":"Log Interlock LOGIN Events",
         "LDAP_LOG_LOGOUT":"Log Interlock LOGOUT Events",
         "LDAP_URI_PREFIX":"LDAP Prefix",
