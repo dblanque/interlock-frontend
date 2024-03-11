@@ -368,6 +368,7 @@ import RefreshButton from '@/components/RefreshButton.vue'
 import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
+import { getDomainDetails } from '@/include/utils.js';
 
 export default {
     name: 'EnduserView',
@@ -409,31 +410,29 @@ export default {
     async created () {
         this.user = new User({})
         this.user.getCurrentUserData().then(response => {
-            var responseStatus = response.status
-            var token = localStorage.getItem('token')
-            var admin_allowed = (localStorage.getItem('admin_allowed') === 'true')
+            let responseStatus = response.status
+            let admin_allowed = (localStorage.getItem('admin_allowed') === 'true')
             response = response.data
 
             // If response code is valid
             if (/^20[0-8]|226/.test(responseStatus)) {
-                this.username = localStorage.getItem('username')
-                this.first_name = localStorage.getItem('first_name')
-                this.last_name = localStorage.getItem('last_name')
-                this.email = localStorage.getItem('email')
-                this.access_token_lifetime = localStorage.getItem("access_token_lifetime");
-                this.refresh_token_lifetime = localStorage.getItem("refresh_token_lifetime");
+                this.username = localStorage.getItem('user.username')
+                this.first_name = localStorage.getItem('user.first_name')
+                this.last_name = localStorage.getItem('user.last_name')
+                this.email = localStorage.getItem('user.email')
+                this.access_token_lifetime = localStorage.getItem("auth.access_token_lifetime");
+                this.refresh_token_lifetime = localStorage.getItem("auth.refresh_token_lifetime");
 
                 new Domain({}).getDetails().then(() => {
-                    this.domain = localStorage.getItem('domain')
-                    this.realm = localStorage.getItem('realm')
-                    this.basedn = localStorage.getItem('basedn')
+                    let domainData = getDomainDetails()
+                    this.domain = domainData['name']
+                    this.realm = domainData['realm']
+                    this.basedn = domainData['basedn']
                 })
             }
             // If response code is an HTTP error code
             else {
-                token = localStorage.getItem("token");
-                if ( !token || token == null || token == 'null' )
-                    this.logoutAction()
+                this.logoutAction()
                 this.showLogoutDialog = true;
             }
 
@@ -453,7 +452,7 @@ export default {
             this.loading = false
             this.error = true
         });
-        this.loadDomainData();
+        this.setDomainDetails();
     },
     computed: {
         getUSN(){
@@ -470,12 +469,12 @@ export default {
             return this.realm.toUpperCase() + "@" + this.username
         },
         showEnduserHelpMessage() {
-            return (localStorage.getItem('enduserHelpMessage') === 'true')
+            return (localStorage.getItem('user.tips.enduserHelp') === 'true')
         }
     },
     methods: {
         disableEnduserHelpMessage(){
-            localStorage.setItem('enduserHelpMessage', false)
+            localStorage.setItem('user.tips.enduserHelp', false)
         },
         openSettings(){
             this.showSettingsDialog = true
@@ -530,12 +529,14 @@ export default {
                 this.error = true
             })
         },
-        async loadDomainData(){
-            if (!this.domain || !this.realm) {
+        async setDomainDetails(){
+            let domainData = getDomainDetails()
+            if (!domainData.domain || !domainData.realm) {
                 await new Domain({}).getDetails().then(() => {
-                this.domain = localStorage.getItem('domain')
-                this.realm = localStorage.getItem('realm')
-                this.basedn = localStorage.getItem('basedn')
+                    domainData = getDomainDetails()
+                    this.domain = domainData['name']
+                    this.realm = domainData['realm']
+                    this.basedn = domainData['basedn']
                 })
             }
         },
@@ -544,7 +545,7 @@ export default {
         ////////////////////////////////////////////////////////////////////////
         async logoutAction(timeout=false) {
             await new User({}).logout(timeout).then(() => {
-                localStorage.setItem("logoutMessage", true);
+                localStorage.setItem("auth.logoutMessage", true);
                 this.$router.push("/login");
             });
         },
@@ -553,7 +554,7 @@ export default {
         // What happens when the timer stops
         ////////////////////////////////////////////////////////////////////////
         handleInactive() {
-            const refreshClock = Date.parse(localStorage.getItem("refreshClock"));
+            const refreshClock = Date.parse(localStorage.getItem("auth.refreshClock"));
             const accessClockLimit = refreshClock + (this.access_token_lifetime * 1000)
             const refreshClockLimit = refreshClock + (this.refresh_token_lifetime * 1000)
             const clockDifference = this.refresh_token_lifetime - this.access_token_lifetime

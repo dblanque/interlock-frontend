@@ -203,6 +203,7 @@ import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import { getRuntimeConfig, ignoreErrorCodes } from "@/providers/interlock_backend/config";
 
 export default {
   name: "LoginView",
@@ -212,6 +213,10 @@ export default {
     ThemeChanger
   },
   async created() {
+    this.version = await getRuntimeConfig()
+    .then(function(json) {
+        localStorage.setItem("interlock.version", json.version)
+    })
   },
   data() {
     return {
@@ -237,9 +242,9 @@ export default {
     };
   },
   mounted() {
-    var errInStorage = parseInt(localStorage.getItem('loginForbiddenCount'))
-    var timedOutStorage = Boolean(localStorage.getItem('loginTimedOut'))
-    var timeOutCounterStorage = parseInt(localStorage.getItem('loginTimeOutCounter'))
+    let errInStorage = parseInt(localStorage.getItem('auth.loginForbiddenCount'))
+    let timedOutStorage = Boolean(localStorage.getItem('auth.loginTimedOut'))
+    let timeOutCounterStorage = parseInt(localStorage.getItem('auth.loginTimeOutCounter'))
     if (Number.isInteger(errInStorage))
       this.loginForbiddenCount = errInStorage
     if (Number.isInteger(timeOutCounterStorage))
@@ -253,21 +258,26 @@ export default {
     if (this.loginForbiddenCount > 0)
       this.error = true
 
-    var userJustLoggedOut = localStorage.getItem('logoutMessage')
+    let userJustLoggedOut = localStorage.getItem('auth.logoutMessage')
     if (userJustLoggedOut) {
       this.snackbarMessage = this.$t("misc.loggedOut").toUpperCase()
       this.logoutSnackbar = true;
-      localStorage.removeItem('logoutMessage')
+      localStorage.removeItem('auth.logoutMessage')
     }
 
-    var token = localStorage.getItem('token')
-    var admin_allowed = localStorage.getItem('admin_allowed')
-    if (token && token != null && token != 'null') {
-      if (admin_allowed == true)
+    let admin_allowed = localStorage.getItem('user.admin_allowed')
+    new User({}).fetchme()
+    .then(() => {
+      console.log("User is already logged in.")
+      if (admin_allowed === 'true')
         this.$router.push("/home")
       else
         this.$router.push("/enduser")
-    }
+    })
+    .catch(e=>{
+      if (!ignoreErrorCodes.includes(e.status))
+        console.error(e)
+    })
   },
   watch: {
     validateForm(){
@@ -284,8 +294,8 @@ export default {
         this.timedOut = true
         if (!this.timeoutCounter)
           this.timeoutCounter = 30
-        localStorage.setItem('loginTimedOut', true)
-        localStorage.setItem('loginTimeOutCounter', this.timeoutCounter)
+        localStorage.setItem('auth.loginTimedOut', true)
+        localStorage.setItem('auth.loginTimeOutCounter', this.timeoutCounter)
         this.submitted = false
         this.valid = false
         this.error = true;
@@ -301,7 +311,7 @@ export default {
           else {
             this.timeoutCounter -= 1
             this.valid = false
-            localStorage.setItem('loginTimeOutCounter', this.timeoutCounter)
+            localStorage.setItem('auth.loginTimeOutCounter', this.timeoutCounter)
             if (this.timeoutCounter == 1)
               this.errorMsg = this.$t("section.login.tooManyLogins") + " (" + this.timeoutCounter + " " + this.$t("words.seconds") + ")";
             this.errorMsg = this.$t("section.login.tooManyLogins") + " (" + this.timeoutCounter + " " + this.$t("words.seconds") + ")";
@@ -309,9 +319,9 @@ export default {
         }, 1000)
     },
     clearLoginTimeout() {
-      localStorage.removeItem('loginForbiddenCount')
-      localStorage.removeItem('loginTimedOut')
-      localStorage.removeItem('loginTimeOutCounter')
+      localStorage.removeItem('auth.loginForbiddenCount')
+      localStorage.removeItem('auth.loginTimedOut')
+      localStorage.removeItem('auth.loginTimeOutCounter')
       this.timedOut = false
       this.timeoutCounter = 30
       this.loginForbiddenCount = 0
@@ -332,8 +342,8 @@ export default {
             this.errorMsg = this.getMessageForCode("ERR_LDAP_GW")
           }
         }, 10000)
-        var user = new User({})
-        var data = {
+        let user = new User({})
+        let data = {
           username: this.username,
           password: this.password
         }
@@ -346,26 +356,25 @@ export default {
           if(response.data != undefined) {
             this.error = false
             this.errorMsg = "";
-            localStorage.removeItem('loginForbiddenCount')
+            localStorage.removeItem('auth.loginForbiddenCount')
             this.clearLoginTimeout()
-            if (response.data.admin_allowed == true)
+            if (response.data.admin_allowed === true)
               this.$router.push("/home")
             else
               this.$router.push("/enduser")
           }
         })
         .catch(e => {
-          console.log(e)
           this.submitted = false;
           this.error = true;
-          var retriesLeft = 5 - this.loginForbiddenCount
-          var retriesLeftMsg = this.$t("section.login.retriesLeft")
+          let retriesLeft = 5 - this.loginForbiddenCount
+          let retriesLeftMsg = this.$t("section.login.retriesLeft")
           if (retriesLeft == 1)
             retriesLeftMsg = this.$t("section.login.oneRetryLeft")
           if(e.status == 401){
             // Add error count to storage to avoid people reloading out of the timeout
             this.loginForbiddenCount += 1
-            localStorage.setItem('loginForbiddenCount', this.loginForbiddenCount)
+            localStorage.setItem('auth.loginForbiddenCount', this.loginForbiddenCount)
             if (retriesLeft > 0)
               this.errorMsg = this.$t('error.codes.auth.invalid_credentials')  + " (" + retriesLeft + " " + retriesLeftMsg + ")"
             else

@@ -610,8 +610,8 @@
           "primaryGroupID":"Only change this if you have Macintosh Clients or POSIX Compliant Applications"
         }
       },
-      "bulkEdit":{
-        "title": "User Bulk Edit"
+      "bulkUpdate":{
+        "title": "User Bulk Update"
       },
       "import":{
         "title":"User Bulk Import",

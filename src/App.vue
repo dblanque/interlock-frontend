@@ -14,6 +14,10 @@ export default {
   mounted () {
     const html = document.documentElement
     html.setAttribute('lang', this.$i18n.locale)
+    if (!localStorage.getItem('interlock.version')) {
+      console.error("No Interlock version found, clearing old localStorage Variables.")
+      localStorage.clear()
+    }
   },
 }
 </script>

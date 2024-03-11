@@ -40,13 +40,13 @@ export default {
     mounted: function () {
         // check for active theme
         let htmlElement = document.documentElement;
-        let theme = localStorage.getItem("theme");
+        let theme = localStorage.getItem("user.theme");
 
         if (theme === 'dark') {
-            htmlElement.setAttribute('theme', 'dark')
+            htmlElement.setAttribute('user.theme', 'dark')
             this.darkMode = true
         } else {
-            htmlElement.setAttribute('theme', 'light');
+            htmlElement.setAttribute('user.theme', 'light');
             this.darkMode = false
         }
     },
@@ -56,12 +56,12 @@ export default {
             let htmlElement = document.documentElement;
 
             if (this.darkMode) {
-                localStorage.setItem("theme", 'dark');
+                localStorage.setItem("user.theme", 'dark');
                 htmlElement.setAttribute('theme', 'dark');
                 this.$emit('darkMode', true);
                 this.$vuetify.theme.dark = true;
             } else {
-                localStorage.setItem("theme", 'light');
+                localStorage.setItem("user.theme", 'light');
                 htmlElement.setAttribute('theme', 'light');
                 this.$emit('darkMode', false);
                 this.$vuetify.theme.dark = false;

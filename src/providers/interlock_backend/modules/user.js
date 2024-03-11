@@ -35,6 +35,16 @@ const actions = {
         })
     },
 
+    bulkUpdate: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.bulkUpdate, data).then(response => {
+                resolve(response)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
     bulkAccountStatusChange: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.user.bulkAccountStatusChange, data).then(response => {
@@ -100,12 +110,19 @@ const actions = {
     },
 
     getCurrentUserData: ()=>{
+        const authKeys = [
+            'access_token_lifetime',
+            'refresh_token_lifetime'
+        ]
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.user.base + 'me/')
             .then(response => {
                 resolve(response);
                 for (const key in response.data.user) {
-                    localStorage.setItem(key, response.data.user[key])
+                    if (authKeys.includes(key))
+                        localStorage.setItem(`auth.${key}`, response.data.user[key])
+                    else
+                        localStorage.setItem(`user.${key}`, response.data.user[key])
                 }
             }).catch((e) => reject(e))
         })

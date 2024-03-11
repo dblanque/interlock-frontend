@@ -58,9 +58,13 @@ export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch=unde
 }
 
 export function getDomainDetails(){
-    var domainData = {}
-    domainData.domain = localStorage.getItem('domain')
-    domainData.realm = localStorage.getItem('realm')
-    domainData.basedn = localStorage.getItem('basedn')
+    let domainData = {}
+    for (let i = 0; i < localStorage.length; i++){
+        const key = localStorage.key(i)
+        if (key.startsWith("ldap.")) {
+            const val = localStorage.getItem(key)
+            domainData[key.replace("ldap.", "")] = val
+        }
+    }
     return domainData
 }

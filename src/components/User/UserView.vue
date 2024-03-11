@@ -82,8 +82,8 @@
           <v-btn class="pa-2 mx-2" small
           :dark="!actionButtonsDisabled"
           :light="!actionButtonsDisabled && isThemeDark($vuetify)"
-          color="primary" @click="openBulkOperationDialog('userBulkEdit')"
-          :disabled="actionButtonsDisabled || true">
+          color="primary" @click="openBulkOperationDialog('userBulkUpdate')"
+          :disabled="actionButtonsDisabled">
             <v-icon small dark :color="actionButtonsDisabled ? undefined : 'white'" class="ma-0 pa-0 mr-1">mdi-pencil</v-icon>
             <span :color="actionButtonsDisabled ? undefined : 'white'">
               {{ $t('actions.edit') }}
@@ -338,10 +338,11 @@
   </v-dialog>
 
   <!-- USER EDIT DIALOG -->
-  <v-dialog eager max-width="1600px" v-model="dialogs['userBulkEdit']">
-    <UserBulkEdit
-      :viewKey="'userBulkEdit'"
-      ref="UserBulkEdit"
+  <v-dialog eager max-width="1600px" v-model="dialogs['userBulkUpdate']">
+    <UserBulkUpdate
+      :selectedUsers="this.tableData.selected"
+      :viewKey="'userBulkUpdate'"
+      ref="UserBulkUpdate"
       :refreshLoading="loading"
       @closeDialog="closeDialog"
       />
@@ -377,18 +378,18 @@
 </template>
 
 <script>
-import User from '@/include/User.js'
-import UserCreate from '@/components/User/UserCreate.vue'
-import UserImport from '@/components/User/UserImport.vue'
-import UserDialog from '@/components/User/UserDialog.vue'
-import UserBulkEdit from '@/components/User/UserBulkEdit.vue';
-import UserResetPassword from '@/components/User/UserResetPassword.vue'
-import UserPermissionList from '@/components/User/UserPermissionList.vue'
-import UserDelete from '@/components/User/UserDelete.vue'
-import RefreshButton from '@/components/RefreshButton.vue'
-import validationMixin from '@/plugins/mixin/validationMixin.js'
-import utilsMixin from '@/plugins/mixin/utilsMixin.js'
-import { notificationBus } from '@/main.js'
+import User from '@/include/User.js';
+import UserCreate from '@/components/User/UserCreate.vue';
+import UserImport from '@/components/User/UserImport.vue';
+import UserDialog from '@/components/User/UserDialog.vue';
+import UserBulkUpdate from '@/components/User/UserBulkUpdate.vue';
+import UserResetPassword from '@/components/User/UserResetPassword.vue';
+import UserPermissionList from '@/components/User/UserPermissionList.vue';
+import UserDelete from '@/components/User/UserDelete.vue';
+import RefreshButton from '@/components/RefreshButton.vue';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import { notificationBus } from '@/main.js';
 
 export default {
   name: 'UserView',
@@ -398,6 +399,7 @@ export default {
     UserImport,
     UserDialog,
     UserResetPassword,
+    UserBulkUpdate,
     UserPermissionList,
     UserDelete,
     RefreshButton
@@ -433,7 +435,7 @@ export default {
         userResetPassword: false,
         userCreate: false,
         bulkUserPermissions: false,
-        userBulkEdit: false
+        userBulkUpdate: false
       }
     }
   },
@@ -571,8 +573,8 @@ export default {
         this.tableData.items = users
         for (let i = 0; i < this.tableData.items.length; i++) {
           const user = this.tableData.items[i];
-          if (user.username == localStorage.getItem('username') ||
-              user.username == 'Administrator' && localStorage.getItem('username') == 'admin') {
+          if (user.username == localStorage.getItem('user.username') ||
+              user.username == 'Administrator' && localStorage.getItem('user.username') == 'admin') {
             this.tableData.items[i]["isSelectable"] = false
             break
           }
@@ -607,7 +609,7 @@ export default {
       })
     },
     isLoggedInUser(username){
-      if (username == localStorage.getItem('username') || username == 'Administrator' && localStorage.getItem('username') == 'admin' )
+      if (username == localStorage.getItem('user.username') || username == 'Administrator' && localStorage.getItem('username') == 'admin' )
         return true
       return false
     },
@@ -658,7 +660,7 @@ export default {
       this.errorMsg = false
       this.data.selectedUser = {}
       this.data.selectedUser = userObject
-      if (localStorage.getItem('username') == this.data.selectedUser.username) {
+      if (localStorage.getItem('user.username') == this.data.selectedUser.username) {
         this.openDialog('userAntilockout');
       }
       else {
@@ -695,7 +697,7 @@ export default {
       this.loading = true
       this.error = false
       this.errorMsg = ""
-      const current_user = localStorage.getItem('username')
+      const current_user = localStorage.getItem('user.username')
       const actionMsg = disable ? this.$t("words.disabled") : this.$t("words.enabled")
       const actionType = disable ? 'warning' : 'success'
       if (this.tableData.selected.find(v => v == current_user)) {

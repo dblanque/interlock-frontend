@@ -516,8 +516,8 @@ export default {
             this.$nextTick(() => {
                 // Do deep copy of object for reset
                 if (this.recordObject != undefined && this.recordObject != null) {
-                    this.recordCopy = JSON.parse(JSON.stringify(this.recordObject))
-                    this.originalRecord = JSON.parse(JSON.stringify(this.recordObject))
+                    this.recordCopy = Object.assign({}, this.recordObject)
+                    this.originalRecord = Object.assign({}, this.recordObject)
                     
                     if (this.recordObject.ttl == undefined)
                         this.recordCopy.ttl = 900

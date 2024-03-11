@@ -340,10 +340,10 @@ export default {
         prevStep(){
             switch (this.createStage) {
                 case 2:
-                    var domainDetails = getDomainDetails()
+                    let domainDetails = getDomainDetails()
                     this.groupToCreate.member = []
                     this.membersToAdd = []
-                    this.domain = domainDetails.domain
+                    this.domain = domainDetails.name
                     this.realm = domainDetails.realm
                     this.basedn = domainDetails.basedn
                     this.createStage -= 1
@@ -420,8 +420,8 @@ export default {
             this.radioGroupType = 1
             this.errorMsg = ""
             this.$refs.groupCreateForm1.resetValidation()
-            var domainDetails = getDomainDetails()
-            this.domain = domainDetails.domain
+            let domainDetails = getDomainDetails()
+            this.domain = domainDetails.name
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
             this.fetchOUs()

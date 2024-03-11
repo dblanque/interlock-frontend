@@ -10,9 +10,9 @@ const actions = {
             interlock_backend.request.get(interlock_backend.urls.domain.details)
             .then(response => {
                 resolve(response);
-                localStorage.setItem("domain", response.data.details.name)
-                localStorage.setItem("realm", response.data.details.realm)
-                localStorage.setItem("basedn", response.data.details.basedn)
+                for (const key in response.data.details) {
+                    localStorage.setItem(`ldap.${key}`, response.data.details[key])
+                }
             }).catch((e) => reject(e))
         })
     },

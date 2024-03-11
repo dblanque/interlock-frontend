@@ -285,15 +285,15 @@ export default {
     methods: {
         toggleAutoRefresh(){
             this.art_input_disabled = true
-            let v = localStorage.getItem('auto_refresh_token') == 'true'
-            localStorage.setItem('auto_refresh_token', !v)
+            let v = localStorage.getItem('auth.auto_refresh_token') == 'true'
+            localStorage.setItem('auth.auto_refresh_token', !v)
             this.art_input_disabled = false
         },
         closeDialog(){
             this.$emit("close")
         },
         async loadSettings(){
-            this.auto_refresh_token = localStorage.getItem('auto_refresh_token') == 'true'
+            this.auto_refresh_token = localStorage.getItem('auth.auto_refresh_token') == 'true'
             this.loading = true
             this.recovery_codes = []
             this.setTotp()

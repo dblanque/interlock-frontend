@@ -573,8 +573,8 @@ export default {
         prevStep(){
             switch (this.createStage) {
                 case 2:
-                    var domainDetails = getDomainDetails()
-                    this.domain = domainDetails.domain
+                    let domainDetails = getDomainDetails()
+                    this.domain = domainDetails.name
                     this.realm = domainDetails.realm
                     this.basedn = domainDetails.basedn
                     this.createStage -= 1
@@ -648,8 +648,8 @@ export default {
             this.$refs.userCreateForm1.resetValidation()
             for (const [key] of Object.entries(this.permissions))
                 this.permissions[key].value = false
-            var domainDetails = getDomainDetails()
-            this.domain = domainDetails.domain
+            let domainDetails = getDomainDetails()
+            this.domain = domainDetails.name
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
             this.fetchOUs()

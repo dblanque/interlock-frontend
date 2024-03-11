@@ -14,12 +14,15 @@ const calls = {
                 }
                 var date = new Date()
 
-                localStorage.setItem('refreshClock', date.toISOString())
-                localStorage.setItem("username", response.data.username)
-                localStorage.setItem("admin_allowed", response.data.admin_allowed)
+                localStorage.setItem('auth.refreshClock', date.toISOString())
+                localStorage.setItem("user.username", response.data.username)
+                if (Object.keys(response.data).includes('admin_allowed'))
+                    localStorage.setItem("user.admin_allowed", response.data.admin_allowed)
+                else
+                    localStorage.removeItem("user.admin_allowed")
                 resolve(response)
             }).catch((e) => {
-                localStorage.removeItem('admin_allowed')
+                localStorage.removeItem('user.admin_allowed')
                 console.log('Authentication Error')
                 reject(e)
             })

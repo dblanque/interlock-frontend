@@ -256,8 +256,8 @@ export default {
     },
     methods: {
         async resetDialog(){
-            var domainDetails = getDomainDetails()
-            this.domain = domainDetails.domain
+            let domainDetails = getDomainDetails()
+            this.domain = domainDetails.name
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
             return
@@ -279,8 +279,8 @@ export default {
                 case 2:
                     this.error = false
                     this.errorMsg = ""
-                    var domainDetails = getDomainDetails()
-                    this.domain = domainDetails.domain
+                    let domainDetails = getDomainDetails()
+                    this.domain = domainDetails.name
                     this.realm = domainDetails.realm
                     this.basedn = domainDetails.basedn
                     this.createStage -= 1
@@ -336,8 +336,8 @@ export default {
             this.errorMsg = ""
             if (this.$refs.ouCreateForm1)
                 this.$refs.ouCreateForm1.resetValidation()
-            var domainDetails = getDomainDetails()
-            this.domain = domainDetails.domain
+            let domainDetails = getDomainDetails()
+            this.domain = domainDetails.name
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
             this.fetchOUs()

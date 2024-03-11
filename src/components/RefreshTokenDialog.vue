@@ -55,8 +55,8 @@ export default {
     },
     computed: {
         threshold(){
-            const time = localStorage.getItem("refresh_token_lifetime")
-            return time - (time / 3)
+            const time = localStorage.getItem("auth.access_token_lifetime")
+            return time
         }
     },
     methods: {
@@ -70,7 +70,7 @@ export default {
             this.allowRefresh = true
             this.alertType = 'info'
             this.alertIcon = 'mdi-information'
-            this.timeRemaining = localStorage.getItem("refresh_token_lifetime") - localStorage.getItem("access_token_lifetime")
+            this.timeRemaining = localStorage.getItem("auth.refresh_token_lifetime") - localStorage.getItem("auth.access_token_lifetime")
         },
         startCountdown(){
             this.clearCountdown()

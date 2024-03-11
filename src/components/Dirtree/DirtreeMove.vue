@@ -201,8 +201,8 @@ export default {
             }
         },
         async resetDialog(){
-            var domainDetails = getDomainDetails()
-            this.domain = domainDetails.domain
+            let domainDetails = getDomainDetails()
+            this.domain = domainDetails.name
             this.realm = domainDetails.realm
             this.basedn = domainDetails.basedn
             this.allowRefresh = false

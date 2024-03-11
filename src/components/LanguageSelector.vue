@@ -71,9 +71,9 @@ export default {
     },
     methods: {
         async verifyLocale() {
-            var setLang = localStorage.getItem('locale')
+            let setLang = localStorage.getItem('lang.locale')
             if(setLang == undefined || setLang == null){
-                var browserlang = navigator.language.toLowerCase()
+                let browserlang = navigator.language.toLowerCase()
                 if(browserlang.includes('es'))
                     this.$i18n.locale = 'es'
                 else{
@@ -81,7 +81,7 @@ export default {
                 }
                 this.language = this.$i18n.locale
                 console.log("Using locale: " + this.language);
-                localStorage.setItem('locale', this.$i18n.locale)
+                localStorage.setItem('lang.locale', this.$i18n.locale)
             }
             else {
                 this.language = setLang
@@ -90,7 +90,7 @@ export default {
         },
         changeLanguage: function(){
             this.$i18n.locale = this.language
-            localStorage.setItem('locale', this.language)
+            localStorage.setItem('lang.locale', this.language)
             this.$emit('updateTabSliders');
             const html = document.documentElement
             html.setAttribute('lang', this.$i18n.locale)

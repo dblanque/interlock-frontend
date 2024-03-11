@@ -58,6 +58,11 @@ else {
 }
 request = axios.create(axios_opts);
 
+export const ignoreErrorCodes = [
+    401,
+    403
+]
+
 // LIST OF URL PATTERNS.
 const urls = {
     auth: {
@@ -73,6 +78,7 @@ const urls = {
         insert: 'api/users/insert/',
         bulkInsert: 'api/users/bulkInsert/',
         bulkDelete: 'api/users/bulkDelete/',
+        bulkUpdate: 'api/users/bulkUpdate/',
         bulkAccountStatusChange: 'api/users/bulkAccountStatusChange/',
         bulkUnlock: 'api/users/bulkUnlock/',
         update: 'api/users/update/',
@@ -154,6 +160,20 @@ const urls = {
     },
 }
 
+const eraseLocalUserData = () => {
+    const localUserKeys = [
+        "first_name",
+        "last_name",
+        "username",
+        "email",
+        "admin_allowed",
+    ]
+    localUserKeys.forEach(v=>{
+        localStorage.removeItem(`user.${v}`)
+    })
+    return
+}
+
 // Adds Axios Response Interceptor.
 request.interceptors.response.use(
     // On Request Success...
@@ -167,8 +187,7 @@ request.interceptors.response.use(
         const originalRequest = error.config;
         if (error?.response?.status == undefined) {
             // erase local storage and go to Index Login.
-            localStorage.removeItem('user_initials')
-            localStorage.removeItem('user_fullname')
+            eraseLocalUserData()
             if (router.app.$route.path != "/login")
                 router.push('/login')
         }
@@ -183,16 +202,16 @@ request.interceptors.response.use(
             .then(() => {
                 var date = new Date()
                 // 1) Set tokens on LocalStorage.
-                localStorage.setItem('refreshClock', date.toISOString())
+                localStorage.setItem('auth.refreshClock', date.toISOString())
                 // 2) Return re-sent request through new axios.
                 return axios(originalRequest);
             // on refresh request error catch
             }).catch((e)=>{
-                console.log(e)
+                if (e.status != undefined && !ignoreErrorCodes.includes(e.status))
+                    console.error(e)
                 if (e?.response?.status != 200) {
                     // erase local storage and go to Index Login.
-                    localStorage.removeItem('user_initials')
-                    localStorage.removeItem('user_fullname')
+                    eraseLocalUserData()
                     if (router.app.$route.path != "/login")
                         router.push('/login')
                 }

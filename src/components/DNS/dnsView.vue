@@ -607,8 +607,8 @@ export default {
             this.lastOperation = key;
             if (refresh == true && this.deleteMode == 'zone') {
                 this.zoneToCreate = ""
-                this.zoneFilter['dnsZone'] = this.ldap.domain
-                this.getDNSData(this.ldap.domain)
+                this.zoneFilter['dnsZone'] = this.ldap.name
+                this.getDNSData(this.ldap.name)
             } else if (refresh === true) {
                 this.getDNSData(this.zoneFilter['dnsZone'])
             }
@@ -621,8 +621,8 @@ export default {
             if (zoneToQuery != undefined && zoneToQuery != null && zoneToQuery.length > 0 && zoneToQuery != "")
                 this.zoneFilter['dnsZone'] = zoneToQuery
             else if (this.zoneFilter['dnsZone'] == "")
-                this.zoneFilter['dnsZone'] = this.ldap.domain
-            var queryFilter = this.zoneFilter
+                this.zoneFilter['dnsZone'] = this.ldap.name
+            let queryFilter = this.zoneFilter
 
             this.selectedRecords = []
 
@@ -631,11 +631,11 @@ export default {
 
             await new DNS({}).zones({filter: queryFilter})
             .then(response => {
-                var dnsHeaders = response.data.headers
+                let dnsHeaders = response.data.headers
                 this.dns.zones = response.data.dnsZones
                 this.dns.records = response.data.records
                 // Add actions header
-                var headerDict
+                let headerDict
 
                 dnsHeaders.forEach(header => {
                     headerDict = {}

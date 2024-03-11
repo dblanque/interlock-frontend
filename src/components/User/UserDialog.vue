@@ -396,7 +396,7 @@
                                             id="userPrincipalName"
                                             :label="$t('ldap.attributes.userPrincipalName')"
                                             readonly
-                                            v-model="getUSN"
+                                            :value="getUSN"
                                             :rules="[this.fieldRules(usercopy.userPrincipalName, 'ldap_usn')]"
                                             ></v-text-field>
                                         </v-col>
@@ -652,10 +652,11 @@
                 </v-btn>
                 <!-- Save User Changes Button -->
                 <v-btn @click="saveUser" 
-                :dark="!isThemeDark($vuetify) && editFlag" :light="isThemeDark($vuetify) && editFlag"
+                :dark="!isThemeDark($vuetify) && editFlag && !loading"
+                :light="isThemeDark($vuetify) && editFlag && !loading"
                 class="ma-0 pa-0 pa-4 ma-1"
                 rounded 
-                :disabled="!editFlag">
+                :disabled="!editFlag || loading">
                     <v-icon class="mr-1">
                         mdi-content-save
                     </v-icon>
@@ -663,10 +664,11 @@
                 </v-btn>
                 <!-- Save User Changes Button -->
                 <v-btn @click="saveUser(true)" 
-                :dark="!isThemeDark($vuetify) && editFlag" :light="isThemeDark($vuetify) && editFlag"
+                :dark="!isThemeDark($vuetify) && editFlag && !loading"
+                :light="isThemeDark($vuetify) && editFlag && !loading"
                 class='ma-0 pa-0 pa-4 ma-1'
                 rounded 
-                :disabled="!editFlag">
+                :disabled="!editFlag || loading">
                     <v-icon class="mr-1">
                         mdi-exit-to-app
                     </v-icon>
@@ -703,6 +705,7 @@ import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import ldap_perm_json from '@/include/ldap_permissions.json';
 import { notificationBus } from '@/main.js';
+import { getDomainDetails } from '@/include/utils.js';
 
 export default {
     name: 'UserDialog',
@@ -859,10 +862,21 @@ export default {
 			return this.calcEnabledPermissions(this.permissions)
 		},
         getUSN(){
-            if (this.usercopy.username != undefined)
-                return this.usercopy.username + "@" + this.domain
-            else
-                return "@" + this.domain
+            return `${this.usercopy.username}@${this.domain}`
+        },
+        isUserModified() {
+            // Check Group Changes
+            if (this.groupsToAdd.length > 0 || this.groupsToRemove.length > 0)
+                return true
+            //  Check Permissions Changes
+            let p = []
+            for (const [key] of Object.entries(this.permissions)) {
+                if (this.permissions[key].value == true)
+                    p.push(key)
+            }
+            if (!this.arraysAreEqual(p, this.user.permission_list)) return true
+            // Check the rest of the user data.
+            return this.getModifiedValues().length > 0
         },
     },
     watch: {
@@ -873,6 +887,9 @@ export default {
             },
             deep: true
         },
+        isUserModified(new_v) {
+            console.log(new_v)
+        }
         // 'permissions': {
         //     handler: function (newValue) {
         //         console.log(newValue)
@@ -884,6 +901,29 @@ export default {
         // }
     },
     methods: {
+        getModifiedValues(){
+            let v = []
+            for (const key in this.user) {
+                if (!(key in this.user) ||
+                    !(key in this.usercopy) ||
+                    this.user[key] == undefined ||
+                    this.usercopy[key] == undefined) {
+                    continue
+                }
+                if (Array.isArray(this.user[key])) {
+                    // Compare Values for Partial Update
+                    let orig_list = structuredClone(this.user[key])
+                    orig_list.sort()
+                    this.usercopy[key].sort()
+                    if (JSON.stringify(orig_list) !== JSON.stringify(this.usercopy[key]))
+                        v.push(key)
+                }
+                else if (this.usercopy[key] != this.user[key]) {
+                    v.push(key)
+                }
+            }
+            return v
+        },
         goToGroup(groupDn) {
             this.$emit('goToGroup', { distinguishedName: groupDn })
         },
@@ -973,10 +1013,12 @@ export default {
         getNameForPID(item){
             return item.name + " (" + item.objectRid + ")"
         },
-        getDomainDetails(){
-            this.domain = localStorage.getItem('domain')
-            this.realm = localStorage.getItem('realm')
-            this.basedn = localStorage.getItem('basedn')
+        setDomainDetails(){
+            let domainDetails = getDomainDetails()
+            this.domain = domainDetails['name']
+            this.realm = domainDetails['realm']
+            this.basedn = domainDetails['basedn']
+            this.userSelector = domainDetails['user_selector']
         },
         setObjectClassToArray(){
             if (this.usercopy.objectClass && this.usercopy.objectClass != '' && (typeof this.usercopy.objectClass === 'string' || this.usercopy.objectClass instanceof String)) {
@@ -997,9 +1039,8 @@ export default {
         },
         // When a permission in the v-list changes this function is executed
         onClickPermission(key){
-            if (this.editFlag == true) {
+            if (this.editFlag == true)
                 this.permissions[key].value = !this.permissions[key].value
-            }
         },
         goBackToDetails(){
             this.tab = this.TABS.DEFAULT
@@ -1111,44 +1152,59 @@ export default {
             this.$emit('closeDialog', this.viewKey);
         },
         async saveUser(closeDialog=false){
+            if (this.isUserModified != true) {
+                console.log("User was not modified, ignoring user save request.")
+                return
+            }
             this.loading = true
             this.loadingColor = 'primary'
             // Set permissions array properly
             this.usercopy.permission_list = []
             for (const [key] of Object.entries(this.permissions)) {
-                if (this.permissions[key].value == true)
-                    this.usercopy.permission_list.push(key)
+            if (this.permissions[key].value == true)
+                this.usercopy.permission_list.push(key)
             }
             // Set groups
             // Groups to Add
+            // ! Deprecated, used Before Partial Update
+            // if (this.groupsToAdd.length > 0)
+            //     this.usercopy.groupsToAdd = this.groupsToAdd
+            // else
+            //     delete this.usercopy.groupsToAdd
+            // // Groups to Remove
+            // if (this.groupsToRemove.length > 0)
+            //     this.usercopy.groupsToRemove = this.groupsToRemove
+            // else
+            //     delete this.usercopy.groupsToRemove
+
+            let modifiedValues = this.getModifiedValues()
+            let partialUpdateData = {
+                distinguishedName: this.usercopy.distinguishedName,
+            }
+            partialUpdateData[this.userSelector] = this.usercopy[this.userSelector]
+            modifiedValues.forEach(k => {
+                partialUpdateData[k] = this.usercopy[k]
+            })
             if (this.groupsToAdd.length > 0)
-                this.usercopy.groupsToAdd = this.groupsToAdd
+                partialUpdateData.groupsToAdd = this.groupsToAdd
             else
-                delete this.usercopy.groupsToAdd
+                delete partialUpdateData.groupsToAdd
             // Groups to Remove
             if (this.groupsToRemove.length > 0)
-                this.usercopy.groupsToRemove = this.groupsToRemove
+                partialUpdateData.groupsToRemove = this.groupsToRemove
             else
-                delete this.usercopy.groupsToRemove
-
-            // ! Uncomment below to log all modified user data values
-            // ONLY USE THIS FOR DEVELOPMENT
-            // for (const key in this.user) {
-            //     if (key in this.usercopy && this.usercopy[key] == this.user[key]) {
-            //         console.log(`${key} hasn't changed (${this.usercopy[key]} == ${this.user[key]})`)
-            //     }
-            // }
+                delete partialUpdateData.groupsToRemove
 
             // Uncomment below to debug permissions list
             // console.log(this.usercopy.permission_list)
             if (this.$refs.userForm.validate()){
-                await new User({}).update({user: this.usercopy})
+                await new User({}).update({user: partialUpdateData})
                 .then(() => {
                     if (closeDialog == true)
                         this.closeDialog();
                     else
                         this.refreshUser();
-                    this.$emit('save', this.viewKey, this.usercopy);
+                    this.$emit('save', this.viewKey, partialUpdateData);
                     this.loading = false
                     this.loadingColor = 'primary'
                 })
@@ -1169,7 +1225,7 @@ export default {
             }
         },
         isLoggedInUser(username){
-            if (username == localStorage.getItem('username'))
+            if (username == localStorage.getItem('user.username'))
                 return true
             return false
         },
@@ -1186,11 +1242,11 @@ export default {
             this.changingPerms = false
             this.changingGroups = false
             this.excludeGroups = []
-            this.getDomainDetails()
+            this.setDomainDetails()
             this.usercopy = new User({})
             this.extraListOpen = false
             this.$nextTick(() => {
-                this.usercopy = this.user
+                this.usercopy = Object.assign({}, this.user)
                 this.setUserGroups()
                 this.setObjectClassToArray()
                 this.setupExclude()

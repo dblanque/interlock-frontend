@@ -616,8 +616,8 @@
           "primaryGroupID":"Solo modifique este valor si tiene Clientes Macintosh o Aplicaciones que utilicen POSIX"
         }
       },
-      "bulkEdit":{
-        "title": "Edición Múltiple de Usuarios"
+      "bulkUpdate":{
+        "title": "Actualización Múltiple de Usuarios"
       },
       "import":{
         "title":"Importación de Usuarios",

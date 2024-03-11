@@ -160,7 +160,7 @@
           :viewTitle="tab.title"
           :viewIndex="tab.index"
           ref="ModularViewContainerRef"
-          @refresh="loadDomainData()"
+          @refresh="setDomainDetails()"
           @goToUser="goToUser"
           @goToGroup="goToGroup"
           :langChanged="langChanged"
@@ -292,6 +292,7 @@ import Domain from "@/include/Domain"
 import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
+import { getDomainDetails } from '@/include/utils.js';
 
 export default {
   name: "HomeView",
@@ -401,33 +402,30 @@ export default {
   },
   async created() {
     await new User({}).getCurrentUserData().then((response) => {
-      var responseStatus = response.status;
-      var token = localStorage.getItem('token')
-      var admin_allowed = (localStorage.getItem('admin_allowed') === 'true')
+      let responseStatus = response.status;
+      let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
       response = response.data;
 
       // If response code is valid
       if (/^20[0-8]|226/.test(responseStatus)) {
-        this.username = localStorage.getItem("username");
-        this.first_name = localStorage.getItem("first_name");
-        this.last_name = localStorage.getItem("last_name");
-        this.email = localStorage.getItem("email");
-        this.access_token_lifetime = localStorage.getItem("access_token_lifetime");
-        this.refresh_token_lifetime = localStorage.getItem("refresh_token_lifetime");
+        this.username = localStorage.getItem("user.username");
+        this.first_name = localStorage.getItem("user.first_name");
+        this.last_name = localStorage.getItem("user.last_name");
+        this.email = localStorage.getItem("user.email");
+        this.access_token_lifetime = localStorage.getItem("auth.access_token_lifetime");
+        this.refresh_token_lifetime = localStorage.getItem("auth.refresh_token_lifetime");
 
         new Domain({}).getDetails().then(() => {
-          this.domain = localStorage.getItem("domain");
-          this.realm = localStorage.getItem("realm");
-          this.basedn = localStorage.getItem("basedn");
-        });
+            let domainData = getDomainDetails()
+            this.domain = domainData['name']
+            this.realm = domainData['realm']
+            this.basedn = domainData['basedn']
+        })
       }
       // If response code is an HTTP error code
       else {
-        token = localStorage.getItem("token");
-        if ( !token || token == null || token == "null" ){
-          this.logoutAction();
-          this.showLogoutDialog = true;
-        }
+        this.logoutAction();
+        this.showLogoutDialog = true;
       }
 
       if (!admin_allowed || admin_allowed == false){
@@ -439,9 +437,9 @@ export default {
     this.setupTimers();
   },
   async mounted() {
-    var currentPath = this.$route.path;
+    let currentPath = this.$route.path;
     if (currentPath && currentPath.length > 0) {
-      var validRoute = this.navTabs.filter(item => "/" + item.route == currentPath && item.enabled == true)[0]
+      let validRoute = this.navTabs.filter(item => "/" + item.route == currentPath && item.enabled == true)[0]
       if (validRoute) {
         this.selectedTab = validRoute.index;
         this.active_tab = validRoute.index;
@@ -452,11 +450,10 @@ export default {
     setTimeout(() => {
       this.showNavTabs = true;
     }, 250);
-    await this.loadDomainData().then(() => {
-      if (this.domain == "example.com") {
-        this.updateSelectedTab(5)
-      }
-    });
+    getDomainDetails()
+    if (this.domain == "example.com") {
+      this.updateSelectedTab(5)
+    }
     this.active_tab = this.selectedTab;
     if (this.selectedTab == 0)
       this.initLoad = true
@@ -504,7 +501,7 @@ export default {
       this.resetTimer()
     },
     goToPrevTab(){
-      var counter = this.selectedTab - 1
+      let counter = this.selectedTab - 1
       this.navTabs.forEach(() => {
         if (this.navTabs[counter].enabled)
           return this.updateSelectedTab(counter)
@@ -514,7 +511,7 @@ export default {
       });
     },
     goToNextTab(){
-      var counter = this.selectedTab + 1
+      let counter = this.selectedTab + 1
       this.navTabs.forEach(() => {
         if (this.navTabs[counter].enabled)
           return this.updateSelectedTab(counter)
@@ -542,20 +539,18 @@ export default {
           refObj.$refs.GroupView.fetchGroup(group);
       });
     },
-    async loadDomainData() {
-      await new Domain({}).getDetails().then(() => {
-        this.domain = localStorage.getItem("domain");
-        this.realm = localStorage.getItem("realm");
-        this.basedn = localStorage.getItem("basedn");
-        return
-      });
+    async setDomainDetails() {
+      let domainData = getDomainDetails()
+      this.domain = domainData["name"];
+      this.realm = domainData["realm"];
+      this.basedn = domainData["basedn"];
     },
     ////////////////////////////////////////////////////////////////////////////
     // Logout Actions
     ////////////////////////////////////////////////////////////////////////////
     async logoutAction(timeout=false) {
       await new User({}).logout(timeout).then(() => {
-        localStorage.setItem("logoutMessage", true);
+        localStorage.setItem("auth.logoutMessage", true);
         this.$router.push("/login");
       });
     },
@@ -575,8 +570,8 @@ export default {
       this.active_tab = index;
       this.selectedTabTitle = this.navTabs[this.selectedTab].title;
       this.requestRefresh = this.selectedTabTitle;
-      await this.loadDomainData();
-      var routeToPush = "";
+      getDomainDetails();
+      let routeToPush = "";
       this.navTabs.forEach((item) => {
         if (item.index == index && item.enabled == true) {
           if (item.route.length > 0) {
@@ -596,12 +591,12 @@ export default {
     // What happens when the timer stops
     ////////////////////////////////////////////////////////////////////////////
     async handleInactive() {
-      const refreshClock = Date.parse(localStorage.getItem("refreshClock"));
+      const refreshClock = Date.parse(localStorage.getItem("auth.refreshClock"));
       const accessClockLimit = refreshClock + (this.access_token_lifetime * 1000)
       const refreshClockLimit = refreshClock + (this.refresh_token_lifetime * 1000)
       const clockDifference = this.refresh_token_lifetime - this.access_token_lifetime
       if (Date.now() >= accessClockLimit && Date.now() < refreshClockLimit) {
-        if (localStorage.getItem('auto_refresh_token') == 'true') {
+        if (localStorage.getItem('auth.auto_refresh_token') == 'true') {
             await new User({}).getCurrentUserData()
             .then(() => { this.resetTimer() })
             .catch((error) => { console.error(error) })

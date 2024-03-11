@@ -519,7 +519,7 @@ export default {
             this.excludeDNs = []
             this.showMemberTab = false
             this.$nextTick(() => {
-                this.groupcopy = this.group
+                this.groupcopy = Object.assign({}, this.group)
                 this.setGroupTypeAndScope()
                 this.getMembersLength()
                 this.setupExclude()

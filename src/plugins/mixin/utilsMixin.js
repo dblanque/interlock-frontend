@@ -29,6 +29,13 @@ const utilsMixin = {
             return result
         },
         // ---------------------------------------------------------------------------- //
+        arraysAreEqual: function(a, b, sort) {
+            let a_clone = structuredClone(a)
+            if (sort == true) a_clone.sort()
+            let b_clone = structuredClone(b)
+            if (sort == true) b_clone.sort()
+            return JSON.stringify(a_clone) === JSON.stringify(b_clone)
+        },
         isNumber: function(evt) {
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -39,7 +46,6 @@ const utilsMixin = {
             }
         },
         getResponseErrorCode(errorData) {
-            console.log(errorData)
             let codeToUse = "ERR_UNKNOWN_SHORT"
             if (errorData === undefined)
                 console.log("getResponseErrorCode(): No error data passed.")
