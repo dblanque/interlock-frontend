@@ -59,11 +59,46 @@
             :light="isThemeDark($vuetify)"
             :buttonIsSmall="true"
           />
-          <!-- Remove this in production -->
-          <v-btn @click="debugAction" v-if="false"
-           outlined class="mx-3" rounded color="red">
-            Debug
-          </v-btn>
+          
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                :dark="!isThemeDark($vuetify)"
+                :disabled="disableDomainDetailsButton"
+                :light="isThemeDark($vuetify)"
+                @click="fetchDomainDetails()"
+                class="ml-2 mr-1"
+                icon
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>
+                  mdi-cog-sync
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>{{$t("nav.tooltip.fetchDomainDetails")}}</span>
+          </v-tooltip>
+
+          <!-- This does not appear in production -->
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="accent"
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
+                :disabled="!enableDebug"
+                @click="debugAction()"
+                icon
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>
+                  mdi-code-brackets
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>{{$t("nav.tooltip.debugAction")}}</span>
+          </v-tooltip>
         </div>
       </v-col>
     </v-row>
@@ -326,12 +361,15 @@ export default {
       showLogoutDialog: false,
       showRefreshTokenDialog: false,
       showSettingsDialog: false,
+      fetchingDomainDetails: false,
+      disableDomainDetailsButton: false,
       requestRefresh: "",
       selectedTab: 0,
       selectedTabTitle: "",
       showNavTabs: false,
       lockNavTabs: false,
       langChanged: false,
+      enableDebug: false,
       active_tab: 0,
       tableData: {
         headers: [],
@@ -417,12 +455,7 @@ export default {
         this.access_token_lifetime = localStorage.getItem("auth.access_token_lifetime");
         this.refresh_token_lifetime = localStorage.getItem("auth.refresh_token_lifetime");
 
-        new Domain({}).getDetails().then(() => {
-            let domainData = getDomainDetails()
-            this.domain = domainData['name']
-            this.realm = domainData['realm']
-            this.basedn = domainData['basedn']
-        })
+        this.fetchDomainDetails()
       }
       // If response code is an HTTP error code
       else {
@@ -549,6 +582,25 @@ export default {
       this.domain = domainData["name"];
       this.realm = domainData["realm"];
       this.basedn = domainData["basedn"];
+    },
+    async fetchDomainDetails(){
+        this.fetchingDomainDetails = true
+        this.disableDomainDetailsButton = true
+        await new Domain({}).getDetails().then(() => {
+          let domainData = getDomainDetails()
+          this.domain = domainData['name']
+          this.realm = domainData['realm']
+          this.basedn = domainData['basedn']
+          this.fetchingDomainDetails = false
+          if ('debug' in domainData) this.enableDebug = (domainData['debug'] === "true")
+          else this.enableDebug = false
+          setTimeout(()=>{ this.disableDomainDetailsButton = false }, 0.5e3)
+        })
+        .catch(e => {
+          console.error(e)
+          this.fetchingDomainDetails = false
+          setTimeout(()=>{ this.disableDomainDetailsButton = false }, 0.5e3)
+        })
     },
     ////////////////////////////////////////////////////////////////////////////
     // Logout Actions

@@ -456,6 +456,12 @@
   "components":{
     "objectEditor":"Object Editor"
   },
+  "nav":{
+    "tooltip":{
+      "fetchDomainDetails":"Refresh Domain Data",
+      "debugAction":"Debug Action"
+    }
+  },
   "section":{
     "dns":{
       "zoneToAddName":"Name of the new DNS Zone",
