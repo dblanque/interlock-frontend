@@ -405,15 +405,14 @@ export default {
           }
           this.submitted = false;
           this.error = true;
-          let retriesLeft = 5 - this.loginForbiddenCount
+          let retriesLeft = e?.data?.remaining_login_count
           let retriesLeftMsg = this.$t("section.login.retriesLeft")
           if (retriesLeft == 1)
             retriesLeftMsg = this.$t("section.login.oneRetryLeft")
           if(e.status == 401){
-            // Add error count to storage to avoid people reloading out of the timeout
-            this.loginForbiddenCount += 1
-            localStorage.setItem('auth.loginForbiddenCount', this.loginForbiddenCount)
-            if (retriesLeft > 0)
+            if (!Number.isInteger(retriesLeft))
+              this.errorMsg = this.$t('error.codes.auth.invalid_credentials')
+            else if (retriesLeft > 0)
               this.errorMsg = this.$t('error.codes.auth.invalid_credentials')  + " (" + retriesLeft + " " + retriesLeftMsg + ")"
             else
               this.setLoginTimeout()
