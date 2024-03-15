@@ -82,8 +82,8 @@ export default {
             if (deleteConfirm == true) {
                 await new OrganizationalUnit({}).delete(ou)
                 .then(response => {
-                    if (response.data.distinguishedName == ou.distinguishedName)
-                        console.log("LDAP Object Deleted Successfully")
+                    // if (response.data.distinguishedName == ou.distinguishedName)
+                    //     console.log("LDAP Object Deleted Successfully")
                     this.$emit('refresh');
                 })
                 .catch(error => {
