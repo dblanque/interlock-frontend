@@ -101,8 +101,8 @@ export default {
                 } else {
                     await new User({}).delete(user)
                     .then(response => {
-                        if (response.data.username == user.username)
-                            console.log("User Deleted Successfully")
+                        // if (response.data.username == user.username)
+                        //     console.log("User Deleted Successfully")
                     })
                     .catch(error => { console.error(error) })
                 }

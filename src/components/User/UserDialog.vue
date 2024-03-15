@@ -552,6 +552,7 @@
             <v-tab-item :key="2">
                 <UserPermissionList content-class="ma-0 pa-0 mx-2 pb-4"
                     :permissions="this.permissions"
+                    enable-calculations
                     @update="onClickPermission"
                     :edit-flag="editFlag"/>
             </v-tab-item>
@@ -584,6 +585,7 @@
                     </template>
                     <v-list elevation="0"
                         dense :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
+                        <!-- Haven't found a way to make this work -->
                         <v-list-item class="ma-0 pa-0 px-2" v-if="false"
                             :disabled="!editFlag || isLoggedInUser(usercopy.username)"
                             @click="expirePwd"
@@ -595,6 +597,20 @@
                             </v-list-item-icon>
                             <v-list-item-content color="primary" class="v-list-btn v-btn">
                                 {{ $t("actions.expirePwd").toUpperCase() }}
+                            </v-list-item-content>
+                        </v-list-item>
+
+                        <v-list-item class="ma-0 pa-0 px-2"
+                            :disabled="!editFlag"
+                            @click="deleteTotp"
+                            :dark="isThemeDark($vuetify)" 
+                            :light="!isThemeDark($vuetify)"
+                            >
+                            <v-list-item-icon color="primary" class="mx-0 pa-0 mr-2">
+                                <v-icon> mdi-cellphone </v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content color="primary" class="v-list-btn v-btn">
+                                {{ $t("section.users.userDialog.deleteTotp").toUpperCase() }}
                             </v-list-item-content>
                         </v-list-item>
 
@@ -886,9 +902,16 @@ export default {
         // }
     },
     methods: {
+        exit() {
+            this.showAlert = false
+        },
         getModifiedValues(){
             let v = []
+            const IGNORE_KEYS = [
+                'lastLogon'
+            ]
             for (const key in this.user) {
+                if (IGNORE_KEYS.includes(key)) continue
                 if (!(key in this.user) ||
                     !(key in this.usercopy)) {
                     continue
@@ -1131,12 +1154,39 @@ export default {
                 );
             })
         },
+        async deleteTotp(closeDialog=false){
+            await new User({}).deleteTotp({username: this.usercopy[this.userSelector]})
+            .then(() => {
+                if (closeDialog == true)
+                    this.closeDialog();
+                else
+                    this.refreshUser();
+                notificationBus.$emit('createNotification', 
+                    {
+                        message: (this.$tc("classes.totp-device", 1) + " " + this.$t("words.deleted.m")).toUpperCase(), 
+                        type: 'success'
+                    }
+                );
+                this.loading = false
+                this.loadingColor = 'primary'
+            })
+            .catch(error => {
+                console.error(error)
+                this.loading = false
+                this.loadingColor = 'error'
+                this.error = true;
+                this.errorMsg = this.getMessageForCode(error)
+                notificationBus.$emit('createNotification', 
+                    {message: this.errorMsg.toUpperCase(), type: 'error'}
+                )
+            })
+        },
         editUser(){
             this.showAlert = false
             this.$emit('editToggle', true);
             setTimeout(() => {
                 this.showAlert = true
-            }, 500)
+            }, 0.1e3)
         },
         viewUser(){
             this.showAlert = false
@@ -1144,7 +1194,7 @@ export default {
             this.refreshUser();
             setTimeout(() => {
                 this.showAlert = true
-            }, 500)
+            }, 0.1e3)
         },
         closeDialog() {
             this.$emit('closeDialog', this.viewKey);
@@ -1202,7 +1252,7 @@ export default {
                         this.closeDialog();
                     else
                         this.refreshUser();
-                    this.$emit('save', this.viewKey, partialUpdateData);
+                    this.$emit('save');
                     this.loading = false
                     this.loadingColor = 'primary'
                 })
