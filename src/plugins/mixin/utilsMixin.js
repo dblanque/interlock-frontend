@@ -107,6 +107,7 @@ const utilsMixin = {
                 case 400:
                 case 'bad_request':
                 case 'ERR_BAD_REQUEST':
+                case 'data_key_missing':
                     return this.$t('error.codes.400')
                 case 403:
                 case 'permission_denied':

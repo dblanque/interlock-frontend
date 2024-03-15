@@ -62,8 +62,59 @@
             v-model="searchString"
             clearable
             :label="$t('actions.search')"
-            class="mx-2"
-        ></v-text-field>
+            class="mx-2">
+            <template slot="append">
+                <v-menu 
+                    offset-y left 
+                    nudge-bottom="1rem" 
+                    :close-on-content-click="false" 
+                    v-model="searchFilterListOpen">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn v-bind="attrs" v-on="on" small elevation="0" icon>
+                            <v-icon>
+                                mdi-filter
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list class="ma-0 pa-0" dense :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)">
+                        <v-list-item class="ma-0 pa-0 mx-2" dense>
+                            <v-btn @click="allColumnFilters(true)"
+                                	class="mx-1"
+                                    small
+                                    color="primary">
+                                <v-icon small>
+                                    mdi-filter
+                                </v-icon>
+                                {{ $tc('words.all.m', 1) }}
+                            </v-btn>
+                            <v-btn @click="allColumnFilters(false)"
+                                class="mx-1"
+                                small
+                                :dark="isThemeDark($vuetify)"
+                                :light="!isThemeDark($vuetify)">
+                                <v-icon small>
+                                    mdi-filter-outline
+                                </v-icon>
+                                {{ $tc('words.none.m', 1) }}
+                            </v-btn>
+                        </v-list-item>
+                        <v-list-item class="ma-0 pa-0 mx-2" v-for="v, k in searchFilterColumns" :key="k" dense @click="searchFilterColumns[k] = !searchFilterColumns[k]">
+                                <v-list-item-action class="ma-0 pa-0 mr-2">
+                                    <v-checkbox on-icon="mdi-checkbox-marked" color="green" v-model="searchFilterColumns[k]" class="ma-0 pa-0" dense/>
+                                </v-list-item-action>
+                                <v-list-item-title class="font-weight-medium">
+                                    <v-row class="ma-0 pa-0" align="center" v-if="k == 'address'">
+                                        {{ $t('dns.attributes.ipv4Address') }}
+                                    </v-row>
+                                    <v-row class="ma-0 pa-0" align="center" v-else>
+                                        {{ $t('dns.attributes.' + k) }}
+                                    </v-row>
+                                </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+            </template>
+        </v-text-field>
         <v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end">
             <refresh-button dense
                 :loading="loading"
@@ -92,13 +143,13 @@
                 </template>
                 <v-list dense :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)">
                     <v-list-item>
-                        <v-btn @click="filterAll" class="mx-1" color="primary">
+                        <v-btn @click="filterAllRecordTypes" class="mx-1" color="primary">
                             <v-icon>
                                 mdi-filter
                             </v-icon>
                             {{ $tc('words.all.m', 1) }}
                         </v-btn>
-                        <v-btn @click="filterNone" class="mx-1"
+                        <v-btn @click="filterNoRecordTypes" class="mx-1"
                             :dark="isThemeDark($vuetify)"
                             :light="!isThemeDark($vuetify)">
                             <v-icon>
@@ -386,6 +437,8 @@ export default {
                 Unsupported: false
             },
             filterListOpen: false,
+            searchFilterListOpen: false,
+            searchFilterColumns: {},
             searchString: "",
             loading: false,
             error: false,
@@ -425,7 +478,7 @@ export default {
         'dialogs': {
             handler: function (newValue) {
                 if (!newValue['recordDialog'] || newValue['recordDialog'] == false)
-                this.$refs.RecordDialog.resetRecord();
+                    this.$refs.RecordDialog.resetRecord();
                 this.$refs.RecordDialog.resetValidation();
             },
             deep: true
@@ -485,12 +538,12 @@ export default {
             }
             return result
         },
-        filterAll(){
+        filterAllRecordTypes(){
             for (var key in this.enabledRecordTypes) {
                 this.enabledRecordTypes[key] = true
             }
         },
-        filterNone(){
+        filterNoRecordTypes(){
             for (var key in this.enabledRecordTypes) {
                 this.enabledRecordTypes[key] = false
             }
@@ -510,7 +563,7 @@ export default {
             const excludedKeys = ['record_bytes', 'type']
             var result = []
             for (const key in item){
-                if (!excludedKeys.includes(key))
+                if (!excludedKeys.includes(key) && this.searchFilterColumns[key] == true)
                     result.push(item[key])
             }
             return result.some(v=>v&&v.toString().toLowerCase().includes(this.searchString.toLowerCase()))
@@ -528,6 +581,7 @@ export default {
                 SRV: true,
                 Unsupported: false
             },
+            this.searchFilterColumns = {}
             this.ldap = getDomainDetails()
             this.loading = true
             this.error = false
@@ -538,9 +592,40 @@ export default {
             if (resetFilter === true)
                 this.filterEnabledRecordTypes = {}
         },
+        setSearchFilterColumnData(){
+            let r = {}
+            const DEFAULT_ON = [
+                "name",
+                "typeName",
+                "value",
+                "nameExchange",
+                "stringData",
+                "nameNode",
+                "address",
+                "ipv6Address",
+            ]
+            DEFAULT_ON.forEach(key => {
+                if (key == 'actions')
+                    return
+                if (DEFAULT_ON.includes(key))
+                    r[key] = true
+                else
+                    r[key] = false
+            })
+            this.searchFilterColumns = r
+            return
+        },
+        allColumnFilters(state=true){
+            if (state !== true && state !== false)
+                throw new Error("allColumnFilters: State must be a boolean.")
+            for (const key in this.searchFilterColumns) {
+                this.searchFilterColumns[key] = state
+            }
+        },
         loadFinished(error=undefined, message=undefined) {
             this.filterData(this.enabledRecordTypes)
             this.loading = false
+            // If error...
             if (error != undefined){
                 this.error = true
                 if (message != undefined && message.length > 0)
@@ -561,10 +646,12 @@ export default {
                                 notificationBus.$emit('createNotification', legacyMessage);
                             }, 4000)
                 }
+            // If OK
             } else {
                 if (!this.lastOperation || this.lastOperation.length < 1) {
                     this.createSnackbar({message: (this.$tc("classes.dns.zone", 1) + " " + this.$tc("words.loaded.f", 1)).toUpperCase(), type: 'success'})
                 }
+                this.setSearchFilterColumnData()
                 this.error = false
                 this.errorMsg = ""
             }

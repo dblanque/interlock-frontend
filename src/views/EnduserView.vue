@@ -462,7 +462,11 @@ export default {
     methods: {
         getModifiedValues(){
             let v = []
+            const IGNORE_KEYS = [
+                'lastLogon'
+            ]
             for (const key in this.user) {
+                if (IGNORE_KEYS.includes(key)) continue
                 if (!(key in this.user) ||
                     !(key in this.usercopy)) {
                     continue

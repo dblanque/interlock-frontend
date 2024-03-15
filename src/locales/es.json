@@ -25,6 +25,7 @@
     }
   },
   "actions": {
+    "commonlyUsed":"Comúnmente Utilizado",
     "ldap":{
       "manual_command":"Comando LDAP Manual",
       "operation":"Operación LDAP",
@@ -211,6 +212,7 @@
     "ou":"OU | OUs",
     "setting":"Parámetro | Parámetros",
     "ldap":"Objeto LDAP | Objetos LDAP",
+    "totp-device":"Dispositivo TOTP | Dispositivos TOTP",
     "dns":{
         "zone":"Zona de DNS | Zonas de DNS",
         "record":"Registro de DNS | Registros de DNS"
@@ -503,6 +505,7 @@
         "message":"¿Está seguro de truncar los registros de evento?"
       },
       "extras":{
+        "totp_delete":"Se eliminó el Dispositivo TOTP",
         "move":"El objeto fue movido",
         "rename":"El objeto fue renombrado",
         "end_user_updated":"El usuario modificó sus detalles",
@@ -607,6 +610,7 @@
           }
       },
       "userDialog":{
+        "deleteTotp":"Eliminar Dispositivo TOTP",
         "noLastLogon":"El usuario aún no ha iniciado sesión",
         "userDetails":"Detalles de Usuario",
         "addToGroup": "Añadir a Grupo",
@@ -619,8 +623,9 @@
           "primaryGroupID":"Solo modifique este valor si tiene Clientes Macintosh o Aplicaciones que utilicen POSIX"
         }
       },
-      "bulkUpdate":{
-        "title": "Actualización Múltiple de Usuarios"
+      "userBulkUpdate":{
+        "title": "Actualización Múltiple de Usuarios",
+        "modifiedAttributes": "Atributos Modificados"
       },
       "import":{
         "title":"Importación de Usuarios",
@@ -857,9 +862,8 @@
     "validateTOTP":"Validar Código QR TOTP",
     "TOTPnotConfirmed":"Por favor confirme su 2FA TOTP",
     "recoveryCodes":"Códigos de Respaldo Consumibles",
+    "copyRecoveryCodes":"Copiar Códigos",
     "totpCodeFieldLabel":"Código TOTP de 6 dígitos",
-    "totpCreated":"Código TOTP Creado",
-    "totpDeleted":"Código TOTP Eliminado",
     "totpValidated":"Código TOTP Validado",
     "qrIsEnabled":"TOTP 2FA está habilitado",
     "qrInfo":"Escanee el Código QR con una App de Autenticación TOTP"

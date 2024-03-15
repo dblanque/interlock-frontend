@@ -124,6 +124,10 @@ class User extends ApiModel{
         return await interlock_backend.call('user/delete', data)
     }
 
+    async deleteTotp(data){
+        return await interlock_backend.call('user/deleteTotp', data)
+    }
+
     async changePassword(data){
         return await interlock_backend.call('user/changePassword', data)
     }

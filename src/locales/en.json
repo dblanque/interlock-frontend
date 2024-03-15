@@ -25,6 +25,7 @@
     }
   },
   "actions":{
+    "commonlyUsed":"Commonly Used",
     "ldap":{
       "manual_command":"Manual LDAP Command",
       "operation":"LDAP Operation",
@@ -205,6 +206,7 @@
     "ou":"OU | OUs",
     "setting":"Setting | Settings",
     "ldap":"LDAP Object | LDAP Objects",
+    "totp-device":"TOTP Device | TOTP Devices",
     "dns":{
       "zone":"DNS Zone | DNS Zones",
       "record":"DNS Record | DNS Records"
@@ -497,6 +499,7 @@
         "message":"Are you sure you wish to truncate the stored event logs?"
       },
       "extras":{
+        "totp_delete":"TOTP Device was Deleted",
         "move":"LDAP Object was moved",
         "rename":"LDAP Object was renamed",
         "end_user_updated":"User changed his details",
@@ -601,6 +604,7 @@
           }
       },
       "userDialog":{
+        "deleteTotp":"Delete TOTP Device",
         "noLastLogon":"User has not logged in yet",
         "userDetails":"User Details",
         "addToGroup": "Add to Group",
@@ -613,8 +617,9 @@
           "primaryGroupID":"Only change this if you have Macintosh Clients or POSIX Compliant Applications"
         }
       },
-      "bulkUpdate":{
-        "title": "User Bulk Update"
+      "userBulkUpdate":{
+        "title": "User Bulk Update",
+        "modifiedAttributes": "Modified Attributes"
       },
       "import":{
         "title":"User Bulk Import",
@@ -850,9 +855,8 @@
     "validateTOTP":"Validate TOTP QR Code",
     "TOTPnotConfirmed":"Please Confirm your TOTP 2FA",
     "recoveryCodes":"Consumable Recovery Codes",
+    "copyRecoveryCodes":"Copy Codes",
     "totpCodeFieldLabel":"6-digit TOTP Code",
-    "totpCreated":"TOTP Code Created",
-    "totpDeleted":"TOTP Code Deleted",
     "totpValidated":"TOTP Code Validated",
     "qrIsEnabled":"TOTP 2FA is enabled",
     "qrInfo":"Scan this QR Code with a TOTP Authenticator App"

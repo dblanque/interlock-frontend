@@ -84,6 +84,7 @@ const urls = {
         update: 'api/users/update/',
         updateSelf: 'api/users/updateSelf/',
         delete: 'api/users/delete/',
+        deleteTotp: 'api/totp/delete_for_user/',
         enable: 'api/users/enable/',
         disable: 'api/users/disable/',
         lock: 'api/users/lock/',

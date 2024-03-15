@@ -155,6 +155,15 @@ const actions = {
         })
     },
 
+    deleteTotp: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.user.deleteTotp, data)
+            .then(response => {
+                resolve(response.data);
+            }).catch((e) => reject(e))
+        })
+    },
+
     changePassword: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.user.changePassword, data)

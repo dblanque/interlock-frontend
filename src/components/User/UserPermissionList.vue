@@ -15,13 +15,27 @@
 			:justify="$vuetify.breakpoint.mdAndUp ? 'start' : 'center'">
 				<!-- Items -->
 				<v-list-item
-				:disabled="disabledPermissions.includes(p_key) || !editFlag"
+				:disabled="isPermissionDisabled(p_key) || !editFlag"
 				two-line
 				@click="togglePermission(p_key)"
 				:value="permissions[p_key].value"
 				v-for="(p_opts, p_key) in permissions"
 				:key="p_key">
-					<v-list-item-content class="pl-10">
+					<v-list-item-avatar v-if="isCommonlyUsed(p_key)">
+						<v-tooltip bottom>
+							<template v-slot:activator="{ on, attrs }">
+								<v-icon
+									color="primary"
+									v-bind="attrs"
+									v-on="on"
+									x-small>
+									mdi-star-four-points
+								</v-icon>
+							</template>
+							<span> {{ $t("actions.commonlyUsed") }}</span>
+						</v-tooltip>
+					</v-list-item-avatar>
+					<v-list-item-content :class="isCommonlyUsed(p_key) ? '' : 'pl-10'">
 						<!-- Title -->
 						<v-list-item-title class="font-weight-bold">
 						{{ $t('section.users.permissions.' + p_key) }}
@@ -30,10 +44,10 @@
 							{{ p_key }}
 						</v-list-item-subtitle>
 					</v-list-item-content>
-						<v-list-item-action>
+					<v-list-item-action>
 						<v-checkbox :disabled="!editFlag" @click="togglePermission(p_key)" v-model="permissions[p_key].value"></v-checkbox>
-						</v-list-item-action>
-					</v-list-item>
+					</v-list-item-action>
+				</v-list-item>
 			</v-list>
 		</v-row>
 	</v-card>
@@ -73,7 +87,7 @@
 </template>
 
 <script>
-import ldap_perm_json from '@/include/ldap_permissions.json';
+import ldap_perm_json_raw from '@/include/ldap_permissions.json';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 export default {
     name: 'UserPermissionList',
@@ -87,17 +101,10 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		permissions: {
-			type: Object,
-			default() {
-				return ldap_perm_json.permissions
-			}
-		},
+		permissions: Object,
 		disabledPermissions: {
 			type: Array,
-			default() {
-				return ldap_perm_json.disabled_permissions
-			}
+			default(){ return [] }
 		},
 		hideSidebar: {
 			type: Boolean,
@@ -113,8 +120,6 @@ export default {
 		}
 	},
 	created() {
-		if (this.emitDefault === true)
-			this.$emit('default', this.permissions)
 		this.init()
 	},
 	computed: {
@@ -130,14 +135,31 @@ export default {
 	},
 	watch:{
         // 'permissions': {
-        //     handler: function (newValue) {
-        //         console.log(newValue)
+        //     handler: function (newValue, oldValue) {
+        //         for (const key in newValue) {
+		// 			if (newValue[key] != oldValue[key])
+		// 				console.log(key)
+		// 				console.log(newValue[key].value)
+		// 		}
         //     },
         //     deep: true
         // }
 	},
 	methods: {
 		init(){
+		},
+		isCommonlyUsed(key){
+			const COMMON_PERMS = [
+				"LDAP_UF_ACCOUNT_DISABLE",
+				"LDAP_UF_NORMAL_ACCOUNT",
+				"LDAP_UF_DONT_EXPIRE_PASSWD",
+			]
+			return COMMON_PERMS.includes(key)
+		},
+		isPermissionDisabled(key){
+			if (this.disabledPermissions.length > 0)
+				return this.disabledPermissions.includes(key)
+			return ldap_perm_json_raw.disabled_permissions.includes(key)
 		},
         // When a permission in the v-list changes this function is executed
         togglePermission(key){

@@ -104,7 +104,7 @@
                     <ul>
                         <li v-for="app, k in auth_apps" :key="k"
                         style="text-align:start;">
-                            <a :href="app.link" class="text-secondary"
+                            <a :href="app.link" class="white--text" style="text-decoration: none;"
                                 target="_blank" rel="noopener noreferrer">
                                 {{ app.name }}
                                 <v-icon small class="ml-2">
@@ -182,9 +182,27 @@
                 <v-row
                     class="ma-0 pa-0" 
                     justify="center">
-                    <v-col>
-                        {{ $t("userAccountDropdown.recoveryCodes").toUpperCase() }}
-                    </v-col>
+                    <v-row class="ma-0 pa-0 my-2" align="center" justify="center">
+                            <span>
+                                {{ $t("userAccountDropdown.recoveryCodes").toUpperCase() }}
+                            </span>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                    v-bind="attrs" v-on="on"
+                                    class="ml-2"
+                                    @click="copyRCCs"
+                                    icon
+                                    small
+                                >
+                                    <v-icon small>
+                                        mdi-content-copy
+                                    </v-icon>
+                                </v-btn>
+                                </template>
+                                <span>{{ $t("userAccountDropdown.copyRecoveryCodes") }}</span>
+                            </v-tooltip>
+                    </v-row>
                     <v-col cols="12"
                     v-for="code in recovery_codes"
                     :key="code">
@@ -283,6 +301,9 @@ export default {
         },
     },
     methods: {
+        copyRCCs(){
+            navigator.clipboard.writeText(this.recovery_codes.join("\n"));
+        },
         toggleAutoRefresh(){
             this.art_input_disabled = true
             let v = localStorage.getItem('auth.auto_refresh_token') == 'true'
@@ -349,7 +370,7 @@ export default {
                     this.showQR = true
                     this.loading = false
                     this.error = false
-                    this.message = this.$t("userAccountDropdown.totpCreated")
+                    this.message = (this.$tc("classes.totp-device", 1) + " " + this.$t("words.created.m")).toUpperCase()
                     notificationBus.$emit('createNotification', 
                         {
                             message: this.message,
@@ -378,7 +399,7 @@ export default {
                     this.showQR = false
                     this.loading = false
                     this.error = false
-                    this.message = this.$t("userAccountDropdown.totpDeleted")
+                    this.message = (this.$tc("classes.totp-device", 1) + " " + this.$t("words.deleted.m")).toUpperCase()
                     notificationBus.$emit('createNotification', 
                         {
                             message: this.message,

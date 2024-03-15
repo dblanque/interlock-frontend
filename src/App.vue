@@ -28,7 +28,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background: var(--v-gray-95-base);
+  background: var(--v-gray-90-base);
   // background-color: var(--body-bg);
   transition: background-color var(--base-transition-speed-5);
 }

@@ -23,7 +23,9 @@ const calls = {
                 resolve(response)
             }).catch((e) => {
                 localStorage.removeItem('user.admin_allowed')
-                console.log('Authentication Error')
+                // if (e?.response?.data?.code != "otp_required"){
+                //     console.log('Authentication Error')
+                // }
                 reject(e)
             })
         })

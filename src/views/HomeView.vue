@@ -6,7 +6,7 @@
     <!------------------>
     <v-row align="center"
       justify="space-between"
-      style="background: var(--v-secondary-10-base)"
+      style="background: var(--v-secondary-15-base)"
       class="ma-0 pa-0 px-4 transition-speed-fix">
       <v-img
         max-width="30ch"
@@ -23,7 +23,7 @@
       align="center"
       justify="space-between"
       class="ma-0 pa-2 transition-speed-fix"
-      style="background: var(--v-secondary-10-base); height: fit-content">
+      style="background: var(--v-secondary-15-base); height: fit-content">
       <v-col cols="12" md="auto">
         <LanguageSelector
           :dark="!isThemeDark($vuetify)"
@@ -70,7 +70,7 @@
 
     <!-- Tabs Bar -->
     <v-toolbar
-      color="secondary-10"
+      color="secondary-15"
       v-if="this.$vuetify.breakpoint.mdAndUp"
       dense
       id="tabs-nav-bar"
@@ -224,6 +224,7 @@
 
     <!-- Footer -->
     <v-footer
+      color="secondary-15"
       padless
       id="home-footer"
       :dark="!isThemeDark($vuetify)"

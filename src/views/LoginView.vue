@@ -6,7 +6,7 @@
     <v-card outlined 
     style="min-width:100%; border-radius: 0; border-left: 0; border-right:0;"
     class="py-4 px-6" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
-      <v-row class="mt-2" justify="center">
+      <v-row class="my-2" justify="center">
         <v-img contain max-width="450px" :aspect-ratio="14/3" :src="isThemeDark($vuetify) ? logoLight : logoDark"/>
       </v-row>
       <v-row class="pa-0 ma-0" justify="center">
@@ -19,12 +19,10 @@
           ref="loginform"
         >
           <v-col align="center">
-            <!-- TITLE -->
-            <!-- <v-row class="text-md-h6 justify-center my-1">
-              <span class="">{{ $t("section.login.title") }}</span>
-            </v-row> -->
+          <v-expand-transition>
+          <div v-show="showLogin">
             <v-row class="ma-0 pa-0 my-4" justify="center" align="center">
-                <v-btn class="ma-0 pa-0 px-2" small outlined color="primary" @click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
+                <v-btn class="ma-0 pa-0 px-2" small outlined color="primary-40" @click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
                   <span v-if="modeUser">
                     <v-icon class="mr-1">
                       mdi-email
@@ -83,63 +81,68 @@
                 v-model="password"
                 :disabled="submitted"
                 @keydown.enter="submit()"
-                class="login-pwd-field login-field font-weight-bold mb-2"
+                class="login-pwd-field login-field font-weight-bold"
                 required
                 :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="() => (value = !value)"
               ></v-text-field>
             </v-row>
 
-            <!-- TOTP FIELD -->
             <v-row justify="center" class="ma-0 pa-0">
-              <v-text-field
-                v-if="!recovery_mode"
-                outlined
-                dense
-                :rules="[this.fieldRules(totp_code, 'auth_totp')]"
-                @keypress="isNumber($event)"
-                :label="$t('attribute.users.totp_code')"
-                type="text"
-                prepend-inner-icon="mdi-qrcode"
-                v-model="totp_code"
-                :disabled="submitted"
-                @keydown.enter="submit()"
-                persistent-hint
-                :hint="$t('attribute.users.totp_code_opt')"
-                class="login-pwd-field login-field font-weight-bold mb-2"
-                required
-              ></v-text-field>
-            </v-row>
-
-            <!-- RECOVERY FIELD -->
-            <v-row justify="center" class="ma-0 pa-0">
-              <v-text-field
-                v-if="recovery_mode"
-                outlined
-                dense
-                :rules="[this.fieldRules(recovery_code, 'auth_recovery')]"
-                :label="$t('attribute.users.recovery_code')"
-                type="text"
-                prepend-inner-icon="mdi-code-array"
-                v-model="recovery_code"
-                :disabled="submitted"
-                @keydown.enter="submit()"
-                class="login-pwd-field login-field font-weight-bold mb-2"
-                required
-              ></v-text-field>
-            </v-row>
-            <v-row justify="center" class="ma-0 pa-0">
-              <v-checkbox :label="$t('section.login.useRecoveryCode')"
-              class="ma-0 pa-0"
-              v-model="recovery_mode"/>
-            </v-row>
-
-            <v-row justify="center">
               <LanguageSelector class="font-weight-medium"/>
             </v-row>
             <v-row justify="center">
               <ThemeChanger class="font-weight-medium ma-6" :buttonIsSwitch="true"/>
             </v-row>
+          </div>
+          </v-expand-transition>
+
+          <v-expand-transition>
+            <div v-show="showTotp">
+              <!-- TOTP FIELD -->
+              <v-row justify="center" class="ma-0 pa-0">
+                <v-text-field
+                  :disabled="submitted"
+                  :label="$t('attribute.users.totp_code')"
+                  :rules="[this.fieldRules(totp_code, 'auth_totp')]"
+                  @keydown.enter="submit()"
+                  @keypress="isNumber($event)"
+                  class="login-pwd-field login-field font-weight-bold"
+                  dense
+                  outlined
+                  prepend-inner-icon="mdi-qrcode"
+                  required
+                  type="text"
+                  v-if="!recovery_mode"
+                  v-model="totp_code"
+                ></v-text-field>
+              </v-row>
+
+              <!-- RECOVERY FIELD -->
+              <v-row justify="center" class="ma-0 pa-0">
+                <v-text-field
+                  :disabled="submitted"
+                  :label="$t('attribute.users.recovery_code')"
+                  :rules="[this.fieldRules(recovery_code, 'auth_recovery')]"
+                  @keydown.enter="submit()"
+                  class="login-pwd-field login-field font-weight-bold"
+                  dense
+                  outlined
+                  prepend-inner-icon="mdi-code-array"
+                  required
+                  type="text"
+                  v-if="recovery_mode"
+                  v-model="recovery_code"
+                ></v-text-field>
+              </v-row>
+              <v-row justify="center" class="ma-0 pa-0">
+                <v-checkbox :label="$t('section.login.useRecoveryCode')"
+                class="ma-0 pa-0 mb-2"
+                v-model="recovery_mode"/>
+              </v-row>
+            </div>
+          </v-expand-transition>
+
             <!-- ERROR MESSAGE -->
             <v-row justify="center">
               <v-expand-transition>
@@ -154,12 +157,18 @@
             <!-- LOGIN BUTTONS -->
             <div>
             <v-row justify="space-around" class="pa-2 mt-4">
-                <!-- <v-btn class="pa-0 ma-0 px-3 py-2 ma-3" v-on:click="gotoPasswRecovery" disabled>
-                  <p class="text-md-body" style="margin-bottom: 0 !important;"> {{ $t("section.login.forgotMyPassword") }}</p>
-                </v-btn> -->
+              <v-expand-x-transition>
+                <v-btn v-show="showTotp"
+                  :disabled="submitted || (this.username.length == 0 || this.password.length == 0) || !valid"
+                  @click="goBack"
+                  class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3"
+                >
+                  {{ $t("actions.back") }}
+                </v-btn>
+              </v-expand-x-transition>
                 <v-btn
                   :loading="submitted"
-                  :disabled="submitted || (this.username.length == 0 || this.password.length == 0) || !valid"
+                  :disabled="disableLoginBtn"
                   @click="submit"
                   class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3"
                 >
@@ -218,8 +227,22 @@ export default {
         localStorage.setItem("interlock.version", json.version)
     })
   },
+  computed:{
+    disableLoginBtn(){
+      if (this.submitted) return true
+      if (this.username.length == 0 || this.password.length == 0) return true
+      if (!this.valid) return true
+      if (this.showTotp) {
+        if (!this.recovery_mode && this.totp_code.length <= 0) return true
+        if (this.recovery_mode && this.recovery_code.length <= 0) return true
+      }
+      return false
+    }
+  },
   data() {
     return {
+      showLogin: true,
+      showTotp: false,
       recovery_mode: false,
       recovery_code: "",
       logoLight: 'logo/interlock-logo-wt-dark.svg',
@@ -280,6 +303,10 @@ export default {
     }
   },
   watch: {
+    recovery_mode(v){
+      if (v === true) this.totp_code = ""
+      else this.recovery_code = ""
+    },
     validateForm(){
       if (!this.$refs.loginform.validate()) {
         this.valid = false
@@ -290,6 +317,10 @@ export default {
     }
   },
   methods: {
+    goBack(){
+      this.showLogin = true;
+      this.showTotp = false;
+    },
     setLoginTimeout() {
         this.timedOut = true
         if (!this.timeoutCounter)
@@ -365,6 +396,13 @@ export default {
           }
         })
         .catch(e => {
+          if (e?.response?.data?.code == "otp_required"){
+            this.showLogin = false;
+            this.showTotp = true;
+            this.submitted = false;
+            this.error = false;
+            return
+          }
           this.submitted = false;
           this.error = true;
           let retriesLeft = 5 - this.loginForbiddenCount

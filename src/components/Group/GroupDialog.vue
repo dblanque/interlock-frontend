@@ -22,7 +22,7 @@
             
                 
             <v-expand-transition>
-                <v-row v-if="editFlag" justify="center" class="pa-0 ma-0">
+                <v-row v-show="editFlag && showAlert" justify="center" class="pa-0 ma-0">
                     <v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
                         <v-icon class="mdso mr-2">warning</v-icon>
                         {{ $t('section.groups.editFlagWarning') }}
@@ -331,6 +331,7 @@ export default {
             realm: "",
             basedn: "",
             showMemberTab: false,
+            showAlert: false,
             groupcopy: {},
             excludeDNs: [],
             memberPanelExpanded: 0,
@@ -363,7 +364,7 @@ export default {
         'dialogs': {
             handler: function (newValue) {
                 if (!newValue['addToGroup'] || newValue['addToGroup'] == false)
-                this.$refs.AddToGroup.clearList();
+                    this.$refs.AddToGroup.clearList();
             },
             deep: true
         }
@@ -376,6 +377,9 @@ export default {
         refreshLoading: Boolean
     },
     methods: {
+        exit() {
+            this.showAlert = false
+        },
         copyText(textString) {
             navigator.clipboard.writeText(textString);
         },
@@ -518,6 +522,7 @@ export default {
             this.membersToAdd = []
             this.excludeDNs = []
             this.showMemberTab = false
+            this.showAlert = false
             this.$nextTick(() => {
                 this.groupcopy = Object.assign({}, this.group)
                 this.setGroupTypeAndScope()
@@ -525,6 +530,9 @@ export default {
                 this.setupExclude()
                 this.loading = false
                 this.loadingColor = 'primary'
+                setTimeout(()=>{
+                    this.showAlert = true
+                }, 0.1e3)
             })
         },
         isUserType(itemObjectClasses){
