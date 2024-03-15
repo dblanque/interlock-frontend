@@ -7,7 +7,9 @@
         <v-row class="ma-0 ma-1 px-4 py-0 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
                 @click="resetDialog = true" :disabled="readonly || loading"
-                elevation="0" dark
+                elevation="0"
+                :dark="!(readonly || loading)"
+                :light="isThemeDark($vuetify) && !(readonly || loading)"
                 class="ma-0 pa-0 pa-4 ma-1 mx-1"
                 color="red">
                     <v-icon class="mr-1">
@@ -17,7 +19,9 @@
             </v-btn>
             <v-btn 
                 @click="testSettings" :disabled="readonly || loading"
-                elevation="0" :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
+                elevation="0"
+                :dark="!isThemeDark($vuetify) && !(readonly || loading)"
+                :light="isThemeDark($vuetify) && !(readonly || loading)"
                 class="ma-0 pa-0 pa-4 ma-1 mx-1">
                     <span>
                         {{ $t("actions.testSettings") }}
@@ -40,7 +44,9 @@
         <v-row class="ma-0 ma-1 px-4 py-0 mb-4 sticky-top" style="top: 6.3rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
                 @click="saveSettings" :disabled="readonly || loading"
-                elevation="0" :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
+                elevation="0"
+                :dark="!isThemeDark($vuetify) && !(readonly || loading)"
+                :light="isThemeDark($vuetify) && !(readonly || loading)"
                 style="border-radius: 0; border-bottom-left-radius: 0.3rem; border-top-left-radius: 0.3rem;"
                 class="ma-0 pa-0 pa-4 ma-1 mr-0" >
                     <v-icon class="mr-1">
