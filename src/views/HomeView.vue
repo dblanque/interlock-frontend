@@ -59,7 +59,6 @@
             :light="isThemeDark($vuetify)"
             :buttonIsSmall="true"
           />
-          
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -67,7 +66,7 @@
                 :disabled="disableDomainDetailsButton"
                 :light="isThemeDark($vuetify)"
                 @click="fetchDomainDetails()"
-                class="ml-2 mr-1"
+                class="ml-2"
                 icon
                 v-bind="attrs"
                 v-on="on"
@@ -83,7 +82,8 @@
           <!-- This does not appear in production -->
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="accent"
+              <v-btn color="accent" class="ml-1"
+                v-show="initLoad && enableDebug"
                 :dark="!isThemeDark($vuetify)"
                 :light="isThemeDark($vuetify)"
                 :disabled="!enableDebug"
@@ -592,7 +592,8 @@ export default {
           this.realm = domainData['realm']
           this.basedn = domainData['basedn']
           this.fetchingDomainDetails = false
-          if ('debug' in domainData) this.enableDebug = (domainData['debug'] === "true")
+          if ('debug' in domainData)
+            this.enableDebug = (domainData['debug'] === "true")
           else this.enableDebug = false
           setTimeout(()=>{ this.disableDomainDetailsButton = false }, 0.5e3)
         })

@@ -6,13 +6,19 @@ import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
     details: ()=>{
+        const REMOVE_KEYS_IF_MISSING = [
+            "debug"
+        ]
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.domain.details)
             .then(response => {
                 resolve(response);
-                for (const key in response.data.details) {
+                for (const key in response.data.details)
                     localStorage.setItem(`ldap.${key}`, response.data.details[key])
-                }
+                REMOVE_KEYS_IF_MISSING.forEach(k => {
+                    if (!(k in response.data.details))
+                        localStorage.removeItem(`ldap.${k}`)
+                })
             }).catch((e) => reject(e))
         })
     },
