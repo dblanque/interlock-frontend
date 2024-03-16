@@ -467,12 +467,12 @@ export default {
 
 #login-form-container{
 	width: 100%;
-	max-width: 80vw;
+	max-width: 400px;
 }
 
-@media screen and (min-width: 1264px) {
+@media screen and (max-width: 960px) {
 	#login-form-container{
-		max-width: 400px;
+		max-width: 80vw;
 	}
 }
 </style>
