@@ -82,7 +82,7 @@
           <!-- This does not appear in production -->
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="accent" class="ml-1"
+              <v-btn color="accent-60-s" class="ml-1"
                 v-show="initLoad && enableDebug"
                 :dark="!isThemeDark($vuetify)"
                 :light="isThemeDark($vuetify)"

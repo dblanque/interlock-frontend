@@ -12,7 +12,7 @@
     :hide-details="true"
     outlined
     dense
-    :style="this.$vuetify.breakpoint.smAndDown ? '' : 'max-width: 25ch;'"
+    :style="fullWidth || this.$vuetify.breakpoint.smAndDown ? '' : 'max-width: 25ch;'"
     >
     <template slot="selection" slot-scope="data">
         <!-- HTML that describe how select should render selected items -->
@@ -42,6 +42,10 @@ export default {
     props:{
         dark: Boolean,
         light: Boolean,
+        fullWidth: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {

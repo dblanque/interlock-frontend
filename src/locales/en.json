@@ -484,7 +484,7 @@
     },
     "login":{
       "title":"Log in to your LDAP Server",
-      "account":"LDAP Account / Username",
+      "account":"LDAP Username",
       "useEmail":"Use E-Mail",
       "useLDAPUser":"Use LDAP Account",
       "loginBtn":"Log-in",

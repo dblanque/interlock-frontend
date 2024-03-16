@@ -37,9 +37,13 @@ const utilsMixin = {
             return JSON.stringify(a_clone) === JSON.stringify(b_clone)
         },
         isNumber: function(evt) {
+            // TODO - Analyze Clipboard data besides standard keypress events
             evt = (evt) ? evt : window.event;
             let charCode = (evt.which) ? evt.which : evt.keyCode;
+            // Writing characters
             if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();
+            } else if (evt.clipboardData != undefined && isNaN(evt.clipboardData.getData('Text'))) {
                 evt.preventDefault();
             } else {
                 return true;

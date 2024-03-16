@@ -150,18 +150,29 @@
                 class="ma-0 pa-0" ref="TOTPForm" v-if="showValidator && showQR">
             <v-row class="ma-0 pa-0" justify="center" align="center">
                 <v-col cols="auto" class="ma-0 pa-0 mb-2">
-                    <v-text-field 
+                    <v-otp-input style="max-width:320px;"
+                        :disabled="noTotp"
+                        :label="$t('userAccountDropdown.totpCodeFieldLabel')"
+                        :rules="[this.fieldRules(totp_code, 'auth_totp')]"
+                        @keypress="isNumber"
+                        @paste="isNumber"
+                        dense
+                        required
+                        type="text"
+                        v-model="totp_code"
+                    />
+                    <!-- <v-text-field 
                         v-model="totp_code"
                         :label="$t('userAccountDropdown.totpCodeFieldLabel')"
                         :disabled="noTotp"
-                        @keypress="isNumber($event)"
+                        @keypress="isNumber"
+                        @paste="isNumber"
                         :rules="[this.fieldRules(totp_code, 'auth_totp', true)]"
                         outlined
-                        dense/>
+                        dense/> -->
                 </v-col>
-                <v-col cols="auto" class="ma-0 pa-0 mb-2 mx-2">
+                <v-col cols="12" class="ma-0 pa-0 mb-4 mx-2">
                     <v-btn color="primary" outlined
-                    class="mb-6"
                     :disabled="noTotp || loading"
                     @click="validateTwoFactor">
                         {{ $t("userAccountDropdown.validateTOTP") }}

@@ -490,7 +490,7 @@
     },
     "login": {
       "title": "Inicie Sesión en su Servidor LDAP",
-      "account": "Cuenta LDAP / Usuario",
+      "account": "Usuario LDAP",
       "useEmail":"Usar E-Mail",
       "useLDAPUser":"Usar Cuenta LDAP",
       "loginBtn": "Iniciar Sesión",
