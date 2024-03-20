@@ -82,75 +82,77 @@
 
 		<!-- GROUP ACTIONS -->
 		<template v-slot:[`item.actions`]="{ item }">
-			<v-tooltip bottom>
-				<template v-slot:activator="{ on, attrs }">
-					<v-btn icon
-						rounded
-						v-bind="attrs"
-						v-on="on"
-						small
-						:disabled="loading || readonly"
-						@click="fetchGroup(item, false)"
-					>
-					<v-icon small color="primary">
-						mdi-eye
-					</v-icon>
-					</v-btn>
-				</template>
-				<span>{{ $t('actions.view') }}</span>
-			</v-tooltip>
-
-			<v-tooltip bottom>
-				<template v-slot:activator="{ on, attrs }">
-					<v-btn icon
-						rounded
-						v-bind="attrs"
-						v-on="on"
-						small
-						:disabled="loading || readonly"
-						@click="fetchGroup(item, true)"
-					>
-					<v-icon small color="primary">
-						mdi-pencil
-					</v-icon>
-					</v-btn>
-				</template>
-				<span>{{ $t('actions.edit') }}</span>
-			</v-tooltip>
-
-			<v-tooltip bottom>
-				<template v-slot:activator="{ on, attrs }">
-					<v-btn icon v-show="!loading && !readonly && !item.groupType.includes('GROUP_SYSTEM') && !item.cn.startsWith('Domain ')"
-						rounded
-						v-bind="attrs"
-						v-on="on"
-						small
-						:disabled="loading || readonly || item.groupType.includes('GROUP_SYSTEM') || item.cn.startsWith('Domain ')"
-						@click="openDeleteDialog(item)"
-					>
-					<v-icon small color="red">
-						mdi-delete
-					</v-icon>
-					</v-btn>
-				</template>
-				<span>{{ $t('actions.delete') }}</span>
-			</v-tooltip>
-			<v-tooltip bottom>
-				<template v-slot:activator="{ on, attrs }">
-					<span v-bind="attrs" v-on="on"
-							v-show="loading || readonly || item.groupType.includes('GROUP_SYSTEM') || item.cn.startsWith('Domain ')">
+			<v-row>
+				<v-tooltip bottom>
+					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
 							rounded
+							v-bind="attrs"
+							v-on="on"
 							small
-							disabled>
-						<v-icon small>
+							:disabled="loading || readonly"
+							@click="fetchGroup(item, false)"
+						>
+						<v-icon small color="primary">
+							mdi-eye
+						</v-icon>
+						</v-btn>
+					</template>
+					<span>{{ $t('actions.view') }}</span>
+				</v-tooltip>
+
+				<v-tooltip bottom>
+					<template v-slot:activator="{ on, attrs }">
+						<v-btn icon
+							rounded
+							v-bind="attrs"
+							v-on="on"
+							small
+							:disabled="loading || readonly"
+							@click="fetchGroup(item, true)"
+						>
+						<v-icon small color="primary">
+							mdi-pencil
+						</v-icon>
+						</v-btn>
+					</template>
+					<span>{{ $t('actions.edit') }}</span>
+				</v-tooltip>
+
+				<v-tooltip bottom>
+					<template v-slot:activator="{ on, attrs }">
+						<v-btn icon v-show="!loading && !readonly && !item.groupType.includes('GROUP_SYSTEM') && !item.cn.startsWith('Domain ')"
+							rounded
+							v-bind="attrs"
+							v-on="on"
+							small
+							:disabled="loading || readonly || item.groupType.includes('GROUP_SYSTEM') || item.cn.startsWith('Domain ')"
+							@click="openDeleteDialog(item)"
+						>
+						<v-icon small color="red">
 							mdi-delete
 						</v-icon>
 						</v-btn>
-					</span>
-				</template>
-				<span>{{ $t('section.groups.groupBuiltinCannotDelete') }}</span>
-			</v-tooltip>
+					</template>
+					<span>{{ $t('actions.delete') }}</span>
+				</v-tooltip>
+				<v-tooltip bottom>
+					<template v-slot:activator="{ on, attrs }">
+						<span v-bind="attrs" v-on="on"
+								v-show="loading || readonly || item.groupType.includes('GROUP_SYSTEM') || item.cn.startsWith('Domain ')">
+							<v-btn icon
+								rounded
+								small
+								disabled>
+							<v-icon small>
+								mdi-delete
+							</v-icon>
+							</v-btn>
+						</span>
+					</template>
+					<span>{{ $t('section.groups.groupBuiltinCannotDelete') }}</span>
+				</v-tooltip>
+			</v-row>
 		</template>
 	</v-data-table>
 

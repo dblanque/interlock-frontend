@@ -1,7 +1,7 @@
 <!----------------- INTERLOCK IS LICENSED UNDER GNU AGPLv3 -------------------->
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------- File: GroupDialog.vue ----------------------------->
-<template>    
+<template>
     <v-card :loading="refreshLoading" class="pa-0 ma-0">
         <v-expand-transition>
         <div v-show="!refreshLoading">
@@ -272,8 +272,10 @@
                 </v-btn>
                 <!-- Save Group Changes Button -->
                 <v-btn @click="saveGroup"
-                :class="(editFlag ? '' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
-                rounded 
+                :class="(editFlag ? '' : '' ) + 'ma-0 pa-0 pa-4 ma-1'"
+                rounded
+                :dark="!isThemeDark($vuetify) && editFlag"
+                :light="isThemeDark($vuetify) && editFlag"
                 :disabled="!editFlag">
                     <v-icon class="mr-1">
                         mdi-content-save
@@ -282,8 +284,10 @@
                 </v-btn>
                 <!-- Save Group Changes Button -->
                 <v-btn @click="saveGroup(true)"
-                :class="(editFlag ? '' : '' ) + 'ma-0 pa-0 pa-4 ma-1 bg-white bg-lig-25'" 
-                rounded 
+                :class="(editFlag ? '' : '' ) + 'ma-0 pa-0 pa-4 ma-1'"
+                rounded
+                :dark="!isThemeDark($vuetify) && editFlag"
+                :light="isThemeDark($vuetify) && editFlag"
                 :disabled="!editFlag">
                     <v-icon class="mr-1">
                         mdi-exit-to-app
@@ -315,6 +319,7 @@ import Group from '@/include/Group.js';
 import RefreshButton from '@/components/RefreshButton.vue';
 import CNObjectList from '@/components/CNObjectList.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 
 export default {
     name: 'GroupDialog',
@@ -354,10 +359,9 @@ export default {
             },
         }
     },
-    mixins: [
-        validationMixin
-    ],
+    mixins: [ validationMixin, utilsMixin ],
     created(){
+        this.alertDelay = 0.5e3;
         this.syncGroup();
     },
     watch: {
@@ -530,9 +534,11 @@ export default {
                 this.setupExclude()
                 this.loading = false
                 this.loadingColor = 'primary'
-                setTimeout(()=>{
-                    this.showAlert = true
-                }, 0.1e3)
+                console.log(Object.keys(this.group).length)
+                if (Object.keys(this.group).length != 0)
+                    setTimeout(() => {
+                        this.showAlert = true
+                    }, this.alertDelay)
             })
         },
         isUserType(itemObjectClasses){

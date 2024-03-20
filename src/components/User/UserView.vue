@@ -159,109 +159,110 @@
 
 	<!-- USER ACTIONS -->
 	<template v-slot:[`item.actions`]="{ item }">
-	  
-	  <v-tooltip bottom>
-		<template v-slot:activator="{ on, attrs }">
-		  <v-btn icon
-			rounded
-			v-bind="attrs"
-			v-on="on"
-			small
-			:disabled="loading"
-			@click="fetchUser(item, false)"
-		  >
-		  <v-icon small color="primary">
-			mdi-eye
-		  </v-icon>
-		  </v-btn>
-		</template>
-		<span>{{ $t('actions.view') }}</span>
-	  </v-tooltip>
-
-	  <v-tooltip bottom>
-		<template v-slot:activator="{ on, attrs }">
-		  <v-btn icon
-			rounded
-			v-bind="attrs"
-			v-on="on"
-			small
-			:disabled="loading"
-			@click="fetchUser(item, true)"
-		  >
-		  <v-icon small color="primary">
-			mdi-pencil
-		  </v-icon>
-		  </v-btn>
-		</template>
-		<span>{{ $t('actions.edit') }}</span>
-	  </v-tooltip>
-
-	  <!-- RESET PASSWORD BUTTON -->
-	  <v-tooltip bottom>
-		<template v-slot:activator="{ on, attrs }">
-		  <v-btn icon
-			rounded
-			v-bind="attrs"
-			v-on="on"
-			small
-			:disabled="loading"
-			@click="changeUserPassword(item)"
-		  >
-		  <v-icon small color="primary">
-			mdi-key-variant
-		  </v-icon>
-		  </v-btn>
-		</template>
-		<span>{{ $t('actions.changePassword') }}</span>
-	  </v-tooltip>
-
-	  <!-- UNLOCK USER BUTTON -->
-	  <v-tooltip bottom>
-		<template v-slot:activator="{ on, attrs }">
-		  <v-btn icon color="secondary-20"
-			rounded
-			v-bind="attrs"
-			v-on="on"
-			small
-			:disabled="loading"
-			@click="unlockUser(item)"
-		  >
-		  <v-icon small>
-			mdi-lock-open
-		  </v-icon>
-		  </v-btn>
-		</template>
-		<span>{{ $t('actions.unlock') }}</span>
-	  </v-tooltip>
-
-	  <v-tooltip bottom>
-		<template v-slot:activator="{ on, attrs }">
-		  <v-btn icon
-			rounded
-			v-bind="attrs"
-			v-on="on"
-			small
-			:disabled="loading"
-			@click="openBulkOperationDialog('userDelete', item)"
-			v-if="!isLoggedInUser(item.username)"
-		  >
-		  <v-icon small color="red">
-			mdi-delete
-		  </v-icon>
-		  </v-btn>
-		  <v-btn 
-		  v-else 
-			disabled
-			elevation="0" 
-			icon 
-			small>
-			<v-icon small>
-			  mdi-delete
+	  <v-row class="my-1">
+		<v-tooltip bottom>
+			<template v-slot:activator="{ on, attrs }">
+			<v-btn icon
+				rounded
+				v-bind="attrs"
+				v-on="on"
+				small
+				:disabled="loading"
+				@click="fetchUser(item, false)"
+			>
+			<v-icon small color="primary">
+				mdi-eye
 			</v-icon>
-		  </v-btn>
-		</template>
-		<span>{{ $t('actions.delete') }}</span>
-	  </v-tooltip>
+			</v-btn>
+			</template>
+			<span>{{ $t('actions.view') }}</span>
+		</v-tooltip>
+
+		<v-tooltip bottom>
+			<template v-slot:activator="{ on, attrs }">
+			<v-btn icon
+				rounded
+				v-bind="attrs"
+				v-on="on"
+				small
+				:disabled="loading"
+				@click="fetchUser(item, true)"
+			>
+			<v-icon small color="primary">
+				mdi-pencil
+			</v-icon>
+			</v-btn>
+			</template>
+			<span>{{ $t('actions.edit') }}</span>
+		</v-tooltip>
+
+		<!-- RESET PASSWORD BUTTON -->
+		<v-tooltip bottom>
+			<template v-slot:activator="{ on, attrs }">
+			<v-btn icon
+				rounded
+				v-bind="attrs"
+				v-on="on"
+				small
+				:disabled="loading"
+				@click="changeUserPassword(item)"
+			>
+			<v-icon small color="primary">
+				mdi-key-variant
+			</v-icon>
+			</v-btn>
+			</template>
+			<span>{{ $t('actions.changePassword') }}</span>
+		</v-tooltip>
+
+		<!-- UNLOCK USER BUTTON -->
+		<v-tooltip bottom>
+			<template v-slot:activator="{ on, attrs }">
+			<v-btn icon color="secondary-20"
+				rounded
+				v-bind="attrs"
+				v-on="on"
+				small
+				:disabled="loading"
+				@click="unlockUser(item)"
+			>
+			<v-icon small>
+				mdi-lock-open
+			</v-icon>
+			</v-btn>
+			</template>
+			<span>{{ $t('actions.unlock') }}</span>
+		</v-tooltip>
+
+		<v-tooltip bottom>
+			<template v-slot:activator="{ on, attrs }">
+			<v-btn icon
+				rounded
+				v-bind="attrs"
+				v-on="on"
+				small
+				:disabled="loading"
+				@click="openBulkOperationDialog('userDelete', item)"
+				v-if="!isLoggedInUser(item.username)"
+			>
+			<v-icon small color="red">
+				mdi-delete
+			</v-icon>
+			</v-btn>
+			<v-btn 
+			v-else 
+				disabled
+				elevation="0" 
+				icon 
+				small>
+				<v-icon small>
+				mdi-delete
+				</v-icon>
+			</v-btn>
+			</template>
+			<span>{{ $t('actions.delete') }}</span>
+		</v-tooltip>
+	  </v-row>
 	</template>
   </v-data-table>
 

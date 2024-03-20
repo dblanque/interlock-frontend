@@ -54,7 +54,7 @@
         </v-card-title>
 
         <v-expand-transition>
-            <v-row v-if="editFlag && showAlert" justify="center" class="pa-0 ma-0">
+            <v-row v-show="editFlag && showAlert" justify="center" class="pa-0 ma-0">
                 <v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
                     <v-icon class="mdso mr-2">warning</v-icon>
                     {{ $t('section.users.editFlagWarning') }}
@@ -64,7 +64,9 @@
                     </v-btn>
                 </v-alert>
             </v-row>
-            <v-row v-else-if="showAlert" justify="center" class="pa-0 ma-0">
+        </v-expand-transition>
+        <v-expand-transition>
+            <v-row v-show="!editFlag && showAlert" justify="center" class="pa-0 ma-0">
                 <v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="info" :icon="false">
                     <v-icon class="mr-2">mdi-eye-circle</v-icon>
                     {{ $t('section.users.viewFlagWarning') }}
@@ -374,174 +376,174 @@
                     </v-row>
                     <v-row class="mt-2">
                         <v-expansion-panels v-model="panel" flat class="ma-1">
-                            <v-expansion-panel class="outlined">
-                                <v-expansion-panel-header class="font-weight-medium">
-                                    {{ $t("section.users.advancedDetails") }}
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content>
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                            dense
-                                            id="distinguishedName"
-                                            :label="$t('ldap.attributes.distinguishedName')"
-                                            readonly
-                                            v-model="usercopy.distinguishedName"
-                                            :rules="[this.fieldRules(usercopy.distinguishedName, 'ldap_dn')]"
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" lg="6">
-                                            <v-text-field
-                                            dense
-                                            id="userPrincipalName"
-                                            :label="$t('ldap.attributes.userPrincipalName')"
-                                            readonly
-                                            :value="getUSN"
-                                            :rules="[this.fieldRules(usercopy.userPrincipalName, 'ldap_usn')]"
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" lg="6" :justify="$vuetify.breakpoint.lgAndUp ? 'start':'center'">
-                                            <v-text-field
-                                            dense
-                                            id="sAMAccountType"
-                                            :label="$t('ldap.attributes.sAMAccountType')"
-                                            readonly
-                                            v-model="usercopy.sAMAccountType"
-                                            :rules="[this.fieldRules(usercopy.sAMAccountType, 'ge_lettersStrictUnderscore')]"
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row :justify="$vuetify.breakpoint.lgAndUp ? 'start':'center'" align="center">
-                                        <v-col cols="12" md="3">
-                                            <v-btn outlined dense color="primary" @click="goToTargetTab(TABS.GROUPS)"
-                                            class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
-                                                {{ $t("actions.changeUserGroups") }}
-                                                <v-icon>mdi-chevron-left</v-icon>
-                                            </v-btn>
-                                        </v-col>
-                                        <v-col cols="12" md="4">
-                                            <v-select
-                                            dense
-                                            id="primaryGroupID"
-                                            :label="$t('ldap.attributes.primaryGroupID')"
-                                            :readonly="editFlag != true"
-                                            v-model="usercopy.primaryGroupID"
-                                            :items="this.usercopy.memberOfObjects"
-                                            :hint="$t('section.users.userDialog.hint.primaryGroupID')"
-                                            persistent-hint
-                                            :item-text="getNameForPID"
-                                            item-value="objectRid"
-                                            ></v-select>
-                                        </v-col>
-                                        <v-col cols="12" md="2">
-                                            <v-text-field
-                                            dense
-                                            id="userAccountControl"
-                                            :label="$t('ldap.attributes.userAccountControl')"
-                                            readonly
-                                            v-model="enabledPermInts"
-                                            :rules="[this.fieldRules(enabledPermInts, 'ge_numbers')]"
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="3">
-                                            <v-btn outlined color="primary" @click="goToTargetTab(TABS.PERMS)"
-                                            class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
-                                                {{ $t("actions.changeUserPerms") }}
-                                                <v-icon>mdi-chevron-right</v-icon>
-                                            </v-btn>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="12" lg="6">
-                                            <v-text-field
-                                            dense
-                                            id="whenCreated"
-                                            :label="$t('ldap.attributes.whenCreated')"
-                                            readonly
-                                            v-model="usercopy.whenCreated"
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" lg="6">
-                                            <v-text-field
-                                            dense
-                                            id="whenChanged"
-                                            :label="$t('ldap.attributes.whenChanged')"
-                                            readonly
-                                            v-model="usercopy.whenChanged"
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="12" lg="6">
-                                            <v-text-field
-                                            dense
-                                            id="lastLogon"
-                                            :label="$t('ldap.attributes.lastLogon')"
-                                            readonly
-                                            v-model="usercopy.lastLogon"
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" lg="6">
-                                            <v-text-field
-                                            dense
-                                            id="pwdLastSet"
-                                            :label="$t('ldap.attributes.pwdLastSet')"
-                                            readonly
-                                            v-model="usercopy.pwdLastSet"
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="12" lg="8">
-                                            <v-row justify="center">
-                                                <span>
-                                                    {{ $t('ldap.attributes.objectClass') }}
-                                                </span>
-                                            </v-row>
-                                            <v-row justify="center">
-                                                <v-chip :light="$vuetify.theme.dark"
-                                                :dark="!$vuetify.theme.dark"
-                                                class="ma-1" v-for="i in usercopy.objectClass" :key="i"
-                                                @click:close="removeObjectClassFromArray(i)"
-                                                :close="editFlag == true">
-                                                    {{ i }}
-                                                </v-chip>
-                                            </v-row>
-                                        </v-col>
-                                        <v-col cols="12" lg="">
-                                            <v-row class="ma-0 pa-0" justify="center">
-                                                <v-autocomplete dense v-model="addObjectClass"
-                                                :label="$t('actions.addObjectClass')"
-                                                clearable
-                                                :readonly="editFlag != true"
-                                                :hint="$t('section.users.userDialog.hint.addObjectClass')"
-                                                :items="objectClasses">
-                                                </v-autocomplete>
-                                                <v-btn color="primary"
-                                                class="ml-3"
-                                                :disabled="editFlag != true"
-                                                @click="addObjectClassToArray"
-                                                rounded
-                                                icon>
-                                                    <v-icon>
-                                                        mdi-plus
-                                                    </v-icon>
+                                <v-expansion-panel class="outlined">
+                                    <v-expansion-panel-header class="font-weight-medium">
+                                        {{ $t("section.users.advancedDetails") }}
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <v-row>
+                                            <v-col cols="12">
+                                                <v-text-field
+                                                dense
+                                                id="distinguishedName"
+                                                :label="$t('ldap.attributes.distinguishedName')"
+                                                readonly
+                                                v-model="usercopy.distinguishedName"
+                                                :rules="[this.fieldRules(usercopy.distinguishedName, 'ldap_dn')]"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" lg="6">
+                                                <v-text-field
+                                                dense
+                                                id="userPrincipalName"
+                                                :label="$t('ldap.attributes.userPrincipalName')"
+                                                readonly
+                                                :value="getUSN"
+                                                :rules="[this.fieldRules(usercopy.userPrincipalName, 'ldap_usn')]"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" lg="6" :justify="$vuetify.breakpoint.lgAndUp ? 'start':'center'">
+                                                <v-text-field
+                                                dense
+                                                id="sAMAccountType"
+                                                :label="$t('ldap.attributes.sAMAccountType')"
+                                                readonly
+                                                v-model="usercopy.sAMAccountType"
+                                                :rules="[this.fieldRules(usercopy.sAMAccountType, 'ge_lettersStrictUnderscore')]"
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row :justify="$vuetify.breakpoint.lgAndUp ? 'start':'center'" align="center">
+                                            <v-col cols="12" md="3">
+                                                <v-btn outlined dense color="primary" @click="goToTargetTab(TABS.GROUPS)"
+                                                class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
+                                                    {{ $t("actions.changeUserGroups") }}
+                                                    <v-icon>mdi-chevron-left</v-icon>
                                                 </v-btn>
-                                            </v-row>
-                                        </v-col>
-                                        <v-col cols="12" lg="12">
-                                            <v-text-field
-                                            dense
-                                            id="objectCategory"
-                                            :label="$t('ldap.attributes.objectCategory')"
-                                            readonly
-                                            v-model="usercopy.objectCategory"
-                                            :rules="[this.fieldRules(usercopy.objectCategory, 'ldap_dn')]"
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
+                                            </v-col>
+                                            <v-col cols="12" md="4">
+                                                <v-select
+                                                dense
+                                                id="primaryGroupID"
+                                                :label="$t('ldap.attributes.primaryGroupID')"
+                                                :readonly="editFlag != true"
+                                                v-model="usercopy.primaryGroupID"
+                                                :items="this.usercopy.memberOfObjects"
+                                                :hint="$t('section.users.userDialog.hint.primaryGroupID')"
+                                                persistent-hint
+                                                :item-text="getNameForPID"
+                                                item-value="objectRid"
+                                                ></v-select>
+                                            </v-col>
+                                            <v-col cols="12" md="2">
+                                                <v-text-field
+                                                dense
+                                                id="userAccountControl"
+                                                :label="$t('ldap.attributes.userAccountControl')"
+                                                readonly
+                                                v-model="enabledPermInts"
+                                                :rules="[this.fieldRules(enabledPermInts, 'ge_numbers')]"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" md="3">
+                                                <v-btn outlined color="primary" @click="goToTargetTab(TABS.PERMS)"
+                                                class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
+                                                    {{ $t("actions.changeUserPerms") }}
+                                                    <v-icon>mdi-chevron-right</v-icon>
+                                                </v-btn>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col cols="12" lg="6">
+                                                <v-text-field
+                                                dense
+                                                id="whenCreated"
+                                                :label="$t('ldap.attributes.whenCreated')"
+                                                readonly
+                                                v-model="usercopy.whenCreated"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" lg="6">
+                                                <v-text-field
+                                                dense
+                                                id="whenChanged"
+                                                :label="$t('ldap.attributes.whenChanged')"
+                                                readonly
+                                                v-model="usercopy.whenChanged"
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col cols="12" lg="6">
+                                                <v-text-field
+                                                dense
+                                                id="lastLogon"
+                                                :label="$t('ldap.attributes.lastLogon')"
+                                                readonly
+                                                v-model="usercopy.lastLogon"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" lg="6">
+                                                <v-text-field
+                                                dense
+                                                id="pwdLastSet"
+                                                :label="$t('ldap.attributes.pwdLastSet')"
+                                                readonly
+                                                v-model="usercopy.pwdLastSet"
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col cols="12" lg="8">
+                                                <v-row justify="center">
+                                                    <span>
+                                                        {{ $t('ldap.attributes.objectClass') }}
+                                                    </span>
+                                                </v-row>
+                                                <v-row justify="center">
+                                                    <v-chip :light="$vuetify.theme.dark"
+                                                    :dark="!$vuetify.theme.dark"
+                                                    class="ma-1" v-for="i in usercopy.objectClass" :key="i"
+                                                    @click:close="removeObjectClassFromArray(i)"
+                                                    :close="editFlag == true">
+                                                        {{ i }}
+                                                    </v-chip>
+                                                </v-row>
+                                            </v-col>
+                                            <v-col cols="12" lg="">
+                                                <v-row class="ma-0 pa-0" justify="center">
+                                                    <v-autocomplete dense v-model="addObjectClass"
+                                                    :label="$t('actions.addObjectClass')"
+                                                    clearable
+                                                    :readonly="editFlag != true"
+                                                    :hint="$t('section.users.userDialog.hint.addObjectClass')"
+                                                    :items="objectClasses">
+                                                    </v-autocomplete>
+                                                    <v-btn color="primary"
+                                                    class="ml-3"
+                                                    :disabled="editFlag != true"
+                                                    @click="addObjectClassToArray"
+                                                    rounded
+                                                    icon>
+                                                        <v-icon>
+                                                            mdi-plus
+                                                        </v-icon>
+                                                    </v-btn>
+                                                </v-row>
+                                            </v-col>
+                                            <v-col cols="12" lg="12">
+                                                <v-text-field
+                                                dense
+                                                id="objectCategory"
+                                                :label="$t('ldap.attributes.objectCategory')"
+                                                readonly
+                                                v-model="usercopy.objectCategory"
+                                                :rules="[this.fieldRules(usercopy.objectCategory, 'ldap_dn')]"
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
                         </v-expansion-panels>
                     </v-row>
                     </v-form>
@@ -742,7 +744,7 @@ export default {
         loading: false,
         loadingColor: 'accent',
         extraListOpen: false,
-        tab: 0,
+        tab: ()=>{ return this.TABS.DEFAULT },
         error: false,
         errorMsg: "",
         domain: "",
@@ -871,6 +873,7 @@ export default {
         refreshLoading: Boolean
     },
     created(){
+        this.alertDelay = 0.5e3;
         this.syncUser();
     },
     computed:{
@@ -1186,7 +1189,7 @@ export default {
             this.$emit('editToggle', true);
             setTimeout(() => {
                 this.showAlert = true
-            }, 0.1e3)
+            }, this.alertDelay)
         },
         viewUser(){
             this.showAlert = false
@@ -1194,7 +1197,7 @@ export default {
             this.refreshUser();
             setTimeout(() => {
                 this.showAlert = true
-            }, 0.1e3)
+            }, this.alertDelay)
         },
         closeDialog() {
             this.$emit('closeDialog', this.viewKey);
@@ -1285,7 +1288,6 @@ export default {
         // Sync the usercopy object to the parent view user object on the
         // next tick to avoid mutation errors
         syncUser(){
-            this.showAlert = true
             this.tab = this.TABS.DEFAULT
             this.changingPerms = false
             this.changingGroups = false
@@ -1303,6 +1305,10 @@ export default {
                 this.setPermissions()
                 this.loading = false
                 this.loadingColor = 'primary'
+                if (Object.keys(this.user).length != 0)
+                    setTimeout(() => {
+                        this.showAlert = true
+                    }, this.alertDelay)
             })
         },
         // Tells the parent view to refresh/fetch the user again
