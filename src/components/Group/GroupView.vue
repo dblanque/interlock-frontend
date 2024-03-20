@@ -82,7 +82,7 @@
 
 		<!-- GROUP ACTIONS -->
 		<template v-slot:[`item.actions`]="{ item }">
-			<v-row>
+			<v-row class="my-1">
 				<v-tooltip bottom>
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
