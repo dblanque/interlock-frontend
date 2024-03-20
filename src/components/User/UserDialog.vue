@@ -907,6 +907,7 @@ export default {
     methods: {
         exit() {
             this.showAlert = false
+            this.tab = this.TABS.DEFAULT
         },
         getModifiedValues(){
             let v = []
