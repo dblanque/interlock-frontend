@@ -372,7 +372,8 @@ export default {
 		},
 		async refreshGroup(item){
 			await this.fetchGroup(item, this.editableForm, false).then(()=>{
-				this.$refs.GroupDialog.syncGroup()
+				if (this.$refs.GroupDialog != undefined)
+					this.$refs.GroupDialog.syncGroup()
 			});
 		},
 		// Fetch individual Group
