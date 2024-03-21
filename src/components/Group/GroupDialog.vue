@@ -534,7 +534,6 @@ export default {
                 this.setupExclude()
                 this.loading = false
                 this.loadingColor = 'primary'
-                console.log(Object.keys(this.group).length)
                 if (Object.keys(this.group).length != 0)
                     setTimeout(() => {
                         this.showAlert = true
