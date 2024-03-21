@@ -562,20 +562,24 @@ export default {
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
       await this.updateSelectedTab(1); // Index for Users Tab is 1
-      
-      this.$refs.ModularViewContainerRef.forEach(refObj => {
-        if (Object.hasOwnProperty.call(refObj.$refs, 'UserView'))
-          refObj.$refs.UserView.fetchUser(user);
-      });
+      setTimeout(()=>{
+        this.$refs.ModularViewContainerRef.forEach(refObj => {
+          console.log(refObj.$refs)
+          if (Object.hasOwnProperty.call(refObj.$refs, 'UserView'))
+            refObj.$refs.UserView.fetchUser(user);
+        });
+      }, 0.1)
     },
     async goToGroup(group) {
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
       await this.updateSelectedTab(2); // Index for Groups Tab is 2
-      this.$refs.ModularViewContainerRef.forEach(refObj => {
-        if (Object.hasOwnProperty.call(refObj.$refs, 'GroupView'))
-          refObj.$refs.GroupView.fetchGroup(group);
-      });
+      setTimeout(()=>{
+        this.$refs.ModularViewContainerRef.forEach(refObj => {
+          if (Object.hasOwnProperty.call(refObj.$refs, 'GroupView'))
+            refObj.$refs.GroupView.fetchGroup(group);
+        });
+      }, 0.1)
     },
     async setDomainDetails() {
       let domainData = getDomainDetails()
