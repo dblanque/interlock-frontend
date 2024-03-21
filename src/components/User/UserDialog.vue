@@ -694,6 +694,7 @@
                 </v-btn>
                 <!-- Refresh User Button -->
                 <refresh-button dense
+                    :fetching-data="fetchingData"
                     :loading="refreshLoading"
                     @refresh="refreshUser"/>
                 </v-row>

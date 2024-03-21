@@ -274,6 +274,7 @@
 	  :viewKey="'userDialog'"
 	  ref="UserDialog"
 	  :refreshLoading="loading"
+	  :disable-actions="fetchingData"
 	  :fetchingData="fetchingData"
 	  @closeDialog="closeDialog"
 	  @save="userSaved"
@@ -673,8 +674,10 @@ export default {
 	  }
 	},
 	async refreshUser(item){
-	  await this.fetchUser(item, this.editableForm, false);
-	  this.$refs.UserDialog.syncUser()
+		await this.fetchUser(item, this.editableForm, true).then(()=>{
+			if (this.$refs.UserDialog != undefined)
+				this.$refs.UserDialog.syncUser()
+		});
 	},
 	async massAccountStatusChange(disable){
 	  this.loading = true
@@ -750,39 +753,39 @@ export default {
 	  this.createSnackbar({message: (this.$tc("classes.user", 1) + " " + this.$tc("words.saved.m", 1)).toUpperCase(), type: 'success'})
 	},
 	// Fetch individual User
-	async fetchUser(item, isEditable=false, refreshAnim=true){
-	  if (refreshAnim == true)
-		this.loading = true
-	  this.fetchingData = true
-	  this.data.selectedUser.username = item.username
-	  this.data.selectedUser.distinguishedName = item.distinguishedName
-	  this.data.userdata = new User({})
-	  await this.data.userdata.fetch(this.data.selectedUser.username)
-	  .then(() => {
-		if (!this.dialogs.userDialog) {
-		  this.openDialog('userDialog')
-		  this.$refs.UserDialog.syncUser()
-		  this.$refs.UserDialog.setupExclude()
-		}
-		if (isEditable == true)
-		  this.editableForm = true
-		else
-		  this.editableForm = false
-		setTimeout(() => {
-		  this.loading = false
-		}, 50);
-		this.fetchingData = false
-	  })
-	  .catch(error => {
-		console.error(error)
-		this.errorMsg = this.getMessageForCode(error)
-		notificationBus.$emit('createNotification', 
-			{message: this.errorMsg.toUpperCase(), type: 'error'}
-		)
-		this.loading = false
-		this.fetchingData = false
-		this.error = true;
-	  })
+	async fetchUser(item, isEditable=false, openedDialogLoading=false){
+		if(!openedDialogLoading)
+			this.loading = true
+		this.fetchingData = true
+		this.data.selectedUser.username = item.username
+		this.data.selectedUser.distinguishedName = item.distinguishedName
+		this.data.userdata = new User({})
+		await this.data.userdata.fetch(this.data.selectedUser.username)
+			.then(() => {
+			if (!this.dialogs.userDialog) {
+				this.openDialog('userDialog')
+				this.$refs.UserDialog.syncUser()
+				this.$refs.UserDialog.setupExclude()
+			}
+			if (isEditable == true)
+				this.editableForm = true
+			else
+				this.editableForm = false
+			setTimeout(() => {
+				this.loading = false
+			}, 50);
+			this.fetchingData = false
+		})
+		.catch(error => {
+			console.error(error)
+			this.errorMsg = this.getMessageForCode(error)
+			notificationBus.$emit('createNotification', 
+				{message: this.errorMsg.toUpperCase(), type: 'error'}
+			)
+			this.loading = false
+			this.fetchingData = false
+			this.error = true;
+		})
 	},
   },
 }

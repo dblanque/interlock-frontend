@@ -296,6 +296,7 @@
                 </v-btn>
                 <!-- Refresh Group Button -->
                 <refresh-button dense
+                    :fetching-data="fetchingData"
                     :loading="refreshLoading"
                     @refresh="refreshGroup"/>
             </v-row>

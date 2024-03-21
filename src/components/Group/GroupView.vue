@@ -371,14 +371,14 @@ export default {
 			this.openDialog('groupDelete')
 		},
 		async refreshGroup(item){
-			await this.fetchGroup(item, this.editableForm, false).then(()=>{
+			await this.fetchGroup(item, this.editableForm, true).then(()=>{
 				if (this.$refs.GroupDialog != undefined)
 					this.$refs.GroupDialog.syncGroup()
 			});
 		},
 		// Fetch individual Group
-		async fetchGroup(item, isEditable=false, refreshAnim=true){
-			if (refreshAnim == true)
+		async fetchGroup(item, isEditable=false, openedDialogLoading=false){
+			if(!openedDialogLoading)
 				this.loading = true
 			this.fetchingData = true
 			this.data.selectedGroup.cn = item.cn
@@ -392,7 +392,7 @@ export default {
 				else
 					this.editableForm = false
 				setTimeout(() => { 
-					this.loading = false 
+					this.loading = false
 				}, 50);
 				this.fetchingData = false
 			})
