@@ -1233,6 +1233,7 @@ export default {
             let partialUpdateData = {
                 distinguishedName: this.usercopy.distinguishedName,
             }
+            partialUpdateData[this.userSelector] = this.usercopy['username']
             partialUpdateData[this.userSelector] = this.usercopy[this.userSelector]
             modifiedValues.forEach(k => {
                 partialUpdateData[k] = this.usercopy[k]
