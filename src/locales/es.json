@@ -236,7 +236,7 @@
       "fileReader": "Excepción del Lector de Archivos",
       "networkError": "AXIOS: Error de Red",
       "auth": {
-        "invalid_credentials": "Email o Contraseña Incorrectos",
+        "invalid_credentials": "Credenciales Incorrectos",
         "verification_code": "Codigo Incorrecto, Intente nuevamente",
         "verified_successfully": "Verificado Exitosamente",
         "verification_expired": "Intentos de Verificación acabados, contacte un administrador"

@@ -230,7 +230,7 @@
           "fileReader": "File Reader Exception",
           "networkError": "AXIOS: Network Error",
           "auth":{
-              "invalid_credentials": "Incorrect Email or Password",
+              "invalid_credentials": "Incorrect Credentials",
               "verification_code": "Incorrect Code, Please try again",
               "verified_successfully": "Verified Successfully",
               "verification_expired": "Verification codes have been exhausted, contact an admin"
