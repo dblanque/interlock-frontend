@@ -32,9 +32,9 @@
         </v-btn>
         <v-btn 
         class="pa-2 mx-2"
-        :dark="!(loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain)"
+        :dark="!(loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.name)"
         @click="openDeleteDialog(null, 'zone')"
-        :disabled="loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.domain" color="red">
+        :disabled="loading || zoneFilter.dnsZone == 'Root DNS Servers' || zoneFilter.dnsZone == ldap.name" color="red">
             <v-icon class="ma-0 pa-0">mdi-delete</v-icon>
             {{ $t('actions.delete') + ' ' + $tc('classes.dns.zone', 1) }}
         </v-btn>
