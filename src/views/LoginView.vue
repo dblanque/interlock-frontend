@@ -21,7 +21,7 @@
 					<v-expand-transition>
 					<div v-show="showLogin">
 						<v-row class="ma-0 pa-0 my-4" justify="center" align="center">
-								<v-btn class="ma-0 pa-0 px-2" small outlined color="primary-40" @click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
+								<v-btn class="ma-0 pa-0 px-2" small outlined color="primary-s" @click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
 									<span v-if="modeUser">
 										<v-icon class="mr-1">
 											mdi-email

@@ -9,16 +9,40 @@
 </template>
 
 <script>
+import semver from 'semver';
+
 export default {
   name: 'App',
-  mounted () {
+  mounted() {
     const html = document.documentElement
     html.setAttribute('lang', this.$i18n.locale)
+
+    // Version based localStorage Cleanup
     if (!localStorage.getItem('interlock.version')) {
       console.error("No Interlock version found, clearing old localStorage Variables.")
       localStorage.clear()
-    }
+    } else
+      this.localStorageSemverCleanup()
   },
+  methods:{
+    localStorageSemverCleanup(){
+      const i7kVersion = semver.clean(localStorage.getItem('interlock.version'))
+      const versions = {
+        "0.94.1":[
+          "auth.access_token_lifetime",
+          "auth.refresh_token_lifetime",
+          "user.access_token_lifetime",
+          "user.refresh_token_lifetime",
+        ]
+      }
+      for (const v in versions) {
+        if ( !i7kVersion || semver.gte(i7kVersion, semver.clean(v)) )
+          versions[v].forEach(deprecated_key => {
+            localStorage.removeItem(deprecated_key)
+          });
+      }
+    }
+  }
 }
 </script>
 

@@ -147,11 +147,11 @@
       v-else
       dense
       id="tabs-nav-bar"
+      color="bg-secondary-10"
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
       style="z-index: 1"
-      :class="'sticky-top ' +
-        (isThemeDark($vuetify) ? 'bg-secondary bg-lig-10' : 'bg-secondary bg-lig-20')"
+      class="sticky-top"
     >
       <v-row justify="space-between" :class="$vuetify.breakpoint.xs ? 'mx-0':'mx-12'" align="center">
         <v-btn
@@ -452,8 +452,7 @@ export default {
         this.first_name = localStorage.getItem("user.first_name");
         this.last_name = localStorage.getItem("user.last_name");
         this.email = localStorage.getItem("user.email");
-        this.access_token_lifetime = localStorage.getItem("auth.access_token_lifetime");
-        this.refresh_token_lifetime = localStorage.getItem("auth.refresh_token_lifetime");
+        this.refreshTokenExpiryData()
 
         this.fetchDomainDetails()
       }
@@ -537,6 +536,10 @@ export default {
     closeRefreshDialog(){
       this.showRefreshTokenDialog = false
       this.resetTimer()
+    },
+    refreshTokenExpiryData(){
+      this.access_expire = parseInt(localStorage.getItem("auth.access_expire"));
+      this.refresh_expire = parseInt(localStorage.getItem("auth.refresh_expire"));
     },
     goToPrevTab(){
       let counter = this.selectedTab - 1
@@ -662,20 +665,20 @@ export default {
     // What happens when the timer stops
     ////////////////////////////////////////////////////////////////////////////
     async handleInactive() {
-      const refreshClock = Date.parse(localStorage.getItem("auth.refreshClock"));
-      const accessClockLimit = refreshClock + (this.access_token_lifetime * 1000)
-      const refreshClockLimit = refreshClock + (this.refresh_token_lifetime * 1000)
-      const clockDifference = this.refresh_token_lifetime - this.access_token_lifetime
+      // ! Dates in EPOCH - Milliseconds
+      const accessClockLimit = this.access_expire;
+      const refreshClockLimit = this.refresh_expire;
+      const clockDifference = refreshClockLimit - accessClockLimit;
       if (Date.now() >= accessClockLimit && Date.now() < refreshClockLimit) {
         if (localStorage.getItem('auth.auto_refresh_token') == 'true') {
             await new User({}).getCurrentUserData()
             .then(() => { this.resetTimer() })
             .catch((error) => { console.error(error) })
-        } else {
+        } else if (!this.showRefreshTokenDialog) {
+          this.timeoutId = setTimeout(this.handleInactive, clockDifference)
           this.showRefreshTokenDialog = true
           if (this.$refs.RefreshTokenDialog != undefined)
             this.$refs.RefreshTokenDialog.startCountdown()
-          this.timeoutId = setTimeout(this.handleInactive, clockDifference * 1000)
         }
       } else if (Date.now() >= refreshClockLimit) {
         this.showLogoutDialog = true
@@ -686,8 +689,12 @@ export default {
       }
     },
     startTimer() {
+      this.refreshTokenExpiryData()
+      const refreshClock = Date.parse(localStorage.getItem("auth.refreshClock"));
+      const accessClockLimit = this.access_expire;
+      const clockDifference = accessClockLimit - refreshClock;
       // setTimeout returns an ID (can be used to start or clear a timer)
-      this.timeoutId = setTimeout(this.handleInactive, this.access_token_lifetime * 1000);
+      this.timeoutId = setTimeout(this.handleInactive, clockDifference);
     },
     resetTimer() {
       clearTimeout(this.timeoutId);

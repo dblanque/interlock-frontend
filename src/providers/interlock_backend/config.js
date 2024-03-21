@@ -160,7 +160,6 @@ const urls = {
         action: "api/debug/action/",
     },
 }
-
 const eraseLocalUserData = () => {
     const localUserKeys = [
         "first_name",
@@ -175,6 +174,32 @@ const eraseLocalUserData = () => {
     return
 }
 
+var tokenIsRefreshing = false
+
+const forToken = async () => {
+    console.log("Waiting for token refresh.")
+    let tokenRefreshCountLimit = 20;
+    let tokenRefreshWaitLimit = 500;
+    let tokenRefreshWait = 0;
+    while (tokenIsRefreshing === true && await (new Promise(resolve => setTimeout(() => resolve(tokenRefreshWait), tokenRefreshWaitLimit))) < tokenRefreshCountLimit) {
+        tokenRefreshWait++
+    }
+    return
+}
+
+// Add a request interceptor
+request.interceptors.request.use(
+    async function (config) {
+        if (tokenIsRefreshing === true)
+            await forToken()
+        // Do something before request is sent
+        return config;
+    },
+    function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+});
+
 // Adds Axios Response Interceptor.
 request.interceptors.response.use(
     // On Request Success...
@@ -187,6 +212,7 @@ request.interceptors.response.use(
         // Get Configuration of failed request.
         const originalRequest = error.config;
         if (error?.response?.status == undefined) {
+            console.error("HTTP Status undefined, going back to login.")
             // erase local storage and go to Index Login.
             eraseLocalUserData()
             if (router.app.$route.path != "/login")
@@ -194,20 +220,29 @@ request.interceptors.response.use(
         }
         // If the request error code is 403 and the request hasn't been retried...
         if (error.response.status === 401 && !originalRequest._retry) {
+            if (tokenIsRefreshing === true) {
+                await forToken();
+                return axios(originalRequest); // Resends
+            }
+            tokenIsRefreshing = true
             // Check flag for request being retried.
             originalRequest._retry = true;
             // Send refresh token request.
             let tokenRefreshAxios = axios.create(axios_opts)
             return tokenRefreshAxios.post(base_url+urls.auth.tokenRefresh)
             // then, if refresh request succeeds.
-            .then(() => {
+            .then(response => {
+                tokenIsRefreshing = false
                 var date = new Date()
                 // 1) Set tokens on LocalStorage.
-                localStorage.setItem('auth.refreshClock', date.toISOString())
+                localStorage.setItem('auth.refreshClock', date)
+                localStorage.setItem('auth.access_expire', response.data.access_expire)
+                localStorage.setItem('auth.refresh_expire', response.data.refresh_expire)
                 // 2) Return re-sent request through new axios.
                 return axios(originalRequest);
             // on refresh request error catch
             }).catch((e)=>{
+                tokenIsRefreshing = false
                 if (e.status != undefined && !ignoreErrorCodes.includes(e.status))
                     console.error(e)
                 if (e?.response?.status == 401) {

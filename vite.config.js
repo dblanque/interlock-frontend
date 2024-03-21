@@ -2,7 +2,7 @@
 // DBLANQUE & BR Consulting S.R.L.
 // File: vite.config.js
 
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 import { createVuePlugin } from "vite-plugin-vue2";
 import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';

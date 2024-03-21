@@ -406,7 +406,7 @@ export default {
             timeoutId: 0,
         }
     },
-    async created () {
+    async created() {
         this.user = new User({})
         this.user.getCurrentUserData().then(response => {
             let responseStatus = response.status
@@ -419,8 +419,7 @@ export default {
                 this.first_name = localStorage.getItem('user.first_name')
                 this.last_name = localStorage.getItem('user.last_name')
                 this.email = localStorage.getItem('user.email')
-                this.access_token_lifetime = localStorage.getItem("auth.access_token_lifetime");
-                this.refresh_token_lifetime = localStorage.getItem("auth.refresh_token_lifetime");
+                this.refreshTokenExpiryData()
 
                 new Domain({}).getDetails().then(() => {
                     let domainData = getDomainDetails()
@@ -543,6 +542,10 @@ export default {
             this.showRefreshTokenDialog = false
             this.resetTimer()
         },
+        refreshTokenExpiryData(){
+            this.access_expire = parseInt(localStorage.getItem("auth.access_expire"));
+            this.refresh_expire = parseInt(localStorage.getItem("auth.refresh_expire"));
+        },
         // Sync the usercopy object to the parent view user object on the
         // next tick to avoid mutation errors
         syncUser(){
@@ -593,16 +596,22 @@ export default {
         // Refresh Token Timers
         // What happens when the timer stops
         ////////////////////////////////////////////////////////////////////////
-        handleInactive() {
-            const refreshClock = Date.parse(localStorage.getItem("auth.refreshClock"));
-            const accessClockLimit = refreshClock + (this.access_token_lifetime * 1000)
-            const refreshClockLimit = refreshClock + (this.refresh_token_lifetime * 1000)
-            const clockDifference = this.refresh_token_lifetime - this.access_token_lifetime
+        async handleInactive() {
+            // ! Dates in EPOCH - Milliseconds
+            const accessClockLimit = this.access_expire;
+            const refreshClockLimit = this.refresh_expire;
+            const clockDifference = refreshClockLimit - accessClockLimit;
             if (Date.now() >= accessClockLimit && Date.now() < refreshClockLimit) {
+                if (localStorage.getItem('auth.auto_refresh_token') == 'true') {
+                    await new User({}).getCurrentUserData()
+                    .then(() => { this.resetTimer() })
+                    .catch((error) => { console.error(error) })
+                } else if (!this.showRefreshTokenDialog) {
+                this.timeoutId = setTimeout(this.handleInactive, clockDifference)
                 this.showRefreshTokenDialog = true
                 if (this.$refs.RefreshTokenDialog != undefined)
-                this.$refs.RefreshTokenDialog.startCountdown()
-                this.timeoutId = setTimeout(this.handleInactive, clockDifference * 1000)
+                    this.$refs.RefreshTokenDialog.startCountdown()
+                }
             } else if (Date.now() >= refreshClockLimit) {
                 this.showLogoutDialog = true
                 this.showRefreshTokenDialog = false
@@ -612,8 +621,12 @@ export default {
             }
         },
         startTimer() {
+            this.refreshTokenExpiryData()
+            const refreshClock = Date.parse(localStorage.getItem("auth.refreshClock"));
+            const accessClockLimit = this.access_expire;
+            const clockDifference = accessClockLimit - refreshClock;
             // setTimeout returns an ID (can be used to start or clear a timer)
-            this.timeoutId = setTimeout(this.handleInactive, this.access_token_lifetime * 1000);
+            this.timeoutId = setTimeout(this.handleInactive, clockDifference);
         },
         resetTimer() { 
             clearTimeout(this.timeoutId);

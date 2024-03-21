@@ -14,7 +14,9 @@ const calls = {
                 }
                 var date = new Date()
 
-                localStorage.setItem('auth.refreshClock', date.toISOString())
+                localStorage.setItem('auth.refreshClock', date)
+                localStorage.setItem('auth.access_expire', response.data.access_expire)
+                localStorage.setItem('auth.refresh_expire', response.data.refresh_expire)
                 localStorage.setItem("user.username", response.data.username)
                 if (Object.keys(response.data).includes('admin_allowed'))
                     localStorage.setItem("user.admin_allowed", response.data.admin_allowed)

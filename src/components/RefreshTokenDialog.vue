@@ -55,8 +55,9 @@ export default {
     },
     computed: {
         threshold(){
-            const time = localStorage.getItem("auth.access_token_lifetime")
-            return time
+            const refreshClock = Date.parse(localStorage.getItem("auth.refreshClock"));
+            const accessClockLimit = localStorage.getItem("auth.access_expire");
+            return (accessClockLimit - refreshClock) / 1000
         }
     },
     methods: {
@@ -69,14 +70,15 @@ export default {
             clearInterval(this.intervalId)
             this.allowRefresh = true
             this.alertType = 'info'
-            this.alertIcon = 'mdi-information'
-            this.timeRemaining = localStorage.getItem("auth.refresh_token_lifetime") - localStorage.getItem("auth.access_token_lifetime")
+            this.alertIcon = 'mdi-information'      
+            const accessClockLimit = localStorage.getItem("auth.access_expire") / 1000;
+            const refreshClockLimit = localStorage.getItem("auth.refresh_expire") / 1000;
+            this.timeRemaining = refreshClockLimit - accessClockLimit
         },
         startCountdown(){
             this.clearCountdown()
             this.getTimeInMinutes()
             this.intervalId = setInterval(() => {
-                // console.log(this.timeRemaining)
                 this.thresholdPassed = this.timeRemaining < this.threshold
                 this.alertType = this.thresholdPassed ? 'warning' : 'info'
                 this.alertIcon = this.thresholdPassed ? 'mdi-alert-box' :'mdi-information'

@@ -110,20 +110,17 @@ const actions = {
     },
 
     getCurrentUserData: ()=>{
-        const authKeys = [
-            'access_token_lifetime',
-            'refresh_token_lifetime'
-        ]
+        const authKeys = []
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.user.base + 'me/')
             .then(response => {
-                resolve(response);
                 for (const key in response.data.user) {
                     if (authKeys.includes(key))
                         localStorage.setItem(`auth.${key}`, response.data.user[key])
                     else
                         localStorage.setItem(`user.${key}`, response.data.user[key])
                 }
+                resolve(response);
             }).catch((e) => reject(e))
         })
     },
