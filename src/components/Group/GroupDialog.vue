@@ -321,6 +321,7 @@ import RefreshButton from '@/components/RefreshButton.vue';
 import CNObjectList from '@/components/CNObjectList.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import { notificationBus } from '@/main.js';
 
 export default {
     name: 'GroupDialog',
@@ -574,20 +575,54 @@ export default {
             else
                 delete this.groupcopy.membersToRemove
 
+            const excludeKeys = ["objectRid", "objectSid"]
+            const keysToCheck = ["cn","groupScope","groupType"]
+            let newDistinguishedName
+            excludeKeys.forEach(k => {
+                delete this.groupcopy[k]
+            });
+            // Remove unchanged keys or do something on change
+            keysToCheck.forEach(k => {
+                if (this.group[k] === this.groupcopy[k]) {
+                    delete this.groupcopy[k]
+                }
+                else {
+                    switch (k) {
+                        case "cn":
+                            const v = this.groupcopy[k]
+                            newDistinguishedName = this.groupcopy["distinguishedName"].split(",")
+                            // Remove relative distinguished name to get superior ldap path.
+                            newDistinguishedName.shift()
+                            newDistinguishedName = newDistinguishedName.join(",")
+                            // Add new relative distinguished name
+                            newDistinguishedName = `CN=${v},${newDistinguishedName}`
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+
             if (this.$refs.groupForm.validate()){
                 await new Group({}).update({group: this.groupcopy})
                 .then(() => {
                     if (closeDialog == true)
                         this.closeDialog();
-                    else
-                        this.refreshGroup();
-                    this.$emit('save', this.viewKey, this.groupcopy);
+                    if(newDistinguishedName)
+                        this.groupcopy["distinguishedName"] = newDistinguishedName
+                    this.$emit('save', this.groupcopy, closeDialog);
                     this.loading = false
                     this.loadingColor = 'primary'
                 })
                 .catch(error => {
                     console.error(error)
                     this.errorMsg = this.getMessageForCode(error)
+                    notificationBus.$emit('createNotification', 
+                        {
+                            message: this.errorMsg, 
+                            type: 'error'
+                        }
+                    );
                     this.loading = false
                     this.loadingColor = 'error'
                     this.error = true;

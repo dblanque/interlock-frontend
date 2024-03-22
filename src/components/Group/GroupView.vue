@@ -169,6 +169,7 @@
 			@save="groupSaved"
 			@editToggle="setViewToEdit"
 			@refreshGroup="refreshGroup"
+			@fetchGroup="fetchGroup"
 			/>
 	</v-dialog>
 
@@ -301,7 +302,8 @@ export default {
 			if (refresh)
 				this.listGroupItems()
 		},
-		groupSaved(){
+		groupSaved(groupToFetch, closeDialog){
+			this.fetchGroup(groupToFetch, true, !closeDialog)
 			this.listGroupItems(false)
 			this.createSnackbar({message: (this.$tc("classes.group", 1) + " " + this.$tc("words.saved.m", 1)).toUpperCase(), type: 'success'})
 		},
