@@ -6,7 +6,7 @@
     append-icon="mdi-earth"
     :dark="dark"
     :light="light"
-    :items="languages"
+    :items="getEnabledLanguages"
     v-model="language"
     @input="changeLanguage()"
     :hide-details="true"
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { supported_locales } from '@/i18n.js';
 export default {
     name: 'LanguageSelector',
     props:{
@@ -52,14 +53,23 @@ export default {
             languages: [
                 {text: 'English', value:"en"},
                 {text: 'Español', value:"es"},
+                {text: 'Français', value:"fr"},
             ],
             language: this.$i18n.locale
         }
     },
-    async created() {
+    async mounted() {
         this.verifyLocale()
     },
     computed:{
+        getEnabledLanguages(){
+            let r = []
+            this.languages.forEach(locale => {
+                if (supported_locales.includes(locale.value))
+                    r.push(locale)
+            })
+            return r
+        },
         breakpointXS() {
             if (this.$vuetify.breakpoint.xs)
                 return true
@@ -78,11 +88,15 @@ export default {
             let setLang = localStorage.getItem('lang.locale')
             if(setLang == undefined || setLang == null){
                 let browserlang = navigator.language.toLowerCase()
-                if(browserlang.includes('es'))
-                    this.$i18n.locale = 'es'
-                else{
-                    this.$i18n.locale = 'en'
-                }
+                let locale_set = false
+                supported_locales.forEach(lang => {
+                    if(browserlang.includes(lang.value)) {
+                        this.$i18n.locale = lang.value
+                        locale_set = true
+                    }
+                })
+                if(!locale_set)
+                    this.$i18n.locale = "en"
                 this.language = this.$i18n.locale
                 console.log("Using locale: " + this.language);
                 localStorage.setItem('lang.locale', this.$i18n.locale)

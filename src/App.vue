@@ -10,21 +10,44 @@
 
 <script>
 import semver from 'semver';
+import { supported_locales } from '@/i18n.js';
 
 export default {
   name: 'App',
   mounted() {
     const html = document.documentElement
     html.setAttribute('lang', this.$i18n.locale)
-
+    setTimeout(()=>{
+      this.verifyLocale()
+    }, 1)
     // Version based localStorage Cleanup
     if (!localStorage.getItem('interlock.version')) {
       console.error("No Interlock version found, clearing old localStorage Variables.")
       localStorage.clear()
-    } else
+    }
+    else {
       this.localStorageSemverCleanup()
+    }
   },
   methods:{
+    async verifyLocale() {
+        let setLang = localStorage.getItem('lang.locale')
+        if(setLang == undefined || setLang == null){
+            let browserlang = navigator.language.toLowerCase()
+            let locale_set = false
+            supported_locales.forEach(lang => {
+                console.log(lang)
+                if(browserlang.includes(lang.value)) {
+                    this.$i18n.locale = lang.value
+                    locale_set = true
+                }
+            })
+            if(!locale_set)
+                this.$i18n.locale = "en"
+            localStorage.setItem('lang.locale', this.$i18n.locale)
+        }
+        else this.$i18n.locale = setLang
+    },
     localStorageSemverCleanup(){
       const i7kVersion = semver.clean(localStorage.getItem('interlock.version'))
       const versions = {
