@@ -80,14 +80,15 @@
 
           <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
 
-          <v-menu 
+          <v-menu
             offset-y left 
             nudge-bottom="1rem" 
             :close-on-content-click="false" 
             v-model="filterListOpen">
               <template v-slot:activator="{ on, attrs }">
                   <v-btn v-bind="attrs" v-on="on" small elevation="0"
-                  style="min-width: 32px;" class="pa-0 px-2 pr-1" :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)">
+                  style="min-width: 32px;" :class="'pa-0 px-2 pr-1 ' + ($vuetify.breakpoint.smAndDown ? 'mx-2' : '')"
+                  :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)">
                   {{ $t("actions.filter") }}
                   <v-icon id="filterListButton" :class="filterListOpen == true  ? 'active' : ''">
                       mdi-chevron-down
