@@ -303,7 +303,8 @@ export default {
 				this.listGroupItems()
 		},
 		groupSaved(groupToFetch, closeDialog){
-			this.fetchGroup(groupToFetch, true, !closeDialog)
+			if(!closeDialog)
+				this.refreshGroup(groupToFetch)
 			this.listGroupItems(false)
 			this.createSnackbar({message: (this.$tc("classes.group", 1) + " " + this.$tc("words.saved.m", 1)).toUpperCase(), type: 'success'})
 		},

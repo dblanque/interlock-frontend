@@ -610,7 +610,7 @@ export default {
                         this.closeDialog();
                     if(newDistinguishedName)
                         this.groupcopy["distinguishedName"] = newDistinguishedName
-                    this.$emit('save', this.groupcopy, closeDialog);
+                    this.$emit('save', this.groupcopy, closeDialog == true);
                     this.loading = false
                     this.loadingColor = 'primary'
                 })
