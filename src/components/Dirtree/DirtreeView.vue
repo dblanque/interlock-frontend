@@ -181,10 +181,10 @@
               <v-icon v-else-if="item.type == 'Computer'">
                 {{ itemTypes[item.type.toLowerCase()]['icon'] }}
               </v-icon>
-              <v-icon v-else-if="(item.type == 'Person' || item.type == 'User') && !item.objectClass.includes('contact')">
+              <v-icon v-else-if="(item.type == 'Person' || item.type == 'User') && !itemIsContact(item)">
                 {{ itemTypes[item.type.toLowerCase()]['icon'] }}
               </v-icon>
-              <v-icon v-else-if="item.objectClass.includes('contact')">
+              <v-icon v-else-if="itemIsContact(item)">
                 {{ itemTypes['contact']['icon'] }}
               </v-icon>
               <v-icon v-else-if="item.type == 'Group'">
@@ -474,6 +474,12 @@ export default {
       }
     },
     methods: {
+        itemIsContact(item){
+          if (!item) return false
+          if (!item.objectClass) return false
+          if (!Array.isArray(item.objectClass)) return false
+          return item.objectClass.includes('contact')
+        },
         createSnackbar(notifObj){
           notificationBus.$emit('createNotification', notifObj);
         },
