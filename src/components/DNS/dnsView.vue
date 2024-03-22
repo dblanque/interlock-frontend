@@ -603,6 +603,7 @@ export default {
                 "nameNode",
                 "address",
                 "ipv6Address",
+                "displayName"
             ]
             DEFAULT_ON.forEach(key => {
                 if (key == 'actions')
