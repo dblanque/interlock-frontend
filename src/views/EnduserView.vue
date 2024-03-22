@@ -19,10 +19,12 @@
         </v-col>
         <v-divider style="border-color: var(--v-primary-base)" class="ma-6" v-if="this.$vuetify.breakpoint.mdAndUp"/>
         <v-col class="ma-0 pa-0 my-3" v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
-            <span v-if="last_name && last_name != '' && first_name && first_name != ''">
+            <span style="color: var(--v-white-d-base);"
+                v-if="last_name && last_name != '' && first_name && first_name != ''">
             {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + '@' + username }}
             </span>
-            <span v-else>
+            <span style="color: var(--v-white-d-base);"
+                v-else>
             {{ realm.toUpperCase() + '@' + username }}
             </span>
         </v-col>
