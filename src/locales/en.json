@@ -285,7 +285,8 @@
             "user_country_error":"User country could not be updated",
             "user_group_fetch_error":"User Group Memberships could not be fetched",
             "user_group_primary_err":"Primary Group for User cannot be Deleted",
-            "user_group_bad":"Bad User Group Member Operations"
+            "user_group_bad":"Bad User Group Member Operations",
+            "user_email_exists":"Another User with that Email exists"
           },
           "ldap":{
             "ldap_obj_exists":"An object with this Common Name already exists",
