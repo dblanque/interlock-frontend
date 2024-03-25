@@ -19,8 +19,7 @@
                     </v-btn>
                 </v-row>
             </v-card-title>
-            
-                
+
             <v-expand-transition>
                 <v-row v-show="editFlag && showAlert" justify="center" class="pa-0 ma-0">
                     <v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
