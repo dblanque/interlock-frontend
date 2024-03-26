@@ -125,6 +125,7 @@ const urls = {
     settings: {
         base: "api/settings/",
         list: "api/settings/",
+        fetch: "api/settings/fetch/",
         save: "api/settings/save/",
         reset: "api/settings/reset/",
         test: "api/settings/test/"

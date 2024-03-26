@@ -26,6 +26,8 @@
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
                 <v-btn @click="resetConfirm"
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
                 class="ma-0 pa-0 pa-2 ma-1 bg-white bg-lig-25"
                 rounded>
                     <v-icon class="mr-2">
@@ -51,8 +53,10 @@
 </template>
 
 <script>
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 export default {
     name: "SettingsResetDialog",
+    mixins: [ utilsMixin ],
     methods: {
         async resetConfirm() {
             this.$emit('resetConfirm');

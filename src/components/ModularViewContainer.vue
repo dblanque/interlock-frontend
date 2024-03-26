@@ -69,6 +69,7 @@
 			:viewTitle="viewTitle"
 			class="my-2 mb-4"
 			ref="SettingsView"
+			@refresh="refreshAction()"
 		/>
 	</v-container>
 

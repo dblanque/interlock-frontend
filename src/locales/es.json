@@ -27,6 +27,10 @@
   "actions": {
     "commonlyUsed":"Comúnmente Utilizado",
     "ldap":{
+      "configPreset":"Grupo de Parámetros",
+      "newConfigPreset":"Nombre de Grupo de Parámetros Nuevo",
+      "defaultPreset":"Grupo de Parámetros Pre-determinado",
+      "presetAlreadyExists":"Grupo de Parámetros Existente",
       "manual_command":"Comando LDAP Manual",
       "operation":"Operación LDAP",
       "operation_list":{

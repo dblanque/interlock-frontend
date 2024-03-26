@@ -27,6 +27,10 @@
   "actions":{
     "commonlyUsed":"Commonly Used",
     "ldap":{
+      "configPreset":"Configuration Preset",
+      "newConfigPreset":"New Configuration Preset Name",
+      "defaultPreset":"Default Preset",
+      "presetAlreadyExists":"Preset Already Exists",
       "manual_command":"Manual LDAP Command",
       "operation":"LDAP Operation",
       "operation_list":{

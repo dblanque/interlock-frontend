@@ -485,9 +485,6 @@ export default {
       this.showNavTabs = true;
     }, 250);
     getDomainDetails()
-    if (this.domain == "example.com") {
-      this.updateSelectedTab(5)
-    }
     this.active_tab = this.selectedTab;
     if (this.selectedTab == 0)
       this.initLoad = true
@@ -598,6 +595,9 @@ export default {
           this.domain = domainData['name']
           this.realm = domainData['realm']
           this.basedn = domainData['basedn']
+          if (this.domain.toLowerCase() == "example.com") {
+            this.updateSelectedTab(5)
+          }
           this.fetchingDomainDetails = false
           if ('debug' in domainData)
             this.enableDebug = (domainData['debug'] === "true")

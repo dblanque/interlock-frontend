@@ -14,6 +14,15 @@ const actions = {
         })
     },
 
+    fetch: (presetId)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.get(interlock_backend.urls.settings.fetch + `${presetId}/`)
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
+    },
+
     reset: ()=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.settings.reset)

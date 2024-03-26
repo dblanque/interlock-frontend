@@ -465,7 +465,7 @@ export default {
     },
     created() {
         this.ldap = getDomainDetails()
-        this.getDNSData(this.defaultZone)
+        this.getDNSData()
     },
     watch: {
         'enabledRecordTypes': {

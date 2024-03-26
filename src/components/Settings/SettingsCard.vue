@@ -65,6 +65,13 @@
                     {{ $t("actions.refresh") }}
             </v-btn>
         </v-row>
+        <v-slide-y-transition>
+            <v-row justify="center" v-if="invalid == true">
+                <v-alert type="warning" dense>
+                    {{ $t("section.settings.settingFailedValidation") }}
+                </v-alert>
+            </v-row>
+        </v-slide-y-transition>
         <v-row class="mx-1" justify="center" v-if="false">
             <v-select :label="$t('actions.ldap.operation')"
                 @input="changeManualOpType(manual_cmd.operation)"
@@ -78,13 +85,93 @@
                 </template>
             </v-select>
         </v-row>
-        <v-row class="mx-1" justify="center">
+        <v-row justify="center" align="center">
+            <v-col cols="6" sm="8" md="6">
+                <v-select class="ma-0 pa-0"
+                    :items="presets"
+                    outlined
+                    dense
+                    hide-details
+                    :label="$t('actions.ldap.configPreset')"
+                    :disabled="!presets || presets.length <=1"
+                    item-value="id"
+                    v-model="presetId">
+                    <template slot="selection" slot-scope="data">
+                        {{ data.item.name == "default" ? $t("actions.ldap.defaultPreset") : `${data.item.label}` }}
+                    </template>
+                    <template slot="item" slot-scope="data">
+                        {{ data.item.name == "default" ? $t("actions.ldap.defaultPreset") : `${data.item.label}` }}
+                    </template>
+                </v-select>
+            </v-col>
+            <v-col cols="auto">
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon
+                            v-bind="attrs"
+                            v-on="on"
+                            :disabled="readonly || loading || true"
+                            class="mx-1"
+                            color="secondary"
+                            small
+                            elevation="0">
+                            <v-icon>
+                                mdi-location-enter
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>{{ $t("actions.apply") }}</span>
+                </v-tooltip>
+                <v-btn disabled
+                    class="mx-1"
+                    @click="addingProfile = !addingProfile"
+                    :color="addingProfile ? 'primary':'secondary'"
+                    small
+                    elevation="0"
+                    icon>
+                    <v-icon>
+                        mdi-application-cog
+                    </v-icon>
+                </v-btn>
+                <v-btn :disabled="loading || readonly || isDefaultPreset() || true"
+                    class="mx-1" color="error-60-s" small elevation="0" icon>
+                    <v-icon>
+                        mdi-delete
+                    </v-icon>
+                </v-btn>
+            </v-col>
+        </v-row>
+        <v-expand-transition>
+            <v-row class="ma-0 pa-0 mx-1" v-if="addingProfile || false" align="center" justify="center">
+                <v-col cols="8" md="6" lg="7">
+                        <v-text-field
+                            :label="$t('actions.ldap.newConfigPreset')"
+                            v-model="newPresetLabel"
+                            :rules="[this.fieldRules(newPresetLabel, 'ge_name', newPresetLabel.length > 0 ? true : false) ]"
+                        >
+                    </v-text-field>
+                </v-col>
+                <v-col cols="auto">
+                    <v-row class="pa-0 ma-0" justify="center" align="center">
+                        <v-btn @click="addPreset"
+                            class="mx-1" color="primary" small elevation="0" icon 
+                            :disabled="!newPresetIsValid"
+                        >
+                            <v-icon>
+                                mdi-plus-circle
+                            </v-icon>
+                        </v-btn>
+                    </v-row>
+                </v-col>
+            </v-row>
+        </v-expand-transition>
+        <v-row class="mx-2" justify="center">
             <v-checkbox off-icon="mdi-close-box"
             :label="$t('section.settings.defaultAdminIs') + ' ' + (defaultAdminEnabled ? $t('words.enabled') : $t('words.disabled'))"
             v-model="defaultAdminEnabled"/>
         </v-row>
-        <v-row class="mx-1" justify="center">
-            <v-col cols="8" md="4" xl="3">
+        <v-row class="mx-4" justify="center">
+            <v-col cols="10" md="4" xl="3">
                 <v-text-field
                 type="password"
                 v-model="defaultAdminPwd"
@@ -92,7 +179,7 @@
                 :rules="[this.fieldRules(defaultAdminPwd, 'ge_password', defaultAdminPwdConfirm.length > 0 ? true : false)]"
                 label="Change Default Admin Password"/>
             </v-col>
-            <v-col cols="8" md="4" xl="3">
+            <v-col cols="10" md="4" xl="3">
                 <v-text-field
                 type="password"
                 v-model="defaultAdminPwdConfirm"
@@ -101,13 +188,6 @@
                 label="Confirm Default Admin Password"/>
             </v-col>
         </v-row>
-        <v-slide-y-transition>
-            <v-row justify="center" v-if="invalid == true">
-                <v-alert type="warning" dense>
-                    {{ $t("section.settings.settingFailedValidation") }}
-                </v-alert>
-            </v-row>
-        </v-slide-y-transition>
         <v-slide-y-transition>
             <div v-if="showSettings == true">
                 <v-form ref="settingsForm" @submit.prevent>
@@ -237,7 +317,7 @@
                             </v-list-item>
                         </v-card>
                         <!-- Object Type Settings -->
-                        <v-card flat outlined class="ma-0 px-6 py-2 pt-4" v-else-if="item.type == 'object'">
+                        <v-card flat outlined class="ma-0 px-6 py-2 pt-4" v-else-if="item.type == 'object' || item.type == 'json'">
                             <ObjectEditor :value="item.value"
                             :label="$t('section.users.import.dataMapping')"
                             ref="settingFieldsEditor"
@@ -249,7 +329,7 @@
                         </v-card>
                         <!-- Select Settings -->
                         <v-select :label="$t('section.settings.fields.' + key)"
-                        v-else-if="item.type == 'select'"
+                        v-else-if="item.type == 'select' || item.type == 'tls'"
                         :readonly="item.readonly || readonly == true"
                         v-model="item.value"
                         :hint="$t(item.hint)"
@@ -382,6 +462,10 @@ export default {
             defaultAdminEnabled: true,
             defaultAdminPwd: "",
             defaultAdminPwdConfirm: "",
+            presetId: 1,
+            presets: [],
+            newPresetLabel: "",
+            addingProfile: false,
             config: {
                 log: {
                     row1:{
@@ -562,7 +646,19 @@ export default {
     mounted(){
         this.refreshSettings();
     },
+    computed: {
+        newPresetIsValid(){
+            return this.fieldRules(this.newPresetLabel, 'ge_name', this.newPresetLabel.length > 0 ? true : false) === true
+        }
+    },
     methods:{
+        isDefaultPreset() {
+            let r = false
+            this.presets.forEach(ps => {
+                if (ps.id == this.presetId && ps.name == "default") r = true
+            })
+            return r
+        },
         changeManualOpType(v){
             console.log(v)
         },
@@ -656,6 +752,10 @@ export default {
             clearTimeout(this.saveTimerId)
             await new Promise(r => this.saveTimerId = setTimeout(r, time_in_milliseconds));
         },
+        async addPreset(){
+            if (this.newPresetIsValid)
+            console.log("Add preset")
+        },
         async saveSettings(){
             if (this.$refs.settingsForm.validate('settingsForm') && 
                 this.$refs.defaultAdminPwd.validate() && 
@@ -668,6 +768,7 @@ export default {
                 this.loading = true
                 var dataToSend = {}
                 dataToSend = this.getConfigValues()
+                dataToSend["PRESET_ID"] = this.presetId
                 dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
                 dataToSend['DEFAULT_ADMIN_PWD'] = this.defaultAdminPwd
                 await new Settings({}).save(dataToSend).then(() => {
@@ -705,8 +806,23 @@ export default {
             this.testError = false
             this.testFinished = false
             await new Settings({}).list()
+            .then(r => {
+                this.presets = r.data.presets
+                this.presetId = r.data.active_preset
+            })
+            .catch(e => {
+                console.error(e)
+                this.loading = false
+                this.createSnackbar({message: this.getMessageForCode(e), type: 'error'})
+                setTimeout(()=>{
+                    this.showSettings = false
+                }, 250)
+                this.error = true
+                this.readonly = false
+            })
+            await new Settings({}).fetch(this.presetId)
             .then(response => {
-                var settings = response.data.settings
+                let settings = response.data.settings
                 this.defaultAdminEnabled = settings['DEFAULT_ADMIN_ENABLED']
                 this.defaultAdminPwd = ""
                 this.defaultAdminPwdConfirm = ""
@@ -734,6 +850,7 @@ export default {
                     this.readonly = false
                 }, 300)
                 this.error = false
+                this.$emit("refresh")
             })
             .catch(error => {
                 console.error(error)
