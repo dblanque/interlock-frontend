@@ -848,9 +848,9 @@ export default {
                 setTimeout(()=>{
                     this.showSettings = true
                     this.readonly = false
+                    this.$emit("refreshDomain")
                 }, 300)
                 this.error = false
-                this.$emit("refresh")
             })
             .catch(error => {
                 console.error(error)

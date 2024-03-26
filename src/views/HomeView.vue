@@ -196,6 +196,7 @@
           :viewIndex="tab.index"
           ref="ModularViewContainerRef"
           @refresh="setDomainDetails()"
+          @refreshDomain="fetchDomainDetails(false)"
           @goToUser="goToUser"
           @goToGroup="goToGroup"
           :langChanged="langChanged"
@@ -587,7 +588,7 @@ export default {
       this.realm = domainData["realm"];
       this.basedn = domainData["basedn"];
     },
-    async fetchDomainDetails(){
+    async fetchDomainDetails(default_redirect=true){
         this.fetchingDomainDetails = true
         this.disableDomainDetailsButton = true
         await new Domain({}).getDetails().then(() => {
@@ -595,7 +596,7 @@ export default {
           this.domain = domainData['name']
           this.realm = domainData['realm']
           this.basedn = domainData['basedn']
-          if (this.domain.toLowerCase() == "example.com") {
+          if (this.domain.toLowerCase() == "example.com" && default_redirect === true) {
             this.updateSelectedTab(5)
           }
           this.fetchingDomainDetails = false

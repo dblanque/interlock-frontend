@@ -57,6 +57,19 @@ export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch=unde
     return searchResult
 }
 
+const asyncLocalStorage = {
+    setItem(key, value) {
+        return Promise.resolve().then(function () {
+            localStorage.setItem(key, value);
+        });
+    },
+    getItem(key) {
+        return Promise.resolve().then(function () {
+            return localStorage.getItem(key);
+        });
+    }
+};
+
 export function getDomainDetails(){
     let domainData = {}
     for (let i = 0; i < localStorage.length; i++){

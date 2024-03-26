@@ -69,7 +69,7 @@
 			:viewTitle="viewTitle"
 			class="my-2 mb-4"
 			ref="SettingsView"
-			@refresh="refreshAction()"
+			@refreshDomain="refreshDomainAction()"
 		/>
 	</v-container>
 
@@ -235,6 +235,9 @@ export default {
 					console.log(data)
 					break;
 			}
+		},
+		refreshDomainAction() {
+			this.$emit('refreshDomain')
 		},
 		refreshAction() {
 			// Reset all filters if refreshing dirtree view
