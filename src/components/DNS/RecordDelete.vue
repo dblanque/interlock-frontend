@@ -25,7 +25,7 @@
                 </span>
             </v-row>
             <v-row v-else-if="deleteMode == 'zone'" class="pa-0 ma-8 mb-2 text-subtitle-1" justify="center">
-                {{ $t('section.dns.deleteRecord.message') }}
+                {{ $t('section.dns.deleteZone.message') }}
                 <span class="font-weight-medium" style="padding-left: 0.5ch;">
                     {{ currentZone + "?" }}
                 </span>
@@ -59,8 +59,8 @@
                 <v-btn @keydown.enter="closeDialog(true)" 
                 @click="closeDialog(true)" 
                 :disabled="getAllowConfirmStatus"
-                :dark="!isThemeDark($vuetify)"
-                :light="isThemeDark($vuetify)"
+                :dark="!isThemeDark($vuetify) && !getAllowConfirmStatus"
+                :light="isThemeDark($vuetify) && !getAllowConfirmStatus"
                 class="ma-0 pa-0 pa-2 pl-1 ma-1" 
                 rounded>
                     <v-icon class="mr-1" color="green">
