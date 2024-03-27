@@ -320,7 +320,7 @@
                     </v-slide-x-reverse-transition>
 
                     <v-slide-x-reverse-transition>
-                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && (createStage < 4 && this.error == true)"
+                    <v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && createStage < 4"
                     @keydown.enter="prevStep"
                     :dark="!isThemeDark($vuetify)"
                     :light="isThemeDark($vuetify)"
@@ -589,6 +589,8 @@ export default {
                     this.createStage -= 1
                     break;
             }
+            this.error = false
+            this.errorMsg = ""
         },
         nextStep(){
             switch (this.createStage) {
