@@ -15,29 +15,38 @@
     :style="fullWidth || this.$vuetify.breakpoint.smAndDown ? '' : 'max-width: 25ch;'"
     >
     <template slot="selection" slot-scope="data">
-        <!-- HTML that describe how select should render selected items -->
-
-        <span>
+        <!-- HTML that describes how select should render the selected item -->
+        <v-row class="ma-0 pa-0" align="center">
             {{ data.item.text + ' (' + data.item.value.toUpperCase() + ')' }}
-        </span>
-        <!-- <span v-else>
-            {{ data.item.value.toUpperCase() }}
-        </span> -->
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                <v-icon color="accent-45-s" v-bind="attrs" v-on="on" class="ml-1" v-if="!localeIsComplete(data.item.value)">
+                    mdi-alert-circle
+                </v-icon>
+                </template>
+            <span>{{ $t('locale.incomplete.'+data.item.value) }}</span>
+            </v-tooltip>
+        </v-row>
     </template>
     <template slot="item" slot-scope="data">
-        <!-- HTML that describe how select should render items when the select is open -->
-        <span>
+        <!-- HTML that describes how select should render items when the select is open -->
+        <v-row class="ma-0 pa-0" align="center">
             {{ data.item.text + ' (' + data.item.value.toUpperCase() + ')' }}
-        </span>
-        <!-- <span v-else>
-            {{ data.item.value.toUpperCase() }}
-        </span> -->
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                <v-icon color="accent-45-s" v-bind="attrs" v-on="on" class="ml-1" v-if="!localeIsComplete(data.item.value)">
+                    mdi-alert-circle
+                </v-icon>
+                </template>
+            <span>{{ $t('locale.incomplete.'+data.item.value) }}</span>
+            </v-tooltip>
+        </v-row>
     </template>
     </v-select>
 </template>
 
 <script>
-import { supported_locales } from '@/i18n.js';
+import { supported_locales, incomplete_locales } from '@/i18n.js';
 export default {
     name: 'LanguageSelector',
     props:{
@@ -84,6 +93,9 @@ export default {
         },
     },
     methods: {
+        localeIsComplete(locale){
+            return !incomplete_locales.includes(locale)
+        },
         async verifyLocale() {
             let setLang = localStorage.getItem('lang.locale')
             if(setLang == undefined || setLang == null){

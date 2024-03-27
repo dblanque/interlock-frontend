@@ -228,7 +228,7 @@
   },
   "error":{
     "codes": {
-      "400": "HTTP 400: Request Erróneo",
+      "400": "HTTP 400: Pedido Erróneo",
       "401": "HTTP 401: No Autorizado",
       "403": "HTTP 403: Prohibido",
       "406": "HTTP 406: Inaceptable",
@@ -904,5 +904,12 @@
     },
     "etianen":"Acreditado por crear el módulo original de Django-python3-ldap",
     "dirkjanm":"Acreditado por su <b>increíble</b> repo krbrelayx y sus scripts"
-  }
+  },
+  "locale":{
+    "incomplete":{
+      "en":"Translation not complete yet",
+      "es":"Traducción aún no completada",
+      "fr":"Traduction pas encore terminée"
+    }
+}
 }

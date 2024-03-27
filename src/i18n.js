@@ -6,7 +6,11 @@ Vue.use(VueI18n)
 export const supported_locales = [
   "en", // ENGLISH
   "es", // SPANISH
-  // "fr" // FRENCH
+  "fr" // FRENCH
+]
+
+export const incomplete_locales = [
+  "fr" // FRENCH
 ]
 
 function loadLocaleMessages_webpack () {

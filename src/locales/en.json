@@ -898,5 +898,12 @@
     },
     "etianen":"Credited for creating the original Django-python3-ldap module",
     "dirkjanm":"Credited for his <b>amazing</b> krbrelayx repo and scripts"
+  },
+  "locale":{
+    "incomplete":{
+      "en":"Translation not complete yet",
+      "es":"Traducción aún no completada",
+      "fr":"Traduction pas encore terminée"
+    }
   }
 }
