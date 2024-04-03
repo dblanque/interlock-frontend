@@ -27,6 +27,9 @@
 	"actions":{
 	  "commonlyUsed":"Couramment Utilisé",
 	  "ldap":{
+		"configPreset":"Groupe du Paramètres",
+		"newConfigPreset":"Nouveau Nom du Paramètres",
+		"defaultPreset":"Paramètres Predeterminés",
 		"manual_command":"Commande LDAP Manuelle",
 		"operation":"Opération LDAP",
 		"operation_list":{
@@ -205,6 +208,7 @@
 	  "organizational-unit": "Unité Organisationnelle | Unités Organisationnelles",
 	  "ou":"OU | OUs",
 	  "setting":"Paramétre | Paramétres",
+	  "setting-preset":"Groupe de Paramétres | Groupes de Paramètres",
 	  "ldap":"Objet LDAP | Objets LDAP",
 	  "totp-device":"Dispositif TOTP | Dispositifs TOTP",
 	  "dns":{
@@ -308,6 +312,17 @@
 			  "group_dn_missing":"Group Distinguished Name missing from Request",
 			  "group_builtin_protect":"Specified Group cannot be Deleted as it is builtin",
 			  "group_members_bad":"The same members are in the Add Member and Remove Member lists"
+			},
+			"settings":{
+			  "setting_type_malformed":"Setting Type Malformed",
+			  "setting_not_in_list":"Required Setting not in List",
+			  "setting_max_log":"Log Limit Violation",
+			  "setting_reset_fail":"Could not reset settings to defaults",
+			  "setting_preset_not_exists":"Settings Preset does not exist",
+			  "setting_preset_exists":"Settings Preset already exists",
+			  "settings_serializer_error":"Settings serializer error",
+			  "settings_preset_serializer_error":"Preset serializer error",
+			  "settings_preset_must_be_disabled":"Preset must be disabled to be deleted"
 			},
 			"ldapObjectExists":"An LDAP Object with that Identifier Exists",
 			"namingViolation":"Naming Violation Exception",
@@ -738,8 +753,13 @@
 		}
 	  },
 	  "settings":{
+		"recommendLoginAfterChanges":"Il est recommandé de se reconnecter après avoir apporté des modifications",
 		"waitingServiceRestart":"Waiting for Service Restart",
-		"defaultAdminIs":"Default Admin is",
+		"superAdminIs":"Super-Admin",
+		"superAdminPwd":"Change Local Admin Password",
+		"superAdminPwdConfirm":"Confirm New Password",
+		"configLabelFieldHint": "Cliquez sur enregistrer pour Renommer",
+		"activePreset":"Groupe de Paramètres Actifs",
 		"resetDialog":{
 		  "header":"Reset Settings",
 		  "message":"Are you sure you wish to reset <b>all</b> the settings?"

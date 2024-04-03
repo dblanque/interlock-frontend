@@ -100,6 +100,7 @@ declare module 'vue' {
     VRow: typeof import('vuetify/lib')['VRow']
     VSelect: typeof import('vuetify/lib')['VSelect']
     VSlideXReverseTransition: typeof import('vuetify/lib')['VSlideXReverseTransition']
+    VSlideXTransition: typeof import('vuetify/lib')['VSlideXTransition']
     VSlideYReverseTransition: typeof import('vuetify/lib')['VSlideYReverseTransition']
     VSlideYTransition: typeof import('vuetify/lib')['VSlideYTransition']
     VSnackbar: typeof import('vuetify/lib')['VSnackbar']

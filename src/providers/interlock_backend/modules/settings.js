@@ -48,6 +48,42 @@ const actions = {
                 resolve(response);
             }).catch((e) => reject(e))
         })
+    },
+
+    preset_create: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.settings.preset_create, data)
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
+    },
+
+    preset_rename: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.settings.preset_rename, data)
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
+    },
+
+    preset_delete: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.settings.preset_delete, data)
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
+    },
+
+    preset_enable: (data)=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.settings.preset_enable, data)
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
     }
 }
 

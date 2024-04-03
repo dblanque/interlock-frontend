@@ -100,6 +100,8 @@ const utilsMixin = {
                 return this.$t('error.codes.ldap.'+codeToUse)
             else if (/group_.*/.test(codeToUse))
                 return this.$t('error.codes.groups.'+codeToUse)
+            else if (/setting_.*/.test(codeToUse))
+                return this.$t('error.codes.settings.'+codeToUse)
             else
                 switch(codeToUse){
                 case 'ERR_UNKNOWN':

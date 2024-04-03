@@ -128,7 +128,11 @@ const urls = {
         fetch: "api/settings/fetch/",
         save: "api/settings/save/",
         reset: "api/settings/reset/",
-        test: "api/settings/test/"
+        test: "api/settings/test/",
+        preset_create: "api/settings/preset_create/",
+        preset_delete: "api/settings/preset_delete/",
+        preset_rename: "api/settings/preset_rename/",
+        preset_enable: "api/settings/preset_enable/"
     },
     ou: {
         base: "api/ou/",

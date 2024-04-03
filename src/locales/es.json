@@ -28,9 +28,8 @@
     "commonlyUsed":"Comúnmente Utilizado",
     "ldap":{
       "configPreset":"Grupo de Parámetros",
-      "newConfigPreset":"Nombre de Grupo de Parámetros Nuevo",
-      "defaultPreset":"Grupo de Parámetros Pre-determinado",
-      "presetAlreadyExists":"Grupo de Parámetros Existente",
+      "newConfigPreset":"Nombre de Parámetros Nuevo",
+      "defaultPreset":"Parámetros Pre-determinados",
       "manual_command":"Comando LDAP Manual",
       "operation":"Operación LDAP",
       "operation_list":{
@@ -215,6 +214,7 @@
     "organizational-unit":"Unidad Organizacional | Unidades Organizacionales",
     "ou":"OU | OUs",
     "setting":"Parámetro | Parámetros",
+	  "setting-preset":"Grupo de Parámetros | Grupos de Parámetros",
     "ldap":"Objeto LDAP | Objetos LDAP",
     "totp-device":"Dispositivo TOTP | Dispositivos TOTP",
     "dns":{
@@ -319,6 +319,17 @@
         "group_dn_missing":"Falta el Nombre Distinguido en el Request",
         "group_builtin_protect":"El Grupo especificado es integrado a LDAP y no puede ser eliminado",
         "group_members_bad":"Los mismos miembros estan siendo eliminados y añadidos"
+      },
+      "settings":{
+        "setting_type_malformed":"Tipo de Parámetro Malformado",
+        "setting_not_in_list":"Parámetro Requerido no encontrado",
+        "setting_max_log":"Violación de Límite de Eventos",
+        "setting_reset_fail":"No se pudieron restaurar los valores por defecto",
+        "setting_preset_not_exists":"Grupo de Parámetros Inexistente",
+        "setting_preset_exists":"Ese Grupo de Parámetros ya existe",
+        "settings_serializer_error":"Error de serialización de Parámetros",
+        "settings_preset_serializer_error":"Error de Serialización de Grupo de Parámetros",
+        "settings_preset_must_be_disabled":"El Grupo de Parámetros debe estar des-habilitado"
       },
       "ldapObjectExists":"Un Objeto LDAP con ese Identificador ya existe",
       "namingViolation":"Excepción de Violación de Nombre (Naming Violation)",
@@ -749,8 +760,13 @@
       }
     },
     "settings":{
+      "recommendLoginAfterChanges":"Se recomienda re-iniciar la sesión luego de cambiar parámetros",
       "waitingServiceRestart":"Aguardando que re-inicie el servicio",
-      "defaultAdminIs":"Administrador Pre-determinado",
+      "superAdminIs":"Súper-Administrador",
+      "superAdminPwd":"Cambiar Contraseña de Admin. Local",
+      "superAdminPwdConfirm":"Confirmar nueva Contraseña",
+      "configLabelFieldHint": "Clickee Guardar para Renombrar",
+      "activePreset":"Grupo de Parámetros Activo",
       "resetDialog":{
         "header":"Re-establecer Configuración",
         "message":"¿Está seguro de re-establecer <b>todos</b> los parámetros?"

@@ -28,9 +28,8 @@
     "commonlyUsed":"Commonly Used",
     "ldap":{
       "configPreset":"Configuration Preset",
-      "newConfigPreset":"New Configuration Preset Name",
+      "newConfigPreset":"New Preset Name",
       "defaultPreset":"Default Preset",
-      "presetAlreadyExists":"Preset Already Exists",
       "manual_command":"Manual LDAP Command",
       "operation":"LDAP Operation",
       "operation_list":{
@@ -209,6 +208,7 @@
     "organizational-unit": "Organizational Unit | Organizational Units",
     "ou":"OU | OUs",
     "setting":"Setting | Settings",
+    "setting-preset":"Preset | Presets",
     "ldap":"LDAP Object | LDAP Objects",
     "totp-device":"TOTP Device | TOTP Devices",
     "dns":{
@@ -313,6 +313,17 @@
             "group_dn_missing":"Group Distinguished Name missing from Request",
             "group_builtin_protect":"Specified Group cannot be Deleted as it is builtin",
             "group_members_bad":"The same members are in the Add Member and Remove Member lists"
+          },
+          "settings":{
+            "setting_type_malformed":"Setting Type Malformed",
+            "setting_not_in_list":"Required Setting not in List",
+            "setting_max_log":"Log Limit Violation",
+            "setting_reset_fail":"Could not reset settings to defaults",
+            "setting_preset_not_exists":"Settings Preset does not exist",
+            "setting_preset_exists":"Settings Preset already exists",
+            "settings_serializer_error":"Settings serializer error",
+            "settings_preset_serializer_error":"Preset serializer error",
+            "settings_preset_must_be_disabled":"Preset must be disabled to be deleted"
           },
           "ldapObjectExists":"An LDAP Object with that Identifier Exists",
           "namingViolation":"Naming Violation Exception",
@@ -743,8 +754,13 @@
       }
     },
     "settings":{
+      "recommendLoginAfterChanges":"It's recommended to login again after making changes",
       "waitingServiceRestart":"Waiting for Service Restart",
-      "defaultAdminIs":"Default Admin is",
+      "superAdminIs":"Super-Admin is",
+      "superAdminPwd":"Change Local Admin Password",
+      "superAdminPwdConfirm":"Confirm New Password",
+      "configLabelFieldHint": "Click Save to Rename",
+      "activePreset":"Active Settings Preset",
       "resetDialog":{
         "header":"Reset Settings",
         "message":"Are you sure you wish to reset <b>all</b> the settings?"

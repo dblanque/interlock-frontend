@@ -36,6 +36,22 @@ class Settings extends ApiModel{
     async save(data){
         return await interlock_backend.call('settings/save', data)
     }
+
+    async preset_create(data){
+        return await interlock_backend.call('settings/preset_create', data)
+    }
+
+    async preset_delete(data){
+        return await interlock_backend.call('settings/preset_delete', data)
+    }
+
+    async preset_rename(data){
+        return await interlock_backend.call('settings/preset_rename', data)
+    }
+
+    async preset_enable(data){
+        return await interlock_backend.call('settings/preset_enable', data)
+    }
 }
 
 export default Settings

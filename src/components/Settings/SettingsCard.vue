@@ -72,7 +72,7 @@
                 </v-alert>
             </v-row>
         </v-slide-y-transition>
-        <v-row class="mx-1" justify="center" v-if="false">
+        <!-- <v-row class="mx-1" justify="center" v-if="false">
             <v-select :label="$t('actions.ldap.operation')"
                 @input="changeManualOpType(manual_cmd.operation)"
                 :v-model="manual_cmd.operation"
@@ -84,6 +84,11 @@
                     {{ $t("actions.ldap.operation_list."+data.item) }}
                 </template>
             </v-select>
+        </v-row> -->
+        <v-row justify="center" align="center">
+            <v-alert type="info" icon="mdi-information">
+                {{ $t("section.settings.recommendLoginAfterChanges") }}
+            </v-alert>
         </v-row>
         <v-row justify="center" align="center">
             <v-col cols="6" sm="8" md="6">
@@ -95,12 +100,33 @@
                     :label="$t('actions.ldap.configPreset')"
                     :disabled="!presets || presets.length <=1"
                     item-value="id"
+                    @change="refreshSettings"
                     v-model="presetId">
                     <template slot="selection" slot-scope="data">
                         {{ data.item.name == "default" ? $t("actions.ldap.defaultPreset") : `${data.item.label}` }}
+                        <v-tooltip bottom v-if="data.item.active === true">
+                            <template v-slot:activator="{ on, attrs }">
+                            <v-icon class="ml-2" color="valid-35" small v-bind="attrs" v-on="on">
+                                mdi-check-circle
+                            </v-icon>
+                            </template>
+                            <span>
+                                {{ $t("section.settings.activePreset") }}
+                            </span>
+                        </v-tooltip>
                     </template>
                     <template slot="item" slot-scope="data">
                         {{ data.item.name == "default" ? $t("actions.ldap.defaultPreset") : `${data.item.label}` }}
+                        <v-tooltip bottom v-if="data.item.active === true">
+                            <template v-slot:activator="{ on, attrs }">
+                            <v-icon class="ml-2" color="valid-35" small v-bind="attrs" v-on="on">
+                                mdi-check-circle
+                            </v-icon>
+                            </template>
+                            <span>
+                                {{ $t("section.settings.activePreset") }}
+                            </span>
+                        </v-tooltip>
                     </template>
                 </v-select>
             </v-col>
@@ -110,7 +136,8 @@
                         <v-btn icon
                             v-bind="attrs"
                             v-on="on"
-                            :disabled="readonly || loading || true"
+                            @click="settingsPresetEnable"
+                            :disabled="readonly || loading || isActivePreset()"
                             class="mx-1"
                             color="secondary"
                             small
@@ -120,45 +147,84 @@
                             </v-icon>
                         </v-btn>
                     </template>
-                    <span>{{ $t("actions.apply") }}</span>
+                    <span>{{ $t("actions.enable") }}</span>
                 </v-tooltip>
-                <v-btn disabled
-                    class="mx-1"
-                    @click="addingProfile = !addingProfile"
-                    :color="addingProfile ? 'primary':'secondary'"
-                    small
-                    elevation="0"
-                    icon>
-                    <v-icon>
-                        mdi-application-cog
-                    </v-icon>
-                </v-btn>
-                <v-btn :disabled="loading || readonly || isDefaultPreset() || true"
-                    class="mx-1" color="error-60-s" small elevation="0" icon>
-                    <v-icon>
-                        mdi-delete
-                    </v-icon>
-                </v-btn>
+
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="renamingProfile = !renamingProfile; addingProfile = false"
+                            :disabled="readonly || loading"
+                            class="mx-1"
+                            :color="renamingProfile ? 'primary':'secondary'"
+                            small
+                            elevation="0">
+                            <v-icon>
+                                mdi-pencil
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>{{ $t("actions.rename") }}</span>
+                </v-tooltip>
+                
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        class="mx-1"
+                        @click="addingProfile = !addingProfile; renamingProfile = false"
+                        :color="addingProfile ? 'primary':'secondary'"
+                        small
+                        elevation="0"
+                        icon>
+                        <v-icon>
+                            mdi-plus-circle
+                        </v-icon>
+                    </v-btn>
+                    </template>
+                    <span>{{ $t("actions.addN") }}</span>
+                </v-tooltip>
+                
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="settingsPresetDelete"
+                        :disabled="loading || readonly || isActivePreset() || presets.length <= 1"
+                        class="mx-1" color="error-60-s" small elevation="0" icon>
+                        <v-icon>
+                            mdi-delete
+                        </v-icon>
+                    </v-btn>
+                    </template>
+                    <span>{{ $t("actions.delete") }}</span>
+                </v-tooltip>
             </v-col>
         </v-row>
         <v-expand-transition>
-            <v-row class="ma-0 pa-0 mx-1" v-if="addingProfile || false" align="center" justify="center">
+            <v-row class="ma-0 pa-0 mx-1" v-if="addingProfile || renamingProfile" align="center" justify="center">
                 <v-col cols="8" md="6" lg="7">
                         <v-text-field
                             :label="$t('actions.ldap.newConfigPreset')"
                             v-model="newPresetLabel"
+                            :hint="renamingProfile ? $t('section.settings.configLabelFieldHint') : ''"
+                            :persistent-hint="renamingProfile"
                             :rules="[this.fieldRules(newPresetLabel, 'ge_name', newPresetLabel.length > 0 ? true : false) ]"
                         >
                     </v-text-field>
                 </v-col>
                 <v-col cols="auto">
                     <v-row class="pa-0 ma-0" justify="center" align="center">
-                        <v-btn @click="addPreset"
-                            class="mx-1" color="primary" small elevation="0" icon 
-                            :disabled="!newPresetIsValid"
+                        <v-btn @click="settingsPresetCreateOrRename"
+                            class="mx-1" color="accent-55-s" small elevation="0" icon 
+                            :disabled="!newPresetNameValid || newPresetLabel.length == 0"
                         >
                             <v-icon>
-                                mdi-plus-circle
+                                {{ renamingProfile ? "mdi-content-save":"mdi-content-save-plus" }}
                             </v-icon>
                         </v-btn>
                     </v-row>
@@ -167,7 +233,7 @@
         </v-expand-transition>
         <v-row class="mx-2" justify="center">
             <v-checkbox off-icon="mdi-close-box"
-            :label="$t('section.settings.defaultAdminIs') + ' ' + (defaultAdminEnabled ? $t('words.enabled') : $t('words.disabled'))"
+            :label="$t('section.settings.superAdminIs') + ' ' + (defaultAdminEnabled ? $t('words.enabled') : $t('words.disabled'))"
             v-model="defaultAdminEnabled"/>
         </v-row>
         <v-row class="mx-4" justify="center">
@@ -177,7 +243,7 @@
                 v-model="defaultAdminPwd"
                 ref="defaultAdminPwd"
                 :rules="[this.fieldRules(defaultAdminPwd, 'ge_password', defaultAdminPwdConfirm.length > 0 ? true : false)]"
-                label="Change Default Admin Password"/>
+                :label="$t('section.settings.superAdminPwd')"/>
             </v-col>
             <v-col cols="10" md="4" xl="3">
                 <v-text-field
@@ -185,7 +251,7 @@
                 v-model="defaultAdminPwdConfirm"
                 ref="defaultAdminPwdConfirm"
                 :rules="[this.fieldRules(defaultAdminPwdConfirm, 'ge_password', defaultAdminPwd.length > 0 ? true : false)]"
-                label="Confirm Default Admin Password"/>
+                :label="$t('section.settings.superAdminPwdConfirm')"/>
             </v-col>
         </v-row>
         <v-slide-y-transition>
@@ -381,6 +447,7 @@
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import Settings from '@/include/Settings.js';
+import Liveness from '@/include/Liveness.js';
 import SettingsResetDialog from '@/components/Settings/SettingsResetDialog.vue'
 import ObjectEditor from '@/components/Settings/ObjectEditor.vue'
 import { notificationBus } from '@/main.js'
@@ -394,6 +461,8 @@ export default {
     },
     data() {
         return {
+            checking_backend: false,
+            backend_offline: false,
             ldap:{
                 operations:[
                     "ADD",
@@ -462,10 +531,11 @@ export default {
             defaultAdminEnabled: true,
             defaultAdminPwd: "",
             defaultAdminPwdConfirm: "",
-            presetId: 1,
+            presetId: -1,
             presets: [],
             newPresetLabel: "",
             addingProfile: false,
+            renamingProfile: false,
             config: {
                 log: {
                     row1:{
@@ -647,15 +717,16 @@ export default {
         this.refreshSettings();
     },
     computed: {
-        newPresetIsValid(){
+        newPresetNameValid(){
+            if (this.presets.map((v) => v.label).includes(this.newPresetLabel)) return false
             return this.fieldRules(this.newPresetLabel, 'ge_name', this.newPresetLabel.length > 0 ? true : false) === true
         }
     },
     methods:{
-        isDefaultPreset() {
+        isActivePreset() {
             let r = false
             this.presets.forEach(ps => {
-                if (ps.id == this.presetId && ps.name == "default") r = true
+                if (ps.id == this.presetId && ps.active == true) r = true
             })
             return r
         },
@@ -672,7 +743,7 @@ export default {
                 return value
             value = value.split('.')
 
-            var currentPath = this[value[0]]
+            let currentPath = this[value[0]]
             value.forEach(function callback(subpath, key) {
                 if (key != 0) {
                     currentPath = currentPath[subpath]
@@ -752,9 +823,31 @@ export default {
             clearTimeout(this.saveTimerId)
             await new Promise(r => this.saveTimerId = setTimeout(r, time_in_milliseconds));
         },
-        async addPreset(){
-            if (this.newPresetIsValid)
-            console.log("Add preset")
+        async checkBackendStatus(){
+            if (this.backend_offline == true && this.checking_backend == true) return
+            this.checking_backend = true
+            await new Liveness({}).check()
+            .then(() => {
+                this.checking_backend = false
+                this.backend_offline = false
+            })
+            .catch(() => {
+                this.checking_backend = false
+                this.backend_offline = true
+            })
+        },
+        async backendAlive(djangoReloadSleep=false){
+            this.backend_offline = true
+            let aliveCheckCountLimit = 20;
+            let aliveCheckCount = 0;
+            let aliveCheckFrequencyMsec = 500;
+            if (djangoReloadSleep)
+                await this.sleep(1000); // Wait for DRF Backend to detect FS Changes
+            while (this.backend_offline === true && await (new Promise(resolve => setTimeout(() => resolve(aliveCheckCount), aliveCheckFrequencyMsec))) < aliveCheckCountLimit) {
+                await this.checkBackendStatus()
+                aliveCheckCount++
+            }
+            return
         },
         async saveSettings(){
             if (this.$refs.settingsForm.validate('settingsForm') && 
@@ -765,25 +858,31 @@ export default {
                 this.invalid = true
 
             if (!this.invalid) {
+                let django_restart = false
                 this.loading = true
                 var dataToSend = {}
                 dataToSend = this.getConfigValues()
-                dataToSend["PRESET_ID"] = this.presetId
                 dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
                 dataToSend['DEFAULT_ADMIN_PWD'] = this.defaultAdminPwd
-                await new Settings({}).save(dataToSend).then(() => {
+                let preset = {}
+                preset["id"] = this.presetId
+                if (this.renamingProfile === true && this.newPresetLabel.length > 0)
+                    preset["label"] = this.newPresetLabel
+                await new Settings({}).save({settings: dataToSend, preset: preset}).then(response => {
+                    django_restart = response.data.restart
                     this.createSnackbar({message: (this.$tc("classes.setting", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
                 })
                 .catch(error => {
                     console.error(error)
                     this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
                 })
-                await this.sleep(1000);
-                this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
-
-                // Wait until Back-end service is active to refresh
-                await this.sleep(2000);
-                this.refreshSettings()
+                
+                if (django_restart)
+                    this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
+                await this.backendAlive(django_restart).then(()=>{
+                    this.refreshSettings()
+                })
+                this.loading = false
             }
         },
         validateSettings(){
@@ -800,7 +899,8 @@ export default {
                 this.testError = false
             }
         },
-        async refreshSettings(){
+        async refreshSettings(snackbar=true){
+            this.loading = true
             this.invalid = false
             this.testing = false
             this.testError = false
@@ -808,7 +908,8 @@ export default {
             await new Settings({}).list()
             .then(r => {
                 this.presets = r.data.presets
-                this.presetId = r.data.active_preset
+                if (this.presetId == -1 || !this.presetId || !r.data.presets.map(v => v.id).includes(this.presetId))
+                    this.presetId = r.data.active_preset
             })
             .catch(e => {
                 console.error(e)
@@ -844,7 +945,8 @@ export default {
                     }
                 }
                 this.loading = false
-                this.createSnackbar({message: (this.$tc("classes.setting", 5) + " " + this.$tc("words.loaded.m", 5)).toUpperCase(), type: 'success'})
+                if (snackbar)
+                    this.createSnackbar({message: (this.$tc("classes.setting", 5) + " " + this.$tc("words.loaded.m", 5)).toUpperCase(), type: 'success'})
                 setTimeout(()=>{
                     this.showSettings = true
                     this.readonly = false
@@ -866,20 +968,69 @@ export default {
         async restoreDefaultValues(){
             this.resetDialog = false
             this.loading = true
+            this.backend_offline = true
             await new Settings({}).reset()
-            .then(() => {
-                setTimeout(async () => {
-                    await this.sleep(1000);
-                    this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
-
-                    // Wait until Back-end service is active to refresh
-                    await this.sleep(2000);
+            .then(async () => {
+                this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
+                await this.backendAlive(true).then(()=>{
                     this.refreshSettings()
-                    this.loading = false
-                }, 550)
+                })
+                this.loading = false
             })
             .catch(error => {
                 console.error(error)
+            })
+        },
+        async settingsPresetCreateOrRename(){
+            this.loading = true;
+            if (!this.newPresetNameValid) return
+            if (this.addingProfile)
+                await new Settings({}).preset_create({"label": this.newPresetLabel})
+                .then(() => {
+                    this.createSnackbar({message: (this.$tc("classes.setting-preset", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
+                    this.refreshSettings(false)
+                })
+                .catch(e => {
+                    this.createSnackbar({message: this.getMessageForCode(e), type: 'error'})
+                    console.error(e)
+                })
+            else
+                await new Settings({}).preset_rename({"id":this.presetId, "label": this.newPresetLabel})
+                .then(() => {
+                    this.createSnackbar({message: (this.$tc("classes.setting-preset", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
+                    this.refreshSettings(false)
+                })
+                .catch(e => {
+                    this.createSnackbar({message: this.getMessageForCode(e), type: 'error'})
+                    console.error(e)
+                })
+        },
+        async settingsPresetEnable(){
+            this.loading = true;
+            await new Settings({}).preset_enable({"id": this.presetId})
+            .then(async () => {
+                this.createSnackbar({message: (this.$tc("classes.setting-preset", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
+                this.sleep(1e3)
+                this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
+                await this.backendAlive(true).then(()=>{
+                    this.refreshSettings(false)
+                })
+            })
+            .catch(e => {
+                this.createSnackbar({message: this.getMessageForCode(e), type: 'error'})
+                console.error(e)
+            })
+        },
+        async settingsPresetDelete(){
+            this.loading = true;
+            await new Settings({}).preset_delete({"id": this.presetId})
+            .then(() => {
+                this.createSnackbar({message: (this.$tc("classes.setting-preset", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
+                this.refreshSettings(false)
+            })
+            .catch(e => {
+                this.createSnackbar({message: this.getMessageForCode(e), type: 'error'})
+                console.error(e)
             })
         },
         getConfigValues(log=false){
