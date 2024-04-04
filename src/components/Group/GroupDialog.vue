@@ -3,6 +3,7 @@
 <!------------------------- File: GroupDialog.vue ----------------------------->
 <template>
     <v-card :loading="refreshLoading" class="pa-0 ma-0">
+        <v-progress-linear :color="loadingColor" :indeterminate="refreshLoading || loading"/>
         <v-expand-transition>
         <div v-show="!refreshLoading">
             <!-- Title Bar -->
@@ -333,6 +334,8 @@ export default {
             userClasses: ['user','person','organizationalPerson','organizationalperson'],
             loading: false,
             loadingColor: 'accent',
+            error: false,
+            errorMsg: "",
             domain: "",
             realm: "",
             basedn: "",
@@ -577,19 +580,20 @@ export default {
             const excludeKeys = ["objectRid", "objectSid"]
             const keysToCheck = ["cn","groupScope","groupType"]
             let newDistinguishedName
+            let data = Object.assign({}, this.groupcopy)
             excludeKeys.forEach(k => {
-                delete this.groupcopy[k]
+                delete data[k]
             });
             // Remove unchanged keys or do something on change
             keysToCheck.forEach(k => {
-                if (this.group[k] === this.groupcopy[k]) {
-                    delete this.groupcopy[k]
+                if (this.group[k] === data[k]) {
+                    delete data[k]
                 }
                 else {
                     switch (k) {
                         case "cn":
-                            const v = this.groupcopy[k]
-                            newDistinguishedName = this.groupcopy["distinguishedName"].split(",")
+                            const v = data[k]
+                            newDistinguishedName = data["distinguishedName"].split(",")
                             // Remove relative distinguished name to get superior ldap path.
                             newDistinguishedName.shift()
                             newDistinguishedName = newDistinguishedName.join(",")
@@ -603,13 +607,13 @@ export default {
             });
 
             if (this.$refs.groupForm.validate()){
-                await new Group({}).update({group: this.groupcopy})
+                await new Group({}).update({group: data})
                 .then(() => {
                     if (closeDialog == true)
                         this.closeDialog();
                     if(newDistinguishedName)
-                        this.groupcopy["distinguishedName"] = newDistinguishedName
-                    this.$emit('save', this.groupcopy, closeDialog == true);
+                        data["distinguishedName"] = newDistinguishedName
+                    this.$emit('save', data, closeDialog == true);
                     this.loading = false
                     this.loadingColor = 'primary'
                 })

@@ -139,6 +139,11 @@
         "f":"Saved",
         "n":"Saved"
       },
+      "renamed":{
+        "m":"Renamed",
+        "f":"Renamed",
+        "n":"Renamed"
+      },
       "all":{
         "m":"All",
         "f":"All",
@@ -754,8 +759,6 @@
       }
     },
     "settings":{
-      "recommendLoginAfterChanges":"It's recommended to login again after making changes",
-      "waitingServiceRestart":"Waiting for Service Restart",
       "superAdminIs":"Super-Admin is",
       "superAdminPwd":"Change Local Admin Password",
       "superAdminPwdConfirm":"Confirm New Password",

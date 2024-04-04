@@ -3,6 +3,7 @@
 <!------------------------- File: UserDialog.vue ------------------------------>
 <template>
     <v-card :loading="refreshLoading" class="pa-0 ma-0">
+        <v-progress-linear :color="loadingColor" :indeterminate="refreshLoading || loading"/>
         <v-expand-transition>
         <div v-show="!refreshLoading">
         <!-- Title Bar -->
@@ -124,7 +125,7 @@
 
                                             <v-list-item-content>
                                                 <v-list-item-title>
-                                                    {{ group.name + " (" + group.objectRid + ")" }}
+                                                    {{ group.name + (group.objectRid && group.objectRid.length > 0 ? " (" + group.objectRid + ")" : "") }}
                                                 </v-list-item-title>
                                             </v-list-item-content>
 

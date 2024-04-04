@@ -139,6 +139,11 @@
 		  "f":"Enregistrée",
 		  "n":"Enregistré"
 		},
+		"renamed":{
+		  "m":"Renommé | Renommés",
+		  "f":"Renommée | Renommés",
+		  "n":"Renommé | Renommés"
+		},
 		"all":{
 		  "m":"Tout",
 		  "f":"Toute",
@@ -753,8 +758,6 @@
 		}
 	  },
 	  "settings":{
-		"recommendLoginAfterChanges":"Il est recommandé de se reconnecter après avoir apporté des modifications",
-		"waitingServiceRestart":"Waiting for Service Restart",
 		"superAdminIs":"Super-Admin",
 		"superAdminPwd":"Change Local Admin Password",
 		"superAdminPwdConfirm":"Confirm New Password",

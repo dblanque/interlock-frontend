@@ -139,6 +139,11 @@
       "f":"Guardada | Guardadas",
       "n":"Guardado | Guardados"
     },
+    "renamed":{
+      "m":"Renombrado | Renombrados",
+      "f":"Renombrada | Renombradas",
+      "n":"Renombrados | Renombrados"
+    },
     "all":{
       "m":"Todo | Todos",
       "f":"Toda | Todas",
@@ -760,8 +765,6 @@
       }
     },
     "settings":{
-      "recommendLoginAfterChanges":"Se recomienda re-iniciar la sesión luego de cambiar parámetros",
-      "waitingServiceRestart":"Aguardando que re-inicie el servicio",
       "superAdminIs":"Súper-Administrador",
       "superAdminPwd":"Cambiar Contraseña de Admin. Local",
       "superAdminPwdConfirm":"Confirmar nueva Contraseña",

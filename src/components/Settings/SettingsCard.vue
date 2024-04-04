@@ -4,6 +4,7 @@
 <template>
     <v-card outlined flat class="ma-0 pa-0">
         <v-progress-linear :indeterminate="testing == true" :value="testFinished ? 100 : 0" :color="testFinished ? (!testError ? 'valid-40-s' : 'red') : 'primary'"/>
+        <!-- Top Button Row 1 -->
         <v-row class="ma-0 ma-1 px-4 py-0 sticky-top" style="top: 3.5rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
                 @click="resetDialog = true" :disabled="readonly || loading"
@@ -41,6 +42,7 @@
                     </v-progress-circular>
             </v-btn>
         </v-row>
+        <!-- Top Button Row 2 -->
         <v-row class="ma-0 ma-1 px-4 py-0 mb-4 sticky-top" style="top: 6.3rem !important; z-index: 10 !important;" justify="center">
             <v-btn 
                 @click="saveSettings" :disabled="readonly || loading"
@@ -65,6 +67,7 @@
                     {{ $t("actions.refresh") }}
             </v-btn>
         </v-row>
+        <!-- Validation Fail Message -->
         <v-slide-y-transition>
             <v-row justify="center" v-if="invalid == true">
                 <v-alert type="warning" dense>
@@ -72,24 +75,6 @@
                 </v-alert>
             </v-row>
         </v-slide-y-transition>
-        <!-- <v-row class="mx-1" justify="center" v-if="false">
-            <v-select :label="$t('actions.ldap.operation')"
-                @input="changeManualOpType(manual_cmd.operation)"
-                :v-model="manual_cmd.operation"
-                :items="ldap.operations">
-                <template slot="selection" slot-scope="data">
-                    {{ $t("actions.ldap.operation_list."+data.item) }}
-                </template>
-                <template slot="item" slot-scope="data">
-                    {{ $t("actions.ldap.operation_list."+data.item) }}
-                </template>
-            </v-select>
-        </v-row> -->
-        <v-row justify="center" align="center">
-            <v-alert type="info" icon="mdi-information">
-                {{ $t("section.settings.recommendLoginAfterChanges") }}
-            </v-alert>
-        </v-row>
         <v-row justify="center" align="center">
             <v-col cols="6" sm="8" md="6">
                 <v-select class="ma-0 pa-0"
@@ -461,64 +446,9 @@ export default {
     },
     data() {
         return {
+            savedSettings: false,
             checking_backend: false,
             backend_offline: false,
-            ldap:{
-                operations:[
-                    "ADD",
-                    "DELETE",
-                    "MODIFY",
-                    "MODIFYDN",
-                    "SEARCH",
-                    "COMPARE",
-                    "EXTENDED"
-                ],
-                object_classes:[
-                    'user',
-                    'person',
-                    'organizationalPerson',
-                    'container',
-                    'organizational-unit'
-                ],
-                object_attributes:[
-                    'distinguishedName',
-                    'givenName', 
-                    'sn', 
-                    'displayName', 
-                    'sAMAccountName', 
-                    'mail',
-                    'telephoneNumber',
-                    'streetAddress',
-                    'postalCode',
-                    'l', // Local / City
-                    'st', // State/Province
-                    'countryCode', // INT
-                    'co', // 2 Letter Code for Country
-                    'c', // Full Country Name
-                    'wWWHomePage',
-                    'distinguishedName',
-                    'userPrincipalName',
-                    'userAccountControl', // Permission ACLs
-                    'whenCreated',
-                    'whenChanged',
-                    'lastLogon',
-                    'badPwdCount',
-                    'pwdLastSet',
-                    'primaryGroupID',
-                    'objectClass',
-                    'objectCategory',
-                    'objectSid',
-                    'sAMAccountType',
-                    'memberOf',
-                    'cn',
-                    'member',
-                    'groupType'
-                ]
-            },
-            manual_cmd: {
-                operation: "ADD",
-                filters: []
-            },
             testing: false,
             testError: false,
             testFinished: false,
@@ -722,16 +652,32 @@ export default {
             return this.fieldRules(this.newPresetLabel, 'ge_name', this.newPresetLabel.length > 0 ? true : false) === true
         }
     },
-    methods:{
-        isActivePreset() {
-            let r = false
-            this.presets.forEach(ps => {
-                if (ps.id == this.presetId && ps.active == true) r = true
-            })
-            return r
+    watch:{
+        addingProfile(new_v){
+            if (new_v===true) this.newPresetLabel = ""
         },
-        changeManualOpType(v){
-            console.log(v)
+        renamingProfile(new_v){
+            if (new_v===true) {
+                let activePreset = this.getSelectedPreset()
+                console.log(activePreset)
+                if (activePreset && 'label' in activePreset)
+                    this.newPresetLabel = activePreset["label"]
+            }
+        }
+    },
+    methods:{
+        getSelectedPreset(){
+            for (let i = 0; i < this.presets.length; i++) {
+                const ps = this.presets[i];
+                if (ps.id == this.presetId) return ps   
+            }
+        },
+        isActivePreset() {
+            for (let i = 0; i < this.presets.length; i++) {
+                const ps = this.presets[i];
+                if (ps.id == this.presetId && ps.active == true) return true   
+            }
+            return false
         },
         createSnackbar(notifObj){
             notificationBus.$emit('createNotification', notifObj);
@@ -836,13 +782,11 @@ export default {
                 this.backend_offline = true
             })
         },
-        async backendAlive(djangoReloadSleep=false){
+        async backendAlive(){
             this.backend_offline = true
             let aliveCheckCountLimit = 20;
             let aliveCheckCount = 0;
             let aliveCheckFrequencyMsec = 500;
-            if (djangoReloadSleep)
-                await this.sleep(1000); // Wait for DRF Backend to detect FS Changes
             while (this.backend_offline === true && await (new Promise(resolve => setTimeout(() => resolve(aliveCheckCount), aliveCheckFrequencyMsec))) < aliveCheckCountLimit) {
                 await this.checkBackendStatus()
                 aliveCheckCount++
@@ -858,7 +802,6 @@ export default {
                 this.invalid = true
 
             if (!this.invalid) {
-                let django_restart = false
                 this.loading = true
                 var dataToSend = {}
                 dataToSend = this.getConfigValues()
@@ -869,18 +812,15 @@ export default {
                 if (this.renamingProfile === true && this.newPresetLabel.length > 0)
                     preset["label"] = this.newPresetLabel
                 await new Settings({}).save({settings: dataToSend, preset: preset}).then(response => {
-                    django_restart = response.data.restart
+                    this.savedSettings = true
                     this.createSnackbar({message: (this.$tc("classes.setting", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
                 })
                 .catch(error => {
                     console.error(error)
                     this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
                 })
-                
-                if (django_restart)
-                    this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
-                await this.backendAlive(django_restart).then(()=>{
-                    this.refreshSettings()
+                await this.backendAlive().then(()=>{
+                    this.refreshSettings(false)
                 })
                 this.loading = false
             }
@@ -899,7 +839,7 @@ export default {
                 this.testError = false
             }
         },
-        async refreshSettings(snackbar=true){
+        async refreshSettings(snackbar=true, resetPreset=false){
             this.loading = true
             this.invalid = false
             this.testing = false
@@ -908,7 +848,7 @@ export default {
             await new Settings({}).list()
             .then(r => {
                 this.presets = r.data.presets
-                if (this.presetId == -1 || !this.presetId || !r.data.presets.map(v => v.id).includes(this.presetId))
+                if (this.presetId == -1 || !this.presetId || !r.data.presets.map(v => v.id).includes(this.presetId) || resetPreset)
                     this.presetId = r.data.active_preset
             })
             .catch(e => {
@@ -945,7 +885,7 @@ export default {
                     }
                 }
                 this.loading = false
-                if (snackbar)
+                if (snackbar === true)
                     this.createSnackbar({message: (this.$tc("classes.setting", 5) + " " + this.$tc("words.loaded.m", 5)).toUpperCase(), type: 'success'})
                 setTimeout(()=>{
                     this.showSettings = true
@@ -971,7 +911,6 @@ export default {
             this.backend_offline = true
             await new Settings({}).reset()
             .then(async () => {
-                this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
                 await this.backendAlive(true).then(()=>{
                     this.refreshSettings()
                 })
@@ -987,7 +926,7 @@ export default {
             if (this.addingProfile)
                 await new Settings({}).preset_create({"label": this.newPresetLabel})
                 .then(() => {
-                    this.createSnackbar({message: (this.$tc("classes.setting-preset", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
+                    this.createSnackbar({message: (this.$tc("classes.setting-preset", 5) + " " + this.$tc("words.created.m", 5)).toUpperCase(), type: 'success'})
                     this.refreshSettings(false)
                 })
                 .catch(e => {
@@ -997,7 +936,7 @@ export default {
             else
                 await new Settings({}).preset_rename({"id":this.presetId, "label": this.newPresetLabel})
                 .then(() => {
-                    this.createSnackbar({message: (this.$tc("classes.setting-preset", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
+                    this.createSnackbar({message: (this.$tc("classes.setting-preset", 5) + " " + this.$tc("words.renamed.m", 5)).toUpperCase(), type: 'success'})
                     this.refreshSettings(false)
                 })
                 .catch(e => {
@@ -1010,8 +949,6 @@ export default {
             await new Settings({}).preset_enable({"id": this.presetId})
             .then(async () => {
                 this.createSnackbar({message: (this.$tc("classes.setting-preset", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success'})
-                this.sleep(1e3)
-                this.createSnackbar({message: (this.$t("section.settings.waitingServiceRestart")).toUpperCase(), type: 'info'})
                 await this.backendAlive(true).then(()=>{
                     this.refreshSettings(false)
                 })

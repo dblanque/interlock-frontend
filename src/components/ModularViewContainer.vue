@@ -187,7 +187,7 @@ export default {
 				case 'settings':
 					if (this.$refs.SettingsView != undefined) {
 						console.log("Requested refresh for component "+ newValue)
-						this.$refs.SettingsView.refreshSettings()
+						this.$refs.SettingsView.refreshSettings(true, true)
 					}
 					break;
 				case 'logs':
