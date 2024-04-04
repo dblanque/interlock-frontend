@@ -32,35 +32,18 @@
         <!-- Actions -->
         <v-card-actions class="card-actions">
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn @keydown.enter="closeDialog(true)" 
-                @click="closeDialog(true)" 
-                :dark="!isThemeDark($vuetify)"
-                :light="isThemeDark($vuetify)"
-                :disabled="selectedRecords == undefined || selectedRecords.length < 1"
-                class="ma-0 pa-0 pa-2 pl-1 ma-1" 
-                rounded>
-                    <v-icon class="mr-1" color="green">
-                    </v-icon>
-                    <v-progress-circular :indeterminate="loading == true" :value="submitted ? 100 : 0" 
-                    :color="error ? 'red' : 'green'" 
-                    size="26" 
-                    class="ma-0 mr-1">
-                    <v-fab-transition>
-                        <v-icon color="green" v-if="!submitted" >
-                            mdi-checkbox-marked-circle-outline
-                        </v-icon>
-                        <v-icon color="green" v-else-if="submitted && !error" >
-                            mdi-checkbox-marked-circle
-                        </v-icon>
-                        <v-icon color="red" v-else-if="submitted == true && error == true">
-                            mdi-close-circle
-                        </v-icon>
-                    </v-fab-transition>
-                    </v-progress-circular>
-                    <span class="pr-1">
-                        {{ $t("actions.yes" )}}
-                    </span>
-                </v-btn>
+                <ProgressButton
+                    :icon-color="loading || !submitted ? 'primary' : (submitted && !error ? 'valid-40-s' : 'error')"
+                    :loading="loading"
+                    :error="error"
+                    :submitted="submitted"
+                    :label="$t('actions.yes')"
+                    @keydown.enter="closeDialog(true)"
+                    @click="closeDialog(true)"
+                    :disabled="selectedRecords == undefined || selectedRecords.length < 1"
+                    class="ma-0 pa-0 pa-2 pl-1 ma-1"
+                    rounded
+                />
                 <v-btn @click="closeDialog"
                 :dark="!isThemeDark($vuetify)"
                 :light="isThemeDark($vuetify)"
@@ -82,10 +65,14 @@
 import DNSRecord from '@/include/DNSRecord.js'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import ProgressButton from '@/components/ProgressButton.vue';
 
 export default {
     name: 'RecordMassAction',
     mixins: [ validationMixin, utilsMixin ],
+    components: {
+        ProgressButton
+    },
     data() {
         return {
             record_value_fields: {

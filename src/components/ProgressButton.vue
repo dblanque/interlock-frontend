@@ -2,14 +2,14 @@
 	<v-btn
 		@click="emitClick" 
 		:disabled="disabled"
-		:dark="!isThemeDark($vuetify) && !disabled"
-		:light="isThemeDark($vuetify) && !disabled"
+		:dark="dark != undefined ? dark : !isThemeDark($vuetify) && !disabled"
+		:light="light != undefined ? light : isThemeDark($vuetify) && !disabled"
 		class="ma-0 pa-0 pa-2 pl-1 ma-1" 
-		rounded>
+		:rounded="rounded">
 	<v-icon class="mr-1" color="valid">
 	</v-icon>
-	<v-progress-circular :indeterminate="loading == true" :value="submitted ? 100 : 0" 
-	:color="error ? 'error' : 'valid'"
+	<v-progress-circular :indeterminate="loading" :value="submitted ? 100 : 0" 
+	:color="iconColor"
 	size="26" 
 	class="ma-0 mr-1">
 	<v-fab-transition>
@@ -57,6 +57,18 @@ export default {
 		submitted: {
 			type: Boolean,
 			default: false
+		},
+		rounded: {
+			type: Boolean,
+			default: true
+		},
+		dark: {
+			type: Boolean,
+			default: undefined
+		},
+		light: {
+			type: Boolean,
+			default: undefined
 		},
 		label: String,
 		icon: {
