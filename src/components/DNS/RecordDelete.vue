@@ -56,35 +56,18 @@
         <v-card-actions class="card-actions">
             <!-- ! TODO Make this a component -->
             <v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-                <v-btn @keydown.enter="closeDialog(true)" 
-                @click="closeDialog(true)" 
-                :disabled="getAllowConfirmStatus"
-                :dark="!isThemeDark($vuetify) && !getAllowConfirmStatus"
-                :light="isThemeDark($vuetify) && !getAllowConfirmStatus"
-                class="ma-0 pa-0 pa-2 pl-1 ma-1" 
-                rounded>
-                    <v-icon class="mr-1" color="green">
-                    </v-icon>
-                    <v-progress-circular :indeterminate="loading == true" :value="submitted ? 100 : 0" 
-                    :color="error ? 'red' : 'green'"
-                    size="26" 
-                    class="ma-0 mr-1">
-                    <v-fab-transition>
-                        <v-icon color="green" v-if="!submitted" >
-                            mdi-checkbox-marked-circle-outline
-                        </v-icon>
-                        <v-icon color="green" v-else-if="submitted && !error" >
-                            mdi-checkbox-marked-circle
-                        </v-icon>
-                        <v-icon color="red" v-else-if="submitted == true && error == true">
-                            mdi-close-circle
-                        </v-icon>
-                    </v-fab-transition>
-                    </v-progress-circular>
-                    <span class="pr-1">
-                        {{ $t("actions.yes" )}}
-                    </span>
-                </v-btn>
+                <ProgressButton
+                    class="ma-0 pa-0 pa-2 pl-1 ma-1" 
+                    @keydown.enter="closeDialog(true)"
+                    @click="closeDialog(true)"
+                    :disabled="getAllowConfirmStatus"
+                    :loading="loading == true"
+                    :submitted="submitted"
+                    :icon-color="loadingColor"
+                    icon-success="mdi-check-circle"
+                    icon-error="mdi-close-circle"
+                    :label="$t('actions.yes')"
+                />
                 <v-btn @click="closeDialog"
                 :dark="!isThemeDark($vuetify)"
                 :light="isThemeDark($vuetify)"
@@ -105,6 +88,7 @@
 <script>
 import DNSRecord from '@/include/DNSRecord.js'
 import Domain from '@/include/Domain.js'
+import ProgressButton from '@/components/ProgressButton.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { notificationBus } from '@/main.js'
@@ -112,6 +96,9 @@ import { notificationBus } from '@/main.js'
 export default {
     name: "RecordDelete",
     mixins: [ validationMixin, utilsMixin ],
+    components: {
+        ProgressButton
+    },
     data() {
         return {
             confirmZone: "",
@@ -155,6 +142,13 @@ export default {
                     break;
             }
             return false
+        },
+        loadingColor(){
+            if (!this.loading) {
+                if (this.submitted && !this.error) return "valid-45-s"
+                else if (this.submitted && this.error) return "error"
+            }
+            return "primary"
         },
     },
     methods: {
