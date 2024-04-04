@@ -63,7 +63,7 @@
                     :disabled="getAllowConfirmStatus"
                     :loading="loading == true"
                     :submitted="submitted"
-                    :icon-color="loadingColor"
+                    :icon-color="loading || !submitted ? 'primary' : (submitted && !error ? 'valid-40-s' : 'error')"
                     icon-success="mdi-check-circle"
                     icon-error="mdi-close-circle"
                     :label="$t('actions.yes')"
@@ -142,14 +142,7 @@ export default {
                     break;
             }
             return false
-        },
-        loadingColor(){
-            if (!this.loading) {
-                if (this.submitted && !this.error) return "valid-45-s"
-                else if (this.submitted && this.error) return "error"
-            }
-            return "primary"
-        },
+        }
     },
     methods: {
         resetDelete(){

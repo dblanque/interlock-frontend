@@ -78,6 +78,7 @@
         <v-row justify="center" align="center">
             <v-col cols="6" sm="8" md="6">
                 <v-select class="ma-0 pa-0"
+                    id="defaultPresetSelect"
                     :items="presets"
                     outlined
                     dense
@@ -659,7 +660,6 @@ export default {
         renamingProfile(new_v){
             if (new_v===true) {
                 let activePreset = this.getSelectedPreset()
-                console.log(activePreset)
                 if (activePreset && 'label' in activePreset)
                     this.newPresetLabel = activePreset["label"]
             }
@@ -1045,3 +1045,9 @@ export default {
     }
 }
 </script>
+
+<style>
+#defaultPresetSelect {
+    cursor: pointer;
+}
+</style>
