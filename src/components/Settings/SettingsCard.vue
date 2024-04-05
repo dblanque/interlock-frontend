@@ -845,6 +845,10 @@ export default {
             this.testing = false
             this.testError = false
             this.testFinished = false
+            if (resetPreset){
+                this.addingProfile = false
+                this.renamingProfile = false
+            }
             await new Settings({}).list()
             .then(r => {
                 this.presets = r.data.presets
