@@ -5,6 +5,9 @@
 Logo Font:
 Matamata [@ dafont.com](https://www.dafont.com/matamata.font)
 
+### Would you like to support me?
+<a href='https://ko-fi.com/E1E2YQ4TG' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
 ## UPDATE: 2024-01-11
 
 The Interlock Front-end has been migrated to Vite instead of Webpack/Vue-CLI,
