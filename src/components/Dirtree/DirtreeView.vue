@@ -689,7 +689,7 @@ export default {
               this.fetchDirtree()
               this.forceReload = false
         },
-        // Home (DirTree) View Actions
+        // DirTree View Actions
         async fetchDirtree(){
             this.loading = true
             this.tableData.headers = []
@@ -700,7 +700,7 @@ export default {
                 this.tableData.items = response.data.ldapObjectList
                 this.error = false;
                 this.loading = false;
-                this.createSnackbar({message: (this.$t("category.header.home") + " " + this.$tc("words.loaded.m", 1)).toUpperCase(), type: 'success'})
+                this.createSnackbar({message: (this.$t("category.header.ldap-dirtree") + " " + this.$tc("words.loaded.m", 1)).toUpperCase(), type: 'success'})
             })
             .catch(error => {
                 console.error(error)

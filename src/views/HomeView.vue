@@ -2,7 +2,7 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------- File: HomeView.vue -------------------------------->
 <template>
-  <div class="home">
+  <div class="home ma-0 pa-0 align-stretch flex-column d-flex" style="height: 100%;">
     <!------------------>
     <v-row align="center"
       justify="space-between"
@@ -78,6 +78,25 @@
             </template>
             <span>{{$t("nav.tooltip.fetchDomainDetails")}}</span>
           </v-tooltip>
+          <!-- Open NavDrawer -->
+          <v-tooltip bottom v-if="!$vuetify.breakpoint.mdAndUp">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                :dark="!isThemeDark($vuetify)"
+                :light="isThemeDark($vuetify)"
+                class="ml-2"
+                @click="navDrawerOpen = !navDrawerOpen"
+                icon
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>
+                  mdi-menu
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>{{$t("nav.menu")}}</span>
+          </v-tooltip>
 
           <!-- This does not appear in production -->
           <v-tooltip bottom>
@@ -103,107 +122,154 @@
       </v-col>
     </v-row>
 
-    <!-- Tabs Bar -->
-    <v-toolbar
-      color="secondary-15"
-      v-if="this.$vuetify.breakpoint.mdAndUp"
-      dense
-      id="tabs-nav-bar"
-      :dark="!isThemeDark($vuetify)"
-      :light="isThemeDark($vuetify)"
-      style="z-index: 1"
-      :class="'sticky-top transition-speed-fix'">
-      <v-fade-transition>
-        <v-tabs
-          v-model="active_tab"
-          v-if="showNavTabs"
-          color="primary"
-          slider-size="4"
-          center-active
-          centered
-          show-arrows
-        >
-          <v-tab
-            class="px-4"
-            v-for="tab in getVisibleTabs"
-            :key="tab.index"
-            @click="updateSelectedTab(tab.index)"
-            :disabled="!tab.enabled || lockNavTabs"
+    <!-- SIDEBAR -->
+    <v-row class="ma-0 pa-0 align-stretch pb-10" style="height: 100%">
+      <v-col cols="auto" class="ma-0 pa-0">
+          <v-navigation-drawer
+            :expand-on-hover="!navDrawerKeepOpen && $vuetify.breakpoint.mdAndUp"
+            id="mainNavDrawer"
+            mobile-breakpoint="sm"
+            :mini-variant="!navDrawerOpen && $vuetify.breakpoint.mdAndUp"
+            v-model="navDrawerOpen"
+            :permanent="$vuetify.breakpoint.mdAndUp"
+            :temporary="!$vuetify.breakpoint.mdAndUp"
+            :fixed="!$vuetify.breakpoint.mdAndUp"
+            :bottom="!$vuetify.breakpoint.mdAndUp"
+            width="320"
           >
-            <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
-            <span v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
-              {{ $t("category." + tab.title + "_short") }}
-            </span>
-            <span v-else>
-              {{ $t("category." + tab.title) }}
-            </span>
-          </v-tab>
-        </v-tabs>
-      </v-fade-transition>
-    </v-toolbar>
+            <v-list dense nav expand>
+              <!-- Top Tabs -->
+              <v-list-item
+                v-for="tab in getVisibleTabsInGroup('_top')"
+                :key="tab.index"
+                color="primary"
+                :input-value="tab.title == selectedTabTitle"
+                @click="updateSelectedTab(tab.index)"
+                :disabled="!tab.enabled || lockNavTabs"
+              >
+                <v-list-item-icon>
+                  <v-icon>{{ tab.icon }}</v-icon>
+                </v-list-item-icon>
 
-    <!-- Mobile Nav -->
-    <v-toolbar
-      v-else
-      dense
-      id="tabs-nav-bar"
-      color="bg-secondary-10"
-      :dark="!isThemeDark($vuetify)"
-      :light="isThemeDark($vuetify)"
-      style="z-index: 1"
-      class="sticky-top"
-    >
-      <v-row justify="space-between" :class="$vuetify.breakpoint.xs ? 'mx-0':'mx-12'" align="center">
-        <v-btn
-          text
-          color="primary"
-          @click="goToPrevTab"
-          :disabled="active_tab == 0 || lockNavTabs">
-          <v-icon> mdi-chevron-double-left </v-icon>
-          <span v-if="$vuetify.breakpoint.smAndUp">
-            {{ $t("actions.back_short") }}
-          </span>
-        </v-btn>
-        <span>
-          <span
-            v-if="getVisibleTabs[active_tab].enableShortName == true"
-            color="primary"
-            class="font-weight-medium">
-            {{ $t("category." + getVisibleTabs[active_tab].title + "_short").toUpperCase() }}
-          </span>
-          <span v-else color="primary" class="font-weight-medium">
-            {{ $t("category." + getVisibleTabs[active_tab].title).toUpperCase() }}
-          </span>
-        </span>
-        <v-btn
-          text
-          color="primary"
-          @click="goToNextTab"
-          :disabled="active_tab == getVisibleEnabledTabs.length || lockNavTabs">
-          <span v-if="$vuetify.breakpoint.smAndUp">
-            {{ $t("actions.next") }}
-          </span>
-          <v-icon> mdi-chevron-double-right </v-icon>
-        </v-btn>
-      </v-row>
-    </v-toolbar>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ $t("category." + tab.title) }}
+                  </v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                </v-list-item-action>
+              </v-list-item>
+              <!-- Grouped Tabs -->
+              <v-list-group
+                v-for="navGroupSettings, navGroup in navGroups" :key="navGroup"
+                :group="navGroup"
+                :value="navDrawerOpenGroups.group"
+                :disabled="!navGroupSettings.enabled"
+                :append-icon="!navGroupSettings.enabled ? 'mdi-minus' : undefined"
+                multiple
+              >
+              <template v-slot:activator>
+                <v-list-item-icon>
+                  <v-icon>
+                    {{ navGroupSettings.icon  }}
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>{{ $t("navgroup." + navGroup) }}</v-list-item-title>
+              </template>
+                <v-list-item
+                  v-for="tab in getVisibleTabsInGroup(navGroup)"
+                  :key="tab.index"
+                  color="primary"
+                  @click="updateSelectedTab(tab.index)"
+                  :input-value="tab.title == selectedTabTitle"
+                  :disabled="!tab.enabled || lockNavTabs"
+                >
+                  <v-list-item-icon>
+                    <v-icon>{{ tab.icon }}</v-icon>
+                  </v-list-item-icon>
 
-    <v-tabs-items v-model="active_tab" class="transparent-body">
-      <v-tab-item v-for="tab in getVisibleTabs" :key="tab.index">
-        <ModularViewContainer
-          :initLoad="initLoad"
-          :viewTitle="tab.title"
-          :viewIndex="tab.index"
-          ref="ModularViewContainerRef"
-          @refresh="setDomainDetails()"
-          @refreshDomain="fetchDomainDetails(false)"
-          @goToUser="goToUser"
-          @goToGroup="goToGroup"
-          :langChanged="langChanged"
-          :requestRefresh="requestRefresh"
-        />
-      </v-tab-item>
-    </v-tabs-items>
+                  <v-list-item-content>
+                    <v-list-item-title v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
+                      {{ $t("category." + tab.title + "_short") }}
+                    </v-list-item-title>
+                    <v-list-item-title v-else>
+                      {{ $t("category." + tab.title) }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action></v-list-item-action>
+                </v-list-item>
+              </v-list-group>
+
+              <!-- Bottom Tabs -->
+              <v-list-item
+                v-for="tab in getVisibleTabsInGroup('_bot')"
+                :key="tab.index"
+                color="primary"
+                @click="updateSelectedTab(tab.index)"
+                :input-value="tab.title == selectedTabTitle"
+                :disabled="!tab.enabled || lockNavTabs"
+              >
+                <v-list-item-icon>
+                  <v-icon>{{ tab.icon }}</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
+                    {{ $t("category." + tab.title + "_short") }}
+                  </v-list-item-title>
+                  <v-list-item-title v-else>
+                    {{ $t("category." + tab.title) }}
+                  </v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
+
+            <!-- Nav Collapse -->
+            <template v-slot:prepend>
+              <v-list dense nav expand v-if="$vuetify.breakpoint.mdAndUp">
+                <v-list-item @click="navDrawerKeepOpen = !navDrawerKeepOpen">
+                  <v-list-item-icon class="align-self-center justify-center">
+                    <v-slide-x-reverse-transition>
+                      <v-icon small v-if="!navDrawerKeepOpen">mdi-arrow-expand-right</v-icon>
+                    </v-slide-x-reverse-transition>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{ navDrawerKeepOpen ? $t("nav.collapse") : $t("nav.keepOpen") }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action class="my-0">
+                    <v-slide-x-transition>
+                      <v-icon small v-if="navDrawerKeepOpen">mdi-arrow-collapse-left</v-icon>
+                    </v-slide-x-transition>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+            </template>
+          </v-navigation-drawer>
+      </v-col>
+
+      <v-col cols="min" class="ma-0 pa-0">
+        <v-tabs-items v-model="activeTab" class="transparent-body">
+          <v-tab-item v-for="tab in getVisibleTabs" :key="tab.index">
+            <ModularViewContainer
+              :initLoad="initLoad"
+              :viewTitle="tab.title"
+              :viewIndex="tab.index"
+              ref="ModularViewContainerRef"
+              @refresh="setDomainDetails()"
+              @refreshDomain="fetchDomainDetails(false)"
+              @goToUser="goToUser"
+              @goToGroup="goToGroup"
+              :langChanged="langChanged"
+              :requestRefresh="requestRefresh"
+            />
+          </v-tab-item>
+        </v-tabs-items>
+      </v-col>
+    </v-row>
 
     <!-- SNACKBAR / NOTIF. BUS -->
     <NotificationBusContainer/>
@@ -367,81 +433,107 @@ export default {
       requestRefresh: "",
       selectedTab: 0,
       selectedTabTitle: "",
-      showNavTabs: false,
       lockNavTabs: false,
       langChanged: false,
       enableDebug: false,
-      active_tab: 0,
+      navDrawerOpen: false,
+      navDrawerKeepOpen: false,
+      navDrawerOpenGroups: {},
+      activeTab: 0,
       tableData: {
         headers: [],
         items: [],
       },
       timeoutId: 0,
+      navGroups: {
+        "local":{
+          enabled: false,
+          icon: "mdi-database",
+        },
+        "ldap":{
+          enabled: true,
+          icon: "mdi-server-security",
+        },
+      },
       navTabs: [
         {
-          index: 0,
           title: "home",
           enabled: true,
           icon: "mdi-home",
           route: "home",
+          group: "_top",
         },
         {
-          index: 1,
-          title: "users",
+          title: "ldap-dirtree",
+          enabled: true,
+          icon: "mdi-family-tree",
+          route: "ldap-dirtree",
+          group: "ldap",
+        },
+        {
+          title: "ldap-users",
           enabled: true,
           icon: "mdi-account",
-          route: "users",
+          route: "ldap-users",
+          group: "ldap",
         },
         {
-          index: 2,
-          title: "groups",
+          title: "ldap-groups",
           enabled: true,
           icon: "mdi-google-circles-communities",
-          route: "groups",
+          route: "ldap-groups",
+          group: "ldap",
         },
         {
-          index: 3,
-          title: "dns",
+          title: "ldap-dns",
           enabled: true,
           enableShortName: true,
           icon: "mdi-dns",
-          route: "dns",
+          route: "ldap-dns",
+          group: "ldap",
         },
         {
-          index: 4,
-          title: "gpo",
+          title: "ldap-gpo",
           enabled: false,
           hidden: false,
           enableShortName: true,
           icon: "mdi-google-circles-extended",
-          route: "gpo",
+          route: "ldap-gpo",
+          group: "ldap",
         },
         {
-          index: 5,
           title: "settings",
           enabled: true,
           icon: "mdi-cog",
           route: "settings",
+          group: "_bot",
         },
         {
-          index: 6,
           title: "logs",
           enabled: true,
           icon: "mdi-flag-outline",
           route: "logs",
+          group: "_bot",
         },
         {
-          index: 7,
           title: "debug",
           enabled: false,
           hidden: true,
           icon: "mdi-xml",
           route: "debug",
+          group: "_bot",
         },
       ],
     };
   },
   async created() {
+    let tabIndex = 0
+    if (this.$vuetify.breakpoint.mdAndUp)
+      this.navDrawerKeepOpen = true;
+    this.navTabs.forEach(t => {
+      t.index = tabIndex
+      tabIndex++
+    })
     await new User({}).getCurrentUserData().then((response) => {
       let responseStatus = response.status;
       let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
@@ -477,16 +569,14 @@ export default {
       let validRoute = this.navTabs.filter(item => "/" + item.route == currentPath && item.enabled == true)[0]
       if (validRoute) {
         this.selectedTab = validRoute.index;
-        this.active_tab = validRoute.index;
+        this.activeTab = validRoute.index;
       } else {
         this.$router.push("/home")
       }
     }
-    setTimeout(() => {
-      this.showNavTabs = true;
-    }, 250);
+    
     getDomainDetails()
-    this.active_tab = this.selectedTab;
+    this.activeTab = this.selectedTab;
     if (this.selectedTab == 0)
       this.initLoad = true
     this.selectedTabTitle = this.navTabs[this.selectedTab].title;
@@ -511,18 +601,21 @@ export default {
         return this.realm.toUpperCase() + "@" + this.username
     }
   },
-  watch: {
-    breakpointName() {
-      this.showNavTabs = false;
-      setTimeout(() => {
-        this.showNavTabs = true;
-      }, 250);
-    },
-  },
   methods: {
+    log(v){
+      console.log(v);
+    },
     ////////////////////////////////////////////////////////////////////////////
     // General Component Methods
     ////////////////////////////////////////////////////////////////////////////
+    getTabIndex(name){
+      return this.navTabs.findIndex(v => name == v.title)
+    },
+    getVisibleTabsInGroup(group=null){
+      if (group !== null)
+        return this.navTabs.filter(x => x.group == group && !x.hidden)
+      return this.navTabs.filter(x => (!("group" in x) || x.group === null) && !x.hidden)
+    },
     openSettings(){
       this.showSettingsDialog = true
       if (this.$refs.UserSettings)
@@ -539,33 +632,13 @@ export default {
       this.access_expire = parseInt(localStorage.getItem("auth.access_expire"));
       this.refresh_expire = parseInt(localStorage.getItem("auth.refresh_expire"));
     },
-    goToPrevTab(){
-      let counter = this.selectedTab - 1
-      this.navTabs.forEach(() => {
-        if (this.navTabs[counter].enabled)
-          return this.updateSelectedTab(counter)
-        else {
-          counter -= 1
-        }
-      });
-    },
-    goToNextTab(){
-      let counter = this.selectedTab + 1
-      this.navTabs.forEach(() => {
-        if (this.navTabs[counter].enabled)
-          return this.updateSelectedTab(counter)
-        else {
-          counter += 1
-        }
-      });
-    },
     async goToUser(user) {
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
-      await this.updateSelectedTab(1); // Index for Users Tab is 1
+      await this.updateSelectedTab(this.getTabIndex("ldap-users")); // Index for Users Tab is 1
       setTimeout(()=>{
         this.$refs.ModularViewContainerRef.forEach(refObj => {
-          console.log(refObj.$refs)
+          // console.log(refObj.$refs)
           if (Object.hasOwnProperty.call(refObj.$refs, 'UserView'))
             refObj.$refs.UserView.fetchUser(user);
         });
@@ -574,7 +647,7 @@ export default {
     async goToGroup(group) {
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
-      await this.updateSelectedTab(2); // Index for Groups Tab is 2
+      await this.updateSelectedTab(this.getTabIndex("ldap-groups")); // Index for Groups Tab is 2
       setTimeout(()=>{
         this.$refs.ModularViewContainerRef.forEach(refObj => {
           if (Object.hasOwnProperty.call(refObj.$refs, 'GroupView'))
@@ -597,7 +670,7 @@ export default {
           this.realm = domainData['realm']
           this.basedn = domainData['basedn']
           if (this.domain.toLowerCase() == "example.com" && default_redirect === true) {
-            this.updateSelectedTab(5)
+            this.updateSelectedTab(this.getTabIndex("settings"))
           }
           this.fetchingDomainDetails = false
           if ('debug' in domainData)
@@ -625,10 +698,8 @@ export default {
       });
     },
     refreshOnLanguageChange() {
-      this.showNavTabs = false;
       this.langChanged = true;
       setTimeout(() => {
-        this.showNavTabs = true;
         this.langChanged = false;
       }, 300);
     },
@@ -637,7 +708,7 @@ export default {
         this.selectedTab = index;
       if (this.selectedTab == 0)
         this.initLoad = true
-      this.active_tab = index;
+      this.activeTab = index;
       this.selectedTabTitle = this.navTabs[this.selectedTab].title;
       this.requestRefresh = this.selectedTabTitle;
       this.lockNavTabs = true;
@@ -773,4 +844,13 @@ export default {
   content: "\F02D1";
   color: var(--v-error-60-s-base);
 }
+
+.v-list-group--disabled:before {
+  opacity: 0 !important;
+}
+
+.v-list-group--disabled .v-ripple__container {
+  opacity: 0 !important;
+}
+
 </style>

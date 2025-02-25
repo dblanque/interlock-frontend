@@ -1,23 +1,29 @@
 {
   "indexTitle": "Interlock - Administrador de LDAP",
+  "navgroup":{
+    "local":"Base de Datos Local",
+    "ldap":"Back-end de LDAP"
+  },
   "category": {
     "home": "Inicio",
-    "users": "Usuarios",
-    "groups": "Grupos de Seguridad",
-    "dns": "DNS",
-    "gpo": "GPO",
-    "dns_short": "DNS",
-    "gpo_short": "GPO",
+    "ldap-dirtree":"Árbol de Directorio",
+    "ldap-users": "Usuarios",
+    "ldap-groups": "Grupos de Seguridad",
+    "ldap-dns": "DNS",
+    "ldap-gpo": "GPO",
+    "ldap-dns_short": "DNS",
+    "ldap-gpo_short": "GPO",
     "server": "Servidor",
     "settings": "Configuración",
     "logs":"Registro de Eventos",
     "debug":"Debugging",
     "header": {
-      "home":"Árbol de Directorio",
-      "users":"Usuarios",
-      "groups":"Grupos de Seguridad",
-      "dns":"Servidor de Nombre de Dominio",
-      "gpo":"Objetos de Política de Grupo",
+      "home":"Inicio",
+      "ldap-dirtree":"Árbol de Directorio",
+      "ldap-users":"Usuarios",
+      "ldap-groups":"Grupos de Seguridad",
+      "ldap-dns":"Servidor de Nombre de Dominio",
+      "ldap-gpo":"Objetos de Política de Grupo",
       "server":"Administración de Servidor",
       "settings": "Configuración",
       "logs":"Registro de Eventos",
@@ -484,6 +490,9 @@
     "objectEditor":"Editor de Objeto"
   },
   "nav":{
+    "collapse":"Colapsar",
+    "keepOpen":"Mantener Abierto",
+    "menu":"Menú",
     "tooltip":{
       "fetchDomainDetails":"Refrescar Datos de Dominio",
       "debugAction":"Acción de Debugging"

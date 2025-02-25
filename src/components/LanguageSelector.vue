@@ -3,6 +3,7 @@
 <!----------------------- File: LanguageSelector.vue -------------------------->
 <template>
     <v-select
+    id="v-select_language_selector"
     append-icon="mdi-earth"
     :dark="dark"
     :light="light"
@@ -128,3 +129,7 @@ export default {
     }
 }
 </script>
+
+<style>
+.v-select:not(.v-autocomplete) .v-select__slot input { visibility: hidden }
+</style>

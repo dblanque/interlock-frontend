@@ -1,23 +1,29 @@
 {
   "indexTitle":"Interlock - LDAP Manager",
+  "navgroup":{
+    "local":"Local Database",
+    "ldap":"LDAP Back-end"
+  },
   "category":{
     "home":"Home",
-    "users":"Users",
-    "groups":"Security Groups",
-    "dns":"DNS",
-    "gpo":"GPO",
-    "dns_short":"DNS",
-    "gpo_short":"GPO",
+    "ldap-dirtree":"Directory Tree",
+    "ldap-users":"Users",
+    "ldap-groups":"Security Groups",
+    "ldap-dns":"DNS",
+    "ldap-gpo":"GPO",
+    "ldap-dns_short":"DNS",
+    "ldap-gpo_short":"GPO",
     "server":"Server",
     "settings": "Settings",
     "logs":"Event Logs",
     "debug":"Debugging",
     "header": {
-      "home":"Full Directory Tree",
-      "users":"Users",
-      "groups":"Security Groups",
-      "dns":"Domain Name Server",
-      "gpo":"Group Policy Objects",
+      "home":"Home",
+      "ldap-dirtree":"Directory Tree",
+      "ldap-users":"Users",
+      "ldap-groups":"Security Groups",
+      "ldap-dns":"Domain Name Server",
+      "ldap-gpo":"Group Policy Objects",
       "server":"Server Management",
       "settings": "Settings",
       "logs":"Event Logs",
@@ -478,6 +484,9 @@
     "objectEditor":"Object Editor"
   },
   "nav":{
+    "collapse":"Collapse",
+    "keepOpen":"Keep Open",
+    "menu":"Menu",
     "tooltip":{
       "fetchDomainDetails":"Refresh Domain Data",
       "debugAction":"Debug Action"

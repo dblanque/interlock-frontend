@@ -71,6 +71,7 @@ export default {
 
 <style lang="scss">
 #app {
+  height: 100%;
   font-family: Montserrat !important; 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

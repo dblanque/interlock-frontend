@@ -11,9 +11,13 @@
 
 	<!-- HOME -->
 	<v-container v-if="viewTitle == 'home' && initLoad == true" class="max-width-change">
+	</v-container>
+
+	<!-- DIRTREE -->
+	<v-container v-if="viewTitle == 'ldap-dirtree'" class="max-width-change">
 		<DirtreeView
 			ref="DirtreeView"
-			:requestRefresh="this.refreshUserDataTable"
+			:requestRefresh="this.refreshDirtreeTable"
 			:viewTitle="viewTitle"
 			:snackbarTimeout="this.snackbarTimeout"
 			@refresh="refreshAction"
@@ -24,7 +28,7 @@
 
 	<!-- USERS -->
 
-	<v-container v-if="viewTitle == 'users'" class="max-width-change">
+	<v-container v-if="viewTitle == 'ldap-users'" class="max-width-change">
 		<UserView ref="UserView"
 			:requestRefresh="this.refreshUserDataTable"
 			:viewTitle="viewTitle"
@@ -35,7 +39,7 @@
 	</v-container>
 
 	<!-- Groups -->
-	<v-container v-if="viewTitle == 'groups'" class="max-width-change">
+	<v-container v-if="viewTitle == 'ldap-groups'" class="max-width-change">
 		<GroupView ref="GroupView"
 			:requestRefresh="this.refreshGroupDataTable"
 			:viewTitle="viewTitle"
@@ -45,7 +49,7 @@
 	</v-container>
 
 	<!-- DNS -->
-	<v-container v-if="viewTitle == 'dns'" class="max-width-change">
+	<v-container v-if="viewTitle == 'ldap-dns'" class="max-width-change">
 		<dnsView ref="dnsView"
 			:requestRefresh="this.refreshDNSData"
 			:viewTitle="viewTitle"
@@ -55,7 +59,7 @@
 	</v-container>
 
 	<!-- GPO -->
-	<v-container v-if="viewTitle == 'gpo'" class="max-width-change">
+	<v-container v-if="viewTitle == 'ldap-gpo'" class="max-width-change">
 		<GpoView
 			:viewTitle="viewTitle"
 			class="my-2 mb-4"
@@ -126,6 +130,7 @@ export default {
 	},
 	data () {
 		return {
+			refreshDirtreeTable: false,
 			refreshUserDataTable: false,
 			refreshGroupDataTable: false,
 			refreshDNSData: false,
@@ -144,16 +149,16 @@ export default {
 		langChanged: {
 			handler: function () {
 				switch (this.viewTitle) {
-					case 'users':
+					case 'ldap-users':
 						this.$refs.UserView.reloadDataTableHeaders()
 						break;
-					case 'groups':
+					case 'ldap-groups':
 						this.$refs.GroupView.reloadDataTableHeaders()
 						break;
 					case 'logs':
 						this.$refs.LogView.reloadDataTableHeaders()
 						break;
-					case 'dns':
+					case 'ldap-dns':
 						this.$refs.dnsView.reloadDataTableHeaders()
 						break;
 					default:
@@ -164,20 +169,22 @@ export default {
 		requestRefresh(newValue) {
 			switch (newValue) {
 				case 'home':
+					break;
+				case 'ldap-dirtree':
 					if (this.$refs.DirtreeView != undefined) {
 						console.log("Requested refresh for view component "+ newValue)
 						this.$refs.DirtreeView.resetSearch()
 						this.$refs.DirtreeView.resetDirtree(true)
 					}
 					break;
-				case 'users':
+				case 'ldap-users':
 					if (this.$refs.UserView != undefined) {
 						console.log("Requested refresh for component "+ newValue)
 						this.$refs.UserView.resetSearch()
 						this.$refs.UserView.listUserItems()
 					}
 					break;
-				case 'groups':
+				case 'ldap-groups':
 					if (this.$refs.GroupView != undefined) {
 						console.log("Requested refresh for component "+ newValue)
 						this.$refs.GroupView.resetSearch()
@@ -197,7 +204,7 @@ export default {
 						this.$refs.LogView.listLogs()
 					}
 					break;
-				case 'dns':
+				case 'ldap-dns':
 					if (this.$refs.dnsView != undefined) {
 						console.log("Requested refresh for component "+ newValue)
 						this.$refs.dnsView.getDNSData()
@@ -241,7 +248,7 @@ export default {
 		},
 		refreshAction() {
 			// Reset all filters if refreshing dirtree view
-			if (this.viewTitle == 'home')
+			if (this.viewTitle == 'ldap-dirtree')
 				Object.keys(this.itemTypes).forEach(key => {
 					this.itemTypes[key]['filtered'] = false
 				});

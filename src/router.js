@@ -22,23 +22,28 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/users',
-    name: 'users',
+    path: '/ldap-dirtree',
+    name: 'ldap-dirtree',
     component: HomeView
   },
   {
-    path: '/groups',
-    name: 'groups',
+    path: '/ldap-users',
+    name: 'ldap-users',
     component: HomeView
   },
   {
-    path: '/dns',
-    name: 'dns',
+    path: '/ldap-groups',
+    name: 'ldap-groups',
     component: HomeView
   },
   {
-    path: '/gpo',
-    name: 'gpo',
+    path: '/ldap-dns',
+    name: 'ldap-dns',
+    component: HomeView
+  },
+  {
+    path: '/ldap-gpo',
+    name: 'ldap-gpo',
     component: HomeView
   },
   {
