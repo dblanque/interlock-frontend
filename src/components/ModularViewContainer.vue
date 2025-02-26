@@ -5,12 +5,30 @@
 <v-container class="my-4 max-width-change">
 	<v-row class="ma-2" justify="center" align="center">
 		<v-divider class="mx-6"/>
-		<h1>{{ $t("category.header." + viewTitle) }}</h1>
+		<h1>{{ getViewTitle() }}</h1>
 		<v-divider class="mx-6"/>
 	</v-row>
 
 	<!-- HOME -->
 	<v-container v-if="viewTitle == 'home' && initLoad == true" class="max-width-change">
+		<HomeViewContainer
+			ref="HomeViewContainer"
+			:viewTitle="viewTitle"
+			:requestRefresh="undefined"
+			:snackbarTimeout="this.snackbarTimeout"
+			@refresh="refreshAction"
+		/>
+	</v-container>
+
+	<!-- APPLICATION -->
+	<v-container v-if="viewTitle == 'sso-application'" class="max-width-change">
+		<ApplicationView
+			ref="ApplicationView"
+			:viewTitle="viewTitle"
+			:requestRefresh="undefined"
+			:snackbarTimeout="this.snackbarTimeout"
+			@refresh="refreshAction"
+		/>
 	</v-container>
 
 	<!-- DIRTREE -->
@@ -98,6 +116,8 @@
 </template>
 
 <script>
+import HomeViewContainer from '@/components/Home/HomeViewContainer.vue';
+import ApplicationView from '@/components/Application/ApplicationView.vue';
 import UserView from '@/components/User/UserView.vue';
 import GroupView from '@/components/Group/GroupView.vue';
 import DirtreeView from '@/components/Dirtree/DirtreeView.vue';
@@ -226,6 +246,12 @@ export default {
 	computed: {
 	},
 	methods: {
+		getViewTitle(){
+			let translation_key = "category.header." + this.viewTitle
+			if (translation_key == this.$t(translation_key))
+				return this.$t("category." + this.viewTitle)
+			return this.$t(translation_key)
+		},
 		goToUser(user){
 			this.$emit('goToUser', user)
 		},

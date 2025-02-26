@@ -447,7 +447,7 @@ export default {
       timeoutId: 0,
       navGroups: {
         "local":{
-          enabled: false,
+          enabled: true,
           icon: "mdi-database",
         },
         "ldap":{
@@ -464,6 +464,27 @@ export default {
           group: "_top",
         },
         {
+          title: "sso-application",
+          enabled: true,
+          icon: "mdi-application-cog",
+          route: "sso-application",
+          group: "_top",
+        },
+        {
+          title: "local-users",
+          enabled: false,
+          icon: "mdi-account",
+          route: "local-users",
+          group: "local",
+        },
+        {
+          title: "local-groups",
+          enabled: false,
+          icon: "mdi-google-circles-communities",
+          route: "local-groups",
+          group: "local",
+        },
+        {
           title: "ldap-dirtree",
           enabled: true,
           icon: "mdi-family-tree",
@@ -473,14 +494,14 @@ export default {
         {
           title: "ldap-users",
           enabled: true,
-          icon: "mdi-account",
+          icon: "mdi-account-network",
           route: "ldap-users",
           group: "ldap",
         },
         {
           title: "ldap-groups",
           enabled: true,
-          icon: "mdi-google-circles-communities",
+          icon: "mdi-google-circles-group",
           route: "ldap-groups",
           group: "ldap",
         },

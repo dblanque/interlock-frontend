@@ -22,6 +22,21 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/sso-application',
+    name: 'sso-application',
+    component: HomeView
+  },
+  {
+    path: '/local-users',
+    name: 'local-users',
+    component: HomeView
+  },
+  {
+    path: '/local-groups',
+    name: 'local-groups',
+    component: HomeView
+  },
+  {
     path: '/ldap-dirtree',
     name: 'ldap-dirtree',
     component: HomeView

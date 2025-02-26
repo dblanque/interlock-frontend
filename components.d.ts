@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AboutDialog: typeof import('./src/components/AboutDialog.vue')['default']
+    ApplicationView: typeof import('./src/components/Application/ApplicationView.vue')['default']
     BackendStatus: typeof import('./src/components/BackendStatus.vue')['default']
     CNObjectList: typeof import('./src/components/CNObjectList.vue')['default']
     DebugView: typeof import('./src/components/Debug/DebugView.vue')['default']
@@ -24,6 +25,7 @@ declare module 'vue' {
     GroupDialog: typeof import('./src/components/Group/GroupDialog.vue')['default']
     GroupTypeRadioGroups: typeof import('./src/components/Group/GroupTypeRadioGroups.vue')['default']
     GroupView: typeof import('./src/components/Group/GroupView.vue')['default']
+    HomeViewContainer: typeof import('./src/components/Home/HomeViewContainer.vue')['default']
     LanguageSelector: typeof import('./src/components/LanguageSelector.vue')['default']
     LogoutDialog: typeof import('./src/components/LogoutDialog.vue')['default']
     LogResetDialog: typeof import('./src/components/Logging/LogResetDialog.vue')['default']

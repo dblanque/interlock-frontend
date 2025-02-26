@@ -7,6 +7,9 @@
   "category":{
     "home":"Home",
     "ldap-dirtree":"Directory Tree",
+    "sso-application":"SSO Applications",
+    "local-users":"Users",
+    "local-groups":"Groups",
     "ldap-users":"Users",
     "ldap-groups":"Security Groups",
     "ldap-dns":"DNS",
