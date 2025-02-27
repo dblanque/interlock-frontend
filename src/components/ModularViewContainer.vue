@@ -146,7 +146,8 @@ export default {
 		viewIndex: Number,
 		langChanged: Boolean,
 		requestRefresh: String,
-		initLoad: Boolean
+		initLoad: Boolean,
+		mobile: Boolean,
 	},
 	data () {
 		return {
@@ -250,7 +251,11 @@ export default {
 	},
 	methods: {
 		getContainerClasses(){
-			return this.containerClasses.join(" ");
+			let _c = [...this.containerClasses]
+			// Add classes to desktop
+			// if (!this.mobile) {
+			// }
+			return _c.join(" ");
 		},
 		getViewTitle(){
 			let translation_key = "category.header." + this.viewTitle

@@ -161,6 +161,7 @@
         <v-tabs-items v-model="activeTab" class="transparent-body">
           <v-tab-item v-for="tab in getVisibleTabs" :key="tab.index">
             <ModularViewContainer
+              :mobile="drawerIsMobile"
               :initLoad="initLoad"
               :viewTitle="tab.title"
               :viewIndex="tab.index"
