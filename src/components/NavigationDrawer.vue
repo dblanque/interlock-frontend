@@ -18,7 +18,7 @@
 			<v-list-item
 				v-for="tab in topTabs"
 				:key="tab.index"
-				color="primary"
+				:color="componentColor"
 				:input-value="tab.title == selectedTabTitle"
 				@click="updateSelectedTab(tab.index)"
 				:disabled="!tab.enabled || lockNavTabs"
@@ -39,6 +39,7 @@
 			<v-list-group
 				v-for="navGroupSettings, navGroup in navGroups" :key="navGroup"
 				:group="navGroup"
+				:color="componentColor"
 				:value="navDrawerOpenGroups.group"
 				:disabled="!navGroupSettings.enabled"
 				:append-icon="!navGroupSettings.enabled ? 'mdi-minus' : undefined"
@@ -55,7 +56,7 @@
 				<v-list-item
 					v-for="tab in getVisibleTabsInGroup(navGroup)"
 					:key="tab.index"
-					color="primary"
+					:color="componentColor"
 					@click="updateSelectedTab(tab.index)"
 					:input-value="tab.title == selectedTabTitle"
 					:disabled="!tab.enabled || lockNavTabs"
@@ -80,7 +81,7 @@
 			<v-list-item
 				v-for="tab in getVisibleTabsInGroup('_bot')"
 				:key="tab.index"
-				color="primary"
+				:color="componentColor"
 				@click="updateSelectedTab(tab.index)"
 				:input-value="tab.title == selectedTabTitle"
 				:disabled="!tab.enabled || lockNavTabs"
@@ -133,7 +134,8 @@
 			return {
 				navDrawerOpen: true,
 				navDrawerKeepOpen: false,
-				navDrawerOpenGroups: {}
+				navDrawerOpenGroups: {},
+				componentColor: "primary-45",
 			}
 		},
 		props: {
