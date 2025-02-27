@@ -225,6 +225,7 @@
     "setting-preset":"Preset | Presets",
     "ldap":"LDAP Object | LDAP Objects",
     "totp-device":"TOTP Device | TOTP Devices",
+    "application":"Application | Applications",
     "dns":{
       "zone":"DNS Zone | DNS Zones",
       "record":"DNS Record | DNS Records"
@@ -373,7 +374,8 @@
           "alphaNumericPassword": "8 char. minimum, special characters allowed: !@#$%&*()",
           "alphaNumericSpaces": "a-z A-Z 0-9 and Spaces, 2 char. min",
           "alphaNumericSpecial": "a-z A-Z 0-9 -_ and Spaces, 2 char. min",
-          "domain": "Must be a valid Top-Level Domain ( example.tld | domain.com )",
+          "domain": "Must be a valid Top-Level Domain ( example.tld )",
+          "endpoint": "Must be a valid Endpoint ( https://example.tld/endpoint )",
           "email": "Must be a valid E-Mail (E.g.: john@domain.com)",
           "phone": "Must be a valid Phone",
           "date": "Date is invalid",
@@ -496,6 +498,21 @@
     }
   },
   "section":{
+    "application":{
+      "dialog":{
+        "create":{
+          "header":"Create Application",
+          "step1":"Configure Application",
+          "step2":"Creating Application",
+          "step3":"Application Created",
+          "redirectUriPlaceholder":"https://<your_service_url>/oidc/callback"
+        }
+      },
+      "attribute":{
+        "name":"Application Name | Application Names",
+        "redirectUri":"Redirect URI | Redirect URIs"
+      }
+    },
     "dns":{
       "zoneToAddName":"Name of the new DNS Zone",
       "confirmZoneCreation":"Confirm Zone Creation",

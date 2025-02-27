@@ -231,6 +231,7 @@
 	  "setting-preset":"Grupo de Parámetros | Grupos de Parámetros",
     "ldap":"Objeto LDAP | Objetos LDAP",
     "totp-device":"Dispositivo TOTP | Dispositivos TOTP",
+    "application":"Aplicación | Aplicaciones",
     "dns":{
         "zone":"Zona de DNS | Zonas de DNS",
         "record":"Registro de DNS | Registros de DNS"
@@ -379,7 +380,8 @@
       "alphaNumericPassword": "8 caracteres mín., caracteres especiales permitidos: !@#$%&*()",
       "alphaNumericSpaces": "a-z A-Z 0-9 y Espacios, 2 car. min",
       "alphaNumericSpecial": "a-z A-Z 0-9 -_ y Espacios, 2 car. min",
-      "domain": "Debe ser un Dominio de NSG válido ( ejemplo.tld | dominio.com )",
+      "domain": "Debe ser un Dominio de NSG válido ( ejemplo.tld )",
+      "endpoint": "Debe ser endpoint válido ( https://ejemplo.tld/endpoint )",
       "email": "Debe ser un E-Mail válido (Ej.: juan@dominio.com)",
       "phone": "Debe ser un Teléfono válido",
       "date": "Fecha inválida",
@@ -502,6 +504,21 @@
     }
   },
   "section": {
+    "application":{
+      "dialog":{
+        "create":{
+          "header":"Crear Aplicación",
+          "step1":"Configurar Aplicación",
+          "step2":"Creando Aplicación",
+          "step3":"Aplicación Creada",
+          "redirectUriPlaceholder":"https://<url_de_servicio>/oidc/callback"
+        }
+      },
+      "attribute":{
+        "name":"Nombre de Aplicación | Nombres de Aplicación",
+        "redirectUri":"URI de Redirección | URIs de Redirección"
+      }
+    },
     "dns":{
       "zoneToAddName":"Nombre de la nueva Zona de DNS",
       "confirmZoneCreation":"Confirmar Creación de Zona",

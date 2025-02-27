@@ -18,6 +18,7 @@ import totpCalls from '@/providers/interlock_backend/modules/totp.js'
 import testCalls from '@/providers/interlock_backend/modules/test.js'
 import livenessCalls from '@/providers/interlock_backend/modules/liveness.js'
 import debugCalls from '@/providers/interlock_backend/modules/debug.js'
+import applicationCalls from '@/providers/interlock_backend/modules/application.js'
 
 const modules = {
     auth: authCalls,
@@ -33,6 +34,7 @@ const modules = {
     test: testCalls,
     liveness: livenessCalls,
     debug: debugCalls,
+    application: applicationCalls,
 }
 
 const interlock_backend = {

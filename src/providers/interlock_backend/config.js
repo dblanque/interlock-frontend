@@ -164,6 +164,12 @@ const urls = {
         list: "api/debug/",
         action: "api/debug/action/",
     },
+    application: {
+        list: "api/application/",
+        insert: "api/application/insert/",
+        update: "api/application/update/",
+        delete: "api/application/delete/",
+    },
 }
 const eraseLocalUserData = () => {
     const localUserKeys = [

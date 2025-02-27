@@ -106,6 +106,7 @@ const validationMixin = {
 
       inputRulesDN: (v) => !v || /^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:,(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/i.test(v) || i18n.t("error.validation.distinguishedName"),
       inputRulesDomain: (v) => !v || /^((?:http(?:s){0,5}(:\/\/){0,1}){0,1}(?:[a-zA-Z0-9-\\.]){2,61}(?:\.[a-zA-Z]{2,})+)?$/.test(v) || i18n.t("error.validation.domain"),
+      inputRulesEndpoint: (v) => !v || /^http(?:s):[/]{2}([a-zA-Z0-9-\\.]){2,63}(?:\.[a-zA-Z]{2,})+(?:\:[0-9]{1,5})?([/a-zA-Z0-9-.])+$/.test(v) || i18n.t("error.validation.endpoint"),
       inputRulesDomainCanonical: (v) => !v || /^(((?:[a-zA-Z0-9-.]){2,61}(?:\.[a-zA-Z]{2,})+|(?:[a-zA-Z0-9-]){2,63}))\.$/.test(v) || i18n.t("error.validation.domainCanonical"),
       inputRulesDomainNonTLD: (v) => !v || /^(((?:[a-zA-Z0-9-.]){2,61}(?:\.[a-zA-Z]{2,})+|(?:[a-zA-Z0-9-]){2,64}))?$/.test(v) || i18n.t("error.validation.domain"),
       inputRulesDomainRoot: (v) => !v || /^(((?:[a-zA-Z0-9-.]){2,61}(?:\.[a-zA-Z]{2,})+|(?:[a-zA-Z0-9-]){2,64})|[@]{1})?$/.test(v) || i18n.t("error.validation.domainRoot"),
@@ -324,6 +325,9 @@ const validationMixin = {
             break;
           case "ge_website":
             rules.push(this.inputRulesDomain)
+            break;
+          case "ge_endpoint":
+            rules.push(this.inputRulesEndpoint)
             break;
           case "ge_address_street": // Address Street
             rules.push(this.inputRulesalphaNumericSpecial)
