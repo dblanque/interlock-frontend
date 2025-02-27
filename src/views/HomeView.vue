@@ -149,6 +149,7 @@
       <NavigationDrawer
         ref="navigationDrawerDesktop"
         v-if="drawerIsDesktop"
+        expanded-on-create
         :selectedTabTitle="selectedTabTitle"
         :selectedTab="selectedTab"
         :navGroups="navGroups"

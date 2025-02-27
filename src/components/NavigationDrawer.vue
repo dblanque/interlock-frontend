@@ -141,6 +141,7 @@
 				type: Boolean,
 				default: false
 			},
+			expandedOnCreate: Boolean,
 			selectedTab: Number,
 			selectedTabTitle: String,
 			navGroups: Object,
@@ -148,6 +149,10 @@
 			bottomTabs: Array,
 			lockNavTabs: Boolean,
 			getVisibleTabsInGroup: Function
+		},
+		created() {
+			if (this.expandedOnCreate === true)
+				this.navDrawerKeepOpen = true;
 		},
 		methods: {
 			updateSelectedTab(tabIndex) {
