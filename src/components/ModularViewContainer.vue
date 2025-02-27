@@ -2,7 +2,7 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!----------------------- File: ModularViewContainer.vue ---------------------->
 <template>
-<v-container class="my-4 max-width-change">
+<div class="my-4">
 	<v-row class="ma-2" justify="center" align="center">
 		<v-divider class="mx-6"/>
 		<h1>{{ getViewTitle() }}</h1>
@@ -10,7 +10,7 @@
 	</v-row>
 
 	<!-- HOME -->
-	<v-container v-if="viewTitle == 'home' && initLoad == true" class="max-width-change">
+	<v-container v-if="viewTitle == 'home' && initLoad == true" :class="getContainerClasses()">
 		<HomeViewContainer
 			ref="HomeViewContainer"
 			:viewTitle="viewTitle"
@@ -21,7 +21,7 @@
 	</v-container>
 
 	<!-- APPLICATION -->
-	<v-container v-if="viewTitle == 'sso-application'" class="max-width-change">
+	<v-container v-if="viewTitle == 'sso-application'" :class="getContainerClasses()">
 		<ApplicationView
 			ref="ApplicationView"
 			:viewTitle="viewTitle"
@@ -32,7 +32,7 @@
 	</v-container>
 
 	<!-- DIRTREE -->
-	<v-container v-if="viewTitle == 'ldap-dirtree'" class="max-width-change">
+	<v-container v-if="viewTitle == 'ldap-dirtree'" :class="getContainerClasses()">
 		<DirtreeView
 			ref="DirtreeView"
 			:requestRefresh="this.refreshDirtreeTable"
@@ -46,7 +46,7 @@
 
 	<!-- USERS -->
 
-	<v-container v-if="viewTitle == 'ldap-users'" class="max-width-change">
+	<v-container v-if="viewTitle == 'ldap-users'" :class="getContainerClasses()">
 		<UserView ref="UserView"
 			:requestRefresh="this.refreshUserDataTable"
 			:viewTitle="viewTitle"
@@ -57,7 +57,7 @@
 	</v-container>
 
 	<!-- Groups -->
-	<v-container v-if="viewTitle == 'ldap-groups'" class="max-width-change">
+	<v-container v-if="viewTitle == 'ldap-groups'" :class="getContainerClasses()">
 		<GroupView ref="GroupView"
 			:requestRefresh="this.refreshGroupDataTable"
 			:viewTitle="viewTitle"
@@ -67,7 +67,7 @@
 	</v-container>
 
 	<!-- DNS -->
-	<v-container v-if="viewTitle == 'ldap-dns'" class="max-width-change">
+	<v-container v-if="viewTitle == 'ldap-dns'" :class="getContainerClasses()">
 		<dnsView ref="dnsView"
 			:requestRefresh="this.refreshDNSData"
 			:viewTitle="viewTitle"
@@ -77,7 +77,7 @@
 	</v-container>
 
 	<!-- GPO -->
-	<v-container v-if="viewTitle == 'ldap-gpo'" class="max-width-change">
+	<v-container v-if="viewTitle == 'ldap-gpo'" :class="getContainerClasses()">
 		<GpoView
 			:viewTitle="viewTitle"
 			class="my-2 mb-4"
@@ -86,7 +86,7 @@
 	</v-container>
 
 	<!-- Settings -->
-	<v-container v-if="viewTitle == 'settings'" class="max-width-change">
+	<v-container v-if="viewTitle == 'settings'" :class="getContainerClasses()">
 		<SettingsCard
 			:viewTitle="viewTitle"
 			class="my-2 mb-4"
@@ -96,7 +96,7 @@
 	</v-container>
 
 	<!-- Logs -->
-	<v-container v-if="viewTitle == 'logs'" class="max-width-change">
+	<v-container v-if="viewTitle == 'logs'" :class="getContainerClasses()">
 		<LogView
 			:viewTitle="viewTitle"
 			class="my-2 mb-4"
@@ -105,14 +105,14 @@
 	</v-container>
 
 	<!-- Debugging -->
-	<v-container v-if="viewTitle == 'debug'" class="max-width-change">
+	<v-container v-if="viewTitle == 'debug'" :class="getContainerClasses()">
 		<DebugView
 			:viewTitle="viewTitle"
 			class="my-2 mb-4"
 			ref="DebugView"
 		/>
 	</v-container>
-</v-container>
+</div>
 </template>
 
 <script>
@@ -150,6 +150,9 @@ export default {
 	},
 	data () {
 		return {
+			containerClasses: [
+				"max-width-change"
+			],
 			refreshDirtreeTable: false,
 			refreshUserDataTable: false,
 			refreshGroupDataTable: false,
@@ -246,6 +249,9 @@ export default {
 	computed: {
 	},
 	methods: {
+		getContainerClasses(){
+			return this.containerClasses.join(" ");
+		},
 		getViewTitle(){
 			let translation_key = "category.header." + this.viewTitle
 			if (translation_key == this.$t(translation_key))

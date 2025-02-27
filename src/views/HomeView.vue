@@ -4,253 +4,159 @@
 <template>
   <div class="home ma-0 pa-0 align-stretch flex-column d-flex" style="height: 100%;">
     <!------------------>
-    <v-row align="center"
-      justify="space-between"
+    <v-system-bar 
+      height="min"
+      id="main-system-bar"
+      ref="mainSystemBar"
       style="background: var(--v-secondary-15-base)"
       class="ma-0 pa-0 px-4 transition-speed-fix">
-      <v-img
-        max-width="30ch"
-        max-height="5em"
-        class="my-3"
-        contain
-        :aspect-ratio="32/9"
-        :src="!isThemeDark($vuetify) ? logoLight : logoDark"/>
-      <h2 style="color: var(--v-text-background-base)" class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
-    </v-row>
-    <v-row
+      <v-row align="center" justify="space-between">
+        <v-img
+          max-width="30ch"
+          max-height="5em"
+          class="my-3"
+          contain
+          :aspect-ratio="32/9"
+          :src="!isThemeDark($vuetify) ? logoLight : logoDark"/>
+        <h2 style="color: var(--v-text-background-base)" class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
+      </v-row>
+    </v-system-bar>
+    <v-app-bar
+      id="main-app-bar"
+      ref="mainAppBar"
+      flat
+      height="min"
+      clipped-left
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
-      align="center"
-      justify="space-between"
       class="ma-0 pa-2 transition-speed-fix"
       style="background: var(--v-secondary-15-base); height: fit-content">
-      <v-col cols="12" md="auto">
-        <LanguageSelector
-          :dark="!isThemeDark($vuetify)"
-          :light="isThemeDark($vuetify)"
-          class=""
-          @updateTabSliders="refreshOnLanguageChange"
-        />
-      </v-col>
-      <v-divider style="border-color: var(--v-primary-base)" class="ma-6" v-if="this.$vuetify.breakpoint.lgAndUp" />
-      <v-col
-        class="ma-0 pa-0 my-3"
-        v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
-        <span style="color: var(--v-white-d-base)"
-          v-if="last_name && last_name != '' && first_name && first_name != ''">
-          {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + "@" + username }}
-        </span>
-        <span v-else>
-          {{ realm.toUpperCase() + "@" + username }}
-        </span>
-      </v-col>
-      <v-col class="ma-0 pa-0" cols="12" md="auto">
-        <div class="mt-2 mr-4">
-          <UserAccountDropdown 
-            extra-classes="mr-3 px-2"
-            icon="mdi-account-cog"
-            color="primary"
-            show-preferences-menu
-            @logout="logoutAction"
-            @openSettings="openSettings"
-            :username="activeUserName"/>
-          <ThemeChanger
+      <v-row class="ma-0 pa-0" align="center" justify="space-between">
+        <v-col cols="12" md="auto">
+          <LanguageSelector
             :dark="!isThemeDark($vuetify)"
             :light="isThemeDark($vuetify)"
-            :buttonIsSmall="true"
+            class=""
+            @updateTabSliders="refreshOnLanguageChange"
           />
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                :dark="!isThemeDark($vuetify)"
-                :disabled="disableDomainDetailsButton"
-                :light="isThemeDark($vuetify)"
-                @click="fetchDomainDetails()"
-                class="ml-2"
-                icon
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon>
-                  mdi-cog-sync
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>{{$t("nav.tooltip.fetchDomainDetails")}}</span>
-          </v-tooltip>
-          <!-- Open NavDrawer -->
-          <v-tooltip bottom v-if="!$vuetify.breakpoint.mdAndUp">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                :dark="!isThemeDark($vuetify)"
-                :light="isThemeDark($vuetify)"
-                class="ml-2"
-                @click="navDrawerOpen = !navDrawerOpen"
-                icon
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon>
-                  mdi-menu
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>{{$t("nav.menu")}}</span>
-          </v-tooltip>
-
-          <!-- This does not appear in production -->
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="accent-60-s" class="ml-1"
-                v-show="initLoad && enableDebug"
-                :dark="!isThemeDark($vuetify)"
-                :light="isThemeDark($vuetify)"
-                :disabled="!enableDebug"
-                @click="debugAction()"
-                icon
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon>
-                  mdi-code-brackets
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>{{$t("nav.tooltip.debugAction")}}</span>
-          </v-tooltip>
-        </div>
-      </v-col>
-    </v-row>
-
-    <!-- SIDEBAR -->
-    <v-row class="ma-0 pa-0 align-stretch pb-10" style="height: 100%">
-      <v-col cols="auto" class="ma-0 pa-0">
-          <v-navigation-drawer
-            :expand-on-hover="!navDrawerKeepOpen && $vuetify.breakpoint.mdAndUp"
-            id="mainNavDrawer"
-            mobile-breakpoint="sm"
-            :mini-variant="!navDrawerOpen && $vuetify.breakpoint.mdAndUp"
-            v-model="navDrawerOpen"
-            :permanent="$vuetify.breakpoint.mdAndUp"
-            :temporary="!$vuetify.breakpoint.mdAndUp"
-            :fixed="!$vuetify.breakpoint.mdAndUp"
-            :bottom="!$vuetify.breakpoint.mdAndUp"
-            width="320"
-          >
-            <v-list dense nav expand>
-              <!-- Top Tabs -->
-              <v-list-item
-                v-for="tab in getVisibleTabsInGroup('_top')"
-                :key="tab.index"
-                color="primary"
-                :input-value="tab.title == selectedTabTitle"
-                @click="updateSelectedTab(tab.index)"
-                :disabled="!tab.enabled || lockNavTabs"
-              >
-                <v-list-item-icon>
-                  <v-icon>{{ tab.icon }}</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                  <v-list-item-title>
-                    {{ $t("category." + tab.title) }}
-                  </v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                </v-list-item-action>
-              </v-list-item>
-              <!-- Grouped Tabs -->
-              <v-list-group
-                v-for="navGroupSettings, navGroup in navGroups" :key="navGroup"
-                :group="navGroup"
-                :value="navDrawerOpenGroups.group"
-                :disabled="!navGroupSettings.enabled"
-                :append-icon="!navGroupSettings.enabled ? 'mdi-minus' : undefined"
-                multiple
-              >
-              <template v-slot:activator>
-                <v-list-item-icon>
-                  <v-icon>
-                    {{ navGroupSettings.icon  }}
-                  </v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>{{ $t("navgroup." + navGroup) }}</v-list-item-title>
-              </template>
-                <v-list-item
-                  v-for="tab in getVisibleTabsInGroup(navGroup)"
-                  :key="tab.index"
-                  color="primary"
-                  @click="updateSelectedTab(tab.index)"
-                  :input-value="tab.title == selectedTabTitle"
-                  :disabled="!tab.enabled || lockNavTabs"
+        </v-col>
+        <v-divider style="border-color: var(--v-primary-base)" class="ma-6" v-if="this.$vuetify.breakpoint.lgAndUp" />
+        <v-col
+          class="ma-0 pa-0 my-3"
+          v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
+          <span style="color: var(--v-white-d-base)"
+            v-if="last_name && last_name != '' && first_name && first_name != ''">
+            {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + "@" + username }}
+          </span>
+          <span v-else>
+            {{ realm.toUpperCase() + "@" + username }}
+          </span>
+        </v-col>
+        <v-col class="ma-0 pa-0" cols="12" md="auto">
+          <div class="mt-2 mr-4">
+            <UserAccountDropdown 
+              extra-classes="mr-3 px-2"
+              icon="mdi-account-cog"
+              color="primary"
+              show-preferences-menu
+              @logout="logoutAction"
+              @openSettings="openSettings"
+              :username="activeUserName"/>
+            <ThemeChanger
+              :dark="!isThemeDark($vuetify)"
+              :light="isThemeDark($vuetify)"
+              :buttonIsSmall="true"
+            />
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  small
+                  :dark="!isThemeDark($vuetify)"
+                  :disabled="disableDomainDetailsButton"
+                  :light="isThemeDark($vuetify)"
+                  @click="fetchDomainDetails()"
+                  class="ml-3"
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
                 >
-                  <v-list-item-icon>
-                    <v-icon>{{ tab.icon }}</v-icon>
-                  </v-list-item-icon>
+                  <v-icon>
+                    mdi-cog-sync
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>{{$t("nav.tooltip.fetchDomainDetails")}}</span>
+            </v-tooltip>
+            <!-- Open NavDrawer -->
+            <v-tooltip bottom v-if="drawerIsMobile">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  small
+                  :dark="!isThemeDark($vuetify)"
+                  :light="isThemeDark($vuetify)"
+                  class="ml-3"
+                  @click="toggleDrawerState()"
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon>
+                    mdi-menu
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>{{$t("nav.menu")}}</span>
+            </v-tooltip>
+  
+            <!-- This does not appear in production -->
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn color="accent-60-s" class="ml-1"
+                  v-show="initLoad && enableDebug"
+                  :dark="!isThemeDark($vuetify)"
+                  :light="isThemeDark($vuetify)"
+                  :disabled="!enableDebug"
+                  @click="debugAction()"
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon>
+                    mdi-code-brackets
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>{{$t("nav.tooltip.debugAction")}}</span>
+            </v-tooltip>
+          </div>
+        </v-col>
+      </v-row>
+    </v-app-bar>
 
-                  <v-list-item-content>
-                    <v-list-item-title v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
-                      {{ $t("category." + tab.title + "_short") }}
-                    </v-list-item-title>
-                    <v-list-item-title v-else>
-                      {{ $t("category." + tab.title) }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action></v-list-item-action>
-                </v-list-item>
-              </v-list-group>
-
-              <!-- Bottom Tabs -->
-              <v-list-item
-                v-for="tab in getVisibleTabsInGroup('_bot')"
-                :key="tab.index"
-                color="primary"
-                @click="updateSelectedTab(tab.index)"
-                :input-value="tab.title == selectedTabTitle"
-                :disabled="!tab.enabled || lockNavTabs"
-              >
-                <v-list-item-icon>
-                  <v-icon>{{ tab.icon }}</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                  <v-list-item-title v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
-                    {{ $t("category." + tab.title + "_short") }}
-                  </v-list-item-title>
-                  <v-list-item-title v-else>
-                    {{ $t("category." + tab.title) }}
-                  </v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                </v-list-item-action>
-              </v-list-item>
-            </v-list>
-
-            <!-- Nav Collapse -->
-            <template v-slot:prepend>
-              <v-list dense nav expand v-if="$vuetify.breakpoint.mdAndUp">
-                <v-list-item @click="navDrawerKeepOpen = !navDrawerKeepOpen">
-                  <v-list-item-icon class="align-self-center justify-center">
-                    <v-slide-x-reverse-transition>
-                      <v-icon small v-if="!navDrawerKeepOpen">mdi-arrow-expand-right</v-icon>
-                    </v-slide-x-reverse-transition>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{ navDrawerKeepOpen ? $t("nav.collapse") : $t("nav.keepOpen") }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item-action class="my-0">
-                    <v-slide-x-transition>
-                      <v-icon small v-if="navDrawerKeepOpen">mdi-arrow-collapse-left</v-icon>
-                    </v-slide-x-transition>
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list>
-            </template>
-          </v-navigation-drawer>
-      </v-col>
-
+    <NavigationDrawer
+      ref="navigationDrawerMobile"
+      v-if="drawerIsMobile"
+      :selectedTabTitle="selectedTabTitle"
+      :selectedTab="selectedTab"
+      :navGroups="navGroups"
+      :topTabs="getVisibleTabsInGroup('_top')"
+      :bottomTabs="getVisibleTabsInGroup('_bot')"
+      :getVisibleTabsInGroup="getVisibleTabsInGroup"
+      @updateSelectedTab="updateSelectedTab"
+      mobile
+    />
+    <v-row class="ma-0 pa-0 align-stretch pb-10" style="position: relative; height: 100%;">
+      <NavigationDrawer
+        ref="navigationDrawerDesktop"
+        v-if="drawerIsDesktop"
+        :selectedTabTitle="selectedTabTitle"
+        :selectedTab="selectedTab"
+        :navGroups="navGroups"
+        :topTabs="getVisibleTabsInGroup('_top')"
+        :bottomTabs="getVisibleTabsInGroup('_bot')"
+        :getVisibleTabsInGroup="getVisibleTabsInGroup"
+        @updateSelectedTab="updateSelectedTab"
+      />
       <v-col cols="min" class="ma-0 pa-0">
         <v-tabs-items v-model="activeTab" class="transparent-body">
           <v-tab-item v-for="tab in getVisibleTabs" :key="tab.index">
@@ -382,6 +288,7 @@
 <script>
 // @ is an alias to /src
 import ModularViewContainer from "@/components/ModularViewContainer.vue"
+import NavigationDrawer from "@/components/NavigationDrawer.vue"
 import LanguageSelector from "@/components/LanguageSelector.vue"
 import UserAccountDropdown from "@/components/User/UserAccountDropdown.vue"
 import UserSettings from "@/components/User/UserSettings.vue"
@@ -436,9 +343,6 @@ export default {
       lockNavTabs: false,
       langChanged: false,
       enableDebug: false,
-      navDrawerOpen: false,
-      navDrawerKeepOpen: false,
-      navDrawerOpenGroups: {},
       activeTab: 0,
       tableData: {
         headers: [],
@@ -605,6 +509,12 @@ export default {
     // this.requestRefresh = this.selectedTabTitle
   },
   computed: {
+    drawerIsDesktop(){
+      return this.$vuetify.breakpoint.lgAndUp
+    },
+    drawerIsMobile(){
+      return !this.drawerIsDesktop
+    },
     getVisibleTabs(){
       return this.navTabs.filter(x => !x.hidden)
     },
@@ -623,12 +533,15 @@ export default {
     }
   },
   methods: {
-    log(v){
-      console.log(v);
-    },
     ////////////////////////////////////////////////////////////////////////////
     // General Component Methods
     ////////////////////////////////////////////////////////////////////////////
+    toggleDrawerState(){
+      if (this.drawerIsDesktop)
+        this.$refs.navigationDrawerDesktop.toggle()
+      else
+        this.$refs.navigationDrawerMobile.toggle()
+    },
     getTabIndex(name){
       return this.navTabs.findIndex(v => name == v.title)
     },
@@ -810,19 +723,19 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #home-footer {
   min-width: 100%;
   position: fixed;
   bottom: 0;
-  z-index: 2;
+  z-index: var(--home-footer-z-index);
 }
 
 #home-footer-buttons {
   min-width: 100%;
   position: fixed;
   bottom: 2.5rem;
-  z-index: 2;
+  z-index: var(--home-footer-z-index);
 }
 
 .transparent-body {

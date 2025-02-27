@@ -1,0 +1,161 @@
+<template>
+	<!-- SIDEBAR -->
+	<v-navigation-drawer
+		id="main-nav-drawer"
+		ref="mainNavDrawer"
+		v-model="navDrawerOpen"
+		:expand-on-hover="!navDrawerKeepOpen && !mobile"
+		:absolute="!navDrawerKeepOpen && !mobile"
+		:mini-variant="!navDrawerOpen && !mobile"
+		:permanent="!mobile"
+		:temporary="mobile"
+		:fixed="mobile"
+		:bottom="mobile"
+		:width="320"
+	>
+		<v-list dense nav expand>
+			<!-- Top Tabs -->
+			<v-list-item
+				v-for="tab in topTabs"
+				:key="tab.index"
+				color="primary"
+				:input-value="tab.title == selectedTabTitle"
+				@click="updateSelectedTab(tab.index)"
+				:disabled="!tab.enabled || lockNavTabs"
+			>
+				<v-list-item-icon>
+					<v-icon>{{ tab.icon }}</v-icon>
+				</v-list-item-icon>
+
+				<v-list-item-content>
+					<v-list-item-title>
+						{{ $t("category." + tab.title) }}
+					</v-list-item-title>
+				</v-list-item-content>
+				<v-list-item-action>
+				</v-list-item-action>
+			</v-list-item>
+			<!-- Grouped Tabs -->
+			<v-list-group
+				v-for="navGroupSettings, navGroup in navGroups" :key="navGroup"
+				:group="navGroup"
+				:value="navDrawerOpenGroups.group"
+				:disabled="!navGroupSettings.enabled"
+				:append-icon="!navGroupSettings.enabled ? 'mdi-minus' : undefined"
+				multiple
+			>
+			<template v-slot:activator>
+				<v-list-item-icon>
+					<v-icon>
+						{{ navGroupSettings.icon  }}
+					</v-icon>
+				</v-list-item-icon>
+				<v-list-item-title>{{ $t("navgroup." + navGroup) }}</v-list-item-title>
+			</template>
+				<v-list-item
+					v-for="tab in getVisibleTabsInGroup(navGroup)"
+					:key="tab.index"
+					color="primary"
+					@click="updateSelectedTab(tab.index)"
+					:input-value="tab.title == selectedTabTitle"
+					:disabled="!tab.enabled || lockNavTabs"
+				>
+					<v-list-item-icon>
+						<v-icon>{{ tab.icon }}</v-icon>
+					</v-list-item-icon>
+
+					<v-list-item-content>
+						<v-list-item-title v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
+							{{ $t("category." + tab.title + "_short") }}
+						</v-list-item-title>
+						<v-list-item-title v-else>
+							{{ $t("category." + tab.title) }}
+						</v-list-item-title>
+					</v-list-item-content>
+					<v-list-item-action></v-list-item-action>
+				</v-list-item>
+			</v-list-group>
+
+			<!-- Bottom Tabs -->
+			<v-list-item
+				v-for="tab in getVisibleTabsInGroup('_bot')"
+				:key="tab.index"
+				color="primary"
+				@click="updateSelectedTab(tab.index)"
+				:input-value="tab.title == selectedTabTitle"
+				:disabled="!tab.enabled || lockNavTabs"
+			>
+				<v-list-item-icon>
+					<v-icon>{{ tab.icon }}</v-icon>
+				</v-list-item-icon>
+
+				<v-list-item-content>
+					<v-list-item-title v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
+						{{ $t("category." + tab.title + "_short") }}
+					</v-list-item-title>
+					<v-list-item-title v-else>
+						{{ $t("category." + tab.title) }}
+					</v-list-item-title>
+				</v-list-item-content>
+				<v-list-item-action>
+				</v-list-item-action>
+			</v-list-item>
+		</v-list>
+
+		<!-- Nav Collapse -->
+		<template v-slot:prepend>
+			<v-list dense nav expand v-if="!mobile">
+				<v-list-item @click="navDrawerKeepOpen = !navDrawerKeepOpen">
+					<v-list-item-icon class="align-self-center justify-center">
+						<v-slide-x-reverse-transition>
+							<v-icon small v-if="!navDrawerKeepOpen">mdi-arrow-expand-right</v-icon>
+						</v-slide-x-reverse-transition>
+					</v-list-item-icon>
+					<v-list-item-content>
+						<v-list-item-title>
+							{{ navDrawerKeepOpen ? $t("nav.collapse") : $t("nav.keepOpen") }}
+						</v-list-item-title>
+					</v-list-item-content>
+					<v-list-item-action class="my-0">
+						<v-slide-x-transition>
+							<v-icon small v-if="navDrawerKeepOpen">mdi-arrow-collapse-left</v-icon>
+						</v-slide-x-transition>
+					</v-list-item-action>
+				</v-list-item>
+			</v-list>
+		</template>
+	</v-navigation-drawer>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				navDrawerOpen: true,
+				navDrawerKeepOpen: false,
+				navDrawerOpenGroups: {}
+			}
+		},
+		props: {
+			mobile: {
+				type: Boolean,
+				default: false
+			},
+			selectedTab: Number,
+			selectedTabTitle: String,
+			navGroups: Object,
+			topTabs: Array,
+			bottomTabs: Array,
+			lockNavTabs: Boolean,
+			getVisibleTabsInGroup: Function
+		},
+		methods: {
+			updateSelectedTab(tabIndex) {
+				this.$emit("updateSelectedTab", tabIndex);
+			},
+			toggle(){
+				this.navDrawerOpen = !this.navDrawerOpen;
+			},
+		}
+	}
+</script>
