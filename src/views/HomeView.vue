@@ -724,6 +724,10 @@ export default {
 </script>
 
 <style lang="scss">
+:root {
+  --home-footer-z-index: 6;
+}
+
 #home-footer {
   min-width: 100%;
   position: fixed;
