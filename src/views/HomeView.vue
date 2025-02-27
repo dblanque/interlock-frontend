@@ -370,10 +370,10 @@ export default {
           group: "_top",
         },
         {
-          title: "sso-application",
+          title: "application",
           enabled: true,
           icon: "mdi-application-cog",
-          route: "sso-application",
+          route: "application",
           group: "_top",
         },
         {

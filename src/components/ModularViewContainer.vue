@@ -21,7 +21,7 @@
 	</v-container>
 
 	<!-- APPLICATION -->
-	<v-container v-if="viewTitle == 'sso-application'" :class="getContainerClasses()">
+	<v-container v-if="viewTitle == 'application'" :class="getContainerClasses()">
 		<ApplicationView
 			ref="ApplicationView"
 			:viewTitle="viewTitle"
