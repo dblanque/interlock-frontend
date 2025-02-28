@@ -21,7 +21,9 @@
 				<v-card-text class="ma-0 pa-0">
 						<v-row class="ma-0 pa-0">
 						<v-col class="ma-0 pa-0">
+							<!-- Application Form -->
 								<v-form ref="applicationForm" @submit.prevent>
+									<!-- Application Name -->
 									<v-row justify="center" align="center" class="ma-0 pa-0 px-8">
 											<v-col cols="12" lg="6">
 													<v-text-field
@@ -33,6 +35,7 @@
 															:label="$tc('section.applications.attribute.name')"
 													/>
 											</v-col>
+											<!-- Redirect URIs -->
 											<v-col cols="12" lg="6">
 													<v-text-field
 															v-model="applicationCopy.redirect_uris"
@@ -44,6 +47,7 @@
 															:hint="$t('section.applications.dialog.create.redirectUriPlaceholder')"
 													/>
 											</v-col>
+											<!-- Client ID -->
 											<v-col cols="8">
 												<v-row no-gutters>
 													<v-text-field
@@ -73,6 +77,7 @@
 													</v-tooltip>
 												</v-row>
 											</v-col>
+											<!-- Client Secret -->
 											<v-col cols="8">
 												<v-row no-gutters>
 													<v-text-field
@@ -106,6 +111,7 @@
 												</v-row>
 											</v-col>
 									</v-row>
+									<!-- Application State Toggle -->
 									<v-row justify="center" align="center" no-gutters>
 										<v-checkbox
 												on-icon="mdi-checkbox-marked"
@@ -116,6 +122,7 @@
 												:label="$t('words.enabled')"
 												dense/>
 									</v-row>
+									<!-- Consent Options -->
 									<v-row justify="center" align="center" no-gutters>
 											<v-checkbox
 													on-icon="mdi-checkbox-marked"
@@ -134,6 +141,7 @@
 													:label="$t('section.applications.attribute.reuse_consent')"
 													dense/>
 									</v-row>
+									<!-- Scope Options -->
 									<v-row justify="center" align="center" no-gutters>
 										<v-card outlined class="pa-6" max-width="600" width="100%">
 												<v-row align="center" justify="center" class="ma-0 pa-0">
