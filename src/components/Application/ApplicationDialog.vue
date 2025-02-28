@@ -57,7 +57,7 @@
 													<v-tooltip bottom>
 													<template v-slot:activator="{ on, attrs }">
 															<v-btn small icon 
-															@click="copyText(applicationCopy.client_secret)"
+															@click="copyText(applicationCopy.client_id)"
 															@click.stop
 															class="ml-2"
 															color="primary"
