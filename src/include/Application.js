@@ -10,6 +10,7 @@ class Application extends ApiModel{
 		scopes;
         request_consent;
         reuse_consent;
+        enabled;
     /**
      * Fetches model instance from API by id.
      * @param {Number} id 
@@ -33,8 +34,12 @@ class Application extends ApiModel{
         return await interlock_backend.call('application/delete', data)
     }
 
-    async fetch(data){
-        return await interlock_backend.call('application/fetch', data)
+    async fetch(id){
+        return await interlock_backend.call('application/fetch', id)
+    }
+
+    async update(data){
+        return await interlock_backend.call('application/update', data)
     }
 }
 

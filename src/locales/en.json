@@ -249,7 +249,9 @@
           "fileReader": "File Reader Exception",
           "networkError": "AXIOS: Network Error",
           "applications":{
-            "application_exists": "SSO Application already exists"
+            "application_exists": "SSO Application already exists",
+            "application_does_not_exist": "SSO Application does not exist",
+            "application_field_does_not_exist": "Field for SSO Application does not exist"
           },
           "auth":{
               "invalid_credentials": "Incorrect Credentials",
@@ -510,6 +512,10 @@
           "step3":"Application Created",
           "redirectUriPlaceholder":"https://<your_service_url>/oidc/callback",
           "success":"Application Created Successfully"
+        },
+        "update":{
+          "copyId":"Copy Client ID",
+          "copySecret":"Copy Client Secret"
         },
         "delete":{
           "message":"Are you sure you wish to delete the SSO Application"

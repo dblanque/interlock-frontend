@@ -52,6 +52,17 @@ const actions = {
             })
         })
     },
+
+    update: (data)=>{
+        let id = data.id
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.put(interlock_backend.urls.application.update.replace("{pk}", id), data).then(response => {
+                resolve(response.data)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
 }
 
 export default actions

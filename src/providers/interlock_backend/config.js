@@ -167,7 +167,7 @@ const urls = {
     application: {
         list: "api/application/",
         insert: "api/application/insert/",
-        update: "api/application/update/",
+        update: "api/application/{pk}/",
         fetch: "api/application/{pk}/fetch/",
         delete: "api/application/{pk}/delete/",
     },

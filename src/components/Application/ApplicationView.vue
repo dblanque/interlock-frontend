@@ -26,9 +26,50 @@
 					</v-btn>
 				</v-row>
 			</template>
-			<!-- USER ACTIONS -->
+
+			<!-- APPLICATION STATUS -->
+			<template v-slot:[`item.enabled`]="{ item }">
+				<!-- Enable Application Button -->
+				<v-tooltip color="red" bottom v-if="item.enabled">
+				<template v-slot:activator="{ on, attrs }">
+					<v-btn icon
+					rounded
+					v-bind="attrs"
+					v-on="on"
+					:disabled="loading"
+					@click="toggleApplicationStatus(item, false)"
+					>
+					<v-icon color="valid-40-s">
+					mdi-check
+					</v-icon>
+					</v-btn>
+				</template>
+				<span>{{ $t('actions.clickTo') + " " + $t('actions.disable') + " " + item.name }}</span>
+				</v-tooltip>
+
+				<!-- Disable Application Button -->
+				<v-tooltip color="green" bottom v-else-if="!item.enabled">
+				<template v-slot:activator="{ on, attrs }">
+					<v-btn icon
+					rounded
+					v-bind="attrs"
+					v-on="on"
+					:disabled="loading"
+					@click="toggleApplicationStatus(item, true)"
+					>
+					<v-icon color="error-60-s">
+					mdi-close
+					</v-icon>
+					</v-btn>
+				</template>
+				<span>{{ $t('actions.clickTo') + " " + $t('actions.enable') + " " + item.name }}</span>
+				</v-tooltip>
+			</template>
+
+
+			<!-- APPLICATION ACTIONS -->
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-row class="my-1">
+				<v-row class="my-1" justify="center">
 					<v-tooltip bottom>
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn icon
@@ -99,13 +140,15 @@
 		<!-- APPLICATION VIEW OR UPDATE DIALOG -->
 		<v-dialog eager max-width="1000px" v-model="dialogs['update']">
 			<ApplicationDialog
+			ref="ApplicationDialog"
+			:refreshLoading="loading"
 			:viewKey="'update'"
 			:applicationObject="applicationObject"
-			ref="ApplicationDialog"
 			:selectedApplication="selectedApplication"
 			:editFlag="editFlag"
+			@editToggle="editFlag = !editFlag"
 			@closeDialog="closeDialog"
-			@refreshApplication="listApplicationItems"
+			@refreshApplication="refreshApplication"
 			/>
 		</v-dialog>
 
@@ -181,6 +224,7 @@ export default {
 					headerDict.text = this.$tc('section.applications.attribute.' + header, 1)
 					headerDict.value = header
 					if (header == 'enabled') {
+						headerDict.text = this.$t("words.enabled")
 						headerDict.align = 'center'
 						headerDict.sortable = false
 					}
@@ -222,7 +266,6 @@ export default {
 			await this.applicationObject.fetch(this.selectedApplication.id)
 			.then(response => {
 				this.applicationObject = response.data
-				console.log(this.applicationObject)
 				if (this.dialogs.update !== true) {
 					this.openDialog('update')
 				}
@@ -243,8 +286,41 @@ export default {
 				this.error = true;
 			})
 		},
-		async refreshApplication(){
-			await this.fetchApplication(item, this.editableForm, true).then(()=>{
+		async toggleApplicationStatus(applicationObject, state){
+			this.loading = true
+			this.error = false
+			this.errorMsg = false
+			this.selectedApplication = {}
+			this.selectedApplication = applicationObject
+			this.selectedApplication.enabled = state
+			let data = Object.assign({}, this.selectedApplication)
+			let action = state === true ? "enabled" : "disabled"
+			await new Application({}).update(data)
+			.then(() => {
+				this.loading = false
+				this.error = false
+				this.errorMsg = false
+				this.listApplicationItems(false);
+				notificationBus.$emit('createNotification', 
+					{
+					message: (this.$tc("classes.application", 1) + " " + this.$t("words."+action)).toUpperCase(), 
+					type: 'success'
+					});
+			})
+			.catch(error => {
+				console.error(error)
+				this.loading = false
+				this.error = true
+				this.errorMsg = this.getMessageForCode(error)
+				notificationBus.$emit('createNotification', 
+				{
+					message: this.errorMsg.toUpperCase(), 
+					type: 'error'
+				});
+			})
+		},
+		async refreshApplication(item){
+			await this.fetchApplication(item, this.editFlag, true).then(()=>{
 			if (this.$refs.ApplicationDialog != undefined)
 				this.$refs.ApplicationDialog.syncApplication()
 			});

@@ -255,7 +255,9 @@
       "fileReader": "Excepción del Lector de Archivos",
       "networkError": "AXIOS: Error de Red",
       "applications":{
-        "application_exists": "La Aplicación SSO ya existe"
+        "application_exists": "La Aplicación SSO ya existe",
+            "application_does_not_exist": "La Aplicación SSO no existe",
+            "application_field_does_not_exist": "Campo Inexistente para Aplicación SSO"
       },
       "auth": {
         "invalid_credentials": "Credenciales Incorrectos",
@@ -516,6 +518,10 @@
           "step3":"Aplicación Creada",
           "redirectUriPlaceholder":"https://<url_de_servicio>/oidc/callback",
           "success":"Aplicación Creada Exitosamente"
+        },
+        "update":{
+          "copyId":"Copiar ID de Cliente",
+          "copySecret":"Copiar Secreto de Cliente"
         },
         "delete":{
           "message":"¿Está seguro de borrar la Aplicación SSO"
