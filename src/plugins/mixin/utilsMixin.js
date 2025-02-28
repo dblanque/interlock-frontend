@@ -4,6 +4,19 @@
 
 const utilsMixin = {
     methods:{
+        toCamelCase(e) {
+            return e.replace(/_([a-z])/g, (g) =>  g[1].toUpperCase());
+        },
+        toSnakeCase(e) {
+            if (e.toLowerCase() === e) {
+                return e;
+            }
+            return e.match(/([A-Z])/g).reduce(
+                (str, c) => str.replace(new RegExp(c), '_' + c.toLowerCase()),
+                e
+            )
+            .substring((e.slice(0, 1).match(/([A-Z])/g)) ? 1 : 0);
+        },
         // ----------------------------- LDAP Permissions ----------------------------- //
         calcEnabledPermissions(permissionList) {
             let result = 0
@@ -82,10 +95,13 @@ const utilsMixin = {
             let suffix
 
             if(codeToUse != undefined && codeToUse != null){
+                if (typeof codeToUse !== 'string')
+                    codeToUse = toString(codeToUse)
+
                 if (codeToUse.length < 40)
-                suffix = " (" + toString(codeToUse) + ")"
+                    suffix = ` (${codeToUse})`
                 else
-                suffix = " (" + toString(codeToUse).substring(0, 40) + "...)"
+                    suffix = ` (${codeToUse.substring(0, 40)}...)`
             }
 
             // OTP ---------------------------------------------------------- //
@@ -102,6 +118,8 @@ const utilsMixin = {
                 return this.$t('error.codes.groups.'+codeToUse)
             else if (/setting_.*/.test(codeToUse))
                 return this.$t('error.codes.settings.'+codeToUse)
+            else if (/application_.*/.test(codeToUse))
+                return this.$t('error.codes.application.'+codeToUse)
             else
                 switch(codeToUse){
                 case 'ERR_UNKNOWN':
