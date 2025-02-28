@@ -398,7 +398,7 @@ export default {
 	}
   },
   created() {
-	this.listUserItems();
+		this.listUserItems();
   },
   watch: {
 	'computedDialogs': {
@@ -527,49 +527,50 @@ export default {
 	  this.tableData.selected = []
 	  await new User({}).list()
 	  .then(response => {
-		var userHeaders = response.headers
-		var users = response.users
-		// Reset Headers Array every time you list to avoid infinite header multiplication
-		this.resetDataTable()
-		var headerDict = {}
-		userHeaders.forEach(header => {
-		  headerDict = {}
-		  headerDict.text = this.$t('ldap.attributes.' + header)
-		  headerDict.value = header
-		  if (header == 'is_enabled') {
+			let userHeaders = response.headers
+			let users = response.users
+			// Reset Headers Array every time you list to avoid infinite header multiplication
+			this.resetDataTable()
+			let headerDict = {}
+			userHeaders.forEach(header => {
+				headerDict = {}
+				headerDict.text = this.$t('ldap.attributes.' + header)
+				headerDict.value = header
+				if (header == 'is_enabled') {
+				headerDict.align = 'center'
+				headerDict.sortable = false
+				}
+				this.tableData.headers.push(headerDict)
+			});
+			headerDict = {}
+			headerDict.text = this.$t('actions.label')
+			headerDict.value = 'actions'
 			headerDict.align = 'center'
 			headerDict.sortable = false
-		  }
-		  this.tableData.headers.push(headerDict)
-		});
-		headerDict = {}
-		headerDict.text = this.$t('actions.label')
-		headerDict.value = 'actions'
-		headerDict.align = 'center'
-		headerDict.sortable = false
-		this.tableData.headers.push(headerDict)
-		this.tableData.items = users
-		for (let i = 0; i < this.tableData.items.length; i++) {
-		  const user = this.tableData.items[i];
-		  if (user.username == localStorage.getItem('user.username') ||
-			  user.username == 'Administrator' && localStorage.getItem('user.username') == 'admin') {
-			this.tableData.items[i]["isSelectable"] = false
-			break
-		  }
-		}
-		this.loading = false
-		this.error = false
-		if (emitNotif == true)
-		  this.createSnackbar({message: (this.$tc("classes.user", users.length) + " " + this.$tc("words.loaded.m", users.length)).toUpperCase(), type: 'success'})
+			this.tableData.headers.push(headerDict)
+			this.tableData.items = users
+			for (let i = 0; i < this.tableData.items.length; i++) {
+				const user = this.tableData.items[i];
+				if (user.username == localStorage.getItem('user.username') ||
+					user.username == 'Administrator' && localStorage.getItem('user.username') == 'admin') {
+				this.tableData.items[i]["isSelectable"] = false
+				break
+				}
+			}
+			this.loading = false
+			this.error = false
+			this.errorMsg = ""
+			if (emitNotif == true)
+				this.createSnackbar({message: (this.$tc("classes.user", users.length) + " " + this.$tc("words.loaded.m", users.length)).toUpperCase(), type: 'success'})
 	  })
 	  .catch(error => {
-		console.error(error)
-		this.loading = false
-		this.error = true
-		this.errorMsg = this.getMessageForCode(error)
-		notificationBus.$emit('createNotification', 
-			{message: this.errorMsg.toUpperCase(), type: 'error'}
-		)
+			console.error(error)
+			this.loading = false
+			this.error = true
+			this.errorMsg = this.getMessageForCode(error)
+			notificationBus.$emit('createNotification', 
+				{message: this.errorMsg.toUpperCase(), type: 'error'}
+			)
 	  })
 	},
 	async unlockUser(userObject){
