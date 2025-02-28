@@ -248,6 +248,9 @@
           "invalidCSVHeaders": "Invalid CSV Headers",
           "fileReader": "File Reader Exception",
           "networkError": "AXIOS: Network Error",
+          "application":{
+            "application_exists": "SSO Application already exists"
+          },
           "auth":{
               "invalid_credentials": "Incorrect Credentials",
               "verification_code": "Incorrect Code, Please try again",
@@ -510,7 +513,8 @@
       },
       "attribute":{
         "name":"Application Name | Application Names",
-        "redirectUri":"Redirect URI | Redirect URIs"
+        "redirect_uris":"Redirect URI | Redirect URIs",
+        "addScope":"Add Scope"
       }
     },
     "dns":{

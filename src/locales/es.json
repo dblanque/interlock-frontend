@@ -254,6 +254,9 @@
       "invalidCSVHeaders": "Cabecera de CSV Inválida",
       "fileReader": "Excepción del Lector de Archivos",
       "networkError": "AXIOS: Error de Red",
+      "application":{
+        "application_exists": "La Aplicación SSO ya existe"
+      },
       "auth": {
         "invalid_credentials": "Credenciales Incorrectos",
         "verification_code": "Codigo Incorrecto, Intente nuevamente",
@@ -516,7 +519,8 @@
       },
       "attribute":{
         "name":"Nombre de Aplicación | Nombres de Aplicación",
-        "redirectUri":"URI de Redirección | URIs de Redirección"
+        "redirect_uris":"URI de Redirección | URIs de Redirección",
+        "addScope":"Añadir Alcance / Scope"
       }
     },
     "dns":{

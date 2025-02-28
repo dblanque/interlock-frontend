@@ -65,17 +65,20 @@
 			
 			<v-tooltip bottom>
 				<template v-slot:activator="{ on, attrs }">
-					<v-btn 
-					elevation="0" 
-					icon 
-					small>
-					<v-icon small>
-						mdi-delete
-					</v-icon>
+				<v-btn icon
+					rounded
+					v-bind="attrs"
+					v-on="on"
+					small
+					:disabled="loading"
+				>
+				<v-icon small color="red">
+					mdi-delete
+				</v-icon>
 				</v-btn>
-			</template>
-			<span>{{ $t('actions.delete') }}</span>
-		</v-tooltip>
+				</template>
+				<span>{{ $t('actions.delete') }}</span>
+			</v-tooltip>
 		</v-row>
 			</template>
 		</v-data-table>
@@ -96,12 +99,14 @@
 import { notificationBus } from '@/main.js';
 import Application from '@/include/Application.js';
 import ApplicationCreate from '@/components/Application/ApplicationCreate.vue';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 
 export default {
 	name: 'ApplicationView',
 	components: {
 		ApplicationCreate
 	},
+	mixins: [ utilsMixin ],
 	props: {
 		viewTitle: String,
 		snackbarTimeout: Number
@@ -121,11 +126,49 @@ export default {
 			}
 		}
 	},
+	created() {
+		this.listApplicationItems();
+	},
 	methods: {
 		async listApplicationItems(emitNotif=true) {
+			this.loading = true
+			this.error = false
+			this.tableData.headers = []
+			this.tableData.items = []
+			this.tableData.selected = []
 			await new Application({}).list()
 			.then(response => {
-				console.log(response)
+				this.tableData.items = response.applications
+				this.tableData.headers = []
+				let headerDict = {}
+				response.headers.forEach(header => {
+					headerDict = {}
+					headerDict.text = this.$tc('section.application.attribute.' + header, 1)
+					headerDict.value = header
+					if (header == 'enabled') {
+						headerDict.align = 'center'
+						headerDict.sortable = false
+					}
+					this.tableData.headers.push(headerDict)
+				});
+				headerDict = {}
+				headerDict.text = this.$t('actions.label')
+				headerDict.value = 'actions'
+				headerDict.align = 'center'
+				headerDict.sortable = false
+				this.tableData.headers.push(headerDict)
+				this.loading = false
+				this.error = false
+				this.errorMsg = ""
+			})
+			.catch(error => {
+				console.error(error)
+				this.loading = false
+				this.error = true
+				this.errorMsg = this.getMessageForCode(error)
+				notificationBus.$emit('createNotification', 
+					{message: this.errorMsg.toUpperCase(), type: 'error'}
+				)
 			})
 		},
 		openDialog(key){

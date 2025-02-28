@@ -194,6 +194,12 @@ export default {
 			switch (newValue) {
 				case 'home':
 					break;
+				case 'application':
+					if (this.$refs.ApplicationView != undefined) {
+						console.log("Requested refresh for view component "+ newValue)
+						this.$refs.ApplicationView.listApplicationItems()
+					}
+					break;
 				case 'ldap-dirtree':
 					if (this.$refs.DirtreeView != undefined) {
 						console.log("Requested refresh for view component "+ newValue)

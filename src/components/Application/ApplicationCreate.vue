@@ -39,7 +39,7 @@
             <!-- Steps Content -->
             <v-stepper-items>
                 <!-- Basics -->
-                <v-stepper-content step="1">
+                <v-stepper-content step="1" class="mx-2">
                     <v-form ref="appCreateForm" @submit.prevent>
                         <v-row justify="center" class="py-2">
                             <v-col cols="12" md="6">
@@ -57,11 +57,45 @@
                                     dense
                                     @keydown.enter="nextStep"
                                     :rules="[this.fieldRules(appToCreate.redirect_uris, 'ge_endpoint', true)]"
-                                    :label="$tc('section.application.attribute.redirectUri')"
+                                    :label="$tc('section.application.attribute.redirect_uris')"
                                     :hint="$t('section.application.dialog.create.redirectUriPlaceholder')"
                                 />
                             </v-col>
                         </v-row>
+                        <v-card outlined class="pa-6">
+                            <v-row align="center" justify="center" class="ma-0 pa-0">
+                                <v-col cols="4" class="ma-0 pa-0">
+                                    <v-text-field
+                                        v-model="scopeToAdd"
+                                        dense
+                                        @keydown.enter="addScopeValue"
+                                        :rules="[this.fieldRules(scopeToAdd, 'ge_lettersStrict', false)]"
+                                        :label="$tc('section.application.attribute.addScope')"
+                                    />
+                                </v-col>
+                                <v-col cols="auto" class="ma-0 pa-0">
+                                    <v-btn icon @click="addScopeValue">
+                                        <v-icon>mdi-plus</v-icon>
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12" class="ma-0 pa-0">
+                                <v-list dense outlined>
+                                    <v-list-item dense v-for="scope in appToCreate.scopes">
+                                        <v-list-item-content>
+                                            <v-list-item-title>{{ scope }}</v-list-item-title>
+                                        </v-list-item-content>
+                                        <v-list-item-action>
+                                            <v-btn small icon @click="removeScopeValue(scope)">
+                                                <v-icon>mdi-minus</v-icon>
+                                            </v-btn>
+                                        </v-list-item-action>
+                                    </v-list-item>
+                                </v-list>
+                                </v-col>
+                            </v-row>
+                        </v-card>
                     </v-form>
                 </v-stepper-content>
                 
@@ -189,6 +223,7 @@ export default {
       return {
         createStage: 1,
         appToCreate: {},
+        scopeToAdd: "",
         success: false,
         loading: true,
         error: false,
@@ -213,11 +248,23 @@ export default {
     computed:{
     },
     methods: {
+        addScopeValue(){
+            if (!this.appToCreate.scopes.includes(this.scopeToAdd))
+                this.appToCreate.scopes.push(this.scopeToAdd)
+            this.scopeToAdd = ""
+        },
+        removeScopeValue(v){
+            const index = this.appToCreate.scopes.indexOf(v);
+            if (index >= 0) {
+                this.appToCreate.scopes.splice(index, 1)
+            }
+        },
         newApplication(){
             this.appToCreate = new Application({})
             this.$refs.appCreateForm.resetValidation()
             this.appToCreate.name = "Proxmox VE"
             this.appToCreate.redirect_uris = "https://proxmox.brconsulting.info:8006/oidc/callback"
+            this.appToCreate.scopes = ["openid","profile","email","groups"]
             this.createStage = 1;
             this.success = false
             this.errorMsg = ""
@@ -258,6 +305,7 @@ export default {
             this.$emit('closeDialog', this.viewKey, refresh);
         },
         async createApplication(){
+            this.loading = true
             this.error = false
             this.errorMsg = ""
             this.createStage += 1
