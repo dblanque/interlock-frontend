@@ -132,7 +132,7 @@
 	export default {
 		data() {
 			return {
-				navDrawerOpen: true,
+				navDrawerOpen: false,
 				navDrawerKeepOpen: false,
 				navDrawerOpenGroups: {},
 				componentColor: "primary-45",
@@ -155,6 +155,8 @@
 		created() {
 			if (this.expandedOnCreate === true)
 				this.navDrawerKeepOpen = true;
+			if (!this.mobile)
+				this.navDrawerOpen = true;
 		},
 		methods: {
 			updateSelectedTab(tabIndex) {
