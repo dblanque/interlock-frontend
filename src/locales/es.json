@@ -516,11 +516,16 @@
           "step3":"Aplicación Creada",
           "redirectUriPlaceholder":"https://<url_de_servicio>/oidc/callback",
           "success":"Aplicación Creada Exitosamente"
+        },
+        "delete":{
+          "message":"¿Está seguro de borrar la Aplicación SSO"
         }
       },
       "attribute":{
         "name":"Nombre de Aplicación | Nombres de Aplicación",
         "redirect_uris":"URI de Redirección | URIs de Redirección",
+        "require_consent":"Requerir Consentimiento",
+        "reuse_consent":"Re-utilizar Consentimiento",
         "addScope":"Añadir Alcance / Scope"
       }
     },

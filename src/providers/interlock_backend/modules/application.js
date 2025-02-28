@@ -24,9 +24,9 @@ const actions = {
         })
     },
 
-    delete: (data)=>{
+    delete: (id)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.application.delete, data)
+            interlock_backend.request.delete(interlock_backend.urls.application.delete.replace("{pk}", id))
             .then(response => {
                 resolve(response.data);
             }).catch((e) => reject(e))
@@ -43,9 +43,9 @@ const actions = {
         })
     },
 
-    fetch: (data)=>{
+    fetch: (id)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.application.fetch, data).then(response => {
+            interlock_backend.request.get(interlock_backend.urls.application.fetch.replace("{pk}", id)).then(response => {
                 resolve(response.data)
             }).catch((e) => {
                 reject(e)

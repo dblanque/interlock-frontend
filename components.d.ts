@@ -9,6 +9,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     AboutDialog: typeof import('./src/components/AboutDialog.vue')['default']
     ApplicationCreate: typeof import('./src/components/Application/ApplicationCreate.vue')['default']
+    ApplicationDelete: typeof import('./src/components/Application/ApplicationDelete.vue')['default']
+    ApplicationDialog: typeof import('./src/components/Application/ApplicationDialog.vue')['default']
+    ApplicationUpdate: typeof import('./src/components/Application/ApplicationUpdate.vue')['default']
     ApplicationView: typeof import('./src/components/Application/ApplicationView.vue')['default']
     BackendStatus: typeof import('./src/components/BackendStatus.vue')['default']
     CNObjectList: typeof import('./src/components/CNObjectList.vue')['default']

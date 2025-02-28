@@ -36,6 +36,7 @@
 							v-bind="attrs"
 							v-on="on"
 							small
+							@click="fetchApplication(item)"
 							:disabled="loading"
 							>
 							<v-icon small color="primary">
@@ -54,6 +55,7 @@
 						v-on="on"
 						small
 						:disabled="loading"
+						@click="fetchApplication(item, true)"
 						>
 						<v-icon small color="primary">
 							mdi-pencil
@@ -67,6 +69,7 @@
 				<template v-slot:activator="{ on, attrs }">
 				<v-btn icon
 					rounded
+					@click="deleteApplication(item)"
 					v-bind="attrs"
 					v-on="on"
 					small
@@ -83,11 +86,35 @@
 			</template>
 		</v-data-table>
 
-		<!-- USER EDIT DIALOG -->
+		<!-- APPLICATION CREATE DIALOG -->
 		<v-dialog eager max-width="1000px" v-model="dialogs['create']">
 			<ApplicationCreate
 			:viewKey="'create'"
 			ref="ApplicationCreate"
+			@closeDialog="closeDialog"
+			@refresh="listApplicationItems"
+			/>
+		</v-dialog>
+
+		<!-- APPLICATION VIEW OR UPDATE DIALOG -->
+		<v-dialog eager max-width="1000px" v-model="dialogs['update']">
+			<ApplicationDialog
+			:viewKey="'update'"
+			:applicationObject="applicationObject"
+			ref="ApplicationDialog"
+			:selectedApplication="selectedApplication"
+			:editFlag="editFlag"
+			@closeDialog="closeDialog"
+			@refreshApplication="listApplicationItems"
+			/>
+		</v-dialog>
+
+		<!-- APPLICATION DELETE DIALOG -->
+		<v-dialog eager max-width="1000px" v-model="dialogs['delete']">
+			<ApplicationDelete
+			:viewKey="'delete'"
+	  	:selectedApplication="selectedApplication"
+			ref="ApplicationDelete"
 			@closeDialog="closeDialog"
 			@refresh="listApplicationItems"
 			/>
@@ -99,12 +126,16 @@
 import { notificationBus } from '@/main.js';
 import Application from '@/include/Application.js';
 import ApplicationCreate from '@/components/Application/ApplicationCreate.vue';
+import ApplicationDialog from '@/components/Application/ApplicationDialog.vue';
+import ApplicationDelete from '@/components/Application/ApplicationDelete.vue';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 
 export default {
 	name: 'ApplicationView',
 	components: {
-		ApplicationCreate
+		ApplicationCreate,
+		ApplicationDialog,
+		ApplicationDelete
 	},
 	mixins: [ utilsMixin ],
 	props: {
@@ -114,6 +145,9 @@ export default {
 	data() {
 		return {
 			loading: false,
+			editFlag: false,
+			selectedApplication: {},
+			applicationObject: {},
 			tableData: {
 				headers: [],
 				items: [],
@@ -123,6 +157,7 @@ export default {
 			dialogs: {
 				create: false,
 				update: false,
+				delete: false
 			}
 		}
 	},
@@ -171,10 +206,63 @@ export default {
 				)
 			})
 		},
+		async deleteApplication(selectedApplication) {
+			this.selectedApplication = {}
+			this.selectedApplication = selectedApplication
+			this.openDialog('delete')
+		},
+		// Fetch individual Application
+		async fetchApplication(item, isEditable=false, openedDialogLoading=false) {
+			if(!openedDialogLoading)
+				this.loading = true
+			this.fetchingData = true
+			this.selectedApplication.id = item.id
+			this.selectedApplication.name = item.name
+			this.applicationObject = new Application({})
+			await this.applicationObject.fetch(this.selectedApplication.id)
+			.then(response => {
+				this.applicationObject = response.data
+				console.log(this.applicationObject)
+				if (this.dialogs.update !== true) {
+					this.openDialog('update')
+				}
+				if (isEditable == true)
+					this.editFlag = true
+				else
+					this.editFlag = false
+				setTimeout(() => {
+					this.loading = false
+				}, 50);
+				this.fetchingData = false
+			})
+			.catch(error => {
+				console.error(error)
+				this.errorMsg = this.getMessageForCode(error)
+				notificationBus.$emit('createNotification', 
+					{message: this.errorMsg.toUpperCase(), type: 'error'}
+				)
+				this.loading = false
+				this.fetchingData = false
+				this.error = true;
+			})
+		},
+		async refreshApplication(){
+			await this.fetchApplication(item, this.editableForm, true).then(()=>{
+			if (this.$refs.ApplicationDialog != undefined)
+				this.$refs.ApplicationDialog.syncApplication()
+			});
+		},
 		openDialog(key){
 			this.dialogs[key] = true;
 			switch (key) {
+				case 'view':
 				case 'update':
+					if (key == "update")
+						this.editFlag = true;
+					else
+						this.editFlag = false;
+					if (this.$refs.ApplicationDialog != undefined)
+						this.$refs.ApplicationDialog.syncApplication()
 				break;
 				case 'create':
 					if (this.$refs.ApplicationCreate != undefined)

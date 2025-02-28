@@ -168,7 +168,8 @@ const urls = {
         list: "api/application/",
         insert: "api/application/insert/",
         update: "api/application/update/",
-        delete: "api/application/delete/",
+        fetch: "api/application/{pk}/fetch/",
+        delete: "api/application/{pk}/delete/",
     },
 }
 const eraseLocalUserData = () => {

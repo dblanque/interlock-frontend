@@ -39,10 +39,10 @@
             <!-- Steps Content -->
             <v-stepper-items>
                 <!-- Basics -->
-                <v-stepper-content step="1" class="mx-2">
+                <v-stepper-content step="1" class="ma-0 pa-0 pa-4">
                     <v-form ref="appCreateForm" @submit.prevent>
-                        <v-row justify="center" class="py-2">
-                            <v-col cols="12" md="6">
+                        <v-row justify="center" align="center" class="ma-0 pa-0">
+                            <v-col cols="12" lg="6">
                                 <v-text-field
                                     v-model="appToCreate.name"
                                     dense
@@ -51,7 +51,7 @@
                                     :label="$tc('section.applications.attribute.name')"
                                 />
                             </v-col>
-                            <v-col cols="12" md="6">
+                            <v-col cols="12" lg="6">
                                 <v-text-field
                                     v-model="appToCreate.redirect_uris"
                                     dense
@@ -61,6 +61,22 @@
                                     :hint="$t('section.applications.dialog.create.redirectUriPlaceholder')"
                                 />
                             </v-col>
+                        </v-row>
+                        <v-row justify="center" align="center" no-gutters>
+                            <v-checkbox
+                                on-icon="mdi-checkbox-marked"
+                                color="primary"
+                                v-model="appToCreate.require_consent"
+                                class="ma-0 pa-0 mx-2"
+                                :label="$t('section.applications.attribute.require_consent')"
+                                dense/>
+                            <v-checkbox
+                                on-icon="mdi-checkbox-marked"
+                                color="primary"
+                                v-model="appToCreate.reuse_consent"
+                                class="ma-0 pa-0 mx-2"
+                                :label="$t('section.applications.attribute.reuse_consent')"
+                                dense/>
                         </v-row>
                         <v-card outlined class="pa-6">
                             <v-row align="center" justify="center" class="ma-0 pa-0">
@@ -74,7 +90,12 @@
                                     />
                                 </v-col>
                                 <v-col cols="auto" class="ma-0 pa-0">
-                                    <v-btn icon @click="addScopeValue">
+                                    <v-btn
+                                        :color="addScopeIsEmpty() ? 'gray' : 'primary'"
+                                        icon
+                                        @click="addScopeValue"
+                                        :disable="addScopeIsEmpty()"
+                                    >
                                         <v-icon>mdi-plus</v-icon>
                                     </v-btn>
                                 </v-col>
@@ -82,12 +103,17 @@
                             <v-row>
                                 <v-col cols="12" class="ma-0 pa-0">
                                 <v-list dense outlined>
-                                    <v-list-item dense v-for="scope in appToCreate.scopes">
+                                    <v-list-item dense v-for="scope in appToCreate.scopes" :key="scope">
                                         <v-list-item-content>
                                             <v-list-item-title>{{ scope }}</v-list-item-title>
                                         </v-list-item-content>
                                         <v-list-item-action>
-                                            <v-btn small icon @click="removeScopeValue(scope)">
+                                            <v-btn
+                                                small
+                                                icon
+                                                @click="removeScopeValue(scope)"
+                                                color="error"
+                                            >
                                                 <v-icon>mdi-minus</v-icon>
                                             </v-btn>
                                         </v-list-item-action>
@@ -248,7 +274,16 @@ export default {
     computed:{
     },
     methods: {
+        addScopeIsEmpty() {
+            return (
+                this.scopeToAdd.length === 0 ||
+                this.scopeToAdd === undefined ||
+                this.scopeToAdd === null
+            )
+        },
         addScopeValue(){
+            if (this.addScopeIsEmpty())
+                return
             if (!this.appToCreate.scopes.includes(this.scopeToAdd))
                 this.appToCreate.scopes.push(this.scopeToAdd)
             this.scopeToAdd = ""

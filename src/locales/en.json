@@ -510,11 +510,16 @@
           "step3":"Application Created",
           "redirectUriPlaceholder":"https://<your_service_url>/oidc/callback",
           "success":"Application Created Successfully"
+        },
+        "delete":{
+          "message":"Are you sure you wish to delete the SSO Application"
         }
       },
       "attribute":{
         "name":"Application Name | Application Names",
         "redirect_uris":"Redirect URI | Redirect URIs",
+        "require_consent":"Require Consent",
+        "reuse_consent":"Re-use Consent",
         "addScope":"Add Scope"
       }
     },
