@@ -226,10 +226,7 @@ export default {
 				if (this.dialogs.update !== true) {
 					this.openDialog('update')
 				}
-				if (isEditable == true)
-					this.editFlag = true
-				else
-					this.editFlag = false
+				this.editFlag = isEditable
 				setTimeout(() => {
 					this.loading = false
 				}, 50);
