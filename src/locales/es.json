@@ -231,7 +231,7 @@
 	  "setting-preset":"Grupo de Parámetros | Grupos de Parámetros",
     "ldap":"Objeto LDAP | Objetos LDAP",
     "totp-device":"Dispositivo TOTP | Dispositivos TOTP",
-    "applications":"Aplicación | Aplicaciones",
+    "application":"Aplicación | Aplicaciones",
     "dns":{
         "zone":"Zona de DNS | Zonas de DNS",
         "record":"Registro de DNS | Registros de DNS"

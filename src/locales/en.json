@@ -225,7 +225,7 @@
     "setting-preset":"Preset | Presets",
     "ldap":"LDAP Object | LDAP Objects",
     "totp-device":"TOTP Device | TOTP Devices",
-    "applications":"Application | Applications",
+    "application":"Application | Applications",
     "dns":{
       "zone":"DNS Zone | DNS Zones",
       "record":"DNS Record | DNS Records"
