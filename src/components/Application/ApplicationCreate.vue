@@ -6,7 +6,7 @@
         <!-- Title Bar -->
         <v-card-title class="ma-0 pa-0 card-title">
             <v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-                <h3 class="ma-2">{{$t("section.application.dialog.create.header")}}</h3>
+                <h3 class="ma-2">{{$t("section.applications.dialog.create.header")}}</h3>
                 <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
                 <v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
                     <v-icon>
@@ -24,15 +24,15 @@
             <v-stepper-header class="px-16">
                 <!-- Basics -->
                 <v-stepper-step :complete="createStage > 1" step="1">
-                    {{ $vuetify.breakpoint.mdAndUp ? $t('section.application.dialog.create.step1') : '' }}
+                    {{ $vuetify.breakpoint.mdAndUp ? $t('section.applications.dialog.create.step1') : '' }}
                 </v-stepper-step>
                 <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
                 <v-stepper-step :complete="createStage > 2" step="2">
-                    {{ $vuetify.breakpoint.mdAndUp ? $t('section.application.dialog.create.step2') : '' }}
+                    {{ $vuetify.breakpoint.mdAndUp ? $t('section.applications.dialog.create.step2') : '' }}
                 </v-stepper-step>
                 <v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
                 <v-stepper-step :complete="!loading && success" step="3">
-                    {{ $vuetify.breakpoint.mdAndUp ? $t('section.application.dialog.create.step3') : '' }}
+                    {{ $vuetify.breakpoint.mdAndUp ? $t('section.applications.dialog.create.step3') : '' }}
                 </v-stepper-step>
             </v-stepper-header>
 
@@ -48,7 +48,7 @@
                                     dense
                                     @keydown.enter="nextStep"
                                     :rules="[this.fieldRules(appToCreate.name, 'ge_lettersStrict', true)]"
-                                    :label="$tc('section.application.attribute.name')"
+                                    :label="$tc('section.applications.attribute.name')"
                                 />
                             </v-col>
                             <v-col cols="12" md="6">
@@ -57,8 +57,8 @@
                                     dense
                                     @keydown.enter="nextStep"
                                     :rules="[this.fieldRules(appToCreate.redirect_uris, 'ge_endpoint', true)]"
-                                    :label="$tc('section.application.attribute.redirect_uris')"
-                                    :hint="$t('section.application.dialog.create.redirectUriPlaceholder')"
+                                    :label="$tc('section.applications.attribute.redirect_uris')"
+                                    :hint="$t('section.applications.dialog.create.redirectUriPlaceholder')"
                                 />
                             </v-col>
                         </v-row>
@@ -70,7 +70,7 @@
                                         dense
                                         @keydown.enter="addScopeValue"
                                         :rules="[this.fieldRules(scopeToAdd, 'ge_lettersStrict', false)]"
-                                        :label="$tc('section.application.attribute.addScope')"
+                                        :label="$tc('section.applications.attribute.addScope')"
                                     />
                                 </v-col>
                                 <v-col cols="auto" class="ma-0 pa-0">
@@ -123,7 +123,7 @@
                             <v-slide-y-transition>
                                 <v-col v-if="!this.loading && this.loading == false">
                                     <h3>
-                                        {{ this.error ? this.errorMsg : $t('section.application.dialog.create.step3_success') }}
+                                        {{ this.error ? this.errorMsg : $t('section.applications.dialog.create.success') }}
                                     </h3>
                                 </v-col>
                             </v-slide-y-transition>

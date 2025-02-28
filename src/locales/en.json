@@ -7,7 +7,7 @@
   "category":{
     "home":"Home",
     "ldap-dirtree":"Directory Tree",
-    "application":"SSO Applications",
+    "applications":"SSO Applications",
     "local-users":"Users",
     "local-groups":"Groups",
     "ldap-users":"Users",
@@ -225,7 +225,7 @@
     "setting-preset":"Preset | Presets",
     "ldap":"LDAP Object | LDAP Objects",
     "totp-device":"TOTP Device | TOTP Devices",
-    "application":"Application | Applications",
+    "applications":"Application | Applications",
     "dns":{
       "zone":"DNS Zone | DNS Zones",
       "record":"DNS Record | DNS Records"
@@ -248,7 +248,7 @@
           "invalidCSVHeaders": "Invalid CSV Headers",
           "fileReader": "File Reader Exception",
           "networkError": "AXIOS: Network Error",
-          "application":{
+          "applications":{
             "application_exists": "SSO Application already exists"
           },
           "auth":{
@@ -501,14 +501,15 @@
     }
   },
   "section":{
-    "application":{
+    "applications":{
       "dialog":{
         "create":{
           "header":"Create Application",
           "step1":"Configure Application",
           "step2":"Creating Application",
           "step3":"Application Created",
-          "redirectUriPlaceholder":"https://<your_service_url>/oidc/callback"
+          "redirectUriPlaceholder":"https://<your_service_url>/oidc/callback",
+          "success":"Application Created Successfully"
         }
       },
       "attribute":{

@@ -143,7 +143,7 @@ export default {
 				let headerDict = {}
 				response.headers.forEach(header => {
 					headerDict = {}
-					headerDict.text = this.$tc('section.application.attribute.' + header, 1)
+					headerDict.text = this.$tc('section.applications.attribute.' + header, 1)
 					headerDict.value = header
 					if (header == 'enabled') {
 						headerDict.align = 'center'

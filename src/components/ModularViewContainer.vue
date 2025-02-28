@@ -21,7 +21,7 @@
 	</v-container>
 
 	<!-- APPLICATION -->
-	<v-container v-if="viewTitle == 'application'" :class="getContainerClasses()">
+	<v-container v-if="viewTitle == 'applications'" :class="getContainerClasses()">
 		<ApplicationView
 			ref="ApplicationView"
 			:viewTitle="viewTitle"
@@ -194,7 +194,7 @@ export default {
 			switch (newValue) {
 				case 'home':
 					break;
-				case 'application':
+				case 'applications':
 					if (this.$refs.ApplicationView != undefined) {
 						console.log("Requested refresh for view component "+ newValue)
 						this.$refs.ApplicationView.listApplicationItems()

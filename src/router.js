@@ -22,8 +22,8 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/application',
-    name: 'application',
+    path: '/applications',
+    name: 'applications',
     component: HomeView
   },
   {

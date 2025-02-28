@@ -370,10 +370,10 @@ export default {
           group: "_top",
         },
         {
-          title: "application",
+          title: "applications",
           enabled: true,
           icon: "mdi-application-cog",
-          route: "application",
+          route: "applications",
           group: "_top",
         },
         {
