@@ -208,6 +208,22 @@ export default {
 		this.listApplicationItems();
 	},
 	methods: {
+		// Reload Data Table Header Labels
+		reloadDataTableHeaders(){
+			this.tableData.headers.forEach(tableHeader => {
+				switch (tableHeader.value) {
+					case "actions":
+						tableHeader.text = this.$t('actions.label')
+						break;
+					case "enabled":
+						tableHeader.text = this.$t('words.enabled')
+						break;
+					default:
+						tableHeader.text = this.$tc('section.applications.attribute.' + tableHeader.value, 1)
+						break;
+				}
+			});
+		},
 		async listApplicationItems(emitNotif=true) {
 			this.loading = true
 			this.error = false

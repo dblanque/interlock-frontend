@@ -173,6 +173,9 @@ export default {
 		langChanged: {
 			handler: function () {
 				switch (this.viewTitle) {
+					case 'applications':
+						this.$refs.ApplicationView.reloadDataTableHeaders()
+						break;
 					case 'ldap-users':
 						this.$refs.UserView.reloadDataTableHeaders()
 						break;
