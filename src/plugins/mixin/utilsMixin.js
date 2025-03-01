@@ -120,6 +120,8 @@ const utilsMixin = {
                 return this.$t('error.codes.settings.'+codeToUse)
             else if (/application_.*/.test(codeToUse))
                 return this.$t('error.codes.applications.'+codeToUse)
+            else if (/oidc_.*/.test(codeToUse))
+                return this.$t('error.codes.oidc.'+codeToUse)
             else
                 switch(codeToUse){
                 case 'ERR_UNKNOWN':

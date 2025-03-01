@@ -254,6 +254,9 @@
       "invalidCSVHeaders": "Cabecera de CSV Inválida",
       "fileReader": "Excepción del Lector de Archivos",
       "networkError": "AXIOS: Error de Red",
+      "oidc":{
+        "oidc_invalid_request":"Request OIDC Inválido"
+      },
       "applications":{
         "application_exists": "La Aplicación SSO ya existe",
             "application_does_not_exist": "La Aplicación SSO no existe",
@@ -531,6 +534,8 @@
         "name":"Nombre de Aplicación | Nombres de Aplicación",
         "redirect_uris":"URI de Redirección | URIs de Redirección",
         "require_consent":"Requerir Consentimiento",
+        "client_secret":"Secreto del Cliente",
+        "client_id":"ID del Cliente",
         "reuse_consent":"Re-utilizar Consentimiento",
         "addScope":"Añadir Alcance / Scope"
       }

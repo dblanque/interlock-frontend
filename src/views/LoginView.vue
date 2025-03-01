@@ -2,11 +2,13 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------- File: LoginView.vue ------------------------------->
 <template>
-	<v-container class="login ma-0 pa-0" fluid fill-height>
-		<v-card outlined 
-		style="min-width: 100%; border-radius: 0; border-left: 0; border-right:0;"
-		class="py-4 px-6" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
-			<v-row class="my-2" justify="center">
+	<v-container id="login-container"
+		class="ma-0 pa-0 justify-center align-items-center"
+		fluid
+		fill-height>
+		<v-card id="login-card" :width="$vuetify.breakpoint.mdAndUp ? '800px' : ''"
+		class="pa-12" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
+			<v-row class="my-2" justify="center" align="center">
 				<v-img contain max-width="450px" :aspect-ratio="14/3" :src="isThemeDark($vuetify) ? logoLight : logoDark"/>
 			</v-row>
 			<v-row class="pa-0 ma-0" justify="center">
@@ -75,15 +77,15 @@
 								outlined
 								dense
 								:label="$t('attribute.users.password')"
-								:type="value ? 'password' : 'text'"
+								:type="hidePassword ? 'password' : 'text'"
 								prepend-inner-icon="mdi-lock"
 								v-model="password"
 								:disabled="submitted"
 								@keydown.enter="submit()"
 								class="font-weight-bold"
 								required
-								:append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
-								@click:append="() => (value = !value)"
+								:append-icon="hidePassword ? 'mdi-eye' : 'mdi-eye-off'"
+								@click:append="() => (hidePassword = !hidePassword)"
 							></v-text-field>
 						</v-row>
 
@@ -116,23 +118,6 @@
 										type="text"
 										v-model="totp_code"
 									/>
-									<!-- TOTP CODE TEXT FIELD -->
-									<!-- <v-text-field
-										:disabled="submitted"
-										:label="$t('attribute.users.totp_code')"
-										:rules="[this.fieldRules(totp_code, 'auth_totp')]"
-										@keydown.enter="submit()"
-										@keypress="isNumber"
-										@paste="isNumber"
-										class="font-weight-bold"
-										dense
-										outlined
-										prepend-inner-icon="mdi-qrcode"
-										required
-										type="text"
-										v-if="!recovery_mode"
-										v-model="totp_code"
-									></v-text-field> -->
 
 									<!-- RECOVERY FIELD -->
 									<v-text-field
@@ -263,8 +248,8 @@ export default {
 			rcm_animation: false,
 			recovery_mode: false,
 			recovery_code: "",
-			logoLight: 'logo/interlock-logo-wt-dark.svg',
-			logoDark: 'logo/interlock-logo-wt-light.svg',
+			logoLight: '/logo/interlock-logo-wt-dark.svg',
+			logoDark: '/logo/interlock-logo-wt-light.svg',
 			modeUser: true,
 			loginForbiddenCount: 0,
 			timeoutCounter: 30,
@@ -279,10 +264,15 @@ export default {
 			submitted: false,
 			logoutSnackbar: false,
 			snackbarMessage: "",
-			value: String,
+			next: "",
+			oidc_failed: false,
+			hidePassword: true,
 		};
 	},
 	mounted() {
+		this.next = this.$route.query.next || "";
+		this.oidc_failed = this.$route.query.oidc_failed === "true" || false;
+		this.oidc_error = this.$route.query.oidc_error || "";
 		let errInStorage = parseInt(localStorage.getItem('auth.loginForbiddenCount'))
 		let timedOutStorage = Boolean(localStorage.getItem('auth.loginTimedOut'))
 		let timeOutCounterStorage = parseInt(localStorage.getItem('auth.loginTimeOutCounter'))
@@ -309,7 +299,13 @@ export default {
 			new User({}).fetchme()
 			.then(() => {
 				console.log("User is already logged in.")
-				if (admin_allowed === 'true')
+				if (this.next !== "") {
+					this.redirectOIDC()
+				}
+				else if (this.oidc_failed === true) {
+					this.adviseFailedOIDC()
+				}
+				else if (admin_allowed === 'true')
 					this.$router.push("/home")
 				else
 					this.$router.push("/enduser")
@@ -341,6 +337,16 @@ export default {
 		}
 	},
 	methods: {
+		adviseFailedOIDC(){
+			this.error = true
+			this.errorMsg = this.getMessageForCode(`oidc_${this.oidc_error}`)
+		},
+		redirectOIDC() {
+			console.log("User OIDC Session Requested.")
+			console.log(this.next)
+			let decodedURL = decodeURIComponent(this.next)
+			window.location.href = this.next;
+		},
 		toggleRCM(){
 			this.rcm_animation = true
 			this.recovery_mode = !this.recovery_mode
@@ -420,7 +426,13 @@ export default {
 						this.errorMsg = "";
 						localStorage.removeItem('auth.loginForbiddenCount')
 						this.clearLoginTimeout()
-						if (response.data.admin_allowed === true)
+						if (this.next !== "") {
+							this.redirectOIDC()
+						}
+						else if (this.oidc_failed === true) {
+							this.adviseFailedOIDC()
+						}
+						else if (response.data.admin_allowed === true)
 							this.$router.push("/home")
 						else
 							this.$router.push("/enduser")

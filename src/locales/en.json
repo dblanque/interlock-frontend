@@ -248,6 +248,9 @@
           "invalidCSVHeaders": "Invalid CSV Headers",
           "fileReader": "File Reader Exception",
           "networkError": "AXIOS: Network Error",
+          "oidc":{
+            "oidc_invalid_request":"OIDC Request is Invalid"
+          },
           "applications":{
             "application_exists": "SSO Application already exists",
             "application_does_not_exist": "SSO Application does not exist",
@@ -526,6 +529,8 @@
         "redirect_uris":"Redirect URI | Redirect URIs",
         "require_consent":"Require Consent",
         "reuse_consent":"Re-use Consent",
+        "client_secret":"Client Secret",
+        "client_id":"Client ID",
         "addScope":"Add Scope"
       }
     },

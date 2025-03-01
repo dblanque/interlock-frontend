@@ -146,6 +146,7 @@
 			:applicationObject="applicationObject"
 			:selectedApplication="selectedApplication"
 			:editFlag="editFlag"
+			@save="applicationSaved"
 			@editToggle="editFlag = !editFlag"
 			@closeDialog="closeDialog"
 			@refreshApplication="refreshApplication"
@@ -340,6 +341,11 @@ export default {
 			if (this.$refs.ApplicationDialog != undefined)
 				this.$refs.ApplicationDialog.syncApplication()
 			});
+		},
+		applicationSaved(){
+			this.listApplicationItems(false)
+			this.$refs.ApplicationDialog.syncApplication()
+			this.createSnackbar({message: (this.$tc("classes.application", 1) + " " + this.$tc("words.saved.m", 1)).toUpperCase(), type: 'success'})
 		},
 		openDialog(key){
 			this.dialogs[key] = true;
