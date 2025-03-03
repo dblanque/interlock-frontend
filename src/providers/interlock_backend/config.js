@@ -169,6 +169,7 @@ const urls = {
         update: "api/application/{pk}/",
         fetch: "api/application/{pk}/fetch/",
         delete: "api/application/{pk}/delete/",
+        oidc_well_known: "openid/.well-known/openid-configuration/",
     },
 }
 const eraseLocalUserData = () => {

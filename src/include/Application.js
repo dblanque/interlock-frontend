@@ -8,6 +8,7 @@ class Application extends ApiModel{
 		client_secret;
 		redirect_uris;
 		scopes;
+        response_types;
         request_consent;
         reuse_consent;
         enabled;
@@ -24,6 +25,10 @@ class Application extends ApiModel{
 
     async list(){
         return await interlock_backend.call('application/list')
+    }
+
+    async oidc_well_known(){
+        return await interlock_backend.call('application/oidc_well_known')
     }
 
     async insert(data){

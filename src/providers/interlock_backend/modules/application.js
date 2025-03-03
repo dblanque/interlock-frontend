@@ -43,6 +43,16 @@ const actions = {
         })
     },
 
+    oidc_well_known: ()=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.get(interlock_backend.urls.application.oidc_well_known).then(response => {
+                resolve(response.data)
+            }).catch((e) => {
+                reject(e)
+            })
+        })
+    },
+
     fetch: (id)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.application.fetch.replace("{pk}", id)).then(response => {
@@ -62,7 +72,7 @@ const actions = {
                 reject(e)
             })
         })
-    },
+    }
 }
 
 export default actions

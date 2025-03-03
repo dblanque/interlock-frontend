@@ -11,6 +11,7 @@ declare module 'vue' {
     ApplicationCreate: typeof import('./src/components/Application/ApplicationCreate.vue')['default']
     ApplicationDelete: typeof import('./src/components/Application/ApplicationDelete.vue')['default']
     ApplicationDialog: typeof import('./src/components/Application/ApplicationDialog.vue')['default']
+    ApplicationForm: typeof import('./src/components/Application/ApplicationForm.vue')['default']
     ApplicationUpdate: typeof import('./src/components/Application/ApplicationUpdate.vue')['default']
     ApplicationView: typeof import('./src/components/Application/ApplicationView.vue')['default']
     BackendStatus: typeof import('./src/components/BackendStatus.vue')['default']

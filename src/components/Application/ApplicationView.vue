@@ -205,7 +205,7 @@ export default {
 			}
 		}
 	},
-	created() {
+	async created() {
 		this.listApplicationItems();
 	},
 	methods: {
@@ -345,7 +345,13 @@ export default {
 		applicationSaved(){
 			this.listApplicationItems(false)
 			this.$refs.ApplicationDialog.syncApplication()
-			this.createSnackbar({message: (this.$tc("classes.application", 1) + " " + this.$tc("words.saved.m", 1)).toUpperCase(), type: 'success'})
+			notificationBus.$emit(
+				'createNotification',
+				{
+					message: `${this.$tc("classes.application", 1)} ${this.$tc("words.saved.m", 1)}`.toUpperCase(),
+					type: 'success'
+				}
+			);
 		},
 		openDialog(key){
 			this.dialogs[key] = true;

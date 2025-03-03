@@ -17,184 +17,16 @@
 								</v-btn>
 						</v-row>
 				</v-card-title>
-		
+
 				<v-card-text class="ma-0 pa-0">
-						<v-row class="ma-0 pa-0">
-						<v-col class="ma-0 pa-0">
-							<!-- Application Form -->
-								<v-form ref="applicationForm" @submit.prevent>
-									<!-- Application Name -->
-									<v-row justify="center" align="center" class="ma-0 pa-0 px-8">
-											<v-col cols="12" lg="6">
-													<v-text-field
-															v-model="applicationCopy.name"
-															:readonly="!editFlag"
-															dense
-															@keydown.enter="nextStep"
-															:rules="[this.fieldRules(applicationCopy.name, 'ge_lettersStrict', true)]"
-															:label="$tc('section.applications.attribute.name')"
-													/>
-											</v-col>
-											<!-- Redirect URIs -->
-											<v-col cols="12" lg="6">
-													<v-text-field
-															v-model="applicationCopy.redirect_uris"
-															:readonly="!editFlag"
-															dense
-															@keydown.enter="nextStep"
-															:rules="[this.fieldRules(applicationCopy.redirect_uris, 'ge_endpoint', true)]"
-															:label="$tc('section.applications.attribute.redirect_uris')"
-															:hint="$t('section.applications.dialog.create.redirectUriPlaceholder')"
-													/>
-											</v-col>
-											<!-- Client ID -->
-											<v-col cols="8">
-												<v-row no-gutters>
-													<v-text-field
-															v-model="applicationCopy.client_id"
-															:readonly="!editFlag"
-															dense
-															@keydown.enter="nextStep"
-															readonly
-															:label="$tc('section.applications.attribute.client_id')"
-													/>
-													<v-tooltip bottom>
-													<template v-slot:activator="{ on, attrs }">
-															<v-btn small icon 
-															@click="copyText(applicationCopy.client_id)"
-															@click.stop
-															class="ml-2"
-															color="primary"
-															v-bind="attrs"
-															v-on="on"
-															>
-															<v-icon small>
-																	mdi-content-copy
-															</v-icon>
-															</v-btn>
-													</template>
-													<span> {{ $t("section.applications.dialog.update.copyId") }} </span>
-													</v-tooltip>
-												</v-row>
-											</v-col>
-											<!-- Client Secret -->
-											<v-col cols="8">
-												<v-row no-gutters>
-													<v-text-field
-															v-model="applicationCopy.client_secret"
-															:type="hideSecret ? 'password' : 'text'"
-															:append-icon="hideSecret ? 'mdi-eye' : 'mdi-eye-off'"
-															prepend-inner-icon="mdi-lock"
-															@click:append="() => (hideSecret = !hideSecret)"
-															readonly
-															dense
-															@keydown.enter="nextStep"
-															:label="$tc('section.applications.attribute.client_secret')"
-													/>
-													<v-tooltip bottom>
-													<template v-slot:activator="{ on, attrs }">
-															<v-btn small icon 
-															@click="copyText(applicationCopy.client_secret)"
-															@click.stop
-															class="ml-2"
-															color="primary"
-															v-bind="attrs"
-															v-on="on"
-															>
-															<v-icon small>
-																	mdi-content-copy
-															</v-icon>
-															</v-btn>
-													</template>
-													<span> {{ $t("section.applications.dialog.update.copySecret") }} </span>
-													</v-tooltip>
-												</v-row>
-											</v-col>
-									</v-row>
-									<!-- Application State Toggle -->
-									<v-row justify="center" align="center" no-gutters>
-										<v-checkbox
-												on-icon="mdi-checkbox-marked"
-												color="primary"
-												v-model="applicationCopy.enabled"
-												:disabled="!editFlag"
-												class="ma-0 pa-0 mx-2"
-												:label="$t('words.enabled')"
-												dense/>
-									</v-row>
-									<!-- Consent Options -->
-									<v-row justify="center" align="center" no-gutters>
-											<v-checkbox
-													on-icon="mdi-checkbox-marked"
-													color="primary"
-													v-model="applicationCopy.require_consent"
-													:disabled="!editFlag"
-													class="ma-0 pa-0 mx-2"
-													:label="$t('section.applications.attribute.require_consent')"
-													dense/>
-											<v-checkbox
-													on-icon="mdi-checkbox-marked"
-													color="primary"
-													v-model="applicationCopy.reuse_consent"
-													:disabled="!editFlag"
-													class="ma-0 pa-0 mx-2"
-													:label="$t('section.applications.attribute.reuse_consent')"
-													dense/>
-									</v-row>
-									<!-- Scope Options -->
-									<v-row justify="center" align="center" no-gutters>
-										<v-card outlined class="pa-6" max-width="600" width="100%">
-												<v-row align="center" justify="center" class="ma-0 pa-0">
-														<v-col cols="4" class="ma-0 pa-0">
-																<v-text-field
-																		v-model="scopeToAdd"
-																		dense
-																		:disabled="!editFlag"
-																		@keydown.enter="addScopeValue"
-																		:rules="[this.fieldRules(scopeToAdd, 'ge_lettersStrict', false)]"
-																		:label="$tc('section.applications.attribute.addScope')"
-																/>
-														</v-col>
-														<v-col cols="auto" class="ma-0 pa-0">
-																<v-btn
-																		color="primary"
-																		icon
-																		@click="addScopeValue"
-																		:disabled="addScopeIsEmpty() || !editFlag"
-																>
-																		<v-icon>mdi-plus</v-icon>
-																</v-btn>
-														</v-col>
-												</v-row>
-												<v-row>
-														<v-col cols="12" class="ma-0 pa-0">
-														<v-list dense outlined>
-																<v-list-item dense v-for="scope in applicationCopy.scopes" :key="scope">
-																		<v-list-item-content>
-																				<v-list-item-title>{{ scope }}</v-list-item-title>
-																		</v-list-item-content>
-																		<v-list-item-action>
-																				<v-btn
-																						small
-																						icon
-																						@click="removeScopeValue(scope)"
-																						:disabled="!editFlag"
-																						color="error"
-																				>
-																						<v-icon>mdi-minus</v-icon>
-																				</v-btn>
-																		</v-list-item-action>
-																</v-list-item>
-														</v-list>
-														</v-col>
-												</v-row>
-										</v-card>
-									</v-row>
-								</v-form>
-						</v-col>
-						</v-row>
+					<ApplicationForm
+						ref="ApplicationForm"
+						:applicationObject="applicationObject"
+						:isBeingEdited="editFlag"
+						@update="updateApplicationData"
+					/>
 				</v-card-text>
-		
+
 				<!-- Actions -->
 				<v-card-actions class="card-actions">
 						<v-row class="ma-1 pa-0" 
@@ -257,6 +89,7 @@
 
 <script>
 import Application from '@/include/Application.js';
+import ApplicationForm from '@/components/Application/ApplicationForm.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import RefreshButton from '@/components/RefreshButton.vue';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
@@ -266,7 +99,8 @@ export default {
 	name: "ApplicationDialog",
 	mixins: [ validationMixin, utilsMixin ],
 	components: {
-		RefreshButton
+		RefreshButton,
+		ApplicationForm
 	},
 	data() {
 		return {
@@ -277,7 +111,7 @@ export default {
 			loadingColor: "primary",
 			error: false,
 			errorMsg: "",
-			submitted: false,
+			submitted: false
 		}
 	},
 	props: {
@@ -295,26 +129,6 @@ export default {
 			console.log(this.applicationCopy)
 			console.log(this.applicationObject)
 		},
-		addScopeIsEmpty() {
-				return (
-						this.scopeToAdd.length === 0 ||
-						this.scopeToAdd === undefined ||
-						this.scopeToAdd === null
-				)
-		},
-		addScopeValue(){
-				if (this.addScopeIsEmpty())
-						return
-				if (!this.appToCreate.scopes.includes(this.scopeToAdd))
-						this.appToCreate.scopes.push(this.scopeToAdd)
-				this.scopeToAdd = ""
-		},
-		removeScopeValue(v){
-				const index = this.appToCreate.scopes.indexOf(v);
-				if (index >= 0) {
-						this.appToCreate.scopes.splice(index, 1)
-				}
-		},
 		resetLoadingStatus(){
 			this.loading = false
 			this.error = false
@@ -323,9 +137,12 @@ export default {
 		},
 		resetApplication() {
 		this.resetLoadingStatus()
-			if (this.$refs.applicationForm != undefined)
-			this.$refs.applicationForm.resetValidation()
+			if (this.$refs.ApplicationForm != undefined)
+			this.$refs.ApplicationForm.resetValidation()
 			this.applicationCopy = {}
+		},
+		updateApplicationData(newData) {
+			this.applicationCopy = newData
 		},
 		syncApplication() {
 			this.resetApplication()
@@ -333,11 +150,9 @@ export default {
 				// Do deep copy of object for reset
 				if (this.applicationObject != undefined && this.applicationObject != null) {
 					this.applicationCopy = Object.assign({}, this.applicationObject)
+					this.$refs.ApplicationForm.sync()
 				}
 			})
-		},
-		copyText(textString) {
-				navigator.clipboard.writeText(textString);
 		},
 		// Tells the parent view to refresh/fetch the group again
 		async refreshApplication(){
@@ -362,7 +177,7 @@ export default {
 				delete data[k]
 			});
 
-			if (this.$refs.applicationForm.validate()){
+			if (this.$refs.ApplicationForm.validate()){
 				await new Application({}).update(data)
 				.then(() => {
 					if (closeDialog == true)

@@ -30,7 +30,7 @@
 				<v-stepper-step :complete="createStage > 2" step="2">
 					{{ $vuetify.breakpoint.mdAndUp ? $t('section.applications.dialog.create.step2') : '' }}
 				</v-stepper-step>
-				<v-divider class="mx-3" :style="createStage > 1 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
+				<v-divider class="mx-3" :style="createStage > 2 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
 				<v-stepper-step :complete="!loading && success" step="3">
 					{{ $vuetify.breakpoint.mdAndUp ? $t('section.applications.dialog.create.step3') : '' }}
 				</v-stepper-step>
@@ -40,92 +40,17 @@
 			<v-stepper-items>
 				<!-- Basics -->
 				<v-stepper-content step="1" class="ma-0 pa-0 pa-4">
-					<v-form ref="appCreateForm" @submit.prevent>
-						<v-row justify="center" align="center" class="ma-0 pa-0">
-							<v-col cols="12" lg="6">
-								<v-text-field
-									v-model="appToCreate.name"
-									dense
-									@keydown.enter="nextStep"
-									:rules="[this.fieldRules(appToCreate.name, 'ge_lettersStrict', true)]"
-									:label="$tc('section.applications.attribute.name')"
-								/>
-							</v-col>
-							<v-col cols="12" lg="6">
-								<v-text-field
-									v-model="appToCreate.redirect_uris"
-									dense
-									@keydown.enter="nextStep"
-									:rules="[this.fieldRules(appToCreate.redirect_uris, 'ge_endpoint', true)]"
-									:label="$tc('section.applications.attribute.redirect_uris')"
-									:hint="$t('section.applications.dialog.create.redirectUriPlaceholder')"
-								/>
-							</v-col>
-						</v-row>
-						<v-row justify="center" align="center" no-gutters>
-							<v-checkbox
-								on-icon="mdi-checkbox-marked"
-								color="primary"
-								v-model="appToCreate.require_consent"
-								class="ma-0 pa-0 mx-2"
-								:label="$t('section.applications.attribute.require_consent')"
-								dense/>
-							<v-checkbox
-								on-icon="mdi-checkbox-marked"
-								color="primary"
-								v-model="appToCreate.reuse_consent"
-								class="ma-0 pa-0 mx-2"
-								:label="$t('section.applications.attribute.reuse_consent')"
-								dense/>
-						</v-row>
-						<v-card outlined class="pa-6">
-							<v-row align="center" justify="center" class="ma-0 pa-0">
-								<v-col cols="4" class="ma-0 pa-0">
-									<v-text-field
-										v-model="scopeToAdd"
-										dense
-										@keydown.enter="addScopeValue"
-										:rules="[this.fieldRules(scopeToAdd, 'ge_lettersStrict', false)]"
-										:label="$tc('section.applications.attribute.addScope')"
-									/>
-								</v-col>
-								<v-col cols="auto" class="ma-0 pa-0">
-									<v-btn
-										color="primary"
-										icon
-										@click="addScopeValue"
-										:disabled="addScopeIsEmpty()"
-									>
-										<v-icon>mdi-plus</v-icon>
-									</v-btn>
-								</v-col>
-							</v-row>
-							<v-row>
-								<v-col cols="12" class="ma-0 pa-0">
-								<v-list dense outlined>
-									<v-list-item dense v-for="scope in appToCreate.scopes" :key="scope">
-										<v-list-item-content>
-											<v-list-item-title>{{ scope }}</v-list-item-title>
-										</v-list-item-content>
-										<v-list-item-action>
-											<v-btn
-												small
-												icon
-												@click="removeScopeValue(scope)"
-												color="error"
-											>
-												<v-icon>mdi-minus</v-icon>
-											</v-btn>
-										</v-list-item-action>
-									</v-list-item>
-								</v-list>
-								</v-col>
-							</v-row>
-						</v-card>
-					</v-form>
+					<ApplicationForm
+						class="mt-4"
+						ref="ApplicationForm"
+						:applicationObject="applicationObject"
+						:isBeingEdited="true"
+						:isBeingCreated="true"
+						@update="updateApplicationData"
+					/>
 				</v-stepper-content>
-				
-				<!-- Check if user exists - loader -->
+
+				<!-- Loader -->
 				<v-stepper-content step="2">
 					<v-row class="pa-12 ma-12" justify="center" align-content="center" align="center">
 						<v-col cols="12">
@@ -248,7 +173,7 @@ export default {
 	data () {
 		return {
 		createStage: 1,
-		appToCreate: {},
+		applicationObject: {},
 		scopeToAdd: "",
 		success: false,
 		loading: true,
@@ -274,36 +199,45 @@ export default {
 	computed:{
 	},
 	methods: {
-		addScopeIsEmpty() {
-			return (
-				this.scopeToAdd.length === 0 ||
-				this.scopeToAdd === undefined ||
-				this.scopeToAdd === null
-			)
+		updateApplicationData(newData) {
+			this.applicationObject = newData
 		},
-		addScopeValue(){
-			if (this.addScopeIsEmpty())
-				return
-			if (!this.appToCreate.scopes.includes(this.scopeToAdd))
-				this.appToCreate.scopes.push(this.scopeToAdd)
-			this.scopeToAdd = ""
-		},
-		removeScopeValue(v){
-			const index = this.appToCreate.scopes.indexOf(v);
-			if (index >= 0) {
-				this.appToCreate.scopes.splice(index, 1)
-			}
-		},
-		newApplication(){
-			this.appToCreate = new Application({})
-			this.$refs.appCreateForm.resetValidation()
-			this.appToCreate.name = "Proxmox VE"
-			this.appToCreate.redirect_uris = "https://proxmox.brconsulting.info:8006/oidc/callback"
-			this.appToCreate.scopes = ["openid","profile","email","groups"]
-			this.createStage = 1;
-			this.success = false
-			this.errorMsg = ""
-			this.error = false
+		async newApplication(){
+			this.applicationObject = new Application({}).oidc_well_known()
+			.then(response => {
+				this.$refs.ApplicationForm.resetValidation()
+				this.applicationObject.name = "Proxmox VE"
+				this.applicationObject.redirect_uris = "https://proxmox.brconsulting.info"
+				this.applicationObject.scopes = ["openid","profile","email","groups"]
+				this.applicationObject.response_types = {}
+				Object.values(response.response_types_supported).forEach(rt => {
+					this.applicationObject.response_types[rt] = false
+				});
+				this.createStage = 1;
+				this.success = false
+				this.errorMsg = ""
+				this.error = false
+				this.$nextTick(() => {
+					// Do deep copy of object for reset
+					if (this.applicationObject != undefined && this.applicationObject != null) {
+						this.applicationCopy = Object.assign({}, this.applicationObject)
+						this.$refs.ApplicationForm.sync()
+					}
+				})
+			})
+			.catch(error => {
+				console.error(error)
+				this.errorMsg = this.getMessageForCode(error)
+				notificationBus.$emit('createNotification', 
+					{
+						message: this.errorMsg, 
+						type: 'error'
+					}
+				);
+				this.loading = false
+				this.loadingColor = 'error'
+				this.error = true;
+			})
 		},
 		prevStep(){
 			switch (this.createStage) {
@@ -317,7 +251,7 @@ export default {
 		nextStep(){
 			switch (this.createStage) {
 				case 1:
-					if (this.$refs.appCreateForm.validate()){
+					if (this.$refs.ApplicationForm.validate()){
 						this.error = false
 						this.errorMsg = ""
 						this.createApplication()
@@ -344,7 +278,7 @@ export default {
 			this.error = false
 			this.errorMsg = ""
 			this.createStage += 1
-			await this.appToCreate.insert(this.appToCreate)
+			await this.applicationObject.insert(this.applicationObject)
 			.then(response => {
 				if (response.status == 200) {
 					this.error = false;
