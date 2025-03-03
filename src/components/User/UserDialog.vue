@@ -1118,7 +1118,7 @@ export default {
         },
         async disableUser(){
             this.extraListOpen = false
-            await this.usercopy.disable(this.usercopy.username).then(() => {
+            await new User({}).disable(this.usercopy.username).then(() => {
                 this.refreshUser()
                 this.refreshUserList()
                 notificationBus.$emit('createNotification', 
@@ -1140,7 +1140,7 @@ export default {
         },
         async enableUser(){
             this.extraListOpen = false
-            await this.usercopy.enable(this.usercopy.username).then(() => {
+            await new User({}).enable(this.usercopy.username).then(() => {
                 this.refreshUser()
                 this.refreshUserList()
                 notificationBus.$emit('createNotification', 
