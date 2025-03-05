@@ -264,10 +264,8 @@
 </template>
 
 <script>
-import Application from '@/include/Application.js';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
-import { notificationBus } from '@/main.js';
 
 export default {
 	name: "ApplicationForm",
@@ -324,9 +322,6 @@ export default {
 		},
 		nextStep()	{
 			this.$emit("nextStep")
-		},
-		prevStep()	{
-			this.$emit("prevStep")
 		},
 		addScopeIsEmpty() {
 				return (
