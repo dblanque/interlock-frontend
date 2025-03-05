@@ -137,8 +137,9 @@
 							</v-icon>
 						</v-btn>
 					</template>
-					<span>{{ $t('actions.clickTo') + " " + $t('actions.disable') + " " + item.username
-						}}</span>
+					<span>
+						{{ `${$t('actions.clickTo')} ${$t('actions.disable').toLowerCase()} ${item.username}` }}
+					</span>
 				</v-tooltip>
 
 				<!-- Disable User Button -->
@@ -155,8 +156,9 @@
 							</v-icon>
 						</v-btn>
 					</template>
-					<span>{{ $t('actions.clickTo') + " " + $t('actions.enable') + " " + item.username
-						}}</span>
+					<span>
+						{{ `${$t('actions.clickTo')} ${$t('actions.enable').toLowerCase()} ${item.username}` }}
+					</span>
 				</v-tooltip>
 			</template>
 
