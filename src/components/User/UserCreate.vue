@@ -164,7 +164,7 @@
 								<v-row justify="center" class="pa-0 ma-0 font-weight-medium">
 									<v-col cols="12" lg="4">
 										<v-text-field dense @keydown.enter="nextStep"
-											:label="$t('attribute.ldap.mail')"
+											:label="$t('attribute.user.email')"
 											v-model="userToCreate.mail"
 											:rules="[this.fieldRules(userToCreate.mail, 'ge_mail')]"></v-text-field>
 									</v-col>

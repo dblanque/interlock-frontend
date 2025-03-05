@@ -32,6 +32,8 @@ declare module 'vue' {
     GroupView: typeof import('./src/components/Group/GroupView.vue')['default']
     HomeViewContainer: typeof import('./src/components/Home/HomeViewContainer.vue')['default']
     LanguageSelector: typeof import('./src/components/LanguageSelector.vue')['default']
+    LocalUserForm: typeof import('./src/components/LocalUser/LocalUserForm.vue')['default']
+    LocalUserView: typeof import('./src/components/LocalUser/LocalUserView.vue')['default']
     LogoutDialog: typeof import('./src/components/LogoutDialog.vue')['default']
     LogResetDialog: typeof import('./src/components/Logging/LogResetDialog.vue')['default']
     LogView: typeof import('./src/components/Logging/LogView.vue')['default']

@@ -2,7 +2,7 @@ import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
 import { dateLdapToString, dateFromFiletime } from '@/include/utils.js'
 
-class User extends ApiModel{
+class User extends ApiModel {
 
     first_name;
     last_name;
@@ -50,7 +50,7 @@ class User extends ApiModel{
      * Fetches model instance from API by id.
      * @param {Number} id 
      */
-     constructor(data){
+    constructor(data) {
         super(data)
         Object.keys(data).forEach(key => {
             this[key] = data[key];
@@ -65,83 +65,31 @@ class User extends ApiModel{
      * @param {Integer} totp_code [Optional]
      * @returns Response Promise, Exception on Failure.
      */
-    async login(data){
+    async login(data) {
         return await interlock_backend.call('auth/login', data)
     }
 
     /**
      * Logs out the current User, Standard Call.
      */
-    async logout(){
+    async logout() {
         return await interlock_backend.call('auth/logout')
     }
 
-    async list(){
+    async list() {
         return await interlock_backend.call('user/list')
     }
 
-    async insert(data){
+    async insert(data) {
         return await interlock_backend.call('user/insert', data)
     }
 
-    async bulkInsert(data){
-        return await interlock_backend.call('user/bulkInsert', data)
-    }
-
-    async bulkDelete(data){
-        return await interlock_backend.call('user/bulkDelete', data)
-    }
-
-    async bulkUpdate(data){
-        return await interlock_backend.call('user/bulkUpdate', data)
-    }
-
-    async bulkStatusChange(data){
-        return await interlock_backend.call('user/bulkStatusChange', data)
-    }
-
-    async bulkUnlock(data){
-        return await interlock_backend.call('user/bulkUnlock', data)
-    }
-
-    async enable(data){
-        return await interlock_backend.call('user/enable', data)
-    }
-
-    async disable(data){
-        return await interlock_backend.call('user/disable', data)
-    }
-
-    async lock(data){
-        return await interlock_backend.call('user/lock', data)
-    }
-
-    async unlock(data){
-        return await interlock_backend.call('user/unlock', data)
-    }
-
-    async delete(data){
-        return await interlock_backend.call('user/delete', data)
-    }
-
-    async deleteTotp(data){
-        return await interlock_backend.call('user/deleteTotp', data)
-    }
-
-    async changePassword(data){
-        return await interlock_backend.call('user/changePassword', data)
-    }
-
-    async selfChangePassword(data){
-        return await interlock_backend.call('user/selfChangePassword', data)
-    }
-
-    async fetch(username){
-        return await interlock_backend.call('user/fetch', {username: username}).then(
+    async fetch(username) {
+        return await interlock_backend.call('user/fetch', { username: username }).then(
             response => {
-                if(!response)
-                        throw Error("Error fetching user data. Provider returned: " + response);
-                else{
+                if (!response)
+                    throw Error("Error fetching user data. Provider returned: " + response);
+                else {
                     Object.keys(response.data).forEach(key => {
                         switch (key) {
                             case 'whenChanged':
@@ -162,42 +110,94 @@ class User extends ApiModel{
         )
     }
 
-    async selfFetch(){
-        return await interlock_backend.call('user/selfFetch').then(
-            response => {
-                if(!response)
-                        throw Error("Error fetching user data. Provider returned: " + response);
-                else{
-                    Object.keys(response.data).forEach(key => {
-                        switch (key) {
-                            case 'whenChanged':
-                            case 'whenCreated':
-                                this[key] = dateLdapToString(response.data[key]);
-                                break;
-                            case 'lastLogon':
-                            case 'pwdLastSet':
-                                this[key] = dateFromFiletime(response.data[key]);
-                                break;
-                            default:
-                                this[key] = response.data[key];
-                                break;
-                        }
-                    });
-                }
-            }
-        )
-    }
-
-    async selfInfo(){
-        return await interlock_backend.call('user/selfInfo')
-    }
-
-    async update(data){
+    async update(data) {
         return await interlock_backend.call('user/update', data)
     }
 
-    async updateSelf(data){
-        return await interlock_backend.call('user/updateSelf', data)
+    async delete(data) {
+        return await interlock_backend.call('user/delete', data)
+    }
+
+    async enable(data) {
+        return await interlock_backend.call('user/enable', data)
+    }
+
+    async disable(data) {
+        return await interlock_backend.call('user/disable', data)
+    }
+
+    async lock(data) {
+        return await interlock_backend.call('user/lock', data)
+    }
+
+    async unlock(data) {
+        return await interlock_backend.call('user/unlock', data)
+    }
+
+    async deleteTotp(data) {
+        return await interlock_backend.call('user/deleteTotp', data)
+    }
+
+    async changePassword(data) {
+        return await interlock_backend.call('user/changePassword', data)
+    }
+
+    async selfChangePassword(data) {
+        return await interlock_backend.call('user/selfChangePassword', data)
+    }
+
+    async selfFetch() {
+        return await interlock_backend.call('user/selfFetch').then(
+            response => {
+                if (!response)
+                    throw Error("Error fetching user data. Provider returned: " + response);
+                else {
+                    Object.keys(response.data).forEach(key => {
+                        switch (key) {
+                            case 'whenChanged':
+                            case 'whenCreated':
+                                this[key] = dateLdapToString(response.data[key]);
+                                break;
+                            case 'lastLogon':
+                            case 'pwdLastSet':
+                                this[key] = dateFromFiletime(response.data[key]);
+                                break;
+                            default:
+                                this[key] = response.data[key];
+                                break;
+                        }
+                    });
+                }
+            }
+        )
+    }
+
+    async selfInfo() {
+        return await interlock_backend.call('user/selfInfo')
+    }
+
+    async selfUpdate(data) {
+        return await interlock_backend.call('user/selfUpdate', data)
+    }
+
+    async bulkInsert(data) {
+        return await interlock_backend.call('user/bulkInsert', data)
+    }
+
+    async bulkDelete(data) {
+        return await interlock_backend.call('user/bulkDelete', data)
+    }
+
+    async bulkUpdate(data) {
+        return await interlock_backend.call('user/bulkUpdate', data)
+    }
+
+    async bulkStatusChange(data) {
+        return await interlock_backend.call('user/bulkStatusChange', data)
+    }
+
+    async bulkUnlock(data) {
+        return await interlock_backend.call('user/bulkUnlock', data)
     }
 }
 

@@ -51,7 +51,7 @@
 							<v-text-field
 							dense
 							id="mail"
-							:label="$t('attribute.ldap.mail')"
+							:label="$t('attribute.user.email')"
 							:readonly="editFlag != true"
 							v-model="groupcopy.mail"
 							:rules="[this.fieldRules(groupcopy.mail, 'ge_email')]"

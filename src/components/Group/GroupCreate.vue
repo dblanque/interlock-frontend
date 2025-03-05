@@ -123,7 +123,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('attribute.ldap.mail')"
+                                    :label="$t('attribute.user.email')"
                                     v-model="groupToCreate.mail"
                                     :rules="[this.fieldRules(groupToCreate.mail, 'ge_mail')]"
                                     ></v-text-field>

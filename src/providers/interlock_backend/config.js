@@ -63,10 +63,8 @@ export const ignoreErrorCodes = [
     403 // Forbidden
 ]
 
-const apiPrefix = "api"
-const localPrefix = "local"
-
 // LIST OF URL PATTERNS.
+const apiPrefix = "api"
 const urls = {
     auth: {
         token: `${apiPrefix}/token/`,
@@ -74,7 +72,6 @@ const urls = {
         logout: `${apiPrefix}/token/revoke/`
     },
     user: {
-        base: `${apiPrefix}/users/`,
         list: `${apiPrefix}/users/`,
         fetch: `${apiPrefix}/users/fetch/`,
         insert: `${apiPrefix}/users/insert/`,
@@ -91,9 +88,25 @@ const urls = {
         unlock: `${apiPrefix}/users/unlock/`,
         changePassword: `${apiPrefix}/users/change_password/`,
         selfChangePassword: `${apiPrefix}/users/self_change_password/`,
-        updateSelf: `${apiPrefix}/users/self_update/`,
+        selfUpdate: `${apiPrefix}/users/self_update/`,
         selfFetch: `${apiPrefix}/users/self_fetch/`,
         selfInfo: `${apiPrefix}/users/self_info/`,
+    },
+    djangoUser: {
+        list: `${apiPrefix}/users/local/`,
+        fetch: `${apiPrefix}/users/local/fetch/{pk}/`,
+        insert: `${apiPrefix}/users/local/insert/`,
+        update: `${apiPrefix}/users/local/update/{pk}/`,
+        delete: `${apiPrefix}/users/local/delete/{pk}/`,
+        changeAccountStatus: `${apiPrefix}/users/local/change_status/{pk}/`,
+        changePassword: `${apiPrefix}/users/local/change_password/{pk}/`,
+        selfUpdate: `${apiPrefix}/users/local/self_update/`,
+        selfChangePassword: `${apiPrefix}/users/local/self_change_password/`,
+        selfFetch: `${apiPrefix}/users/local/self_fetch/`,
+        bulkInsert: `${apiPrefix}/users/local/bulk_insert/`,
+        bulkDelete: `${apiPrefix}/users/local/bulk_delete/`,
+        bulkUpdate: `${apiPrefix}/users/local/bulk_update/`,
+        bulkStatusChange: `${apiPrefix}/users/local/bulk_status_change/`,
     },
     group: {
         base: `${apiPrefix}/groups/`,

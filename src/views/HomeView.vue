@@ -422,7 +422,7 @@ export default {
         {
           title: "ldap-gpo",
           enabled: false,
-          hidden: false,
+          hidden: true,
           enableShortName: true,
           icon: "mdi-google-circles-extended",
           route: "ldap-gpo",

@@ -6,7 +6,7 @@
 		<v-data-table
 			:headers="tableData.headers"
 			:show-select="true"
-			item-key="distinguishedName"
+			:item-key="tableItemKey"
 			v-model="tableData.selected"
 			:items="tableData.items"
 			:custom-sort="sortNullLast"
@@ -15,7 +15,7 @@
 			:footer-props="{
 				'items-per-page-options': [10, 25, 50, 100, -1]
 			}"
-			sort-by="sn"
+			:sort-by="tableDefaultSortKey"
 			class="py-3 px-2 mt-2 mb-2">
 			<!-- Table Header -->
 			<template v-slot:top>
@@ -68,7 +68,7 @@
 						</span>
 					</v-btn>
 					<!-- Mass Unlock Button -->
-					<v-btn class="pa-2 mx-2" small
+					<v-btn class="pa-2 mx-2" small v-if="viewTitle == 'ldap-users'"
 						@click="massUnlock()"
 						:dark="!actionButtonsDisabled && !isThemeDark($vuetify)"
 						:light="!actionButtonsDisabled && isThemeDark($vuetify)"
@@ -106,8 +106,13 @@
 				</v-row>
 			</template>
 			<!-- USER IS ENABLED STATUS -->
+			<template v-slot:[`item.user_type`]="{ item }">
+				<v-chip color="primary">
+					{{ item.user_type.toUpperCase() }}
+				</v-chip>
+			</template>
+			<!-- USER IS ENABLED STATUS -->
 			<template v-slot:[`item.is_enabled`]="{ item }">
-
 				<!-- Same User Icon -->
 				<v-tooltip bottom v-if="isLoggedInUser(item.username)">
 					<template v-slot:activator="{ on, attrs }">
@@ -164,7 +169,7 @@
 
 			<!-- USER ACTIONS -->
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-row class="my-1">
+				<v-row class="my-1" justify="center">
 					<v-tooltip bottom>
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn icon
@@ -189,7 +194,7 @@
 								v-bind="attrs"
 								v-on="on"
 								small
-								:disabled="loading"
+								:disabled="loading || !isUserEditable(item)"
 								@click="fetchUser(item, true)">
 								<v-icon small color="primary">
 									mdi-pencil
@@ -207,7 +212,7 @@
 								v-bind="attrs"
 								v-on="on"
 								small
-								:disabled="loading"
+								:disabled="loading || !isUserEditable(item)"
 								@click="changeUserPassword(item)">
 								<v-icon small color="primary">
 									mdi-key-variant
@@ -218,7 +223,7 @@
 					</v-tooltip>
 
 					<!-- UNLOCK USER BUTTON -->
-					<v-tooltip bottom>
+					<v-tooltip bottom v-if="viewTitle == 'ldap-users'">
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn icon color="secondary-20"
 								rounded
@@ -309,6 +314,7 @@
 
 <script>
 import User from '@/include/User.js';
+import DjangoUser from '@/include/DjangoUser.js';
 import UserCreate from '@/components/User/UserCreate.vue';
 import UserImport from '@/components/User/UserImport.vue';
 import UserDialog from '@/components/User/UserDialog.vue';
@@ -339,6 +345,9 @@ export default {
 				items: [],
 				selected: []
 			},
+			userClass: undefined,
+			tableItemKey: undefined,
+			tableDefaultSortKey: undefined,
 			searchString: "",
 			loading: false,
 			fetchingData: false,
@@ -396,13 +405,9 @@ export default {
 	},
 	props: {
 		viewTitle: String,
-		snackbarTimeout: Number,
-		viewMode: String
+		snackbarTimeout: Number
 	},
 	methods: {
-		createSnackbar(notifObj) {
-			notificationBus.$emit('createNotification', notifObj);
-		},
 		resetSearch() {
 			this.searchString = ""
 		},
@@ -444,21 +449,21 @@ export default {
 				switch (key) {
 					case 'userResetPassword':
 						emitNotif = false
-						this.createSnackbar({
+						notificationBus.$emit("createNotification", {
 							message: this.$t("actions.passwordChanged").toUpperCase(),
 							type: 'success'
 						})
 						break;
 					case 'userImport':
 						emitNotif = false
-						this.createSnackbar({
+						notificationBus.$emit("createNotification", {
 							message: this.$t('section.users.import.bulkImportSuccess').toUpperCase(),
 							type: 'success'
 						})
 						break;
 					case 'userDelete':
 						emitNotif = false
-						this.createSnackbar({
+						notificationBus.$emit("createNotification", {
 							message: this.$t('section.users.deleteUser.success').toUpperCase(),
 							type: 'info'
 						})
@@ -488,14 +493,42 @@ export default {
 			this.tableData.headers = []
 			this.tableData.items = []
 		},
-		// User Actions
-		async listUserItems(emitNotif = true) {
+		setLoading() {
 			this.loading = true
 			this.error = false
 			this.tableData.headers = []
 			this.tableData.items = []
 			this.tableData.selected = []
-			await new User({}).list()
+		},
+		isUserEditable(user) {
+			if ("user_type" in user)
+				if (user.user_type != "local")
+					return false
+			return true
+		},
+		// User Actions
+		async listUserItems(emitNotif) {
+			let translationParent
+			switch (this.viewTitle) {
+				case "django-users":
+				case "local-users":
+					this.setLoading()
+					this.userClass = DjangoUser
+					this.tableItemKey = "username"
+					this.tableDefaultSortKey = "last_name"
+					translationParent = "attribute.user."
+					break;
+				case "ldap-users":
+					this.setLoading()
+					this.userClass = User
+					this.tableItemKey = "distinguishedName"
+					this.tableDefaultSortKey = "sn"
+					translationParent = "attribute.ldap."
+					break;
+				default:
+					return
+			}
+			await new this.userClass({}).list()
 				.then(response => {
 					let userHeaders = response.headers
 					let users = response.users
@@ -504,7 +537,17 @@ export default {
 					let headerDict = {}
 					userHeaders.forEach(header => {
 						headerDict = {}
-						headerDict.text = this.$t('attribute.ldap.' + header)
+						switch (header) {
+							case "mail":
+								headerDict.text = this.$t("attribute.user.email")
+								break;
+							case "is_enabled":
+								headerDict.text = this.$t("attribute.user." + header)
+								break;
+							default:
+								headerDict.text = this.$t(translationParent + header)
+								break;
+						}
 						headerDict.value = header
 						if (header == 'is_enabled') {
 							headerDict.align = 'center'
@@ -526,12 +569,19 @@ export default {
 							this.tableData.items[i]["isSelectable"] = false
 							break
 						}
+						if ("user_type" in user) {
+							if (user.user_type != "local")
+								this.tableData.items[i]["isSelectable"] = false
+						}
 					}
 					this.loading = false
 					this.error = false
 					this.errorMsg = ""
 					if (emitNotif == true)
-						this.createSnackbar({ message: (this.$tc("classes.user", users.length) + " " + this.$tc("words.loaded.m", users.length)).toUpperCase(), type: 'success' })
+						notificationBus.$emit("createNotification", {
+							message: (`${this.$tc("classes.user", users.length)} ${this.$tc("words.loaded.m", users.length)}`).toUpperCase(),
+							type: 'success'
+						})
 				})
 				.catch(error => {
 					console.error(error)
@@ -548,13 +598,19 @@ export default {
 				.then(() => {
 					this.loading = false
 					this.error = false
-					this.createSnackbar({ message: this.$t("section.users.userUnlocked").toUpperCase(), type: 'success' })
+					notificationBus.$emit("createNotification", {
+						message: this.$t("section.users.userUnlocked").toUpperCase(),
+						type: 'success'
+					})
 				})
 				.catch(error => {
 					console.error(error)
 					this.loading = false
 					this.error = true
-					this.createSnackbar({ message: this.$t("section.users.errorUserUnlock").toUpperCase(), type: 'error' })
+					notificationBus.$emit("createNotification", {
+						message: this.$t("section.users.errorUserUnlock").toUpperCase(),
+						type: 'error'
+					})
 				})
 		},
 		isLoggedInUser(username) {
@@ -684,8 +740,10 @@ export default {
 						this.errorMsg = this.getMessageForCode(error)
 						this.listUserItems(false);
 						notificationBus.$emit('createNotification',
-							{ message: this.errorMsg.toUpperCase(), type: 'error' }
-						)
+							{
+								message: this.errorMsg.toUpperCase(),
+								type: 'error'
+							})
 					})
 			}
 		},
@@ -721,7 +779,11 @@ export default {
 		userSaved() {
 			this.listUserItems(false)
 			this.$refs.UserDialog.syncUser()
-			this.createSnackbar({ message: (this.$tc("classes.user", 1) + " " + this.$tc("words.saved.m", 1)).toUpperCase(), type: 'success' })
+			notificationBus.$emit("createNotification",
+				{
+					message: (`${this.$tc("classes.user", 1)} ${this.$tc("words.saved.m", 1)}`).toUpperCase(),
+					type: 'success'
+				})
 		},
 		// Fetch individual User
 		async fetchUser(item, isEditable = false, openedDialogLoading = false) {

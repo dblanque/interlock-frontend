@@ -240,7 +240,7 @@
 										<v-text-field
 										dense
 										id="mail"
-										:label="$t('attribute.ldap.mail')"
+										:label="$t('attribute.user.email')"
 										:readonly="editFlag != true"
 										v-model="usercopy.mail"
 										:rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"
@@ -250,7 +250,7 @@
 										<v-fade-transition>
 											<v-card v-ripple outlined class="pa-1 py-2">
 												<span :color="(usercopy.is_enabled ? 'valid-40' : 'error')">
-													{{ usercopy.is_enabled ? $t('attribute.ldap.is_enabled') : $t('attribute.ldap.is_disabled') }}
+													{{ usercopy.is_enabled ? $t('attribute.user.is_enabled') : $t('attribute.user.is_disabled') }}
 												</span>
 												<div elevation="0" v-if="usercopy.is_enabled == true">
 													<v-icon color="valid-40">

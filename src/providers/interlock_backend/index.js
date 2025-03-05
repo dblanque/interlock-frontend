@@ -19,6 +19,7 @@ import testCalls from '@/providers/interlock_backend/modules/test.js'
 import livenessCalls from '@/providers/interlock_backend/modules/liveness.js'
 import debugCalls from '@/providers/interlock_backend/modules/debug.js'
 import applicationCalls from '@/providers/interlock_backend/modules/application.js'
+import djangoUserCalls from '@/providers/interlock_backend/modules/djangoUser.js'
 
 const modules = {
     auth: authCalls,
@@ -35,6 +36,7 @@ const modules = {
     liveness: livenessCalls,
     debug: debugCalls,
     application: applicationCalls,
+    djangoUser: djangoUserCalls,
 }
 
 const interlock_backend = {

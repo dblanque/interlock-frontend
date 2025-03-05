@@ -101,7 +101,7 @@
                                     <v-text-field
                                     dense
                                     id="mail"
-                                    :label="$t('attribute.ldap.mail')"
+                                    :label="$t('attribute.user.email')"
                                     v-model="usercopy.mail"
                                     :rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"
                                     ></v-text-field>
@@ -511,7 +511,7 @@ export default {
                 partialUpdateData[k] = this.usercopy[k]
             })
             if (this.$refs.endUserForm.validate()){
-                await new User({}).updateSelf(partialUpdateData)
+                await new User({}).selfUpdate(partialUpdateData)
                 .then(() => {
                     this.refreshUser();
                     this.loading = false

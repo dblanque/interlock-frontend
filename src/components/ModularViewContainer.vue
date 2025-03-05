@@ -58,7 +58,6 @@
 				:requestRefresh="this.refreshGroupDataTable"
 				:viewTitle="viewTitle"
 				:snackbarTimeout="this.snackbarTimeout"
-				:viewMode="'django'"
 				@refresh="refreshAction" />
 		</v-container>
 
@@ -67,7 +66,6 @@
 			<UserView ref="UserView"
 				:requestRefresh="this.refreshUserDataTable"
 				:viewTitle="viewTitle"
-				:viewMode="'ldap'"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction"
 				@goToGroup="goToGroup" />
@@ -190,16 +188,12 @@ export default {
 					case 'applications':
 						this.$refs.ApplicationView.reloadDataTableHeaders()
 						break;
+					case 'ldap-users':
 					case 'django-users':
 						this.$refs.UserView.reloadDataTableHeaders()
 						break;
-					case 'django-groups':
-						this.$refs.GroupView.reloadDataTableHeaders()
-						break;
-					case 'ldap-users':
-						this.$refs.UserView.reloadDataTableHeaders()
-						break;
 					case 'ldap-groups':
+					case 'django-groups':
 						this.$refs.GroupView.reloadDataTableHeaders()
 						break;
 					case 'logs':
@@ -231,6 +225,7 @@ export default {
 					}
 					break;
 				case 'ldap-users':
+				case 'django-users':
 					if (this.$refs.UserView != undefined) {
 						console.log("Requested refresh for component " + newValue)
 						this.$refs.UserView.resetSearch()
@@ -238,6 +233,7 @@ export default {
 					}
 					break;
 				case 'ldap-groups':
+				case 'django-groups':
 					if (this.$refs.GroupView != undefined) {
 						console.log("Requested refresh for component " + newValue)
 						this.$refs.GroupView.resetSearch()

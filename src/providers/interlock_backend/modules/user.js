@@ -136,9 +136,9 @@ const actions = {
         })
     },
 
-    updateSelf: (data)=>{
+    selfUpdate: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.put(interlock_backend.urls.user.updateSelf, data)
+            interlock_backend.request.put(interlock_backend.urls.user.selfUpdate, data)
             .then(response => {
                 resolve(response.data);
             }).catch((e) => reject(e))

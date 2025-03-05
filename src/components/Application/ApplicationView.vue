@@ -344,8 +344,7 @@ export default {
 		applicationSaved(){
 			this.listApplicationItems(false)
 			this.$refs.ApplicationDialog.syncApplication()
-			notificationBus.$emit(
-				'createNotification',
+			notificationBus.$emit('createNotification',
 				{
 					message: `${this.$tc("classes.application", 1)} ${this.$tc("words.saved.m", 1)}`.toUpperCase(),
 					type: 'success'
