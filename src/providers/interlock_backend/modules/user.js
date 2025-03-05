@@ -114,7 +114,7 @@ const actions = {
     getCurrentUserData: ()=>{
         const authKeys = []
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.user.base + 'me/')
+            interlock_backend.request.get(interlock_backend.urls.user.selfInfo)
             .then(response => {
                 for (const key in response.data.user) {
                     if (authKeys.includes(key))
