@@ -47,6 +47,7 @@
 						:isBeingEdited="true"
 						:isBeingCreated="true"
 						@update="updateApplicationData"
+						@nextStep="nextStep"
 					/>
 				</v-stepper-content>
 
