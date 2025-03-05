@@ -410,7 +410,7 @@ export default {
     },
     async created() {
         this.user = new User({})
-        this.user.getCurrentUserData().then(response => {
+        this.user.selfInfo().then(response => {
             let responseStatus = response.status
             let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
             response = response.data
@@ -558,7 +558,7 @@ export default {
         async refreshUser(){
             this.loading = true
             this.error = false
-            await this.user.fetchme().then(() => {
+            await this.user.selfFetch().then(() => {
                 this.syncUser()
                 setTimeout(() => {
                     this.loading = false
@@ -605,7 +605,7 @@ export default {
             const clockDifference = refreshClockLimit - accessClockLimit;
             if (Date.now() >= accessClockLimit && Date.now() < refreshClockLimit) {
                 if (localStorage.getItem('auth.auto_refresh_token') == 'true') {
-                    await new User({}).getCurrentUserData()
+                    await new User({}).selfInfo()
                     .then(() => { this.resetTimer() })
                     .catch((error) => { console.error(error) })
                 } else if (!this.showRefreshTokenDialog) {

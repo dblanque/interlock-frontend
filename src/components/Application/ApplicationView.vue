@@ -66,7 +66,6 @@
 				</v-tooltip>
 			</template>
 
-
 			<!-- APPLICATION ACTIONS -->
 			<template v-slot:[`item.actions`]="{ item }">
 				<v-row class="my-1" justify="center">

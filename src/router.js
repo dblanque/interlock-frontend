@@ -27,13 +27,13 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/local-users',
-    name: 'local-users',
+    path: '/django-users',
+    name: 'django-users',
     component: HomeView
   },
   {
-    path: '/local-groups',
-    name: 'local-groups',
+    path: '/django-groups',
+    name: 'django-groups',
     component: HomeView
   },
   {

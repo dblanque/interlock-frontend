@@ -96,8 +96,8 @@ class User extends ApiModel{
         return await interlock_backend.call('user/bulkUpdate', data)
     }
 
-    async bulkAccountStatusChange(data){
-        return await interlock_backend.call('user/bulkAccountStatusChange', data)
+    async bulkStatusChange(data){
+        return await interlock_backend.call('user/bulkStatusChange', data)
     }
 
     async bulkUnlock(data){
@@ -132,8 +132,8 @@ class User extends ApiModel{
         return await interlock_backend.call('user/changePassword', data)
     }
 
-    async changePasswordSelf(data){
-        return await interlock_backend.call('user/changePasswordSelf', data)
+    async selfChangePassword(data){
+        return await interlock_backend.call('user/selfChangePassword', data)
     }
 
     async fetch(username){
@@ -162,8 +162,8 @@ class User extends ApiModel{
         )
     }
 
-    async fetchme(){
-        return await interlock_backend.call('user/fetchme').then(
+    async selfFetch(){
+        return await interlock_backend.call('user/selfFetch').then(
             response => {
                 if(!response)
                         throw Error("Error fetching user data. Provider returned: " + response);
@@ -188,8 +188,8 @@ class User extends ApiModel{
         )
     }
 
-    async getCurrentUserData(){
-        return await interlock_backend.call('user/getCurrentUserData')
+    async selfInfo(){
+        return await interlock_backend.call('user/selfInfo')
     }
 
     async update(data){

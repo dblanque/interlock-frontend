@@ -95,7 +95,7 @@ export default {
             this.$emit('logoutAction')
         },
         async refreshAccessToken(){
-            await new User({}).getCurrentUserData()
+            await new User({}).selfInfo()
             .then(() => {
                 notificationBus.$emit('createNotification', {
                         message: this.$t("misc.tokenRefreshed").toUpperCase(), 

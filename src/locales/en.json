@@ -8,8 +8,8 @@
     "home":"Home",
     "ldap-dirtree":"Directory Tree",
     "applications":"SSO Applications",
-    "local-users":"Users",
-    "local-groups":"Groups",
+    "django-users":"Users",
+    "django-groups":"Groups",
     "ldap-users":"Users",
     "ldap-groups":"Security Groups",
     "ldap-dns":"DNS",
@@ -22,8 +22,8 @@
     "debug":"Debugging",
     "header": {
       "home":"Home",
-      "local-users":"Local Users",
-      "local-groups":"Local Groups",
+      "django-users":"Local Users",
+      "django-groups":"Local Groups",
       "ldap-dirtree":"Directory Tree",
       "ldap-users":"LDAP Users",
       "ldap-groups":"LDAP Security Groups",
@@ -405,10 +405,6 @@
     "notFound": "not found",
     "unknown_short": "An Unknown error has occurred",
     "unknown": "An Unknown error has occurred, please try again or contact us"
-  },
-  "localUser":{
-    "attributes":{
-    }
   },
   "dns":{
     "hints":{

@@ -296,7 +296,7 @@ export default {
 			localStorage.removeItem('auth.logoutMessage')
 		} else {
 			let admin_allowed = localStorage.getItem('user.admin_allowed')
-			new User({}).fetchme()
+			new User({}).selfFetch()
 			.then(() => {
 				console.log("User is already logged in.")
 				if (this.next !== "") {

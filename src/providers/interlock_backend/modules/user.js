@@ -45,9 +45,9 @@ const actions = {
         })
     },
 
-    bulkAccountStatusChange: (data)=>{
+    bulkStatusChange: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.user.bulkAccountStatusChange, data).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.user.bulkStatusChange, data).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)
@@ -111,7 +111,7 @@ const actions = {
         })
     },
 
-    getCurrentUserData: ()=>{
+    selfInfo: ()=>{
         const authKeys = []
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.user.selfInfo)
@@ -172,9 +172,9 @@ const actions = {
         })
     },
 
-    changePasswordSelf: (data)=>{
+    selfChangePassword: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.user.changePasswordSelf, data)
+            interlock_backend.request.post(interlock_backend.urls.user.selfChangePassword, data)
             .then(response => {
                 resolve(response.data);
             }).catch((e) => reject(e))
@@ -201,9 +201,9 @@ const actions = {
         })
     },
 
-    fetchme: ()=>{
+    selfFetch: ()=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.user.fetchme).then(response => {
+            interlock_backend.request.get(interlock_backend.urls.user.selfFetch).then(response => {
                 resolve(response.data)
             }).catch((e) => {
                 reject(e)

@@ -168,7 +168,7 @@
               :viewIndex="tab.index"
               ref="ModularViewContainerRef"
               @refresh="setDomainDetails()"
-              @refreshDomain="fetchDomainDetails(false)"
+              @refreshDomain="fetchDomainDetails()"
               @goToUser="goToUser"
               @goToGroup="goToGroup"
               :langChanged="langChanged"
@@ -377,17 +377,17 @@ export default {
           group: "_top",
         },
         {
-          title: "local-users",
-          enabled: false,
+          title: "django-users",
+          enabled: true,
           icon: "mdi-account",
-          route: "local-users",
+          route: "django-users",
           group: "local",
         },
         {
-          title: "local-groups",
-          enabled: false,
+          title: "django-groups",
+          enabled: true,
           icon: "mdi-google-circles-communities",
-          route: "local-groups",
+          route: "django-groups",
           group: "local",
         },
         {
@@ -461,7 +461,7 @@ export default {
       t.index = tabIndex
       tabIndex++
     })
-    await new User({}).getCurrentUserData().then((response) => {
+    await new User({}).selfInfo().then((response) => {
       let responseStatus = response.status;
       let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
       response = response.data;
@@ -597,7 +597,7 @@ export default {
       this.realm = domainData["realm"];
       this.basedn = domainData["basedn"];
     },
-    async fetchDomainDetails(default_redirect=true){
+    async fetchDomainDetails(){
         this.fetchingDomainDetails = true
         this.disableDomainDetailsButton = true
         await new Domain({}).getDetails().then(() => {
@@ -605,9 +605,6 @@ export default {
           this.domain = domainData['name']
           this.realm = domainData['realm']
           this.basedn = domainData['basedn']
-          if (this.domain.toLowerCase() == "example.com" && default_redirect === true) {
-            this.updateSelectedTab(this.getTabIndex("settings"))
-          }
           this.fetchingDomainDetails = false
           if ('debug' in domainData)
             this.enableDebug = (domainData['debug'] === "true")
@@ -679,7 +676,7 @@ export default {
       const clockDifference = refreshClockLimit - accessClockLimit;
       if (Date.now() >= accessClockLimit && Date.now() < refreshClockLimit) {
         if (localStorage.getItem('auth.auto_refresh_token') == 'true') {
-            await new User({}).getCurrentUserData()
+            await new User({}).selfInfo()
             .then(() => { this.resetTimer() })
             .catch((error) => { console.error(error) })
         } else if (!this.showRefreshTokenDialog) {

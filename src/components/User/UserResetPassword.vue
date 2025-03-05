@@ -145,7 +145,7 @@ export default {
             if (this.isEndUser === true) {
                 if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
                     this.loading = true
-                    await new User({}).changePasswordSelf(user)
+                    await new User({}).selfChangePassword(user)
                     .then(response => {
                         setTimeout(() => {
                             this.loading = false
