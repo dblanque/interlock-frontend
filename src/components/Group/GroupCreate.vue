@@ -40,7 +40,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('ldap.attributes.cn')"
+                                    :label="$t('attribute.ldap.cn')"
                                     v-model="groupToCreate.cn"
                                     :rules="[this.fieldRules(groupToCreate.cn, 'ge_cn', true)]"
                                     ></v-text-field>
@@ -123,7 +123,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$t('ldap.attributes.mail')"
+                                    :label="$t('attribute.ldap.mail')"
                                     v-model="groupToCreate.mail"
                                     :rules="[this.fieldRules(groupToCreate.mail, 'ge_mail')]"
                                     ></v-text-field>

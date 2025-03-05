@@ -101,7 +101,7 @@ export default {
 				let headerDict = {}
 				gpoHeaders.forEach(header => {
 					headerDict = {}
-					headerDict.text = this.$t('ldap.attributes.' + header)
+					headerDict.text = this.$t('attribute.ldap.' + header)
 					headerDict.value = header
 					if (header == 'hasMembers') {
 						headerDict.sortable = false

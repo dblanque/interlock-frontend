@@ -73,7 +73,7 @@
                                             <v-divider class="mb-2"/>
                                             </v-col>
                                             <v-col class="mx-2">
-                                                {{ $t(`ldap.attributes.${k}`) }}
+                                                {{ $t(`attribute.ldap.${k}`) }}
                                             </v-col>
                                             <v-col class="mx-2">
                                                 <v-icon color="primary">
@@ -237,39 +237,39 @@ export default {
         getDefaultFields(){
             return {
                 "givenName":{
-                    text_i18n: "ldap.attributes.givenName",
+                    text_i18n: "attribute.ldap.givenName",
                     value: ""
                 },
                 "sn":{
-                    text_i18n: "ldap.attributes.sn",
+                    text_i18n: "attribute.ldap.sn",
                     value: ""
                 },
                 "telephoneNumber":{
-                    text_i18n: "ldap.attributes.telephoneNumber",
+                    text_i18n: "attribute.ldap.telephoneNumber",
                     value: ""
                 },
                 "streetAddress":{
-                    text_i18n: "ldap.attributes.streetAddress",
+                    text_i18n: "attribute.ldap.streetAddress",
                     value: ""
                 },
                 "postalCode":{
-                    text_i18n: "ldap.attributes.postalCode",
+                    text_i18n: "attribute.ldap.postalCode",
                     value: ""
                 },
                 "l":{
-                    text_i18n: "ldap.attributes.l",
+                    text_i18n: "attribute.ldap.l",
                     value: ""
                 },
                 "st":{
-                    text_i18n: "ldap.attributes.st",
+                    text_i18n: "attribute.ldap.st",
                     value: ""
                 },
                 "co":{
-                    text_i18n: "ldap.attributes.co",
+                    text_i18n: "attribute.ldap.co",
                     value: ""
                 },
                 "wWWHomePage":{
-                    text_i18n: "ldap.attributes.wWWHomePage",
+                    text_i18n: "attribute.ldap.wWWHomePage",
                     value: ""
                 },
             }

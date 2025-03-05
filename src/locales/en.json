@@ -22,9 +22,11 @@
     "debug":"Debugging",
     "header": {
       "home":"Home",
+      "local-users":"Local Users",
+      "local-groups":"Local Groups",
       "ldap-dirtree":"Directory Tree",
-      "ldap-users":"Users",
-      "ldap-groups":"Security Groups",
+      "ldap-users":"LDAP Users",
+      "ldap-groups":"LDAP Security Groups",
       "ldap-dns":"Domain Name Server",
       "ldap-gpo":"Group Policy Objects",
       "server":"Server Management",
@@ -128,85 +130,85 @@
     "passwordChanged": "Password Changed"
   },
   "words":{
-      "created":{
-        "m":"Created",
-        "f":"Created",
-        "n":"Created"
-      },
-      "updated":{
-        "m":"Updated",
-        "f":"Updated",
-        "n":"Updated"
-      },
-      "deleted":{
-        "m":"Deleted",
-        "f":"Deleted",
-        "n":"Deleted"
-      },
-      "saved":{
-        "m":"Saved",
-        "f":"Saved",
-        "n":"Saved"
-      },
-      "renamed":{
-        "m":"Renamed",
-        "f":"Renamed",
-        "n":"Renamed"
-      },
-      "all":{
-        "m":"All",
-        "f":"All",
-        "n":"All"
-      },
-      "none":{
-        "m":"None",
-        "f":"None",
-        "n":"None"
-      },
-      "loaded": {
-        "m":"Loaded",
-        "f":"Loaded",
-        "n":"Loaded"
-      },
-      "unlocked": {
-        "m":"Unlocked",
-        "f":"Unlocked",
-        "n":"Unlocked"
-      },
-      "success":"Success",
-      "skipped":"Skipped",
-      "status":"Status",
-      "selected":"Selected",
-      "readOnly":"Read Only",
-      "member":"Member",
-      "enabled":"Enabled",
-      "disabled":"Disabled",
-      "seconds":"Seconds",
-      "minutes":"Minutes",
-      "hours":"Hours",
-      "key":"Key",
-      "value":"Value",
-      "error":"Error",
-      "today": "Today",
-      "filter": "Filter",
-      "legend": "Legend",
-      "export": "Export",
-      "maximum": "Maximum",
-      "minimum": "Minimum",
-      "expiration": "Expiration",
-      "expiration_ab": "Exp.",
-      "at": "At",
-      "of": "Of",
-      "details": "Details",
-      "list": "List",
-      "to": "To",
-      "currently": "Currently",
-      "notes": "Notes",
-      "secondaryM": "Secondary",
-      "secondaryF": "Secondary",
-      "others": "Others",
-      "processing": "Processing",
-      "date": "Date"
+    "created":{
+      "m":"Created",
+      "f":"Created",
+      "n":"Created"
+    },
+    "updated":{
+      "m":"Updated",
+      "f":"Updated",
+      "n":"Updated"
+    },
+    "deleted":{
+      "m":"Deleted",
+      "f":"Deleted",
+      "n":"Deleted"
+    },
+    "saved":{
+      "m":"Saved",
+      "f":"Saved",
+      "n":"Saved"
+    },
+    "renamed":{
+      "m":"Renamed",
+      "f":"Renamed",
+      "n":"Renamed"
+    },
+    "all":{
+      "m":"All",
+      "f":"All",
+      "n":"All"
+    },
+    "none":{
+      "m":"None",
+      "f":"None",
+      "n":"None"
+    },
+    "loaded": {
+      "m":"Loaded",
+      "f":"Loaded",
+      "n":"Loaded"
+    },
+    "unlocked": {
+      "m":"Unlocked",
+      "f":"Unlocked",
+      "n":"Unlocked"
+    },
+    "success":"Success",
+    "skipped":"Skipped",
+    "status":"Status",
+    "selected":"Selected",
+    "readOnly":"Read Only",
+    "member":"Member",
+    "enabled":"Enabled",
+    "disabled":"Disabled",
+    "seconds":"Seconds",
+    "minutes":"Minutes",
+    "hours":"Hours",
+    "key":"Key",
+    "value":"Value",
+    "error":"Error",
+    "today": "Today",
+    "filter": "Filter",
+    "legend": "Legend",
+    "export": "Export",
+    "maximum": "Maximum",
+    "minimum": "Minimum",
+    "expiration": "Expiration",
+    "expiration_ab": "Exp.",
+    "at": "At",
+    "of": "Of",
+    "details": "Details",
+    "list": "List",
+    "to": "To",
+    "currently": "Currently",
+    "notes": "Notes",
+    "secondaryM": "Secondary",
+    "secondaryF": "Secondary",
+    "others": "Others",
+    "processing": "Processing",
+    "date": "Date"
   },
   "classes":{
     "log": "Log | Logs",
@@ -236,173 +238,177 @@
     }
   },
   "error":{
-      "codes":{
-          "400": "HTTP 400: Bad Request",
-          "401": "HTTP 401: Unauthorized",
-          "403": "HTTP 403: Forbidden",
-          "406": "HTTP 406: Not Acceptable",
-          "409": "HTTP 409: Conflict",
-          "500": "HTTP 500: Server Error",
-          "ldapGwError": "LDAP Server is Unreachable",
-          "invalidCSV": "Invalid CSV File",
-          "invalidCSVHeaders": "Invalid CSV Headers",
-          "fileReader": "File Reader Exception",
-          "networkError": "AXIOS: Network Error",
-          "oidc":{
-            "oidc_invalid_request":"OIDC Request is Invalid"
-          },
-          "applications":{
-            "application_exists": "SSO Application already exists",
-            "application_does_not_exist": "SSO Application does not exist",
-            "application_field_does_not_exist": "Field for SSO Application does not exist"
-          },
-          "auth":{
-              "invalid_credentials": "Incorrect Credentials",
-              "verification_code": "Incorrect Code, Please try again",
-              "verified_successfully": "Verified Successfully",
-              "verification_expired": "Verification codes have been exhausted, contact an admin"
-          },
-          "otp":{
-            "otp_invalid_code":"OTP Code is invalid",
-            "otp_invalid_recovery_code":"Recovery Code is invalid",
-            "otp_invalid_data":"OTP Data is invalid",
-            "otp_required":"OTP Code is Required",
-            "otp_no_device_registered":"No OTP Device Registered"
-          },
-          "dns":{
-            "dns_zone_missing":"Zone Value is invalid",
-            "dns_zone_in_record":"Zone must not be included in Record Name",
-            "dns_zone_not_deletable":"Zone cannot be deleted",
-            "dns_zone_exists":"Zone already exists",
-            "dns_zone_does_not_exist":"Zone does not exist",
-            "dns_record_not_in_request":"Record is not present in request",
-            "dns_record_dn_missing":"Record does not contain the requested Distinguished Name",
-            "dns_record_type_conflict":"Record Type Insertion or Update has a conflict",
-            "dns_record_exists_conflict":"Record already exists",
-            "dns_record_type_unsupported":"Record Type not supported",
-            "dns_record_attr_missing":"Record does not contain a required attribute",
-            "dns_record_type_missing":"Record Type not in Request",
-            "dns_record_data_does_not_match":"Record Data does not match server-side entry",
-            "dns_record_entry_does_not_exist":"Record LDAP Entry does not exist",
-            "dns_record_data_malformed":"DNS Record is Malformed",
-            "dns_record_serial":"Unable to set Record Serial",
-            "dns_soa_fetch":"Could not fetch Record Zone SOA",
-            "dns_soa_serial_increment":"Unable to increment SOA Serial",
-            "dns_soa_record_root_only":"A Start Of Authority Record can only be set for the root of your zone",
-            "dns_root_servers_only_cli":"Root DNS Servers may only be modified by command-line",
-            "dns_field_validator_failed":"A Field in the Record has failed validation",
-            "dns_list_response_empty":"LDAP Response does not contain the DNS List",
-            "dns_field_validator_exception":"Unhandled DNS Field Validator Exception",
-            "dns_record_create":"Record could not be created"
-          },
-          "users":{
-            "noUsersInImport":"No Users detected in File",
-            "user_permission_malformed":"User permissions in request are malformed",
-            "user_passwords_dont_match":"User passwords do not match",
-            "user_create_error":"User could not be created",
-            "user_bulk_create_error":"A user could not be created",
-            "user_bulk_mapping_error":"A required header mapping is invalid or missing",
-            "user_bulk_length_error":"A row does not have the correct field amount or delimitation",
-            "user_update_error":"User could not be updated",
-            "user_field_validator_error":"User could not be validated",
-            "user_dn_does_not_exist":"User Distinguished Name does not exist",
-            "user_dn_path_exception":"User DN Path Parsing Stage Exception",
-            "user_anti_lockout":"User Anti-lockout Exception",
-            "user_unlock_error":"User could not be unlocked",
-            "user_country_error":"User country could not be updated",
-            "user_group_fetch_error":"User Group Memberships could not be fetched",
-            "user_group_primary_err":"Primary Group for User cannot be Deleted",
-            "user_group_bad":"Bad User Group Member Operations",
-            "user_email_exists":"Another User with that Email exists"
-          },
-          "ldap":{
-            "ldap_obj_exists":"An object with this Common Name already exists",
-            "ldap_connection_not_open":"No LDAP Connection was open prior to this operation",
-            "ldap_perm_insufficient":"Insufficient LDAP Permissions",
-            "ldap_obj_doesnt_exist":"An object with this Distinguished Name does not exist",
-            "ldap_bind_err":"Could not bind to LDAP Server",
-            "ldap_tree_err":"Could not fetch Directory Tree from LDAP Server",
-            "ldap_port_err":"LDAP Server Port unreachable",
-            "ldap_bind_test_failed":"Bind Connection Failed"
-          },
-          "groups":{
-            "group_does_not_exist":"Specified Group does not exist",
-            "group_create":"Group could not be Created",
-            "group_delete":"Group could not be Deleted",
-            "group_update":"Group could not be Updated",
-            "group_member_add":"Members could not be added to Group",
-            "group_member_remove":"Members could not be removed from Group",
-            "group_scope_or_type":"Group Scope or Type missing from Request",
-            "group_dn_missing":"Group Distinguished Name missing from Request",
-            "group_builtin_protect":"Specified Group cannot be Deleted as it is builtin",
-            "group_members_bad":"The same members are in the Add Member and Remove Member lists"
-          },
-          "settings":{
-            "setting_type_malformed":"Setting Type Malformed",
-            "setting_not_in_list":"Required Setting not in List",
-            "setting_max_log":"Log Limit Violation",
-            "setting_reset_fail":"Could not reset settings to defaults",
-            "setting_preset_not_exists":"Settings Preset does not exist",
-            "setting_preset_exists":"Settings Preset already exists",
-            "settings_serializer_error":"Settings serializer error",
-            "settings_preset_serializer_error":"Preset serializer error",
-            "settings_preset_must_be_disabled":"Preset must be disabled to be deleted"
-          },
-          "ldapObjectExists":"An LDAP Object with that Identifier Exists",
-          "namingViolation":"Naming Violation Exception",
-          "unwillingToPerform":"LDAP Server is Unwilling to Perform Action",
-          "unwillingToPerformPwd":"Active Directory requires LDAP with SSL to Modify Passwords"
+    "codes":{
+      "400": "HTTP 400: Bad Request",
+      "401": "HTTP 401: Unauthorized",
+      "403": "HTTP 403: Forbidden",
+      "406": "HTTP 406: Not Acceptable",
+      "409": "HTTP 409: Conflict",
+      "500": "HTTP 500: Server Error",
+      "ldapGwError": "LDAP Server is Unreachable",
+      "invalidCSV": "Invalid CSV File",
+      "invalidCSVHeaders": "Invalid CSV Headers",
+      "fileReader": "File Reader Exception",
+      "networkError": "AXIOS: Network Error",
+      "oidc":{
+        "oidc_invalid_request":"OIDC Request is Invalid"
       },
-      "settings": {
-        "testInvalid":"LDAP Bind Connection Failed",
-        "serverUnreachable":"LDAP Server Unreachable"
+      "applications":{
+        "application_exists": "SSO Application already exists",
+        "application_does_not_exist": "SSO Application does not exist",
+        "application_field_does_not_exist": "Field for SSO Application does not exist"
       },
-      "data":{
-        "noCountryCode":"No country code set"
+      "auth":{
+        "invalid_credentials": "Incorrect Credentials",
+        "verification_code": "Incorrect Code, Please try again",
+        "verified_successfully": "Verified Successfully",
+        "verification_expired": "Verification codes have been exhausted, contact an admin"
       },
-      "validation":{
-          "int32":"Must be a 32-bit Integer",
-          "below10000":"Numeric value must be below 10000",
-          "aboveZero":"Numeric value must be above 0",
-          "doubleQuotes":"Double quotes are not allowed",
-          "singleQuotes":"Single quotes are not allowed",
-          "domainRoot":"Must be a valid Domain Name (Exclude the DNS Zone, @ allowed for root)",
-          "ascii": "String Data must contain only ASCII Characters",
-          "fieldinvalid": "One or more fields are invalid",
-          "fieldRequired": "This field is required",
-          "passwordNotSame":"Passwords must match",
-          "alphabetic": "Must contain only letters (2 character minimum)",
-          "numeric": "Must contain only numbers",
-          "max4": "4 Characters Maximum",
-          "max6": "6 Characters Maximum",
-          "max8": "8 Characters Maximum",
-          "max255": "255 Characters Maximum",
-          "alphaNumeric": "Must be Alphanumeric",
-          "alphaNumericSpecialUsername": "Must contain only letters (hyphen allowed)",
-          "alphaNumericPassword": "8 char. minimum, special characters allowed: !@#$%&*()",
-          "alphaNumericSpaces": "a-z A-Z 0-9 and Spaces, 2 char. min",
-          "alphaNumericSpecial": "a-z A-Z 0-9 -_ and Spaces, 2 char. min",
-          "domain": "Must be a valid Top-Level Domain ( example.tld )",
-          "endpoint": "Must be a valid Endpoint ( https://example.tld/endpoint )",
-          "email": "Must be a valid E-Mail (E.g.: john@domain.com)",
-          "phone": "Must be a valid Phone",
-          "date": "Date is invalid",
-          "dayDate":"Day Date is invalid",
-          "ipv4Address":"Invalid IPv4 Address",
-          "ipv6Address":"Invalid IPv6 Address [0-9a-fA-F]",
-          "ipv6AddressUri":"IPv6 URI must be enclosed by brackets",
-          "ipv6AddressLength":"Invalid IPv6 Address Length",
-          "ipv6AddressAmbiguous":"Ambiguous IPv6 Address",
-          "distinguishedName":"Distinguished Name is invalid",
-          "realm":"NT Realm is invalid",
-          "domainCanonical":"Must be a valid Domain in Canonical format (with a dot at the end)",
-          "totpLength":"TOTP Code must be 6 digits long"
+      "otp":{
+        "otp_invalid_code":"OTP Code is invalid",
+        "otp_invalid_recovery_code":"Recovery Code is invalid",
+        "otp_invalid_data":"OTP Data is invalid",
+        "otp_required":"OTP Code is Required",
+        "otp_no_device_registered":"No OTP Device Registered"
       },
-      "unableToLoad":"Unable to load",
-      "notDisplayedCorrectly": "Could not get error message to display",
-      "notFound": "not found",
-      "unknown_short": "An Unknown error has occurred",
-      "unknown": "An Unknown error has occurred, please try again or contact us"
+      "dns":{
+        "dns_zone_missing":"Zone Value is invalid",
+        "dns_zone_in_record":"Zone must not be included in Record Name",
+        "dns_zone_not_deletable":"Zone cannot be deleted",
+        "dns_zone_exists":"Zone already exists",
+        "dns_zone_does_not_exist":"Zone does not exist",
+        "dns_record_not_in_request":"Record is not present in request",
+        "dns_record_dn_missing":"Record does not contain the requested Distinguished Name",
+        "dns_record_type_conflict":"Record Type Insertion or Update has a conflict",
+        "dns_record_exists_conflict":"Record already exists",
+        "dns_record_type_unsupported":"Record Type not supported",
+        "dns_record_attr_missing":"Record does not contain a required attribute",
+        "dns_record_type_missing":"Record Type not in Request",
+        "dns_record_data_does_not_match":"Record Data does not match server-side entry",
+        "dns_record_entry_does_not_exist":"Record LDAP Entry does not exist",
+        "dns_record_data_malformed":"DNS Record is Malformed",
+        "dns_record_serial":"Unable to set Record Serial",
+        "dns_soa_fetch":"Could not fetch Record Zone SOA",
+        "dns_soa_serial_increment":"Unable to increment SOA Serial",
+        "dns_soa_record_root_only":"A Start Of Authority Record can only be set for the root of your zone",
+        "dns_root_servers_only_cli":"Root DNS Servers may only be modified by command-line",
+        "dns_field_validator_failed":"A Field in the Record has failed validation",
+        "dns_list_response_empty":"LDAP Response does not contain the DNS List",
+        "dns_field_validator_exception":"Unhandled DNS Field Validator Exception",
+        "dns_record_create":"Record could not be created"
+      },
+      "users":{
+        "noUsersInImport":"No Users detected in File",
+        "user_permission_malformed":"User permissions in request are malformed",
+        "user_passwords_dont_match":"User passwords do not match",
+        "user_create_error":"User could not be created",
+        "user_bulk_create_error":"A user could not be created",
+        "user_bulk_mapping_error":"A required header mapping is invalid or missing",
+        "user_bulk_length_error":"A row does not have the correct field amount or delimitation",
+        "user_update_error":"User could not be updated",
+        "user_field_validator_error":"User could not be validated",
+        "user_dn_does_not_exist":"User Distinguished Name does not exist",
+        "user_dn_path_exception":"User DN Path Parsing Stage Exception",
+        "user_anti_lockout":"User Anti-lockout Exception",
+        "user_unlock_error":"User could not be unlocked",
+        "user_country_error":"User country could not be updated",
+        "user_group_fetch_error":"User Group Memberships could not be fetched",
+        "user_group_primary_err":"Primary Group for User cannot be Deleted",
+        "user_group_bad":"Bad User Group Member Operations",
+        "user_email_exists":"Another User with that Email exists"
+      },
+      "ldap":{
+        "ldap_obj_exists":"An object with this Common Name already exists",
+        "ldap_connection_not_open":"No LDAP Connection was open prior to this operation",
+        "ldap_perm_insufficient":"Insufficient LDAP Permissions",
+        "ldap_obj_doesnt_exist":"An object with this Distinguished Name does not exist",
+        "ldap_bind_err":"Could not bind to LDAP Server",
+        "ldap_tree_err":"Could not fetch Directory Tree from LDAP Server",
+        "ldap_port_err":"LDAP Server Port unreachable",
+        "ldap_bind_test_failed":"Bind Connection Failed"
+      },
+      "groups":{
+        "group_does_not_exist":"Specified Group does not exist",
+        "group_create":"Group could not be Created",
+        "group_delete":"Group could not be Deleted",
+        "group_update":"Group could not be Updated",
+        "group_member_add":"Members could not be added to Group",
+        "group_member_remove":"Members could not be removed from Group",
+        "group_scope_or_type":"Group Scope or Type missing from Request",
+        "group_dn_missing":"Group Distinguished Name missing from Request",
+        "group_builtin_protect":"Specified Group cannot be Deleted as it is builtin",
+        "group_members_bad":"The same members are in the Add Member and Remove Member lists"
+      },
+      "settings":{
+        "setting_type_malformed":"Setting Type Malformed",
+        "setting_not_in_list":"Required Setting not in List",
+        "setting_max_log":"Log Limit Violation",
+        "setting_reset_fail":"Could not reset settings to defaults",
+        "setting_preset_not_exists":"Settings Preset does not exist",
+        "setting_preset_exists":"Settings Preset already exists",
+        "settings_serializer_error":"Settings serializer error",
+        "settings_preset_serializer_error":"Preset serializer error",
+        "settings_preset_must_be_disabled":"Preset must be disabled to be deleted"
+      },
+      "ldapObjectExists":"An LDAP Object with that Identifier Exists",
+      "namingViolation":"Naming Violation Exception",
+      "unwillingToPerform":"LDAP Server is Unwilling to Perform Action",
+      "unwillingToPerformPwd":"Active Directory requires LDAP with SSL to Modify Passwords"
+    },
+    "settings": {
+      "testInvalid":"LDAP Bind Connection Failed",
+      "serverUnreachable":"LDAP Server Unreachable"
+    },
+    "data":{
+      "noCountryCode":"No country code set"
+    },
+    "validation":{
+      "int32":"Must be a 32-bit Integer",
+      "below10000":"Numeric value must be below 10000",
+      "aboveZero":"Numeric value must be above 0",
+      "doubleQuotes":"Double quotes are not allowed",
+      "singleQuotes":"Single quotes are not allowed",
+      "domainRoot":"Must be a valid Domain Name (Exclude the DNS Zone, @ allowed for root)",
+      "ascii": "String Data must contain only ASCII Characters",
+      "fieldinvalid": "One or more fields are invalid",
+      "fieldRequired": "This field is required",
+      "passwordNotSame":"Passwords must match",
+      "alphabetic": "Must contain only letters (2 character minimum)",
+      "numeric": "Must contain only numbers",
+      "max4": "4 Characters Maximum",
+      "max6": "6 Characters Maximum",
+      "max8": "8 Characters Maximum",
+      "max255": "255 Characters Maximum",
+      "alphaNumeric": "Must be Alphanumeric",
+      "alphaNumericSpecialUsername": "Must contain only letters (hyphen allowed)",
+      "alphaNumericPassword": "8 char. minimum, special characters allowed: !@#$%&*()",
+      "alphaNumericSpaces": "a-z A-Z 0-9 and Spaces, 2 char. min",
+      "alphaNumericSpecial": "a-z A-Z 0-9 -_ and Spaces, 2 char. min",
+      "domain": "Must be a valid Top-Level Domain ( example.tld )",
+      "endpoint": "Must be a valid Endpoint ( https://example.tld/endpoint )",
+      "email": "Must be a valid E-Mail (E.g.: john@domain.com)",
+      "phone": "Must be a valid Phone",
+      "date": "Date is invalid",
+      "dayDate":"Day Date is invalid",
+      "ipv4Address":"Invalid IPv4 Address",
+      "ipv6Address":"Invalid IPv6 Address [0-9a-fA-F]",
+      "ipv6AddressUri":"IPv6 URI must be enclosed by brackets",
+      "ipv6AddressLength":"Invalid IPv6 Address Length",
+      "ipv6AddressAmbiguous":"Ambiguous IPv6 Address",
+      "distinguishedName":"Distinguished Name is invalid",
+      "realm":"NT Realm is invalid",
+      "domainCanonical":"Must be a valid Domain in Canonical format (with a dot at the end)",
+      "totpLength":"TOTP Code must be 6 digits long"
+    },
+    "unableToLoad":"Unable to load",
+    "notDisplayedCorrectly": "Could not get error message to display",
+    "notFound": "not found",
+    "unknown_short": "An Unknown error has occurred",
+    "unknown": "An Unknown error has occurred, please try again or contact us"
+  },
+  "localUser":{
+    "attributes":{
+    }
   },
   "dns":{
     "hints":{
@@ -445,53 +451,6 @@
     }
   },
   "ldap":{
-    "attributes":{
-      "realm":"NT Realm",
-      "domain":"Domain",
-      "name":"Name",
-      "objectRid":"Object Relative Identifier (RID)",
-      "objectSid":"Object Security Identifier (SID)",
-      "hasMembers":"Populated",
-      "sAMAccountName":"Account Name",
-      "username":"Username",
-      "givenName":"First Name",
-      "sn":"Last Name",
-      "cn":"Common Name",
-      "groupType": "Group Type",
-      "password":"Password",
-      "passwordConfirm":"Confirm Password",
-      "initials":"Initials",
-      "mail":"Email",
-      "displayName":"Full Display Name",
-      "is_enabled":"Account is Enabled",
-      "is_disabled":"Account is Disabled",
-      "last_login":"Last Login",
-      "role":"Role",
-      "is_staff":"Is Staff",
-      "telephoneNumber":"Phone Number",
-      "streetAddress":"Street Address",
-      "postalCode":"Postal Code",
-      "l":"City",
-      "st":"State / Province",
-      "countryCode":"Country INT Code",
-      "countryCodeCombined":"Country INT / ISO",
-      "c":"Country ISO Code",
-      "co":"Country",
-      "wWWHomePage":"Web Page",
-      "distinguishedName":"Distinguished Name",
-      "userPrincipalName":"User Principal Name",
-      "userPrincipalName_pre2000":"User Logon Name (pre-Windows 2000)",
-      "userAccountControl":"User Permissions (Raw INT)",
-      "whenCreated":"Account created at",
-      "whenChanged":"Account modified at",
-      "lastLogon":"Last Logon",
-      "badPwdCount":"Bad Password Count",
-      "pwdLastSet":"Password Last Set at",
-      "primaryGroupID":"Primary Group ID",
-      "objectClass":"Object Class",
-      "objectCategory":"Object Category",
-      "sAMAccountType":"Account Type"
-    }
   },
   "components":{
     "objectEditor":"Object Editor"
@@ -554,8 +513,6 @@
       }
     },
     "login":{
-      "title":"Log in to your LDAP Server",
-      "account":"LDAP Username",
       "useEmail":"Use E-Mail",
       "useLDAPUser":"Use LDAP Account",
       "loginBtn":"Log-in",
@@ -670,15 +627,15 @@
         "step3_success":"User Created Successfully"
       },
       "resetPasswordDialog":{
-          "title":"Reset Password",
-          "changePasswordForUser":"Changing password for user",
-          "complexity":{
-            "title":"Password Complexity Recommendations",
-            "letters":"Upper or lowercase letters (A-Z / a-z)",
-            "numbers":"Numeric characters (0–9)",
-            "symbols":"Non-alphanumeric characters like $, # or %",
-            "dontMatchUser":"No more than two symbols from the user's account name or display name"
-          }
+        "title":"Reset Password",
+        "changePasswordForUser":"Changing password for user",
+        "complexity":{
+          "title":"Password Complexity Recommendations",
+          "letters":"Upper or lowercase letters (A-Z / a-z)",
+          "numbers":"Numeric characters (0–9)",
+          "symbols":"Non-alphanumeric characters like $, # or %",
+          "dontMatchUser":"No more than two symbols from the user's account name or display name"
+        }
       },
       "userDialog":{
         "deleteTotp":"Delete TOTP Device",
@@ -877,45 +834,62 @@
     }
   },
   "attribute":{
-      "fname": "First Name",
-      "lname": "Last Name",
-      "name": "Name",
-      "fullName": "Full Name",
-      "email": "E-Mail",
-      "country": "Country",
-      "type": "Type",
-      "optional": "Optional",
-      "sexes": {
-          "female": "Female",
-          "male": "Male",
-          "other": "Other",
-          "unspecified": "Unspecified"
-      },
-      "users":{
-          "password": "Password",
-          "passwordConfirm": "Confirm Password",
-          "role": "Role",
-		      "totp_code":"TOTP Code",
-		      "totp_code_opt":"Required if Enabled on Account Preferences",
-          "recovery_code":"Recovery Code"
-      },
-      "phone": "Phone",
-      "phoneNumber": "Phone Number",
-      "secondaryPhone": "Secondary Phone",
-      "address": "Address",
-      "addressStreet": "Street",
-      "addressNumber": "Street Number",
-      "betweenStreets": "Between Streets",
-      "addressVerified": "Verified Address",
-      "addressCity": "City",
-      "addressPostalCode": "Postal Code",
-      "addressFloor": "Floor",
-      "addressApartment": "Apartment",
-      "addressState": "State",
+    "user":{
+      "username": "Username",
+      "is_local": "User is Local",
+      "password": "Password",
+      "passwordConfirm": "Confirm Password",
       "role": "Role",
-      "featureWIP": "This feature being worked on",
-      "notEnoughPerms": "Insufficient permissions",
-      "featureNotAvailable": "This feature is not available"
+      "totp_code":"TOTP Code",
+      "totp_code_opt":"Required if Enabled on Account Preferences",
+      "recovery_code":"Recovery Code"
+    },
+    "ldap":{
+      "realm":"NT Realm",
+      "domain":"Domain",
+      "name":"Name",
+      "objectRid":"Object Relative Identifier (RID)",
+      "objectSid":"Object Security Identifier (SID)",
+      "hasMembers":"Populated",
+      "sAMAccountName":"Account Name",
+      "givenName":"First Name",
+      "sn":"Last Name",
+      "cn":"Common Name",
+      "groupType": "Group Type",
+      "password":"Password",
+      "passwordConfirm":"Confirm Password",
+      "initials":"Initials",
+      "mail":"Email",
+      "displayName":"Full Display Name",
+      "is_enabled":"Account is Enabled",
+      "is_disabled":"Account is Disabled",
+      "last_login":"Last Login",
+      "role":"Role",
+      "is_staff":"Is Staff",
+      "telephoneNumber":"Phone Number",
+      "streetAddress":"Street Address",
+      "postalCode":"Postal Code",
+      "l":"City",
+      "st":"State / Province",
+      "countryCode":"Country INT Code",
+      "countryCodeCombined":"Country INT / ISO",
+      "c":"Country ISO Code",
+      "co":"Country",
+      "wWWHomePage":"Web Page",
+      "distinguishedName":"Distinguished Name",
+      "userPrincipalName":"User Principal Name",
+      "userPrincipalName_pre2000":"User Logon Name (pre-Windows 2000)",
+      "userAccountControl":"User Permissions (Raw INT)",
+      "whenCreated":"Account created at",
+      "whenChanged":"Account modified at",
+      "lastLogon":"Last Logon",
+      "badPwdCount":"Bad Password Count",
+      "pwdLastSet":"Password Last Set at",
+      "primaryGroupID":"Primary Group ID",
+      "objectClass":"Object Class",
+      "objectCategory":"Object Category",
+      "sAMAccountType":"Account Type"
+    }
   },
   "footer":{
     "copyright":"Copyright (C) 2022-2025 | BR Consulting S.R.L.",

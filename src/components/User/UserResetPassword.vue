@@ -35,7 +35,7 @@
                         @click:append="() => (passwordHidden = !passwordHidden)"
                         dense
                         @keydown.enter="closeDialog(true, user)"
-                        :label="$t('ldap.attributes.password')"
+                        :label="$t('attribute.ldap.password')"
                         v-model="user.password"
                         :rules="[this.fieldRules(user.password, 'ge_password', true)]"
                         ></v-text-field>
@@ -45,7 +45,7 @@
                             :type="passwordHidden ? 'password' : 'text'"
                             dense
                             @keydown.enter="closeDialog(true, user)"
-                            :label="$t('ldap.attributes.passwordConfirm')"
+                            :label="$t('attribute.ldap.passwordConfirm')"
                             v-model="user.passwordConfirm"
                             :rules="[user.passwordConfirm == user.password ? true : this.$t('error.validation.passwordNotSame') ]"
                             ></v-text-field>

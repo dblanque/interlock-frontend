@@ -22,6 +22,8 @@
     "debug":"Debugging",
     "header": {
       "home":"Inicio",
+      "local-users": "Usuarios Locales",
+      "local-groups": "Grupos Locales",
       "ldap-dirtree":"Árbol de Directorio",
       "ldap-users":"Usuarios",
       "ldap-groups":"Grupos de Seguridad",
@@ -228,13 +230,13 @@
     "organizational-unit":"Unidad Organizacional | Unidades Organizacionales",
     "ou":"OU | OUs",
     "setting":"Parámetro | Parámetros",
-	  "setting-preset":"Grupo de Parámetros | Grupos de Parámetros",
+    "setting-preset":"Grupo de Parámetros | Grupos de Parámetros",
     "ldap":"Objeto LDAP | Objetos LDAP",
     "totp-device":"Dispositivo TOTP | Dispositivos TOTP",
     "application":"Aplicación | Aplicaciones",
     "dns":{
-        "zone":"Zona de DNS | Zonas de DNS",
-        "record":"Registro de DNS | Registros de DNS"
+      "zone":"Zona de DNS | Zonas de DNS",
+      "record":"Registro de DNS | Registros de DNS"
     },
     "gpo": {
       "normal":"Objetos de Políticas de Grupo | Objeto de Políticas de Grupo",
@@ -259,8 +261,8 @@
       },
       "applications":{
         "application_exists": "La Aplicación SSO ya existe",
-            "application_does_not_exist": "La Aplicación SSO no existe",
-            "application_field_does_not_exist": "Campo Inexistente para Aplicación SSO"
+        "application_does_not_exist": "La Aplicación SSO no existe",
+        "application_field_does_not_exist": "Campo Inexistente para Aplicación SSO"
       },
       "auth": {
         "invalid_credentials": "Credenciales Incorrectos",
@@ -450,55 +452,6 @@
       "wPreference":"Prioridad"
     }
   },
-  "ldap":{
-    "attributes":{
-      "realm":"Reino NT",
-      "domain":"Dominio",
-      "name":"Nombre",
-      "objectRid":"Identificador Relativo del Objeto (RID)",
-      "objectSid":"Identificador de Seguridad del Objeto (SID)",
-      "hasMembers":"Tiene Miembros",
-      "sAMAccountName":"Nombre de Cuenta",
-      "username":"Nombre de Usuario",
-      "givenName":"Nombre",
-      "sn":"Apellido",
-      "cn":"Nombre Común",
-      "groupType": "Tipo de Grupo",
-      "password":"Contraseña",
-      "passwordConfirm":"Confirmar Contraseña",
-      "initials":"Iniciales",
-      "mail":"Email",
-      "displayName":"Nombre Completo",
-      "is_enabled":"Usuario Habilitado",
-      "is_disabled":"Usuario Des-habilitado",
-      "last_login":"Ultima vez activo",
-      "role":"Rol",
-      "is_staff":"Es Empleado",
-      "telephoneNumber":"Teléfono",
-      "streetAddress":"Dirección",
-      "postalCode":"Código Postal",
-      "l":"Ciudad",
-      "st":"Estado / Provincia",
-      "countryCode":"País (Código INT)",
-      "countryCodeCombined":"País (Códigos INT / ISO)",
-      "c":"País (Código ISO)",
-      "co":"País",
-      "wWWHomePage":"Página Web",
-      "distinguishedName":"Nombre Distinguido",
-      "userPrincipalName":"Nombre Principal del Usuario",
-      "userPrincipalName_pre2000":"Nombre del Usuario (pre-Windows 2000)",
-      "userAccountControl":"Permisos del Usuario (INT Crudo)",
-      "whenCreated":"Cuenta creada el",
-      "whenChanged":"Cuenta modificada el",
-      "lastLogon":"Último inicio de sesión",
-      "badPwdCount":"Contador de Contraseñas Incorrectas",
-      "pwdLastSet":"Contraseña cambiada por última vez",
-      "primaryGroupID":"ID Primario de Grupo",
-      "objectClass":"Clase del Objeto",
-      "objectCategory":"Categoría del Objeto",
-      "sAMAccountType":"Tipo de Cuenta"
-    }
-  },
   "components":{
     "objectEditor":"Editor de Objeto"
   },
@@ -560,8 +513,6 @@
       }
     },
     "login": {
-      "title": "Inicie Sesión en su Servidor LDAP",
-      "account": "Usuario LDAP",
       "useEmail":"Usar E-Mail",
       "useLDAPUser":"Usar Cuenta LDAP",
       "loginBtn": "Iniciar Sesión",
@@ -676,15 +627,15 @@
         "step3_success":"Usuario Creado Exitosamente"
       },
       "resetPasswordDialog":{
-          "title":"Blanqueo de Contraseña",
-          "changePasswordForUser":"Cambiará la contraseña del usuario",
-          "complexity":{
-            "title":"Recomendaciones de Complejidad de Contraseña",
-            "letters":"Letras mayúscula o minúsucla (A-Z / a-z)",
-            "numbers":"Caracteres Numéricos (0-9)",
-            "symbols":"Caracteres No-Alfanuméricos como $, # o %",
-            "dontMatchUser":"No más que dos símbolos del nombre de usuario o nombre visible"
-          }
+        "title":"Blanqueo de Contraseña",
+        "changePasswordForUser":"Cambiará la contraseña del usuario",
+        "complexity":{
+          "title":"Recomendaciones de Complejidad de Contraseña",
+          "letters":"Letras mayúscula o minúsucla (A-Z / a-z)",
+          "numbers":"Caracteres Numéricos (0-9)",
+          "symbols":"Caracteres No-Alfanuméricos como $, # o %",
+          "dontMatchUser":"No más que dos símbolos del nombre de usuario o nombre visible"
+        }
       },
       "userDialog":{
         "deleteTotp":"Eliminar Dispositivo TOTP",
@@ -883,46 +834,63 @@
     }
   },
   "attribute": {
-    "fname": "Nombre",
-    "lname": "Apellido",
-    "name": "Nombre",
-    "fullName": "Nombre Completo",
-    "email": "E-Mail",
-    "country": "País",
-    "type": "Tipo",
-    "optional": "Opcional",
-    "sexes": {
-      "female": "Femenino",
-      "male": "Masculino",
-      "other": "Otro",
-      "unspecified": "No especificado"
-    },
-    "users": {
+    "user": {
+      "username":"Usuario",
+      "is_local": "Usuario Local",
       "permissionsProfile": "Perfil de Permisos",
       "password": "Contraseña",
       "passwordConfirm": "Confirmar Contraseña",
       "role": "Permisos",
-	    "totp_code":"Código TOTP",
+      "totp_code":"Código TOTP",
       "totp_code_opt":"Requerido si se habilitó en las Preferencias de Cuenta",
       "recovery_code":"Código de Respaldo"
     },
-    "phone": "Teléfono",
-    "phoneNumber": "Número Telefónico",
-    "secondaryPhone": "Teléfono Secundario",
-    "address": "Dirección",
-    "addressStreet": "Calle",
-    "addressNumber": "Altura",
-    "betweenStreets": "Entre Calles",
-    "addressVerified": "Dirección Verificada",
-    "addressCity": "Ciudad",
-    "addressPostalCode": "Código Postal",
-    "addressFloor": "Piso",
-    "addressApartment": "Apartamento",
-    "addressState": "Estado / Provincia",
-    "role": "Rol",
-    "featureWIP": "Característica en desarrollo",
-    "notEnoughPerms": "Permisos insuficientes",
-    "featureNotAvailable": "Característica no disponible"
+    "ldap":{
+      "realm":"Reino NT",
+      "domain":"Dominio",
+      "name":"Nombre",
+      "objectRid":"Identificador Relativo del Objeto (RID)",
+      "objectSid":"Identificador de Seguridad del Objeto (SID)",
+      "hasMembers":"Tiene Miembros",
+      "sAMAccountName":"Nombre de Cuenta",
+      "givenName":"Nombre",
+      "sn":"Apellido",
+      "cn":"Nombre Común",
+      "groupType": "Tipo de Grupo",
+      "password":"Contraseña",
+      "passwordConfirm":"Confirmar Contraseña",
+      "initials":"Iniciales",
+      "mail":"Email",
+      "displayName":"Nombre Completo",
+      "is_enabled":"Usuario Habilitado",
+      "is_disabled":"Usuario Des-habilitado",
+      "last_login":"Ultima vez activo",
+      "role":"Rol",
+      "is_staff":"Es Empleado",
+      "telephoneNumber":"Teléfono",
+      "streetAddress":"Dirección",
+      "postalCode":"Código Postal",
+      "l":"Ciudad",
+      "st":"Estado / Provincia",
+      "countryCode":"País (Código INT)",
+      "countryCodeCombined":"País (Códigos INT / ISO)",
+      "c":"País (Código ISO)",
+      "co":"País",
+      "wWWHomePage":"Página Web",
+      "distinguishedName":"Nombre Distinguido",
+      "userPrincipalName":"Nombre Principal del Usuario",
+      "userPrincipalName_pre2000":"Nombre del Usuario (pre-Windows 2000)",
+      "userAccountControl":"Permisos del Usuario (INT Crudo)",
+      "whenCreated":"Cuenta creada el",
+      "whenChanged":"Cuenta modificada el",
+      "lastLogon":"Último inicio de sesión",
+      "badPwdCount":"Contador de Contraseñas Incorrectas",
+      "pwdLastSet":"Contraseña cambiada por última vez",
+      "primaryGroupID":"ID Primario de Grupo",
+      "objectClass":"Clase del Objeto",
+      "objectCategory":"Categoría del Objeto",
+      "sAMAccountType":"Tipo de Cuenta"
+    }
   },
   "footer": {
     "copyright": "Derechos de Autor (C) 2022-2025 | BR Consulting S.R.L.",
@@ -980,5 +948,5 @@
       "es":"Traducción aún no completada",
       "fr":"Traduction pas encore terminée"
     }
-}
+  }
 }

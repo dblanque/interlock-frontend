@@ -118,7 +118,7 @@ webpage
                                     :append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
                                     @click:append="() => (passwordHidden = !passwordHidden)"
                                     dense
-                                    :label="$t('ldap.attributes.password')"
+                                    :label="$t('attribute.ldap.password')"
                                     v-model="placeholderPassword"
                                     :rules="[this.fieldRules(placeholderPassword, 'ge_password', usePlaceholderPassword ? true : false)]"
                                     ></v-text-field>

@@ -44,7 +44,7 @@
 								outlined
 								dense
 								v-model="username"
-								:label="$t('section.login.account')"
+								:label="$t('attribute.user.username')"
 								prepend-inner-icon="mdi-account"
 								:disabled="submitted"
 								validate-on-blur
@@ -60,7 +60,7 @@
 								outlined
 								dense
 								v-model="username"
-								:label="$t('attribute.email')"
+								:label="$t('attribute.user.email')"
 								prepend-inner-icon="mdi-email"
 								:disabled="submitted"
 								validate-on-blur
@@ -76,7 +76,7 @@
 							<v-text-field
 								outlined
 								dense
-								:label="$t('attribute.users.password')"
+								:label="$t('attribute.user.password')"
 								:type="hidePassword ? 'password' : 'text'"
 								prepend-inner-icon="mdi-lock"
 								v-model="password"
@@ -107,7 +107,7 @@
 										ref="f_totp_code"
 										v-if="!recovery_mode && !rcm_animation"
 										:disabled="submitted"
-										:label="$t('attribute.users.totp_code')"
+										:label="$t('attribute.user.totp_code')"
 										:rules="[this.fieldRules(totp_code, 'auth_totp')]"
 										@keydown.enter="submit()"
 										@keypress="isNumber"
@@ -124,7 +124,7 @@
 										ref="f_recovery_code"
 										v-else-if="recovery_mode && !rcm_animation"
 										:disabled="submitted"
-										:label="$t('attribute.users.recovery_code')"
+										:label="$t('attribute.user.recovery_code')"
 										:rules="[this.fieldRules(recovery_code, 'auth_recovery')]"
 										@keydown.enter="submit()"
 										class="font-weight-bold"

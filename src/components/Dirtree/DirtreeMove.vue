@@ -21,7 +21,7 @@
                 {{ $t('section.dirtree.move.originalRelativePath') + ": " + originalRelativePath }}
             </v-col>
             <v-col cols="12" class="font-weight-medium">
-                {{ $t('ldap.attributes.distinguishedName') + ": " + objectDn }}
+                {{ $t('attribute.ldap.distinguishedName') + ": " + objectDn }}
             </v-col>
         </v-row>
 

@@ -41,7 +41,7 @@
 							<v-text-field
 							dense
 							id="cn"
-							:label="$t('ldap.attributes.cn')"
+							:label="$t('attribute.ldap.cn')"
 							:readonly="editFlag != true && !loading"
 							v-model="groupcopy.cn"
 							:rules="[this.fieldRules(groupcopy.cn, 'ge_cn')]"
@@ -51,7 +51,7 @@
 							<v-text-field
 							dense
 							id="mail"
-							:label="$t('ldap.attributes.mail')"
+							:label="$t('attribute.ldap.mail')"
 							:readonly="editFlag != true"
 							v-model="groupcopy.mail"
 							:rules="[this.fieldRules(groupcopy.mail, 'ge_email')]"
@@ -64,7 +64,7 @@
 							<v-text-field
 							dense
 							id="objectRid"
-							:label="$t('ldap.attributes.objectRid')"
+							:label="$t('attribute.ldap.objectRid')"
 							readonly
 							v-model="groupcopy.objectRid"
 							></v-text-field>
@@ -73,7 +73,7 @@
 							<v-text-field
 							dense
 							id="objectSid"
-							:label="$t('ldap.attributes.objectSid')"
+							:label="$t('attribute.ldap.objectSid')"
 							readonly
 							v-model="groupcopy.objectSid"
 							></v-text-field>
@@ -85,7 +85,7 @@
 							<v-text-field
 							dense
 							id="distinguishedName"
-							:label="$t('ldap.attributes.distinguishedName')"
+							:label="$t('attribute.ldap.distinguishedName')"
 							readonly
 							v-model="groupcopy.distinguishedName"
 							></v-text-field>

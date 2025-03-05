@@ -20,7 +20,7 @@
         <div v-if="!showQR">
             <v-row cols="12" class="ma-0 pa-0 mt-2" justify="center">
                 <h3>
-                    {{ $t("ldap.attributes.username") }}
+                    {{ $t("attribute.user.username") }}
                 </h3>
             </v-row>
 
@@ -36,7 +36,7 @@
 
             <v-row cols="12" class="ma-0 pa-0" justify="center">
                 <h4>
-                    {{ $t("ldap.attributes.name") }}
+                    {{ $t("attribute.ldap.name") }}
                 </h4>
             </v-row>
 
@@ -52,7 +52,7 @@
 
             <v-row cols="12" class="ma-0 pa-0" justify="center">
                 <h4>
-                    {{ $t("ldap.attributes.domain") }}
+                    {{ $t("attribute.ldap.domain") }}
                 </h4>
             </v-row>
 
@@ -89,7 +89,7 @@
 
             <v-row cols="12" class="ma-0 pa-0" justify="center">
                 <h4>
-                    {{ $t("ldap.attributes.realm") }}
+                    {{ $t("attribute.ldap.realm") }}
                 </h4>
             </v-row>
 

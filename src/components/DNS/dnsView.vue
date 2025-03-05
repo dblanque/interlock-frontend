@@ -328,7 +328,7 @@
                     mdi-menu-right
                 </v-icon>
                 <span v-if="key == 'distinguishedName'">
-                    {{ $t("ldap.attributes." + key) + ": " + attribute + " "}}
+                    {{ $t("attribute.ldap." + key) + ": " + attribute + " "}}
                 </span>
                 <span v-else-if="key == 'ts'">
                     {{ $t("dns.attributes." + key) + ": " }}

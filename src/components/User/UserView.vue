@@ -509,7 +509,7 @@ export default {
 		if (tableHeader.value == "actions") {
 		  tableHeader.text = this.$t('actions.label')
 		} else {
-		  tableHeader.text = this.$t('ldap.attributes.' + tableHeader.value)
+		  tableHeader.text = this.$t('attribute.ldap.' + tableHeader.value)
 		}
 	  });
 	},
@@ -534,7 +534,7 @@ export default {
 			let headerDict = {}
 			userHeaders.forEach(header => {
 				headerDict = {}
-				headerDict.text = this.$t('ldap.attributes.' + header)
+				headerDict.text = this.$t('attribute.ldap.' + header)
 				headerDict.value = header
 				if (header == 'is_enabled') {
 				headerDict.align = 'center'
