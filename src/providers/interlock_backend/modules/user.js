@@ -65,23 +65,7 @@ const actions = {
         })
     },
 
-    enable: (username)=>{
-        const data = {}
-        data['username'] = username
-        data['enabled'] = true
-        return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.user.changeAccountStatus, data).then(response => {
-                resolve(response)
-            }).catch((e) => {
-                reject(e)
-            })
-        })
-    },
-
-    disable: (username)=>{
-        const data = {}
-        data['username'] = username
-        data['enabled'] = false
+    changeAccountStatus: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.user.changeAccountStatus, data).then(response => {
                 resolve(response)

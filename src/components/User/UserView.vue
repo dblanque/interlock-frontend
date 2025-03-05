@@ -29,7 +29,7 @@
 						<refresh-button dense
 							:loading="loading"
 							@refresh="listUserItems" />
-						<v-btn class="pa-2 mx-2" :disabled="loading" color="primary"
+						<v-btn class="pa-2 mx-2" :disabled="loading || !isImplemented('create')" color="primary"
 							@click="openDialog('userCreate')">
 							<v-icon class="ma-0 pa-0">mdi-plus</v-icon>
 							{{ $t('actions.addN') + ' ' + $tc('classes.user', 1) }}
@@ -39,29 +39,29 @@
 				<v-row class="ma-0 pa-0 px-4" justify="center">
 					<!-- Import Button -->
 					<v-btn class="pa-2 mx-2" small
-						:dark="!loading && !isThemeDark($vuetify)"
-						:light="!loading && isThemeDark($vuetify)"
-						:disabled="loading"
+						:dark="!loading && !isThemeDark($vuetify) && isImplemented('import')"
+						:light="!loading && isThemeDark($vuetify) && isImplemented('import')"
+						:disabled="loading || !isImplemented('import')"
 						@click="openDialog('userImport')">
 						<v-icon small class="ma-0 pa-0 mr-1">mdi-file-import</v-icon>
 						{{ $t('actions.import') }}
 					</v-btn>
 					<!-- Mass Enable Button -->
 					<v-btn class="pa-2 mx-2" small
-						:dark="!actionButtonsDisabled"
-						:light="!actionButtonsDisabled && isThemeDark($vuetify)"
+						:dark="!actionButtonsDisabled && isImplemented('bulkEnable')"
+						:light="!actionButtonsDisabled && isThemeDark($vuetify) && isImplemented('bulkEnable')"
 						color="green" @click="massAccountStatusChange(false)"
-						:disabled="loading || tableData.selected.length < 1">
+						:disabled="loading || tableData.selected.length < 1 || !isImplemented('bulkEnable')">
 						<v-icon small class="ma-0 pa-0 mr-1">mdi-check</v-icon>
 						{{ $t('actions.enable') }}
 					</v-btn>
 					<!-- Mass Disable Button -->
 					<v-btn class="pa-2 mx-2" small
 						color="red"
-						:dark="!actionButtonsDisabled"
-						:light="!actionButtonsDisabled && isThemeDark($vuetify)"
+						:dark="!actionButtonsDisabled && isImplemented('bulkDisable')"
+						:light="!actionButtonsDisabled && isThemeDark($vuetify) && isImplemented('bulkDisable')"
 						@click="massAccountStatusChange(true)"
-						:disabled="loading || tableData.selected.length < 1">
+						:disabled="loading || tableData.selected.length < 1 || !isImplemented('bulkDisable')">
 						<v-icon small class="ma-0 pa-0 mr-1">mdi-close</v-icon>
 						<span :color="actionButtonsDisabled ? 'error' : 'error-70-s'">
 							{{ $t('actions.disable') }}
@@ -70,9 +70,9 @@
 					<!-- Mass Unlock Button -->
 					<v-btn class="pa-2 mx-2" small v-if="viewTitle == 'ldap-users'"
 						@click="massUnlock()"
-						:dark="!actionButtonsDisabled && !isThemeDark($vuetify)"
-						:light="!actionButtonsDisabled && isThemeDark($vuetify)"
-						:disabled="actionButtonsDisabled">
+						:dark="!actionButtonsDisabled && !isThemeDark($vuetify) && isImplemented('bulkUnlock')"
+						:light="!actionButtonsDisabled && isThemeDark($vuetify) && isImplemented('bulkUnlock')"
+						:disabled="actionButtonsDisabled || !isImplemented('bulkUnlock')">
 						<span>
 							<v-icon small class="ma-0 pa-0 mr-1">mdi-lock-open</v-icon>
 							{{ $t('actions.unlock') }}
@@ -80,11 +80,11 @@
 					</v-btn>
 					<!-- Mass Edit Button -->
 					<v-btn class="pa-2 mx-2" small
-						:dark="!actionButtonsDisabled"
-						:light="!actionButtonsDisabled && isThemeDark($vuetify)"
+						:dark="!actionButtonsDisabled && isImplemented('bulkEdit')"
+						:light="!actionButtonsDisabled && isThemeDark($vuetify) && isImplemented('bulkEdit')"
 						color="primary"
 						@click="openBulkOperationDialog('userBulkUpdate')"
-						:disabled="actionButtonsDisabled">
+						:disabled="actionButtonsDisabled || !isImplemented('bulkEdit')">
 						<v-icon small dark :color="actionButtonsDisabled ? undefined : 'white'"
 							class="ma-0 pa-0 mr-1">mdi-shield-account</v-icon>
 						<span :color="actionButtonsDisabled ? undefined : 'white'">
@@ -93,10 +93,10 @@
 					</v-btn>
 					<!-- Mass Delete Button -->
 					<v-btn class="pa-2 mx-2" small
-						:dark="!actionButtonsDisabled"
-						:light="!actionButtonsDisabled && isThemeDark($vuetify)"
+						:dark="!actionButtonsDisabled && isImplemented('bulkDelete')"
+						:light="!actionButtonsDisabled && isThemeDark($vuetify) && isImplemented('bulkDelete')"
 						color="red" @click="openBulkOperationDialog('userDelete')"
-						:disabled="actionButtonsDisabled">
+						:disabled="actionButtonsDisabled || !isImplemented('bulkDelete')">
 						<v-icon small dark :color="actionButtonsDisabled ? undefined : 'white'"
 							class="ma-0 pa-0 mr-1">mdi-delete</v-icon>
 						<span :color="actionButtonsDisabled ? undefined : 'white'">
@@ -128,7 +128,7 @@
 					</span>
 				</v-tooltip>
 
-				<!-- Enable User Button -->
+				<!-- Disable User Button -->
 				<v-tooltip color="red" bottom v-else-if="item.is_enabled">
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
@@ -136,7 +136,7 @@
 							v-bind="attrs"
 							v-on="on"
 							:disabled="loading || isLoggedInUser(item.username)"
-							@click="disableUser(item)">
+							@click="setAccountStatus(item, false)">
 							<v-icon :color="!isLoggedInUser(item.username) ? 'valid-40-s' : ''">
 								mdi-check
 							</v-icon>
@@ -147,7 +147,7 @@
 					</span>
 				</v-tooltip>
 
-				<!-- Disable User Button -->
+				<!-- Enable User Button -->
 				<v-tooltip color="green" bottom v-else-if="!item.is_enabled">
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
@@ -155,7 +155,7 @@
 							v-bind="attrs"
 							v-on="on"
 							:disabled="loading || isLoggedInUser(item.username)"
-							@click="enableUser(item)">
+							@click="setAccountStatus(item, true)">
 							<v-icon :color="!isLoggedInUser(item.username) ? 'error-60-s' : ''">
 								mdi-close
 							</v-icon>
@@ -277,37 +277,40 @@
 				ref="UserDialog" :refreshLoading="loading" :disable-actions="fetchingData"
 				:fetchingData="fetchingData" @closeDialog="closeDialog" @save="userSaved"
 				@goToGroup="goToGroup"
-				@editToggle="setViewToEdit" @refreshUser="refreshUser"
+				:parentTitle="viewTitle" @editToggle="setViewToEdit" @refreshUser="refreshUser"
 				@refreshUserList="listUserItems(false)" />
 		</v-dialog>
 
 		<!-- USER DELETE CONFIRM DIALOG -->
 		<v-dialog eager max-width="800px" v-model="dialogs['userDelete']">
 			<UserDelete :userObject="this.data.selectedUser" :userObjectList="tableData.selected"
-				:viewKey="'userDelete'" ref="UserDelete" @closeDialog="closeDialog"
-				@refresh="listUserItems" />
+				:viewKey="'userDelete'" ref="UserDelete" @closeDialog="closeDialog" @refresh="listUserItems"
+				:parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER RESET PASSWORD DIALOG -->
 		<v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']">
 			<UserResetPassword :userObject="this.data.selectedUser" :viewKey="'userResetPassword'"
-				ref="UserResetPassword" @closeDialog="closeDialog" />
+				ref="UserResetPassword" @closeDialog="closeDialog" :parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER CREATE DIALOG -->
 		<v-dialog eager max-width="1200px" v-model="dialogs['userCreate']">
-			<UserCreate :viewKey="'userCreate'" ref="UserCreate" @closeDialog="closeDialog" />
+			<UserCreate :viewKey="'userCreate'" ref="UserCreate" @closeDialog="closeDialog"
+				:parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER IMPORT DIALOG -->
 		<v-dialog eager persistent max-width="1600px" v-model="dialogs['userImport']">
-			<UserImport :viewKey="'userImport'" ref="UserImport" @closeDialog="closeDialog" />
+			<UserImport :viewKey="'userImport'" ref="UserImport" @closeDialog="closeDialog"
+				:parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER EDIT DIALOG -->
 		<v-dialog eager max-width="1600px" v-model="dialogs['userBulkUpdate']">
 			<UserBulkUpdate :selectedUsers="this.tableData.selected" :viewKey="'userBulkUpdate'"
-				ref="UserBulkUpdate" @closeDialog="closeDialog" @refresh="listUserItems" />
+				ref="UserBulkUpdate" @closeDialog="closeDialog" @refresh="listUserItems"
+				:parentTitle="viewTitle" />
 		</v-dialog>
 	</div>
 </template>
@@ -408,6 +411,26 @@ export default {
 		snackbarTimeout: Number
 	},
 	methods: {
+		isImplemented(action) {
+			switch (this.viewTitle) {
+				case "django-users":
+				case "local-users":
+					switch (action) {
+						case "create":
+						case "import":
+						case "bulkEnable":
+						case "bulkDisable":
+						case "bulkDelete":
+						case "bulkUnlock":
+						case "bulkEdit":
+							return false
+						default:
+							return true
+					}
+				default:
+					return true
+			}
+		},
 		resetSearch() {
 			this.searchString = ""
 		},
@@ -632,22 +655,26 @@ export default {
 			if (this.data.selectedUser || this.tableData.selected.length > 0)
 				this.openDialog(dialogRef)
 		},
-		async enableUser(userObject) {
+		async setAccountStatus(userObject, enabled) {
 			this.loading = true
 			this.error = false
 			this.errorMsg = false
 			this.data.selectedUser = {}
 			this.data.selectedUser = userObject
 			this.data.userdata = await new User({})
-			await this.data.userdata.enable(this.data.selectedUser.username)
+			await this.data.userdata.changeAccountStatus({
+				"username": this.data.selectedUser.username,
+				"enabled": enabled
+			})
 				.then(() => {
+					let action = `words.${enabled ? 'enabled' : 'disabled'}`;
 					this.loading = false
 					this.error = false
 					this.errorMsg = false
 					this.listUserItems(false);
 					notificationBus.$emit('createNotification',
 						{
-							message: (this.$tc("classes.user", 1) + " " + this.$t("words.enabled")).toUpperCase(),
+							message: (`${this.$tc("classes.user", 1)} ${this.$t(action)}`).toUpperCase(),
 							type: 'success'
 						});
 				})
@@ -662,43 +689,6 @@ export default {
 							type: 'error'
 						});
 				})
-		},
-		async disableUser(userObject) {
-			this.loading = true
-			this.error = false
-			this.errorMsg = false
-			this.data.selectedUser = {}
-			this.data.selectedUser = userObject
-			if (localStorage.getItem('user.username') == this.data.selectedUser.username) {
-				this.openDialog('userAntilockout');
-			}
-			else {
-				this.data.userdata = await new User({})
-				await this.data.userdata.disable(this.data.selectedUser.username)
-					.then(() => {
-						this.loading = false
-						this.error = false
-						this.errorMsg = ""
-						this.listUserItems(false);
-						notificationBus.$emit('createNotification',
-							{
-								message: (this.$tc("classes.user", 1) + " " + this.$t("words.disabled")).toUpperCase(),
-								type: 'warning'
-							}
-						);
-					})
-					.catch(error => {
-						console.error(error)
-						this.loading = false
-						this.error = true
-						this.errorMsg = this.getMessageForCode(error)
-						notificationBus.$emit('createNotification',
-							{
-								message: this.errorMsg.toUpperCase(),
-								type: 'error'
-							});
-					})
-			}
 		},
 		async refreshUser(item) {
 			await this.fetchUser(item, this.editableForm, true).then(() => {
