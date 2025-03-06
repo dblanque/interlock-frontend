@@ -8,6 +8,12 @@ export function dateFromFiletime(date) {
     return result;
 }
 
+export function truncateDate(d) {
+    if (d === undefined || d === null || d === "")
+        return ""
+    return `${new Date(d).toISOString().replace("T", " ").substring(0, 19)} (UTC)`;
+}
+
 export function dateLdapToString(date) {
     if (!date) {
         return console.log("No date provided for dateFromFiletime")

@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import User from '@/include/User.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
 export default {
@@ -78,7 +77,9 @@ export default {
 		userObject: Object,
 		userObjectList: Array,
 		dialogKey: String,
-		massDelete: Boolean
+		massDelete: Boolean,
+		userClass: Function,
+		parentTitle: String,
 	},
 	created() {
 	},
@@ -91,26 +92,37 @@ export default {
 		async closeDialog(deleteConfirm = false, user = {}) {
 			if (!this.multipleUsers) {
 				if (user != {}) {
-					user.distinguishedName = this.userObject.distinguishedName
-					user.username = this.userObject.username
+					if (this.parentTitle == "ldap-users") {
+						user.distinguishedName = this.userObject.distinguishedName
+						user.username = this.userObject.username
+					} else {
+						user.id = this.userObject.id
+						user.username = this.userObject.username
+					}
 				}
 			}
+
 			if (deleteConfirm == true) {
 				if (this.multipleUsers) {
-					await new User({}).bulkDelete(this.userObjectList)
+					await new this.userClass({}).bulkDelete(this.userObjectList)
 						.then(() => { })
 						.catch(error => { console.error(error) })
 				} else {
-					await new User({}).delete(user)
+					await new this.userClass({}).delete(user)
 						.then(response => {
-							// if (response.data.username == user.username)
-							//     console.log("User Deleted Successfully")
+							this.$emit('closeDialog', this.dialogKey, true);
 						})
-						.catch(error => { console.error(error) })
+						.catch(error => {
+							console.error(error)
+							this.$emit('closeDialog', this.dialogKey, true, {
+								message: this.getMessageForCode(error),
+								type: 'error'
+							});
+						})
 				}
-				this.$emit('closeDialog', this.dialogKey, true);
-			} else
+			} else {
 				this.$emit('closeDialog', this.dialogKey);
+			}
 		},
 	}
 }

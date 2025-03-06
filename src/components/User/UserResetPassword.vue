@@ -125,6 +125,8 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		userClass: Function,
+		parentTitle: String,
 		dialogKey: String
 	},
 	created() {
@@ -146,7 +148,7 @@ export default {
 			if (this.isEndUser === true) {
 				if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
 					this.loading = true
-					await new User({}).selfChangePassword(user)
+					await new this.userClass({}).selfChangePassword(user)
 						.then(response => {
 							setTimeout(() => {
 								this.loading = false
@@ -174,11 +176,15 @@ export default {
 				}
 			}
 			else {
-				user.distinguishedName = this.userObject.distinguishedName
+				if (this.parentTitle == "ldap-users") {
+					user.distinguishedName = this.userObject.distinguishedName
+				} else {
+					user.id = this.userObject.id
+				}
 				user.username = this.userObject.username
 				if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
 					this.loading = true
-					await new User({}).changePassword(user)
+					await new this.userClass({}).changePassword(user)
 						.then(response => {
 							setTimeout(() => {
 								this.loading = false

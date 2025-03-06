@@ -477,7 +477,7 @@
 									</v-expansion-panels>
 								</v-row>
 								<!-- DJANGO USER DATA -->
-								<v-row align-content="center" class="mb-2" v-if="!isLDAPView()">
+								<v-row align-content="center" class="mb-2" v-else>
 									<v-col class="ma-0 pa-0" cols="12" md="6">
 										<v-card outlined height="100%" class="ma-1 pa-4">
 											<v-row :justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'start'"
@@ -500,7 +500,7 @@
 													:class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
 													<v-text-field dense id="email" :label="$t('attribute.user.email')"
 														:readonly="editFlag != true" v-model="usercopy.email"
-														:rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"></v-text-field>
+														:rules="[this.fieldRules(usercopy.email, 'ge_mail')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6">
 													<v-fade-transition>
@@ -707,7 +707,6 @@
 
 <script>
 import User from '@/include/User.js';
-import DjangoUser from '@/include/DjangoUser.js';
 import CNObjectList from '@/components/CNObjectList.vue';
 import UserPermissionList from '@/components/User/UserPermissionList.vue';
 import RefreshButton from '@/components/RefreshButton.vue';
@@ -715,7 +714,7 @@ import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import ldap_perm_json from '@/include/ldap_permissions.json';
 import { notificationBus } from '@/main.js';
-import { getDomainDetails } from '@/include/utils.js';
+import { getDomainDetails, truncateDate } from '@/include/utils.js';
 
 export default {
 	name: 'UserDialog',
@@ -888,6 +887,7 @@ export default {
 		},
 	},
 	methods: {
+		truncateDate,
 		isLDAPView() {
 			return this.parentTitle == 'ldap-users'
 		},
@@ -931,9 +931,12 @@ export default {
 				if (this.permissions[key].value == true)
 					p.push(key)
 			}
-			if (!this.arraysAreEqual(p, this.user.permission_list)) return true
+			if (this.user.permission_list !== undefined)
+				if (!this.arraysAreEqual(p, this.user.permission_list))
+					return true
 			// Check the rest of the user data.
-			if (this.getModifiedValues().length > 0) return true
+			if (this.getModifiedValues().length > 0)
+				return true
 			return false
 		},
 		goToGroup(groupDn) {
@@ -1031,7 +1034,7 @@ export default {
 			this.domain = domainDetails['name']
 			this.realm = domainDetails['realm']
 			this.basedn = domainDetails['basedn']
-			this.userSelector = domainDetails['user_selector']
+			this.userSelector = this.isLDAPUser() ? domainDetails['user_selector'] : 'username'
 		},
 		setObjectClassToArray() {
 			if (this.usercopy.objectClass && this.usercopy.objectClass != '' && (typeof this.usercopy.objectClass === 'string' || this.usercopy.objectClass instanceof String)) {
@@ -1172,6 +1175,10 @@ export default {
 			this.$emit('closeDialog', this.dialogKey);
 		},
 		async saveUser(closeDialog = false) {
+			if (this.getIsUserModified() != true) {
+				console.log("User was not modified, ignoring user save request.")
+				return
+			}
 			switch (this.parentTitle) {
 				case "django-users":
 					if (this.$refs.userForm.validate()) {
@@ -1202,10 +1209,6 @@ export default {
 					}
 					break;
 				default:
-					if (this.getIsUserModified() != true) {
-						console.log("User was not modified, ignoring user save request.")
-						return
-					}
 					this.loading = true
 					this.loadingColor = 'primary'
 					// Set permissions array properly
@@ -1316,11 +1319,6 @@ export default {
 		exit() {
 			this.showAlert = false
 			this.tab = this.TABS.DEFAULT
-		},
-		truncateDate(d) {
-			if (d === undefined || d === null || d === "")
-				return ""
-			return `${new Date(d).toISOString().replace("T", " ").substring(0, 19)} (UTC)`;
 		}
 	}
 }

@@ -91,6 +91,10 @@ class DjangoUser extends ApiModel {
 		return await interlock_backend.call(`${callsPrefix}/selfUpdate`, data)
 	}
 
+	async selfInfo() {
+		return await interlock_backend.call(`${callsPrefix}/selfInfo`)
+	}
+
 	async bulkInsert(data) {
 		return await interlock_backend.call(`${callsPrefix}/bulkInsert`, data)
 	}

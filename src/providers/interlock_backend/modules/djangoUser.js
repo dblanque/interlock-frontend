@@ -35,9 +35,9 @@ const actions = {
 		})
 	},
 
-	delete: (id) => {
+	delete: (data) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.djangoUser.delete.replace("{pk}", id))
+			interlock_backend.request.delete(interlock_backend.urls.djangoUser.delete.replace("{pk}", data.id))
 				.then(response => {
 					resolve(response.data);
 				}).catch((e) => reject(e))
@@ -65,7 +65,7 @@ const actions = {
 
 	changePassword: (data) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.djangoUser.changePassword.replace("{pk}", data.id))
+			interlock_backend.request.post(interlock_backend.urls.djangoUser.changePassword.replace("{pk}", data.id), data)
 				.then(response => {
 					resolve(response.data);
 				}).catch((e) => reject(e))
@@ -74,7 +74,7 @@ const actions = {
 
 	selfFetch: () => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.get(interlock_backend.urls.djangoUser.selfFetch).then(response => {
+			interlock_backend.request.get(interlock_backend.urls.user.selfFetch).then(response => {
 				resolve(response.data)
 			}).catch((e) => {
 				reject(e)
@@ -93,9 +93,25 @@ const actions = {
 
 	selfChangePassword: (data) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.djangoUser.selfChangePassword, data)
+			interlock_backend.request.put(interlock_backend.urls.djangoUser.selfChangePassword, data)
 				.then(response => {
 					resolve(response.data);
+				}).catch((e) => reject(e))
+		})
+	},
+
+	selfInfo: () => {
+		const authKeys = []
+		return new Promise((resolve, reject) => {
+			interlock_backend.request.get(interlock_backend.urls.user.selfInfo)
+				.then(response => {
+					for (const key in response.data.user) {
+						if (authKeys.includes(key))
+							localStorage.setItem(`auth.${key}`, response.data.user[key])
+						else
+							localStorage.setItem(`user.${key}`, response.data.user[key])
+					}
+					resolve(response);
 				}).catch((e) => reject(e))
 		})
 	},

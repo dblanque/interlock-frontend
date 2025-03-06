@@ -103,10 +103,6 @@
 							{{ $t('actions.delete') }}
 						</span>
 					</v-btn>
-					<!-- Local Users Only Switch -->
-					<v-switch v-if="viewTitle == 'django-users'"
-						:label="'Only Local Users'"
-						v-model="localUsersOnly" />
 				</v-row>
 			</template>
 			<!-- USER IS ENABLED STATUS -->
@@ -251,7 +247,7 @@
 								v-bind="attrs"
 								v-on="on"
 								small
-								:disabled="loading"
+								:disabled="loading || !isUserEditable(item)"
 								@click="openBulkOperationDialog('userDelete', item)"
 								v-if="!isLoggedInUser(item.username)">
 								<v-icon small color="red">
@@ -289,19 +285,22 @@
 		<v-dialog eager max-width="800px" v-model="dialogs['userDelete']">
 			<UserDelete :userObject="this.data.selectedUser" :userObjectList="tableData.selected"
 				:dialogKey="'userDelete'" ref="UserDelete" @closeDialog="closeDialog"
-				@refresh="listUserItems"
+				@refresh="listUserItems" :userClass="userClass"
 				:parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER RESET PASSWORD DIALOG -->
 		<v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']">
 			<UserResetPassword :userObject="this.data.selectedUser" :dialogKey="'userResetPassword'"
-				ref="UserResetPassword" @closeDialog="closeDialog" :parentTitle="viewTitle" />
+				ref="UserResetPassword" @closeDialog="closeDialog" :parentTitle="viewTitle"
+				:userClass="userClass"
+				/>
 		</v-dialog>
 
 		<!-- USER CREATE DIALOG -->
 		<v-dialog eager max-width="1200px" v-model="dialogs['userCreate']">
 			<UserCreate :dialogKey="'userCreate'" ref="UserCreate" @closeDialog="closeDialog"
+				:userClass="userClass"
 				:parentTitle="viewTitle" />
 		</v-dialog>
 
@@ -421,7 +420,6 @@ export default {
 			switch (this.viewTitle) {
 				case "django-users":
 					switch (action) {
-						case "create":
 						case "import":
 						case "bulkEnable":
 						case "bulkDisable":
@@ -470,10 +468,10 @@ export default {
 					break;
 			}
 		},
-		async closeDialog(key, refresh = false) {
+		async closeDialog(key, refresh = false, emitData=undefined) {
 			this.dialogs[key] = false;
 			if (refresh) {
-				var emitNotif
+				let emitNotif
 				switch (key) {
 					case 'userResetPassword':
 						emitNotif = false
@@ -491,10 +489,12 @@ export default {
 						break;
 					case 'userDelete':
 						emitNotif = false
-						notificationBus.$emit("createNotification", {
-							message: this.$t('section.users.deleteUser.success').toUpperCase(),
-							type: 'info'
-						})
+						if (!emitData)
+							emitData = {
+								message: this.$t('section.users.deleteUser.success').toUpperCase(),
+								type: 'info'
+							}
+						notificationBus.$emit("createNotification", emitData)
 						break;
 					default:
 						emitNotif = true
@@ -557,12 +557,10 @@ export default {
 			}
 			await new this.userClass({}).list()
 				.then(response => {
-					let userHeaders = response.headers
-					let users = response.users
 					// Reset Headers Array every time you list to avoid infinite header multiplication
 					this.resetDataTable()
 					let headerDict = {}
-					userHeaders.forEach(header => {
+					response.headers.forEach(header => {
 						headerDict = {}
 						switch (header) {
 							case "mail":
@@ -586,13 +584,13 @@ export default {
 					headerDict.align = 'center'
 					headerDict.sortable = false
 					this.tableData.headers.push(headerDict)
-					this.tableData.items = users
+					this.tableData.items = response.users
 					for (let i = 0; i < this.tableData.items.length; i++) {
 						const user = this.tableData.items[i];
 						if (user.username == localStorage.getItem('user.username') ||
 							user.username == 'Administrator' && localStorage.getItem('user.username') == 'admin') {
 							user.isSelectable = false
-							break
+							continue
 						}
 						if ("user_type" in user) {
 							if (user.user_type != "local")
@@ -604,7 +602,7 @@ export default {
 					this.errorMsg = ""
 					if (emitNotif == true)
 						notificationBus.$emit("createNotification", {
-							message: (`${this.$tc("classes.user", users.length)} ${this.$tc("words.loaded.m", users.length)}`).toUpperCase(),
+							message: (`${this.$tc("classes.user", response.users.length)} ${this.$tc("words.loaded.m", response.users.length)}`).toUpperCase(),
 							type: 'success'
 						})
 				})
