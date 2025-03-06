@@ -54,7 +54,7 @@
 							:label="$t('attribute.user.email')"
 							:readonly="editFlag != true"
 							v-model="groupcopy.mail"
-							:rules="[this.fieldRules(groupcopy.mail, 'ge_email')]"
+							:rules="[this.fieldRules(groupcopy.mail, 'ge_mail')]"
 							></v-text-field>
 						</v-col>
 					</v-row>
