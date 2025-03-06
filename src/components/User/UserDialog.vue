@@ -12,14 +12,14 @@
 						<h3
 							v-if="!usercopy.givenName || usercopy.givenName == '' || !usercopy.sn || usercopy.sn == ''"
 							class="pa-0 ma-0 ma-2">
-							{{ usercopy.username ? $tc('classes.user', 1) + ': ' + usercopy.username.toUpperCase()
+							{{ usercopy.username ? $tc('classes.user', 1) + ': ' + usercopy.username
 								: '' }}
 						</h3>
 						<h3 v-else class="pa-0 ma-0 ma-2">
 							{{ $tc('classes.user', 1) + ': ' + usercopy.givenName + " " + usercopy.sn }}
 						</h3>
 						<v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4" />
-						<v-btn small color="primary" @click="goToTargetTab(tab - 1)"
+						<v-btn small color="primary" @click="goToTargetTab(tab - 1)" v-if="isLDAPView()"
 							class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
 							<v-fade-transition>
 								<span v-if="tab - 1 == TABS.PERMS || tab - 1 < 0">
@@ -34,7 +34,7 @@
 							</v-fade-transition>
 							<v-icon>mdi-chevron-left</v-icon>
 						</v-btn>
-						<v-btn small color="primary" @click="goToTargetTab(tab + 1)"
+						<v-btn small color="primary" @click="goToTargetTab(tab + 1)" v-if="isLDAPView()"
 							class="ma-0 pa-0 py-2 pr-1 pl-3 ma-1">
 							<v-fade-transition>
 								<span v-if="tab + 1 == TABS.PERMS">
@@ -70,11 +70,14 @@
 					</v-row>
 				</v-expand-transition>
 				<v-expand-transition>
-					<v-row v-show="!editFlag && showAlert" justify="center" class="pa-0 ma-0">
+					<v-row
+						v-show="!editFlag && showAlert"
+						justify="center" class="pa-0 ma-0">
 						<v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="info" :icon="false">
 							<v-icon class="mr-2">mdi-eye-circle</v-icon>
 							{{ $t('section.users.viewFlagWarning') }}
-							<v-btn @click="editUser" small class="ma-0 pa-0 ml-2 pr-2 pl-1">
+							<v-btn @click="editUser" small class="ma-0 pa-0 ml-2 pr-2 pl-1"
+								:disabled="isLDAPUser() && !isLDAPView()">
 								<v-icon color="blue" class="mx-1" small>mdi-pencil</v-icon>
 								{{ $t('actions.edit') }}
 							</v-btn>
@@ -213,7 +216,8 @@
 					<v-tab-item :key="1">
 						<v-card-text class="ma-0 py-4">
 							<v-form ref="userForm" @submit.prevent>
-								<v-row align-content="center" class="mb-2">
+								<!-- LDAP USER DATA -->
+								<v-row align-content="center" class="mb-2" v-if="isLDAPView()">
 									<!-- User Basic Data Panel -->
 									<v-col class="ma-0 pa-0" cols="12" md="6">
 										<v-card outlined height="100%" class="ma-1 pa-4">
@@ -343,7 +347,7 @@
 										</v-card>
 									</v-col>
 								</v-row>
-								<v-row class="mt-2">
+								<v-row class="mt-2" v-if="isLDAPView()">
 									<v-expansion-panels v-model="panel" flat class="ma-1">
 										<v-expansion-panel class="outlined">
 											<v-expansion-panel-header class="font-weight-medium">
@@ -472,6 +476,99 @@
 										</v-expansion-panel>
 									</v-expansion-panels>
 								</v-row>
+								<!-- DJANGO USER DATA -->
+								<v-row align-content="center" class="mb-2" v-if="!isLDAPView()">
+									<v-col class="ma-0 pa-0" cols="12" md="6">
+										<v-card outlined height="100%" class="ma-1 pa-4">
+											<v-row :justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'start'"
+												class="pa-0 ma-0 text-h6 mx-4 mb-5">
+												{{ $t('section.users.basicDetails') }}
+											</v-row>
+											<v-row class="pa-0 ma-0 font-weight-medium">
+												<v-col cols="12" lg="6">
+													<v-text-field dense id="first_name"
+														:label="$t('attribute.ldap.givenName')"
+														:readonly="editFlag != true" v-model="usercopy.first_name"
+														:rules="[this.fieldRules(usercopy.first_name, 'ge_name')]"></v-text-field>
+												</v-col>
+												<v-col cols="12" lg="6">
+													<v-text-field dense id="last_name" :label="$t('attribute.ldap.sn')"
+														:readonly="editFlag != true" v-model="usercopy.last_name"
+														:rules="[this.fieldRules(usercopy.last_name, 'ge_name')]"></v-text-field>
+												</v-col>
+												<v-col cols="12" lg="6"
+													:class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
+													<v-text-field dense id="email" :label="$t('attribute.user.email')"
+														:readonly="editFlag != true" v-model="usercopy.email"
+														:rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"></v-text-field>
+												</v-col>
+												<v-col cols="12" lg="6">
+													<v-fade-transition>
+														<v-card v-ripple outlined class="pa-1 py-2">
+															<span :color="(usercopy.is_enabled ? 'valid-40' : 'error')">
+																{{ usercopy.is_enabled ? $t('attribute.user.is_enabled') :
+																	$t('attribute.user.is_disabled') }}
+															</span>
+															<div elevation="0" v-if="usercopy.is_enabled == true">
+																<v-icon color="valid-40">
+																	mdi-check
+																</v-icon>
+															</div>
+															<div elevation="0" icon rounded
+																v-else-if="usercopy.is_enabled == false">
+																<v-icon color="error">
+																	mdi-close
+																</v-icon>
+															</div>
+														</v-card>
+													</v-fade-transition>
+												</v-col>
+												<v-col cols="12"
+													v-if="user.last_login != undefined && user.last_login != ''">
+													{{ $t('attribute.ldap.last_login') + ": " +
+														truncateDate(user.last_login) }}
+												</v-col>
+											</v-row>
+										</v-card>
+									</v-col>
+									<v-col class="ma-0 pa-0" cols="12" md="6">
+										<v-card outlined height="100%" class="ma-1 pa-4">
+											<v-row :justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'end'"
+												class="pa-0 ma-0 text-h6 mx-4 mb-5">
+												{{ $t('section.users.userDialog.extraDetails') }}
+											</v-row>
+											<v-row align-content="center" class="mb-2" v-if="!isLDAPView()">
+												<v-row justify="center" no-gutters>
+													<v-col cols="12" class="mb-1">
+														<p style="cursor: default" class="ma-0 pa-0">
+															{{ $t("attribute.user.user_type") }}
+														</p>
+													</v-col>
+													<v-col cols="12">
+														<v-chip color="primary">
+															{{ user.user_type ? user.user_type.toUpperCase() : 'UNKNOWN' }}
+														</v-chip>
+													</v-col>
+												</v-row>
+												<v-row justify="center" no-gutters class="ma-4">
+													<v-col cols="12" class="px-2" v-if="user.dn && user.dn.length > 0">
+														<v-text-field dense id="dn"
+															:label="$t('attribute.ldap.distinguishedName')"
+															:value="user.dn" readonly></v-text-field>
+													</v-col>
+													<v-col cols="12" lg="6" class="px-2">
+														<v-text-field dense id="dn" :label="$t('attribute.ldap.whenCreated')"
+															:value="truncateDate(user.created_at)" readonly></v-text-field>
+													</v-col>
+													<v-col cols="12" lg="6" class="px-2">
+														<v-text-field dense id="dn" :label="$t('attribute.ldap.whenChanged')"
+															:value="truncateDate(user.modified_at)" readonly></v-text-field>
+													</v-col>
+												</v-row>
+											</v-row>
+										</v-card>
+									</v-col>
+								</v-row>
 							</v-form>
 						</v-card-text>
 					</v-tab-item>
@@ -559,7 +656,7 @@
 					class="ma-0 pa-0">
 					<!-- Edit User Button -->
 					<v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag != true"
-						@click="editUser">
+						@click="editUser" :disabled="isLDAPUser() && !isLDAPView()">
 						<v-icon class="mr-1">
 							mdi-pencil
 						</v-icon>
@@ -610,6 +707,7 @@
 
 <script>
 import User from '@/include/User.js';
+import DjangoUser from '@/include/DjangoUser.js';
 import CNObjectList from '@/components/CNObjectList.vue';
 import UserPermissionList from '@/components/User/UserPermissionList.vue';
 import RefreshButton from '@/components/RefreshButton.vue';
@@ -763,8 +861,10 @@ export default {
 		dialogKey: String,
 		editFlag: Boolean,
 		user: Object,
+		userClass: Function,
 		fetchingData: Boolean,
-		refreshLoading: Boolean
+		refreshLoading: Boolean,
+		parentTitle: String,
 	},
 	created() {
 		this.alertDelay = 0.5e3;
@@ -786,22 +886,15 @@ export default {
 			},
 			deep: true
 		},
-		// 'permissions': {
-		//     handler: function (newValue) {
-		//     },
-		//     deep: true
-		// }
-		// Monitor changes in usercopy
-		// 'usercopy': {
-		//     handler: function (newValue) {
-		//     },
-		//     deep: true
-		// }
 	},
 	methods: {
-		exit() {
-			this.showAlert = false
-			this.tab = this.TABS.DEFAULT
+		isLDAPView() {
+			return this.parentTitle == 'ldap-users'
+		},
+		isLDAPUser() {
+			if ("user_type" in this.user)
+				return this.user.user_type == "ldap"
+			return true
 		},
 		getModifiedValues() {
 			let v = []
@@ -895,9 +988,10 @@ export default {
 			this.$forceUpdate
 		},
 		removeFromGroup(groupDn) {
-			var currentGroupFilter = this.usercopy.memberOfObjects.filter(e => e.distinguishedName == groupDn)
+			let currentGroupFilter = this.usercopy.memberOfObjects.filter(e => e.distinguishedName == groupDn)
+			let currentGroup
 			if (currentGroupFilter.length > 0)
-				var currentGroup = currentGroupFilter[0]
+				currentGroup = currentGroupFilter[0]
 
 			if (currentGroup['objectRid'] == this.usercopy['primaryGroupID']) {
 				console.error("Primary group cannot be deleted")
@@ -1010,7 +1104,7 @@ export default {
 		},
 		async setAccountStatus(enabled) {
 			this.extraListOpen = false
-			await new User({}).changeAccountStatus({ username: this.usercopy.username, enabled: enabled })
+			await new this.userClass({}).changeAccountStatus({ username: this.usercopy.username, enabled: enabled })
 				.then(() => {
 					let action = `words.${enabled ? 'enabled' : 'disabled'}`;
 					this.refreshUser()
@@ -1063,7 +1157,7 @@ export default {
 			this.showAlert = false
 			this.$emit('editToggle', true);
 			setTimeout(() => {
-				this.showAlert = true
+				this.setShowAlert()
 			}, this.alertDelay)
 		},
 		viewUser() {
@@ -1071,84 +1165,104 @@ export default {
 			this.$emit('editToggle', false);
 			this.refreshUser();
 			setTimeout(() => {
-				this.showAlert = true
+				this.setShowAlert()
 			}, this.alertDelay)
 		},
 		closeDialog() {
 			this.$emit('closeDialog', this.dialogKey);
 		},
 		async saveUser(closeDialog = false) {
-			if (this.getIsUserModified() != true) {
-				console.log("User was not modified, ignoring user save request.")
-				return
-			}
-			this.loading = true
-			this.loadingColor = 'primary'
-			// Set permissions array properly
-			this.usercopy.permission_list = []
-			for (const [key] of Object.entries(this.permissions)) {
-				if (this.permissions[key].value == true)
-					this.usercopy.permission_list.push(key)
-			}
-			// Set groups
-			// Groups to Add
-			// ! Deprecated, used Before Partial Update
-			// if (this.groupsToAdd.length > 0)
-			//     this.usercopy.groupsToAdd = this.groupsToAdd
-			// else
-			//     delete this.usercopy.groupsToAdd
-			// // Groups to Remove
-			// if (this.groupsToRemove.length > 0)
-			//     this.usercopy.groupsToRemove = this.groupsToRemove
-			// else
-			//     delete this.usercopy.groupsToRemove
-
-			let modifiedValues = this.getModifiedValues()
-			let partialUpdateData = {
-				distinguishedName: this.usercopy.distinguishedName,
-			}
-			partialUpdateData[this.userSelector] = this.usercopy['username']
-			partialUpdateData[this.userSelector] = this.usercopy[this.userSelector]
-			modifiedValues.forEach(k => {
-				partialUpdateData[k] = this.usercopy[k]
-			})
-			if (this.groupsToAdd.length > 0)
-				partialUpdateData.groupsToAdd = this.groupsToAdd
-			else
-				delete partialUpdateData.groupsToAdd
-			// Groups to Remove
-			if (this.groupsToRemove.length > 0)
-				partialUpdateData.groupsToRemove = this.groupsToRemove
-			else
-				delete partialUpdateData.groupsToRemove
-
-			// Uncomment below to debug permissions list
-			// console.log(this.usercopy.permission_list)
-			if (this.$refs.userForm.validate()) {
-				await new User({}).update({ user: partialUpdateData })
-					.then(() => {
-						if (closeDialog == true)
-							this.closeDialog();
-						else
-							this.refreshUser();
-						this.$emit('save');
-						this.loading = false
-						this.loadingColor = 'primary'
-					})
-					.catch(error => {
-						console.error(error)
+			switch (this.parentTitle) {
+				case "django-users":
+					if (this.$refs.userForm.validate()) {
+						await new this.userClass({}).update(this.usercopy)
+							.then(() => {
+								if (closeDialog == true)
+									this.closeDialog();
+								else
+									this.refreshUser();
+								this.$emit('save');
+								this.loading = false
+								this.loadingColor = 'primary'
+							})
+							.catch(error => {
+								console.error(error)
+								this.loading = false
+								this.loadingColor = 'error'
+								this.error = true;
+								this.errorMsg = this.getMessageForCode(error)
+								notificationBus.$emit('createNotification',
+									{ message: this.errorMsg.toUpperCase(), type: 'error' }
+								)
+							})
+					} else {
 						this.loading = false
 						this.loadingColor = 'error'
 						this.error = true;
-						this.errorMsg = this.getMessageForCode(error)
-						notificationBus.$emit('createNotification',
-							{ message: this.errorMsg.toUpperCase(), type: 'error' }
-						)
+					}
+					break;
+				default:
+					if (this.getIsUserModified() != true) {
+						console.log("User was not modified, ignoring user save request.")
+						return
+					}
+					this.loading = true
+					this.loadingColor = 'primary'
+					// Set permissions array properly
+					this.usercopy.permission_list = []
+					for (const [key] of Object.entries(this.permissions)) {
+						if (this.permissions[key].value == true)
+							this.usercopy.permission_list.push(key)
+					}
+
+					let modifiedValues = this.getModifiedValues()
+					let partialUpdateData = {
+						distinguishedName: this.usercopy.distinguishedName,
+					}
+					partialUpdateData[this.userSelector] = this.usercopy['username']
+					partialUpdateData[this.userSelector] = this.usercopy[this.userSelector]
+					modifiedValues.forEach(k => {
+						partialUpdateData[k] = this.usercopy[k]
 					})
-			} else {
-				this.loading = false
-				this.loadingColor = 'error'
-				this.error = true;
+					if (this.groupsToAdd.length > 0)
+						partialUpdateData.groupsToAdd = this.groupsToAdd
+					else
+						delete partialUpdateData.groupsToAdd
+					// Groups to Remove
+					if (this.groupsToRemove.length > 0)
+						partialUpdateData.groupsToRemove = this.groupsToRemove
+					else
+						delete partialUpdateData.groupsToRemove
+
+					// Uncomment below to debug permissions list
+					// console.log(this.usercopy.permission_list)
+					if (this.$refs.userForm.validate()) {
+						await new this.userClass({}).update({ user: partialUpdateData })
+							.then(() => {
+								if (closeDialog == true)
+									this.closeDialog();
+								else
+									this.refreshUser();
+								this.$emit('save');
+								this.loading = false
+								this.loadingColor = 'primary'
+							})
+							.catch(error => {
+								console.error(error)
+								this.loading = false
+								this.loadingColor = 'error'
+								this.error = true;
+								this.errorMsg = this.getMessageForCode(error)
+								notificationBus.$emit('createNotification',
+									{ message: this.errorMsg.toUpperCase(), type: 'error' }
+								)
+							})
+					} else {
+						this.loading = false
+						this.loadingColor = 'error'
+						this.error = true;
+					}
+					break;
 			}
 		},
 		isLoggedInUser(username) {
@@ -1161,6 +1275,10 @@ export default {
 			this.groupsToRemove = []
 			this.groupsToAdd = []
 		},
+		setShowAlert() {
+			if (this.isLDAPUser() && this.isLDAPView() || !this.isLDAPUser() && !this.isLDAPView())
+				this.showAlert = true
+		},
 		// Sync the usercopy object to the parent view user object on the
 		// next tick to avoid mutation errors
 		syncUser() {
@@ -1169,7 +1287,7 @@ export default {
 			this.changingGroups = false
 			this.excludeGroups = []
 			this.setDomainDetails()
-			this.usercopy = new User({})
+			this.usercopy = new this.userClass({})
 			this.extraListOpen = false
 			this.$nextTick(() => {
 				this.usercopy = Object.assign({}, this.user)
@@ -1183,7 +1301,7 @@ export default {
 				this.loadingColor = 'primary'
 				if (Object.keys(this.user).length != 0)
 					setTimeout(() => {
-						this.showAlert = true
+						this.setShowAlert()
 					}, this.alertDelay)
 			})
 		},
@@ -1194,6 +1312,15 @@ export default {
 			this.setupExclude()
 			this.loading = false
 			this.loadingColor = 'primary'
+		},
+		exit() {
+			this.showAlert = false
+			this.tab = this.TABS.DEFAULT
+		},
+		truncateDate(d) {
+			if (d === undefined || d === null || d === "")
+				return ""
+			return `${new Date(d).toISOString().replace("T", " ").substring(0, 19)} (UTC)`;
 		}
 	}
 }

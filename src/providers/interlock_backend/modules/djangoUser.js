@@ -17,7 +17,7 @@ const actions = {
 
 	fetch: (id) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.djangoUser.fetch.replace("{pk}", id)).then(response => {
+			interlock_backend.request.get(interlock_backend.urls.djangoUser.fetch.replace("{pk}", id)).then(response => {
 				resolve(response.data)
 			}).catch((e) => {
 				reject(e)
@@ -44,19 +44,9 @@ const actions = {
 		})
 	},
 
-	enable: (id) => {
+	changeAccountStatus: (data) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.djangoUser.changeAccountStatus.replace("{pk}", id)).then(response => {
-				resolve(response)
-			}).catch((e) => {
-				reject(e)
-			})
-		})
-	},
-
-	disable: (id) => {
-		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.djangoUser.changeAccountStatus.replace("{pk}", id)).then(response => {
+			interlock_backend.request.post(interlock_backend.urls.djangoUser.changeAccountStatus.replace("{pk}", data.id), data).then(response => {
 				resolve(response)
 			}).catch((e) => {
 				reject(e)

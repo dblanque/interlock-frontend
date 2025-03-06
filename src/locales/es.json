@@ -638,6 +638,7 @@
         }
       },
       "userDialog":{
+        "extraDetails":"Detalles Extra",
         "deleteTotp":"Eliminar Dispositivo TOTP",
         "noLastLogon":"El usuario aún no ha iniciado sesión",
         "userDetails":"Detalles de Usuario",

@@ -634,6 +634,7 @@
         }
       },
       "userDialog":{
+        "extraDetails":"Extra Details",
         "deleteTotp":"Delete TOTP Device",
         "noLastLogon":"User has not logged in yet",
         "userDetails":"User Details",

@@ -36,7 +36,7 @@
 						</v-btn>
 					</v-row>
 				</v-row>
-				<v-row class="ma-0 pa-0 px-4" justify="center">
+				<v-row class="ma-0 pa-0 px-4" justify="center" align="center">
 					<!-- Import Button -->
 					<v-btn class="pa-2 mx-2" small
 						:dark="!loading && !isThemeDark($vuetify) && isImplemented('import')"
@@ -103,6 +103,10 @@
 							{{ $t('actions.delete') }}
 						</span>
 					</v-btn>
+					<!-- Local Users Only Switch -->
+					<v-switch v-if="viewTitle == 'django-users'"
+						:label="'Only Local Users'"
+						v-model="localUsersOnly" />
 				</v-row>
 			</template>
 			<!-- USER IS ENABLED STATUS -->
@@ -135,7 +139,7 @@
 							rounded
 							v-bind="attrs"
 							v-on="on"
-							:disabled="loading || isLoggedInUser(item.username)"
+							:disabled="loading || isLoggedInUser(item.username) || !isUserEditable(item)"
 							@click="setAccountStatus(item, false)">
 							<v-icon :color="!isLoggedInUser(item.username) ? 'valid-40-s' : ''">
 								mdi-check
@@ -154,7 +158,7 @@
 							rounded
 							v-bind="attrs"
 							v-on="on"
-							:disabled="loading || isLoggedInUser(item.username)"
+							:disabled="loading || isLoggedInUser(item.username) || !isUserEditable(item)"
 							@click="setAccountStatus(item, true)">
 							<v-icon :color="!isLoggedInUser(item.username) ? 'error-60-s' : ''">
 								mdi-close
@@ -277,14 +281,15 @@
 				ref="UserDialog" :refreshLoading="loading" :disable-actions="fetchingData"
 				:fetchingData="fetchingData" @closeDialog="closeDialog" @save="userSaved"
 				@goToGroup="goToGroup"
-				:parentTitle="viewTitle" @editToggle="setViewToEdit" @refreshUser="refreshUser"
-				@refreshUserList="listUserItems(false)" />
+				:userClass="userClass" :parentTitle="viewTitle" @editToggle="setViewToEdit"
+				@refreshUser="refreshUser" @refreshUserList="listUserItems(false)" />
 		</v-dialog>
 
 		<!-- USER DELETE CONFIRM DIALOG -->
 		<v-dialog eager max-width="800px" v-model="dialogs['userDelete']">
 			<UserDelete :userObject="this.data.selectedUser" :userObjectList="tableData.selected"
-				:dialogKey="'userDelete'" ref="UserDelete" @closeDialog="closeDialog" @refresh="listUserItems"
+				:dialogKey="'userDelete'" ref="UserDelete" @closeDialog="closeDialog"
+				@refresh="listUserItems"
 				:parentTitle="viewTitle" />
 		</v-dialog>
 
@@ -348,6 +353,7 @@ export default {
 				items: [],
 				selected: []
 			},
+			localUsersOnly: false,
 			userClass: undefined,
 			tableItemKey: undefined,
 			tableDefaultSortKey: undefined,
@@ -414,7 +420,6 @@ export default {
 		isImplemented(action) {
 			switch (this.viewTitle) {
 				case "django-users":
-				case "local-users":
 					switch (action) {
 						case "create":
 						case "import":
@@ -534,7 +539,6 @@ export default {
 			let translationParent
 			switch (this.viewTitle) {
 				case "django-users":
-				case "local-users":
 					this.setLoading()
 					this.userClass = DjangoUser
 					this.tableItemKey = "username"
@@ -566,16 +570,14 @@ export default {
 								break;
 							case "is_enabled":
 								headerDict.text = this.$t("attribute.user." + header)
+								headerDict.align = 'center'
+								headerDict.sortable = false
 								break;
 							default:
 								headerDict.text = this.$t(translationParent + header)
 								break;
 						}
 						headerDict.value = header
-						if (header == 'is_enabled') {
-							headerDict.align = 'center'
-							headerDict.sortable = false
-						}
 						this.tableData.headers.push(headerDict)
 					});
 					headerDict = {}
@@ -589,12 +591,12 @@ export default {
 						const user = this.tableData.items[i];
 						if (user.username == localStorage.getItem('user.username') ||
 							user.username == 'Administrator' && localStorage.getItem('user.username') == 'admin') {
-							this.tableData.items[i]["isSelectable"] = false
+							user.isSelectable = false
 							break
 						}
 						if ("user_type" in user) {
 							if (user.user_type != "local")
-								this.tableData.items[i]["isSelectable"] = false
+								user.isSelectable = false
 						}
 					}
 					this.loading = false
@@ -661,11 +663,19 @@ export default {
 			this.errorMsg = false
 			this.data.selectedUser = {}
 			this.data.selectedUser = userObject
-			this.data.userdata = await new User({})
-			await this.data.userdata.changeAccountStatus({
-				"username": this.data.selectedUser.username,
-				"enabled": enabled
-			})
+			this.data.userdata = await new this.userClass({})
+			let ident
+			if (this.viewTitle === "ldap-users")
+				ident = {
+					username: this.data.selectedUser.username,
+					enabled: enabled
+				}
+			else
+				ident = {
+					id: this.data.selectedUser.id,
+					enabled: enabled
+				}
+			await this.data.userdata.changeAccountStatus(ident)
 				.then(() => {
 					let action = `words.${enabled ? 'enabled' : 'disabled'}`;
 					this.loading = false
@@ -704,7 +714,8 @@ export default {
 			const actionMsg = disable ? this.$t("words.disabled") : this.$t("words.enabled")
 			const actionType = disable ? 'warning' : 'success'
 			if (this.tableData.selected.find(v => v == current_user)) {
-				this.openDialog('userAntilockout');
+				throw new Error("Current user cannot change their own status.");
+
 			}
 			else {
 				await new User({}).bulkStatusChange({
@@ -777,13 +788,15 @@ export default {
 		},
 		// Fetch individual User
 		async fetchUser(item, isEditable = false, openedDialogLoading = false) {
+			let ident = this.viewTitle == "ldap-users" ? item.username : item.id
 			if (!openedDialogLoading)
 				this.loading = true
 			this.fetchingData = true
 			this.data.selectedUser.username = item.username
-			this.data.selectedUser.distinguishedName = item.distinguishedName
-			this.data.userdata = new User({})
-			await this.data.userdata.fetch(this.data.selectedUser.username)
+			if (this.viewTitle == "ldap-users")
+				this.data.selectedUser.distinguishedName = item.distinguishedName
+			this.data.userdata = new this.userClass({})
+			await this.data.userdata.fetch(ident)
 				.then(() => {
 					if (!this.dialogs.userDialog) {
 						this.openDialog('userDialog')

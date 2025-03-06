@@ -28,7 +28,7 @@ class DjangoUser extends ApiModel {
 	}
 
 	async fetch(id) {
-		return await interlock_backend.call(`${callsPrefix}/fetch/${id}/`).then(
+		return await interlock_backend.call(`${callsPrefix}/fetch`, id).then(
 			response => {
 				if (!response)
 					throw Error("Error fetching user data. Provider returned: " + response);
@@ -50,19 +50,15 @@ class DjangoUser extends ApiModel {
 	}
 
 	async update(data) {
-		return await interlock_backend.call(`${callsPrefix}/update/${data.id}/`, data)
+		return await interlock_backend.call(`${callsPrefix}/update`, data)
 	}
 
 	async delete(id) {
-		return await interlock_backend.call(`${callsPrefix}/delete/${id}`)
+		return await interlock_backend.call(`${callsPrefix}/delete`, id)
 	}
 
-	async enable(id) {
-		return await interlock_backend.call(`${callsPrefix}/enable/${id}/`)
-	}
-
-	async disable(id) {
-		return await interlock_backend.call(`${callsPrefix}/disable/${id}/`)
+	async changeAccountStatus(data) {
+		return await interlock_backend.call(`${callsPrefix}/changeAccountStatus`, data)
 	}
 
 	async changePassword(data) {

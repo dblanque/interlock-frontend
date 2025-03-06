@@ -33,7 +33,6 @@
 		<v-container v-if="viewTitle == 'ldap-dirtree'" :class="getContainerClasses()">
 			<DirtreeView
 				ref="DirtreeView"
-				:requestRefresh="this.refreshDirtreeTable"
 				:viewTitle="viewTitle"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction"
@@ -41,21 +40,18 @@
 				@goToGroup="goToGroup" />
 		</v-container>
 
-		<!-- DJANGO USERS -->
+		<!-- USERS -->
 		<v-container v-if="viewTitle == 'django-users'" :class="getContainerClasses()">
-			<UserView ref="UserView"
-				:requestRefresh="this.refreshUserDataTable"
+			<UserView ref="DjangoUserView"
 				:viewTitle="viewTitle"
 				:snackbarTimeout="this.snackbarTimeout"
-				:viewMode="'django'"
 				@refresh="refreshAction"
 				@goToGroup="goToGroup" />
 		</v-container>
 
-		<!-- DJANGO GROUPS -->
+		<!-- GROUPS -->
 		<v-container v-if="viewTitle == 'django-groups'" :class="getContainerClasses()">
-			<GroupView ref="GroupView"
-				:requestRefresh="this.refreshGroupDataTable"
+			<GroupView ref="DjangoGroupView"
 				:viewTitle="viewTitle"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction" />
@@ -63,8 +59,7 @@
 
 		<!-- USERS -->
 		<v-container v-if="viewTitle == 'ldap-users'" :class="getContainerClasses()">
-			<UserView ref="UserView"
-				:requestRefresh="this.refreshUserDataTable"
+			<UserView ref="LdapUserView"
 				:viewTitle="viewTitle"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction"
@@ -73,9 +68,7 @@
 
 		<!-- GROUPS -->
 		<v-container v-if="viewTitle == 'ldap-groups'" :class="getContainerClasses()">
-			<GroupView ref="GroupView"
-				:requestRefresh="this.refreshGroupDataTable"
-				:viewMode="'ldap'"
+			<GroupView ref="LdapGroupView"
 				:viewTitle="viewTitle"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction" />
@@ -84,7 +77,6 @@
 		<!-- DNS -->
 		<v-container v-if="viewTitle == 'ldap-dns'" :class="getContainerClasses()">
 			<dnsView ref="dnsView"
-				:requestRefresh="this.refreshDNSData"
 				:viewTitle="viewTitle"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction" />
@@ -166,10 +158,6 @@ export default {
 			containerClasses: [
 				"max-width-change"
 			],
-			refreshDirtreeTable: false,
-			refreshUserDataTable: false,
-			refreshGroupDataTable: false,
-			refreshDNSData: false,
 			refreshOnClose: false,
 			userRefreshLoading: false,
 			error: false,
@@ -225,19 +213,24 @@ export default {
 					}
 					break;
 				case 'ldap-users':
-				case 'django-users':
-					if (this.$refs.UserView != undefined) {
+					if (this.$refs.LdapUserView != undefined) {
 						console.log("Requested refresh for component " + newValue)
-						this.$refs.UserView.resetSearch()
-						this.$refs.UserView.listUserItems()
+						this.$refs.LdapUserView.resetSearch()
+						this.$refs.LdapUserView.listUserItems()
+					}
+					break;
+				case 'django-users':
+					if (this.$refs.DjangoUserView != undefined) {
+						console.log("Requested refresh for component " + newValue)
+						this.$refs.DjangoUserView.resetSearch()
+						this.$refs.DjangoUserView.listUserItems()
 					}
 					break;
 				case 'ldap-groups':
-				case 'django-groups':
-					if (this.$refs.GroupView != undefined) {
+					if (this.$refs.LdapGroupView != undefined) {
 						console.log("Requested refresh for component " + newValue)
-						this.$refs.GroupView.resetSearch()
-						this.$refs.GroupView.listGroupItems()
+						this.$refs.LdapGroupView.resetSearch()
+						this.$refs.LdapGroupView.listGroupItems()
 					}
 					break;
 				case 'settings':
