@@ -68,7 +68,7 @@ export default {
 	mixins: [ utilsMixin ],
 	props: {
 			selectedApplication: Object,
-			viewKey: String
+			dialogKey: String
 	},
 	created() {
 	},
@@ -97,7 +97,7 @@ export default {
 						});
 					})
 				}
-				this.$emit('closeDialog', this.viewKey);
+				this.$emit('closeDialog', this.dialogKey);
 			},
 	}
 }

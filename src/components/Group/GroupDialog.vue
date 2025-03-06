@@ -305,7 +305,7 @@
 		<!-- USER ADD TO GROUP DIALOG -->
 		<v-dialog eager max-width="1200px" v-model="dialogs['addToGroup']">
 			<CNObjectList
-			:viewKey="'addToGroup'"
+			:dialogKey="'addToGroup'"
 			ref="AddToGroup"
 			@addDNs="addMembers"
 			:excludeDNs="excludeDNs"
@@ -378,7 +378,7 @@ export default {
 		}
 	},
 	props: {
-		viewKey: String,
+		dialogKey: String,
 		editFlag: Boolean,
 		group: Object,
 		fetchingData: Boolean,
@@ -428,7 +428,7 @@ export default {
 			}
 		},
 		closeDialog() {
-			this.$emit('closeDialog', this.viewKey);
+			this.$emit('closeDialog', this.dialogKey);
 		},
 		closeInnerDialog(key){
 			this.dialogs[key] = false;

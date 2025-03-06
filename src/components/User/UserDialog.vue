@@ -602,7 +602,7 @@
 
 		<!-- USER ADD TO GROUP DIALOG -->
 		<v-dialog eager max-width="1200px" v-model="dialogs['userAddToGroup']">
-			<CNObjectList :viewKey="'userAddToGroup'" ref="UserAddToGroup" @addDNs="addToGroup"
+			<CNObjectList :dialogKey="'userAddToGroup'" ref="UserAddToGroup" @addDNs="addToGroup"
 				:excludeDNs="excludeGroups" :enableUsers="false" @closeDialog="closeInnerDialog" />
 		</v-dialog>
 	</v-card>
@@ -760,7 +760,7 @@ export default {
 	},
 	mixins: [validationMixin, utilsMixin],
 	props: {
-		viewKey: String,
+		dialogKey: String,
 		editFlag: Boolean,
 		user: Object,
 		fetchingData: Boolean,
@@ -1075,7 +1075,7 @@ export default {
 			}, this.alertDelay)
 		},
 		closeDialog() {
-			this.$emit('closeDialog', this.viewKey);
+			this.$emit('closeDialog', this.dialogKey);
 		},
 		async saveUser(closeDialog = false) {
 			if (this.getIsUserModified() != true) {

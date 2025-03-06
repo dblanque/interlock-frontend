@@ -196,7 +196,7 @@ export default {
 	},
 	props: {
 		selectedUsers: Array,
-		viewKey: String,
+		dialogKey: String,
 	},
 	data() {
 		return {
@@ -342,7 +342,7 @@ export default {
 				})
 		},
 		async closeDialog() {
-			this.$emit('closeDialog', this.viewKey);
+			this.$emit('closeDialog', this.dialogKey);
 			this.$emit('refresh');
 		},
 	}

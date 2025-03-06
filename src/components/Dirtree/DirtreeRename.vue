@@ -88,7 +88,7 @@ export default {
     name: 'DirtreeRename',
     mixins: [ validationMixin, utilsMixin ],
     props: {
-        viewKey: String,
+        dialogKey: String,
         objectDn: String,
         objectName: String
     },
@@ -106,7 +106,7 @@ export default {
             this.errorMsg = ""
         },
         closeDialog(){
-            this.$emit('closeDialog', this.viewKey);
+            this.$emit('closeDialog', this.dialogKey);
         },
         confirmRename(){
             this.$emit('confirm', this.newObjectName);

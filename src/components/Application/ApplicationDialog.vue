@@ -115,7 +115,7 @@ export default {
 		}
 	},
 	props: {
-		viewKey: String,
+		dialogKey: String,
 		editFlag: Boolean,
 		applicationObject: Object,
 		fetchingData: Boolean,
@@ -162,7 +162,7 @@ export default {
 			this.loadingColor = 'primary'
 		},
 		closeDialog() {
-				this.$emit('closeDialog', this.viewKey);
+				this.$emit('closeDialog', this.dialogKey);
 		},
 		async saveApplication(closeDialog=false){
 			this.loading = true

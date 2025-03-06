@@ -161,7 +161,7 @@
 		<GroupDialog
 			:group="data.groupdata"
 			:editFlag="this.editableForm"
-			:viewKey="'groupDialog'"
+			:dialogKey="'groupDialog'"
 			ref="GroupDialog"
 			:refreshLoading="loading"
 			:fetchingData="fetchingData"
@@ -177,7 +177,7 @@
 	<v-dialog eager max-width="800px" v-model="dialogs['groupDelete']">
 		<GroupDelete
 			:groupObject="this.data.selectedGroup"
-			:viewKey="'groupDelete'"
+			:dialogKey="'groupDelete'"
 			ref="GroupDelete"
 			@closeDialog="closeDialog"
 			@refresh="listGroupItems(false)"
@@ -187,7 +187,7 @@
 	<!-- GROUP CREATE DIALOG -->
 	<v-dialog eager max-width="1200px" v-model="dialogs['groupCreate']">
 		<GroupCreate
-			:viewKey="'groupCreate'"
+			:dialogKey="'groupCreate'"
 			ref="GroupCreate"
 			@closeDialog="closeDialog"
 			/>

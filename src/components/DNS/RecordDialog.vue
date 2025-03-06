@@ -317,7 +317,7 @@ export default {
     name: 'RecordDialog',
     mixins: [ validationMixin, utilsMixin ],
     props: {
-        viewKey: String,
+        dialogKey: String,
         recordObject: Object,
         currentZone: String,
         updateFlag: Boolean,
@@ -630,7 +630,7 @@ export default {
             }
         },
         closeDialog(refresh=false){
-            this.$emit('closeDialog', this.viewKey, refresh);
+            this.$emit('closeDialog', this.dialogKey, refresh);
         },
     },
 }

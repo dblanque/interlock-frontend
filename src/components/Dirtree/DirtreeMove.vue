@@ -162,7 +162,7 @@ export default {
             type: Boolean,
             default: false
         },
-        viewKey: String,
+        dialogKey: String,
         objectDn: String,
         objectName: String
     },
@@ -227,7 +227,7 @@ export default {
                 this.objectDestination = destination
         },
         closeDialog(){
-            this.$emit('closeDialog', this.viewKey);
+            this.$emit('closeDialog', this.dialogKey);
         },
         confirmMove(){
             this.$emit('confirm', this.objectDestination);

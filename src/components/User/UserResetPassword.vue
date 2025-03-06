@@ -125,7 +125,7 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		viewKey: String
+		dialogKey: String
 	},
 	created() {
 	},
@@ -142,7 +142,7 @@ export default {
 		},
 		async closeDialog(resetConfirm = false, user = {}) {
 			if (resetConfirm != true)
-				this.$emit('closeDialog', this.viewKey);
+				this.$emit('closeDialog', this.dialogKey);
 			if (this.isEndUser === true) {
 				if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
 					this.loading = true
@@ -158,7 +158,7 @@ export default {
 									message: this.$t('section.logs.extras.changed_password'),
 									type: "success"
 								});
-							this.$emit('closeDialog', this.viewKey);
+							this.$emit('closeDialog', this.dialogKey);
 						})
 						.catch(error => {
 							setTimeout(() => {
@@ -190,7 +190,7 @@ export default {
 									message: this.$t('section.logs.extras.changed_password'),
 									type: "success"
 								});
-							this.$emit('closeDialog', this.viewKey, true);
+							this.$emit('closeDialog', this.dialogKey, true);
 						})
 						.catch(error => {
 							setTimeout(() => {

@@ -273,7 +273,7 @@
 
 		<!-- USER VIEW/EDIT DIALOG -->
 		<v-dialog eager max-width="1200px" v-model="dialogs['userDialog']">
-			<UserDialog :user="data.userdata" :editFlag="this.editableForm" :viewKey="'userDialog'"
+			<UserDialog :user="data.userdata" :editFlag="this.editableForm" :dialogKey="'userDialog'"
 				ref="UserDialog" :refreshLoading="loading" :disable-actions="fetchingData"
 				:fetchingData="fetchingData" @closeDialog="closeDialog" @save="userSaved"
 				@goToGroup="goToGroup"
@@ -284,31 +284,31 @@
 		<!-- USER DELETE CONFIRM DIALOG -->
 		<v-dialog eager max-width="800px" v-model="dialogs['userDelete']">
 			<UserDelete :userObject="this.data.selectedUser" :userObjectList="tableData.selected"
-				:viewKey="'userDelete'" ref="UserDelete" @closeDialog="closeDialog" @refresh="listUserItems"
+				:dialogKey="'userDelete'" ref="UserDelete" @closeDialog="closeDialog" @refresh="listUserItems"
 				:parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER RESET PASSWORD DIALOG -->
 		<v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']">
-			<UserResetPassword :userObject="this.data.selectedUser" :viewKey="'userResetPassword'"
+			<UserResetPassword :userObject="this.data.selectedUser" :dialogKey="'userResetPassword'"
 				ref="UserResetPassword" @closeDialog="closeDialog" :parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER CREATE DIALOG -->
 		<v-dialog eager max-width="1200px" v-model="dialogs['userCreate']">
-			<UserCreate :viewKey="'userCreate'" ref="UserCreate" @closeDialog="closeDialog"
+			<UserCreate :dialogKey="'userCreate'" ref="UserCreate" @closeDialog="closeDialog"
 				:parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER IMPORT DIALOG -->
 		<v-dialog eager persistent max-width="1600px" v-model="dialogs['userImport']">
-			<UserImport :viewKey="'userImport'" ref="UserImport" @closeDialog="closeDialog"
+			<UserImport :dialogKey="'userImport'" ref="UserImport" @closeDialog="closeDialog"
 				:parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER EDIT DIALOG -->
 		<v-dialog eager max-width="1600px" v-model="dialogs['userBulkUpdate']">
-			<UserBulkUpdate :selectedUsers="this.tableData.selected" :viewKey="'userBulkUpdate'"
+			<UserBulkUpdate :selectedUsers="this.tableData.selected" :dialogKey="'userBulkUpdate'"
 				ref="UserBulkUpdate" @closeDialog="closeDialog" @refresh="listUserItems"
 				:parentTitle="viewTitle" />
 		</v-dialog>

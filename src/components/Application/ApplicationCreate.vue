@@ -192,7 +192,7 @@ export default {
 		utilsMixin
 	],
 	props: {
-		viewKey: String
+		dialogKey: String
 	},
 	created(){
 		this.newApplication
@@ -272,7 +272,7 @@ export default {
 			}
 		},
 		closeDialog(refresh=false){
-			this.$emit('closeDialog', this.viewKey, refresh);
+			this.$emit('closeDialog', this.dialogKey, refresh);
 		},
 		async createApplication(){
 			this.loading = true

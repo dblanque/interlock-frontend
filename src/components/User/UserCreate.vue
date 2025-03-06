@@ -486,7 +486,7 @@ export default {
 		utilsMixin
 	],
 	props: {
-		viewKey: String
+		dialogKey: String
 	},
 	created() {
 		this.newUser
@@ -649,7 +649,7 @@ export default {
 			this.permissions[key].value = !this.permissions[key].value
 		},
 		closeDialog(refresh = false) {
-			this.$emit('closeDialog', this.viewKey, refresh);
+			this.$emit('closeDialog', this.dialogKey, refresh);
 		},
 		async createUser() {
 			this.error = false

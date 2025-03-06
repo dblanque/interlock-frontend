@@ -129,7 +129,7 @@
 		<!-- APPLICATION CREATE DIALOG -->
 		<v-dialog eager max-width="1000px" v-model="dialogs['create']">
 			<ApplicationCreate
-			:viewKey="'create'"
+			:dialogKey="'create'"
 			ref="ApplicationCreate"
 			@closeDialog="closeDialog"
 			@refresh="listApplicationItems"
@@ -141,7 +141,7 @@
 			<ApplicationDialog
 			ref="ApplicationDialog"
 			:refreshLoading="loading"
-			:viewKey="'update'"
+			:dialogKey="'update'"
 			:applicationObject="applicationObject"
 			:selectedApplication="selectedApplication"
 			:editFlag="editFlag"
@@ -155,7 +155,7 @@
 		<!-- APPLICATION DELETE DIALOG -->
 		<v-dialog eager max-width="1000px" v-model="dialogs['delete']">
 			<ApplicationDelete
-			:viewKey="'delete'"
+			:dialogKey="'delete'"
 	  	:selectedApplication="selectedApplication"
 			ref="ApplicationDelete"
 			@closeDialog="closeDialog"

@@ -77,7 +77,7 @@ export default {
 	props: {
 		userObject: Object,
 		userObjectList: Array,
-		viewKey: String,
+		dialogKey: String,
 		massDelete: Boolean
 	},
 	created() {
@@ -108,9 +108,9 @@ export default {
 						})
 						.catch(error => { console.error(error) })
 				}
-				this.$emit('closeDialog', this.viewKey, true);
+				this.$emit('closeDialog', this.dialogKey, true);
 			} else
-				this.$emit('closeDialog', this.viewKey);
+				this.$emit('closeDialog', this.dialogKey);
 		},
 	}
 }

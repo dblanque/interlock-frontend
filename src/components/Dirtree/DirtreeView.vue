@@ -312,7 +312,7 @@
     <v-dialog eager max-width="900px" v-model="dialogs['dirtreeOUCreate']">
         <DirtreeOUCreate
           :createType="createType"
-          :viewKey="'dirtreeOUCreate'"
+          :dialogKey="'dirtreeOUCreate'"
           ref="DirtreeOUCreate"
           @closeDialog="closeDialog"
         />
@@ -322,7 +322,7 @@
     <v-dialog eager max-width="800px" v-model="dialogs['dirtreeDeleteObject']">
       <DirtreeDeleteObject
         :ldapObject="this.selectedObject"
-        :viewKey="'dirtreeDeleteObject'"
+        :dialogKey="'dirtreeDeleteObject'"
         ref="DirtreeDeleteObject"
         @closeDialog="closeDialog"
         @refresh="resetDirtree(true)"
@@ -334,7 +334,7 @@
         <DirtreeMove
             :objectDn="selectedObject.distinguishedName"
             :objectName="selectedObject.name"
-            :viewKey="'dirtreeMove'"
+            :dialogKey="'dirtreeMove'"
             ref="DirtreeMove"
             @closeDialog="closeDialog"
             @confirm="moveObject"
@@ -346,7 +346,7 @@
         <DirtreeRename
             :objectDn="selectedObject.distinguishedName"
             :objectName="selectedObject.name"
-            :viewKey="'dirtreeRename'"
+            :dialogKey="'dirtreeRename'"
             ref="DirtreeRename"
             @closeDialog="closeDialog"
             @confirm="renameObject"

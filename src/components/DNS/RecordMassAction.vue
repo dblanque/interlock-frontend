@@ -111,7 +111,7 @@ export default {
         },
         selectedRecords: Array,
         currentZone: String,
-        viewKey: String
+        dialogKey: String
     },
     methods: {
         reset(){
@@ -157,10 +157,10 @@ export default {
             // Wait for animations if delete confirm true
             if (deleteConfirm == true && this.submitted == true && this.error != true)
                 setTimeout(() => {
-                    this.$emit('closeDialog', this.viewKey, deleteConfirm);
+                    this.$emit('closeDialog', this.dialogKey, deleteConfirm);
                 }, 150)
             else
-                this.$emit('closeDialog', this.viewKey);
+                this.$emit('closeDialog', this.dialogKey);
         },
     }
 }

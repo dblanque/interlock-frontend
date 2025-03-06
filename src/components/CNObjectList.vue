@@ -153,7 +153,7 @@ export default {
         }
     },
     props: {
-        viewKey: String,
+        dialogKey: String,
         enableGroups: {
             type: Boolean,
             default: true
@@ -297,7 +297,7 @@ export default {
             // console.log(destination)
         // },
         closeDialog() {
-            this.$emit('closeDialog', this.viewKey)
+            this.$emit('closeDialog', this.dialogKey)
         }
     },
     

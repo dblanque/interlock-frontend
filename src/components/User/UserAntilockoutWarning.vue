@@ -64,13 +64,13 @@ export default {
 	name: "UserAntilockoutWarning",
 	props: {
 		userObject: Object,
-		viewKey: String
+		dialogKey: String
 	},
 	created() {
 	},
 	methods: {
 		async closeDialog() {
-			this.$emit('closeDialog', this.viewKey);
+			this.$emit('closeDialog', this.dialogKey);
 		},
 	}
 }

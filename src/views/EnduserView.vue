@@ -324,7 +324,7 @@
         <v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']">
             <UserResetPassword
             :userObject="this.user"
-            :viewKey="'userResetPassword'"
+            :dialogKey="'userResetPassword'"
             ref="UserResetPassword"
             :isEndUser="true"
             @closeDialog="closeDialog"

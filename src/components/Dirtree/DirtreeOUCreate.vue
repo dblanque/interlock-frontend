@@ -249,7 +249,7 @@ export default {
             type: String,
             default: "ou"
         },
-        viewKey: String
+        dialogKey: String
     },
     created(){
         this.newOU()
@@ -362,7 +362,7 @@ export default {
             }
         },
         closeDialog(refresh=false){
-            this.$emit('closeDialog', this.viewKey, refresh);
+            this.$emit('closeDialog', this.dialogKey, refresh);
         },
         async createLDAPObject(){
             this.error = false

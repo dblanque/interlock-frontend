@@ -329,7 +329,7 @@ export default {
 	},
 	props: {
 		userObject: Object,
-		viewKey: String
+		dialogKey: String
 	},
 	mounted() {
 		this.setDefaultImportFields()
@@ -624,7 +624,7 @@ export default {
 			var refresh = false
 			if (this.showResult)
 				refresh = true
-			return this.$emit('closeDialog', this.viewKey, refresh);
+			return this.$emit('closeDialog', this.dialogKey, refresh);
 		},
 		async importUsers() {
 			this.loading = true

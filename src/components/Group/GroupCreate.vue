@@ -297,7 +297,7 @@ export default {
         utilsMixin
     ],
     props: {
-        viewKey: String
+        dialogKey: String
     },
     created(){
         this.newGroup
@@ -446,7 +446,7 @@ export default {
             }
         },
         closeDialog(refresh=false){
-            this.$emit('closeDialog', this.viewKey, refresh);
+            this.$emit('closeDialog', this.dialogKey, refresh);
         },
         async createGroup(){
             this.error = false

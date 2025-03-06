@@ -69,7 +69,7 @@ export default {
     mixins: [ utilsMixin ],
     props: {
         ldapObject: Object,
-        viewKey: String
+        dialogKey: String
     },
     created() {
     },
@@ -90,7 +90,7 @@ export default {
                     console.error(error)
                 })
             }
-            this.$emit('closeDialog', this.viewKey);
+            this.$emit('closeDialog', this.dialogKey);
         },
     }
 }
