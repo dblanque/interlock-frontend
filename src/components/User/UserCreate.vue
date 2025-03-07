@@ -703,18 +703,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-.card-actions {
-	border-radius: 4px;
-	background: var(--v-white-d-base);
-	position: sticky !important;
-	bottom: 0 !important;
-	z-index: 100;
-	border-top: thin solid var(--border-d-base);
-}
-
-[theme=dark] .card-actions {
-	background: var(--v-gray-85-base);
-}
-</style>

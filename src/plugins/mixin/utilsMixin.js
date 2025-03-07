@@ -17,6 +17,16 @@ const utilsMixin = {
             )
             .substring((e.slice(0, 1).match(/([A-Z])/g)) ? 1 : 0);
         },
+        toPropCase(e) {
+            if (e.toLowerCase() === e) {
+                return e;
+            }
+            return e.match(/([A-Z])/g).reduce(
+                (str, c) => str.replace(new RegExp(c), '-' + c.toLowerCase()),
+                e
+            )
+            .substring((e.slice(0, 1).match(/([A-Z])/g)) ? 1 : 0);
+        },
         // ----------------------------- LDAP Permissions ----------------------------- //
         calcEnabledPermissions(permissionList) {
             let result = 0

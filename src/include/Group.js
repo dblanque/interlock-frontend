@@ -3,6 +3,7 @@ import ApiModel from '@/include/super/ApiModel'
 
 class Group extends ApiModel{
     
+    _callsPrefix = "group/"
     cn;
     displayName;
     mail;
@@ -22,11 +23,11 @@ class Group extends ApiModel{
     }
 
     async list(){
-        return await interlock_backend.call('group/list')
+        return await interlock_backend.call(this._getEndpoint("list"))
     }
 
     async fetch(groupdn){
-        return await interlock_backend.call('group/fetch', {group: groupdn}).then(
+        return await interlock_backend.call(this._getEndpoint("fetch"), {group: groupdn}).then(
             response => {
                 if(!response)
                         throw Error("Error fetching user data. Provider returned: " + response);
@@ -40,15 +41,15 @@ class Group extends ApiModel{
     }
 
     async insert(group){
-        return await interlock_backend.call('group/insert', group)
+        return await interlock_backend.call(this._getEndpoint("insert"), group)
     }
 
     async update(group){
-        return await interlock_backend.call('group/update', group)
+        return await interlock_backend.call(this._getEndpoint("update"), group)
     }
 
     async delete(group){
-        return await interlock_backend.call('group/delete', group)
+        return await interlock_backend.call(this._getEndpoint("delete"), group)
     }
 }
 

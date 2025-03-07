@@ -188,6 +188,13 @@ const urls = {
         delete: `${apiPrefix}/application/{pk}/delete/`,
         oidc_well_known: "openid/.well-known/openid-configuration/",
     },
+    applicationGroup: {
+        list: `${apiPrefix}/application/group/`,
+        fetch: `${apiPrefix}/application/group/{pk}/`,
+        insert: `${apiPrefix}/application/group/insert/`,
+        update: `${apiPrefix}/application/group/{pk}/`,
+        create_info: `${apiPrefix}/application/group/create_info/`,
+    }
 }
 const eraseLocalUserData = () => {
     const localUserKeys = [

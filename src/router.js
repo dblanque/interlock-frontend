@@ -32,8 +32,8 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/django-groups',
-    name: 'django-groups',
+    path: '/application-groups',
+    name: 'application-groups',
     component: HomeView
   },
   {

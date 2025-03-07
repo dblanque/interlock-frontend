@@ -384,10 +384,10 @@ export default {
           group: "local",
         },
         {
-          title: "django-groups",
+          title: "application-groups",
           enabled: true,
           icon: "mdi-google-circles-communities",
-          route: "django-groups",
+          route: "application-groups",
           group: "local",
         },
         {

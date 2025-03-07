@@ -20,6 +20,7 @@ import livenessCalls from '@/providers/interlock_backend/modules/liveness.js'
 import debugCalls from '@/providers/interlock_backend/modules/debug.js'
 import applicationCalls from '@/providers/interlock_backend/modules/application.js'
 import djangoUserCalls from '@/providers/interlock_backend/modules/djangoUser.js'
+import applicationGroupCalls from '@/providers/interlock_backend/modules/applicationGroup.js'
 
 const modules = {
     auth: authCalls,
@@ -37,13 +38,14 @@ const modules = {
     debug: debugCalls,
     application: applicationCalls,
     djangoUser: djangoUserCalls,
+    applicationGroup: applicationGroupCalls,
 }
 
 const interlock_backend = {
-    call: (moduleCallLinkString, params) => {
+    call: (moduleCallLinkString, data) => {
         if(!moduleCallLinkString)
             throw Error("Missing Link String Parameters. Linking String provided is undefined.")
-        var links = moduleCallLinkString.split('/')
+        const links = moduleCallLinkString.split('/')
         if(links.length == 1)
             throw Error("Missing Link String Parameters. Linking String Example 'module/call'.")
         else if (!(links[0] in modules))
@@ -51,7 +53,7 @@ const interlock_backend = {
         else if (!(links[1] in modules[links[0]]))
             throw Error("Function `" +links[1]+ "` was not found in `"+links[0]+"` module.")
         else{
-            return modules[links[0]][links[1]](params)
+            return modules[links[0]][links[1]](data)
         }
     }
 }

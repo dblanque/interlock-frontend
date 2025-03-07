@@ -28,7 +28,7 @@
 					<v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end">
 						<refresh-button dense
 							:loading="loading"
-							@refresh="listUserItems" />
+							@refresh="listUserItems(true)" />
 						<v-btn class="pa-2 mx-2" :disabled="loading || !isImplemented('create')" color="primary"
 							@click="openDialog('userCreate')">
 							<v-icon class="ma-0 pa-0">mdi-plus</v-icon>
@@ -384,7 +384,7 @@ export default {
 		}
 	},
 	created() {
-		this.listUserItems();
+		this.listUserItems(true);
 	},
 	watch: {
 		'computedDialogs': {
@@ -536,6 +536,7 @@ export default {
 		},
 		// User Actions
 		async listUserItems(emitNotif) {
+			this.resetDataTable()
 			let translationParent
 			switch (this.viewTitle) {
 				case "django-users":
@@ -557,8 +558,6 @@ export default {
 			}
 			await new this.userClass({}).list()
 				.then(response => {
-					// Reset Headers Array every time you list to avoid infinite header multiplication
-					this.resetDataTable()
 					let headerDict = {}
 					response.headers.forEach(header => {
 						headerDict = {}

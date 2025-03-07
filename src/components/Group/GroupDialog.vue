@@ -3,314 +3,303 @@
 <!------------------------- File: GroupDialog.vue ----------------------------->
 <template>
 	<v-card :loading="refreshLoading" class="pa-0 ma-0">
-		<v-progress-linear :color="loadingColor" :indeterminate="refreshLoading || loading"/>
+		<v-progress-linear :color="loadingColor" :indeterminate="refreshLoading || loading" />
 		<v-expand-transition>
-		<div v-show="!refreshLoading">
-			<!-- Title Bar -->
-			<v-card-title class="ma-0 pa-0 card-title">
-				<v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-					<h3 class="pa-0 ma-0 ma-2">
-						{{ $tc('classes.group', 1) + ': ' + groupcopy.cn }}
-					</h3>
-					<v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
-					<v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
-						<v-icon>
-							mdi-close
-						</v-icon>
-					</v-btn>
-				</v-row>
-			</v-card-title>
-
-			<v-expand-transition>
-				<v-row v-show="editFlag && showAlert" justify="center" class="pa-0 ma-0">
-					<v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
-						<v-icon class="mdso mr-2">warning</v-icon>
-						{{ $t('section.groups.editFlagWarning') }}
-						<v-btn @click="viewGroup" small class="ma-0 pa-0 ml-2 pr-2 pl-1">
-							<v-icon color="orange" class="">mdi-chevron-left</v-icon>
-							{{ $t('actions.back') }}
+			<div v-show="!refreshLoading">
+				<!-- Title Bar -->
+				<v-card-title class="ma-0 pa-0 card-title">
+					<v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
+						<h3 class="pa-0 ma-0 ma-2">
+							{{
+								`${$tc('classes.group', 1)}: ` +
+									parentTitle == 'ldap-groups' ? groupcopy.cn : groupcopy.name
+							}}
+						</h3>
+						<v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4" />
+						<v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
+							<v-icon>
+								mdi-close
+							</v-icon>
 						</v-btn>
-					</v-alert>
-				</v-row>
-			</v-expand-transition>
-			<!-- BODY -->
-			<v-card-text class="ma-0 pa-0 py-4 pb-2">
-				<v-form ref="groupForm" @submit.prevent>
-					<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
-						<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
-							<v-text-field
-							dense
-							id="cn"
-							:label="$t('attribute.ldap.cn')"
-							:readonly="editFlag != true && !loading"
-							v-model="groupcopy.cn"
-							:rules="[this.fieldRules(groupcopy.cn, 'ge_cn')]"
-							></v-text-field>
-						</v-col>
-						<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
-							<v-text-field
-							dense
-							id="mail"
-							:label="$t('attribute.user.email')"
-							:readonly="editFlag != true"
-							v-model="groupcopy.mail"
-							:rules="[this.fieldRules(groupcopy.mail, 'ge_mail')]"
-							></v-text-field>
-						</v-col>
 					</v-row>
+				</v-card-title>
 
-					<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
-						<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
-							<v-text-field
-							dense
-							id="objectRid"
-							:label="$t('attribute.ldap.objectRid')"
-							readonly
-							v-model="groupcopy.objectRid"
-							></v-text-field>
-						</v-col>
-						<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
-							<v-text-field
-							dense
-							id="objectSid"
-							:label="$t('attribute.ldap.objectSid')"
-							readonly
-							v-model="groupcopy.objectSid"
-							></v-text-field>
-						</v-col>
-					</v-row>
-
-					<v-row justify="center" class="ma-0 pa-0 mt-2">
-						<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
-							<v-text-field
-							dense
-							id="distinguishedName"
-							:label="$t('attribute.ldap.distinguishedName')"
-							readonly
-							v-model="groupcopy.distinguishedName"
-							></v-text-field>
-						</v-col>
-					</v-row>
-
-					<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
-						<v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
-							<v-card outlined height="100%" class="ma-1 pa-0 px-3 py-1">
-								<v-row class="ma-2">
-									{{ $t('section.groups.groupDialog.groupType') }}
-								</v-row>
-								<v-radio-group
-								:readonly="!editFlag"
-								:disabled="!editFlag"
-								v-model="radioGroupType" class="ma-0 pa-0">
-									<v-radio v-for="gt, key in groupTypes"
-									:value="key"
-									:key="key"
-									:label="$t('section.groups.types.' + gt)"
-									/>
-								</v-radio-group>
-							</v-card>
-						</v-col>
-						<v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
-							<v-card outlined height="100%" class="ma-1 pa-0 px-3 py-1">
-								<v-row class="ma-2">
-									{{ $t('section.groups.groupDialog.groupScope') }}
-								</v-row>
-								<v-radio-group
-								:readonly="!editFlag"
-								:disabled="!editFlag"
-								v-model="radioGroupScope" class="ma-0 pa-0">
-									<v-radio v-for="gs, key in groupScopes"
-									:value="key"
-									:key="key"
-									:label="$t('section.groups.types.' + gs)"
-									/>
-								</v-radio-group>
-							</v-card>
-						</v-col>
-					</v-row>
-
-					<!-- MEMBER BUTTONS -->
-					<v-row justify="center" class="ma-0 pa-0 my-4">
-						<v-col cols="8" class="ma-0 pa-0">
-							<v-btn @click="openDialog('addToGroup')"
-							rounded text color="primary" outlined :disabled="!editFlag" class="pa-3">
-								<v-icon small class="mr-1">mdi-plus</v-icon>
-								{{ $t("actions.addN") + " " + $t("words.member") }}
+				<v-expand-transition>
+					<v-row v-show="editFlag && showAlert" justify="center" class="pa-0 ma-0">
+						<v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
+							<v-icon class="mdso mr-2">warning</v-icon>
+							{{ $t('section.groups.editFlagWarning') }}
+							<v-btn @click="viewGroup" small class="ma-0 pa-0 ml-2 pr-2 pl-1">
+								<v-icon color="orange" class="">mdi-chevron-left</v-icon>
+								{{ $t('actions.back') }}
 							</v-btn>
-						</v-col>
+						</v-alert>
 					</v-row>
-					<v-row>
-					</v-row>
-					<!-- MEMBER EXPANSION PANEL -->
-					<v-row v-if="showMemberTab" align-content="center" justify="center" class="ma-0 pa-0 my-4">
-						<v-col cols="10" md="8" class="ma-0 pa-0">
-							<v-expansion-panels v-model="memberPanelExpanded" flat 
-							:style="memberPanelExpanded == [0] ? 'border: 1px solid var(--v-primary-base);' : 'border: 1px solid var(--v-gray-80-base);'">
-								<v-expansion-panel>
-									<v-expansion-panel-header>
-										{{ $t('section.groups.groupDialog.members') }}
-									</v-expansion-panel-header>
-									<v-expansion-panel-content>
-										<v-list dense>
-											<v-list-item v-for="member, key in this.groupcopy.member" :key="key"
-											:class="key != 0 ? 'border-bottom': 'border-block'">
-												<v-list-item-icon class="">
-													<v-icon v-if="isUserType(member.objectClass)">
-														mdi-account
-													</v-icon>
-													<v-icon v-else-if="member.objectClass.includes('group')">
-														mdi-google-circles-communities
-													</v-icon>
-													<v-icon v-else>
-														mdi-group
-													</v-icon>
-												</v-list-item-icon>
+				</v-expand-transition>
+				<!-- BODY -->
+				<v-card-text class="ma-0 pa-0 py-4 pb-2">
+					<v-form ref="groupForm" @submit.prevent>
+						<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
+							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
+								<v-text-field
+									dense
+									id="cn"
+									:label="$t('attribute.ldap.cn')"
+									:readonly="editFlag != true && !loading"
+									v-model="groupcopy.cn"
+									:rules="[this.fieldRules(groupcopy.cn, 'ge_cn')]"></v-text-field>
+							</v-col>
+							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
+								<v-text-field
+									dense
+									id="mail"
+									:label="$t('attribute.user.email')"
+									:readonly="editFlag != true"
+									v-model="groupcopy.mail"
+									:rules="[this.fieldRules(groupcopy.mail, 'ge_mail')]"></v-text-field>
+							</v-col>
+						</v-row>
 
-												<v-list-item-content>
-													<v-row v-if="isUserType(member.objectClass)"
-													align="center" justify="center">
-														<v-col cols="12" class="pa-0 ma-0 px-1">
-															<span class="ma-0 pa-0">
-																{{ $tc('classes.user', 1) + ": " + ((member.givenName && member.sn) ? member.givenName + " " + member.sn + " (" + member.username + ")" : member.username) }}
+						<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4">
+							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
+								<v-text-field
+									dense
+									id="objectRid"
+									:label="$t('attribute.ldap.objectRid')"
+									readonly
+									v-model="groupcopy.objectRid"></v-text-field>
+							</v-col>
+							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
+								<v-text-field
+									dense
+									id="objectSid"
+									:label="$t('attribute.ldap.objectSid')"
+									readonly
+									v-model="groupcopy.objectSid"></v-text-field>
+							</v-col>
+						</v-row>
+
+						<v-row justify="center" class="ma-0 pa-0 mt-2">
+							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
+								<v-text-field
+									dense
+									id="distinguishedName"
+									:label="$t('attribute.ldap.distinguishedName')"
+									readonly
+									v-model="groupcopy.distinguishedName"></v-text-field>
+							</v-col>
+						</v-row>
+
+						<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
+							<v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
+								<v-card outlined height="100%" class="ma-1 pa-0 px-3 py-1">
+									<v-row class="ma-2">
+										{{ $t('section.groups.groupDialog.groupType') }}
+									</v-row>
+									<v-radio-group
+										:readonly="!editFlag"
+										:disabled="!editFlag"
+										v-model="radioGroupType" class="ma-0 pa-0">
+										<v-radio v-for="gt, key in groupTypes"
+											:value="key"
+											:key="key"
+											:label="$t('section.groups.types.' + gt)" />
+									</v-radio-group>
+								</v-card>
+							</v-col>
+							<v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
+								<v-card outlined height="100%" class="ma-1 pa-0 px-3 py-1">
+									<v-row class="ma-2">
+										{{ $t('section.groups.groupDialog.groupScope') }}
+									</v-row>
+									<v-radio-group
+										:readonly="!editFlag"
+										:disabled="!editFlag"
+										v-model="radioGroupScope" class="ma-0 pa-0">
+										<v-radio v-for="gs, key in groupScopes"
+											:value="key"
+											:key="key"
+											:label="$t('section.groups.types.' + gs)" />
+									</v-radio-group>
+								</v-card>
+							</v-col>
+						</v-row>
+
+						<!-- MEMBER BUTTONS -->
+						<v-row justify="center" class="ma-0 pa-0 my-4">
+							<v-col cols="8" class="ma-0 pa-0">
+								<v-btn @click="openDialog('addToGroup')"
+									rounded text color="primary" outlined :disabled="!editFlag" class="pa-3">
+									<v-icon small class="mr-1">mdi-plus</v-icon>
+									{{ $t("actions.addN") + " " + $t("words.member") }}
+								</v-btn>
+							</v-col>
+						</v-row>
+						<v-row>
+						</v-row>
+						<!-- MEMBER EXPANSION PANEL -->
+						<v-row v-if="showMemberTab" align-content="center" justify="center"
+							class="ma-0 pa-0 my-4">
+							<v-col cols="10" md="8" class="ma-0 pa-0">
+								<v-expansion-panels v-model="memberPanelExpanded" flat
+									:style="memberPanelExpanded == [0] ? 'border: 1px solid var(--v-primary-base);' : 'border: 1px solid var(--v-gray-80-base);'">
+									<v-expansion-panel>
+										<v-expansion-panel-header>
+											{{ $t('section.groups.groupDialog.members') }}
+										</v-expansion-panel-header>
+										<v-expansion-panel-content>
+											<v-list dense>
+												<v-list-item v-for="member, key in this.groupcopy.member" :key="key"
+													:class="key != 0 ? 'border-bottom' : 'border-block'">
+													<v-list-item-icon class="">
+														<v-icon v-if="isUserType(member.objectClass)">
+															mdi-account
+														</v-icon>
+														<v-icon v-else-if="member.objectClass.includes('group')">
+															mdi-google-circles-communities
+														</v-icon>
+														<v-icon v-else>
+															mdi-group
+														</v-icon>
+													</v-list-item-icon>
+
+													<v-list-item-content>
+														<v-row v-if="isUserType(member.objectClass)"
+															align="center" justify="center">
+															<v-col cols="12" class="pa-0 ma-0 px-1">
+																<span class="ma-0 pa-0">
+																	{{ $tc('classes.user', 1) + ": " + ((member.givenName &&
+																		member.sn) ? member.givenName + " " + member.sn + " (" +
+																		member.username + ")" : member.username) }}
+																</span>
+															</v-col>
+														</v-row>
+														<v-row v-else-if="member.objectClass.includes('group')"
+															align="center" justify="center">
+															<v-col cols="12" class="pa-0 ma-0 px-1">
+																<span class="ma-0 pa-0">
+																	{{ $tc('classes.group', 1) + ": " + member.cn }}
+																</span>
+															</v-col>
+														</v-row>
+														<v-row v-else align="center" justify="center">
+															<v-col cols="12" class="pa-0 ma-0 px-1">
+																{{ member.distinguishedName }}
+															</v-col>
+														</v-row>
+													</v-list-item-content>
+
+													<v-list-item-action class="pa-0 ma-0">
+														<v-tooltip bottom color="primary">
+															<template v-slot:activator="{ on, attrs }">
+																<v-btn small icon
+																	color="primary"
+																	v-bind="attrs"
+																	v-on="on">
+																	<v-icon small>
+																		mdi-help-circle
+																	</v-icon>
+																</v-btn>
+															</template>
+															<span> {{ member.distinguishedName }} </span>
+														</v-tooltip>
+													</v-list-item-action>
+
+													<v-list-item-action class="pa-0 ma-0">
+														<v-tooltip bottom>
+															<template v-slot:activator="{ on, attrs }">
+																<v-btn small icon @click="copyText(member.distinguishedName)"
+																	color="primary"
+																	v-bind="attrs"
+																	v-on="on">
+																	<v-icon small>
+																		mdi-content-copy
+																	</v-icon>
+																</v-btn>
+															</template>
+															<span> {{ $t("section.groups.groupDialog.copyDistinguishedName") }}
 															</span>
-														</v-col>
-													</v-row>
-													<v-row v-else-if="member.objectClass.includes('group')"
-													align="center" justify="center">
-														<v-col cols="12" class="pa-0 ma-0 px-1">
-															<span class="ma-0 pa-0">
-																{{ $tc('classes.group', 1) + ": " + member.cn }}
-															</span>
-														</v-col>
-													</v-row>
-													<v-row v-else align="center" justify="center">
-														<v-col cols="12" class="pa-0 ma-0 px-1">
-															{{ member.distinguishedName }}
-														</v-col>
-													</v-row>
-												</v-list-item-content>
+														</v-tooltip>
+													</v-list-item-action>
 
-												<v-list-item-action class="pa-0 ma-0">
-													<v-tooltip bottom color="primary">
-													<template v-slot:activator="{ on, attrs }">
-														<v-btn small icon
-														color="primary"
-														v-bind="attrs"
-														v-on="on"
-														>
-														<v-icon small>
-															mdi-help-circle
-														</v-icon>
-														</v-btn>
-													</template>
-													<span> {{ member.distinguishedName }} </span>
-													</v-tooltip>
-												</v-list-item-action>
-
-												<v-list-item-action class="pa-0 ma-0">
-													<v-tooltip bottom>
-													<template v-slot:activator="{ on, attrs }">
-														<v-btn small icon @click="copyText(member.distinguishedName)"
-														color="primary"
-														v-bind="attrs"
-														v-on="on"
-														>
-														<v-icon small>
-															mdi-content-copy
-														</v-icon>
-														</v-btn>
-													</template>
-													<span> {{ $t("section.groups.groupDialog.copyDistinguishedName") }} </span>
-													</v-tooltip>
-												</v-list-item-action>
-
-												<v-list-item-action class="pa-0 ma-0">
-													<v-tooltip bottom color="red">
-													<template v-slot:activator="{ on, attrs }">
-														<v-btn small icon @click="removeMember(member.distinguishedName, groupcopy.member)"
-														color="red"
-														:disabled="!editFlag"
-														v-bind="attrs"
-														v-on="on"
-														>
-														<v-icon small>
-															mdi-close
-														</v-icon>
-														</v-btn>
-													</template>
-													<span> {{ $t("actions.remove") }} </span>
-													</v-tooltip>
-												</v-list-item-action>
-											</v-list-item>
-										</v-list>
-									</v-expansion-panel-content>
-								</v-expansion-panel>
-							</v-expansion-panels>
-						</v-col>
-					</v-row>
-				</v-form>
-			</v-card-text>
-		</div>
+													<v-list-item-action class="pa-0 ma-0">
+														<v-tooltip bottom color="red">
+															<template v-slot:activator="{ on, attrs }">
+																<v-btn small icon
+																	@click="removeMember(member.distinguishedName, groupcopy.member)"
+																	color="red"
+																	:disabled="!editFlag"
+																	v-bind="attrs"
+																	v-on="on">
+																	<v-icon small>
+																		mdi-close
+																	</v-icon>
+																</v-btn>
+															</template>
+															<span> {{ $t("actions.remove") }} </span>
+														</v-tooltip>
+													</v-list-item-action>
+												</v-list-item>
+											</v-list>
+										</v-expansion-panel-content>
+									</v-expansion-panel>
+								</v-expansion-panels>
+							</v-col>
+						</v-row>
+					</v-form>
+				</v-card-text>
+			</div>
 		</v-expand-transition>
 
 		<!-- Actions -->
 		<v-card-actions class="card-actions">
-			<v-row class="ma-1 pa-0" align="center" align-content="center" :justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
+			<v-row class="ma-1 pa-0" align="center" align-content="center"
+				:justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
 				<!-- Edit Group Button -->
-				<v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag != true" @click="editGroup">
+				<v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag != true"
+					@click="editGroup">
 					<v-icon class="mr-1">
 						mdi-pencil
 					</v-icon>
 					{{ $t("actions.edit") }}
 				</v-btn>
 				<!-- View Group Button -->
-				<v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag == true" @click="viewGroup">
+				<v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag == true"
+					@click="viewGroup">
 					<v-icon class="mr-1">
 						mdi-eye
 					</v-icon>
 					{{ $t("actions.view") }}
 				</v-btn>
 				<!-- Save Group Changes Button -->
-				<v-btn @click="saveGroup"
-				:class="(editFlag ? '' : '' ) + 'ma-0 pa-0 pa-4 ma-1'"
-				rounded
-				:dark="!isThemeDark($vuetify) && editFlag"
-				:light="isThemeDark($vuetify) && editFlag"
-				:disabled="!editFlag">
+				<v-btn @click="saveGroup" :class="(editFlag ? '' : '') + 'ma-0 pa-0 pa-4 ma-1'" rounded
+					:dark="!isThemeDark($vuetify) && editFlag" :light="isThemeDark($vuetify) && editFlag"
+					:disabled="!editFlag">
 					<v-icon class="mr-1">
 						mdi-content-save
 					</v-icon>
 					{{ $t("actions.save") }}
 				</v-btn>
 				<!-- Save Group Changes Button -->
-				<v-btn @click="saveGroup(true)"
-				:class="(editFlag ? '' : '' ) + 'ma-0 pa-0 pa-4 ma-1'"
-				rounded
-				:dark="!isThemeDark($vuetify) && editFlag"
-				:light="isThemeDark($vuetify) && editFlag"
-				:disabled="!editFlag">
+				<v-btn @click="saveGroup(true)" :class="(editFlag ? '' : '') + 'ma-0 pa-0 pa-4 ma-1'"
+					rounded
+					:dark="!isThemeDark($vuetify) && editFlag" :light="isThemeDark($vuetify) && editFlag"
+					:disabled="!editFlag">
 					<v-icon class="mr-1">
 						mdi-exit-to-app
 					</v-icon>
 					{{ $t("actions.saveClose") }}
 				</v-btn>
 				<!-- Refresh Group Button -->
-				<refresh-button dense
-					:fetching-data="fetchingData"
-					:loading="refreshLoading"
-					@refresh="refreshGroup"/>
+				<refresh-button dense :fetching-data="fetchingData" :loading="refreshLoading"
+					@refresh="refreshGroup" />
 			</v-row>
 		</v-card-actions>
-		
+
 		<!-- USER ADD TO GROUP DIALOG -->
 		<v-dialog eager max-width="1200px" v-model="dialogs['addToGroup']">
-			<CNObjectList
-			:dialogKey="'addToGroup'"
-			ref="AddToGroup"
-			@addDNs="addMembers"
-			:excludeDNs="excludeDNs"
-			@closeDialog="closeInnerDialog"
-			/>
+			<CNObjectList :dialogKey="'addToGroup'" ref="AddToGroup" @addDNs="addMembers"
+				:excludeDNs="excludeDNs" @closeDialog="closeInnerDialog" />
 		</v-dialog>
 	</v-card>
 </template>
@@ -331,7 +320,7 @@ export default {
 	},
 	data() {
 		return {
-			userClasses: ['user','person','organizationalPerson','organizationalperson'],
+			userClasses: ['user', 'person', 'organizationalPerson', 'organizationalperson'],
 			loading: false,
 			loadingColor: 'accent',
 			error: false,
@@ -363,8 +352,8 @@ export default {
 			},
 		}
 	},
-	mixins: [ validationMixin, utilsMixin ],
-	created(){
+	mixins: [validationMixin, utilsMixin],
+	created() {
 		this.alertDelay = 0.5e3;
 		this.syncGroup();
 	},
@@ -382,7 +371,9 @@ export default {
 		editFlag: Boolean,
 		group: Object,
 		fetchingData: Boolean,
-		refreshLoading: Boolean
+		refreshLoading: Boolean,
+		groupClass: Function,
+		parentTitle: String,
 	},
 	methods: {
 		exit() {
@@ -391,7 +382,7 @@ export default {
 		copyText(textString) {
 			navigator.clipboard.writeText(textString);
 		},
-		getMembersLength(){
+		getMembersLength() {
 			if (this.groupcopy.member != undefined) {
 				if (this.groupcopy.member.length == 0 || !this.groupcopy.member)
 					this.showMemberTab = false
@@ -399,7 +390,7 @@ export default {
 					this.showMemberTab = true
 			}
 		},
-		setupExclude(){
+		setupExclude() {
 			this.excludeDNs = []
 			if (!this.excludeDNs.includes(this.groupcopy.distinguishedName))
 				this.excludeDNs.push(this.groupcopy.distinguishedName)
@@ -416,24 +407,24 @@ export default {
 			}
 			// this.logGroups()
 		},
-		openDialog(key){
+		openDialog(key) {
 			this.dialogs[key] = true;
 			switch (key) {
 				case 'addToGroup':
 					this.setupExclude()
 					this.$refs.AddToGroup.fetchLists(this.excludeDNs)
-				break;
+					break;
 				default:
-				break;
+					break;
 			}
 		},
 		closeDialog() {
 			this.$emit('closeDialog', this.dialogKey);
 		},
-		closeInnerDialog(key){
+		closeInnerDialog(key) {
 			this.dialogs[key] = false;
 		},
-		addMembers(members){
+		addMembers(members) {
 			this.membersToAdd = members.map(e => e.distinguishedName)
 			if (!this.groupcopy.member)
 				this.groupcopy.member = []
@@ -469,7 +460,7 @@ export default {
 			this.setupExclude()
 			this.$forceUpdate
 		},
-		logGroups(){
+		logGroups() {
 			console.log("Member Array")
 			console.log(this.groupcopy.member)
 			console.log("Members to Add")
@@ -479,25 +470,25 @@ export default {
 			console.log("Exclude DNs")
 			console.log(this.excludeDNs)
 		},
-		checkIfGroupBuiltIn(){
+		checkIfGroupBuiltIn() {
 			if (this.group.groupType.includes('GROUP_SYSTEM'))
 				return true
 			return false
 		},
-		addToArray(value, object, itemRef=undefined){
+		addToArray(value, object, itemRef = undefined) {
 			var array = object.value
-			if (itemRef){
+			if (itemRef) {
 				if (this.$refs[itemRef][0].validate()) {
 					if (!array.includes(value) && array && value)
 						array = array.push(value);
 				}
-			} 
-			else if (!array.includes(value) && array && value){
+			}
+			else if (!array.includes(value) && array && value) {
 				array = array.push(value);
 			}
 			return array
 		},
-		setGroupTypeAndScope(){
+		setGroupTypeAndScope() {
 			if (this.group.groupType != undefined) {
 				this.group.groupType.forEach(groupSetting => {
 					switch (groupSetting) {
@@ -524,7 +515,7 @@ export default {
 		},
 		// Sync the groupcopy object to the parent view group object on the
 		// next tick to avoid mutation errors
-		syncGroup(){
+		syncGroup() {
 			this.groupcopy = new Group({})
 			this.membersToRemove = []
 			this.membersToAdd = []
@@ -544,7 +535,7 @@ export default {
 					}, this.alertDelay)
 			})
 		},
-		isUserType(itemObjectClasses){
+		isUserType(itemObjectClasses) {
 			var isUser = false
 			itemObjectClasses.forEach(v => {
 				if (this.userClasses.includes(v))
@@ -553,14 +544,14 @@ export default {
 			return isUser
 		},
 		// Tells the parent view to refresh/fetch the group again
-		async refreshGroup(){
+		async refreshGroup() {
 			this.loading = true
 			this.$emit('refreshGroup', this.group);
 			this.setupExclude()
 			this.loading = false
 			this.loadingColor = 'primary'
 		},
-		async saveGroup(closeDialog=false){
+		async saveGroup(closeDialog = false) {
 			this.loading = true
 			this.loadingColor = 'primary'
 			this.groupcopy.groupType = this.radioGroupType
@@ -578,7 +569,7 @@ export default {
 				delete this.groupcopy.membersToRemove
 
 			const excludeKeys = ["objectRid", "objectSid"]
-			const keysToCheck = ["cn","groupScope","groupType"]
+			const keysToCheck = ["cn", "groupScope", "groupType"]
 			let newDistinguishedName
 			let data = Object.assign({}, this.groupcopy)
 			excludeKeys.forEach(k => {
@@ -606,40 +597,40 @@ export default {
 				}
 			});
 
-			if (this.$refs.groupForm.validate()){
-				await new Group({}).update({group: data})
-				.then(() => {
-					if (closeDialog == true)
-						this.closeDialog();
-					if(newDistinguishedName)
-						data["distinguishedName"] = newDistinguishedName
-					this.$emit('save', data, closeDialog == true);
-					this.loading = false
-					this.loadingColor = 'primary'
-				})
-				.catch(error => {
-					console.error(error)
-					this.errorMsg = this.getMessageForCode(error)
-					notificationBus.$emit('createNotification', 
-						{
-							message: this.errorMsg, 
-							type: 'error'
-						}
-					);
-					this.loading = false
-					this.loadingColor = 'error'
-					this.error = true;
-				})
+			if (this.$refs.groupForm.validate()) {
+				await new Group({}).update({ group: data })
+					.then(() => {
+						if (closeDialog == true)
+							this.closeDialog();
+						if (newDistinguishedName)
+							data["distinguishedName"] = newDistinguishedName
+						this.$emit('save', data, closeDialog == true);
+						this.loading = false
+						this.loadingColor = 'primary'
+					})
+					.catch(error => {
+						console.error(error)
+						this.errorMsg = this.getMessageForCode(error)
+						notificationBus.$emit('createNotification',
+							{
+								message: this.errorMsg,
+								type: 'error'
+							}
+						);
+						this.loading = false
+						this.loadingColor = 'error'
+						this.error = true;
+					})
 			} else {
 				this.loading = false
 				this.loadingColor = 'error'
 				this.error = true;
 			}
 		},
-		editGroup(){
+		editGroup() {
 			this.$emit('editToggle', true);
 		},
-		viewGroup(){
+		viewGroup() {
 			this.$emit('editToggle', false);
 			this.refreshGroup();
 		},
@@ -649,19 +640,21 @@ export default {
 
 <style>
 .border-top {
-	border-top: 1px solid rgba(0,0,0,0.1);
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .border-bottom {
-	border-bottom: 1px solid rgba(0,0,0,0.1);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .border-block {
-	border-bottom: 1px solid rgba(0,0,0,0.1);
-	border-top: 1px solid rgba(0,0,0,0.1);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 [theme=dark] .border-top,
 [theme=dark] .border-bottom,
 [theme=dark] .border-block {
-	border-color: rgba(255,255,255,0.1)
+	border-color: rgba(255, 255, 255, 0.1)
 }
 </style>

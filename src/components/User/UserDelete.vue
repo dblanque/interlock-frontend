@@ -127,35 +127,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-.outlined {
-	border: thin solid var(--border-d-base);
-}
-
-.card-title {
-	border-radius: 4px;
-	background: var(--v-white-d-base);
-	position: sticky !important;
-	top: 0 !important;
-	z-index: 100;
-	border-bottom: thin solid var(--border-d-base);
-}
-
-[theme=dark] .card-title {
-	background: var(--v-gray-85-base);
-}
-
-.card-actions {
-	border-radius: 4px;
-	background: var(--v-white-d-base);
-	position: sticky !important;
-	bottom: 0 !important;
-	z-index: 100;
-	border-top: thin solid var(--border-d-base);
-}
-
-[theme=dark] .card-actions {
-	background: var(--v-gray-85-base);
-}
-</style>

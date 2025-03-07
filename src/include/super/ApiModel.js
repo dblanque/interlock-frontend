@@ -1,11 +1,14 @@
 
 class ApiModel{
 
+    _callsPrefix = undefined
     /**
      * Abstract ApiModel Constructor.
      * Override.
      * 
-     * This ApiModel stuff was made by mvilche, my great friend Martin Vilche! - Dylan
+     * Contributors
+     * Martín Vilche
+     * Dylan Blanqué
      */
     constructor() {
         if (this.constructor === ApiModel) {
@@ -23,6 +26,14 @@ class ApiModel{
 
     list(){
         throw new TypeError("The method `list` inherited by ApiModel must be overridden."); 
+    }
+
+    _getEndpoint(name, pk=undefined, pkReplacePattern="{pk}") {
+        if (this._callsPrefix === undefined)
+            throw new TypeError("Attribute `_callsPrefix` inherited by ApiModel must be overridden."); 
+        if (pk !== undefined)
+            return (this._callsPrefix + name).replace(pkReplacePattern, pk)
+        return this._callsPrefix + name
     }
 }
 

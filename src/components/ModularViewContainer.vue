@@ -50,8 +50,8 @@
 		</v-container>
 
 		<!-- GROUPS -->
-		<v-container v-if="viewTitle == 'django-groups'" :class="getContainerClasses()">
-			<GroupView ref="DjangoGroupView"
+		<v-container v-if="viewTitle == 'application-groups'" :class="getContainerClasses()">
+			<GroupView ref="ApplicationGroupView"
 				:viewTitle="viewTitle"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction" />
@@ -181,7 +181,7 @@ export default {
 						this.$refs.UserView.reloadDataTableHeaders()
 						break;
 					case 'ldap-groups':
-					case 'django-groups':
+					case 'application-groups':
 						this.$refs.GroupView.reloadDataTableHeaders()
 						break;
 					case 'logs':

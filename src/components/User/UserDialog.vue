@@ -9,6 +9,7 @@
 				<!-- Title Bar -->
 				<v-card-title class="ma-0 pa-0 card-title">
 					<v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
+						<!-- Header -->
 						<h3
 							v-if="!usercopy.givenName || usercopy.givenName == '' || !usercopy.sn || usercopy.sn == ''"
 							class="pa-0 ma-0 ma-2">
@@ -57,6 +58,7 @@
 					</v-row>
 				</v-card-title>
 
+				<!-- Alert -->
 				<v-expand-transition>
 					<v-row v-show="editFlag && showAlert" justify="center" class="pa-0 ma-0">
 						<v-alert class="pa-0 ma-1 pa-4 pb-3 mt-3" border="top" type="warning" :icon="false">
@@ -84,6 +86,7 @@
 						</v-alert>
 					</v-row>
 				</v-expand-transition>
+
 				<!-- Body -->
 				<v-tabs v-model="tab" height="0">
 					<!-- GROUPS SCREEN -->
@@ -476,6 +479,7 @@
 										</v-expansion-panel>
 									</v-expansion-panels>
 								</v-row>
+
 								<!-- DJANGO USER DATA -->
 								<v-row align-content="center" class="mb-2" v-else>
 									<v-col class="ma-0 pa-0" cols="12" md="6">
@@ -601,18 +605,6 @@
 						</v-btn>
 					</template>
 					<v-list elevation="0" dense :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
-						<!-- Haven't found a way to make this work -->
-						<v-list-item class="ma-0 pa-0 px-2" v-if="false"
-							:disabled="!editFlag || isLoggedInUser(usercopy.username)" @click="expirePwd"
-							:dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
-							<v-list-item-icon color="primary" class="mx-0 pa-0 mr-2">
-								<v-icon> mdi-key-change </v-icon>
-							</v-list-item-icon>
-							<v-list-item-content color="primary" class="v-list-btn v-btn">
-								{{ $t("actions.expirePwd").toUpperCase() }}
-							</v-list-item-content>
-						</v-list-item>
-
 						<v-list-item class="ma-0 pa-0 px-2" :disabled="!editFlag" @click="deleteTotp"
 							:dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
 							<v-list-item-icon color="primary" class="mx-0 pa-0 mr-2">
@@ -1097,11 +1089,6 @@ export default {
 					break;
 			}
 		},
-		async expirePwd() {
-			this.extraListOpen = false
-			this.usercopy.pwdLastSet = 0
-			await this.saveUser()
-		},
 		refreshUserList() {
 			this.$emit('refreshUserList');
 		},
@@ -1323,55 +1310,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-.outlined {
-	border: thin solid var(--border-d-base);
-}
-
-.card-title {
-	border-radius: 4px;
-	background: var(--v-white-d-base);
-	position: sticky !important;
-	top: 0 !important;
-	z-index: 100;
-	border-bottom: thin solid var(--border-d-base);
-}
-
-[theme=dark] .card-title {
-	background: var(--v-gray-85-base);
-}
-
-.card-actions {
-	border-radius: 4px;
-	background: var(--v-white-d-base);
-	position: sticky !important;
-	bottom: 0 !important;
-	z-index: 100;
-	border-top: thin solid var(--border-d-base);
-}
-
-[theme=dark] .card-actions {
-	background: var(--v-gray-85-base);
-}
-
-.groupSelected {
-	border-left: 4px solid var(--v-primary-base);
-}
-
-.groupSelected::before {
-	background-color: rgba(0, 0, 0, 0.3);
-}
-
-.border-no-sides {
-	border-left: 0;
-	border-right: 0;
-}
-</style>
-
-<style scoped>
-.v-list-btn {
-	font-size: 0.875rem;
-	justify-content: start;
-}
-</style>

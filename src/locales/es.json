@@ -9,7 +9,7 @@
     "ldap-dirtree":"Árbol de Directorio",
     "applications":"Aplicaciones de SSO",
     "django-users": "Usuarios",
-    "django-groups": "Grupos",
+    "application-groups": "Grupos",
     "ldap-users": "Usuarios",
     "ldap-groups": "Grupos de Seguridad",
     "ldap-dns": "DNS",
@@ -23,7 +23,7 @@
     "header": {
       "home":"Inicio",
       "django-users": "Usuarios Locales",
-      "django-groups": "Grupos Locales",
+      "application-groups": "Grupos de Aplicación",
       "ldap-dirtree":"Árbol de Directorio",
       "ldap-users":"Usuarios",
       "ldap-groups":"Grupos de Seguridad",
@@ -234,6 +234,7 @@
     "ldap":"Objeto LDAP | Objetos LDAP",
     "totp-device":"Dispositivo TOTP | Dispositivos TOTP",
     "application":"Aplicación | Aplicaciones",
+    "application-group":"Grupo de Aplicación | Grupos de Aplicaciones",
     "dns":{
       "zone":"Zona de DNS | Zonas de DNS",
       "record":"Registro de DNS | Registros de DNS"
@@ -263,6 +264,9 @@
         "application_exists": "La Aplicación SSO ya existe",
         "application_does_not_exist": "La Aplicación SSO no existe",
         "application_field_does_not_exist": "Campo Inexistente para Aplicación SSO"
+      },
+      "application_groups":{
+        "application_group_exists": "El Grupo de Aplicación ya existe"
       },
       "auth": {
         "invalid_credentials": "Credenciales Incorrectos",
@@ -465,6 +469,13 @@
     }
   },
   "section": {
+    "applicationGroups":{
+      "dialog":{
+        "create":{
+          "header":"Crear Grupo de Aplicación"
+        }
+      }
+    },
     "applications":{
       "dialog":{
         "create":{
@@ -850,6 +861,11 @@
       "is_enabled":"Usuario Habilitado",
       "is_disabled":"Usuario Des-habilitado",
       "is_staff":"Es Empleado"
+    },
+    "application":{
+      "group":{
+        "ldap_objects":"Objetos de LDAP"
+      }
     },
     "ldap":{
       "realm":"Reino NT",
