@@ -33,7 +33,8 @@ class ApiModel{
             throw new TypeError("Attribute `_callsPrefix` inherited by ApiModel must be overridden."); 
         if (pk !== undefined)
             return (this._callsPrefix + name).replace(pkReplacePattern, pk)
-        return this._callsPrefix + name
+        else
+            return this._callsPrefix + name
     }
 }
 
