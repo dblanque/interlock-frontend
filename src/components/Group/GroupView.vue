@@ -365,7 +365,7 @@ export default {
 					break;
 				case 'groupCreate':
 					if (this.$refs.GroupCreate != undefined)
-						this.$refs.GroupCreate.syncApplicationGroup()
+						this.$refs.GroupCreate.newGroup()
 					break;
 				case 'applicationGroupCreate':
 					if (this.$refs.ApplicationGroupCreate != undefined)
