@@ -43,6 +43,9 @@ const modules = {
 
 const interlock_backend = {
     call: (moduleCallLinkString, data) => {
+        if (data !== undefined && data !== null)
+            if (typeof data === "object" && "_callsPrefix" in data)
+                delete data._callsPrefix
         if(!moduleCallLinkString)
             throw Error("Missing Link String Parameters. Linking String provided is undefined.")
         const links = moduleCallLinkString.split('/')
