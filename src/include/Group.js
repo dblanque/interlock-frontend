@@ -1,8 +1,8 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
 
-class Group extends ApiModel{
-    
+class Group extends ApiModel {
+
     _callsPrefix = "group/"
     cn;
     displayName;
@@ -15,23 +15,23 @@ class Group extends ApiModel{
      * Fetches model instance from API by id.
      * @param {Number} id 
      */
-     constructor(data){
+    constructor(data) {
         super(data)
         Object.keys(data).forEach(key => {
             this[key] = data[key];
         });
     }
 
-    async list(){
+    async list() {
         return await interlock_backend.call(this._getEndpoint("list"))
     }
 
-    async fetch(groupdn){
-        return await interlock_backend.call(this._getEndpoint("fetch"), {group: groupdn}).then(
+    async fetch(distinguishedName) {
+        return await interlock_backend.call(this._getEndpoint("fetch"), { group: distinguishedName }).then(
             response => {
-                if(!response)
-                        throw Error("Error fetching user data. Provider returned: " + response);
-                else{
+                if (!response)
+                    throw Error("Error fetching user data. Provider returned: " + response);
+                else {
                     Object.keys(response.data).forEach(key => {
                         this[key] = response.data[key];
                     });
@@ -40,16 +40,16 @@ class Group extends ApiModel{
         )
     }
 
-    async insert(group){
-        return await interlock_backend.call(this._getEndpoint("insert"), group)
+    async insert(data) {
+        return await interlock_backend.call(this._getEndpoint("insert"), data)
     }
 
-    async update(group){
-        return await interlock_backend.call(this._getEndpoint("update"), group)
+    async update(data) {
+        return await interlock_backend.call(this._getEndpoint("update"), data)
     }
 
-    async delete(group){
-        return await interlock_backend.call(this._getEndpoint("delete"), group)
+    async delete(data) {
+        return await interlock_backend.call(this._getEndpoint("delete"), data)
     }
 }
 
