@@ -45,7 +45,27 @@ const actions = {
 
 	fetch: (id) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.applicationGroup.fetch.replace("{pk}", id)).then(response => {
+			interlock_backend.request.get(interlock_backend.urls.applicationGroup.fetch.replace("{pk}", id)).then(response => {
+				resolve(response.data)
+			}).catch((e) => {
+				reject(e)
+			})
+		})
+	},
+
+	delete: (id) => {
+		return new Promise((resolve, reject) => {
+			interlock_backend.request.delete(interlock_backend.urls.applicationGroup.delete.replace("{pk}", id)).then(response => {
+				resolve(response.data)
+			}).catch((e) => {
+				reject(e)
+			})
+		})
+	},
+
+	change_status: (data) => {
+		return new Promise((resolve, reject) => {
+			interlock_backend.request.patch(interlock_backend.urls.applicationGroup.change_status.replace("{pk}", data.id), {enabled: data.enabled}).then(response => {
 				resolve(response.data)
 			}).catch((e) => {
 				reject(e)

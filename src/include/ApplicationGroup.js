@@ -29,8 +29,8 @@ class ApplicationGroup extends ApiModel {
 		return await interlock_backend.call(this._getEndpoint("list"))
 	}
 
-	async fetch(groupdn) {
-		return await interlock_backend.call(this._getEndpoint("fetch"), { group: groupdn }).then(
+	async fetch(id) {
+		return await interlock_backend.call(this._getEndpoint("fetch"), id).then(
 			response => {
 				if (!response)
 					throw Error("Error fetching user data. Provider returned: " + response);
@@ -43,12 +43,20 @@ class ApplicationGroup extends ApiModel {
 		)
 	}
 
-	async update(group) {
-		return await interlock_backend.call(this._getEndpoint("update"), group)
+	async update(data) {
+		return await interlock_backend.call(this._getEndpoint("update"), data)
 	}
 
-	async insert(group) {
-		return await interlock_backend.call(this._getEndpoint("insert"), group)
+	async change_status(data) {
+		return await interlock_backend.call(this._getEndpoint("change_status"), data)
+	}
+
+	async delete(id) {
+		return await interlock_backend.call(this._getEndpoint("delete"), id)
+	}
+
+	async insert(data) {
+		return await interlock_backend.call(this._getEndpoint("insert"), data)
 	}
 }
 

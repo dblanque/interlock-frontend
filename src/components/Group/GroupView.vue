@@ -88,6 +88,7 @@
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
 							rounded
+							@click="setApplicationGroupStatus(item.id, false)"
 							v-bind="attrs"
 							v-on="on"
 							:disabled="loading">
@@ -107,6 +108,7 @@
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
 							rounded
+							@click="setApplicationGroupStatus(item.id, true)"
 							v-bind="attrs"
 							v-on="on"
 							:disabled="loading">
@@ -124,7 +126,7 @@
 
 			<!-- GROUP ACTIONS -->
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-row class="my-1">
+				<v-row class="my-1" justify="center">
 					<v-tooltip bottom>
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn icon
@@ -197,18 +199,27 @@
 		</v-data-table>
 
 		<!-- GROUP VIEW/EDIT DIALOG -->
-		<v-dialog eager max-width="1200px" v-model="dialogs['groupDialog']">
+		<v-dialog eager max-width="1200px" v-model="dialogs['groupDialog']" v-if="isLDAPView">
 			<GroupDialog :group="data.groupdata" :editFlag="this.editableForm" :dialogKey="'groupDialog'"
 				ref="GroupDialog" :refreshLoading="loading" :fetchingData="fetchingData"
 				@closeDialog="closeDialog" @save="groupSaved" @editToggle="setViewToEdit"
 				@refreshGroup="refreshGroup" @fetchGroup="fetchGroup" />
 		</v-dialog>
 
+		<!-- APPLICATION GROUP CREATE DIALOG -->
+		<v-dialog eager max-width="1200px" v-model="dialogs['applicationGroupUpdate']" v-else>
+			<ApplicationGroupDialog :dialogKey="'applicationGroupUpdate'" ref="ApplicationGroupUpdate"
+				@closeDialog="closeDialog" @refresh="listGroupItems(false)" :editFlag="this.editableForm"
+				@refreshGroup="refreshGroup" :refreshLoading="loading" :fetchingData="fetchingData"
+				@save="groupSaved" @editToggle="setViewToEdit" :value="data.groupdata" />
+		</v-dialog>
+
 		<!-- GROUP DELETE CONFIRM DIALOG -->
 		<v-dialog eager max-width="800px" v-model="dialogs['groupDelete']">
 			<GroupDelete :groupObject="this.data.selectedGroup" :dialogKey="'groupDelete'"
 				ref="GroupDelete"
-				@closeDialog="closeDialog" @refresh="listGroupItems(false)" />
+				:isLDAPGroup="isLDAPView" :groupClass="groupClass" @closeDialog="closeDialog"
+				@refresh="listGroupItems(false)" />
 		</v-dialog>
 
 		<!-- GROUP CREATE DIALOG -->
@@ -218,8 +229,8 @@
 
 		<!-- APPLICATION GROUP CREATE DIALOG -->
 		<v-dialog eager max-width="1200px" v-model="dialogs['applicationGroupCreate']" v-else>
-			<ApplicationGroupCreate :dialogKey="'applicationGroupCreate'" ref="ApplicationGroupCreate"
-				@closeDialog="closeDialog" @refresh="listGroupItems(false)" />
+			<ApplicationGroupDialog :dialogKey="'applicationGroupCreate'" ref="ApplicationGroupCreate"
+				@closeDialog="closeDialog" @refresh="listGroupItems(false)" createFlag />
 		</v-dialog>
 	</div>
 </template>
@@ -228,13 +239,13 @@
 import { notificationBus } from '@/main.js'
 import Group from '@/include/Group.js';
 import ApplicationGroup from '@/include/ApplicationGroup.js';
+import ApplicationGroupDialog from '@/components/Group/ApplicationGroupDialog.vue';
 import GroupDialog from '@/components/Group/GroupDialog.vue'
 import GroupCreate from '@/components/Group/GroupCreate.vue'
 import GroupDelete from '@/components/Group/GroupDelete.vue'
 import RefreshButton from '@/components/RefreshButton.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
-import ApplicationGroupCreate from './ApplicationGroupCreate.vue';
 
 export default {
 	name: 'GroupView',
@@ -243,7 +254,8 @@ export default {
 		GroupDialog,
 		GroupCreate,
 		GroupDelete,
-		RefreshButton
+		RefreshButton,
+		ApplicationGroupDialog
 	},
 	data() {
 		return {
@@ -264,10 +276,7 @@ export default {
 
 			// Group Data
 			data: {
-				selectedGroup: {
-					"cn": "",
-					"distinguishedName": ""
-				},
+				selectedGroup: {},
 				groupdata: {},
 			},
 
@@ -277,6 +286,7 @@ export default {
 				groupDelete: false,
 				groupCreate: false,
 				applicationGroupCreate: false,
+				applicationGroupUpdate: false,
 			}
 		}
 	},
@@ -290,7 +300,7 @@ export default {
 					const ref_key = d[0].toUpperCase() + d.slice(1);
 					// On Close do exit method
 					if (v_old[d] === true) {
-						if (this.$refs[ref_key].exit !== undefined) {
+						if (this.$refs[ref_key] !== undefined && this.$refs[ref_key].exit !== undefined) {
 							this.$refs[ref_key].exit()
 							console.log(`Exit for ${d} executed.`)
 						}
@@ -313,6 +323,30 @@ export default {
 		snackbarTimeout: Number,
 	},
 	methods: {
+		async setApplicationGroupStatus(itemId, enabled) {
+			if (this.isLDAPView)
+				throw new Error("Group View must be an Application Group.");
+			await new this.groupClass({}).change_status({ id: itemId, enabled: enabled })
+				.then(() => {
+					let action = enabled === true ? "words.enabled" : "words.disabled"
+					this.listGroupItems(false)
+					notificationBus.$emit("createNotification",
+						{
+							message: `${this.$tc("classes.group", 1)} ${this.$tc(action, 1)}`.toUpperCase(),
+							type: enabled === true ? 'success':'info'
+						})
+				})
+				.catch(error => {
+					console.error(error)
+					this.loading = false
+					this.error = true
+					notificationBus.$emit("createNotification",
+						{
+							message: this.getMessageForCode(error),
+							type: 'error'
+						})
+				})
+		},
 		isLDAPGroupCritical(item) {
 			if ("groupType" in item && "cn" in item)
 				return item.groupType.includes('GROUP_SYSTEM') || item.cn.startsWith('Domain ')
@@ -331,11 +365,15 @@ export default {
 					break;
 				case 'groupCreate':
 					if (this.$refs.GroupCreate != undefined)
-						this.$refs.GroupCreate.newGroup()
+						this.$refs.GroupCreate.syncApplicationGroup()
 					break;
 				case 'applicationGroupCreate':
 					if (this.$refs.ApplicationGroupCreate != undefined)
-						this.$refs.ApplicationGroupCreate.newGroup()
+						this.$refs.ApplicationGroupCreate.syncApplicationGroup()
+					break;
+				case 'applicationGroupUpdate':
+					if (this.$refs.ApplicationGroupUpdate != undefined)
+						this.$refs.ApplicationGroupUpdate.syncApplicationGroup()
 					break;
 				default:
 					break;
@@ -468,6 +506,8 @@ export default {
 			await this.fetchGroup(item, this.editableForm, true).then(() => {
 				if (this.$refs.GroupDialog != undefined)
 					this.$refs.GroupDialog.syncGroup()
+				if (this.$refs.ApplicationGroupUpdate != undefined)
+					this.$refs.ApplicationGroupUpdate.syncApplicationGroup()
 			});
 		},
 		// Fetch individual Group
@@ -475,12 +515,16 @@ export default {
 			if (!openedDialogLoading)
 				this.loading = true
 			this.fetchingData = true
-			this.data.selectedGroup.cn = item.cn
-			this.data.selectedGroup.distinguishedName = item.distinguishedName
-			this.data.groupdata = new Group({})
-			await this.data.groupdata.fetch(this.data.selectedGroup.distinguishedName)
+			this.setLoading()
+			this.data.selectedGroup[this.tableDefaultSortKey] = item[this.tableDefaultSortKey]
+			this.data.selectedGroup[this.tableItemKey] = item[this.tableItemKey]
+			this.data.groupdata = new this.groupClass({})
+			await this.data.groupdata.fetch(this.data.selectedGroup[this.tableItemKey])
 				.then(() => {
-					this.openDialog('groupDialog')
+					if (this.isLDAPView)
+						this.openDialog('groupDialog')
+					else
+						this.openDialog('applicationGroupUpdate')
 					if (isEditable == true)
 						this.editableForm = true
 					else

@@ -1,12 +1,10 @@
 <template>
 	<div class="ma-0 pa-0" :style="getStyle()">
 		<v-progress-linear :loading="loading" v-if="showLoading"></v-progress-linear>
-		<v-list :dense="dense">
-			<v-list-item-group
-				v-model="selected"
-				multiple>
-				<v-list-item v-for="(item, index) in (users !== null ? users : items)"
-					:key="item[usernameKey]">
+		<v-list :dense="dense" :disabled="disabled">
+			<v-list-item-group multiple v-model="selected">
+				<v-list-item v-for="(item, index) in userChoices"
+					:key="item[usernameKey]" :value="item.id" @change="updateSelected(item)">
 					<template v-slot:default="{ active }">
 						<v-list-item-avatar class="my-0 pa-0">
 							<v-icon v-if="!active">
@@ -31,14 +29,11 @@
 </template>
 
 <script>
-import { notificationBus } from '@/main.js';
-import DjangoUser from '@/include/DjangoUser.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 
 export default {
 	data() {
 		return {
-			items: [],
 			loading: true,
 			error: false,
 			selected: []
@@ -46,11 +41,10 @@ export default {
 	},
 	mixins: [utilsMixin],
 	props: {
-		users: { type: Array, default() { return null }},
+		disabled: Boolean,
+		userChoices: { type: Array, default() { return null } },
 		value: { type: Array },
-		valueKey: { type: String | Array, default: "id" },
 		usernameKey: { type: String, default: "username" },
-		returnKeys: { type: Array, default() { return ["id", "username", "dn"] }},
 		nameKeys: { type: Array, default() { return ["first_name", "last_name"] } },
 		showName: { type: Boolean, default: false },
 		userType: { type: String },
@@ -63,31 +57,20 @@ export default {
 		maxWidth: { type: String | Number },
 		maxHeight: { type: String | Number, default: "400px" },
 	},
-	watch: {
-		selected(newValue) {
-			let target = this.users !== null ? this.users : this.items
-			let r = []
-			for (let i = 0; i < target.length; i++) {
-				if (newValue.includes(i)) {
-					if (this.returnKeys.length > 1) {
-						const filtered = Object.keys(target[i])
-							.filter(key => this.returnKeys.includes(key))
-							.reduce((obj, key) => {
-								obj[key] = target[i][key];
-								return obj;
-							}, {});
-						r.push(filtered)
-					} else {
-						r.push(target[i][this.returnKeys[0]])
-					}
-				}
-			}
+	methods: {
+		getSelectedValue(item) {
+			if (Array.isArray(this.value))
+				return this.value.includes(item.id)
+			return false
+		},
+		updateSelected(item) {
+			let r = structuredClone(this.value)
+			if (r.includes(item.id))
+				r.splice(r.indexOf(item.id), 1)
+			else
+				r.push(item.id)
 			this.$emit('input', r)
 		},
-	},
-	computed: {
-	},
-	methods: {
 		getName(item) {
 			let first_or_last_name = (
 				(item[this.nameKeys[0]] &&
@@ -122,26 +105,11 @@ export default {
 		clearData() {
 			this.loading = true
 			this.error = false
-			this.selected = []
+			if (this.value !== undefined && this.value !== null && Array.isArray(this.value))
+				this.selected = this.value
+			else
+				this.selected = []
 			this.items = []
-		},
-		async init() {
-			this.clearData()
-			await new DjangoUser({}).list()
-				.then(response => {
-					this.items = response.users
-					this.loading = false
-					this.error = false
-				})
-				.catch(error => {
-					console.error(error)
-					this.loading = false
-					this.error = true
-					notificationBus.$emit("createNotification",
-						{
-							message: this.getMessageForCode(error), type: 'error'
-						})
-				})
 		}
 	},
 }

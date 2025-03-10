@@ -77,12 +77,12 @@
 							hoverable>
 							<template v-slot:prepend="{ item, open }">
 								<v-row class="mx-1"
-									@click="isTypeValid(item.type.toLowerCase()) ? changeSelectedStatus(item.id) : undefined">
+									@click="isTypeValid(item.type.toLowerCase()) ? changeSelectedStatus(item) : undefined">
 									<v-checkbox
 										:off-icon="(!isTypeValid(item.type.toLowerCase())) ? (item.children && item.children.length > 0 ? 'mdi-checkbox-blank' : 'mdi-close-box') : undefined"
-										:value="selectedDNs.includes(item.id) ? true : false"
+										:input-value="getIsSelected(item)"
 										:disabled="!isTypeValid(item.type.toLowerCase())"
-										@change="changeSelectedStatus(item.id)"
+										@change="changeSelectedStatus(item)"
 										@click.stop />
 									<v-icon :color="open ? 'primary' : undefined"
 										v-if="item.builtin == true && item.type != 'Container'">
@@ -109,7 +109,7 @@
 							</template>
 							<template v-slot:label="{ item }">
 								<v-row align="start"
-									@click="isTypeValid(item.type.toLowerCase()) ? changeSelectedStatus(item.id) : undefined">
+									@click="isTypeValid(item.type.toLowerCase()) ? changeSelectedStatus(item) : undefined">
 									<v-col cols="11" md="auto">
 										{{ item.name }}
 									</v-col>
@@ -157,8 +157,16 @@ export default {
 		}
 	},
 	props: {
+		value: Array,
+		isSelectedKey: {
+			type: String,
+			default: "id"
+		},
 		dialogKey: String,
-		valueKey: String,
+		valueKey: {
+			type: String,
+			default: "id"
+		},
 		enableGroups: {
 			type: Boolean,
 			default: true
@@ -182,42 +190,36 @@ export default {
 		contentClass: {
 			type: String,
 			default: "pa-2"
-		}
+		},
+		disabled: Boolean
 	},
 	computed: {
 		selectedDNsLength() {
 			return this.selectedDNs.length
 		}
 	},
-	watch: {
-		selectedDNs(newValue) {
-			let v_model_result = []
-			let searchResult
-			// Loop for each Group ID
-			newValue.forEach(groupID => {
-				// Loop for all objects in LDAP List to do a recursive search
-				this.ldapList.forEach(element => {
-					// If a result is not found keep searching
-					if (!searchResult || searchResult.length == 0) {
-						searchResult = objectRecursiveSearch(element, parseInt(groupID))
-					}
-					// Once done push it and set the result to undefined for the next object
-					if (searchResult != undefined) {
-						if (this.valueKey) {
-							if (!this.valueKey in searchResult)
-								throw new Error(`${this.valueKey} is not present in object`);
-							v_model_result.push(searchResult[this.valueKey])
-						}
-						else
-							v_model_result.push(searchResult)
-						searchResult = undefined
-					}
-				});
-			});
-			this.$emit('input', v_model_result)
-		}
-	},
 	methods: {
+		getIsSelected(item) {
+			if (this.value !== undefined && this.value !== null && Array.isArray(this.value)) {
+				return this.value.includes(item[this.valueKey])
+			}
+			return this.selectedDNs.includes(item[this.valueKey])
+		},
+		changeSelectedStatus(item) {
+			if (this.value !== undefined && this.value !== null) {
+				let v = structuredClone(this.value)
+				if (v.includes(item[this.valueKey]))
+					v = v.filter(e => e != item[this.valueKey])
+				else
+					v.push(item[this.valueKey])
+				this.$emit('input', v)
+			} else {
+				if (this.selectedDNs.includes(item[this.valueKey]))
+					this.selectedDNs = this.selectedDNs.filter(e => e != item[this.valueKey])
+				else
+					this.selectedDNs.push(item[this.valueKey])
+			}
+		},
 		isUserType(itemObjectClass) {
 			var isUser = false
 			if (this.userClasses.includes(itemObjectClass.toLowerCase()))
@@ -253,15 +255,9 @@ export default {
 				this.$emit('addDNs', finalGroupArray)
 			}
 		},
-		changeSelectedStatus(itemID) {
-			if (this.selectedDNs.includes(itemID)) {
-				this.selectedDNs = this.selectedDNs.filter(e => e != itemID)
-			}
-			else {
-				this.selectedDNs.push(itemID)
-			}
-		},
 		isTypeValid(type) {
+			if (this.disabled)
+				return false
 			var types = [
 				'user',
 				'person',

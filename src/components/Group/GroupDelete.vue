@@ -21,7 +21,7 @@
 			<v-row class="pa-0 ma-8 text-subtitle-1" justify="center">
 				{{ $t('section.groups.deleteGroup.message') }}
 				<span class="font-weight-medium" style="padding-left: 0.5ch;">
-					{{ (groupObject.cn ? groupObject.cn : groupObject.distinguishedName) + "?" }}
+					{{ `${getDisplayName}?` }}
 				</span>
 			</v-row>
 		</v-card-text>
@@ -68,20 +68,35 @@ export default {
 	mixins: [ utilsMixin ],
 	props: {
 		groupObject: Object,
-		dialogKey: String
+		dialogKey: String,
+		isLDAPGroup: Boolean,
+		groupClass: Function
 	},
-	created() {
+	computed: {
+		getDisplayName() {
+			if (this.isLDAPGroup)
+				return this.groupObject.cn ? this.groupObject.cn : this.groupObject.distinguishedName
+			else
+				return this.groupObject.application
+		},
 	},
 	methods: {
 		async closeDialog(deleteConfirm=false, group={}) {
+			let data
 			if (group != {}) {
-				group.distinguishedName = this.groupObject.distinguishedName
-				group.cn = this.groupObject.cn
+				if (this.isLDAPGroup) {
+					group.distinguishedName = this.groupObject.distinguishedName
+					group.cn = this.groupObject.cn
+					data = {group: group}
+				} else {
+					group.id = this.groupObject.id
+					data = this.groupObject.id
+				}
 			}
 			if (deleteConfirm == true) {
-				await new Group({}).delete({group: group})
+				await new this.groupClass({}).delete(data)
 				.then(response => {
-					if (response.data.groupname == group.groupname)
+					if (response?.data?.groupname == group.groupname)
 						notificationBus.$emit('createNotification', {
 								message: (this.$tc("classes.group", 1) + " " + this.$tc("words.deleted.m", 1)).toUpperCase(), 
 								type: 'info'

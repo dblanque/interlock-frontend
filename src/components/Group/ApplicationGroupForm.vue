@@ -1,6 +1,6 @@
 <template>
-	<v-form ref="form">
-		<v-row v-if="createFlag">
+	<v-form ref="form" class="ma-0 pa-0 mt-8">
+		<v-row justify="center" v-if="createFlag">
 			<v-col>
 				<v-select
 					:rules="[inputRulesRequired]"
@@ -13,10 +13,12 @@
 				</v-select>
 			</v-col>
 		</v-row>
-		<v-row v-else>
-			<h2>
-				{{ value.name }}
-			</h2>
+		<v-row justify="center" v-else>
+			<v-col>
+				<h2>
+					{{ applicationName }}
+				</h2>
+			</v-col>
 		</v-row>
 
 		<v-row align-content="center" justify="center" v-if="!createFlag">
@@ -26,7 +28,7 @@
 					id="enabled"
 					:label="$t('words.enabled')"
 					v-model="enabled"
-					:readonly="actionDisabled" />
+					:disabled="actionDisabled" />
 			</v-col>
 		</v-row>
 
@@ -40,8 +42,8 @@
 			<v-col cols="12">
 				<v-expand-transition>
 					<v-card max-height="400" width="100%" height="100%" outlined>
-						<UserObjectList :users="user_choices" ref="UserObjectList"
-							:return-keys="['id']"
+						<UserObjectList :user-choices="user_choices" ref="UserObjectList"
+							:return-keys="['id']" :disabled="actionDisabled"
 							show-name v-model="users" dense user-type="local" />
 					</v-card>
 				</v-expand-transition>
@@ -54,9 +56,9 @@
 		</v-row>
 		<v-row>
 			<v-col cols="12" class="ma-0 pa-0">
-				<CNObjectList :dialogKey="'addLDAPGroup'" ref="AddLDAPGroup" :addButton="false"
+				<CNObjectList :dialogKey="'addLDAPGroup'" ref="AddLDAPGroup" :add-button="false"
 					valueKey="distinguishedName" v-model="ldap_objects" :enableUsers="false"
-					content-class="ma-0 pa-0" :showHeader="false" />
+					:disabled="actionDisabled" content-class="ma-0 pa-0" :showHeader="false" />
 			</v-col>
 		</v-row>
 	</v-form>
@@ -79,29 +81,37 @@ export default {
 		createFlag: { type: Boolean, default: false },
 	},
 	computed: {
+		applicationName() {
+			if (this.value?.application?.name !== undefined &&
+				this.value?.application?.name !== null) {
+				return this.value.application.name
+			}
+			return this.value.application
+		},
 		actionDisabled() {
 			return !this.editFlag && !this.createFlag || this.disabled
 		},
-    application: {
-      get() { return this.value.application; },
-      set(v) { this.$emit('input', { ...this.value, application: v }) }
-    },
-    enabled: {
-      get() { return this.value.enabled; },
-      set(v) { this.$emit('input', { ...this.value, enabled: v }) }
-    },
-    users: {
-      get() { return this.value.users; },
-      set(v) { this.$emit('input', { ...this.value, users: v }) }
-    },
-    ldap_objects: {
-      get() { return this.value.ldap_objects; },
-      set(v) { this.$emit('input', { ...this.value, ldap_objects: v }) }
-    },
+		application: {
+			get() { return this.value.application; },
+			set(v) { this.$emit('input', { ...this.value, application: v }) }
+		},
+		enabled: {
+			get() { return this.value.enabled; },
+			set(v) { this.$emit('input', { ...this.value, enabled: v }) }
+		},
+		users: {
+			get() { return this.value.users; },
+			set(v) { this.$emit('input', { ...this.value, users: v }) }
+		},
+		ldap_objects: {
+			get() { return this.value.ldap_objects; },
+			set(v) { this.$emit('input', { ...this.value, ldap_objects: v }) }
+		},
 	},
 	methods: {
 		init() {
 			this.$refs.AddLDAPGroup.fetchLists()
+			this.$refs.UserObjectList.clearData()
 		},
 		validate() {
 			return this.$refs.form.validate()

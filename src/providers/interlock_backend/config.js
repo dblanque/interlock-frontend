@@ -193,6 +193,8 @@ const urls = {
         fetch: `${apiPrefix}/application/group/{pk}/`,
         insert: `${apiPrefix}/application/group/insert/`,
         update: `${apiPrefix}/application/group/{pk}/`,
+        delete: `${apiPrefix}/application/group/{pk}/delete/`,
+        change_status: `${apiPrefix}/application/group/{pk}/change_status/`,
         create_info: `${apiPrefix}/application/group/create_info/`,
     }
 }
