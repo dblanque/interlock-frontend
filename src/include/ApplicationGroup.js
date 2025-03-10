@@ -2,7 +2,6 @@ import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
 
 class ApplicationGroup extends ApiModel {
-	_callsPrefix = "applicationGroup/"
 
 	name;
 	enabled;
@@ -22,15 +21,15 @@ class ApplicationGroup extends ApiModel {
 	}
 
 	async create_info() {
-		return await interlock_backend.call(this._getEndpoint("create_info"))
+		return await interlock_backend.call("applicationGroup/create_info")
 	}
 
 	async list() {
-		return await interlock_backend.call(this._getEndpoint("list"))
+		return await interlock_backend.call("applicationGroup/list")
 	}
 
 	async fetch(id) {
-		return await interlock_backend.call(this._getEndpoint("fetch"), id).then(
+		return await interlock_backend.call("applicationGroup/fetch", id).then(
 			response => {
 				if (!response)
 					throw Error("Error fetching user data. Provider returned: " + response);
@@ -44,19 +43,19 @@ class ApplicationGroup extends ApiModel {
 	}
 
 	async update(data) {
-		return await interlock_backend.call(this._getEndpoint("update"), data)
+		return await interlock_backend.call("applicationGroup/update", data)
 	}
 
 	async change_status(data) {
-		return await interlock_backend.call(this._getEndpoint("change_status"), data)
+		return await interlock_backend.call("applicationGroup/change_status", data)
 	}
 
 	async delete(id) {
-		return await interlock_backend.call(this._getEndpoint("delete"), id)
+		return await interlock_backend.call("applicationGroup/delete", id)
 	}
 
 	async insert(data) {
-		return await interlock_backend.call(this._getEndpoint("insert"), data)
+		return await interlock_backend.call("applicationGroup/insert", data)
 	}
 }
 
