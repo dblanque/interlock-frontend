@@ -18,7 +18,7 @@
 						</v-row>
 				</v-card-title>
 
-				<v-card-text class="ma-0 pa-0">
+				<v-card-text class="ma-0 pa-0 pt-4">
 					<ApplicationForm
 						ref="ApplicationForm"
 						:applicationObject="applicationObject"
