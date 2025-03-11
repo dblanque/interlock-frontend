@@ -50,13 +50,13 @@
 				</v-col>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center">
+			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="domain && domain !== undefined && domain !== null">
 				<h4>
 					{{ $t("attribute.ldap.domain") }}
 				</h4>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center">
+			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="domain && domain !== undefined && domain !== null">
 				{{ domain }}
 			</v-row>
 
@@ -87,13 +87,13 @@
 				</v-col>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center">
+			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="realm && realm !== undefined && realm !== null">
 				<h4>
 					{{ $t("attribute.ldap.realm") }}
 				</h4>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center">
+			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="realm && realm !== undefined && realm !== null">
 				{{ realm }}
 			</v-row>
 		</div>
