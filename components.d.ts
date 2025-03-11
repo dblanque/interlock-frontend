@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AboutDialog: typeof import('./src/components/AboutDialog.vue')['default']
+    ApplicationChangeStatusConfirm: typeof import('./src/components/Group/ApplicationChangeStatusConfirm.vue')['default']
     ApplicationCreate: typeof import('./src/components/Application/ApplicationCreate.vue')['default']
     ApplicationDelete: typeof import('./src/components/Application/ApplicationDelete.vue')['default']
     ApplicationDialog: typeof import('./src/components/Application/ApplicationDialog.vue')['default']
@@ -20,6 +21,8 @@ declare module 'vue' {
     ApplicationView: typeof import('./src/components/Application/ApplicationView.vue')['default']
     BackendStatus: typeof import('./src/components/BackendStatus.vue')['default']
     CNObjectList: typeof import('./src/components/CNObjectList.vue')['default']
+    ConfirmDeleteDialog: typeof import('./src/components/ConfirmDeleteDialog.vue')['default']
+    ConfirmDialog: typeof import('./src/components/ConfirmDialog.vue')['default']
     DebugView: typeof import('./src/components/Debug/DebugView.vue')['default']
     DirtreeDeleteObject: typeof import('./src/components/Dirtree/DirtreeDeleteObject.vue')['default']
     DirtreeMove: typeof import('./src/components/Dirtree/DirtreeMove.vue')['default']

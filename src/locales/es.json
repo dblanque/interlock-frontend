@@ -476,6 +476,11 @@
       "dialog":{
         "create":{
           "header":"Crear Grupo de Aplicación"
+        },
+        "statusChange":{
+          "question": "{action} Filtrado por Grupo de Aplicación",
+          "enable_warning": "Esto puede bloquear el acceso a su aplicación a otros usuarios accidentalmente",
+          "disable_warning": "Esto permitirá el acceso a su aplicación por parte de CUALQUIERA con acceso a Interlock"
         }
       }
     },

@@ -68,7 +68,10 @@
 				</v-tooltip>
 
 				<!-- Group is not populated -->
-				<v-tooltip color="secondary" bottom v-else-if="!item.hasMembers">
+				<v-tooltip
+					color="secondary"
+					bottom
+					v-else-if="!item.hasMembers">
 					<template v-slot:activator="{ on, attrs }">
 						<v-icon
 							v-bind="attrs"
@@ -82,13 +85,15 @@
 			</template>
 
 			<!-- APPLICATION GROUP IS ENABLED STATUS -->
-			<template v-slot:[`item.enabled`]="{ item }" v-if="!isLDAPView">
+			<template
+				v-slot:[`item.enabled`]="{ item }"
+				v-if="!isLDAPView">
 				<!-- Disable Group Button -->
 				<v-tooltip color="red" bottom v-if="item.enabled === true">
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
 							rounded
-							@click="setApplicationGroupStatus(item.id, false)"
+							@click="openDialog('confirmASGStatusChange', item)"
 							v-bind="attrs"
 							v-on="on"
 							:disabled="loading">
@@ -104,11 +109,14 @@
 				</v-tooltip>
 
 				<!-- Enable Group Button -->
-				<v-tooltip color="green" bottom v-else>
+				<v-tooltip
+					color="green"
+					bottom
+					v-else>
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
 							rounded
-							@click="setApplicationGroupStatus(item.id, true)"
+							@click="openDialog('confirmASGStatusChange', item)"
 							v-bind="attrs"
 							v-on="on"
 							:disabled="loading">
@@ -199,38 +207,101 @@
 		</v-data-table>
 
 		<!-- GROUP VIEW/EDIT DIALOG -->
-		<v-dialog eager max-width="1200px" v-model="dialogs['groupDialog']" v-if="isLDAPView">
-			<GroupDialog :group="data.groupdata" :editFlag="this.editableForm" :dialogKey="'groupDialog'"
-				ref="GroupDialog" :refreshLoading="loading" :fetchingData="fetchingData"
-				@closeDialog="closeDialog" @save="groupSaved" @editToggle="setViewToEdit"
-				@refreshGroup="refreshGroup" @fetchGroup="fetchGroup" />
+		<v-dialog
+			eager
+			max-width="1200px"
+			v-model="dialogs['groupDialog']"
+			v-if="isLDAPView">
+			<GroupDialog
+				:group="data.groupdata"
+				:editFlag="this.editableForm"
+				:dialogKey="'groupDialog'"
+				ref="GroupDialog"
+				:refreshLoading="loading"
+				:fetchingData="fetchingData"
+				@closeDialog="closeDialog"
+				@save="groupSaved"
+				@editToggle="setViewToEdit"
+				@refreshGroup="refreshGroup"
+				@fetchGroup="fetchGroup" />
 		</v-dialog>
 
 		<!-- APPLICATION GROUP CREATE DIALOG -->
-		<v-dialog eager max-width="1200px" v-model="dialogs['applicationGroupUpdate']" v-else>
-			<ApplicationGroupDialog :dialogKey="'applicationGroupUpdate'" ref="ApplicationGroupUpdate"
-				@closeDialog="closeDialog" @refresh="listGroupItems(false)" :editFlag="this.editableForm"
-				@refreshGroup="refreshGroup" :refreshLoading="loading" :fetchingData="fetchingData"
-				@save="groupSaved" @editToggle="setViewToEdit" :value="data.groupdata" />
+		<v-dialog
+			eager
+			max-width="1200px"
+			v-model="dialogs['applicationGroupUpdate']"
+			v-else>
+			<ApplicationGroupDialog
+				:dialogKey="'applicationGroupUpdate'"
+				ref="ApplicationGroupUpdate"
+				@closeDialog="closeDialog"
+				@refresh="listGroupItems(false)"
+				:editFlag="this.editableForm"
+				@refreshGroup="refreshGroup"
+				:refreshLoading="loading"
+				:fetchingData="fetchingData"
+				@save="groupSaved"
+				@editToggle="setViewToEdit"
+				:value="data.groupdata" />
 		</v-dialog>
 
 		<!-- GROUP DELETE CONFIRM DIALOG -->
-		<v-dialog eager max-width="800px" v-model="dialogs['groupDelete']">
-			<GroupDelete :groupObject="this.data.selectedGroup" :dialogKey="'groupDelete'"
+		<v-dialog
+			eager
+			max-width="800px"
+			v-model="dialogs['groupDelete']">
+			<GroupDelete
+				:groupObject="data.selectedGroup"
+				:dialogKey="'groupDelete'"
 				ref="GroupDelete"
-				:isLDAPGroup="isLDAPView" :groupClass="groupClass" @closeDialog="closeDialog"
+				:isLDAPGroup="isLDAPView"
+				:groupClass="groupClass"
+				@closeDialog="closeDialog"
 				@refresh="listGroupItems(false)" />
 		</v-dialog>
 
 		<!-- GROUP CREATE DIALOG -->
-		<v-dialog eager max-width="1200px" v-model="dialogs['groupCreate']" v-if="isLDAPView">
-			<GroupCreate :dialogKey="'groupCreate'" ref="GroupCreate" @closeDialog="closeDialog" />
+		<v-dialog
+			eager
+			max-width="1200px"
+			v-model="dialogs['groupCreate']"
+			v-if="isLDAPView">
+			<GroupCreate
+				:dialogKey="'groupCreate'"
+				ref="GroupCreate"
+				@closeDialog="closeDialog" />
 		</v-dialog>
 
 		<!-- APPLICATION GROUP CREATE DIALOG -->
-		<v-dialog eager max-width="1200px" v-model="dialogs['applicationGroupCreate']" v-else>
-			<ApplicationGroupDialog :dialogKey="'applicationGroupCreate'" ref="ApplicationGroupCreate"
-				@closeDialog="closeDialog" @refresh="listGroupItems(false)" createFlag />
+		<v-dialog
+			eager
+			max-width="1200px"
+			v-model="dialogs['applicationGroupCreate']"
+			v-else>
+			<ApplicationGroupDialog
+				:dialogKey="'applicationGroupCreate'"
+				ref="ApplicationGroupCreate"
+				@closeDialog="closeDialog"
+				@refresh="listGroupItems(false)"
+				createFlag />
+		</v-dialog>
+
+		<!-- CONFIRM APPLICATION GROUP STATUS CHANGE DIALOG -->
+		<v-dialog
+			eager
+			max-width="800px"
+			v-if="!isLDAPView"
+			v-model="dialogs['confirmASGStatusChange']">
+			<ConfirmDialog
+				:title="getTitle"
+				:message="getMessage"
+				:sub-message="'application' in data.selectedGroup ? data.selectedGroup.application : ''"
+				:dialogKey="'confirmASGStatusChange'"
+				ref="ConfirmASGStatusChange"
+				:value="dialogs['confirmASGStatusChange']"
+				@yes="setApplicationGroupStatus()"
+				@no="closeDialog" />
 		</v-dialog>
 	</div>
 </template>
@@ -243,6 +314,7 @@ import ApplicationGroupDialog from '@/components/Group/ApplicationGroupDialog.vu
 import GroupDialog from '@/components/Group/GroupDialog.vue'
 import GroupCreate from '@/components/Group/GroupCreate.vue'
 import GroupDelete from '@/components/Group/GroupDelete.vue'
+import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import RefreshButton from '@/components/RefreshButton.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
@@ -251,6 +323,7 @@ export default {
 	name: 'GroupView',
 	mixins: [validationMixin, utilsMixin],
 	components: {
+		ConfirmDialog,
 		GroupDialog,
 		GroupCreate,
 		GroupDelete,
@@ -287,6 +360,7 @@ export default {
 				groupCreate: false,
 				applicationGroupCreate: false,
 				applicationGroupUpdate: false,
+				confirmASGStatusChange: false,
 			}
 		}
 	},
@@ -311,6 +385,22 @@ export default {
 		}
 	},
 	computed: {
+		getTitle() {
+			return this.$t('section.applicationGroups.dialog.statusChange.question', {
+				action: this.data.selectedGroup.enabled == true ?
+					this.$t('actions.disable') : this.$t('actions.enable')
+			})
+		},
+		getMessage() {
+			if (this.data.selectedGroup === undefined ||
+				this.data.selectedGroup === null ||
+				this.data.selectedGroup === {})
+				return ""
+			if (this.data.selectedGroup.enabled)
+				return this.$t('section.applicationGroups.dialog.statusChange.disable_warning')
+			else
+				return this.$t('section.applicationGroups.dialog.statusChange.enable_warning')
+		},
 		computedDialogs() {
 			return Object.assign({}, this.dialogs)
 		},
@@ -323,17 +413,20 @@ export default {
 		snackbarTimeout: Number,
 	},
 	methods: {
-		async setApplicationGroupStatus(itemId, enabled) {
+		async setApplicationGroupStatus() {
+			let itemId = this.data.selectedGroup.id
+			let enabled = !this.data.selectedGroup.enabled
 			if (this.isLDAPView)
 				throw new Error("Group View must be an Application Group.");
 			await new this.groupClass({}).change_status({ id: itemId, enabled: enabled })
 				.then(() => {
 					let action = enabled === true ? "words.enabled" : "words.disabled"
+					this.closeDialog('confirmASGStatusChange')
 					this.listGroupItems(false)
 					notificationBus.$emit("createNotification",
 						{
 							message: `${this.$tc("classes.group", 1)} ${this.$tc(action, 1)}`.toUpperCase(),
-							type: enabled === true ? 'success':'info'
+							type: enabled === true ? 'success' : 'info'
 						})
 				})
 				.catch(error => {
@@ -355,7 +448,7 @@ export default {
 		resetSearch() {
 			this.searchString = ""
 		},
-		openDialog(key) {
+		openDialog(key, item = undefined) {
 			this.dialogs[key] = true;
 			switch (key) {
 				case 'groupDialog':
@@ -375,11 +468,20 @@ export default {
 					if (this.$refs.ApplicationGroupUpdate != undefined)
 						this.$refs.ApplicationGroupUpdate.syncApplicationGroup()
 					break;
+				case 'confirmASGStatusChange':
+					if (item === undefined)
+						throw new Error("Item cannot be undefined.");
+					this.data.selectedGroup = item
+					break;
 				default:
 					break;
 			}
 		},
-		async closeDialog(key, refresh = false) {
+		async closeDialog(key = undefined, refresh = false) {
+			if (key === undefined)
+				for (const key in this.dialogs) {
+					this.dialogs[key] = false
+				}
 			this.dialogs[key] = false;
 			if (refresh)
 				this.listGroupItems()

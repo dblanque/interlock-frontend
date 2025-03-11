@@ -472,6 +472,11 @@
       "dialog":{
         "create":{
           "header":"Create Application Group"
+        },
+        "statusChange":{
+          "question": "{action} Application Group Filtering",
+          "enable_warning": "This can accidentally lockout users from your Application",
+          "disable_warning": "This will allow access to your Application to ANYONE with Interlock Credentials"
         }
       }
     },
