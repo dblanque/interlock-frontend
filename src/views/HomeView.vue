@@ -164,7 +164,7 @@
           v-model="activeTab"
           class="transparent-body">
           <v-tab-item
-            v-for="tab in getVisibleTabs"
+            v-for="tab in navTabs"
             :key="tab.index">
             <ModularViewContainer
               :mobile="drawerIsMobile"
@@ -523,12 +523,6 @@ export default {
     },
     drawerIsMobile() {
       return !this.drawerIsDesktop
-    },
-    getVisibleTabs() {
-      return this.navTabs.filter(x => !x.hidden)
-    },
-    getVisibleEnabledTabs() {
-      return this.getVisibleTabs.filter(x => x.enabled)
     },
     breakpointName() {
       return this.$vuetify.breakpoint.name;
