@@ -16,7 +16,7 @@
 			</h1>
 		</v-col>
 		<v-col cols="12" class="ma-0 pa-0">
-			<p class="ma-0 pa-0">is requesting consent to use your Interlock Credentials</p>
+			<p class="ma-0 pa-0">{{ $t("section.login.oidcRequestedByApp") }}</p>
 		</v-col>
 	 </v-row>
 </template>

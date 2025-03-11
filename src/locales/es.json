@@ -536,7 +536,8 @@
       "tryAgain": "Inténtelo nuevamente",
       "oneRetryLeft": "intento restante",
       "retriesLeft": "intentos restantes",
-      "loginForOidc": "Inicie Sesión para continuar con la Conexión de OpenID"
+      "loginForOidc": "Inicie Sesión para continuar con la Conexión de OpenID",
+      "oidcRequestedByApp": "solicita usar sus Credenciales de Interlock"
     },
     "logs":{
       "resetDialog":{
