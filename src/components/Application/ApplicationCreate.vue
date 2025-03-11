@@ -207,8 +207,8 @@ export default {
 			this.applicationObject = new Application({}).oidc_well_known()
 			.then(response => {
 				this.$refs.ApplicationForm.resetValidation()
-				this.applicationObject.name = "Proxmox VE"
-				this.applicationObject.redirect_uris = "https://proxmox.brconsulting.info"
+				this.applicationObject.name = ""
+				this.applicationObject.redirect_uris = ""
 				this.applicationObject.scopes = ["openid","profile","email","groups"]
 				this.applicationObject.response_types = {}
 				Object.values(response.response_types_supported).forEach(rt => {
