@@ -54,6 +54,8 @@
       },
       "filter":"LDAP Filter"
     },
+    "accept":"Accept",
+    "decline":"Decline",
     "runExecute":"Run",
     "expirePwd":"Expire Password",
     "extra":"Extra",
@@ -252,7 +254,8 @@
       "fileReader": "File Reader Exception",
       "networkError": "AXIOS: Network Error",
       "oidc":{
-        "oidc_invalid_request":"OIDC Request is Invalid"
+        "oidc_invalid_request":"OIDC Request is Invalid",
+        "oidc_application_fetch":"OIDC Application could not be fetched"
       },
       "applications":{
         "application_exists": "SSO Application already exists",
@@ -528,7 +531,8 @@
       "tooManyLogins": "You've been timed out",
       "tryAgain": "You may now try again",
       "oneRetryLeft": "retry left",
-      "retriesLeft": "retries left"
+      "retriesLeft": "retries left",
+      "loginForOidc": "Login to continue with OpenID Connection"
     },
     "logs":{
       "resetDialog":{

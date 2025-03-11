@@ -142,7 +142,6 @@ export default {
 		},
 		closeDialog() {
 			this.$emit('closeDialog', this.dialogKey);
-			this.$emit('refresh');
 		},
 		clearData() {
 			this.validApplications = []
@@ -190,9 +189,6 @@ export default {
 			if (this.$refs.ApplicationGroupForm.validate()) {
 				await new ApplicationGroup({}).update(finalData)
 					.then(() => {
-						this.loading = false
-						if (closeDialog == true)
-							this.closeDialog();
 						this.$emit('save', this.requestData, closeDialog == true);
 						this.loading = false
 						this.loadingColor = 'primary'
@@ -221,6 +217,7 @@ export default {
 					.then(response => {
 						this.loading = false
 						this.closeDialog();
+						this.$emit('refresh');
 						notificationBus.$emit("createNotification",
 							{
 								message: `${this.$tc("classes.applicationGroup", 1)} ${this.$t("words.created.m", 1)}`.toUpperCase(),

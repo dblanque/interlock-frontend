@@ -21,6 +21,7 @@ import debugCalls from '@/providers/interlock_backend/modules/debug.js'
 import applicationCalls from '@/providers/interlock_backend/modules/application.js'
 import djangoUserCalls from '@/providers/interlock_backend/modules/djangoUser.js'
 import applicationGroupCalls from '@/providers/interlock_backend/modules/applicationGroup.js'
+import oidcCalls from '@/providers/interlock_backend/modules/oidc.js'
 
 const modules = {
     auth: authCalls,
@@ -39,6 +40,7 @@ const modules = {
     application: applicationCalls,
     djangoUser: djangoUserCalls,
     applicationGroup: applicationGroupCalls,
+    oidc: oidcCalls,
 }
 
 const interlock_backend = {

@@ -45,6 +45,7 @@ declare module 'vue' {
     NavigationDrawer: typeof import('./src/components/NavigationDrawer.vue')['default']
     NotificationBusContainer: typeof import('./src/components/NotificationBusContainer.vue')['default']
     ObjectEditor: typeof import('./src/components/Settings/ObjectEditor.vue')['default']
+    OIDCWidget: typeof import('./src/components/OIDC/OIDCWidget.vue')['default']
     ProgressButton: typeof import('./src/components/ProgressButton.vue')['default']
     RecordDelete: typeof import('./src/components/DNS/RecordDelete.vue')['default']
     RecordDialog: typeof import('./src/components/DNS/RecordDialog.vue')['default']

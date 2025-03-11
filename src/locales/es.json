@@ -54,6 +54,8 @@
       },
       "filter":"Filtro LDAP"
     },
+    "accept":"Aceptar",
+    "decline":"Declinar",
     "runExecute":"Ejecutar",
     "expirePwd":"Expirar Contraseña",
     "extra":"Extra",
@@ -258,7 +260,8 @@
       "fileReader": "Excepción del Lector de Archivos",
       "networkError": "AXIOS: Error de Red",
       "oidc":{
-        "oidc_invalid_request":"Request OIDC Inválido"
+        "oidc_invalid_request":"Pedido OIDC Inválido",
+        "oidc_application_fetch":"No se pudo obtener la Aplicación OIDC"
       },
       "applications":{
         "application_exists": "La Aplicación SSO ya existe",
@@ -532,7 +535,8 @@
       "tooManyLogins": "Ha sido deshabilitado",
       "tryAgain": "Inténtelo nuevamente",
       "oneRetryLeft": "intento restante",
-      "retriesLeft": "intentos restantes"
+      "retriesLeft": "intentos restantes",
+      "loginForOidc": "Inicie Sesión para continuar con la Conexión de OpenID"
     },
     "logs":{
       "resetDialog":{

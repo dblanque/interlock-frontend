@@ -114,23 +114,27 @@ const utilsMixin = {
                     suffix = ` (${codeToUse.substring(0, 40)}...)`
             }
 
+            // Attempt to cast to numeric
+            try {
+                codeToUse = Number(codeToUse)
+            } catch (error) {}
             // OTP ---------------------------------------------------------- //
-            if (/otp_.*/.test(codeToUse))
+            if (/^otp_.*/.test(codeToUse))
                 return this.$t('error.codes.otp.'+codeToUse)
             // DNS ---------------------------------------------------------- //
-            else if (/dns_.*/.test(codeToUse))
+            else if (/^dns_.*/.test(codeToUse))
                 return this.$t('error.codes.dns.'+codeToUse)
-            else if (/user_.*/.test(codeToUse))
+            else if (/^user_.*/.test(codeToUse))
                 return this.$t('error.codes.users.'+codeToUse)
-            else if (/ldap_.*/.test(codeToUse))
+            else if (/^ldap_.*/.test(codeToUse))
                 return this.$t('error.codes.ldap.'+codeToUse)
-            else if (/group_.*/.test(codeToUse))
+            else if (/^group_.*/.test(codeToUse))
                 return this.$t('error.codes.groups.'+codeToUse)
-            else if (/setting_.*/.test(codeToUse))
+            else if (/^setting_.*/.test(codeToUse))
                 return this.$t('error.codes.settings.'+codeToUse)
-            else if (/application_.*/.test(codeToUse))
+            else if (/^application_.*/.test(codeToUse))
                 return this.$t('error.codes.applications.'+codeToUse)
-            else if (/oidc_.*/.test(codeToUse))
+            else if (/^oidc_.*/.test(codeToUse))
                 return this.$t('error.codes.oidc.'+codeToUse)
             else
                 switch(codeToUse){
