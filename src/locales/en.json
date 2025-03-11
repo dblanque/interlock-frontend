@@ -532,7 +532,7 @@
       "tryAgain": "You may now try again",
       "oneRetryLeft": "retry left",
       "retriesLeft": "retries left",
-      "loginForOidc": "Login to continue with OpenID Connection",
+      "loginForOidc": "OIDC Requires Authentication",
       "oidcRequestedByApp": "is requesting to use your Interlock Credentials"
     },
     "logs":{
@@ -929,6 +929,8 @@
     "TOTPnotConfirmed":"Please Confirm your TOTP 2FA",
     "recoveryCodes":"Consumable Recovery Codes",
     "copyRecoveryCodes":"Copy Codes",
+    "totpUri":"TOTP URI",
+    "copyTotpUri":"Copy TOTP URI",
     "totpCodeFieldLabel":"6-digit TOTP Code",
     "totpValidated":"TOTP Code Validated",
     "qrIsEnabled":"TOTP 2FA is enabled",
