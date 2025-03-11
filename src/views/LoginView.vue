@@ -164,34 +164,40 @@
 									</v-btn>
 								</v-col>
 							</v-expand-x-transition>
-							<v-col class="ma-0 pa-0" v-if="!showOIDC">
-								<v-btn
-									:loading="submitted"
-									:disabled="disableLoginBtn"
-									@click="submit"
-									class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
-									{{ $t("section.login.loginBtn") }}
-								</v-btn>
-							</v-col>
-							<v-col class="ma-0 pa-0" v-if="showOIDC">
-								<v-btn
-									:loading="submitted && oidc.accepted_consent"
-									:disabled="submitted"
-									@click="consentResponse(true)"
-									class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
-									{{ $t("actions.accept") }}
-								</v-btn>
-							</v-col>
-							<v-col class="ma-0 pa-0" v-if="showOIDC">
-								<v-btn
-									:loading="submitted && !oidc.accepted_consent"
-									:disabled="submitted"
-									@click="consentResponse(false)"
-									color="error-65"
-									class="white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
-									{{ $t("actions.decline") }}
-								</v-btn>
-							</v-col>
+							<v-expand-x-transition>
+								<v-col class="ma-0 pa-0" v-if="showLogin || showTotp">
+									<v-btn
+										:loading="submitted"
+										:disabled="disableLoginBtn"
+										@click="submit"
+										class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
+										{{ $t("section.login.loginBtn") }}
+									</v-btn>
+								</v-col>
+							</v-expand-x-transition>
+							<v-expand-x-transition>
+								<v-col class="ma-0 pa-0" v-if="showOIDC">
+									<v-btn
+										:loading="submitted && oidc.accepted_consent"
+										:disabled="submitted"
+										@click="consentResponse(true)"
+										class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
+										{{ $t("actions.accept") }}
+									</v-btn>
+								</v-col>
+							</v-expand-x-transition>
+							<v-expand-x-transition>
+								<v-col class="ma-0 pa-0" v-if="showOIDC">
+									<v-btn
+										:loading="submitted && !oidc.accepted_consent"
+										:disabled="submitted"
+										@click="consentResponse(false)"
+										color="error-65"
+										class="white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
+										{{ $t("actions.decline") }}
+									</v-btn>
+								</v-col>
+							</v-expand-x-transition>
 						</v-row>
 					</v-col>
 				</v-form>
@@ -300,10 +306,11 @@ export default {
 	},
 	mounted() {
 		this.next = this.$route.query.next || "";
+		this.oidc.error = this.$route.query.error === "true" || false;
+		this.oidc.error_detail = this.$route.query.error_detail || "";
 		if (this.next !== "") {
 			this.oidc = this.$route.query
 			const bool_values = [
-				"error",
 				"require_consent",
 				"reuse_consent",
 			]
@@ -343,10 +350,12 @@ export default {
 					console.log("User is already logged in.")
 					if (this.next !== "")
 						this.redirectOIDC()
-					else if (admin_allowed === 'true')
-						this.$router.push("/home")
-					else
-						this.$router.push("/enduser")
+					else if (!this.error) {
+						if (admin_allowed === 'true')
+							this.$router.push("/home")
+						else
+							this.$router.push("/enduser")
+					}
 				})
 				.catch(e => {
 					if (!ignoreErrorCodes.includes(e.status))
@@ -504,10 +513,12 @@ export default {
 							this.clearLoginTimeout()
 							if (this.next !== "")
 								this.redirectOIDC()
-							else if (response.data.admin_allowed === true)
-								this.$router.push("/home")
-							else
-								this.$router.push("/enduser")
+							else if (!this.error) {
+								if (response.data.admin_allowed === true)
+									this.$router.push("/home")
+								else
+									this.$router.push("/enduser")
+							}
 						}
 					})
 					.catch(e => {
