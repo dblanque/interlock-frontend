@@ -302,7 +302,6 @@ export default {
 		this.next = this.$route.query.next || "";
 		if (this.next !== "") {
 			this.oidc = this.$route.query
-			this.errorMsg = this.$t("section.login.loginForOidc")
 			const bool_values = [
 				"error",
 				"require_consent",
@@ -352,8 +351,11 @@ export default {
 				.catch(e => {
 					if (!ignoreErrorCodes.includes(e.status))
 						console.error(e)
-					else
+					else {
 						this.showLogin = true
+						if (this.next !== "")
+							this.errorMsg = this.$t("section.login.loginForOidc")
+					}
 				})
 		}
 	},
@@ -413,7 +415,10 @@ export default {
 			if (this.oidc.require_consent == true) {
 				this.showOIDC = true
 				this.showLogin = false
+				this.showTotp = false
 				this.submitted = false
+				if (this.error !== true)
+					this.errorMsg = ""
 			} else {
 				this.goToNextURI()
 			}
