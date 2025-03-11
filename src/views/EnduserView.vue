@@ -40,6 +40,7 @@
 						:extraClasses="'mr-3 px-2'"
 						icon="mdi-account-cog"
 						color="primary"
+						show-preferences-menu
 						@logout="logoutAction"
 						@openSettings="openSettings"
 						:username="activeUserName" />
@@ -362,12 +363,27 @@
 		<!-- SNACKBAR / NOTIF. BUS -->
 		<NotificationBusContainer />
 
+    <!-- SETTINGS DIALOG  -->
+    <v-dialog
+      max-width="48rem"
+      v-model="showSettingsDialog">
+      <UserSettings
+        ref="UserSettings"
+        :username="username"
+        :first-name="first_name"
+        :last-name="last_name"
+        admin-mode
+        :domain="domain"
+        :realm="realm"
+        @close='showSettingsDialog = !showSettingsDialog' />
+    </v-dialog>
+
 		<!-- USER RESET PASSWORD DIALOG -->
 		<v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']">
 			<UserResetPassword
 				:userObject="this.user"
 				:dialogKey="'userResetPassword'"
-				:parentTitle="isLDAPUser ? 'ldap-users':'django-users'"
+				:parentTitle="isLDAPUser ? 'ldap-users' : 'django-users'"
 				:userClass="userClass"
 				ref="UserResetPassword"
 				:isEndUser="true"
@@ -405,6 +421,7 @@ import DjangoUser from '@/include/DjangoUser.js'
 import Domain from '@/include/Domain.js'
 import UserResetPassword from '@/components/User/UserResetPassword.vue'
 import UserAccountDropdown from '@/components/User/UserAccountDropdown.vue'
+import UserSettings from '@/components/User/UserSettings.vue'
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import ThemeChanger from '@/components/ThemeChanger.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
@@ -422,6 +439,7 @@ export default {
 		LanguageSelector,
 		UserResetPassword,
 		UserAccountDropdown,
+		UserSettings,
 		NotificationBusContainer,
 		RefreshTokenDialog,
 		RefreshButton,
@@ -430,6 +448,7 @@ export default {
 	},
 	data() {
 		return {
+			showSettingsDialog: false,
 			logoLight: 'logo/interlock-logo-wt-dark.svg',
 			logoDark: 'logo/interlock-logo-wt-light.svg',
 			// Dialog States
