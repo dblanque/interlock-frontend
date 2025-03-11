@@ -138,7 +138,7 @@
 					:disabled="!totp_uri || totp_uri.length < 1"
 					@click="showQR = !showQR">
 					{{ !showQR ? $t("userAccountDropdown.showQR") :
-						$t("userAccountDropdown.hideQR")}}
+						$t("userAccountDropdown.hideQR") }}
 				</v-btn>
 			</v-col>
 			<v-col cols="12" class="pa-0 ma-0" v-if="hasTotp && !this.totp_confirmed"
@@ -161,15 +161,6 @@
 							required
 							type="text"
 							v-model="totp_code" />
-						<!-- <v-text-field 
-						v-model="totp_code"
-						:label="$t('userAccountDropdown.totpCodeFieldLabel')"
-						:disabled="noTotp"
-						@keypress="isNumber"
-						@paste="isNumber"
-						:rules="[this.fieldRules(totp_code, 'auth_totp', true)]"
-						outlined
-						dense/> -->
 					</v-col>
 					<v-col cols="12" class="ma-0 pa-0 mb-4 mx-2">
 						<v-btn color="primary" outlined
@@ -180,9 +171,30 @@
 					</v-col>
 				</v-row>
 			</v-form>
-			<v-row justify="center" class="ma-0 pa-0">
-				<v-col cols="auto" v-if="totp_uri.length > 0 && two_factor_auth && showQR"
-					class="ma-0 pa-0">
+
+			<v-row justify="center" class="ma-0 pa-0"
+				v-if="totp_uri.length > 0 && two_factor_auth && showQR">
+				<v-col cols="8" class="d-flex justify-center align-center">
+					<v-text-field :value="totp_uri" readonly :label="$t('userAccountDropdown.totpUri')">
+					</v-text-field>
+					<v-tooltip bottom>
+							<template v-slot:activator="{ on, attrs }">
+								<v-btn
+									v-bind="attrs" v-on="on"
+									class="ml-2"
+									@click="copyTotpUri"
+									icon
+									small>
+									<v-icon small>
+										mdi-content-copy
+									</v-icon>
+								</v-btn>
+							</template>
+							<span>{{ $t("userAccountDropdown.copyTotpUri") }}</span>
+						</v-tooltip>
+				</v-col>
+				<v-col cols="12" v-if="totp_uri.length > 0 && two_factor_auth && showQR"
+					class="ma-0 pa-0 d-flex justify-center">
 					<v-card class="ma-0 pa-0 pa-2 pb-0" elevation="0"
 						light width="fit-content" :outlined="!isThemeDark($vuetify)">
 						<QrcodeVue class="ma-0 pa-0" :value="totp_uri" :size="225" level="H" />
@@ -213,7 +225,10 @@
 							<span>{{ $t("userAccountDropdown.copyRecoveryCodes") }}</span>
 						</v-tooltip>
 					</v-row>
-					<v-col cols="12" v-for="code in recovery_codes" :key="code">
+					<v-col
+						cols="12"
+						v-for="code in recovery_codes"
+						:key="code">
 						{{ code }}
 					</v-col>
 				</v-row>
@@ -222,12 +237,18 @@
 
 		<!-- Actions -->
 		<v-card-actions class="card-actions mt-4">
-			<v-row class="ma-1 pa-0" align="center" align-content="center"
+			<v-row
+				class="ma-1 pa-0"
+				align="center"
+				align-content="center"
 				:justify="this.$vuetify.breakpoint.mdAndDown ? 'center' : 'end'">
 				<!-- Save User Changes Button -->
-				<v-btn @click="closeDialog" :dark="!isThemeDark($vuetify)"
+				<v-btn
+					@click="closeDialog"
+					:dark="!isThemeDark($vuetify)"
 					:light="isThemeDark($vuetify)"
-					class="ma-0 pa-0 pa-4 ma-1" rounded>
+					class="ma-0 pa-0 pa-4 ma-1"
+					rounded>
 					<v-icon class="mr-1">
 						mdi-close
 					</v-icon>
@@ -309,6 +330,9 @@ export default {
 	methods: {
 		copyRCCs() {
 			navigator.clipboard.writeText(this.recovery_codes.join("\n"));
+		},
+		copyTotpUri() {
+			navigator.clipboard.writeText(this.totp_uri);
 		},
 		toggleAutoRefresh() {
 			this.art_input_disabled = true
