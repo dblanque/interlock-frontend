@@ -208,7 +208,7 @@
 											id="co"
 											:label="$t('attribute.ldap.co')"
 											v-model="usercopy.co"
-											:items="getCountryList()"
+											:items="LDAPCountries"
 											:rules="[this.fieldRules(usercopy.co, 'ge_country')]">
 										</v-autocomplete>
 									</v-col>
@@ -431,6 +431,7 @@ import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 import { getDomainDetails, truncateDate } from '@/include/utils.js';
+import LDAPCountries from '@/include/constants/LDAPCountries.js'
 
 export default {
 	name: 'EnduserView',
@@ -448,6 +449,7 @@ export default {
 	},
 	data() {
 		return {
+			LDAPCountries: LDAPCountries,
 			showSettingsDialog: false,
 			logoLight: 'logo/interlock-logo-wt-dark.svg',
 			logoDark: 'logo/interlock-logo-wt-light.svg',

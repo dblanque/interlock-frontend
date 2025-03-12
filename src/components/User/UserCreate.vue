@@ -352,6 +352,8 @@ import DirtreeOUList from '@/components/Dirtree/DirtreeOUList.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { getDomainDetails } from '@/include/utils.js';
+import LDAPObjectClasses from '@/include/constants/LDAPObjectClasses.js';
+import { LDAPUserCategories } from '@/include/constants/LDAPUser.js';
 
 export default {
 	name: 'UserCreate',
@@ -376,70 +378,7 @@ export default {
 			userToCreate: {},
 			createStage: 1,
 			addObjectClass: "",
-			objectClasses: [
-				"accessControlSubentry",
-				"account",
-				"alias",
-				"applicationEntity",
-				"applicationProcess",
-				"bootableDevice",
-				"certificationAuthority",
-				"certificationAuthority-V2",
-				"collectiveAttributeSubentry",
-				"country",
-				"crlDistributionPoint",
-				"device",
-				"dmd",
-				"dnsDomain",
-				"documentSeries",
-				"domain",
-				"domainRelatedObject",
-				"dsa",
-				"extensibleObject",
-				"friendlyCountry",
-				"groupOfNames",
-				"groupOfUniqueNames",
-				"ieee802Device",
-				"inetOrgPerson",
-				"ipHost",
-				"ipNetwork",
-				"ipProtocol",
-				"ipService",
-				"javaContainer",
-				"javaMarshalledObject",
-				"javaNamingReference",
-				"javaObject",
-				"javaSerializedObject",
-				"labeledURIObject",
-				"locality",
-				"mailRecipient",
-				"newPilotPerson",
-				"nisDomainObject",
-				"nisKeyObject",
-				"nisMap",
-				"nisNetgroup",
-				"nisObject",
-				"oldQualityLabelledData",
-				"oncRpc",
-				"organization",
-				"organizationalPerson",
-				"organizationalRole",
-				"organizationalUnit",
-				"person",
-				"pilotDSA",
-				"pilotObject",
-				"pilotOrganization",
-				"posixAccount",
-				"posixGroup",
-				"top",
-				"user",
-				"referral",
-				"residentialPerson",
-				"room",
-				"shadowAccount",
-				"simpleSecurityObject",
-				"strongAuthenticationUser"
-			],
+			objectClasses: LDAPObjectClasses,
 			permissions: {
 				"LDAP_UF_ACCOUNT_DISABLE": {
 					value: false,
@@ -454,42 +393,7 @@ export default {
 					int: 65536
 				},
 			},
-			categories: {
-				basic: [
-					"sAMAccountName",
-					"givenName",
-					"sn",
-					"mail",
-					"displayName",
-					"is_enabled",
-					"last_login",
-					"telephoneNumber",
-					"wWWHomePage",
-				],
-				location: [
-					"streetAddress",
-					"postalCode",
-					"l",
-					"st",
-					"countryCode",
-					"co",
-					"c",
-				],
-				account: [
-					"distinguishedName",
-					"userPrincipalName",
-					"userAccountControl",
-					"whenCreated",
-					"whenChanged",
-					"lastLogon",
-					"badPwdCount",
-					"pwdLastSet",
-					"primaryGroupID",
-					"objectClass",
-					"objectCategory",
-					"sAMAccountType"
-				]
-			}
+			categories: LDAPUserCategories
 		}
 	},
 	mixins: [

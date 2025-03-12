@@ -223,7 +223,9 @@
 													</v-list-item-action>
 
 													<v-list-item-action class="pa-0 ma-0">
-														<v-tooltip bottom color="red">
+														<v-tooltip
+															bottom
+															color="red">
 															<template v-slot:activator="{ on, attrs }">
 																<v-btn small icon
 																	@click="removeMember(member.distinguishedName, groupcopy.member)"
@@ -253,10 +255,17 @@
 
 		<!-- Actions -->
 		<v-card-actions class="card-actions">
-			<v-row class="ma-1 pa-0" align="center" align-content="center"
+			<v-row
+				class="ma-1 pa-0"
+				align="center"
+				align-content="center"
 				:justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
 				<!-- Edit Group Button -->
-				<v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag != true"
+				<v-btn
+					color="primary"
+					class="ma-0 pa-0 pa-4 ma-1"
+					rounded
+					v-if="editFlag != true"
 					@click="editGroup">
 					<v-icon class="mr-1">
 						mdi-pencil
@@ -264,7 +273,11 @@
 					{{ $t("actions.edit") }}
 				</v-btn>
 				<!-- View Group Button -->
-				<v-btn color="primary" class="ma-0 pa-0 pa-4 ma-1" rounded v-if="editFlag == true"
+				<v-btn
+					color="primary"
+					class="ma-0 pa-0 pa-4 ma-1"
+					rounded
+					v-if="editFlag == true"
 					@click="viewGroup">
 					<v-icon class="mr-1">
 						mdi-eye
@@ -272,8 +285,12 @@
 					{{ $t("actions.view") }}
 				</v-btn>
 				<!-- Save Group Changes Button -->
-				<v-btn @click="saveGroup" :class="(editFlag ? '' : '') + 'ma-0 pa-0 pa-4 ma-1'" rounded
-					:dark="!isThemeDark($vuetify) && editFlag" :light="isThemeDark($vuetify) && editFlag"
+				<v-btn
+					@click="saveGroup"
+					:class="(editFlag ? '' : '') + 'ma-0 pa-0 pa-4 ma-1'"
+					rounded
+					:dark="!isThemeDark($vuetify) && editFlag"
+					:light="isThemeDark($vuetify) && editFlag"
 					:disabled="!editFlag">
 					<v-icon class="mr-1">
 						mdi-content-save
@@ -281,9 +298,12 @@
 					{{ $t("actions.save") }}
 				</v-btn>
 				<!-- Save Group Changes Button -->
-				<v-btn @click="saveGroup(true)" :class="(editFlag ? '' : '') + 'ma-0 pa-0 pa-4 ma-1'"
+				<v-btn
+					@click="saveGroup(true)"
+					:class="(editFlag ? '' : '') + 'ma-0 pa-0 pa-4 ma-1'"
 					rounded
-					:dark="!isThemeDark($vuetify) && editFlag" :light="isThemeDark($vuetify) && editFlag"
+					:dark="!isThemeDark($vuetify) && editFlag"
+					:light="isThemeDark($vuetify) && editFlag"
 					:disabled="!editFlag">
 					<v-icon class="mr-1">
 						mdi-exit-to-app
@@ -291,15 +311,25 @@
 					{{ $t("actions.saveClose") }}
 				</v-btn>
 				<!-- Refresh Group Button -->
-				<refresh-button dense :fetching-data="fetchingData" :loading="refreshLoading"
+				<refresh-button
+					dense
+					:fetching-data="fetchingData"
+					:loading="refreshLoading"
 					@refresh="refreshGroup" />
 			</v-row>
 		</v-card-actions>
 
 		<!-- USER ADD TO GROUP DIALOG -->
-		<v-dialog eager max-width="1200px" v-model="dialogs['addToGroup']">
-			<CNObjectList :dialogKey="'addToGroup'" ref="AddToGroup" @addDNs="addMembers"
-				:excludeDNs="excludeDNs" @closeDialog="closeInnerDialog" />
+		<v-dialog
+			eager
+			max-width="1200px"
+			v-model="dialogs['addToGroup']">
+			<CNObjectList
+				:dialogKey="'addToGroup'"
+				ref="AddToGroup"
+				@addDNs="addMembers"
+				:excludeDNs="excludeDNs"
+				@closeDialog="closeInnerDialog" />
 		</v-dialog>
 	</v-card>
 </template>
@@ -311,6 +341,8 @@ import CNObjectList from '@/components/CNObjectList.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { notificationBus } from '@/main.js';
+import { LDAPGroupScopes, LDAPGroupTypes } from '@/include/constants/LDAPGroup.js';
+import { LDAPUserClasses } from '@/include/constants/LDAPUser.js';
 
 export default {
 	name: 'GroupDialog',
@@ -320,7 +352,7 @@ export default {
 	},
 	data() {
 		return {
-			userClasses: ['user', 'person', 'organizationalPerson', 'organizationalperson'],
+			userClasses: LDAPUserClasses,
 			loading: false,
 			loadingColor: 'accent',
 			error: false,
@@ -335,15 +367,8 @@ export default {
 			memberPanelExpanded: 0,
 			membersToAdd: [],
 			membersToRemove: [],
-			groupTypes: [
-				"GROUP_DISTRIBUTION",
-				"GROUP_SECURITY"
-			],
-			groupScopes: [
-				"GROUP_GLOBAL",
-				"GROUP_DOMAIN_LOCAL",
-				"GROUP_UNIVERSAL"
-			],
+			groupTypes: LDAPGroupTypes,
+			groupScopes: LDAPGroupScopes,
 			radioGroupType: 0,
 			radioGroupScope: 0,
 			// Dialog States

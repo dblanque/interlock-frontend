@@ -127,6 +127,7 @@
 import OrganizationalUnit from '@/include/OrganizationalUnit.js'
 import RefreshButton from '@/components/RefreshButton.vue'
 import { objectRecursiveSearch } from '@/include/utils.js';
+import { LDAPUserClasses } from '@/include/constants/LDAPUser.js';
 
 export default {
 	name: 'CNObjectList',
@@ -135,7 +136,7 @@ export default {
 	},
 	data() {
 		return {
-			userClasses: ['user', 'person', 'organizationalperson'],
+			userClasses: LDAPUserClasses,
 			ldapList: [],
 			selectedDNs: [],
 			showLoadingBar: false,
@@ -258,10 +259,8 @@ export default {
 		isTypeValid(type) {
 			if (this.disabled)
 				return false
-			var types = [
-				'user',
-				'person',
-				'organizationalperson',
+			let types = [
+				...this.userClasses,
 				'group'
 			]
 			if (types.includes(type))

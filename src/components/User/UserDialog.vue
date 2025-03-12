@@ -342,7 +342,7 @@
 												<v-col cols="12" lg="6">
 													<v-autocomplete dense id="co" :label="$t('attribute.ldap.co')"
 														:readonly="editFlag != true" v-model="usercopy.co"
-														:items="getCountryList()"
+														:items="LDAPCountries"
 														:rules="[this.fieldRules(usercopy.co, 'ge_country')]">
 													</v-autocomplete>
 												</v-col>
@@ -707,6 +707,9 @@ import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import ldap_perm_json from '@/include/ldap_permissions.json';
 import { notificationBus } from '@/main.js';
 import { getDomainDetails, truncateDate } from '@/include/utils.js';
+import LDAPObjectClasses from '@/include/constants/LDAPObjectClasses.js';
+import { LDAPUserCategories } from '@/include/constants/LDAPUser.js';
+import LDAPCountries from '@/include/constants/LDAPCountries.js';
 
 export default {
 	name: 'UserDialog',
@@ -717,6 +720,9 @@ export default {
 	},
 	data() {
 		return {
+			objectClasses: LDAPObjectClasses,
+			categories: LDAPUserCategories,
+			LDAPCountries: LDAPCountries,
 			TABS: {
 				GROUPS: 0,
 				DEFAULT: 1,
@@ -745,106 +751,6 @@ export default {
 				userAddToGroup: false
 			},
 			permissions: ldap_perm_json.permissions,
-			objectClasses: [
-				"accessControlSubentry",
-				"account",
-				"alias",
-				"applicationEntity",
-				"applicationProcess",
-				"bootableDevice",
-				"certificationAuthority",
-				"certificationAuthority-V2",
-				"collectiveAttributeSubentry",
-				"country",
-				"crlDistributionPoint",
-				"device",
-				"dmd",
-				"dnsDomain",
-				"documentSeries",
-				"domain",
-				"domainRelatedObject",
-				"dsa",
-				"extensibleObject",
-				"friendlyCountry",
-				"groupOfNames",
-				"groupOfUniqueNames",
-				"ieee802Device",
-				"inetOrgPerson",
-				"ipHost",
-				"ipNetwork",
-				"ipProtocol",
-				"ipService",
-				"javaContainer",
-				"javaMarshalledObject",
-				"javaNamingReference",
-				"javaObject",
-				"javaSerializedObject",
-				"labeledURIObject",
-				"locality",
-				"mailRecipient",
-				"newPilotPerson",
-				"nisDomainObject",
-				"nisKeyObject",
-				"nisMap",
-				"nisNetgroup",
-				"nisObject",
-				"oldQualityLabelledData",
-				"oncRpc",
-				"organization",
-				"organizationalPerson",
-				"organizationalRole",
-				"organizationalUnit",
-				"person",
-				"pilotDSA",
-				"pilotObject",
-				"pilotOrganization",
-				"posixAccount",
-				"posixGroup",
-				"top",
-				"user",
-				"referral",
-				"residentialPerson",
-				"room",
-				"shadowAccount",
-				"simpleSecurityObject",
-				"strongAuthenticationUser"
-			],
-			categories: {
-				basic: [
-					"sAMAccountName",
-					"givenName",
-					"sn",
-					"mail",
-					"displayName",
-					"is_enabled",
-					"last_login",
-					"telephoneNumber",
-					"wWWHomePage",
-				],
-				location: [
-					"streetAddress",
-					"postalCode",
-					"l",
-					"st",
-					"countryCode",
-					"co",
-					"c",
-				],
-				account: [
-					"distinguishedName",
-					"userPrincipalName",
-					"userAccountControl",
-					"whenCreated",
-					"whenChanged",
-					"lastLogon",
-					"badPwdCount",
-					"pwdLastSet",
-					"primaryGroupID",
-					"objectClass",
-					"objectCategory",
-					"sAMAccountType"
-				]
-			}
 		}
 	},
 	mixins: [validationMixin, utilsMixin],

@@ -97,7 +97,7 @@
                 <v-autocomplete v-else
                 :dense="dense"
                 :hint="$t(valueHint)"
-                :items="getCountryList()"
+                :items="LDAPCountries"
                 :label="getSelectLabel(keyToAdd)"
                 :persistent-hint="persistentHint"
                 :readonly="readonly"
@@ -193,7 +193,7 @@
                 :readonly="readonly"
                 :value="subItem"
                 @change="updateValue(subItemKey, $event)"
-                :items="getCountryList()"
+                :items="LDAPCountries"
                 :rules="[v => {return valueChoices[subItemKey].values.includes(v) || subItem != undefined && subItem.length == 0}]">
                 </v-autocomplete>
             </v-col>
@@ -217,6 +217,7 @@
 <script>
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import LDAPCountries from '@/include/constants/LDAPCountries.js';
 
 // Complex Validator Object Structure:
 // validators: {
@@ -233,9 +234,10 @@ export default {
     mixins: [ validationMixin, utilsMixin ],
     data() {
         return {
+            LDAPCountries: LDAPCountries,
             objectToEdit: {},
             keyToAdd: "",
-            valueToAdd: ""
+            valueToAdd: "",
         }
     },
     props: {

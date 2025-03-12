@@ -176,6 +176,7 @@ import UserPermissionList from './UserPermissionList.vue';
 import User from '@/include/User.js';
 import { notificationBus } from '@/main.js';
 import { getDomainDetails } from '@/include/utils.js';
+import LDAPCountries from '@/include/constants/LDAPCountries.js';
 
 export default {
 	name: "UserBulkUpdate",
@@ -200,6 +201,7 @@ export default {
 	},
 	data() {
 		return {
+			LDAPCountries: LDAPCountries,
 			showStepper: false,
 			stage: 1,
 			showModifiedAttributes: false,
@@ -281,7 +283,7 @@ export default {
 			this.userFields = {}
 			this.choicesFields = {
 				"co": {
-					values: this.getCountryList(),
+					values: this.LDAPCountries,
 					type: "autocomplete"
 				}
 			}
