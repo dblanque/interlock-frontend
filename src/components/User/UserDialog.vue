@@ -1094,7 +1094,18 @@ export default {
 		},
 		async setAccountStatus(enabled) {
 			this.extraListOpen = false
-			await new this.userClass({}).changeAccountStatus({ username: this.usercopy.username, enabled: enabled })
+			let ident
+			if (this.isLDAPUser())
+				ident = {
+					username: this.usercopy.username,
+					enabled: enabled
+				}
+			else
+				ident = {
+					id: this.usercopy.id,
+					enabled: enabled
+				}
+			await new this.userClass({}).changeAccountStatus(ident)
 				.then(() => {
 					let action = `words.${enabled ? 'enabled' : 'disabled'}`;
 					this.refreshUser()
@@ -1117,7 +1128,12 @@ export default {
 				})
 		},
 		async deleteTotp(closeDialog = false) {
-			await new User({}).deleteTotp({ username: this.usercopy[this.userSelector] })
+			let ident
+			if (this.isLDAPUser())
+				ident = this.usercopy[this.userSelector]
+			else
+				ident = this.usercopy["username"]
+			await new User({}).deleteTotp({ username: ident })
 				.then(() => {
 					if (closeDialog == true)
 						this.closeDialog();
