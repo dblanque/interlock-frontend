@@ -44,13 +44,9 @@
           v-if="this.$vuetify.breakpoint.lgAndUp" />
         <v-col
           class="ma-0 pa-0 my-3"
-          v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
-          <span style="color: var(--v-white-d-base)"
-            v-if="last_name && last_name != '' && first_name && first_name != ''">
-            {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + "@" + username }}
-          </span>
-          <span v-else>
-            {{ realm.toUpperCase() + "@" + username }}
+          v-if="!this.$vuetify.breakpoint.mdAndUp && realm !== null && realm !== undefined && realm !== ''">
+          <span class="text--white">
+            {{ activeUserName }}
           </span>
         </v-col>
         <v-col class="ma-0 pa-0" cols="12" md="auto">
@@ -460,6 +456,16 @@ export default {
       ],
     };
   },
+  watch: {
+    domain: {
+      handler: function (v) {
+        if (!v)
+          this.navGroups["ldap"].enabled = false
+        else
+          this.navGroups["ldap"].enabled = true
+      }
+    },
+  },
   async created() {
     let tabIndex = 0
     if (this.$vuetify.breakpoint.mdAndUp)
@@ -527,13 +533,17 @@ export default {
     breakpointName() {
       return this.$vuetify.breakpoint.name;
     },
+    getRealmDisplayName() {
+      if (this.realm !== undefined && this.realm !== null && this.realm !== "")
+        return `${this.realm.toUpperCase()}@`
+      return ""
+    },
     activeUserName() {
       if (this.last_name && this.last_name.length > 0 &&
         this.first_name && this.first_name.length > 0)
-        return this.last_name + ", " + this.first_name + " | " + this.username
-      // return this.last_name + ", " + this.first_name + " | " + this.realm.toUpperCase() + "@" + this.username
-      return this.realm.toUpperCase() + "@" + this.username
-    }
+        return `${this.last_name}, ${this.first_name} | ${this.username}`
+      return this.getRealmDisplayName + this.username
+    },
   },
   methods: {
     ////////////////////////////////////////////////////////////////////////////

@@ -18,7 +18,7 @@
 		</v-card-title>
 
 		<div v-if="!showQR">
-			<v-row cols="12" class="ma-0 pa-0 mt-2" justify="center">
+			<v-row cols="12" class="ma-0 pa-0 mt-4" justify="center">
 				<h3>
 					{{ $t("attribute.user.username") }}
 				</h3>
@@ -34,33 +34,36 @@
 				</v-col>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center">
+			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="fullName && fullName !== ''">
 				<h4>
 					{{ $t("attribute.ldap.name") }}
 				</h4>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center">
-				{{ firstName + " " + lastName }}
+			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="fullName && fullName !== ''">
+				{{ fullName }}
 			</v-row>
 
-			<v-row class="ma-0 pa-0" justify="center">
+			<v-row class="ma-0 pa-0" justify="center" v-if="fullName && fullName !== ''">
 				<v-col cols="6" sm="10" md="8">
 					<v-divider />
 				</v-col>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="domain && domain !== undefined && domain !== null">
+			<v-row cols="12" class="ma-0 pa-0" justify="center"
+				v-if="domain && domain !== undefined && domain !== null">
 				<h4>
 					{{ $t("attribute.ldap.domain") }}
 				</h4>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="domain && domain !== undefined && domain !== null">
+			<v-row cols="12" class="ma-0 pa-0" justify="center"
+				v-if="domain && domain !== undefined && domain !== null">
 				{{ domain }}
 			</v-row>
 
-			<v-row class="ma-0 pa-0" justify="center">
+			<v-row class="ma-0 pa-0" justify="center"
+				v-if="domain && domain !== undefined && domain !== null">
 				<v-col cols="6" sm="10" md="8">
 					<v-divider />
 				</v-col>
@@ -81,19 +84,22 @@
 					:label="`${$t('userAccountDropdown.auto_refresh_token')} ${auto_refresh_token ? $t('words.enabled') : $t('words.disabled')}`" />
 			</v-row>
 
-			<v-row class="ma-0 pa-0" justify="center">
+			<v-row class="ma-0 pa-0" justify="center"
+				v-if="realm && realm !== undefined && realm !== null">
 				<v-col cols="6" sm="10" md="8">
 					<v-divider />
 				</v-col>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="realm && realm !== undefined && realm !== null">
+			<v-row cols="12" class="ma-0 pa-0" justify="center"
+				v-if="realm && realm !== undefined && realm !== null">
 				<h4>
 					{{ $t("attribute.ldap.realm") }}
 				</h4>
 			</v-row>
 
-			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="realm && realm !== undefined && realm !== null">
+			<v-row cols="12" class="ma-0 pa-0" justify="center"
+				v-if="realm && realm !== undefined && realm !== null">
 				{{ realm }}
 			</v-row>
 		</div>
@@ -178,34 +184,50 @@
 					<v-text-field :value="totp_uri" readonly :label="$t('userAccountDropdown.totpUri')">
 					</v-text-field>
 					<v-tooltip bottom>
-							<template v-slot:activator="{ on, attrs }">
-								<v-btn
-									v-bind="attrs" v-on="on"
-									class="ml-2"
-									@click="copyTotpUri"
-									icon
-									small>
-									<v-icon small>
-										mdi-content-copy
-									</v-icon>
-								</v-btn>
-							</template>
-							<span>{{ $t("userAccountDropdown.copyTotpUri") }}</span>
-						</v-tooltip>
+						<template v-slot:activator="{ on, attrs }">
+							<v-btn
+								v-bind="attrs" v-on="on"
+								class="ml-2"
+								@click="copyTotpUri"
+								icon
+								small>
+								<v-icon small>
+									mdi-content-copy
+								</v-icon>
+							</v-btn>
+						</template>
+						<span>{{ $t("userAccountDropdown.copyTotpUri") }}</span>
+					</v-tooltip>
 				</v-col>
-				<v-col cols="12" v-if="totp_uri.length > 0 && two_factor_auth && showQR"
+				<v-col
+					cols="12"
+					v-if="totp_uri.length > 0 && two_factor_auth && showQR"
 					class="ma-0 pa-0 d-flex justify-center">
-					<v-card class="ma-0 pa-0 pa-2 pb-0" elevation="0"
-						light width="fit-content" :outlined="!isThemeDark($vuetify)">
-						<QrcodeVue class="ma-0 pa-0" :value="totp_uri" :size="225" level="H" />
+					<v-card
+						class="ma-0 pa-0 pa-2 pb-0"
+						elevation="0"
+						light
+						width="fit-content"
+						:outlined="!isThemeDark($vuetify)">
+						<QrcodeVue
+							class="ma-0 pa-0"
+							:value="totp_uri"
+							:size="225"
+							level="H" />
 					</v-card>
 				</v-col>
 			</v-row>
-			<v-card class="ma-0 pa-0 mx-10" v-if="recovery_codes.length > 0 && !showQR" outlined>
+			<v-card
+				class="ma-0 pa-0 mx-10"
+				v-if="recovery_codes.length > 0 && !showQR"
+				outlined>
 				<v-row
 					class="ma-0 pa-0"
 					justify="center">
-					<v-row class="ma-0 pa-0 my-2" align="center" justify="center">
+					<v-row
+						class="ma-0 pa-0 my-2"
+						align="center"
+						justify="center">
 						<span>
 							{{ $t("userAccountDropdown.recoveryCodes").toUpperCase() }}
 						</span>
@@ -318,6 +340,12 @@ export default {
 		this.loadSettings()
 	},
 	computed: {
+		fullName() {
+			if (this.firstName.length > 0 || this.lastName.length > 0)
+				return `${this.firstName} ${this.lastName}`
+			else
+				return null
+		},
 		noTotp() {
 			return (!this.totp_uri || this.totp_uri.length < 1)
 		},
