@@ -21,7 +21,7 @@
 					ref="loginform">
 					<v-col align="center">
 						<v-expand-transition>
-							<div v-if="showLogin">
+							<div v-if="viewModes.login">
 								<v-row class="ma-0 pa-0 my-4" justify="center" align="center">
 									<v-btn class="ma-0 pa-0 px-2" small outlined color="primary-s"
 										@click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
@@ -97,7 +97,7 @@
 						</v-expand-transition>
 
 						<v-expand-transition>
-							<div v-if="showTotp">
+							<div v-if="viewModes.totp">
 								<!-- TOTP FIELD -->
 								<v-row id="RowRCM" justify="center" class="ma-0 pa-0">
 									<v-slide-y-transition>
@@ -141,7 +141,7 @@
 							</div>
 						</v-expand-transition>
 
-						<OIDCWidget v-if="showOIDC" :application-name="oidc.application" />
+						<OIDCWidget v-if="viewModes.oidc" :application-name="oidc.application" />
 						<!-- ERROR MESSAGE -->
 						<v-row justify="center" class="mt-2">
 							<v-expand-transition>
@@ -155,7 +155,7 @@
 						<!-- LOGIN BUTTONS -->
 						<v-row justify="center" class="pa-2 mt-4">
 							<v-expand-x-transition>
-								<v-col class="ma-0 pa-0" v-if="showTotp">
+								<v-col class="ma-0 pa-0" v-if="viewModes.totp">
 									<v-btn
 										:disabled="submitted || (this.username.length == 0 || this.password.length == 0) || !valid"
 										@click="goBack"
@@ -165,7 +165,7 @@
 								</v-col>
 							</v-expand-x-transition>
 							<v-expand-x-transition>
-								<v-col class="ma-0 pa-0" v-if="showLogin || showTotp">
+								<v-col class="ma-0 pa-0" v-if="viewModes.login || viewModes.totp">
 									<v-btn
 										:loading="submitted"
 										:disabled="disableLoginBtn"
@@ -176,7 +176,7 @@
 								</v-col>
 							</v-expand-x-transition>
 							<v-expand-x-transition>
-								<v-col class="ma-0 pa-0" v-if="showOIDC">
+								<v-col class="ma-0 pa-0" v-if="viewModes.oidc">
 									<v-btn
 										:loading="submitted && oidc.accepted_consent"
 										:disabled="submitted"
@@ -187,7 +187,7 @@
 								</v-col>
 							</v-expand-x-transition>
 							<v-expand-x-transition>
-								<v-col class="ma-0 pa-0" v-if="showOIDC">
+								<v-col class="ma-0 pa-0" v-if="viewModes.oidc">
 									<v-btn
 										:loading="submitted && !oidc.accepted_consent"
 										:disabled="submitted"
@@ -259,7 +259,7 @@ export default {
 				return true
 			if (!this.valid)
 				return true
-			if (this.showTotp) {
+			if (this.viewModes.totp) {
 				if (!this.recovery_mode && this.totp_code.length <= 0) return true
 				if (this.recovery_mode && this.recovery_code.length <= 0) return true
 			}
@@ -268,9 +268,11 @@ export default {
 	},
 	data() {
 		return {
-			showLogin: false,
-			showTotp: false,
-			showOIDC: false,
+			viewModes: {
+				login: false,
+				totp: false,
+				oidc: false
+			},
 			rcm_animation: false,
 			recovery_mode: false,
 			recovery_code: "",
@@ -340,7 +342,7 @@ export default {
 		let userJustLoggedOut = localStorage.getItem('auth.logoutMessage')
 		if (userJustLoggedOut) {
 			this.snackbarMessage = this.$t("misc.loggedOut").toUpperCase()
-			this.showLogin = true
+			this.viewModes.login = true
 			this.logoutSnackbar = true;
 			localStorage.removeItem('auth.logoutMessage')
 		} else {
@@ -361,7 +363,7 @@ export default {
 					if (!ignoreErrorCodes.includes(e.status))
 						console.error(e)
 					else {
-						this.showLogin = true
+						this.viewModes.login = true
 						if (this.next !== "")
 							this.errorMsg = this.$t("section.login.loginForOidc")
 					}
@@ -411,8 +413,8 @@ export default {
 				})
 				.catch(e => {
 					if (e?.code == 401) {
-						this.showLogin = true
-						this.showOIDC = false
+						this.viewModes.login = true
+						this.viewModes.oidc = false
 					}
 					console.error(e)
 					this.errorMsg = this.getMessageForCode(e)
@@ -422,10 +424,10 @@ export default {
 		},
 		redirectOIDC() {
 			if (this.oidc.require_consent == true) {
-				this.showOIDC = true
-				this.showLogin = false
-				this.showTotp = false
+				this.viewModes.login = false
+				this.viewModes.totp = false
 				this.submitted = false
+				this.viewModes.oidc = true
 				if (this.error !== true)
 					this.errorMsg = ""
 			} else {
@@ -440,8 +442,8 @@ export default {
 			}, 300)
 		},
 		goBack() {
-			this.showLogin = true;
-			this.showTotp = false;
+			this.viewModes.totp = false;
+			this.viewModes.login = true;
 		},
 		setLoginTimeout() {
 			this.timedOut = true
@@ -523,8 +525,8 @@ export default {
 					})
 					.catch(e => {
 						if (e?.response?.data?.code == "otp_required") {
-							this.showLogin = false;
-							this.showTotp = true;
+							this.viewModes.login = false;
+							this.viewModes.totp = true;
 							this.submitted = false;
 							this.error = false;
 							return
