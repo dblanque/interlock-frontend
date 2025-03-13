@@ -474,7 +474,7 @@
 										:items="item.choices" />
 									<!-- Password Settings -->
 									<v-text-field
-										v-else-if="item.type == 'password'"
+										v-else-if="item.type == 'password' || item.type == 'crypt'"
 										:type="item.hidden ? 'password' : 'text'"
 										:readonly="item.readonly || readonly == true"
 										required
