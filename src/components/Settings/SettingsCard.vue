@@ -22,10 +22,10 @@
 				{{ $t("actions.restoreDefaultValues") }}
 			</v-btn>
 			<v-btn
-				@click="testSettings" :disabled="readonly || loading"
+				@click="testSettings" :disabled="readonly || loading || !settingClsEnabled('ldap')"
 				elevation="0"
-				:dark="!isThemeDark($vuetify) && !(readonly || loading)"
-				:light="isThemeDark($vuetify) && !(readonly || loading)"
+				:dark="!isThemeDark($vuetify) && !(readonly || loading || !settingClsEnabled('ldap'))"
+				:light="isThemeDark($vuetify) && !(readonly || loading || !settingClsEnabled('ldap'))"
 				class="ma-0 pa-0 pa-4 ma-1 mx-1">
 				<span>
 					{{ $t("actions.testSettings") }}
@@ -278,230 +278,245 @@
 					:label="$t('section.settings.superAdminPwdConfirm')" />
 			</v-col>
 		</v-row>
-		<v-slide-y-transition>
-			<div v-if="showSettings == true">
-				<v-form
-					ref="settingsForm"
-					@submit.prevent>
-					<v-row>
-						<v-col
-							cols="12"
-							v-for="(category, categoryKey) in config"
-							:key="categoryKey">
-							<!-- Category Header -->
-							<v-row
-								class="ma-0 pa-0"
-								justify="center">
-								<h4>
-									{{ $t('section.settings.headers.' + categoryKey) }}
-								</h4>
-							</v-row>
-
-							<!-- Category Body -->
-							<v-row
-								class="ma-1 pa-1"
-								align="center"
-								justify="center"
-								v-for="(row, key) in category"
-								:key="key">
-								<v-col
-									:class="'ma-0 pa-0 py-0 px-4'"
-									cols="10"
-									:md="getColSize(key, 'md')"
-									:lg="getColSize(key, 'lg')"
-									v-for="(item, key) in row"
-									:key="key">
-									<!-- Checkbox Settings -->
-									<v-checkbox
-										:class="'pa-0 ma-0 ' + (key == 'LDAP_AUTH_USE_TLS' ? 'mt-4' : '') + ' ' + item.extraClasses"
-										v-if="item.type == 'checkbox' || item.type == 'boolean' || item.type == 'bool'"
-										v-model="item.value"
-										:disabled="item.disabled"
-										:readonly="item.readonly || readonly == true"
-										:hint="$t(item.hint)"
-										:persistent-hint="item.persistentHint"
-										:label="$t('section.settings.fields.' + key)" />
-									<!-- List / Array of Settings -->
-									<v-card
-										flat
-										outlined
-										class="ma-0 px-6 py-2"
-										v-else-if="item.type == 'list' || item.type == 'array'">
-										<v-row class="ma-0 pa-0">
-											<v-text-field
-												:label="$t('section.settings.fields.' + key)"
-												:readonly="item.readonly || readonly == true"
-												:hint="$t(item.hint)"
-												:persistent-hint="item.persistentHint"
-												@keydown.enter="addToArray(item.add, item, 'LIST_KEY_' + key)"
-												v-model="item.add"
-												:ref="'LIST_KEY_' + key"
-												:required="item.required && item.value.length == 0 ? true : false"
-												:rules="item.validator ? [fieldRules(item.add, item.validator, (item.required && item.value.length == 0 ? true : false))] : undefined"
-												:id="'LIST_KEY_' + key" />
-											<v-btn
-												color="primary"
-												class="mt-3 ml-5"
-												@click="addToArray(item.add, item, 'LIST_KEY_' + key)"
-												:disabled="item.readonly || readonly == true"
-												rounded
-												icon>
-												<v-icon>
-													mdi-plus
-												</v-icon>
-											</v-btn>
-										</v-row>
-										<v-list-item
-											v-for="subItem, subItemKey in item.value"
-											:key="subItemKey">
-											<v-list-item-content>
-												{{ subItem }}
-											</v-list-item-content>
-											<v-list-item-action>
-												<v-btn
-													color="primary"
-													class="ml-5"
-													:disabled="item.readonly || readonly == true"
-													@click="removeFromArray(subItem, item)"
-													rounded
-													small
-													icon>
-													<v-icon small>
-														mdi-minus
-													</v-icon>
-												</v-btn>
-											</v-list-item-action>
-										</v-list-item>
-									</v-card>
-									<!-- LDAP URI Type -->
-									<v-card
-										flat
-										outlined
-										class="ma-0 px-6 py-2"
-										v-else-if="item.type == 'ldap_uri'">
-										<v-row class="ma-0 pa-0">
-											<v-col cols="3">
-												<v-select
-													:label="$t('section.settings.fields.LDAP_URI_PREFIX')"
-													ref="ldapUriPrefix"
-													id="ldapUriPrefix"
-													:readonly="item.readonly || readonly == true"
-													v-model="item.addPREFIX"
-													:items="['ldap://', 'ldaps://']" />
-											</v-col>
-											<v-col>
-												<v-text-field
-													:label="$t('section.settings.fields.LDAP_URI_IP')"
-													:readonly="item.readonly || readonly == true"
-													@keydown.enter="addServer(item)"
-													v-model="item.addIP"
-													ref="ldapUriIP"
-													:required="item.required && item.value.length == 0 ? true : false"
-													:rules="[fieldRules(item.addIP, 'net_ip_uri', (item.required && item.value.length == 0 || item.addPORT.length > 0 ? true : false))]"
-													id="ldapUriIP" />
-											</v-col>
-											<v-col>
-												<v-text-field
-													:label="$t('section.settings.fields.LDAP_URI_PORT')"
-													:readonly="item.readonly || readonly == true"
-													:hint="$t('section.settings.fields.LDAP_URI_PORT_HINT')"
-													persistent-hint
-													@keydown.enter="addServer(item)"
-													v-model="item.addPORT"
-													ref="ldapUriPort"
-													:required="item.required && item.value.length == 0 ? true : false"
-													:rules="[fieldRules(item.addPORT, 'net_port', (item.required && item.value.length == 0 || item.addIP.length > 0 ? true : false))]"
-													id="ldapUriPort" />
-											</v-col>
-											<v-btn
-												color="primary"
-												class="mt-3 ml-5"
-												@click="addServer(item)"
-												:disabled="item.readonly || readonly == true"
-												rounded
-												icon>
-												<v-icon>
-													mdi-plus
-												</v-icon>
-											</v-btn>
-										</v-row>
-										<v-list-item
-											v-for="subItem, subItemKey in item.value"
-											:key="subItemKey">
-											<v-list-item-content>
-												{{ subItem }}
-											</v-list-item-content>
-											<v-list-item-action>
-												<v-btn
-													color="primary"
-													class="ml-5"
-													@click="removeFromArray(subItem, item)"
-													:disabled="item.readonly || readonly == true"
-													rounded
-													small
-													icon>
-													<v-icon small>
-														mdi-minus
-													</v-icon>
-												</v-btn>
-											</v-list-item-action>
-										</v-list-item>
-									</v-card>
-									<!-- Object Type Settings -->
-									<v-card
-										flat
-										outlined
-										class="ma-0 px-6 py-2 pt-4"
-										v-else-if="item.type == 'object' || item.type == 'json'">
-										<ObjectEditor
-											:value="item.value"
-											:label="$t('section.users.import.dataMapping')"
-											ref="settingFieldsEditor"
-											@update="v => item.value = v"
-											dense
-											:disableAddDelete="!item.allow_add_delete"
-											:required="item.required" />
-									</v-card>
-									<!-- Select Settings -->
-									<v-select
-										:label="$t('section.settings.fields.' + key)"
-										v-else-if="item.type == 'select' || item.type == 'ldap_tls'"
-										:readonly="item.readonly || readonly == true"
-										v-model="item.value"
-										:hint="$t(item.hint)"
-										:persistent-hint="item.persistentHint"
-										:id="key"
-										:items="item.choices" />
-									<!-- Password Settings -->
-									<v-text-field
-										v-else-if="item.type == 'password' || item.type == 'crypt'"
-										:type="item.hidden ? 'password' : 'text'"
-										:readonly="item.readonly || readonly == true"
-										required
-										:append-icon="readonly == true ? undefined : (item.hidden ? 'mdi-eye' : 'mdi-eye-off')"
-										@click:append="() => (item.hidden = !item.hidden)"
-										dense
-										:label="$t('attribute.ldap.password')"
-										v-model="item.value"
-										:rules="[fieldRules(item.value, 'ge_password', getRequired(item.required))]" />
-									<!-- Text Field Settings -->
-									<v-text-field
-										:label="$t('section.settings.fields.' + key)"
-										v-else
-										:class="item.extraClasses"
-										:readonly="item.readonly || readonly == true"
-										:hint="$t(item.hint)"
-										:rules="item.validator ? [fieldRules(item.value, item.validator, item.required)] : undefined"
-										:persistent-hint="item.persistentHint"
-										v-model="item.value"
-										:id="key" />
-								</v-col>
-							</v-row>
-						</v-col>
+		<v-expansion-panels
+			class="mb-6"
+			multiple
+			accordion
+			flat>
+			<v-expansion-panel
+				v-for="(cls, clsKey) in config"
+				:disabled="!settingClsEnabled(clsKey)"
+				:key="clsKey">
+				<v-expansion-panel-header ripple>
+					<v-row no-gutters justify="center">
+						{{ $t(`section.settings.headers.${clsKey}.title`) }}
 					</v-row>
-				</v-form>
-			</div>
-		</v-slide-y-transition>
+				</v-expansion-panel-header>
+				<v-expansion-panel-content class="mt-6 mb-2 pa-0" eager>
+					<v-form
+						:disabled="!settingClsEnabled(clsKey)"
+						:ref="`${clsKey}SettingsForm`"
+						@submit.prevent>
+						<v-row>
+							<v-col
+								cols="12"
+								v-for="(category, categoryKey) in cls"
+								:key="categoryKey">
+								<!-- Category Header -->
+								<v-row
+									class="ma-0 pa-0"
+									justify="center">
+									<h4>
+										{{ $t(`section.settings.headers.${clsKey}.${categoryKey}`) }}
+									</h4>
+								</v-row>
+
+								<!-- Category Body -->
+								<v-row
+									class="ma-1 pa-1"
+									align="center"
+									justify="center"
+									v-for="(row, rowKey) in category"
+									:key="rowKey">
+									<v-col
+										:class="'ma-0 pa-0'"
+										cols="10"
+										:md="getColSize(rowKey, 'md')"
+										:lg="getColSize(rowKey, 'lg')"
+										v-for="(item, key) in row"
+										:key="key">
+										<!-- Checkbox Settings -->
+										<v-checkbox
+											:class="'pa-0 ma-0 ' + (key == 'LDAP_AUTH_USE_TLS' ? 'mt-4' : '') + ' ' + item.extraClasses"
+											v-if="item.type == 'checkbox' || item.type == 'boolean' || item.type == 'bool'"
+											v-model="item.value"
+											:disabled="item.disabled"
+											:readonly="item.readonly || readonly == true"
+											:hint="$t(item.hint)"
+											:persistent-hint="item.persistentHint"
+											:label="$t('section.settings.fields.' + key)" />
+										<!-- List / Array of Settings -->
+										<v-card
+											flat
+											outlined
+											class="ma-0 px-6 py-2"
+											v-else-if="item.type == 'list' || item.type == 'array'">
+											<v-row class="ma-0 pa-0">
+												<v-text-field
+													:label="$t('section.settings.fields.' + key)"
+													:readonly="item.readonly || readonly == true"
+													:hint="$t(item.hint)"
+													:persistent-hint="item.persistentHint"
+													@keydown.enter="addToArray(item.add, item, 'LIST_KEY_' + key)"
+													v-model="item.add"
+													:ref="'LIST_KEY_' + key"
+													:required="item.required && item.value.length == 0 ? true : false"
+													:rules="item.validator ? [fieldRules(item.add, item.validator, (item.required && item.value.length == 0 ? true : false))] : undefined"
+													:id="'LIST_KEY_' + key" />
+												<v-btn
+													color="primary"
+													class="mt-3 ml-5"
+													@click="addToArray(item.add, item, 'LIST_KEY_' + key)"
+													:disabled="item.readonly || readonly == true || !settingClsEnabled(clsKey)"
+													rounded
+													icon>
+													<v-icon>
+														mdi-plus
+													</v-icon>
+												</v-btn>
+											</v-row>
+											<v-list-item
+												v-for="subItem, subItemKey in item.value"
+												:key="subItemKey">
+												<v-list-item-content>
+													{{ subItem }}
+												</v-list-item-content>
+												<v-list-item-action>
+													<v-btn
+														color="primary"
+														class="ml-5"
+														:disabled="item.readonly || readonly == true || !settingClsEnabled(clsKey)"
+														@click="removeFromArray(subItem, item)"
+														rounded
+														small
+														icon>
+														<v-icon small>
+															mdi-minus
+														</v-icon>
+													</v-btn>
+												</v-list-item-action>
+											</v-list-item>
+										</v-card>
+										<!-- LDAP URI Type -->
+										<v-card
+											flat
+											outlined
+											class="ma-0 px-6 py-2"
+											v-else-if="item.type == 'ldap_uri'">
+											<v-row class="ma-0 pa-0">
+												<v-col cols="3">
+													<v-select
+														:label="$t('section.settings.fields.LDAP_URI_PREFIX')"
+														ref="ldapUriPrefix"
+														id="ldapUriPrefix"
+														:readonly="item.readonly || readonly == true"
+														v-model="item.addPREFIX"
+														:items="['ldap://', 'ldaps://']" />
+												</v-col>
+												<v-col>
+													<v-text-field
+														:label="$t('section.settings.fields.LDAP_URI_IP')"
+														:readonly="item.readonly || readonly == true"
+														@keydown.enter="addServer(item)"
+														v-model="item.addIP"
+														ref="ldapUriIP"
+														:required="item.required && item.value.length == 0 ? true : false"
+														:rules="[fieldRules(item.addIP, 'net_ip_uri', (item.required && item.value.length == 0 || item.addPORT.length > 0 ? true : false))]"
+														id="ldapUriIP" />
+												</v-col>
+												<v-col>
+													<v-text-field
+														:label="$t('section.settings.fields.LDAP_URI_PORT')"
+														:readonly="item.readonly || readonly == true"
+														:hint="$t('section.settings.fields.LDAP_URI_PORT_HINT')"
+														persistent-hint
+														@keydown.enter="addServer(item)"
+														v-model="item.addPORT"
+														ref="ldapUriPort"
+														:required="item.required && item.value.length == 0 ? true : false"
+														:rules="[fieldRules(item.addPORT, 'net_port', (item.required && item.value.length == 0 || item.addIP.length > 0 ? true : false))]"
+														id="ldapUriPort" />
+												</v-col>
+												<v-btn
+													color="primary"
+													class="mt-3 ml-5"
+													@click="addServer(item)"
+													:disabled="item.readonly || readonly == true || !settingClsEnabled(clsKey)"
+													rounded
+													icon>
+													<v-icon>
+														mdi-plus
+													</v-icon>
+												</v-btn>
+											</v-row>
+											<v-list-item
+												v-for="subItem, subItemKey in item.value"
+												:key="subItemKey">
+												<v-list-item-content>
+													{{ subItem }}
+												</v-list-item-content>
+												<v-list-item-action>
+													<v-btn
+														color="primary"
+														class="ml-5"
+														@click="removeFromArray(subItem, item)"
+														:disabled="item.readonly || readonly == true || !settingClsEnabled(clsKey)"
+														rounded
+														small
+														icon>
+														<v-icon small>
+															mdi-minus
+														</v-icon>
+													</v-btn>
+												</v-list-item-action>
+											</v-list-item>
+										</v-card>
+										<!-- Object Type Settings -->
+										<v-card
+											flat
+											outlined
+											class="ma-0 px-6 py-2 pt-4"
+											v-else-if="item.type == 'object' || item.type == 'json'">
+											<ObjectEditor
+												:value="item.value"
+												:label="$t('section.users.import.dataMapping')"
+												ref="settingFieldsEditor"
+												@update="v => item.value = v"
+												dense
+												:disableAddDelete="!item.allow_add_delete"
+												:required="item.required" />
+										</v-card>
+										<!-- Select Settings -->
+										<v-select
+											:label="$t('section.settings.fields.' + key)"
+											v-else-if="item.type == 'select' || item.type == 'ldap_tls'"
+											:readonly="item.readonly || readonly == true"
+											v-model="item.value"
+											:hint="$t(item.hint)"
+											:persistent-hint="item.persistentHint"
+											:id="key"
+											:items="item.choices" />
+										<!-- Password Settings -->
+										<v-text-field
+											v-else-if="item.type == 'password' || item.type == 'crypt'"
+											:type="item.hidden ? 'password' : 'text'"
+											:readonly="item.readonly || readonly == true"
+											required
+											:append-icon="readonly == true ? undefined : (item.hidden ? 'mdi-eye' : 'mdi-eye-off')"
+											@click:append="() => (item.hidden = !item.hidden)"
+											dense
+											:label="$t('attribute.ldap.password')"
+											v-model="item.value"
+											:rules="[fieldRules(item.value, 'ge_password', getRequired(item.required))]" />
+										<!-- Text Field Settings -->
+										<v-text-field
+											:label="$t('section.settings.fields.' + key)"
+											v-else
+											:class="item.extraClasses"
+											:readonly="item.readonly || readonly == true"
+											:hint="$t(item.hint)"
+											:rules="item.validator ? [fieldRules(item.value, item.validator, item.required)] : undefined"
+											:persistent-hint="item.persistentHint"
+											v-model="item.value"
+											:id="key" />
+									</v-col>
+								</v-row>
+							</v-col>
+						</v-row>
+					</v-form>
+				</v-expansion-panel-content>
+			</v-expansion-panel>
+		</v-expansion-panels>
 
 		<v-dialog
 			v-model="resetDialog"
@@ -532,7 +547,6 @@ export default {
 	},
 	data() {
 		return {
-			savedSettings: false,
 			checking_backend: false,
 			backend_offline: false,
 			testing: false,
@@ -543,7 +557,6 @@ export default {
 			invalid: false,
 			loading: true,
 			resetDialog: false,
-			showSettings: false,
 			defaultAdminEnabled: true,
 			defaultAdminPwd: "",
 			defaultAdminPwdConfirm: "",
@@ -552,7 +565,19 @@ export default {
 			newPresetLabel: "",
 			addingProfile: false,
 			renamingProfile: false,
-			config: LDAPSettings
+			config: {
+				local: {
+					general: {
+						row1: {
+							ILCK_ENABLE_LDAP: {
+								value: false,
+								type: "boolean",
+							}
+						}
+					}
+				},
+				ldap: LDAPSettings
+			}
 		}
 	},
 	props: {
@@ -568,6 +593,13 @@ export default {
 		}
 	},
 	watch: {
+		// config: {
+		// 	deep: true,
+		// 	immediate: true,
+		// 	handler: function (val, oldVal) {
+		// 		console.log(val)
+		// 	}
+		// },
 		addingProfile(new_v) {
 			if (new_v === true) this.newPresetLabel = ""
 		},
@@ -605,9 +637,8 @@ export default {
 
 			let currentPath = this[value[0]]
 			value.forEach(function callback(subpath, key) {
-				if (key != 0) {
+				if (key != 0)
 					currentPath = currentPath[subpath]
-				}
 			});
 			if (sameObject == true && valueField == true)
 				return currentPath['keyToAdd']
@@ -642,42 +673,37 @@ export default {
 			}
 		},
 		async testSettings() {
-			if (this.$refs.settingsForm.validate('settingsForm') &&
-				this.$refs.defaultAdminPwd.validate() &&
-				this.$refs.defaultAdminPwdConfirm.validate()) {
-				this.invalid = false
-				this.testing = true
-				this.testFinished = false
-				this.testError = false
-			}
-			else {
+			this.loading = true
+			this.invalid = false
+			if (!this.validateSettings() ||
+				!this.$refs.defaultAdminPwd.validate() ||
+				!this.$refs.defaultAdminPwdConfirm.validate())
 				this.invalid = true
-				this.testing = false
-				this.testFinished = true
-				this.testError = true
-			}
 
-			if (!this.invalid) {
-				var dataToSend = {}
-				dataToSend = this.getConfigValues()
-				await new Settings({}).test(dataToSend).then(() => {
+			if (this.invalid)
+				return
+
+			await new Settings({}).test(this.getConfigValues()['ldap']).then(() => {
+				setTimeout(() => {
+					this.loading = false
+					this.readonly = false
+					this.testing = false
+					this.testFinished = true
+					this.testError = false
+					this.createSnackbar({ message: (this.$t("section.settings.testSuccess")).toUpperCase(), type: 'success' })
+				}, 500)
+			})
+				.catch(error => {
+					console.error(error)
+					this.createSnackbar({ message: this.getMessageForCode(error), type: 'error' })
 					setTimeout(() => {
+						this.loading = false
+						this.readonly = false
 						this.testing = false
 						this.testFinished = true
-						this.testError = false
-						this.createSnackbar({ message: (this.$t("section.settings.testSuccess")).toUpperCase(), type: 'success' })
+						this.testError = true
 					}, 500)
 				})
-					.catch(error => {
-						console.error(error)
-						this.createSnackbar({ message: this.getMessageForCode(error), type: 'error' })
-						setTimeout(() => {
-							this.testing = false
-							this.testFinished = true
-							this.testError = true
-						}, 500)
-					})
-			}
 		},
 		async sleep(time_in_milliseconds) {
 			clearTimeout(this.saveTimerId)
@@ -708,43 +734,68 @@ export default {
 			return
 		},
 		async saveSettings() {
-			if (this.$refs.settingsForm.validate('settingsForm') &&
-				this.$refs.defaultAdminPwd.validate() &&
-				this.$refs.defaultAdminPwdConfirm.validate())
-				this.invalid = false
-			else
+			this.invalid = false
+			if (!this.validateSettings() ||
+				!this.$refs.defaultAdminPwd.validate() ||
+				!this.$refs.defaultAdminPwdConfirm.validate())
 				this.invalid = true
 
-			if (!this.invalid) {
-				this.loading = true
-				var dataToSend = {}
-				dataToSend = this.getConfigValues()
-				dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
-				dataToSend['DEFAULT_ADMIN_PWD'] = this.defaultAdminPwd
-				let preset = {}
-				preset["id"] = this.presetId
-				if (this.renamingProfile === true && this.newPresetLabel.length > 0)
-					preset["label"] = this.newPresetLabel
-				await new Settings({}).save({ settings: dataToSend, preset: preset }).then(response => {
-					this.savedSettings = true
-					this.createSnackbar({ message: (this.$tc("classes.setting", 5) + " " + this.$tc("words.saved.m", 5)).toUpperCase(), type: 'success' })
-				})
-					.catch(error => {
-						console.error(error)
-						this.createSnackbar({ message: this.getMessageForCode(error), type: 'error' })
+			if (this.invalid === true)
+				return
+
+			this.loading = true
+			var dataToSend = {}
+			dataToSend = this.getConfigValues()
+			dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
+			dataToSend['DEFAULT_ADMIN_PWD'] = this.defaultAdminPwd
+			let preset = {}
+			preset["id"] = this.presetId
+			if (this.renamingProfile === true && this.newPresetLabel.length > 0)
+				preset["label"] = this.newPresetLabel
+			await new Settings({}).save({ settings: dataToSend, preset: preset })
+				.then(() => {
+					this.loading = false
+					this.readonly = false
+					this.createSnackbar({
+						message: (`${this.$tc("classes.setting", 5)} ${this.$tc("words.saved.m", 5)}`).toUpperCase(),
+						type: 'success'
 					})
-				await this.backendAlive().then(() => {
-					this.refreshSettings(false)
 				})
-				this.loading = false
+				.catch(error => {
+					console.error(error)
+					this.loading = false
+					this.readonly = false
+					this.createSnackbar({ message: this.getMessageForCode(error), type: 'error' })
+				})
+			await this.backendAlive().then(() => {
+				this.refreshSettings(false)
+			})
+		},
+		getSettingValue(clsKey, valueKey) {
+			for (const [categoryKey, category] of Object.entries(this.config[clsKey])) {
+				for (const [rowKey, row] of Object.entries(category)) {
+					if (valueKey in row) {
+						return row[valueKey].value
+					}
+				}
 			}
 		},
+		settingClsEnabled(clsKey) {
+			if (clsKey == "ldap")
+				return this.getSettingValue("local", "ILCK_ENABLE_LDAP") === true
+			return true
+		},
 		validateSettings() {
-			if (this.$refs.settingsForm != undefined)
-				if (this.$refs.settingsForm.validate('settingsForm'))
-					this.invalid = false
-				else
-					this.invalid = true
+			this.invalid = false
+			const configKeys = Object.keys(this.config)
+			for (let i = 0; i < configKeys.length; i++) {
+				const clsKey = configKeys[i];
+				const ref = `${clsKey}SettingsForm`
+				const refLen = this.$refs[ref] ? this.$refs[ref].length : 0
+				if (this.$refs[ref][refLen - 1] !== undefined)
+					if (!this.$refs[ref][refLen - 1].validate())
+						this.invalid = true
+			}
 
 			this.readonly = true
 			if (this.testFinished) {
@@ -752,8 +803,23 @@ export default {
 				this.testFinished = false
 				this.testError = false
 			}
+			return !this.invalid
+		},
+		setSettingsClassData(cls, settings) {
+			let config = this.config[cls]
+			for (const category of Object.values(config)) {
+				for (const row of Object.values(category)) {
+					for (const settingKey in row) {
+						if (settingKey in settings) {
+							row[settingKey].value = settings[settingKey].value
+							row[settingKey].type = settings[settingKey].type
+						}
+					}
+				}
+			}
 		},
 		async refreshSettings(snackbar = true, resetPreset = false) {
+			this.readonly = true
 			this.loading = true
 			this.invalid = false
 			this.testing = false
@@ -763,6 +829,7 @@ export default {
 				this.addingProfile = false
 				this.renamingProfile = false
 			}
+			// Fetch Presets
 			await new Settings({}).list()
 				.then(r => {
 					this.presets = r.data.presets
@@ -773,40 +840,27 @@ export default {
 					console.error(e)
 					this.loading = false
 					this.createSnackbar({ message: this.getMessageForCode(e), type: 'error' })
-					setTimeout(() => {
-						this.showSettings = false
-					}, 250)
 					this.error = true
 					this.readonly = false
 				})
+
+			// Fetch Current Preset Data
 			await new Settings({}).fetch(this.presetId)
 				.then(response => {
-					let settings = response.data.settings.ldap
-					this.defaultAdminEnabled = settings['DEFAULT_ADMIN_ENABLED']
+					const data = response.data.settings
+					this.defaultAdminEnabled = data.ldap['DEFAULT_ADMIN_ENABLED']
 					this.defaultAdminPwd = ""
 					this.defaultAdminPwdConfirm = ""
-					for (const key in settings) {
-						if (Object.hasOwnProperty.call(settings, key)) {
-							var value = settings[key]['value'];
-							const type = settings[key]['type'];
-							for (const category in this.config) {
-								for (const row in this.config[category]) {
-									var currentPath = this.config[category][row]
-									for (const settingKey in currentPath) {
-										if (settingKey == key) {
-											currentPath[settingKey]['value'] = value
-											currentPath[settingKey]['type'] = type
-										}
-									}
-								}
-							}
+
+					for (const cls in data) {
+						if (Object.prototype.hasOwnProperty.call(data, cls)) {
+							this.setSettingsClassData(cls, data[cls])
 						}
 					}
 					this.loading = false
 					if (snackbar === true)
 						this.createSnackbar({ message: (this.$tc("classes.setting", 5) + " " + this.$tc("words.loaded.m", 5)).toUpperCase(), type: 'success' })
 					setTimeout(() => {
-						this.showSettings = true
 						this.readonly = false
 						this.$emit("refreshDomain")
 					}, 300)
@@ -816,9 +870,6 @@ export default {
 					console.error(error)
 					this.loading = false
 					this.createSnackbar({ message: this.getMessageForCode(error), type: 'error' })
-					setTimeout(() => {
-						this.showSettings = false
-					}, 250)
 					this.error = true
 					this.readonly = false
 				})
@@ -889,33 +940,30 @@ export default {
 				})
 		},
 		getConfigValues(log = false) {
-			var dataToSend = {}
-			for (const category in this.config) {
-				for (const row in this.config[category]) {
-					var currentPath = this.config[category][row]
-					for (const settingKey in currentPath) {
-						dataToSend[settingKey] = {}
-						dataToSend[settingKey]['value'] = currentPath[settingKey]['value']
-						if (currentPath[settingKey]['type'])
-							dataToSend[settingKey]['type'] = currentPath[settingKey]['type']
-						else
-							dataToSend[settingKey]['type'] = 'string'
+			let dataToSend = {}
+			try {
+				for (const [clsKey, cls] of Object.entries(this.config)) {
+					dataToSend[clsKey] = {}
+					for (const [categoryKey, category] of Object.entries(cls)) {
+						for (const [rowKey, row] of Object.entries(category)) {
+							let currentPath = row
+							for (const settingKey in currentPath) {
+								dataToSend[clsKey][settingKey] = {}
+								dataToSend[clsKey][settingKey]['value'] = currentPath[settingKey]['value']
+								if (currentPath[settingKey]['type'])
+									dataToSend[clsKey][settingKey]['type'] = currentPath[settingKey]['type']
+								else
+									dataToSend[clsKey][settingKey]['type'] = 'string'
+							}
+						}
 					}
 				}
+			} catch (error) {
+				console.error(error)
 			}
 			if (log == true)
 				console.log(dataToSend)
 			return dataToSend
-		},
-		addToObject(object, key, value) {
-			object['value'][key] = value
-			object.valueToAdd = ""
-			object.keyToAdd = ""
-		},
-		removeFromObject(object, key) {
-			delete object['value'][key];
-			// For some reason the v-bind isn't registering when removing an item
-			this.$forceUpdate()
 		},
 		addServer(item) {
 			var fieldsToValidate = [
