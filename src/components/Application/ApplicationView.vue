@@ -278,8 +278,7 @@ export default {
 			this.fetchingData = true
 			this.selectedApplication.id = item.id
 			this.selectedApplication.name = item.name
-			this.applicationObject = new Application({})
-			await this.applicationObject.fetch(this.selectedApplication.id)
+			await new Application({}).fetch(this.selectedApplication.id)
 			.then(response => {
 				this.applicationObject = response.data
 				if (this.dialogs.update !== true) {

@@ -166,6 +166,7 @@
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import Application from '@/include/Application.js';
+import { notificationBus } from '@/main.js';
 
 export default {
 	name: 'ApplicationCreate',
@@ -174,7 +175,7 @@ export default {
 	data () {
 		return {
 		createStage: 1,
-		applicationObject: {},
+		applicationObject: new Application({}),
 		scopeToAdd: "",
 		success: false,
 		loading: true,
@@ -195,16 +196,15 @@ export default {
 		dialogKey: String
 	},
 	created(){
-		this.newApplication
-	},
-	computed:{
+		this.newApplication()
 	},
 	methods: {
 		updateApplicationData(newData) {
-			this.applicationObject = newData
+			this.applicationObject = Object.assign({}, newData)
 		},
 		async newApplication(){
-			this.applicationObject = new Application({}).oidc_well_known()
+			this.applicationObject = new Application({})
+			await this.applicationObject.oidc_well_known()
 			.then(response => {
 				this.$refs.ApplicationForm.resetValidation()
 				this.applicationObject.name = ""
@@ -279,7 +279,7 @@ export default {
 			this.error = false
 			this.errorMsg = ""
 			this.createStage += 1
-			await this.applicationObject.insert(this.applicationObject)
+			await new Application({}).insert(this.applicationObject)
 			.then(response => {
 				if (response.status == 200) {
 					this.error = false;

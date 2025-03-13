@@ -142,7 +142,7 @@ export default {
 			this.applicationCopy = {}
 		},
 		updateApplicationData(newData) {
-			this.applicationCopy = newData
+			this.applicationCopy = Object.assign({}, newData)
 		},
 		syncApplication() {
 			this.resetApplication()
