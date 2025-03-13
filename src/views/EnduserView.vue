@@ -332,7 +332,7 @@
 					<v-row justify="center" class="pa-0 ma-0" align="center">
 						<!-- Reset Password Button -->
 						<v-btn color="primary" @click="openDialog('userResetPassword')"
-							:disabled="!user.can_change_pwd && isLDAPUser"
+							:disabled="!user.can_change_pwd && user_type == 'ldap'"
 							class="ma-0 pa-0 pa-4 ma-1"
 							rounded>
 							<v-icon class="mr-1">
@@ -464,6 +464,7 @@ export default {
 			first_name: "",
 			last_name: "",
 			email: "",
+			user_type: "local",
 			user: {},
 			usercopy: {},
 			domain: "",
@@ -492,6 +493,7 @@ export default {
 				this.first_name = localStorage.getItem('user.first_name')
 				this.last_name = localStorage.getItem('user.last_name')
 				this.email = localStorage.getItem('user.email')
+				this.user_type = localStorage.getItem('user.user_type')
 				this.refreshTokenExpiryData()
 
 				new Domain({}).getDetails().then(() => {
@@ -517,10 +519,8 @@ export default {
 		this.refreshUser()
 	},
 	computed: {
-		isLDAPUser() {
-			if (this.user !== undefined && this.user !== null)
-				return this.user?.user_type == 'ldap'
-			return false
+		async isLDAPUser() {
+			return await this.getUserType() === 'ldap'
 		},
 		getUSN() {
 			return `${this.user.username}@${this.domain}`
@@ -626,9 +626,9 @@ export default {
 					break;
 			}
 		},
-		async closeDialog(key) {
+		async closeDialog(key, extra) {
 			this.dialogs[key] = false;
-			if (key == 'userResetPassword')
+			if (key == 'userResetPassword' && extra === true)
 				this.showLogoutDialog = true
 		},
 		closeRefreshDialog() {

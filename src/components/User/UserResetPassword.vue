@@ -143,10 +143,10 @@ export default {
 			this.$refs.userResetPasswordForm.resetValidation()
 		},
 		async closeDialog(resetConfirm = false, user = {}) {
-			if (resetConfirm != true)
-				this.$emit('closeDialog', this.dialogKey);
+			if (resetConfirm !== true)
+				this.$emit('closeDialog', this.dialogKey, resetConfirm);
 			if (this.isEndUser === true) {
-				if (resetConfirm == true && this.$refs.userResetPasswordForm.validate()) {
+				if (resetConfirm === true && this.$refs.userResetPasswordForm.validate()) {
 					this.loading = true
 					await new this.userClass({}).selfChangePassword(user)
 						.then(response => {
@@ -160,7 +160,7 @@ export default {
 									message: this.$t('section.logs.extras.changed_password'),
 									type: "success"
 								});
-							this.$emit('closeDialog', this.dialogKey);
+							this.$emit('closeDialog', this.dialogKey, resetConfirm);
 						})
 						.catch(error => {
 							setTimeout(() => {
