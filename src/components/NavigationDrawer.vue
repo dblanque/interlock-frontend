@@ -11,8 +11,7 @@
 		:temporary="mobile"
 		:fixed="mobile"
 		:bottom="mobile"
-		:width="320"
-	>
+		:width="320">
 		<v-list dense nav expand>
 			<!-- Top Tabs -->
 			<v-list-item
@@ -21,8 +20,7 @@
 				:color="componentColor"
 				:input-value="tab.title == selectedTabTitle"
 				@click="updateSelectedTab(tab.index)"
-				:disabled="!tab.enabled || lockNavTabs"
-			>
+				:disabled="!tab.enabled || lockNavTabs">
 				<v-list-item-icon>
 					<v-icon>{{ tab.icon }}</v-icon>
 				</v-list-item-icon>
@@ -43,24 +41,35 @@
 				:value="navDrawerOpenGroups.group"
 				:disabled="!navGroupSettings.enabled"
 				:append-icon="!navGroupSettings.enabled ? 'mdi-minus' : undefined"
-				multiple
-			>
-			<template v-slot:activator>
-				<v-list-item-icon>
-					<v-icon>
-						{{ navGroupSettings.icon  }}
-					</v-icon>
-				</v-list-item-icon>
-				<v-list-item-title>{{ $t("navgroup." + navGroup) }}</v-list-item-title>
-			</template>
+				multiple>
+				<template v-slot:activator>
+					<!-- About -->
+					<v-tooltip
+						:disabled="!('tooltip' in navGroupSettings) ||
+							navGroupSettings.tooltip === undefined ||
+							navGroupSettings === null"
+						right
+						color="primary">
+						<template v-slot:activator="{ on, attrs }">
+							<v-list-item v-bind="attrs" v-on="on">
+								<v-list-item-icon>
+									<v-icon>
+										{{ navGroupSettings.icon }}
+									</v-icon>
+								</v-list-item-icon>
+								<v-list-item-title>{{ $t("navgroup." + navGroup) }}</v-list-item-title>
+							</v-list-item>
+						</template>
+						<span>{{ navGroupSettings.tooltip }}</span>
+					</v-tooltip>
+				</template>
 				<v-list-item
 					v-for="tab in getVisibleTabsInGroup(navGroup)"
 					:key="tab.index"
 					:color="componentColor"
 					@click="updateSelectedTab(tab.index)"
 					:input-value="tab.title == selectedTabTitle"
-					:disabled="!tab.enabled || lockNavTabs"
-				>
+					:disabled="!tab.enabled || lockNavTabs">
 					<v-list-item-icon>
 						<v-icon>{{ tab.icon }}</v-icon>
 					</v-list-item-icon>
@@ -84,8 +93,7 @@
 				:color="componentColor"
 				@click="updateSelectedTab(tab.index)"
 				:input-value="tab.title == selectedTabTitle"
-				:disabled="!tab.enabled || lockNavTabs"
-			>
+				:disabled="!tab.enabled || lockNavTabs">
 				<v-list-item-icon>
 					<v-icon>{{ tab.icon }}</v-icon>
 				</v-list-item-icon>
@@ -129,42 +137,42 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				navDrawerOpen: false,
-				navDrawerKeepOpen: false,
-				navDrawerOpenGroups: {},
-				componentColor: "primary-45",
-			}
-		},
-		props: {
-			mobile: {
-				type: Boolean,
-				default: false
-			},
-			expandedOnCreate: Boolean,
-			selectedTab: Number,
-			selectedTabTitle: String,
-			navGroups: Object,
-			topTabs: Array,
-			bottomTabs: Array,
-			lockNavTabs: Boolean,
-			getVisibleTabsInGroup: Function
-		},
-		created() {
-			if (this.expandedOnCreate === true)
-				this.navDrawerKeepOpen = true;
-			if (!this.mobile)
-				this.navDrawerOpen = true;
-		},
-		methods: {
-			updateSelectedTab(tabIndex) {
-				this.$emit("updateSelectedTab", tabIndex);
-			},
-			toggle(){
-				this.navDrawerOpen = !this.navDrawerOpen;
-			},
+export default {
+	data() {
+		return {
+			navDrawerOpen: false,
+			navDrawerKeepOpen: false,
+			navDrawerOpenGroups: {},
+			componentColor: "primary-45",
 		}
+	},
+	props: {
+		mobile: {
+			type: Boolean,
+			default: false
+		},
+		expandedOnCreate: Boolean,
+		selectedTab: Number,
+		selectedTabTitle: String,
+		navGroups: Object,
+		topTabs: Array,
+		bottomTabs: Array,
+		lockNavTabs: Boolean,
+		getVisibleTabsInGroup: Function
+	},
+	created() {
+		if (this.expandedOnCreate === true)
+			this.navDrawerKeepOpen = true;
+		if (!this.mobile)
+			this.navDrawerOpen = true;
+	},
+	methods: {
+		updateSelectedTab(tabIndex) {
+			this.$emit("updateSelectedTab", tabIndex);
+		},
+		toggle() {
+			this.navDrawerOpen = !this.navDrawerOpen;
+		},
 	}
+}
 </script>

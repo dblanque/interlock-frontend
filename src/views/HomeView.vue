@@ -456,16 +456,6 @@ export default {
       ],
     };
   },
-  watch: {
-    domain: {
-      handler: function (v) {
-        if (!v)
-          this.navGroups["ldap"].enabled = false
-        else
-          this.navGroups["ldap"].enabled = true
-      }
-    },
-  },
   async created() {
     let tabIndex = 0
     if (this.$vuetify.breakpoint.mdAndUp)
@@ -524,6 +514,11 @@ export default {
     // this.requestRefresh = this.selectedTabTitle
   },
   computed: {
+    ldapBackendDisabled() {
+      return [this.domain, this.realm, this.basedn].some(
+        v => v === undefined || v === null || v.length <= 0
+      )
+    },
     drawerIsDesktop() {
       return this.$vuetify.breakpoint.lgAndUp
     },
@@ -608,6 +603,15 @@ export default {
       this.realm = domainData["realm"];
       this.basedn = domainData["basedn"];
     },
+    setLDAPBackendStatus() {
+      if (this.ldapBackendDisabled) {
+        this.navGroups["ldap"].enabled = false
+        this.navGroups.ldap.tooltip = this.$t("navgroup.ldap_hint")
+      } else {
+        this.navGroups["ldap"].enabled = true
+        delete this.navGroups.ldap.tooltip
+      }
+    },
     async fetchDomainDetails() {
       this.fetchingDomainDetails = true
       this.disableDomainDetailsButton = true
@@ -616,6 +620,7 @@ export default {
         this.domain = domainData['name']
         this.realm = domainData['realm']
         this.basedn = domainData['basedn']
+        this.setLDAPBackendStatus()
         this.fetchingDomainDetails = false
         if ('debug' in domainData)
           this.enableDebug = (domainData['debug'] === "true")
@@ -623,6 +628,7 @@ export default {
         setTimeout(() => { this.disableDomainDetailsButton = false }, 0.5e3)
       })
         .catch(e => {
+          this.setLDAPBackendStatus()
           console.error(e)
           this.fetchingDomainDetails = false
           setTimeout(() => { this.disableDomainDetailsButton = false }, 0.5e3)
