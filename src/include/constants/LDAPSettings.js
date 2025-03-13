@@ -90,7 +90,7 @@ const config = {
 				value: "",
 				type: "password",
 				hidden: true,
-				required: 'config.bindUser.row1.LDAP_AUTH_CONNECTION_USER_DN'
+				required: 'config.ldap.bindUser.row1.LDAP_AUTH_CONNECTION_USER_DN'
 			}
 		}
 	},
