@@ -465,7 +465,7 @@
 									<!-- Select Settings -->
 									<v-select
 										:label="$t('section.settings.fields.' + key)"
-										v-else-if="item.type == 'select' || item.type == 'tls'"
+										v-else-if="item.type == 'select' || item.type == 'ldap_tls'"
 										:readonly="item.readonly || readonly == true"
 										v-model="item.value"
 										:hint="$t(item.hint)"
@@ -781,7 +781,7 @@ export default {
 				})
 			await new Settings({}).fetch(this.presetId)
 				.then(response => {
-					let settings = response.data.settings
+					let settings = response.data.settings.ldap
 					this.defaultAdminEnabled = settings['DEFAULT_ADMIN_ENABLED']
 					this.defaultAdminPwd = ""
 					this.defaultAdminPwdConfirm = ""
