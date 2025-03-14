@@ -318,8 +318,6 @@ export default {
 		},
 		sync() {
 			this.localData = Object.assign({}, this.applicationObject)
-			console.log("Changed - Form")
-			console.log(this.applicationObject)
 		},
 		update() {
 			this.$emit("update", this.localData)
@@ -337,15 +335,17 @@ export default {
 		addScopeValue() {
 			if (this.addScopeIsEmpty())
 				return
-			if (!this.appToCreate.scopes.includes(this.scopeToAdd))
-				this.appToCreate.scopes.push(this.scopeToAdd)
+			if (!this.localData.scopes.includes(this.scopeToAdd))
+				this.localData.scopes.push(this.scopeToAdd)
 			this.scopeToAdd = ""
+			this.update()
 		},
 		removeScopeValue(v) {
-			const index = this.appToCreate.scopes.indexOf(v);
+			const index = this.localData.scopes.indexOf(v);
 			if (index >= 0) {
-				this.appToCreate.scopes.splice(index, 1)
+				this.localData.scopes.splice(index, 1)
 			}
+			this.update()
 		},
 	},
 }

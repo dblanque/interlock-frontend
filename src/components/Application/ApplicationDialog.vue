@@ -151,7 +151,6 @@ export default {
 			this.applicationCopy = Object.assign({}, this.applicationObject)
 			if (this.$refs.ApplicationForm)
 				this.$refs.ApplicationForm.sync()
-			console.log("Changed - Dialog")
 		},
 		// Tells the parent view to refresh/fetch the group again
 		async refreshApplication() {
