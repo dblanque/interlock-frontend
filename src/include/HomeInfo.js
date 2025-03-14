@@ -10,7 +10,7 @@ class HomeInfo extends ApiModel {
 	ldap_tls = false;
 	ldap_ssl = false;
 	ldap_ok = false;
-	active_server = null;
+	ldap_active_server = null;
 	/**
 	 * Fetches model instance from API by id.
 	 * @param {Number} id 

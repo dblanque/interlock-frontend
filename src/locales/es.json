@@ -171,7 +171,11 @@
     "loaded": {
       "m":"Cargado | Cargados",
       "f":"Cargada | Cargadas",
-      "n":"Cargado | Cargados"
+      "n":"Cargado | Cargados",
+      "oidc":{
+        "issuer": "Issuer",
+        "authorization_endpoint": "Authorization Endpoint"
+      }
     },
     "unlocked": {
       "m":"Desbloqueado | Desbloqueados",
@@ -475,7 +479,25 @@
   },
   "section": {
     "home":{
-      "welcomeMessage": "Bienvenido a Interlock"
+      "welcomeMessage": "Bienvenido a Interlock",
+      "oidc":{
+        "title":"Información de OpenID",
+        "issuer": "Proveedor",
+        "authorization_endpoint": "Endpoint de Autorización"
+      },
+      "local":{
+        "title":"Información de Usuarios",
+        "local_user_count": "Usuarios Locales",
+        "ldap_user_count": "Usuarios de LDAP Sincronizados"
+      },
+      "ldap":{
+        "title":"Información de LDAP",
+        "ldap_enabled":"Back-end de LDAP Configurado",
+        "ldap_tls":"LDAP con TLS",
+        "ldap_ssl":"LDAP con SSL",
+        "ldap_ok":"Estado de Back-end LDAP",
+        "ldap_active_server":"Servidor LDAP Activo"
+      }
     },
     "applicationGroups":{
       "dialog":{

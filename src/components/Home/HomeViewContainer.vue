@@ -3,10 +3,128 @@
 <!----------------------- File: HomeViewContainer.vue ------------------------->
 <template>
 	<div class="ma-0 pa-0">
-		<v-card flat color="secondary-80">
-			<v-row>
+		<v-card flat color="transparent">
+			<v-row justify="center" class="py-3 px-6">
 				<v-col cols="12">
-					<v-card flat>
+					<v-card outlined color="gray-95">
+						<v-card-title class="mt-2">
+							<v-row justify="center">
+								{{ $t("section.home.oidc.title") }}
+							</v-row>
+						</v-card-title>
+						<v-card-text>
+							<v-list dense color="transparent">
+								<v-list-item-group>
+									<v-list-item two-line
+										v-for="value, key in data.oidc_well_known"
+										v-if="displayedOidcData.includes(key)"
+										:key="key">
+										<v-list-item-content>
+											<v-list-item-title>
+												{{ $t(`section.home.oidc.${key}`) }}
+											</v-list-item-title>
+											<v-list-item-subtitle>
+												{{ value }}
+											</v-list-item-subtitle>
+										</v-list-item-content>
+
+										<v-list-item-action>
+											<v-tooltip bottom>
+												<template v-slot:activator="{ on, attrs }">
+													<v-btn
+														v-bind="attrs" v-on="on"
+														class="ml-2"
+														@click="copyValueToClipboard(value)"
+														icon
+														small>
+														<v-icon small>
+															mdi-content-copy
+														</v-icon>
+													</v-btn>
+												</template>
+												<span>{{ $t("actions.copy") }}</span>
+											</v-tooltip>
+										</v-list-item-action>
+									</v-list-item>
+								</v-list-item-group>
+							</v-list>
+						</v-card-text>
+					</v-card>
+				</v-col>
+				<v-col cols="12" md="6">
+					<v-card height="100%"
+						outlined
+						color="gray-95">
+						<v-card-title class="mt-2">
+							<v-row justify="center">
+								{{ $t("section.home.local.title") }}
+							</v-row>
+						</v-card-title>
+						<v-list disabled dense color="transparent">
+							<v-list-item-group>
+								<v-list-item
+									two-line
+									v-for="key in userCountKeys"
+									:key="key">
+									<v-list-item-content>
+										<v-list-item-title>
+											{{ $t(`section.home.local.${key}`) }}
+										</v-list-item-title>
+										<v-list-item-subtitle>
+											{{ data[key] }}
+										</v-list-item-subtitle>
+									</v-list-item-content>
+								</v-list-item>
+							</v-list-item-group>
+						</v-list>
+					</v-card>
+				</v-col>
+				<v-col cols="12" md="6">
+					<v-card height="100%"
+						outlined
+						color="gray-95">
+						<v-card-title class="mt-2">
+							<v-row justify="center">
+								{{ $t("section.home.ldap.title") }}
+							</v-row>
+						</v-card-title>
+						<v-list disabled dense color="transparent">
+							<v-list-item-group>
+								<v-list-item
+									:two-line="isTwoLine(key)"
+									v-for="key in ldapKeys"
+									:key="key">
+									<v-list-item-content>
+										<v-list-item-title>
+											{{ $t(`section.home.ldap.${key}`) }}
+										</v-list-item-title>
+										<v-list-item-subtitle v-if="isTwoLine(key)">
+											{{ data[key] }}
+										</v-list-item-subtitle>
+									</v-list-item-content>
+									<v-list-item-action>
+										<div v-if="typeof data[key] === 'boolean'">
+											<v-icon v-if="showBoolInactive(key)">
+												mdi-checkbox-blank-circle-outline
+											</v-icon>
+											<v-icon
+												v-else-if="data[key] === true"
+												color="green">
+												mdi-checkbox-marked-circle
+											</v-icon>
+											<v-icon
+												v-else
+												color="red">
+												mdi-close-circle
+											</v-icon>
+										</div>
+										<div v-else-if="!isTwoLine(key)">
+											{{ data[key] }}
+										</div>
+									</v-list-item-action>
+								</v-list-item>
+							</v-list-item-group>
+						</v-list>
 					</v-card>
 				</v-col>
 			</v-row>
@@ -31,6 +149,10 @@ export default {
 			loading: false,
 			error: false,
 			errorMsg: "",
+			displayedOidcData: [
+				"issuer",
+				"authorization_endpoint"
+			],
 			categories: {
 				users: [
 					"local_user_count",
@@ -45,13 +167,41 @@ export default {
 				oidc: [
 					"oidc_well_known"
 				],
-			}
+			},
+			userCountKeys: [
+				"local_user_count",
+				"ldap_user_count",
+			],
+			ldapKeys: [
+				"ldap_enabled",
+				"ldap_tls",
+				"ldap_ssl",
+				"ldap_ok",
+				"ldap_active_server",
+			],
 		}
 	},
 	mounted() {
 		this.fetchHomeInfo()
 	},
 	methods: {
+		isTwoLine(key) {
+			if (!(key in this.data))
+				return false
+			if (this.data[key] === null || this.data[key] === undefined)
+				return false
+			return key in this.data && this.data[key].length > 16
+		},
+		showBoolInactive(key) {
+			if (["ldap_tls", "ldap_ssl", "ldap_ok"].includes(key) &&
+				this.data.ldap_enabled !== true) {
+				return true
+			}
+			return false
+		},
+		copyValueToClipboard(value) {
+			navigator.clipboard.writeText(value)
+		},
 		startLoading() {
 			this.loading = false
 			this.error = false

@@ -471,7 +471,25 @@
   },
   "section":{
     "home":{
-      "welcomeMessage": "Welcome to Interlock"
+      "welcomeMessage": "Welcome to Interlock",
+      "oidc":{
+        "title":"OpenID Information",
+        "issuer": "Issuer",
+        "authorization_endpoint": "Authorization Endpoint"
+      },
+      "local":{
+        "title":"User Information",
+        "local_user_count": "Local User Count",
+        "ldap_user_count": "Synced LDAP User Count"
+      },
+      "ldap":{
+        "title":"LDAP Information",
+        "ldap_enabled":"LDAP Back-end Configured",
+        "ldap_tls":"LDAP TLS",
+        "ldap_ssl":"LDAP SSL",
+        "ldap_ok":"LDAP Back-end Status",
+        "ldap_active_server":"Active LDAP Server"
+      }
     },
     "applicationGroups":{
       "dialog":{
