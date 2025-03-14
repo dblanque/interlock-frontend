@@ -318,6 +318,8 @@ export default {
 		},
 		sync() {
 			this.localData = Object.assign({}, this.applicationObject)
+			console.log("Changed - Form")
+			console.log(this.applicationObject)
 		},
 		update() {
 			this.$emit("update", this.localData)
