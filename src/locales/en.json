@@ -470,6 +470,9 @@
     }
   },
   "section":{
+    "home":{
+      "welcomeMessage": "Welcome to Interlock"
+    },
     "applicationGroups":{
       "dialog":{
         "create":{

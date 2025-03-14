@@ -474,6 +474,9 @@
     }
   },
   "section": {
+    "home":{
+      "welcomeMessage": "Bienvenido a Interlock"
+    },
     "applicationGroups":{
       "dialog":{
         "create":{

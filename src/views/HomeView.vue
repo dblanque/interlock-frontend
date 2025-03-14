@@ -131,6 +131,7 @@
     <NavigationDrawer
       ref="navigationDrawerMobile"
       v-if="drawerIsMobile"
+      :lockNavTabs="lockNavTabs"
       :selectedTabTitle="selectedTabTitle"
       :selectedTab="selectedTab"
       :navGroups="navGroups"
@@ -145,6 +146,7 @@
       <NavigationDrawer
         ref="navigationDrawerDesktop"
         v-if="drawerIsDesktop"
+        :lockNavTabs="lockNavTabs"
         expanded-on-create
         :selectedTabTitle="selectedTabTitle"
         :selectedTab="selectedTab"

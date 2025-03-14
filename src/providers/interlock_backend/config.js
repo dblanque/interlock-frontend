@@ -66,6 +66,9 @@ export const ignoreErrorCodes = [
 // LIST OF URL PATTERNS.
 const apiPrefix = "api"
 const urls = {
+    home: {
+        fetch: `${apiPrefix}/home/`
+    },
     auth: {
         token: `${apiPrefix}/token/`,
         tokenRefresh: `${apiPrefix}/token/refresh/`,

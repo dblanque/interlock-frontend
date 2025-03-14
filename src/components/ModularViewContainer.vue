@@ -196,8 +196,13 @@ export default {
 			}
 		},
 		requestRefresh(newValue) {
+			this.$emit('loading')
 			switch (newValue) {
 				case 'home':
+					if (this.$refs.HomeViewContainer != undefined) {
+						console.log("Requested refresh for view component " + newValue)
+						this.$refs.HomeViewContainer.fetchHomeInfo()
+					}
 					break;
 				case 'applications':
 					if (this.$refs.ApplicationView != undefined) {
@@ -263,6 +268,7 @@ export default {
 						console.log("Requested refresh for component " + newValue)
 					break;
 			}
+			this.$emit('done')
 		},
 	},
 	computed: {
