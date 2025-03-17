@@ -43,13 +43,7 @@ export default {
 	data() {
 		return {
 			showSnackbar: false,
-			snackbarMessage: "",
-			notificationType: "",
-			snackbarColor: 'primary',
-			snackbarTextColor: '',
-			snackbarIcon: "",
-			snackbarTimeout: 10000,
-			snackBarTimer: 0
+			...this.getDefaultSnackbarData()
 		}
 	},
 	watch: {
@@ -94,20 +88,31 @@ export default {
 				this.snackbarColor = notifObj.color
 			if (notifObj.text !== undefined)
 				this.snackbarTextColor = notifObj.text
+			if (notifObj.timeout !== undefined)
+				this.snackbarTimeout = notifObj.timeout
+
 			this.snackBarTimer = setTimeout(() => {
 				this.showSnackbar = false
 			}, this.snackbarTimeout)
 		})
 	},
 	methods: {
+		getDefaultSnackbarData() {
+			return {
+				notificationType: "",
+				snackbarMessage: "",
+				snackbarColor: 'primary',
+				snackbarTextColor: '',
+				snackbarIcon: "",
+				snackbarTimeout: 1e3,
+				snackBarTimer: 0
+			}
+		},
 		resetSnackbar() {
 			setTimeout(() => {
-				if (this.showSnackbar != true) {
-					this.snackbarColor = 'primary'
-					this.snackbarTextColor = ""
-					this.snackbarMessage = ""
-				}
-			}, 300)
+				if (this.showSnackbar != true)
+					this.getDefaultSnackbarData()
+			}, 3e2)
 		}
 	},
 }

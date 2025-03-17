@@ -37,6 +37,8 @@
     }
   },
   "actions":{
+    "copy":"Copy",
+    "copiedToClipboard":"Copied to Clipboard",
     "commonlyUsed":"Commonly Used",
     "ldap":{
       "configPreset":"Configuration Preset",
