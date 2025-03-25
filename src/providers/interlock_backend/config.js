@@ -109,7 +109,7 @@ const urls = {
         bulkInsert: `${apiPrefix}/users/bulk_insert/`,
         bulkDelete: `${apiPrefix}/users/bulk_delete/`,
         bulkUpdate: `${apiPrefix}/users/bulk_update/`,
-        bulkStatusChange: `${apiPrefix}/users/bulk_status_change/`,
+        bulkStatusChange: `${apiPrefix}/users/bulk_change_status/`,
     },
     group: {
         base: `${apiPrefix}/ldap/groups/`,
