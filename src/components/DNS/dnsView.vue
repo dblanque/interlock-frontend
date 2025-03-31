@@ -518,8 +518,7 @@ export default {
 			headers = headers.map(e => e.value)
 			var excludeKeys = [
 				'id',
-				'record_bytes',
-				'zone'
+				'zone',
 			]
 			for (const key in item) {
 				if (Object.hasOwnProperty.call(item, key)) {
@@ -552,7 +551,7 @@ export default {
 			}
 		},
 		searchDnsTable(value, search, item) {
-			const excludedKeys = ['record_bytes', 'type']
+			const excludedKeys = ['type']
 			var result = []
 			for (const key in item) {
 				if (!excludedKeys.includes(key) && this.searchFilterColumns[key] == true)

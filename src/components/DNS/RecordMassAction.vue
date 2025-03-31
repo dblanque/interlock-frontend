@@ -97,7 +97,6 @@ export default {
                 'index',
                 'distinguishedName',
                 'zone',
-                'record_bytes'
             ],
             loading: false,
             error: false,

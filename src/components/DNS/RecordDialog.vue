@@ -181,6 +181,7 @@
                         <v-text-field
                         v-model="recordCopy.dwRefresh"
                         :label="$t('dns.attributes.dwRefresh')"
+                        :hint="`${$t('words.recommended')}: 900`"
                         :rules="[this.fieldRules(recordCopy.dwRefresh, 'ge_numbers', true)]"
                         class="mx-2"
                         ></v-text-field>
@@ -189,6 +190,7 @@
                         <v-text-field
                         v-model="recordCopy.dwRetry"
                         :label="$t('dns.attributes.dwRetry')"
+                        :hint="`${$t('words.recommended')}: 600`"
                         :rules="[this.fieldRules(recordCopy.dwRetry, 'ge_numbers', true)]"
                         class="mx-2"
                         ></v-text-field>
@@ -197,6 +199,7 @@
                         <v-text-field
                         v-model="recordCopy.dwExpire"
                         :label="$t('dns.attributes.dwExpire')"
+                        :hint="`${$t('words.recommended')}: 86400`"
                         :rules="[this.fieldRules(recordCopy.dwExpire, 'ge_numbers', true)]"
                         class="mx-2"
                         ></v-text-field>
@@ -205,6 +208,7 @@
                         <v-text-field
                         v-model="recordCopy.dwMinimumTtl"
                         :label="$t('dns.attributes.dwMinimumTtl')"
+                        :hint="`${$t('words.recommended')}: 900`"
                         :rules="[this.fieldRules(recordCopy.dwMinimumTtl, 'ge_numbers', true)]"
                         class="mx-2"
                         ></v-text-field>

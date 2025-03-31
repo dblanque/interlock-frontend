@@ -135,6 +135,8 @@
     "passwordChanged": "Contraseña Modificada"
   },
   "words": {
+    "recommended":"Recomendado",
+    "default":"Pre-determinado",
     "created":{
       "m":"Creado | Creados",
       "f":"Creada | Creadas",

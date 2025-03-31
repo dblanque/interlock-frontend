@@ -135,6 +135,8 @@
     "passwordChanged": "Password Changed"
   },
   "words":{
+    "recommended":"Recommended",
+    "default":"Default",
     "created":{
       "m":"Created",
       "f":"Created",
