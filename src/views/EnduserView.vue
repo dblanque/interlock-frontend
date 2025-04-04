@@ -2,7 +2,7 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------- File: EnduserView.vue ----------------------------->
 <template>
-	<div class="enduser">
+	<div class="enduser" v-if="showView">
 		<v-row align="center"
 			justify="space-between"
 			style="background: var(--v-secondary-10-base)"
@@ -363,20 +363,20 @@
 		<!-- SNACKBAR / NOTIF. BUS -->
 		<NotificationBusContainer />
 
-    <!-- SETTINGS DIALOG  -->
-    <v-dialog
-      max-width="48rem"
-      v-model="showSettingsDialog">
-      <UserSettings
-        ref="UserSettings"
-        :username="username"
-        :first-name="first_name"
-        :last-name="last_name"
-        admin-mode
-        :domain="domain"
-        :realm="realm"
-        @close='showSettingsDialog = !showSettingsDialog' />
-    </v-dialog>
+		<!-- SETTINGS DIALOG  -->
+		<v-dialog
+			max-width="48rem"
+			v-model="showSettingsDialog">
+			<UserSettings
+				ref="UserSettings"
+				:username="username"
+				:first-name="first_name"
+				:last-name="last_name"
+				admin-mode
+				:domain="domain"
+				:realm="realm"
+				@close='showSettingsDialog = !showSettingsDialog' />
+		</v-dialog>
 
 		<!-- USER RESET PASSWORD DIALOG -->
 		<v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']">
@@ -449,6 +449,7 @@ export default {
 	},
 	data() {
 		return {
+			showView: false,
 			LDAPCountries: LDAPCountries,
 			showSettingsDialog: false,
 			logoLight: 'logo/interlock-logo-wt-dark.svg',
@@ -501,6 +502,7 @@ export default {
 					this.domain = domainData['name']
 					this.realm = domainData['realm']
 					this.basedn = domainData['basedn']
+					this.showView = true
 				})
 			}
 			// If response code is an HTTP error code

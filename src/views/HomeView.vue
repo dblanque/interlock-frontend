@@ -2,7 +2,7 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------- File: HomeView.vue -------------------------------->
 <template>
-  <div class="home ma-0 pa-0 align-stretch flex-column d-flex" style="height: 100%;">
+  <div class="home ma-0 pa-0 align-stretch flex-column d-flex" style="height: 100%;" v-if="showView">
     <!------------------>
     <v-system-bar
       height="min"
@@ -327,6 +327,7 @@ export default {
   },
   data() {
     return {
+      showView: false,
       logoLight: 'logo/interlock-logo-wt-dark.svg',
       logoDark: 'logo/interlock-logo-wt-light.svg',
       username: "",
@@ -478,8 +479,8 @@ export default {
         this.last_name = localStorage.getItem("user.last_name");
         this.email = localStorage.getItem("user.email");
         this.refreshTokenExpiryData()
-
         this.fetchDomainDetails()
+        this.showView = true
       }
       // If response code is an HTTP error code
       else {
