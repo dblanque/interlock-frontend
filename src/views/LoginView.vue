@@ -24,8 +24,8 @@
 							<div v-if="viewModes.login">
 								<v-row class="ma-0 pa-0 my-4" justify="center" align="center">
 									<v-btn class="ma-0 pa-0 px-2" small outlined color="primary-s"
-										@click="modeUser = !modeUser; username = ''; $refs.loginform.resetValidation()">
-										<span v-if="modeUser">
+										@click="loginWithUsername = !loginWithUsername; username = ''; email = ''; $refs.loginform.resetValidation()">
+										<span v-if="loginWithUsername">
 											<v-icon class="mr-1">
 												mdi-email
 											</v-icon>
@@ -40,7 +40,7 @@
 									</v-btn>
 								</v-row>
 								<!-- USER / EMAIL FIELD -->
-								<v-row v-if="modeUser" justify="center" class="ma-0 pa-0">
+								<v-row v-if="loginWithUsername" justify="center" class="ma-0 pa-0">
 									<v-text-field
 										outlined
 										dense
@@ -59,12 +59,12 @@
 										autofocus
 										outlined
 										dense
-										v-model="username"
+										v-model="email"
 										:label="$t('attribute.user.email')"
 										prepend-inner-icon="mdi-email"
 										:disabled="submitted"
 										validate-on-blur
-										:rules="[this.fieldRules(username, 'ge_email', true)]"
+										:rules="[this.fieldRules(email, 'ge_email', true)]"
 										class="font-weight-bold"
 										required
 										@keydown.enter="submit()"></v-text-field>
@@ -157,7 +157,7 @@
 							<v-expand-x-transition>
 								<v-col class="ma-0 pa-0" v-if="viewModes.totp">
 									<v-btn
-										:disabled="submitted || (this.username.length == 0 || this.password.length == 0) || !valid"
+										:disabled="submitted || (userIdentifier.length == 0 || this.password.length == 0) || !valid"
 										@click="goBack"
 										class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
 										{{ $t("actions.back") }}
@@ -252,10 +252,16 @@ export default {
 			})
 	},
 	computed: {
+		userIdentifierKey() {
+			return this.loginWithUsername ? "username" : "email"
+		},
+		userIdentifier() {
+			return this.loginWithUsername ? this.username : this.email
+		},
 		disableLoginBtn() {
 			if (this.submitted)
 				return true
-			if (this.username.length == 0 || this.password.length == 0)
+			if (this.userIdentifier.length == 0 || this.password.length == 0)
 				return true
 			if (!this.valid)
 				return true
@@ -278,7 +284,7 @@ export default {
 			recovery_code: "",
 			logoLight: '/logo/interlock-logo-wt-dark.svg',
 			logoDark: '/logo/interlock-logo-wt-light.svg',
-			modeUser: true,
+			loginWithUsername: true,
 			loginForbiddenCount: 0,
 			timeoutCounter: 30,
 			timedOut: false,
@@ -287,6 +293,7 @@ export default {
 			error: false,
 			errorMsg: "",
 			username: "",
+			email: "",
 			password: "",
 			totp_code: "",
 			submitted: false,
@@ -388,7 +395,7 @@ export default {
 				setTimeout(() => {
 					this.submit()
 				}, 100)
-		}
+		},
 	},
 	methods: {
 		adviseFailedOIDC() {
@@ -484,9 +491,9 @@ export default {
 		async submit() {
 			if (!this.$refs.loginform.validate())
 				return
-			if (this.username == "" || this.password == "") {
+			if (this.userIdentifier.length == 0 || this.password.length == 0) {
 				this.error = true;
-				this.errorMsg = "";
+				this.errorMsg = this.$t("section.login.invalidCredentials");
 			}
 			else {
 				this.submitted = true;
@@ -498,10 +505,7 @@ export default {
 					}
 				}, 10000)
 				let user = new User({})
-				let data = {
-					username: this.username,
-					password: this.password
-				}
+				let data = { username: this.userIdentifier, password: this.password }
 				if (this.totp_code.length > 0 && !this.recovery_mode)
 					data.totp_code = this.totp_code
 				else if (this.recovery_code.length > 0)

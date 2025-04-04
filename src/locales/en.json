@@ -558,6 +558,7 @@
       "useEmail":"Use E-Mail",
       "useLDAPUser":"Use LDAP Account",
       "loginBtn":"Log-in",
+      "invalidCredentials":"Invalid Credentials",
       "useRecoveryCode":"Use Recovery Code",
       "forgotMyPassword":"I forgot my password",
       "tooManyLogins": "You've been timed out",

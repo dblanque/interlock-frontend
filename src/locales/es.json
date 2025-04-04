@@ -566,6 +566,7 @@
       "useEmail":"Usar E-Mail",
       "useLDAPUser":"Usar Cuenta LDAP",
       "loginBtn": "Iniciar Sesión",
+      "invalidCredentials":"Credenciales Inválidos",
       "useRecoveryCode":"Usar Código de Respaldo",
       "forgotMyPassword": "Olvidé mi Contraseña",
       "tooManyLogins": "Ha sido deshabilitado",
