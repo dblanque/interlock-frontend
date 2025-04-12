@@ -327,7 +327,8 @@
         "user_group_fetch_error":"User Group Memberships could not be fetched",
         "user_group_primary_err":"Primary Group for User cannot be Deleted",
         "user_group_bad":"Bad User Group Member Operations",
-        "user_email_exists":"Another User with that Email exists"
+        "user_email_exists":"A User with that Email exists",
+        "user_exists":"User already exists"
       },
       "ldap":{
         "ldap_backend_disabled":"Please enable the LDAP Back-end",

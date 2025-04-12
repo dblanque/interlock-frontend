@@ -337,7 +337,8 @@
         "user_group_fetch_error":"No se pudieron obtener las membresías de Grupo",
         "user_group_primary_err":"No se puede eliminar el Grupo Primario del Usuario",
         "user_group_bad":"Operación de Miembro de Grupo Inválida",
-        "user_email_exists":"Ya existe otro Usuario con ese Email"
+        "user_email_exists":"Ya existe otro usuario con ese Email",
+        "user_exists":"El usuario ya existe"
       },
       "ldap":{
         "ldap_backend_disabled":"Por favor habilite el Back-end de LDAP",
