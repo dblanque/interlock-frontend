@@ -192,7 +192,11 @@ export default {
 			type: String,
 			default: "pa-2"
 		},
-		disabled: Boolean
+		disabled: Boolean,
+		excludeDNs: {
+			type: Array,
+			default: undefined
+		}
 	},
 	computed: {
 		selectedDNsLength() {
@@ -285,7 +289,7 @@ export default {
 				}
 			}
 		},
-		async fetchLists(excludeDNs = undefined) {
+		async fetchLists() {
 			this.ldapList = []
 			this.resetFilter()
 			var filter = this.filter
@@ -298,6 +302,7 @@ export default {
 				}
 			} else delete filter['iexact']['group']
 			if (this.enableUsers) {
+				console.log("users enabled")
 				filter['iexact']['user'] = {
 					attr: "objectClass",
 					or: true
@@ -306,8 +311,8 @@ export default {
 			this.loading = true
 			this.error = false
 			this.selectedDNs = []
-			if (excludeDNs != undefined && excludeDNs.length > 0) {
-				excludeDNs.forEach(distinguishedName => {
+			if (this.excludeDNs != undefined && this.excludeDNs.length > 0) {
+				this.excludeDNs.forEach(distinguishedName => {
 					filter['iexact'][distinguishedName] = {
 						attr: "distinguishedName",
 						exclude: true

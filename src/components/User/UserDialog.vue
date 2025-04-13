@@ -777,8 +777,8 @@ export default {
 	},
 	watch: {
 		'dialogs': {
-			handler: function (newValue) {
-				if (!newValue['userAddToGroup'] || newValue['userAddToGroup'] == false)
+			handler: function (v_new) {
+				if (!v_new['userAddToGroup'] || v_new['userAddToGroup'] == false)
 					this.$refs.UserAddToGroup.clearList();
 			},
 			deep: true
