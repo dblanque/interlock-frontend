@@ -22,14 +22,14 @@ export function dateLdapToString(date) {
         console.log(date)
         console.log("Invalid timezone, must be Timezone Z (Zulu Time Zone, UTC/GMT)")
     }
-    var dateString = date.toString()
-    var year = dateString.substring(0,4)
-    var month = dateString.substring(4,6)
-    var day = dateString.substring(6,8)
-    var hour = dateString.substring(8,10)
-    var min = dateString.substring(10,12)
-    var sec = dateString.substring(12,14)
-    var result = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
+    let dateString = date.toString()
+    let year = dateString.substring(0,4)
+    let month = dateString.substring(4,6)
+    let day = dateString.substring(6,8)
+    let hour = dateString.substring(8,10)
+    let min = dateString.substring(10,12)
+    let sec = dateString.substring(12,14)
+    let result = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
     return result
 }
 
