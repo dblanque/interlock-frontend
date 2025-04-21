@@ -129,6 +129,17 @@ import RefreshButton from '@/components/RefreshButton.vue'
 import { objectRecursiveSearch } from '@/include/utils.js';
 import { LDAPUserClasses } from '@/include/constants/LDAPUser.js';
 
+let defaultFilter = {
+	"exclude": {},
+	"include": {
+		"objectCategory": [
+			"organizationalUnit",
+			"container",
+		],
+		"name": "Builtin",
+	},
+	"use_defaults": false,
+}
 export default {
 	name: 'CNObjectList',
 	components: {
@@ -143,18 +154,7 @@ export default {
 			loading: false,
 			listOpenAll: false,
 			openItems: [],
-			filter: {
-				"iexact": {
-					"organizationalUnit": {
-						attr: "objectClass",
-						or: true
-					},
-					"container": {
-						attr: "objectClass",
-						or: true
-					}
-				}
-			}
+			filter: defaultFilter
 		}
 	},
 	props: {
@@ -226,7 +226,7 @@ export default {
 			}
 		},
 		isUserType(itemObjectClass) {
-			var isUser = false
+			let isUser = false
 			if (this.userClasses.includes(itemObjectClass.toLowerCase()))
 				isUser = true
 			return isUser
@@ -237,8 +237,8 @@ export default {
 				this.$refs.groupTreeview.updateAll(this.listOpenAll)
 		},
 		addDNs() {
-			var searchResult
-			var finalGroupArray = []
+			let searchResult
+			let finalGroupArray = []
 			// If there's a Selected Member to Add
 			if (this.selectedDNs.length > 0) {
 				// Loop for each Group ID
@@ -272,51 +272,39 @@ export default {
 			return false
 		},
 		resetFilter() {
-			this.filter = {
-				"iexact": {
-					"organizationalUnit": {
-						attr: "objectClass",
-						or: true
-					},
-					"container": {
-						attr: "objectClass",
-						or: true
-					},
-					"Builtin": {
-						attr: "name",
-						or: true
-					}
-				}
-			}
+			this.filter = defaultFilter
 		},
 		async fetchLists() {
 			this.ldapList = []
 			this.resetFilter()
-			var filter = this.filter
+			let filter = this.filter
 			// Gotta force update for the filter value refresh, Javascript LOL
 			this.$forceUpdate
-			if (this.enableGroups) {
-				filter['iexact']['group'] = {
-					attr: "objectClass",
-					or: true
-				}
-			} else delete filter['iexact']['group']
-			if (this.enableUsers) {
-				console.log("users enabled")
-				filter['iexact']['user'] = {
-					attr: "objectClass",
-					or: true
-				}
-			} else delete filter['iexact']['user']
+			filter['include']['objectClass'] = []
+			let objectClassFilter = filter['include']['objectClass']
+			// Enable Groups in filter
+			if (this.enableGroups)
+				objectClassFilter.push("group")
+			else {
+				let groupIncludeFilter = objectClassFilter.indexOf("group")
+				if (groupIncludeFilter >= 0)
+					objectClassFilter.splice(groupIncludeFilter)
+			}
+			// Enable users in filter
+			if (this.enableUsers)
+				objectClassFilter.push("user")
+			else {
+				let userIncludeFilter = objectClassFilter.indexOf("user")
+				if (userIncludeFilter >= 0)
+					objectClassFilter.splice(userIncludeFilter)
+			}
 			this.loading = true
 			this.error = false
 			this.selectedDNs = []
 			if (this.excludeDNs != undefined && this.excludeDNs.length > 0) {
+				filter['exclude']["distinguishedName"] = []
 				this.excludeDNs.forEach(distinguishedName => {
-					filter['iexact'][distinguishedName] = {
-						attr: "distinguishedName",
-						exclude: true
-					}
+					filter['exclude']["distinguishedName"].push(distinguishedName)
 				});
 			}
 			await new OrganizationalUnit({}).dirtree(this.filter)

@@ -426,7 +426,7 @@ export default {
 				this.$nextTick(() => {
 					if (refresh != true)
 						this.setDestination()
-					this.$refs.DirtreeOUList.fetchOUs(this.filter)
+					this.$refs.DirtreeOUList.fetchOUs()
 						.then(() => {
 							this.allowRefresh = true
 						})
