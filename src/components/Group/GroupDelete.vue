@@ -75,7 +75,7 @@ export default {
 	computed: {
 		getDisplayName() {
 			if (this.isLDAPGroup)
-				return this.groupObject.cn ? this.groupObject.cn : this.groupObject.distinguishedName
+				return this.groupObject.name ? this.groupObject.name : this.groupObject.distinguished_name
 			else
 				return this.groupObject.application
 		},
@@ -85,8 +85,8 @@ export default {
 			let data
 			if (group != {}) {
 				if (this.isLDAPGroup) {
-					group.distinguishedName = this.groupObject.distinguishedName
-					group.cn = this.groupObject.cn
+					group.distinguished_name = this.groupObject.distinguished_name
+					group.name = this.groupObject.name
 					data = {group: group}
 				} else {
 					group.id = this.groupObject.id
