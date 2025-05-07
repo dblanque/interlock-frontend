@@ -85,15 +85,15 @@
 										@change="changeSelectedStatus(item)"
 										@click.stop />
 									<v-icon :color="open ? 'primary' : undefined"
-										v-if="item.builtin == true && item.type != 'Container'">
+										v-if="item.builtin == true && item.type != 'container'">
 										mdi-hammer
 									</v-icon>
 									<v-icon :color="open ? 'primary' : undefined"
-										v-else-if="item.type == 'Container'">
+										v-else-if="item.type == 'container'">
 										mdi-archive
 									</v-icon>
 									<v-icon :color="open ? 'primary' : undefined"
-										v-else-if="item.type == 'Organizational-Unit'">
+										v-else-if="item.type == 'organizational-unit'">
 										{{ open ? 'mdi-folder-open' : 'mdi-folder' }}
 									</v-icon>
 									<v-icon v-if="isUserType(item.type)">

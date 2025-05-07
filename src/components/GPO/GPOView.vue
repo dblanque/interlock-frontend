@@ -137,9 +137,9 @@ export default {
 			if (refreshAnim == true)
 				this.loading = true
 			this.fetchingData = true
-			this.data.selectedGPO.distinguishedName = item.distinguishedName
+			this.data.selectedGPO.distinguished_name = item.distinguished_name
 			this.data.gpoData = new GPO({})
-			await this.data.gpoData.fetch(this.data.selectedGPO.distinguishedName)
+			await this.data.gpoData.fetch(this.data.selectedGPO.distinguished_name)
 			.then(() => {
 				this.openDialog('gpoDialog')
 				if (isEditable == true)

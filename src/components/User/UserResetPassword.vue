@@ -177,7 +177,7 @@ export default {
 			}
 			else {
 				if (this.parentTitle == "ldap-users") {
-					user.distinguishedName = this.userObject.distinguishedName
+					user.distinguished_name = this.userObject.distinguished_name
 				} else {
 					user.id = this.userObject.id
 				}

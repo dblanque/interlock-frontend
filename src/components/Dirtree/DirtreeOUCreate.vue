@@ -38,7 +38,7 @@
                                     <v-text-field
                                     dense
                                     @keydown.enter="nextStep"
-                                    :label="$tc('classes.'+createType, 1) + ' ' + $t('attribute.ldap.name')"
+                                    :label="$tc('classes.'+createType, 1) + ' ' + $t('attribute.name')"
                                     v-model="objectToCreate.name"
                                     :rules="[this.fieldRules(objectToCreate.name, 'ge_cn', true)]"
                                     ></v-text-field>

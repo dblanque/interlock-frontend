@@ -367,7 +367,7 @@ export default {
 			data: {
 				selectedUser: {
 					"username": "",
-					"distinguishedName": ""
+					"distinguished_name": ""
 				},
 				userdata: {},
 			},
@@ -549,7 +549,7 @@ export default {
 				case "ldap-users":
 					this.setLoading()
 					this.userClass = User
-					this.tableItemKey = "distinguishedName"
+					this.tableItemKey = "distinguished_name"
 					this.tableDefaultSortKey = "sn"
 					translationParent = "attribute."
 					break;
@@ -791,7 +791,7 @@ export default {
 			this.fetchingData = true
 			this.data.selectedUser.username = item.username
 			if (this.viewTitle == "ldap-users")
-				this.data.selectedUser.distinguishedName = item.distinguishedName
+				this.data.selectedUser.distinguished_name = item.distinguished_name
 			this.data.userdata = new this.userClass({})
 			await this.data.userdata.fetch(ident)
 				.then(() => {

@@ -74,7 +74,7 @@
 											<v-divider class="mb-2" />
 										</v-col>
 										<v-col class="mx-2">
-											{{ $t(`attribute.ldap.${k}`) }}
+											{{ $t(`attribute.${k}`) }}
 										</v-col>
 										<v-col class="mx-2">
 											<v-icon color="primary">

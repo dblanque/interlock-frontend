@@ -15,13 +15,13 @@
         @update:active="updateObjectDestination"
         >
             <template v-slot:prepend="{ item, open }">
-              <v-icon v-if="item.builtin == true && item.type != 'Container'">
+              <v-icon v-if="item.builtin == true && item.type != 'container'">
                 mdi-hammer
               </v-icon>
-              <v-icon v-else-if="item.type == 'Container'">
+              <v-icon v-else-if="item.type == 'container'">
                 mdi-archive
               </v-icon>
-              <v-icon v-else-if="item.type == 'Organizational-Unit'">
+              <v-icon v-else-if="item.type == 'organizational-unit'">
                 {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
               </v-icon>
               <v-icon v-else>
@@ -89,12 +89,12 @@ export default {
             if (itemToUpdate == undefined){
                 this.ouList.forEach(ou => {
                     if (!searchResult) {
-                        searchResult = objectRecursiveSearch(ou, parseInt(itemID), "distinguishedName")
+                        searchResult = objectRecursiveSearch(ou, parseInt(itemID), "distinguished_name")
                         this.objectDestination = searchResult
                     }
                 })
             } else if (itemToUpdate.id == itemID)
-                this.objectDestination = itemToUpdate.distinguishedName
+                this.objectDestination = itemToUpdate.distinguished_name
 
             this.emitDestination()
         },

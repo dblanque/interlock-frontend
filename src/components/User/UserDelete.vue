@@ -93,7 +93,7 @@ export default {
 			if (!this.multipleUsers) {
 				if (user != {}) {
 					if (this.parentTitle == "ldap-users") {
-						user.distinguishedName = this.userObject.distinguishedName
+						user.distinguished_name = this.userObject.distinguished_name
 						user.username = this.userObject.username
 					} else {
 						user.id = this.userObject.id

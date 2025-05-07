@@ -29,7 +29,7 @@
                 <v-text-field
                 dense
                 @keydown.enter="confirmRename"
-                :label="$t('attribute.ldap.name')"
+                :label="$t('attribute.name')"
                 v-model="newObjectName"
                 :rules="[this.fieldRules(newObjectName, 'ge_cn', true)]"
                 ></v-text-field>

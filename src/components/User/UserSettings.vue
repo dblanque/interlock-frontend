@@ -36,7 +36,7 @@
 
 			<v-row cols="12" class="ma-0 pa-0" justify="center" v-if="fullName && fullName !== ''">
 				<h4>
-					{{ $t("attribute.ldap.name") }}
+					{{ $t("attribute.name") }}
 				</h4>
 			</v-row>
 
@@ -53,7 +53,7 @@
 			<v-row cols="12" class="ma-0 pa-0" justify="center"
 				v-if="domain && domain !== undefined && domain !== null">
 				<h4>
-					{{ $t("attribute.ldap.domain") }}
+					{{ $t("attribute.domain") }}
 				</h4>
 			</v-row>
 

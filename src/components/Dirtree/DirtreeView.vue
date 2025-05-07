@@ -217,11 +217,11 @@
                 @click="getObjectIsClickable ? changeOpenStatus(item.id) : undefined"
                 :class="getObjectIsClickable(item) + ' '">
                 <v-icon
-                  v-if="item.builtin == true && item.type != 'Container' && item.type != 'Computer'"
+                  v-if="item.builtin == true && item.type != 'container' && item.type != 'computer'"
                   :color="open ? 'primary' : undefined">
                   mdi-hammer
                 </v-icon>
-                <div v-else-if="item.type == 'Container' && item.builtin == true">
+                <div v-else-if="item.type == 'container' && item.builtin == true">
                   <v-icon :color="open ? 'primary' : undefined">
                     {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                   </v-icon>
@@ -229,24 +229,24 @@
                     mdi-hammer
                   </v-icon>
                 </div>
-                <v-icon v-else-if="item.type == 'Container'" :color="open ? 'primary' : undefined">
+                <v-icon v-else-if="item.type == 'container'" :color="open ? 'primary' : undefined">
                   {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                 </v-icon>
-                <v-icon v-else-if="item.type == 'Organizational-Unit'"
+                <v-icon v-else-if="item.type == 'organizational-unit'"
                   :color="open ? 'primary' : undefined">
                   {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
                 </v-icon>
-                <v-icon v-else-if="item.type == 'Computer'">
+                <v-icon v-else-if="item.type == 'computer'">
                   {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                 </v-icon>
                 <v-icon
-                  v-else-if="(item.type == 'Person' || item.type == 'User') && !itemIsContact(item)">
+                  v-else-if="(item.type == 'person' || item.type == 'user') && !itemIsContact(item)">
                   {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                 </v-icon>
                 <v-icon v-else-if="itemIsContact(item)">
                   {{ itemTypes['contact']['icon'] }}
                 </v-icon>
-                <v-icon v-else-if="item.type == 'Group'">
+                <v-icon v-else-if="item.type == 'group'">
                   {{ itemTypes[item.type.toLowerCase()]['icon'] }}
                 </v-icon>
                 <v-icon v-else>
@@ -266,9 +266,9 @@
             </template>
             <!-- ACTIONS -->
             <template v-slot:append="{ item }">
-              <!-- User Buttons -->
+              <!-- user Buttons -->
               <span
-                v-if="(item.type == 'User' || item.type == 'Person') && validForActions(item.objectClass)">
+                v-if="(item.type == 'user' || item.type == 'person') && validForActions(item.object_class)">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click="goToUser(item)"
@@ -285,8 +285,8 @@
                 </v-tooltip>
               </span>
 
-              <!-- Group Buttons -->
-              <span v-else-if="item.type == 'Group' && validForActions(item.objectClass)">
+              <!-- group Buttons -->
+              <span v-else-if="item.type == 'group' && validForActions(item.object_class)">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -309,7 +309,7 @@
               <span v-if="item.builtin != true">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-if="validForActions(item.objectClass)"
+                    <v-btn v-if="validForActions(item.object_class)"
                       @click="openDialog('dirtreeMove', item)"
                       color="primary"
                       icon
@@ -324,7 +324,7 @@
                 </v-tooltip>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-if="validForActions(item.objectClass)"
+                    <v-btn v-if="validForActions(item.object_class)"
                       @click="openDialog('dirtreeRename', item)"
                       color="primary"
                       icon
@@ -401,7 +401,7 @@
       max-width="900px"
       v-model="dialogs['dirtreeMove']">
       <DirtreeMove
-        :objectDn="selectedObject.distinguishedName"
+        :objectDn="selectedObject.distinguished_name"
         :objectName="selectedObject.name"
         :dialogKey="'dirtreeMove'"
         ref="DirtreeMove"
@@ -415,7 +415,7 @@
       max-width="900px"
       v-model="dialogs['dirtreeRename']">
       <DirtreeRename
-        :objectDn="selectedObject.distinguishedName"
+        :objectDn="selectedObject.distinguished_name"
         :objectName="selectedObject.name"
         :dialogKey="'dirtreeRename'"
         ref="DirtreeRename"
@@ -456,7 +456,7 @@ export default {
       actionListOpen: false,
       actionList: [
         {
-          value: "dirtreeComputerCreate",
+          value: "dirtreecomputerCreate",
           icon: "mdi-monitor",
           enabled: true
         },
@@ -494,11 +494,6 @@ export default {
           "icon": "mdi-archive",
           "required": false,
         },
-        // "builtin-domain":{
-        //     "filtered": false,
-        //     "icon": "mdi-hammer",
-        //     "required": true,
-        // },
         "person": {
           "filtered": false,
           "show": false,
@@ -524,6 +519,11 @@ export default {
           "icon": "mdi-monitor",
           "required": false,
         },
+        // "builtin-domain":{
+        //     "filtered": false,
+        //     "icon": "mdi-hammer",
+        //     "required": true,
+        // },
         // "organizational-unit":{
         //     "filtered":false,
         //     "icon":"mdi-folder",
@@ -539,7 +539,7 @@ export default {
     'dialogs': {
       handler: function (newValue) {
         if (!newValue['dirtreeMove'] || newValue['dirtreeMove'] == false)
-          this.$refs.DirtreeMove.clearList(this.selectedObject.distinguishedName);
+          this.$refs.DirtreeMove.clearList(this.selectedObject.distinguished_name);
       },
       deep: true
     }
@@ -547,9 +547,9 @@ export default {
   methods: {
     itemIsContact(item) {
       if (!item) return false
-      if (!item.objectClass) return false
-      if (!Array.isArray(item.objectClass)) return false
-      return item.objectClass.includes('contact')
+      if (!item.object_class) return false
+      if (!Array.isArray(item.object_class)) return false
+      return item.object_class.includes('contact')
     },
     createSnackbar(notifObj) {
       notificationBus.$emit('createNotification', notifObj);
@@ -579,7 +579,7 @@ export default {
           return this.$t("actions.move") + " " + this.$tc("classes.ldap", 1)
         case "dirtreePrinterCreate":
           return this.$t("actions.addN") + " " + this.$tc("classes.printer", 1)
-        case "dirtreeComputerCreate":
+        case "dirtreecomputerCreate":
           return this.$t("actions.addN") + " " + this.$tc("classes.computer", 1)
         case "dirtreeDelete":
           return this.$t("actions.delete") + " " + this.$tc("classes.ldap", 1)
@@ -649,7 +649,7 @@ export default {
           this.createFlag = false
           this.selectedObject = item
           if (this.$refs.DirtreeMove != undefined)
-            this.$refs.DirtreeMove.resetDialog(this.selectedObject.distinguishedName);
+            this.$refs.DirtreeMove.resetDialog(this.selectedObject.distinguished_name);
           break;
         case 'dirtreeRename':
           this.selectedObject = item
@@ -663,7 +663,7 @@ export default {
             this.$refs.DirtreeOUCreate.resetDialog();
           }
           break;
-        case 'dirtreeComputerCreate':
+        case 'dirtreecomputerCreate':
           this.dialogs['dirtreeOUCreate'] = true;
           this.createType = 'computer'
           if (this.$refs.DirtreeOUCreate != undefined) {

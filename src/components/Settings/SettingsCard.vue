@@ -495,7 +495,7 @@
 											:append-icon="readonly == true ? undefined : (item.hidden ? 'mdi-eye' : 'mdi-eye-off')"
 											@click:append="() => (item.hidden = !item.hidden)"
 											dense
-											:label="$t('attribute.ldap.password')"
+											:label="$t('attribute.password')"
 											v-model="item.value"
 											:rules="[fieldRules(item.value, 'ge_password', getRequired(item.required))]" />
 										<!-- Text Field Settings -->

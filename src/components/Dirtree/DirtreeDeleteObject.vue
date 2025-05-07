@@ -21,7 +21,7 @@
             <v-row class="pa-0 ma-8 text-subtitle-1" justify="center">
                 {{ $t('section.dirtree.deleteObject.message') }}
                 <span class="font-weight-medium" style="padding-left: 0.5ch;">
-                    {{ ldapObject.distinguishedName + "?" }}
+                    {{ ldapObject.distinguished_name + "?" }}
                 </span>
             </v-row>
         </v-card-text>
@@ -76,13 +76,13 @@ export default {
     methods: {
         async closeDialog(deleteConfirm=false, ou={}) {
             if (ou != {}) {
-                ou.distinguishedName = this.ldapObject.distinguishedName
+                ou.distinguished_name = this.ldapObject.distinguished_name
                 ou.name = this.ldapObject.name
             }
             if (deleteConfirm == true) {
                 await new OrganizationalUnit({}).delete(ou)
                 .then(response => {
-                    // if (response.data.distinguishedName == ou.distinguishedName)
+                    // if (response.data.distinguished_name == ou.distinguished_name)
                     //     console.log("LDAP Object Deleted Successfully")
                     this.$emit('refresh');
                 })
