@@ -551,7 +551,7 @@ export default {
 					this.userClass = User
 					this.tableItemKey = "distinguishedName"
 					this.tableDefaultSortKey = "sn"
-					translationParent = "attribute.ldap."
+					translationParent = "attribute."
 					break;
 				default:
 					return
@@ -562,7 +562,7 @@ export default {
 					response.headers.forEach(header => {
 						headerDict = {}
 						switch (header) {
-							case "mail":
+							case "email":
 								headerDict.text = this.$t("attribute.user.email")
 								break;
 							case "is_enabled":

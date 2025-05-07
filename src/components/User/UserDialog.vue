@@ -11,13 +11,13 @@
 					<v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
 						<!-- Header -->
 						<h3
-							v-if="!usercopy.givenName || usercopy.givenName == '' || !usercopy.sn || usercopy.sn == ''"
+							v-if="!usercopy.first_name || usercopy.first_name == '' || !usercopy.last_name || usercopy.last_name == ''"
 							class="pa-0 ma-0 ma-2">
 							{{ usercopy.username ? $tc('classes.user', 1) + ': ' + usercopy.username
 								: '' }}
 						</h3>
 						<h3 v-else class="pa-0 ma-0 ma-2">
-							{{ $tc('classes.user', 1) + ': ' + usercopy.givenName + " " + usercopy.sn }}
+							{{ $tc('classes.user', 1) + ': ' + usercopy.first_name + " " + usercopy.last_name }}
 						</h3>
 						<v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4" />
 						<v-btn small color="primary" @click="goToTargetTab(tab - 1)" v-if="isLDAPView()"
@@ -96,15 +96,15 @@
 								<v-col cols="12" md="10">
 									<v-select
 										dense
-										id="primaryGroupID"
-										:label="$t('attribute.ldap.primaryGroupID')"
+										id="primary_group_id"
+										:label="$t('attribute.primary_group_id')"
 										:readonly="editFlag != true"
-										v-model="usercopy.primaryGroupID"
-										:items="this.usercopy.memberOfObjects"
-										:hint="$t('section.users.userDialog.hint.primaryGroupID')"
+										v-model="usercopy.primary_group_id"
+										:items="this.usercopy.groups"
+										:hint="$t('section.users.userDialog.hint.primary_group_id')"
 										persistent-hint
 										:item-text="getNameForPID"
-										item-value="objectRid"></v-select>
+										item-value="object_relative_id"></v-select>
 								</v-col>
 							</v-row>
 							<v-row justify="center" align-content="center" class="mb-2">
@@ -127,14 +127,14 @@
 												</v-btn>
 											</v-row>
 											<v-list-item-group active-class="groupSelected">
-												<v-list-item v-for="group, key in usercopy.memberOfObjects" :key="key">
+												<v-list-item v-for="group, key in usercopy.groups" :key="key">
 													<template v-slot:default="{ }">
 														<v-list-item-action />
 
 														<v-list-item-content>
 															<v-list-item-title>
-																{{ group.name + (group.objectRid && group.objectRid.length > 0 ?
-																	`(${group.objectRid})` : "") }}
+																{{ group.name + (group.object_relative_id && group.object_relative_id.length > 0 ?
+																	`(${group.object_relative_id})` : "") }}
 															</v-list-item-title>
 														</v-list-item-content>
 
@@ -142,7 +142,7 @@
 															<v-tooltip bottom>
 																<template v-slot:activator="{ on, attrs }">
 																	<v-btn small icon
-																		@click="goToGroup(group.distinguishedName)"
+																		@click="goToGroup(group.distinguished_name)"
 																		@click.stop
 																		color="primary"
 																		v-bind="attrs"
@@ -160,7 +160,7 @@
 															<v-tooltip bottom>
 																<template v-slot:activator="{ on, attrs }">
 																	<v-btn small icon
-																		@click="copyText(group.distinguishedName)"
+																		@click="copyText(group.distinguished_name)"
 																		@click.stop
 																		color="primary"
 																		v-bind="attrs"
@@ -178,9 +178,9 @@
 															<v-tooltip bottom>
 																<template v-slot:activator="{ on, attrs }">
 																	<v-btn small icon
-																		v-show="group.objectRid != usercopy.primaryGroupID"
+																		v-show="group.object_relative_id != usercopy.primary_group_id"
 																		:disabled="editFlag != true"
-																		@click="removeFromGroup(group.distinguishedName)"
+																		@click="removeFromGroup(group.distinguished_name)"
 																		@click.stop
 																		color="red"
 																		v-bind="attrs"
@@ -190,7 +190,7 @@
 																		</v-icon>
 																	</v-btn>
 																	<v-btn small icon
-																		v-show="group.objectRid == usercopy.primaryGroupID"
+																		v-show="group.object_relative_id == usercopy.primary_group_id"
 																		@click.stop
 																		v-bind="attrs"
 																		v-on="on">
@@ -199,7 +199,7 @@
 																		</v-icon>
 																	</v-btn>
 																</template>
-																<span v-if="group.objectRid != usercopy.primaryGroupID"> {{
+																<span v-if="group.object_relative_id != usercopy.primary_group_id"> {{
 																	$t("section.users.userDialog.removeFromGroup") }} </span>
 																<span v-else> {{
 																	$t("section.users.userDialog.primaryGroupRemoveDisabled") }}
@@ -230,20 +230,20 @@
 											</v-row>
 											<v-row class="pa-0 ma-0 font-weight-medium">
 												<v-col cols="12" lg="6">
-													<v-text-field dense id="givenName" :label="$t('attribute.ldap.givenName')"
-														:readonly="editFlag != true" v-model="usercopy.givenName"
-														:rules="[this.fieldRules(usercopy.givenName, 'ge_name')]"></v-text-field>
+													<v-text-field dense id="first_name" :label="$t('attribute.first_name')"
+														:readonly="editFlag != true" v-model="usercopy.first_name"
+														:rules="[this.fieldRules(usercopy.first_name, 'ge_name')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6">
-													<v-text-field dense id="sn" :label="$t('attribute.ldap.sn')"
-														:readonly="editFlag != true" v-model="usercopy.sn"
-														:rules="[this.fieldRules(usercopy.sn, 'ge_name')]"></v-text-field>
+													<v-text-field dense id="last_name" :label="$t('attribute.last_name')"
+														:readonly="editFlag != true" v-model="usercopy.last_name"
+														:rules="[this.fieldRules(usercopy.last_name, 'ge_name')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6"
 													:class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
-													<v-text-field dense id="mail" :label="$t('attribute.user.email')"
-														:readonly="editFlag != true" v-model="usercopy.mail"
-														:rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"></v-text-field>
+													<v-text-field dense id="email" :label="$t('attribute.user.email')"
+														:readonly="editFlag != true" v-model="usercopy.email"
+														:rules="[this.fieldRules(usercopy.email, 'ge_email')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6">
 													<v-fade-transition>
@@ -268,20 +268,20 @@
 												</v-col>
 												<v-col cols="12"
 													v-if="user.last_login != undefined && user.last_login != ''">
-													{{ $t('attribute.ldap.last_login') + ": " + user.last_login }}
+													{{ $t('attribute.last_login') + ": " + user.last_login }}
 												</v-col>
 												<v-col cols="12" lg="6">
-													<v-text-field dense id="telephoneNumber"
-														:label="$t('attribute.ldap.telephoneNumber')"
+													<v-text-field dense id="phone"
+														:label="$t('attribute.phone')"
 														:readonly="editFlag != true"
-														v-model="usercopy.telephoneNumber"
-														:rules="[this.fieldRules(usercopy.telephoneNumber, 'ge_phone_intl')]"></v-text-field>
+														v-model="usercopy.phone"
+														:rules="[this.fieldRules(usercopy.phone, 'ge_phone_intl')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6">
-													<v-text-field dense id="wWWHomePage"
-														:label="$t('attribute.ldap.wWWHomePage')"
-														:readonly="editFlag != true" v-model="usercopy.wWWHomePage"
-														:rules="[this.fieldRules(usercopy.wWWHomePage, 'ge_website')]"></v-text-field>
+													<v-text-field dense id="website"
+														:label="$t('attribute.website')"
+														:readonly="editFlag != true" v-model="usercopy.website"
+														:rules="[this.fieldRules(usercopy.website, 'ge_website')]"></v-text-field>
 												</v-col>
 											</v-row>
 										</v-card>
@@ -295,35 +295,35 @@
 											</v-row>
 											<v-row class="pa-0 ma-0 font-weight-medium">
 												<v-col cols="12" lg="6">
-													<v-text-field dense id="streetAddress"
-														:label="$t('attribute.ldap.streetAddress')"
-														:readonly="editFlag != true" v-model="usercopy.streetAddress"
-														:rules="[this.fieldRules(usercopy.streetAddress, 'ge_address_street')]"></v-text-field>
+													<v-text-field dense id="street_address"
+														:label="$t('attribute.street_address')"
+														:readonly="editFlag != true" v-model="usercopy.street_address"
+														:rules="[this.fieldRules(usercopy.street_address, 'ge_address_street')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6">
-													<v-text-field dense id="postalCode"
-														:label="$t('attribute.ldap.postalCode')"
-														:readonly="editFlag != true" v-model="usercopy.postalCode"
-														:rules="[this.fieldRules(usercopy.postalCode, 'ge_address_postal_code')]"></v-text-field>
+													<v-text-field dense id="postal_code"
+														:label="$t('attribute.postal_code')"
+														:readonly="editFlag != true" v-model="usercopy.postal_code"
+														:rules="[this.fieldRules(usercopy.postal_code, 'ge_address_postal_code')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6"
 													:class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
-													<v-text-field dense id="l" :label="$t('attribute.ldap.l')"
-														:readonly="editFlag != true" v-model="usercopy.l"
-														:rules="[this.fieldRules(usercopy.l, 'ge_address_city')]"></v-text-field>
+													<v-text-field dense id="city" :label="$t('attribute.city')"
+														:readonly="editFlag != true" v-model="usercopy.city"
+														:rules="[this.fieldRules(usercopy.city, 'ge_address_city')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6">
 													<v-card v-ripple outlined class="pa-1 py-2">
 														<div
-															v-if="usercopy.countryCode != undefined && usercopy.countryCode != '' && usercopy.countryCode != 0">
-															{{ $t('attribute.ldap.countryCodeCombined') }}
+															v-if="usercopy.country_code_dcc != undefined && usercopy.country_code_dcc != '' && usercopy.country_code_dcc != 0">
+															{{ $t('attribute.country_codes') }}
 															<div elevation="0">
-																{{ usercopy.countryCode }}
-																{{ "(" + usercopy.c + ")" }}
+																{{ usercopy.country_code_dcc }}
+																{{ "(" + usercopy.country_code_iso + ")" }}
 															</div>
 														</div>
 														<div v-else>
-															{{ $t('attribute.ldap.countryCodeCombined') }}
+															{{ $t('attribute.country_codes') }}
 															<div>
 																{{ $t('error.data.noCountryCode') }}
 															</div>
@@ -332,18 +332,18 @@
 												</v-col>
 												<v-col cols="12"
 													v-if="user.last_login != undefined && user.last_login != ''">
-													{{ $t('attribute.ldap.last_login') + ": " + user.last_login }}
+													{{ $t('attribute.last_login') + ": " + user.last_login }}
 												</v-col>
 												<v-col cols="12" lg="6">
-													<v-text-field dense id="st" :label="$t('attribute.ldap.st')"
-														:readonly="editFlag != true" v-model="usercopy.st"
-														:rules="[this.fieldRules(usercopy.st, 'ge_state')]"></v-text-field>
+													<v-text-field dense id="state_province" :label="$t('attribute.state_province')"
+														:readonly="editFlag != true" v-model="usercopy.state_province"
+														:rules="[this.fieldRules(usercopy.state_province, 'ge_state')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6">
-													<v-autocomplete dense id="co" :label="$t('attribute.ldap.co')"
-														:readonly="editFlag != true" v-model="usercopy.co"
+													<v-autocomplete dense id="country_name" :label="$t('attribute.country_name')"
+													:readonly="editFlag != true" v-model="usercopy.country_name"
 														:items="LDAPCountries"
-														:rules="[this.fieldRules(usercopy.co, 'ge_country')]">
+														:rules="[this.fieldRules(usercopy.country_name, 'ge_country')]">
 													</v-autocomplete>
 												</v-col>
 											</v-row>
@@ -359,23 +359,23 @@
 											<v-expansion-panel-content>
 												<v-row>
 													<v-col cols="12">
-														<v-text-field dense id="distinguishedName"
-															:label="$t('attribute.ldap.distinguishedName')" readonly
-															v-model="usercopy.distinguishedName"
-															:rules="[this.fieldRules(usercopy.distinguishedName, 'ldap_dn')]"></v-text-field>
+														<v-text-field dense id="distinguished_name"
+															:label="$t('attribute.distinguished_name')" readonly
+															v-model="usercopy.distinguished_name"
+															:rules="[this.fieldRules(usercopy.distinguished_name, 'ldap_dn')]"></v-text-field>
 													</v-col>
 													<v-col cols="12" lg="6">
-														<v-text-field dense id="userPrincipalName"
-															:label="$t('attribute.ldap.userPrincipalName')" readonly
+														<v-text-field dense id="user_principal_name"
+															:label="$t('attribute.user_principal_name')" readonly
 															:value="getUSN"
-															:rules="[this.fieldRules(usercopy.userPrincipalName, 'ldap_usn')]"></v-text-field>
+															:rules="[this.fieldRules(usercopy.user_principal_name, 'ldap_usn')]"></v-text-field>
 													</v-col>
 													<v-col cols="12" lg="6"
 														:justify="$vuetify.breakpoint.lgAndUp ? 'start' : 'center'">
-														<v-text-field dense id="sAMAccountType"
-															:label="$t('attribute.ldap.sAMAccountType')" readonly
-															v-model="usercopy.sAMAccountType"
-															:rules="[this.fieldRules(usercopy.sAMAccountType, 'ge_lettersStrictUnderscore')]"></v-text-field>
+														<v-text-field dense id="account_type"
+															:label="$t('attribute.account_type')" readonly
+															v-model="usercopy.account_type"
+															:rules="[this.fieldRules(usercopy.account_type, 'ge_lettersStrictUnderscore')]"></v-text-field>
 													</v-col>
 												</v-row>
 												<v-row :justify="$vuetify.breakpoint.lgAndUp ? 'start' : 'center'"
@@ -389,17 +389,17 @@
 														</v-btn>
 													</v-col>
 													<v-col cols="12" md="4">
-														<v-select dense id="primaryGroupID"
-															:label="$t('attribute.ldap.primaryGroupID')"
-															:readonly="editFlag != true" v-model="usercopy.primaryGroupID"
-															:items="this.usercopy.memberOfObjects"
-															:hint="$t('section.users.userDialog.hint.primaryGroupID')"
+														<v-select dense id="primary_group_id"
+															:label="$t('attribute.primary_group_id')"
+															:readonly="editFlag != true" v-model="usercopy.primary_group_id"
+															:items="this.usercopy.groups"
+															:hint="$t('section.users.userDialog.hint.primary_group_id')"
 															persistent-hint
-															:item-text="getNameForPID" item-value="objectRid"></v-select>
+															:item-text="getNameForPID" item-value="object_relative_id"></v-select>
 													</v-col>
 													<v-col cols="12" md="2">
-														<v-text-field dense id="userAccountControl"
-															:label="$t('attribute.ldap.userAccountControl')" readonly
+														<v-text-field dense id="user_account_control"
+															:label="$t('attribute.user_account_control')" readonly
 															v-model="enabledPermInts"
 															:rules="[this.fieldRules(enabledPermInts, 'ge_numbers')]"></v-text-field>
 													</v-col>
@@ -413,39 +413,39 @@
 												</v-row>
 												<v-row>
 													<v-col cols="12" lg="6">
-														<v-text-field dense id="whenCreated"
-															:label="$t('attribute.ldap.whenCreated')"
-															readonly v-model="usercopy.whenCreated"></v-text-field>
+														<v-text-field dense id="created_at"
+															:label="$t('attribute.created_at')"
+															readonly v-model="usercopy.created_at"></v-text-field>
 													</v-col>
 													<v-col cols="12" lg="6">
-														<v-text-field dense id="whenChanged"
-															:label="$t('attribute.ldap.whenChanged')"
-															readonly v-model="usercopy.whenChanged"></v-text-field>
+														<v-text-field dense id="modified_at"
+															:label="$t('attribute.modified_at')"
+															readonly v-model="usercopy.modified_at"></v-text-field>
 													</v-col>
 												</v-row>
 												<v-row>
 													<v-col cols="12" lg="6">
-														<v-text-field dense id="lastLogon"
-															:label="$t('attribute.ldap.lastLogon')"
-															readonly v-model="usercopy.lastLogon"></v-text-field>
+														<v-text-field dense id="last_login_win32"
+															:label="$t('attribute.last_login_win32')"
+															readonly v-model="usercopy.last_login_win32"></v-text-field>
 													</v-col>
 													<v-col cols="12" lg="6">
-														<v-text-field dense id="pwdLastSet"
-															:label="$t('attribute.ldap.pwdLastSet')"
-															readonly v-model="usercopy.pwdLastSet"></v-text-field>
+														<v-text-field dense id="password_set_at"
+															:label="$t('attribute.password_set_at')"
+															readonly v-model="usercopy.password_set_at"></v-text-field>
 													</v-col>
 												</v-row>
 												<v-row>
 													<v-col cols="12" lg="8">
 														<v-row justify="center">
 															<span>
-																{{ $t('attribute.ldap.objectClass') }}
+																{{ $t('attribute.object_class') }}
 															</span>
 														</v-row>
 														<v-row justify="center">
 															<v-chip :light="$vuetify.theme.dark" :dark="!$vuetify.theme.dark"
 																class="ma-1"
-																v-for="i in usercopy.objectClass" :key="i"
+																v-for="i in usercopy.object_class" :key="i"
 																@click:close="removeObjectClassFromArray(i)"
 																:close="editFlag == true">
 																{{ i }}
@@ -469,10 +469,10 @@
 														</v-row>
 													</v-col>
 													<v-col cols="12" lg="12">
-														<v-text-field dense id="objectCategory"
-															:label="$t('attribute.ldap.objectCategory')" readonly
-															v-model="usercopy.objectCategory"
-															:rules="[this.fieldRules(usercopy.objectCategory, 'ldap_dn')]"></v-text-field>
+														<v-text-field dense id="object_category"
+															:label="$t('attribute.object_category')" readonly
+															v-model="usercopy.object_category"
+															:rules="[this.fieldRules(usercopy.object_category, 'ldap_dn')]"></v-text-field>
 													</v-col>
 												</v-row>
 											</v-expansion-panel-content>
@@ -491,12 +491,12 @@
 											<v-row class="pa-0 ma-0 font-weight-medium">
 												<v-col cols="12" lg="6">
 													<v-text-field dense id="first_name"
-														:label="$t('attribute.ldap.givenName')"
+														:label="$t('attribute.first_name')"
 														:readonly="editFlag != true" v-model="usercopy.first_name"
 														:rules="[this.fieldRules(usercopy.first_name, 'ge_name')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6">
-													<v-text-field dense id="last_name" :label="$t('attribute.ldap.sn')"
+													<v-text-field dense id="last_name" :label="$t('attribute.last_name')"
 														:readonly="editFlag != true" v-model="usercopy.last_name"
 														:rules="[this.fieldRules(usercopy.last_name, 'ge_name')]"></v-text-field>
 												</v-col>
@@ -504,7 +504,7 @@
 													:class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
 													<v-text-field dense id="email" :label="$t('attribute.user.email')"
 														:readonly="editFlag != true" v-model="usercopy.email"
-														:rules="[this.fieldRules(usercopy.email, 'ge_mail')]"></v-text-field>
+														:rules="[this.fieldRules(usercopy.email, 'ge_email')]"></v-text-field>
 												</v-col>
 												<v-col cols="12" lg="6">
 													<v-fade-transition>
@@ -529,7 +529,7 @@
 												</v-col>
 												<v-col cols="12"
 													v-if="user.last_login != undefined && user.last_login != ''">
-													{{ $t('attribute.ldap.last_login') + ": " +
+													{{ $t('attribute.last_login') + ": " +
 														truncateDate(user.last_login) }}
 												</v-col>
 											</v-row>
@@ -557,15 +557,15 @@
 												<v-row justify="center" no-gutters class="ma-4">
 													<v-col cols="12" class="px-2" v-if="user.dn && user.dn.length > 0">
 														<v-text-field dense id="dn"
-															:label="$t('attribute.ldap.distinguishedName')"
+															:label="$t('attribute.distinguished_name')"
 															:value="user.dn" readonly></v-text-field>
 													</v-col>
 													<v-col cols="12" lg="6" class="px-2">
-														<v-text-field dense id="dn" :label="$t('attribute.ldap.whenCreated')"
+														<v-text-field dense id="dn" :label="$t('attribute.created_at')"
 															:value="truncateDate(user.created_at)" readonly></v-text-field>
 													</v-col>
 													<v-col cols="12" lg="6" class="px-2">
-														<v-text-field dense id="dn" :label="$t('attribute.ldap.whenChanged')"
+														<v-text-field dense id="dn" :label="$t('attribute.modified_at')"
 															:value="truncateDate(user.modified_at)" readonly></v-text-field>
 													</v-col>
 												</v-row>
@@ -743,8 +743,8 @@ export default {
 			changingGroups: false,
 			usercopy: {},
 			addObjectClass: "",
-			groupsToRemove: [],
-			groupsToAdd: [],
+			groups_to_remove: [],
+			groups_to_add: [],
 			excludeGroups: [],
 			// Dialog States
 			dialogs: {
@@ -797,7 +797,7 @@ export default {
 		getModifiedValues() {
 			let v = []
 			const IGNORE_KEYS = [
-				'lastLogon'
+				'last_login_win32'
 			]
 			for (const key in this.user) {
 				if (IGNORE_KEYS.includes(key)) continue
@@ -821,7 +821,7 @@ export default {
 		},
 		getIsUserModified() {
 			// Check Group Changes
-			if (this.groupsToAdd.length > 0 || this.groupsToRemove.length > 0)
+			if (this.groups_to_add.length > 0 || this.groups_to_remove.length > 0)
 				return true
 			//  Check Permissions Changes
 			let p = []
@@ -829,8 +829,8 @@ export default {
 				if (this.permissions[key].value == true)
 					p.push(key)
 			}
-			if (this.user.permission_list !== undefined)
-				if (!this.arraysAreEqual(p, this.user.permission_list))
+			if (this.user.permissions !== undefined)
+				if (!this.arraysAreEqual(p, this.user.permissions))
 					return true
 			// Check the rest of the user data.
 			if (this.getModifiedValues().length > 0)
@@ -838,17 +838,17 @@ export default {
 			return false
 		},
 		goToGroup(groupDn) {
-			this.$emit('goToGroup', { distinguishedName: groupDn })
+			this.$emit('goToGroup', { distinguished_name: groupDn })
 		},
 		setupExclude() {
 			this.excludeGroups = []
-			if (this.usercopy.memberOfObjects != undefined && this.usercopy.memberOfObjects.length > 0) {
-				this.usercopy.memberOfObjects.forEach(g => {
-					this.excludeGroups.push(g.distinguishedName)
+			if (this.usercopy.groups != undefined && this.usercopy.groups.length > 0) {
+				this.usercopy.groups.forEach(g => {
+					this.excludeGroups.push(g.distinguished_name)
 				});
 			}
-			if (this.usercopy.groupsToAdd != undefined && this.usercopy.groupsToAdd.length > 0) {
-				this.usercopy.groupsToAdd.forEach(g => {
+			if (this.usercopy.groups_to_add != undefined && this.usercopy.groups_to_add.length > 0) {
+				this.usercopy.groups_to_add.forEach(g => {
 					if (!this.excludeGroups.includes(g))
 						this.excludeGroups.push(g)
 				});
@@ -870,17 +870,17 @@ export default {
 			this.dialogs[key] = false;
 		},
 		addToGroup(groups) {
-			this.groupsToAdd = groups.map(e => e.distinguishedName)
-			if (!this.usercopy.memberOfObjects)
-				this.usercopy.memberOfObjects = []
+			this.groups_to_add = groups.map(e => e.distinguished_name)
+			if (!this.usercopy.groups)
+				this.usercopy.groups = []
 			groups.forEach(g => {
-				if (this.usercopy.memberOfObjects.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
-					this.usercopy.memberOfObjects.push(g)
+				if (this.usercopy.groups.filter(e => e.distinguished_name == g.distinguished_name).length == 0) {
+					this.usercopy.groups.push(g)
 				}
 
-				if (this.groupsToRemove != undefined) {
-					// console.log("MTR Includes this member, removing. " + g.distinguishedName)
-					this.groupsToRemove = this.groupsToRemove.filter(e => e != g.distinguishedName)
+				if (this.groups_to_remove != undefined) {
+					// console.log("MTR Includes this member, removing. " + g.distinguished_name)
+					this.groups_to_remove = this.groups_to_remove.filter(e => e != g.distinguished_name)
 				}
 			});
 			this.closeInnerDialog('userAddToGroup')
@@ -889,25 +889,25 @@ export default {
 			this.$forceUpdate
 		},
 		removeFromGroup(groupDn) {
-			let currentGroupFilter = this.usercopy.memberOfObjects.filter(e => e.distinguishedName == groupDn)
+			let currentGroupFilter = this.usercopy.groups.filter(e => e.distinguished_name == groupDn)
 			let currentGroup
 			if (currentGroupFilter.length > 0)
 				currentGroup = currentGroupFilter[0]
 
-			if (currentGroup['objectRid'] == this.usercopy['primaryGroupID']) {
+			if (currentGroup['object_relative_id'] == this.usercopy['primary_group_id']) {
 				console.error("Primary group cannot be deleted")
 			}
 			else {
-				if (!this.groupsToRemove.includes(groupDn))
-					this.groupsToRemove.push(groupDn)
+				if (!this.groups_to_remove.includes(groupDn))
+					this.groups_to_remove.push(groupDn)
 
-				if (this.groupsToAdd.includes(groupDn))
-					this.groupsToAdd = this.groupsToAdd.filter(e => e != groupDn)
+				if (this.groups_to_add.includes(groupDn))
+					this.groups_to_add = this.groups_to_add.filter(e => e != groupDn)
 
 				if (this.excludeGroups.includes(groupDn))
 					this.excludeGroups = this.excludeGroups.filter(e => e != groupDn)
 
-				this.usercopy.memberOfObjects = this.usercopy.memberOfObjects.filter(e => e.distinguishedName != groupDn)
+				this.usercopy.groups = this.usercopy.groups.filter(e => e.distinguished_name != groupDn)
 				// this.logGroups()
 				this.setupExclude()
 				this.$forceUpdate
@@ -915,17 +915,17 @@ export default {
 		},
 		logGroups() {
 			console.log("Groups to Add")
-			console.log(this.groupsToAdd)
+			console.log(this.groups_to_add)
 			console.log("Groups to Remove")
-			console.log(this.groupsToRemove)
-			console.log("Member Of Objects")
-			console.log(this.usercopy.memberOfObjects)
+			console.log(this.groups_to_remove)
+			console.log("User Groups")
+			console.log(this.usercopy.groups)
 		},
 		copyText(textString) {
 			navigator.clipboard.writeText(textString);
 		},
 		getNameForPID(item) {
-			return item.name + " (" + item.objectRid + ")"
+			return `${item.name} (${item.object_relative_id.toString()})`
 		},
 		setDomainDetails() {
 			let domainDetails = getDomainDetails()
@@ -935,20 +935,20 @@ export default {
 			this.userSelector = this.isLDAPUser() ? domainDetails['user_selector'] : 'username'
 		},
 		setObjectClassToArray() {
-			if (this.usercopy.objectClass && this.usercopy.objectClass != '' && (typeof this.usercopy.objectClass === 'string' || this.usercopy.objectClass instanceof String)) {
-				this.usercopy.objectClass = this.usercopy.objectClass.replace(/'/g, "\"")
-				this.usercopy.objectClass = JSON.parse(this.usercopy.objectClass)
+			if (this.usercopy.object_class && this.usercopy.object_class != '' && (typeof this.usercopy.object_class === 'string' || this.usercopy.object_class instanceof String)) {
+				this.usercopy.object_class = this.usercopy.object_class.replace(/'/g, "\"")
+				this.usercopy.object_class = JSON.parse(this.usercopy.object_class)
 			}
 		},
 		removeObjectClassFromArray(value) {
 			// Returns array without value
-			if (this.usercopy.objectClass.includes(value) && Array.isArray(this.usercopy.objectClass))
-				this.usercopy.objectClass = this.usercopy.objectClass.filter(e => e !== value);
+			if (this.usercopy.object_class.includes(value) && Array.isArray(this.usercopy.object_class))
+				this.usercopy.object_class = this.usercopy.object_class.filter(e => e !== value);
 			this.addObjectClass = value
 		},
 		addObjectClassToArray() {
-			if (!this.usercopy.objectClass.includes(this.addObjectClass) && this.addObjectClass)
-				this.usercopy.objectClass.push(this.addObjectClass);
+			if (!this.usercopy.object_class.includes(this.addObjectClass) && this.addObjectClass)
+				this.usercopy.object_class.push(this.addObjectClass);
 			this.addObjectClass = ''
 		},
 		// When a permission in the v-list changes this function is executed
@@ -967,8 +967,8 @@ export default {
 			for (const [key] of Object.entries(this.permissions)) {
 				this.permissions[key].value = false
 			}
-			if (this.usercopy['permission_list'] != undefined) {
-				this.usercopy['permission_list'].forEach(perm => {
+			if (this.usercopy['permissions'] != undefined) {
+				this.usercopy['permissions'].forEach(perm => {
 					this.permissions[perm].value = true
 				});
 			}
@@ -1034,11 +1034,6 @@ export default {
 				})
 		},
 		async deleteTotp(closeDialog = false) {
-			let ident
-			if (this.isLDAPUser())
-				ident = this.usercopy[this.userSelector]
-			else
-				ident = this.usercopy["username"]
 			await new User({}).deleteTotp({ username: ident })
 				.then(() => {
 					if (closeDialog == true)
@@ -1121,35 +1116,34 @@ export default {
 					this.loading = true
 					this.loadingColor = 'primary'
 					// Set permissions array properly
-					this.usercopy.permission_list = []
+					this.usercopy.permissions = []
 					for (const [key] of Object.entries(this.permissions)) {
 						if (this.permissions[key].value == true)
-							this.usercopy.permission_list.push(key)
+							this.usercopy.permissions.push(key)
 					}
 
 					let modifiedValues = this.getModifiedValues()
 					let partialUpdateData = {
-						distinguishedName: this.usercopy.distinguishedName,
+						username: this.usercopy.username,
+						distinguished_name: this.usercopy.distinguished_name,
 					}
-					partialUpdateData[this.userSelector] = this.usercopy['username']
-					partialUpdateData[this.userSelector] = this.usercopy[this.userSelector]
 					modifiedValues.forEach(k => {
 						partialUpdateData[k] = this.usercopy[k]
 					})
-					if (this.groupsToAdd.length > 0)
-						partialUpdateData.groupsToAdd = this.groupsToAdd
+					if (this.groups_to_add.length > 0)
+						partialUpdateData.groups_to_add = this.groups_to_add
 					else
-						delete partialUpdateData.groupsToAdd
+						delete partialUpdateData.groups_to_add
 					// Groups to Remove
-					if (this.groupsToRemove.length > 0)
-						partialUpdateData.groupsToRemove = this.groupsToRemove
+					if (this.groups_to_remove.length > 0)
+						partialUpdateData.groups_to_remove = this.groups_to_remove
 					else
-						delete partialUpdateData.groupsToRemove
+						delete partialUpdateData.groups_to_remove
 
 					// Uncomment below to debug permissions list
-					// console.log(this.usercopy.permission_list)
+					// console.log(this.usercopy.permissions)
 					if (this.$refs.userForm.validate()) {
-						await new this.userClass({}).update(partialUpdateData)
+						await new this.userClass({}).update(this.usercopy)
 							.then(() => {
 								if (closeDialog == true)
 									this.closeDialog();
@@ -1184,8 +1178,8 @@ export default {
 		},
 
 		setUserGroups() {
-			this.groupsToRemove = []
-			this.groupsToAdd = []
+			this.groups_to_remove = []
+			this.groups_to_add = []
 		},
 		setShowAlert() {
 			if (this.isLDAPUser() && this.isLDAPView() || !this.isLDAPUser() && !this.isLDAPView())
@@ -1206,8 +1200,8 @@ export default {
 				this.setUserGroups()
 				this.setObjectClassToArray()
 				this.setupExclude()
-				if (this.usercopy.lastLogon == 0)
-					this.usercopy.lastLogon = this.$t('section.users.userDialog.noLastLogon')
+				if (this.usercopy.last_login_win32 == 0)
+					this.usercopy.last_login_win32 = this.$t('section.users.userDialog.noLastLogon')
 				this.setPermissions()
 				this.loading = false
 				this.loadingColor = 'primary'

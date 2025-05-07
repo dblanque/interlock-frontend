@@ -108,26 +108,26 @@
 									<v-row justify="center" class="pa-0 ma-0 font-weight-medium">
 										<v-col cols="12" lg="4">
 											<v-text-field dense @keydown.enter="nextStep"
-												:label="$t('attribute.ldap.givenName')"
-												v-model="userToCreate.givenName"
-												:rules="[this.fieldRules(userToCreate.givenName, 'ge_name', true)]"></v-text-field>
+												:label="$t('attribute.first_name')"
+												v-model="userToCreate.first_name"
+												:rules="[this.fieldRules(userToCreate.first_name, 'ge_name')]"></v-text-field>
 										</v-col>
 										<v-col cols="12" lg="4">
-											<v-text-field dense @keydown.enter="nextStep" :label="$t('attribute.ldap.sn')"
-												v-model="userToCreate.sn"
-												:rules="[this.fieldRules(userToCreate.sn, 'ge_name')]"></v-text-field>
+											<v-text-field dense @keydown.enter="nextStep" :label="$t('attribute.last_name')"
+												v-model="userToCreate.last_name"
+												:rules="[this.fieldRules(userToCreate.last_name, 'ge_name')]"></v-text-field>
 										</v-col>
 									</v-row>
 									<v-row justify="center" class="pa-0 ma-0 font-weight-medium">
 										<v-col cols="12" lg="6">
 											<v-text-field dense @keydown.enter="nextStep"
-												:label="$t('attribute.ldap.displayName')"
+												:label="$t('attribute.full_name')"
 												v-model="getDisplayName"
-												:rules="[this.fieldRules(getDisplayName, 'ge_topic', true)]"></v-text-field>
+												:rules="[this.fieldRules(getDisplayName, 'ge_topic')]"></v-text-field>
 										</v-col>
 										<v-col cols="12" lg="2">
 											<v-text-field dense @keydown.enter="nextStep"
-												:label="$t('attribute.ldap.initials')"
+												:label="$t('attribute.initials')"
 												v-model="userToCreate.initials"
 												:rules="[this.fieldRules(userToCreate.initials, 'ge_topic')]"></v-text-field>
 										</v-col>
@@ -136,13 +136,13 @@
 										<v-col cols="12" lg="4">
 											<v-text-field dense @keydown.enter="nextStep"
 												:hint="$t('misc.autocomputedField')"
-												persistent-hint :label="$t('attribute.ldap.userPrincipalName')" readonly
+												persistent-hint :label="$t('attribute.user_principal_name')" readonly
 												v-model="getUSN"></v-text-field>
 										</v-col>
 										<v-col cols="12" lg="4">
 											<v-text-field dense @keydown.enter="nextStep"
 												:hint="$t('misc.autocomputedField')"
-												persistent-hint :label="$t('attribute.ldap.userPrincipalName_pre2000')"
+												persistent-hint :label="$t('attribute.user_principal_name_pre2000')"
 												readonly
 												v-model="getUSN_2000"></v-text-field>
 										</v-col>
@@ -152,12 +152,12 @@
 								<div v-else>
 									<v-row class="pa-0 ma-0 font-weight-medium">
 										<v-col cols="12" lg="6">
-											<v-text-field dense id="first_name" :label="$t('attribute.ldap.givenName')"
+											<v-text-field dense id="first_name" :label="$t('attribute.first_name')"
 												v-model="userToCreate.first_name"
 												:rules="[this.fieldRules(userToCreate.first_name, 'ge_name')]"></v-text-field>
 										</v-col>
 										<v-col cols="12" lg="6">
-											<v-text-field dense id="last_name" :label="$t('attribute.ldap.sn')"
+											<v-text-field dense id="last_name" :label="$t('attribute.last_name')"
 												v-model="userToCreate.last_name"
 												:rules="[this.fieldRules(userToCreate.last_name, 'ge_name')]"></v-text-field>
 										</v-col>
@@ -178,14 +178,14 @@
 									<v-col cols="12" lg="4">
 										<v-text-field dense @keydown.enter="nextStep"
 											:label="$t('attribute.user.email')"
-											v-model="userToCreate.mail"
-											:rules="[this.fieldRules(userToCreate.mail, 'ge_mail')]"></v-text-field>
+											v-model="userToCreate.email"
+											:rules="[this.fieldRules(userToCreate.email, 'ge_mail')]"></v-text-field>
 									</v-col>
 									<v-col cols="12" lg="4">
 										<v-text-field dense @keydown.enter="nextStep"
-											:label="$t('attribute.ldap.wWWHomePage')"
-											v-model="userToCreate.wWWHomePage"
-											:rules="[this.fieldRules(userToCreate.wWWHomePage, 'ge_website')]"></v-text-field>
+											:label="$t('attribute.website')"
+											v-model="userToCreate.website"
+											:rules="[this.fieldRules(userToCreate.website, 'ge_website')]"></v-text-field>
 									</v-col>
 								</v-row>
 								<v-row justify="center" class="pa-0 ma-0 font-weight-medium" v-else>
@@ -208,15 +208,15 @@
 											@keydown.enter="nextStep"
 											:append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
 											@click:append="() => (passwordHidden = !passwordHidden)" dense
-											:label="$t('attribute.ldap.password')" v-model="userToCreate.password"
+											:label="$t('attribute.password')" v-model="userToCreate.password"
 											:rules="[this.fieldRules(userToCreate.password, 'ge_password', true)]"></v-text-field>
 									</v-col>
 									<v-col cols="12" lg="4">
 										<v-text-field :type="passwordHidden ? 'password' : 'text'" dense
 											@keydown.enter="nextStep"
-											:label="$t('attribute.ldap.passwordConfirm')"
-											v-model="userToCreate.passwordConfirm"
-											:rules="[userToCreate.passwordConfirm == userToCreate.password ? true : this.$t('error.validation.passwordNotSame')]"></v-text-field>
+											:label="$t('attribute.password_confirm')"
+											v-model="userToCreate.password_confirm"
+											:rules="[userToCreate.password_confirm == userToCreate.password ? true : this.$t('error.validation.passwordNotSame')]"></v-text-field>
 									</v-col>
 								</v-row>
 								<v-list v-if="isLDAPView">
@@ -324,7 +324,7 @@
 							@keydown.enter="nextStep"
 							:dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
 							class="ma-0 pa-0 pa-2 ma-1 pl-4" rounded>
-							{{ $t("actions.next") }}
+							{{ this.createStage > 1 && this.userToCreate.password.length === 0 ? $t("actions.skip") : $t("actions.next")}}
 							<v-icon class="ma-0" color="primary">
 								mdi-chevron-double-right
 							</v-icon>
@@ -442,8 +442,10 @@ export default {
 				return this.realm + "\\"
 		},
 		getDisplayName() {
-			if (this.userToCreate.givenName != undefined || this.userToCreate.sn != undefined)
-				return (this.userToCreate.givenName || "") + " " + (this.userToCreate.sn || "")
+			if (this.userToCreate.first_name != undefined && this.userToCreate.first_name != "" || 
+				this.userToCreate.last_name != undefined && this.userToCreate.last_name != ""
+			)
+				return (this.userToCreate.first_name || "") + " " + (this.userToCreate.last_name || "").trim()
 			else
 				return ""
 		}
@@ -504,7 +506,7 @@ export default {
 					if (this.$refs.userCreateForm2.validate()) {
 						this.error = false
 						this.errorMsg = ""
-						var permission_list = []
+						let permissions = []
 						Object.keys(this.userToCreate).forEach(key => {
 							if (this.userToCreate[key] === undefined) {
 								delete this.userToCreate[key];
@@ -512,9 +514,9 @@ export default {
 						});
 						Object.keys(this.permissions).forEach(key => {
 							if (this.permissions[key].value == true)
-								permission_list.push(key)
+								permissions.push(key)
 						});
-						this.userToCreate.permission_list = permission_list
+						this.userToCreate.permissions = permissions
 						this.createUser()
 					}
 					else {
@@ -535,6 +537,8 @@ export default {
 			this.passwordHidden = true
 			this.userPathExpansionPanel = false
 			this.userToCreate = new this.userClass({})
+			this.userToCreate.password = ""
+			this.userToCreate.password_confirm = ""
 			this.createStage = 1
 			this.error = false
 			this.errorMsg = ""

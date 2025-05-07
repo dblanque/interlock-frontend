@@ -11,40 +11,37 @@ class User extends ApiModel {
 	last_login;
 	role;
 	is_staff;
-	givenName;
-	sn;
-	displayName;
-	mail;
-	telephoneNumber;
-	streetAddress;
-	postalCode;
+	full_name;
+	email;
+	phone;
+	street_address;
+	postal_code;
 	// Locale / City
-	l;
+	city;
 	// State/Province
-	st;
+	state_province;
 	// INT
-	countryCode;
+	country_code_dcc;
 	// 2 Letter Code for Country
-	co;
+	country_code_iso;
 	// Full Country Name
-	c;
-	wWWHomePage;
-	distinguishedName;
-	userPrincipalName;
-	memberOfObjects;
+	country_name;
+	website;
+	distinguished_name;
+	user_principal_name;
+	groups;
 	// Permission ACLs
-	userAccountControl;
-	whenCreated;
-	whenChanged;
-	lastLogon;
-	badPwdCount;
-	pwdLastSet;
-	primaryGroupID;
-	objectClass;
-	objectCategory;
-	sAMAccountName;
-	sAMAccountType;
-	permission_list;
+	user_account_control;
+	created_at;
+	changed_at;
+	last_login;
+	bad_password_count;
+	password_set_at;
+	primary_group_id;
+	object_class;
+	object_category;
+	account_type;
+	permissions;
 
 	/**
 	 * Fetches model instance from API by id.
@@ -92,12 +89,12 @@ class User extends ApiModel {
 				else {
 					Object.keys(response.data).forEach(key => {
 						switch (key) {
-							case 'whenChanged':
-							case 'whenCreated':
+							case 'created_at':
+							case 'modified_at':
 								this[key] = dateLdapToString(response.data[key]);
 								break;
-							case 'lastLogon':
-							case 'pwdLastSet':
+							case 'last_login_win32':
+							case 'password_set_at':
 								this[key] = dateFromFiletime(response.data[key]);
 								break;
 							default:

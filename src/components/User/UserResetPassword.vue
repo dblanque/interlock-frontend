@@ -26,8 +26,8 @@
 				</v-row>
 				<v-row class="pa-0 ma-0 mt-4 mb-5 text-uppercase font-weight-bold"
 					style="font-size: large !important;" justify="center">
-					{{ userObject.givenName && userObject.sn ? userObject.givenName + " " +
-						userObject.sn + " (" + userObject.username + ")" : userObject.username }}
+					{{ userObject.first_name && userObject.last_name ? userObject.first_name + " " +
+						userObject.last_name + " (" + userObject.username + ")" : userObject.username }}
 				</v-row>
 				<v-row justify="center" class="pa-0 ma-0 font-weight-medium">
 					<v-col cols="10" lg="4">
@@ -38,7 +38,7 @@
 							@click:append="() => (passwordHidden = !passwordHidden)"
 							dense
 							@keydown.enter="closeDialog(true, user)"
-							:label="$t('attribute.ldap.password')"
+							:label="$t('attribute.password')"
 							v-model="user.password"
 							:rules="[this.fieldRules(user.password, 'ge_password', true)]"></v-text-field>
 					</v-col>
@@ -47,9 +47,9 @@
 							:type="passwordHidden ? 'password' : 'text'"
 							dense
 							@keydown.enter="closeDialog(true, user)"
-							:label="$t('attribute.ldap.passwordConfirm')"
-							v-model="user.passwordConfirm"
-							:rules="[user.passwordConfirm == user.password ? true : this.$t('error.validation.passwordNotSame')]"></v-text-field>
+							:label="$t('attribute.password_confirm')"
+							v-model="user.password_confirm"
+							:rules="[user.password_confirm == user.password ? true : this.$t('error.validation.passwordNotSame')]"></v-text-field>
 					</v-col>
 				</v-row>
 			</v-form>
@@ -115,7 +115,7 @@ export default {
 			errorMsg: "",
 			user: {
 				"password": "",
-				"passwordConfirm": "",
+				"password_confirm": "",
 			}
 		}
 	},
@@ -138,7 +138,7 @@ export default {
 			this.errorMsg = false
 			this.user = {
 				"password": "",
-				"passwordConfirm": "",
+				"password_confirm": "",
 			}
 			this.$refs.userResetPasswordForm.resetValidation()
 		},

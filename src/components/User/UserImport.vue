@@ -569,17 +569,17 @@ export default {
 			this.import_fields = {
 				"username": "username",
 				"password": "password",
-				"mail": "email",
-				"givenName": "first_name",
-				"sn": "last_name",
+				"email": "email",
+				"first_name": "first_name",
+				"last_name": "last_name",
 				"initials": "initials",
-				"telephoneNumber": "phone_number",
-				"wWWHomePage": "webpage",
-				"streetAddress": "street_address",
-				"postalCode": "postal_code",
-				"l": "town",
-				"st": "state_province",
-				"co": "country"
+				"phone": "phone",
+				"website": "website",
+				"street_address": "street_address",
+				"postal_code": "postal_code",
+				"city": "city",
+				"state_province": "state_province",
+				"country_name": "country_name"
 			}
 		},
 		async fetchOUs(refresh = false) {

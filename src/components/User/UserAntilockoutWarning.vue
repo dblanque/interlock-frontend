@@ -23,8 +23,8 @@
 					{{ $t('section.users.tryingToDisable') }}
 					<span class="font-weight-bold" style="padding-left: 0.5ch;">
 						{{
-							userObject.givenName && userObject.sn ?
-								`${userObject.givenName} ${userObject.sn} (${userObject.username})` :
+							userObject.first_name && userObject.last_name ?
+								`${userObject.first_name} ${userObject.last_name} (${userObject.username})` :
 								userObject.username
 						}}
 					</span>

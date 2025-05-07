@@ -241,40 +241,40 @@ export default {
 		},
 		getDefaultFields() {
 			return {
-				"givenName": {
-					text_i18n: "attribute.ldap.givenName",
+				"first_name": {
+					text_i18n: "attribute.first_name",
 					value: ""
 				},
-				"sn": {
-					text_i18n: "attribute.ldap.sn",
+				"last_name": {
+					text_i18n: "attribute.last_name",
 					value: ""
 				},
-				"telephoneNumber": {
-					text_i18n: "attribute.ldap.telephoneNumber",
+				"phone": {
+					text_i18n: "attribute.phone",
 					value: ""
 				},
-				"streetAddress": {
-					text_i18n: "attribute.ldap.streetAddress",
+				"street_address": {
+					text_i18n: "attribute.street_address",
 					value: ""
 				},
-				"postalCode": {
-					text_i18n: "attribute.ldap.postalCode",
+				"postal_code": {
+					text_i18n: "attribute.postal_code",
 					value: ""
 				},
-				"l": {
-					text_i18n: "attribute.ldap.l",
+				"city": {
+					text_i18n: "attribute.city",
 					value: ""
 				},
-				"st": {
-					text_i18n: "attribute.ldap.st",
+				"state_province": {
+					text_i18n: "attribute.state_province",
 					value: ""
 				},
-				"co": {
-					text_i18n: "attribute.ldap.co",
+				"country_name": {
+					text_i18n: "attribute.country_name",
 					value: ""
 				},
-				"wWWHomePage": {
-					text_i18n: "attribute.ldap.wWWHomePage",
+				"website": {
+					text_i18n: "attribute.website",
 					value: ""
 				},
 			}
@@ -282,7 +282,7 @@ export default {
 		setDefaultFields() {
 			this.userFields = {}
 			this.choicesFields = {
-				"co": {
+				"country_name": {
 					values: this.LDAPCountries,
 					type: "autocomplete"
 				}

@@ -168,8 +168,8 @@
 															align="center" justify="center">
 															<v-col cols="12" class="pa-0 ma-0 px-1">
 																<span class="ma-0 pa-0">
-																	{{ $tc('classes.user', 1) + ": " + ((member.givenName &&
-																		member.sn) ? member.givenName + " " + member.sn + " (" +
+																	{{ $tc('classes.user', 1) + ": " + ((member.first_name &&
+																		member.last_name) ? member.first_name + " " + member.last_name + " (" +
 																		member.username + ")" : member.username) }}
 																</span>
 															</v-col>
