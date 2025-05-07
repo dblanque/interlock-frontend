@@ -5,7 +5,6 @@
 	<div>
 		<v-data-table
 			:headers="tableData.headers"
-			item-key="distinguishedName"
 			v-model="tableData.selected"
 			:items="tableData.items"
 			:loading="loading"
