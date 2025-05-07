@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import Group from '@/include/Group.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 import { notificationBus } from '@/main.js'
 
