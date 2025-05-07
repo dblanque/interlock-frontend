@@ -3,12 +3,15 @@ import ApiModel from '@/include/super/ApiModel'
 
 class Group extends ApiModel {
 
-	cn;
-	displayName;
-	mail;
-	member;
-	distinguishedName;
-	sAMAccountName;
+	name;
+	full_name;
+	email;
+	members;
+	distinguished_name;
+	username;
+	has_members;
+	group_types;
+	group_scopes;
 
 	/**
 	 * Fetches model instance from API by id.

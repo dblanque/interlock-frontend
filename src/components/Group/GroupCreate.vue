@@ -45,9 +45,9 @@
 										<v-text-field
 											dense
 											@keydown.enter="nextStep"
-											:label="$t('attribute.ldap.cn')"
-											v-model="groupToCreate.cn"
-											:rules="[this.fieldRules(groupToCreate.cn, 'ge_cn', true)]"></v-text-field>
+											:label="$t('attribute.name')"
+											v-model="groupToCreate.name"
+											:rules="[this.fieldRules(groupToCreate.name, 'ge_cn', true)]"></v-text-field>
 									</v-col>
 								</v-row>
 
@@ -74,9 +74,16 @@
 									</v-btn>
 								</v-row>
 
-								<v-row class="ma-0 pa-0" justify="center">
-									<v-col cols="12" lg="8">
-										<v-expansion-panels v-model="groupPathExpansionPanel" flat hover
+								<v-row
+									class="ma-0 pa-0"
+									justify="center">
+									<v-col
+										cols="12"
+										lg="8">
+										<v-expansion-panels
+											v-model="groupPathExpansionPanel"
+											flat
+											hover
 											style="border: 1px solid var(--v-primary-base);">
 											<v-expansion-panel>
 												<v-expansion-panel-header>
@@ -93,10 +100,13 @@
 												</v-expansion-panel-header>
 
 												<v-expansion-panel-content>
-													<v-card flat outlined
+													<v-card
+														flat
+														outlined
 														style="max-height: 300px; overflow: auto !important;">
 														<!-- Dirtree OU List Component -->
-														<DirtreeOUList ref="DirtreeOUList"
+														<DirtreeOUList
+															ref="DirtreeOUList"
 															@selectedDestination="setDestination" />
 													</v-card>
 												</v-expansion-panel-content>
@@ -105,22 +115,35 @@
 									</v-col>
 								</v-row>
 
-								<GroupTypeRadioGroups :editFlag="true" :radioGroupScope="radioGroupScope"
-									:radioGroupType="radioGroupType" @update="updateValue" />
+								<GroupTypeRadioGroups
+									:group="groupToCreate"
+									:edit-flag="true"
+									@update-type="(v) => radioGroupType = v"
+									@update-scope="(v) => radioGroupScope = v" />
 								<v-row class="ma-0 pa-0">
 									<v-divider class="mx-12 my-3 mt-6"></v-divider>
 								</v-row>
 
 
 								<!-- Optionals -->
-								<v-row justify="center" class="mb-1">
-									<span class="text-overline" style="font-size: .95em !important;">{{
-										$t("section.groups.groupCreate.optionalsHeader") }}</span>
+								<v-row
+									justify="center"
+									class="mb-1">
+									<span
+										class="text-overline"
+										style="font-size: .95em !important;">{{
+											$t("section.groups.groupCreate.optionalsHeader") }}</span>
 								</v-row>
-								<v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-									<v-col cols="12" lg="4">
-										<v-text-field dense @keydown.enter="nextStep"
-											:label="$t('attribute.user.email')"
+								<v-row
+									justify="center"
+									class="pa-0 ma-0 font-weight-medium">
+									<v-col
+										cols="12"
+										lg="4">
+										<v-text-field
+											dense
+											@keydown.enter="nextStep"
+											:label="$t('attribute.email')"
 											v-model="groupToCreate.mail"
 											:rules="[this.fieldRules(groupToCreate.mail, 'ge_mail')]"></v-text-field>
 									</v-col>
@@ -129,24 +152,41 @@
 						</v-stepper-content>
 						<!-- Members -->
 						<v-stepper-content step="2">
-							<v-form ref="groupCreateForm2" @submit.prevent>
-								<CNObjectList ref="AddToGroup" @addDNs="addMembers" :showHeader="false"
+							<v-form
+								ref="groupCreateForm2"
+								@submit.prevent>
+								<CNObjectList
+									ref="AddToGroup"
+									@addDNs="addMembers"
+									:showHeader="false"
 									:addButton="false" />
 							</v-form>
 						</v-stepper-content>
 						<!-- Check if user exists - loader -->
 						<v-stepper-content step="3">
-							<v-row class="pa-12 ma-12" justify="center" align-content="center" align="center">
+							<v-row
+								class="pa-12 ma-12"
+								justify="center"
+								align-content="center"
+								align="center">
 								<v-col cols="12">
 									<v-fab-transition>
-										<v-progress-circular value="100"
+										<v-progress-circular
+											value="100"
 											:color="(this.error === false) ? (loading ? 'primary' : 'green') : 'red'"
-											:indeterminate="loading" size="100" width="10">
+											:indeterminate="loading"
+											size="100"
+											width="10">
 											<v-fab-transition>
 												<div v-show="loading == false">
-													<v-icon v-if="error == true" size="82"
+													<v-icon
+														v-if="error == true"
+														size="82"
 														color="red">mdi-close-circle</v-icon>
-													<v-icon v-else size="82" color="green">mdi-check-circle</v-icon>
+													<v-icon
+														v-else
+														size="82"
+														color="green">mdi-check-circle</v-icon>
 												</div>
 											</v-fab-transition>
 										</v-progress-circular>
@@ -170,8 +210,13 @@
 			</div>
 		</v-expand-transition>
 
-		<v-snackbar text color="red" timeout="1500" v-if="$vuetify.breakpoint.smAndDown"
-			v-model="showSnackbar" centered>
+		<v-snackbar
+			text
+			color="red"
+			timeout="1500"
+			v-if="$vuetify.breakpoint.smAndDown"
+			v-model="showSnackbar"
+			centered>
 			<v-row justify="center">
 				{{ this.errorMsg }}
 			</v-row>
@@ -179,22 +224,33 @@
 
 		<!-- Actions -->
 		<v-card-actions class="card-actions">
-			<v-row class="ma-1 pa-0"
+			<v-row
+				class="ma-1 pa-0"
 				:justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
 				<!-- Back and Next buttons -->
 				<div>
 					<v-slide-x-reverse-transition>
-						<v-chip class="mx-2" color="red" v-if="this.error && $vuetify.breakpoint.mdAndUp"
+						<v-chip
+							class="mx-2"
+							color="red"
+							v-if="this.error && $vuetify.breakpoint.mdAndUp"
 							text-color="white">
 							{{ this.errorMsg }}
 						</v-chip>
 					</v-slide-x-reverse-transition>
 
 					<v-slide-x-reverse-transition>
-						<v-btn elevation="0" @click="newGroup" v-if="this.createStage < 2"
-							class="ma-0 pa-0 pa-2 ma-1 pr-4" :dark="!isThemeDark($vuetify)"
-							:light="isThemeDark($vuetify)" rounded>
-							<v-icon class="ma-0 mr-1" color="primary">
+						<v-btn
+							elevation="0"
+							@click="newGroup"
+							v-if="this.createStage < 2"
+							class="ma-0 pa-0 pa-2 ma-1 pr-4"
+							:dark="!isThemeDark($vuetify)"
+							:light="isThemeDark($vuetify)"
+							rounded>
+							<v-icon
+								class="ma-0 mr-1"
+								color="primary">
 								mdi-cached
 							</v-icon>
 							{{ $t("actions.reset") }}
@@ -202,34 +258,54 @@
 					</v-slide-x-reverse-transition>
 
 					<v-slide-x-reverse-transition>
-						<v-btn elevation="0" @click="prevStep"
+						<v-btn
+							elevation="0"
+							@click="prevStep"
 							v-if="createStage > 1 && createStage < 3 || this.error == true && createStage > 1"
-							@keydown.enter="prevStep" class="ma-0 pa-0 pa-2 pr-4 ma-1"
+							@keydown.enter="prevStep"
+							class="ma-0 pa-0 pa-2 pr-4 ma-1"
 							:dark="!isThemeDark($vuetify)"
-							:light="isThemeDark($vuetify)" rounded>
-							<v-icon class="ma-0" color="primary">
+							:light="isThemeDark($vuetify)"
+							rounded>
+							<v-icon
+								class="ma-0"
+								color="primary">
 								mdi-chevron-double-left
 							</v-icon>
 							{{ $t("actions.back_short") }}
 						</v-btn>
 					</v-slide-x-reverse-transition>
 					<v-slide-x-reverse-transition>
-						<v-btn elevation="0" @click="nextStep" v-if="this.createStage < 3"
+						<v-btn
+							elevation="0"
+							@click="nextStep"
+							v-if="this.createStage < 3"
 							@keydown.enter="nextStep"
-							class="ma-0 pa-0 pa-2 ma-1 pl-4" :dark="!isThemeDark($vuetify)"
-							:light="isThemeDark($vuetify)" rounded>
+							class="ma-0 pa-0 pa-2 ma-1 pl-4"
+							:dark="!isThemeDark($vuetify)"
+							:light="isThemeDark($vuetify)"
+							rounded>
 							{{ $t("actions.next") }}
-							<v-icon class="ma-0" color="primary">
+							<v-icon
+								class="ma-0"
+								color="primary">
 								mdi-chevron-double-right
 							</v-icon>
 						</v-btn>
 					</v-slide-x-reverse-transition>
 					<v-slide-x-reverse-transition>
-						<v-btn elevation="0" @click="closeDialog(true)"
-							v-if="this.createStage > 2 && this.error === false" @keydown.enter="closeDialog(true)"
-							class="ma-0 pa-0 pa-2 ma-1 pr-4" :dark="!isThemeDark($vuetify)"
-							:light="isThemeDark($vuetify)" rounded>
-							<v-icon class="ma-0 mr-1" color="primary">
+						<v-btn
+							elevation="0"
+							@click="closeDialog(true)"
+							v-if="this.createStage > 2 && this.error === false"
+							@keydown.enter="closeDialog(true)"
+							class="ma-0 pa-0 pa-2 ma-1 pr-4"
+							:dark="!isThemeDark($vuetify)"
+							:light="isThemeDark($vuetify)"
+							rounded>
+							<v-icon
+								class="ma-0 mr-1"
+								color="primary">
 								mdi-checkbox-marked-circle-outline
 							</v-icon>
 							{{ $t("actions.done") }}
@@ -249,13 +325,17 @@ import GroupTypeRadioGroups from '@/components/Group/GroupTypeRadioGroups.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { getDomainDetails } from '@/include/utils.js';
+import {
+	GROUP_SCOPE_DEFAULT,
+	GROUP_TYPE_DEFAULT,
+} from '@/include/constants/LDAPGroup.js';
 
 export default {
 	name: 'GroupCreate',
 	components: {
 		DirtreeOUList,
 		CNObjectList,
-		GroupTypeRadioGroups
+		GroupTypeRadioGroups,
 	},
 	data() {
 		return {
@@ -264,7 +344,7 @@ export default {
 			domain: "",
 			realm: "",
 			basedn: "",
-			membersToAdd: [],
+			members_to_add: [],
 			success: false,
 			loading: true,
 			error: false,
@@ -274,8 +354,8 @@ export default {
 			groupPathExpansionPanel: false,
 			groupDestination: '',
 			groupToCreate: {},
-			radioGroupScope: 0,
-			radioGroupType: 1,
+			radioGroupScope: GROUP_SCOPE_DEFAULT,
+			radioGroupType: GROUP_TYPE_DEFAULT,
 			ouList: [],
 			createStage: 1,
 		}
@@ -295,14 +375,10 @@ export default {
 	methods: {
 		addMembers(members) {
 			try {
-				this.membersToAdd = members.map(e => e.distinguishedName)
-				if (!this.groupToCreate.member)
-					this.groupToCreate.member = []
-				members.forEach(g => {
-					if (this.groupToCreate.member.filter(e => e.distinguishedName == g.distinguishedName).length == 0) {
-						this.groupToCreate.member.push(g)
-					}
-				});
+				if (members && Array.isArray(members) && members.length > 0)
+					this.groupToCreate.members_to_add = members.map((e) => e.distinguished_name)
+				else
+					this.groupToCreate.members_to_add = []
 			}
 			catch (error) {
 				console.error(error)
@@ -329,8 +405,8 @@ export default {
 			switch (this.createStage) {
 				case 2:
 					let domainDetails = getDomainDetails()
-					this.groupToCreate.member = []
-					this.membersToAdd = []
+					this.groupToCreate.members = []
+					this.members_to_add = []
 					this.domain = domainDetails.name
 					this.realm = domainDetails.realm
 					this.basedn = domainDetails.basedn
@@ -370,16 +446,16 @@ export default {
 				case 2:
 					this.$refs.AddToGroup.addDNs()
 					if (!this.error) {
-						this.groupToCreate.groupType = this.radioGroupType
-						this.groupToCreate.groupScope = this.radioGroupScope
+						this.groupToCreate.group_types = [this.radioGroupType]
+						this.groupToCreate.group_scopes = [this.radioGroupScope]
 						Object.keys(this.groupToCreate).forEach(key => {
 							if (this.groupToCreate[key] === undefined) {
 								delete this.groupToCreate[key];
 							}
 						});
 						//
-						if (this.membersToAdd.length > 0)
-							this.groupToCreate['membersToAdd'] = this.membersToAdd
+						if (this.members_to_add.length > 0)
+							this.groupToCreate.members_to_add = this.members_to_add
 						//
 						this.createGroup()
 					}
@@ -401,11 +477,11 @@ export default {
 			this.passwordHidden = true
 			this.groupPathExpansionPanel = false
 			this.groupToCreate = new Group({})
-			this.membersToAdd = []
+			this.members_to_add = []
 			this.createStage = 1
 			this.error = false
-			this.radioGroupScope = 0
-			this.radioGroupType = 1
+			this.radioGroupScope = GROUP_SCOPE_DEFAULT
+			this.radioGroupType = GROUP_TYPE_DEFAULT
 			this.errorMsg = ""
 			this.$refs.groupCreateForm1.resetValidation()
 			let domainDetails = getDomainDetails()

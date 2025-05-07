@@ -11,8 +11,7 @@
 					<v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
 						<h3 class="pa-0 ma-0 ma-2">
 							{{
-								`${$tc('classes.group', 1)}: ` +
-									parentTitle == 'ldap-groups' ? groupcopy.cn : groupcopy.name
+								`${$tc('classes.group', 1)}: ` + groupcopy.name
 							}}
 						</h3>
 						<v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4" />
@@ -43,20 +42,20 @@
 							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
 								<v-text-field
 									dense
-									id="cn"
-									:label="$t('attribute.ldap.cn')"
+									id="name"
+									:label="$t('attribute.name')"
 									:readonly="editFlag != true && !loading"
-									v-model="groupcopy.cn"
-									:rules="[this.fieldRules(groupcopy.cn, 'ge_cn')]"></v-text-field>
+									v-model="groupcopy.name"
+									:rules="[this.fieldRules(groupcopy.name, 'ge_cn')]"></v-text-field>
 							</v-col>
 							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
 								<v-text-field
 									dense
-									id="mail"
-									:label="$t('attribute.user.email')"
+									id="email"
+									:label="$t('attribute.email')"
 									:readonly="editFlag != true"
-									v-model="groupcopy.mail"
-									:rules="[this.fieldRules(groupcopy.mail, 'ge_mail')]"></v-text-field>
+									v-model="groupcopy.email"
+									:rules="[this.fieldRules(groupcopy.email, 'ge_email')]"></v-text-field>
 							</v-col>
 						</v-row>
 
@@ -64,18 +63,18 @@
 							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
 								<v-text-field
 									dense
-									id="objectRid"
-									:label="$t('attribute.ldap.objectRid')"
+									id="object_relative_id"
+									:label="$t('attribute.object_relative_id')"
 									readonly
-									v-model="groupcopy.objectRid"></v-text-field>
+									v-model="groupcopy.object_relative_id"></v-text-field>
 							</v-col>
 							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
 								<v-text-field
 									dense
-									id="objectSid"
-									:label="$t('attribute.ldap.objectSid')"
+									id="object_security_id"
+									:label="$t('attribute.object_security_id')"
 									readonly
-									v-model="groupcopy.objectSid"></v-text-field>
+									v-model="groupcopy.object_security_id"></v-text-field>
 							</v-col>
 						</v-row>
 
@@ -83,46 +82,17 @@
 							<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
 								<v-text-field
 									dense
-									id="distinguishedName"
-									:label="$t('attribute.ldap.distinguishedName')"
+									id="distinguished_name"
+									:label="$t('attribute.distinguished_name')"
 									readonly
-									v-model="groupcopy.distinguishedName"></v-text-field>
+									v-model="groupcopy.distinguished_name"></v-text-field>
 							</v-col>
 						</v-row>
 
 						<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
-							<v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
-								<v-card outlined height="100%" class="ma-1 pa-0 px-3 py-1">
-									<v-row class="ma-2">
-										{{ $t('section.groups.groupDialog.groupType') }}
-									</v-row>
-									<v-radio-group
-										:readonly="!editFlag"
-										:disabled="!editFlag"
-										v-model="radioGroupType" class="ma-0 pa-0">
-										<v-radio v-for="gt, key in groupTypes"
-											:value="key"
-											:key="key"
-											:label="$t('section.groups.types.' + gt)" />
-									</v-radio-group>
-								</v-card>
-							</v-col>
-							<v-col class="ma-0 pa-0 mx-2 mb-2" cols="12" md="4">
-								<v-card outlined height="100%" class="ma-1 pa-0 px-3 py-1">
-									<v-row class="ma-2">
-										{{ $t('section.groups.groupDialog.groupScope') }}
-									</v-row>
-									<v-radio-group
-										:readonly="!editFlag"
-										:disabled="!editFlag"
-										v-model="radioGroupScope" class="ma-0 pa-0">
-										<v-radio v-for="gs, key in groupScopes"
-											:value="key"
-											:key="key"
-											:label="$t('section.groups.types.' + gs)" />
-									</v-radio-group>
-								</v-card>
-							</v-col>
+							<GroupTypeRadioGroups :editFlag="editFlag" :group="groupcopy"
+								@update-type="(v) => radioGroupType = v"
+								@update-scope="(v) => radioGroupScope = v"/>
 						</v-row>
 
 						<!-- MEMBER BUTTONS -->
@@ -149,13 +119,13 @@
 										</v-expansion-panel-header>
 										<v-expansion-panel-content>
 											<v-list dense>
-												<v-list-item v-for="member, key in this.groupcopy.member" :key="key"
+												<v-list-item v-for="member, key in this.groupcopy.members" :key="key"
 													:class="key != 0 ? 'border-bottom' : 'border-block'">
 													<v-list-item-icon class="">
-														<v-icon v-if="isUserType(member.objectClass)">
+														<v-icon v-if="isUserType(member.object_class)">
 															mdi-account
 														</v-icon>
-														<v-icon v-else-if="member.objectClass.includes('group')">
+														<v-icon v-else-if="member.object_class.includes('group')">
 															mdi-google-circles-communities
 														</v-icon>
 														<v-icon v-else>
@@ -164,27 +134,31 @@
 													</v-list-item-icon>
 
 													<v-list-item-content>
-														<v-row v-if="isUserType(member.objectClass)"
+														<v-row v-if="isUserType(member.object_class)"
 															align="center" justify="center">
 															<v-col cols="12" class="pa-0 ma-0 px-1">
 																<span class="ma-0 pa-0">
-																	{{ $tc('classes.user', 1) + ": " + ((member.first_name &&
-																		member.last_name) ? member.first_name + " " + member.last_name + " (" +
-																		member.username + ")" : member.username) }}
+																	{{ `${$tc('classes.user', 1)}: ` }}
+																	{{
+																		((member.first_name && member.last_name) ?
+																			`${member.first_name} ${member.last_name} (${member.username})`
+																			:
+																			member.username)
+																	}}
 																</span>
 															</v-col>
 														</v-row>
-														<v-row v-else-if="member.objectClass.includes('group')"
+														<v-row v-else-if="member.object_class.includes('group')"
 															align="center" justify="center">
 															<v-col cols="12" class="pa-0 ma-0 px-1">
 																<span class="ma-0 pa-0">
-																	{{ $tc('classes.group', 1) + ": " + member.cn }}
+																	{{ `${$tc('classes.group', 1)}: ${member.name}` }}
 																</span>
 															</v-col>
 														</v-row>
 														<v-row v-else align="center" justify="center">
 															<v-col cols="12" class="pa-0 ma-0 px-1">
-																{{ member.distinguishedName }}
+																{{ member.distinguished_name }}
 															</v-col>
 														</v-row>
 													</v-list-item-content>
@@ -201,14 +175,14 @@
 																	</v-icon>
 																</v-btn>
 															</template>
-															<span> {{ member.distinguishedName }} </span>
+															<span> {{ member.distinguished_name }} </span>
 														</v-tooltip>
 													</v-list-item-action>
 
 													<v-list-item-action class="pa-0 ma-0">
 														<v-tooltip bottom>
 															<template v-slot:activator="{ on, attrs }">
-																<v-btn small icon @click="copyText(member.distinguishedName)"
+																<v-btn small icon @click="copyText(member.distinguished_name)"
 																	color="primary"
 																	v-bind="attrs"
 																	v-on="on">
@@ -228,7 +202,7 @@
 															color="red">
 															<template v-slot:activator="{ on, attrs }">
 																<v-btn small icon
-																	@click="removeMember(member.distinguishedName, groupcopy.member)"
+																	@click="removeMember(member.distinguished_name, groupcopy.members)"
 																	color="red"
 																	:disabled="!editFlag"
 																	v-bind="attrs"
@@ -341,14 +315,25 @@ import CNObjectList from '@/components/CNObjectList.vue';
 import validationMixin from '@/plugins/mixin/validationMixin.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import { notificationBus } from '@/main.js';
-import { LDAPGroupScopes, LDAPGroupTypes } from '@/include/constants/LDAPGroup.js';
+import {
+	GROUP_SCOPE_DEFAULT,
+	GROUP_TYPE_DEFAULT,
+	GROUP_TYPE_DISTRIBUTION,
+	GROUP_TYPE_SECURITY,
+	GROUP_TYPE_SYSTEM,
+	GROUP_SCOPE_GLOBAL,
+	GROUP_SCOPE_DOMAIN_LOCAL,
+	GROUP_SCOPE_UNIVERSAL,
+} from '@/include/constants/LDAPGroup.js';
 import { LDAPUserClasses } from '@/include/constants/LDAPUser.js';
+import GroupTypeRadioGroups from '@/components/Group/GroupTypeRadioGroups.vue'
 
 export default {
 	name: 'GroupDialog',
 	components: {
 		CNObjectList,
-		RefreshButton
+		RefreshButton,
+		GroupTypeRadioGroups,
 	},
 	data() {
 		return {
@@ -365,12 +350,10 @@ export default {
 			groupcopy: {},
 			excludeDNs: [],
 			memberPanelExpanded: 0,
-			membersToAdd: [],
-			membersToRemove: [],
-			groupTypes: LDAPGroupTypes,
-			groupScopes: LDAPGroupScopes,
-			radioGroupType: 0,
-			radioGroupScope: 0,
+			members_to_add: [],
+			members_to_remove: [],
+			radioGroupType: GROUP_TYPE_DEFAULT,
+			radioGroupScope: GROUP_SCOPE_DEFAULT,
 			// Dialog States
 			dialogs: {
 				addToGroup: false
@@ -383,7 +366,7 @@ export default {
 		this.syncGroup();
 	},
 	watch: {
-		'dialogs': {
+		dialogs: {
 			handler: function (newValue) {
 				if (!newValue['addToGroup'] || newValue['addToGroup'] == false)
 					this.$refs.AddToGroup.clearList();
@@ -408,8 +391,8 @@ export default {
 			navigator.clipboard.writeText(textString);
 		},
 		getMembersLength() {
-			if (this.groupcopy.member != undefined) {
-				if (this.groupcopy.member.length == 0 || !this.groupcopy.member)
+			if (this.groupcopy.members != undefined) {
+				if (this.groupcopy.members.length == 0 || !this.groupcopy.members)
 					this.showMemberTab = false
 				else
 					this.showMemberTab = true
@@ -417,15 +400,15 @@ export default {
 		},
 		setupExclude() {
 			this.excludeDNs = []
-			if (!this.excludeDNs.includes(this.groupcopy.distinguishedName))
-				this.excludeDNs.push(this.groupcopy.distinguishedName)
-			if (this.groupcopy.member != undefined && this.groupcopy.member.length > 0) {
-				this.groupcopy.member.forEach(member => {
-					this.excludeDNs.push(member.distinguishedName)
+			if (!this.excludeDNs.includes(this.groupcopy.distinguished_name))
+				this.excludeDNs.push(this.groupcopy.distinguished_name)
+			if (this.groupcopy.members != undefined && this.groupcopy.members.length > 0) {
+				this.groupcopy.members.forEach(member => {
+					this.excludeDNs.push(member.distinguished_name)
 				});
 			}
-			if (this.membersToAdd != undefined && this.membersToAdd.length > 0) {
-				this.membersToAdd.forEach(member => {
+			if (this.members_to_add != undefined && this.members_to_add.length > 0) {
+				this.members_to_add.forEach(member => {
 					if (!this.excludeDNs.includes(member))
 						this.excludeDNs.push(member)
 				});
@@ -450,16 +433,16 @@ export default {
 			this.dialogs[key] = false;
 		},
 		addMembers(members) {
-			this.membersToAdd = members.map(e => e.distinguishedName)
-			if (!this.groupcopy.member)
-				this.groupcopy.member = []
+			this.members_to_add = members.map(e => e.distinguished_name)
+			if (!this.groupcopy.members)
+				this.groupcopy.members = []
 			members.forEach(g => {
-				if (this.groupcopy.member.filter(e => e.distinguishedName == g.distinguishedName).length == 0)
-					this.groupcopy.member.push(g)
+				if (this.groupcopy.members.filter(e => e.distinguished_name == g.distinguished_name).length == 0)
+					this.groupcopy.members.push(g)
 
-				if (this.membersToRemove != undefined) {
-					// console.log("MTR Includes this member, removing. " + g.distinguishedName)
-					this.membersToRemove = this.membersToRemove.filter(e => e != g.distinguishedName)
+				if (this.members_to_remove != undefined) {
+					// console.log("MTR Includes this member, removing. " + g.distinguished_name)
+					this.members_to_remove = this.members_to_remove.filter(e => e != g.distinguished_name)
 				}
 			});
 			this.closeInnerDialog('addToGroup')
@@ -469,34 +452,34 @@ export default {
 			this.$forceUpdate
 		},
 		removeMember(memberDn) {
-			if (!this.membersToRemove != undefined && !this.membersToRemove.includes(memberDn))
-				this.membersToRemove.push(memberDn)
+			if (!this.members_to_remove != undefined && !this.members_to_remove.includes(memberDn))
+				this.members_to_remove.push(memberDn)
 
-			if (this.membersToAdd != undefined && this.membersToAdd.includes(memberDn))
-				this.membersToAdd = this.membersToAdd.filter(e => e != memberDn)
+			if (this.members_to_add != undefined && this.members_to_add.includes(memberDn))
+				this.members_to_add = this.members_to_add.filter(e => e != memberDn)
 
 			if (this.excludeDNs != undefined && this.excludeDNs.includes(memberDn))
 				this.excludeDNs = this.excludeDNs.filter(e => e != memberDn)
 
-			this.groupcopy.member = this.groupcopy.member.filter(e => e.distinguishedName != memberDn)
+			this.groupcopy.members = this.groupcopy.members.filter(e => e.distinguished_name != memberDn)
 			// this.logGroups()
-			if (this.groupcopy.member == undefined || this.groupcopy.member.length == 0)
+			if (this.groupcopy.members == undefined || this.groupcopy.members.length == 0)
 				this.showMemberTab = false
 			this.setupExclude()
 			this.$forceUpdate
 		},
 		logGroups() {
 			console.log("Member Array")
-			console.log(this.groupcopy.member)
+			console.log(this.groupcopy.members)
 			console.log("Members to Add")
-			console.log(this.membersToAdd)
+			console.log(this.members_to_add)
 			console.log("Members to Remove")
-			console.log(this.membersToRemove)
+			console.log(this.members_to_remove)
 			console.log("Exclude DNs")
 			console.log(this.excludeDNs)
 		},
 		checkIfGroupBuiltIn() {
-			if (this.group.groupType.includes('GROUP_SYSTEM'))
+			if (this.group.group_types.includes('TYPE_SYSTEM'))
 				return true
 			return false
 		},
@@ -514,23 +497,31 @@ export default {
 			return array
 		},
 		setGroupTypeAndScope() {
-			if (this.group.groupType != undefined) {
-				this.group.groupType.forEach(groupSetting => {
-					switch (groupSetting) {
-						case 'GROUP_DISTRIBUTION':
-							this.radioGroupType = 0;
+			if (this.group.group_types != undefined) {
+				this.group.group_types.forEach(k => {
+					switch (k) {
+						case "GROUP_TYPE_DISTRIBUTION":
+							this.radioGroupType = GROUP_TYPE_DISTRIBUTION;
 							break;
-						case 'GROUP_SECURITY':
-							this.radioGroupType = 1;
+						case "GROUP_TYPE_SECURITY":
+							this.radioGroupType = GROUP_TYPE_SECURITY;
 							break;
-						case 'GROUP_GLOBAL':
-							this.radioGroupScope = 0;
+						default:
 							break;
-						case 'GROUP_DOMAIN_LOCAL':
-							this.radioGroupScope = 1;
+					}
+				});
+			}
+			if (this.group.group_scopes != undefined) {
+				this.group.group_scopes.forEach(k => {
+					switch (k) {
+						case 'GROUP_SCOPE_GLOBAL':
+							this.radioGroupScope = GROUP_SCOPE_GLOBAL;
 							break;
-						case 'GROUP_UNIVERSAL':
-							this.radioGroupScope = 2;
+						case 'GROUP_SCOPE_DOMAIN_LOCAL':
+							this.radioGroupScope = GROUP_SCOPE_DOMAIN_LOCAL;
+							break;
+						case 'GROUP_SCOPE_UNIVERSAL':
+							this.radioGroupScope = GROUP_SCOPE_UNIVERSAL;
 							break;
 						default:
 							break;
@@ -542,8 +533,8 @@ export default {
 		// next tick to avoid mutation errors
 		syncGroup() {
 			this.groupcopy = new Group({})
-			this.membersToRemove = []
-			this.membersToAdd = []
+			this.members_to_remove = []
+			this.members_to_add = []
 			this.excludeDNs = []
 			this.showMemberTab = false
 			this.showAlert = false
@@ -579,22 +570,28 @@ export default {
 		async saveGroup(closeDialog = false) {
 			this.loading = true
 			this.loadingColor = 'primary'
-			this.groupcopy.groupType = this.radioGroupType
-			this.groupcopy.groupScope = this.radioGroupScope
+
+			// Set Group Type and Scope
+			let isSystemGroup = this.group.group_types.includes(GROUP_TYPE_SYSTEM)
+			this.groupcopy.group_types = [this.radioGroupType]
+			if (isSystemGroup === true)
+				this.groupcopy.group_types.push(GROUP_TYPE_SYSTEM)
+			this.groupcopy.group_scopes = [this.radioGroupScope]
+
 			// Set members
 			// Members to Add
-			if (this.membersToAdd.length > 0)
-				this.groupcopy.membersToAdd = this.membersToAdd
+			if (this.members_to_add.length > 0)
+				this.groupcopy.members_to_add = this.members_to_add
 			else
-				delete this.groupcopy.membersToAdd
+				delete this.groupcopy.members_to_add
 			// Members to Remove
-			if (this.membersToRemove.length > 0)
-				this.groupcopy.membersToRemove = this.membersToRemove
+			if (this.members_to_remove.length > 0)
+				this.groupcopy.members_to_remove = this.members_to_remove
 			else
-				delete this.groupcopy.membersToRemove
+				delete this.groupcopy.members_to_remove
 
-			const excludeKeys = ["objectRid", "objectSid"]
-			const keysToCheck = ["cn", "groupScope", "groupType"]
+			const excludeKeys = ["object_relative_id", "object_security_id"]
+			const keysToCheck = ["name", "group_scopes", "group_types"]
 			let newDistinguishedName
 			let data = Object.assign({}, this.groupcopy)
 			excludeKeys.forEach(k => {
@@ -607,9 +604,9 @@ export default {
 				}
 				else {
 					switch (k) {
-						case "cn":
+						case "name":
 							const v = data[k]
-							newDistinguishedName = data["distinguishedName"].split(",")
+							newDistinguishedName = data["distinguished_name"].split(",")
 							// Remove relative distinguished name to get superior ldap path.
 							newDistinguishedName.shift()
 							newDistinguishedName = newDistinguishedName.join(",")
@@ -628,7 +625,7 @@ export default {
 						if (closeDialog == true)
 							this.closeDialog();
 						if (newDistinguishedName)
-							data["distinguishedName"] = newDistinguishedName
+							data["distinguished_name"] = newDistinguishedName
 						this.$emit('save', data, closeDialog == true);
 						this.loading = false
 						this.loadingColor = 'primary'

@@ -793,12 +793,14 @@
       "isPopulated":"El grupo tiene miembros",
       "isNotPopulated":"El grupo no tiene miembros",
       "types":{
-        "GROUP_DISTRIBUTION": "Grupo de Distribución",
-        "GROUP_SYSTEM": "Creado por el Sistema",
-        "GROUP_GLOBAL": "Alcance Global",
-        "GROUP_DOMAIN_LOCAL": "Alcance Local de Dominio",
-        "GROUP_UNIVERSAL": "Alcance Universal",
-        "GROUP_SECURITY": "Grupo de Seguridad"
+        "GROUP_TYPE_DISTRIBUTION": "Grupo de Distribución",
+        "GROUP_TYPE_SYSTEM": "Creado por el Sistema",
+        "GROUP_TYPE_SECURITY": "Grupo de Seguridad"
+      },
+      "scopes":{
+        "GROUP_SCOPE_GLOBAL": "Alcance Global",
+        "GROUP_SCOPE_DOMAIN_LOCAL": "Alcance Local de Dominio",
+        "GROUP_SCOPE_UNIVERSAL": "Alcance Universal"
       },
       "groupCreate":{
         "header":"Crear Grupo",

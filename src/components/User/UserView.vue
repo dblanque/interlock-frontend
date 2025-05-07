@@ -512,7 +512,7 @@ export default {
 				if (tableHeader.value == "actions") {
 					tableHeader.text = this.$t('actions.label')
 				} else {
-					tableHeader.text = this.$t('attribute.ldap.' + tableHeader.value)
+					tableHeader.text = this.$t('attribute.' + tableHeader.value)
 				}
 			});
 		},

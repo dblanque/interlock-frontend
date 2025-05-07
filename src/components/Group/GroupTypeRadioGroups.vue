@@ -8,12 +8,12 @@
 				<v-row class="ma-2">
 					{{ $t('section.groups.groupDialog.groupType') }}
 				</v-row>
-				<v-radio-group @change="emitValueUpdate('radioGroupScope', selectedRadioGroupType)"
+				<v-radio-group @change="updateType"
 				mandatory
 				:readonly="!editFlag"
 				:disabled="!editFlag"
-				v-model="selectedRadioGroupType" class="ma-0 pa-0">
-					<v-radio v-for="gt, key in groupTypes"
+				v-model="selectedType" class="ma-0 pa-0">
+					<v-radio v-for="key, gt in groupTypes"
 					:value="key"
 					:key="key"
 					:label="$t('section.groups.types.' + gt)"
@@ -26,15 +26,15 @@
 				<v-row class="ma-2">
 					{{ $t('section.groups.groupDialog.groupScope') }}
 				</v-row>
-				<v-radio-group @change="emitValueUpdate('radioGroupScope', selectedRadioGroupScope)"
+				<v-radio-group @change="updateScope"
 				mandatory
 				:readonly="!editFlag"
 				:disabled="!editFlag"
-				v-model="selectedRadioGroupScope" class="ma-0 pa-0">
-					<v-radio v-for="gs, key in groupScopes"
+				v-model="selectedScope" class="ma-0 pa-0">
+					<v-radio v-for="key, gs in groupScopes"
 					:value="key"
 					:key="key"
-					:label="$t('section.groups.types.' + gs)"
+					:label="$t('section.groups.scopes.' + gs)"
 					/>
 				</v-radio-group>
 			</v-card>
@@ -43,39 +43,87 @@
 </template>
 
 <script>
+import {
+	GROUP_SCOPE_DEFAULT,
+	GROUP_TYPE_DEFAULT,
+	GROUP_TYPE_SYSTEM,
+	LDAPGroupScopes,
+	LDAPGroupTypes,
+} from '@/include/constants/LDAPGroup.js';
+
 export default {
 	name: 'GroupTypeRadioGroups',
 	props: {
 		editFlag: Boolean,
-		radioGroupType: Number,
-		radioGroupScope: Number
-	},
-	mounted () {
-		this.selectedRadioGroupType = this.radioGroupType;
-		this.selectedRadioGroupScope = this.radioGroupScope;
+		group: {
+			type: Object,
+			default: () => { return {} },
+		},
 	},
 	data() {
 		return {
-			selectedRadioGroupType: 0,
-			selectedRadioGroupScope: 0,
-			groupTypes: [
-				"GROUP_DISTRIBUTION",
-				"GROUP_SECURITY"
-			],
-			groupScopes: [
-				"GROUP_GLOBAL",
-				"GROUP_DOMAIN_LOCAL",
-				"GROUP_UNIVERSAL"
-			],
+			logWatch: false,
+			selectedType: GROUP_TYPE_DEFAULT,
+			selectedScope: GROUP_SCOPE_DEFAULT,
+			groupTypes: LDAPGroupTypes,
+			groupScopes: LDAPGroupScopes,
 		}
 	},
-	methods: {
-		reloadRadioValues(){
-			this.selectedRadioGroupType = this.radioGroupType;
-			this.selectedRadioGroupScope = this.radioGroupScope;
+	watch: {
+		group: {
+			deep: true,
+			handler: function () {
+				this.reloadRadioValues()
+			}
 		},
-		emitValueUpdate(key, value) {
-			this.$emit('update', key, value)
+		selectedType: {
+			handler: function (newValue) {
+				if (this.logWatch === true)
+					console.log(newValue)
+			}
+		},
+		selectedScope: {
+			handler: function (newValue) {
+				if (this.logWatch === true)
+					console.log(newValue)
+			}
+		},
+	},
+	mounted () {
+		this.reloadRadioValues();
+	},
+	methods: {
+		getScope(){
+			if (this.group)
+				if (this.group.group_scopes && this.group.group_scopes.length > 0)
+					return this.group.group_scopes[0]
+			return GROUP_SCOPE_DEFAULT
+		},
+		getTypes(){
+			if (this.group) {
+				if (this.group.group_types && this.group.group_types.length > 0) {
+					for (let i = 0; i < this.group.group_types.length; i++) {
+						const t = this.group.group_types[i]
+						if (t != GROUP_TYPE_SYSTEM)
+							return t;
+					}
+				}
+			}
+			return GROUP_TYPE_DEFAULT
+		},
+		reloadRadioValues(){
+			this.selectedType = this.getTypes();
+			this.selectedScope = this.getScope();
+		},
+		updateType(){
+			let v = this.selectedType
+			this.$emit("update-type", v)
+			this.$emit("updateType", v)
+		},
+		updateScope(){
+			let v = this.selectedScope
+			this.$emit("update-scope", v)
+			this.$emit("updateScope", v)
 		}
 	},
 }

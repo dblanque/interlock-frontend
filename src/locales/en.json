@@ -785,12 +785,14 @@
       "isPopulated":"This group is populated",
       "isNotPopulated":"This group is not Populated",
       "types":{
-        "GROUP_DISTRIBUTION": "Distribution Group",
-        "GROUP_SYSTEM": "System Created",
-        "GROUP_GLOBAL": "Global Scope",
-        "GROUP_DOMAIN_LOCAL": "Domain Local Scope",
-        "GROUP_UNIVERSAL": "Universal Scope",
-        "GROUP_SECURITY": "Security Group"
+        "GROUP_TYPE_DISTRIBUTION": "Distribution Group",
+        "GROUP_TYPE_SYSTEM": "System Created",
+        "GROUP_TYPE_SECURITY": "Security Group"
+      },
+      "scopes":{
+        "GROUP_SCOPE_GLOBAL": "Global Scope",
+        "GROUP_SCOPE_DOMAIN_LOCAL": "Domain Local Scope",
+        "GROUP_SCOPE_UNIVERSAL": "Universal Scope"
       },
       "groupCreate":{
         "header":"Create Group",
@@ -925,8 +927,9 @@
     "account_type":"Account Type",
     "groups":"Groups",
     "members":"Members",
-    "group_type":"Group Type",
-    "group_scope":"Group Scope",
+    "has_members":"Has Members",
+    "group_types":"Group Type | Group Types",
+    "group_scopes":"Group Scope | Group Scopes",
     "is_enabled":"Enabled",
     "type":"Type",
     "name":"Name",

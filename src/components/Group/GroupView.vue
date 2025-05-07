@@ -4,8 +4,8 @@
 <template>
 	<div>
 		<v-data-table
-			:headers="this.tableData.headers"
-			:items="this.tableData.items"
+			:headers="tableData.headers"
+			:items="tableData.items"
 			:custom-sort="sortNullLast"
 			:item-key="tableItemKey"
 			:loading="loading"
@@ -37,25 +37,40 @@
 			</template>
 
 			<!-- GROUP TYPE -->
-			<template v-slot:[`item.groupType`]="{ item }">
-				<div class="pt-2">
+			<template v-slot:[`item.group_types`]="{ item }">
+				<div class="pt-2" v-if="item.group_types && item.group_types.length > 0">
 					<v-chip
-						:dark="getColorForGroupType(type)['dark']"
-						:light="!getColorForGroupType(type)['dark']"
-						:color="getColorForGroupType(type)['color']"
+						v-for="groupType in item.group_types"
+						:key="groupType"
 						class="mx-1 mb-2"
-						v-for="type in item.groupType"
-						:key="type">
-						{{ $t('section.groups.types.' + type) }}
+						:dark="getColorForGroupTypeOrScope(groupType).dark"
+						:light="!getColorForGroupTypeOrScope(groupType).dark"
+						:color="getColorForGroupTypeOrScope(groupType).color">
+						{{ $t(`section.groups.types.GROUP_${groupType}`) }}
+					</v-chip>
+				</div>
+			</template>
+
+			<!-- GROUP SCOPE -->
+			<template v-slot:[`item.group_scopes`]="{ item }">
+				<div class="pt-2" v-if="item.group_scopes && item.group_scopes.length > 0">
+					<v-chip
+						v-for="groupScope in item.group_scopes"
+						:key="groupScope"
+						class="mx-1 mb-2"
+						:dark="getColorForGroupTypeOrScope(groupScope).dark"
+						:light="!getColorForGroupTypeOrScope(groupScope).dark"
+						:color="getColorForGroupTypeOrScope(groupScope).color">
+						{{ $t(`section.groups.scopes.GROUP_${groupScope}`) }}
 					</v-chip>
 				</div>
 			</template>
 
 
 			<!-- GROUP POPULATION -->
-			<template v-slot:[`item.hasMembers`]="{ item }">
+			<template v-slot:[`item.has_members`]="{ item }">
 				<!-- Group is Populated -->
-				<v-tooltip color="primary" bottom v-if="item.hasMembers">
+				<v-tooltip color="primary" bottom v-if="item.has_members">
 					<template v-slot:activator="{ on, attrs }">
 						<v-icon
 							v-bind="attrs"
@@ -71,7 +86,7 @@
 				<v-tooltip
 					color="secondary"
 					bottom
-					v-else-if="!item.hasMembers">
+					v-else-if="!item.has_members">
 					<template v-slot:activator="{ on, attrs }">
 						<v-icon
 							v-bind="attrs"
@@ -311,6 +326,14 @@ import { notificationBus } from '@/main.js'
 import Group from '@/include/Group.js';
 import ApplicationGroup from '@/include/ApplicationGroup.js';
 import ApplicationGroupDialog from '@/components/Group/ApplicationGroupDialog.vue';
+import {
+	GROUP_TYPE_DISTRIBUTION,
+	GROUP_TYPE_SECURITY,
+	GROUP_TYPE_SYSTEM,
+	GROUP_SCOPE_GLOBAL,
+	GROUP_SCOPE_DOMAIN_LOCAL,
+	GROUP_SCOPE_UNIVERSAL,
+} from '@/include/constants/LDAPGroup.js';
 import GroupDialog from '@/components/Group/GroupDialog.vue'
 import GroupCreate from '@/components/Group/GroupCreate.vue'
 import GroupDelete from '@/components/Group/GroupDelete.vue'
@@ -441,8 +464,10 @@ export default {
 				})
 		},
 		isLDAPGroupCritical(item) {
-			if ("groupType" in item && "cn" in item)
-				return item.groupType.includes('GROUP_SYSTEM') || item.cn.startsWith('Domain ')
+			let _r = item.group_types.includes(GROUP_TYPE_SYSTEM) ||
+				item.name.toLowerCase().startsWith('domain ')
+			if ("group_types" in item && "name" in item)
+				return _r
 			return false
 		},
 		resetSearch() {
@@ -499,13 +524,23 @@ export default {
 		setViewToEdit(value) {
 			this.editableForm = value;
 		},
+		getTranslationParent() {
+			switch (this.viewTitle) {
+				case "application-groups":
+					return "attribute.application.group."
+				case "ldap-groups":
+				default:
+					return "attribute."
+			}
+		},
 		// Reload Data Table Header Labels
 		reloadDataTableHeaders() {
 			this.tableData.headers.forEach(tableHeader => {
 				if (tableHeader.value == "actions") {
 					tableHeader.text = this.$t('actions.label')
 				} else {
-					tableHeader.text = this.$t('attribute.ldap.' + tableHeader.value)
+					tableHeader.text = this.$tc(
+						this.getTranslationParent() + tableHeader.value, 1)
 				}
 			});
 		},
@@ -521,21 +556,19 @@ export default {
 		// Group Actions
 		async listGroupItems(emitNotif = true) {
 			this.resetDataTable()
-			let translationParent
+			let translationParent = this.getTranslationParent()
 			switch (this.viewTitle) {
 				case "application-groups":
 					this.setLoading()
 					this.groupClass = ApplicationGroup
 					this.tableItemKey = "id"
 					this.tableDefaultSortKey = "name"
-					translationParent = "attribute.application.group."
 					break;
 				case "ldap-groups":
 					this.setLoading()
 					this.groupClass = Group
-					this.tableItemKey = "distinguishedName"
-					this.tableDefaultSortKey = "cn"
-					translationParent = "attribute.ldap."
+					this.tableItemKey = "distinguished_name"
+					this.tableDefaultSortKey = "name"
 					break;
 				default:
 					return
@@ -553,7 +586,7 @@ export default {
 						headerDict.value = header
 						headerDict.text = undefined
 						switch (header) {
-							case "hasMembers":
+							case "has_members":
 								headerDict.sortable = false
 								headerDict.align = 'center'
 								break;
@@ -566,18 +599,23 @@ export default {
 							case "enabled":
 								headerDict.text = this.$t(`words.${header}`)
 								break;
+							case "group_types":
+							case "group_scopes":
+								headerDict.text = this.$tc(`${translationParent}${header}`, 2)
+								break;
 							default:
 								break;
 						}
 						if (headerDict.text === undefined)
-							headerDict.text = this.$t(translationParent + header)
+							headerDict.text = this.$tc(translationParent + header, 1)
 						this.tableData.headers.push(headerDict)
 					});
-					headerDict = {}
-					headerDict.text = this.$t('actions.label')
-					headerDict.value = 'actions'
-					headerDict.align = 'center'
-					headerDict.sortable = false
+					headerDict = {
+						text: this.$t('actions.label'),
+						value: 'actions',
+						align: 'center',
+						sortable: false
+					}
 					this.tableData.headers.push(headerDict)
 					this.tableData.items = groups
 					this.loading = false
@@ -643,29 +681,29 @@ export default {
 					this.error = true
 				})
 		},
-		getColorForGroupType(groupType) {
-			switch (groupType) {
-				case 'GROUP_DISTRIBUTION':
+		getColorForGroupTypeOrScope(v) {
+			switch (v) {
+				case GROUP_TYPE_DISTRIBUTION:
 					return {
 						"color": 'orange',
 						"dark": false // Uses black text
 					}
-				case 'GROUP_SYSTEM':
+				case GROUP_TYPE_SYSTEM:
 					return {
 						"color": 'secondary-10',
 						"dark": this.isThemeDark(this.$vuetify) ? false : true
 					}
-				case 'GROUP_GLOBAL':
+				case GROUP_SCOPE_GLOBAL:
 					return {
 						"color": 'secondary-10',
 						"dark": this.isThemeDark(this.$vuetify) ? false : true // Uses white text
 					}
-				case 'GROUP_DOMAIN_LOCAL':
+				case GROUP_SCOPE_DOMAIN_LOCAL:
 					return {
 						"color": 'green',
 						"dark": true
 					}
-				case 'GROUP_UNIVERSAL':
+				case GROUP_SCOPE_UNIVERSAL:
 					return {
 						"color": 'blue-grey',
 						"dark": true
