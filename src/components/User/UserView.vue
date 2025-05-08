@@ -712,12 +712,14 @@ export default {
 			const actionType = disable ? 'warning' : 'success'
 			if (this.tableData.selected.find(v => v == current_user)) {
 				throw new Error("Current user cannot change their own status.");
-
 			}
 			else {
-				await new User({}).bulkStatusChange({
+				let _filtered_map = this.tableData.selected.map(
+					({ distinguished_name, username }) => ({ distinguished_name, username })
+				);
+				await new User({}).bulkChangeStatus({
 					"disable": disable,
-					"users": this.tableData.selected
+					"users": _filtered_map
 				})
 					.then(() => {
 						this.loading = false
@@ -726,7 +728,7 @@ export default {
 						this.listUserItems(false);
 						notificationBus.$emit('createNotification',
 							{
-								message: (this.$tc("classes.user", this.tableData.selected.length) + " " + actionMsg).toUpperCase(),
+								message: (this.$tc("classes.user", _filtered_map.length) + " " + actionMsg).toUpperCase(),
 								type: actionType
 							}
 						);
@@ -749,7 +751,10 @@ export default {
 			this.loading = true
 			this.error = false
 			this.errorMsg = false
-			await new User({}).bulkUnlock(this.tableData.selected)
+			let _filtered_map = this.tableData.selected.map(
+				({ distinguished_name, username }) => ({ distinguished_name, username })
+			);
+			await new User({}).bulkUnlock(_filtered_map)
 				.then(() => {
 					this.loading = false
 					this.error = false
