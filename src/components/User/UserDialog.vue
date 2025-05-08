@@ -932,7 +932,6 @@ export default {
 			this.domain = domainDetails['name']
 			this.realm = domainDetails['realm']
 			this.basedn = domainDetails['basedn']
-			this.userSelector = this.isLDAPUser() ? domainDetails['user_selector'] : 'username'
 		},
 		setObjectClassToArray() {
 			if (this.usercopy.object_class && this.usercopy.object_class != '' && (typeof this.usercopy.object_class === 'string' || this.usercopy.object_class instanceof String)) {
