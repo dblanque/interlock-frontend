@@ -4,11 +4,6 @@
 
 const csvMixin = {
     methods:{
-    // Methods Start
-    getUserImportHeaders() {
-        return ["username","password","email","first_name","last_name","initials","webpage"]
-    },
-
     csvToJSON(csv, delimiter) {
         csv = csv.replace(/\r\n/g, '\n'); // Replaces windows new line to linux.
         var lines = csv.split('\n')
