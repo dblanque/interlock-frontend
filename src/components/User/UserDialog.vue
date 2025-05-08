@@ -1142,7 +1142,7 @@ export default {
 					// Uncomment below to debug permissions list
 					// console.log(this.usercopy.permissions)
 					if (this.$refs.userForm.validate()) {
-						await new this.userClass({}).update(this.usercopy)
+						await new this.userClass({}).update(partialUpdateData)
 							.then(() => {
 								if (closeDialog == true)
 									this.closeDialog();
