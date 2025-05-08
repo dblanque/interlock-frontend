@@ -1,171 +1,86 @@
 <template>
-<!-- Object Type Settings -->
-<div :class="contentClass">
-    <v-row v-if="showTitle" class="ma-0 pa-0 mb-2" justify="center">
-        <span class="font-weight-normal">
-            {{ label || $t("components.objectEditor") }}
-        </span>
-    </v-row>
-    <v-row class="ma-0 pa-0 mt-2 mb-6" v-if="resettable" justify="center">
-        <v-btn x-small outlined @click="emitReset">
-            {{ $t("actions.reset") }}
-        </v-btn>
-    </v-row>
-    <v-row align="center" justify="center" class="ma-0 pa-0" v-show="!disableAddDelete">
-        <v-col class="ma-0 pa-0" cols="5">
-            <v-text-field v-if="keyChoices.length == 0"
-            :label="$t('words.key')"
-            class="pa-0 ma-0 ml-2 mr-4"
-            :readonly="readonly"
-            :hint="$t(keyHint)"
-            :persistent-hint="persistentHint"
-            @keydown.enter="addToObject(keyToAdd, valueToAdd)"
-            v-model="keyToAdd"
-            outlined
-            :required="required && keyToAdd.length == 0 ? true : false"
-            :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.k)] : valueValidator"
-            />
-            <v-select v-else
-                :dense="dense"
-                :items="keyChoices"
-                :label="$t('words.key')"
-                :readonly="readonly"
-                class="pa-0 ma-0 ml-2 mr-4"
-                outlined
-                v-model="keyToAdd"
-                >
-                <template slot="selection" slot-scope="data">
-                    <!-- HTML that describe how select should render selected items -->
-                    <span>
-                        {{ getSelectText(data.item) }}
-                    </span>
-                </template>
-                <template slot="item" slot-scope="data">
-                    <!-- HTML that describe how select should render items when the select is open -->
-                    <span>
-                        {{ getSelectText(data.item) }}
-                    </span>
-                </template>
-            </v-select>
-        </v-col>
-        <v-col class="ma-0 pa-0" cols="5">
-            <v-text-field :label="$t('words.value')" v-if="!isChoicesField(keyToAdd)"
-            :dense="dense"
-            :hint="$t(valueHint)"
-            :persistent-hint="persistentHint"
-            :readonly="readonly"
-            :required="required && valueToAdd.length == 0 ? true : false"
-            :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.v)] : valueValidator"
-            @keydown.enter="addToObject(keyToAdd, valueToAdd)"
-            class="pa-0 ma-0 mr-2"
-            outlined
-            v-model="valueToAdd"
-            />
-            <v-select v-else-if="valueChoices[keyToAdd].type == 'select'"
-                :append-icon="getSelectIcon(keyToAdd, 'append')"
-                :dense="dense"
-                :hint="$t(valueHint)"
-                :items="valueChoices[keyToAdd].values"
-                :label="getSelectLabel(keyToAdd)"
-                :persistent-hint="persistentHint"
-                :prepend-icon="getSelectIcon(keyToAdd, 'prepend')"
-                :readonly="readonly"
-                :value="valueToAdd"
-                @change="updateValue(keyToAdd, $event)"
-                outlined
-                >
-                    <template slot="selection" slot-scope="data">
-                        <!-- HTML that describe how select should render selected items -->
-
-                        <span>
-                            {{ getSelectText(data.item) }}
-                        </span>
-                        <!-- <span v-else>
-                            {{ data.value.toUpperCase() }}
-                        </span> -->
-                    </template>
-                    <template slot="item" slot-scope="data">
-                        <!-- HTML that describe how select should render items when the select is open -->
-                        <span>
-                            {{ getSelectText(data.item) }}
-                        </span>
-                        <!-- <span v-else>
-                            {{ data.value.toUpperCase() }}
-                        </span> -->
-                    </template>
-                </v-select>
-                <v-autocomplete v-else
-                :dense="dense"
-                :hint="$t(valueHint)"
-                :items="LDAPCountries"
-                :label="getSelectLabel(keyToAdd)"
-                :persistent-hint="persistentHint"
-                :readonly="readonly"
-                :rules="[v => {return valueChoices[keyToAdd].values.includes(v) || valueToAdd != undefined && valueToAdd.length == 0}]"
-                :value="valueToAdd"
-                @change="updateValue(keyToAdd, $event)"
-                outlined
-                >
-                </v-autocomplete>
-        </v-col>
-        <v-col :class="`${actionButtonClasses} mb-6`" cols="auto">
-            <v-btn small
-            color="primary"
-            :disabled="readonly == true || this.isFieldDisabled(keyToAdd) || keyToAdd in this.objectToEdit"
-            @click="addToObject(keyToAdd, valueToAdd)"
-            rounded
-            icon>
-                <v-icon>
-                    mdi-plus
-                </v-icon>
+    <!-- Object Type Settings -->
+    <div :class="contentClass">
+        <v-row v-if="showTitle" class="ma-0 pa-0 mb-2" justify="center">
+            <span class="font-weight-normal">
+                {{ label || $t("components.objectEditor") }}
+            </span>
+        </v-row>
+        <v-row class="ma-0 pa-0 mt-2 mb-6" v-if="resettable" justify="center">
+            <v-btn x-small outlined @click="emitReset">
+                {{ $t("actions.reset") }}
             </v-btn>
-        </v-col>
-    </v-row>
-
-    <!-- VALUES -->
-    <v-list-item v-bind="objectToEdit" v-for="subItem, subItemKey in objectToEdit" :key="subItemKey">
-        <v-list-item-icon v-if="reorder">
-            <v-btn @click="moveItem(subItemKey)"
-            x-small icon><v-icon>mdi-arrow-up</v-icon></v-btn>
-            <v-btn @click="moveItem(subItemKey, false)"
-            x-small icon><v-icon>mdi-arrow-down</v-icon></v-btn>
-        </v-list-item-icon>
-        <v-list-item-content class="ma-0 pa-0">
-            <v-col class="ma-0 pa-0 px-2 py-1" cols="6">
-                <v-text-field outlined
+        </v-row>
+        <v-row align="center" justify="center" class="ma-0 pa-0" v-show="!disableAddDelete">
+            <v-col class="ma-0 pa-0" cols="5">
+                <v-text-field v-if="keyChoices.length == 0"
                     :dense="dense"
-                    :disabled="isFieldDisabled(subItemKey)"
-                    :hide-details="!complexValidator"
-                    :hint="complexValidator ? complexValidator.subItemKey.kHint : undefined"
-                    :required="required && subItemKey.length == 0 ? true : false"
                     :label="$t('words.key')"
-                    :value="subItemKey"
-                    readonly/>
-            </v-col>
-            <v-col class="ma-0 pa-0" cols="6">
-                <v-text-field outlined v-if="!isChoicesField(subItemKey)"
-                    :dense="dense"
-                    @change="updateValue(subItemKey, $event)"
-                    :disabled="isFieldDisabled(subItemKey)"
-                    :hide-details="!complexValidator"
-                    :hint="complexValidator ? complexValidator.subItemKey.vHint : undefined"
-                    :required="required && subItem.length == 0 ? true : false"
-                    :label="$t('words.value')"
-                    :value="subItem"
-                    :readonly="readonly"/>
-                <v-select v-else-if="valueChoices[subItemKey].type == 'select'"
-                    :append-icon="getSelectIcon(subItemKey, 'append')"
-                    :prepend-icon="getSelectIcon(subItemKey, 'prepend')"
+                    class="pa-0 ma-0 ml-2 mr-4"
                     :readonly="readonly"
-                    :label="getSelectLabel(subItemKey)"
-                    :items="valueChoices[subItemKey].values"
-                    @change="updateValue(subItemKey, $event)"
-                    :value="subItem"
-                    hide-details
+                    :hint="$t(keyHint)"
+                    :persistent-hint="persistentHint"
+                    @keydown.enter="addToObject(keyToAdd, valueToAdd)"
+                    v-model="keyToAdd"
                     outlined
+                    :required="required && keyToAdd.length == 0 ? true : false"
+                    :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.k)] : valueValidator" />
+                <v-select v-else
                     :dense="dense"
-                    >
+                    :items="keyChoices"
+                    :label="$t('words.key')"
+                    :readonly="readonly"
+                    class="pa-0 ma-0 ml-2 mr-4"
+                    outlined
+                    v-model="keyToAdd">
                     <template slot="selection" slot-scope="data">
+                        <!-- HTML that describe how select should render selected items -->
+                        <span>
+                            {{ getSelectText(data.item) }}
+                        </span>
+                    </template>
+                    <template
+                        slot="item"
+                        slot-scope="data">
+                        <!-- HTML that describe how select should render items when the select is open -->
+                        <span>
+                            {{ getSelectText(data.item) }}
+                        </span>
+                    </template>
+                </v-select>
+            </v-col>
+            <v-col
+                class="ma-0 pa-0"
+                cols="5">
+                <v-text-field
+                    :label="$t('words.value')"
+                    v-if="!isChoicesField(keyToAdd)"
+                    :dense="dense"
+                    :hint="$t(valueHint)"
+                    :persistent-hint="persistentHint"
+                    :readonly="readonly"
+                    :required="required && valueToAdd.length == 0 ? true : false"
+                    :rules="isFieldInComplexValidators(keyToAdd) ? [fieldRules(valueToAdd, complexValidator.keyToAdd.v)] : valueValidator"
+                    @keydown.enter="addToObject(keyToAdd, valueToAdd)"
+                    class="pa-0 ma-0 mr-2"
+                    outlined
+                    v-model="valueToAdd" />
+                <v-select
+                    v-else-if="valueChoices[keyToAdd].type == 'select'"
+                    :append-icon="getSelectIcon(keyToAdd, 'append')"
+                    :dense="dense"
+                    :hint="$t(valueHint)"
+                    :items="valueChoices[keyToAdd].values"
+                    :label="getSelectLabel(keyToAdd)"
+                    :persistent-hint="persistentHint"
+                    :prepend-icon="getSelectIcon(keyToAdd, 'prepend')"
+                    :readonly="readonly"
+                    :value="valueToAdd"
+                    @change="updateValue(keyToAdd, $event)"
+                    outlined>
+                    <template
+                        slot="selection"
+                        slot-scope="data">
                         <!-- HTML that describe how select should render selected items -->
 
                         <span>
@@ -175,7 +90,9 @@
                             {{ data.value.toUpperCase() }}
                         </span> -->
                     </template>
-                    <template slot="item" slot-scope="data">
+                    <template
+                        slot="item"
+                        slot-scope="data">
                         <!-- HTML that describe how select should render items when the select is open -->
                         <span>
                             {{ getSelectText(data.item) }}
@@ -185,33 +102,149 @@
                         </span> -->
                     </template>
                 </v-select>
-                <v-autocomplete v-else
-                :dense="dense"
-                hide-details
-                outlined
-                :label="getSelectLabel(subItemKey)"
-                :readonly="readonly"
-                :value="subItem"
-                @change="updateValue(subItemKey, $event)"
-                :items="LDAPCountries"
-                :rules="[v => {return valueChoices[subItemKey].values.includes(v) || subItem != undefined && subItem.length == 0}]">
+                <v-autocomplete
+                    v-else
+                    :dense="dense"
+                    :hint="$t(valueHint)"
+                    :items="LDAPCountries"
+                    :label="getSelectLabel(keyToAdd)"
+                    :persistent-hint="persistentHint"
+                    :readonly="readonly"
+                    :rules="[v => { return valueChoices[keyToAdd].values.includes(v) || valueToAdd != undefined && valueToAdd.length == 0 }]"
+                    :value="valueToAdd"
+                    @change="updateValue(keyToAdd, $event)"
+                    outlined>
                 </v-autocomplete>
             </v-col>
-        </v-list-item-content>
-        <v-list-item-action :class="actionButtonClasses">
-            <v-btn color="primary" :class="'ml-2 ' + (complexValidator ? 'mb-7' : '')"
-            :disabled="readonly == true || isFieldDisabled(subItemKey) || disableAddDelete && !isFieldDeletable(subItemKey)"
-            v-show="!disableAddDelete"
-            @click="removeFromObject(subItemKey)"
-            rounded small
-            icon>
-                <v-icon small>
-                    mdi-minus
-                </v-icon>
-            </v-btn>
-        </v-list-item-action>
-    </v-list-item>
-</div>
+            <v-col
+                :class="`${actionButtonClasses} mb-6`"
+                cols="auto">
+                <v-btn
+                    small
+                    color="primary"
+                    :disabled="readonly == true || this.isFieldDisabled(keyToAdd) || keyToAdd in this.objectToEdit"
+                    @click="addToObject(keyToAdd, valueToAdd)"
+                    rounded
+                    icon>
+                    <v-icon>
+                        mdi-plus
+                    </v-icon>
+                </v-btn>
+            </v-col>
+        </v-row>
+
+        <!-- VALUES -->
+        <v-list-item
+            v-bind="objectToEdit"
+            v-for="subItem, subItemKey in objectToEdit"
+            :key="subItemKey">
+            <v-list-item-icon v-if="reorder">
+                <v-btn
+                    @click="moveItem(subItemKey)"
+                    x-small
+                    icon><v-icon>mdi-arrow-up</v-icon></v-btn>
+                <v-btn
+                    @click="moveItem(subItemKey, false)"
+                    x-small
+                    icon><v-icon>mdi-arrow-down</v-icon></v-btn>
+            </v-list-item-icon>
+            <v-list-item-content class="ma-0 pa-0">
+                <v-col
+                    class="ma-0 pa-0 px-2 py-1"
+                    cols="6">
+                    <v-text-field
+                        outlined
+                        :dense="dense"
+                        :disabled="isFieldDisabled(subItemKey)"
+                        :hide-details="!complexValidator"
+                        :hint="complexValidator ? complexValidator.subItemKey.kHint : undefined"
+                        :required="required && subItemKey.length == 0 ? true : false"
+                        :label="$t('words.key')"
+                        :value="subItemKey"
+                        readonly />
+                </v-col>
+                <v-col
+                    class="ma-0 pa-0"
+                    cols="6">
+                    <v-text-field
+                        outlined
+                        v-if="!isChoicesField(subItemKey)"
+                        :dense="dense"
+                        @change="updateValue(subItemKey, $event)"
+                        :disabled="isFieldDisabled(subItemKey)"
+                        :hide-details="!complexValidator"
+                        :hint="complexValidator ? complexValidator.subItemKey.vHint : undefined"
+                        :required="required && subItem.length == 0 ? true : false"
+                        :label="$t('words.value')"
+                        :value="subItem"
+                        :readonly="readonly" />
+                    <v-select
+                        v-else-if="valueChoices[subItemKey].type == 'select'"
+                        :append-icon="getSelectIcon(subItemKey, 'append')"
+                        :prepend-icon="getSelectIcon(subItemKey, 'prepend')"
+                        :readonly="readonly"
+                        :label="getSelectLabel(subItemKey)"
+                        :items="valueChoices[subItemKey].values"
+                        @change="updateValue(subItemKey, $event)"
+                        :value="subItem"
+                        hide-details
+                        outlined
+                        :dense="dense">
+                        <template
+                            slot="selection"
+                            slot-scope="data">
+                            <!-- HTML that describe how select should render selected items -->
+
+                            <span>
+                                {{ getSelectText(data.item) }}
+                            </span>
+                            <!-- <span v-else>
+                            {{ data.value.toUpperCase() }}
+                        </span> -->
+                        </template>
+                        <template
+                            slot="item"
+                            slot-scope="data">
+                            <!-- HTML that describe how select should render items when the select is open -->
+                            <span>
+                                {{ getSelectText(data.item) }}
+                            </span>
+                            <!-- <span v-else>
+                            {{ data.value.toUpperCase() }}
+                        </span> -->
+                        </template>
+                    </v-select>
+                    <v-autocomplete
+                        v-else
+                        :dense="dense"
+                        hide-details
+                        outlined
+                        :label="getSelectLabel(subItemKey)"
+                        :readonly="readonly"
+                        :value="subItem"
+                        @change="updateValue(subItemKey, $event)"
+                        :items="LDAPCountries"
+                        :rules="[v => { return valueChoices[subItemKey].values.includes(v) || subItem != undefined && subItem.length == 0 }]">
+                    </v-autocomplete>
+                </v-col>
+            </v-list-item-content>
+            <v-list-item-action :class="actionButtonClasses">
+                <v-btn
+                    color="primary"
+                    :class="'ml-2 ' + (complexValidator ? 'mb-7' : '')"
+                    :disabled="readonly == true || isFieldDisabled(subItemKey) || !isFieldDeletable(subItemKey)"
+                    v-show="!disableAddDelete"
+                    @click="removeFromObject(subItemKey)"
+                    rounded
+                    small
+                    icon>
+                    <v-icon small>
+                        mdi-minus
+                    </v-icon>
+                </v-btn>
+            </v-list-item-action>
+        </v-list-item>
+    </div>
 </template>
 
 <script>
@@ -231,7 +264,7 @@ import LDAPCountries from '@/include/constants/LDAPCountries.js';
 
 export default {
     name: 'ObjectEditor',
-    mixins: [ validationMixin, utilsMixin ],
+    mixins: [validationMixin, utilsMixin],
     data() {
         return {
             LDAPCountries: LDAPCountries,
@@ -286,10 +319,10 @@ export default {
         },
         resettable: Boolean,
         complexValidator: Object,
-		contentClass: {
-			type: String,
-			default: "ma-0 px-6 py-2 pt-4"
-		}
+        contentClass: {
+            type: String,
+            default: "ma-0 px-6 py-2 pt-4"
+        }
     },
     emits: ['update:value'],
     created() {
@@ -299,41 +332,42 @@ export default {
     mounted() {
     },
     watch: {
-        value(new_v){
+        value(new_v) {
             this.objectToEdit = new_v
         },
         // keyToAdd(new_v){
-            // console.log(new_v)
+        // console.log(new_v)
         // }
     },
     methods: {
-        forceUpdate(){
-            this.$nextTick(()=>{
+        forceUpdate() {
+            this.$nextTick(() => {
                 this.$forceUpdate()
             })
         },
-        setObject(){
+        setObject() {
             if (this.value != undefined)
                 this.objectToEdit = this.value
             this.forceUpdate()
         },
-        isFieldInComplexValidators(key){
+        isFieldInComplexValidators(key) {
             if (this.complexValidator != undefined)
                 return key in this.complexValidator
         },
-        isFieldDisabled(key){
+        isFieldDisabled(key) {
             if (this.disabledFields != undefined)
                 return this.disabledFields.includes(key)
         },
-        isFieldDeletable(key){
-            if (this.deletableFields != undefined)
+        isFieldDeletable(key) {
+            if (this.deletableFields !== undefined && Array.isArray(this.deletableFields))
                 return this.deletableFields.includes(key)
+            return true
         },
-        updateValue(k, v){
+        updateValue(k, v) {
             this.objectToEdit[k] = v
             this.updateObject()
         },
-        addToObject(key, value){
+        addToObject(key, value) {
             if (this.keyToAdd.length < 1)
                 return
             if (this.allowEmptyFields !== true)
@@ -346,18 +380,18 @@ export default {
             this.keyToAdd = ""
             this.updateObject()
         },
-        removeFromObject(key){
+        removeFromObject(key) {
             delete this.objectToEdit[key];
             this.updateObject()
         },
-        emitReset(){
+        emitReset() {
             this.$emit('reset')
         },
-        updateObject(){
+        updateObject() {
             this.$emit('update', this.objectToEdit)
             this.forceUpdate()
         },
-        moveItem(k, up=true){
+        moveItem(k, up = true) {
             var v = this.objectToEdit[k]
             var idx = Object.keys(this.objectToEdit).indexOf(k)
             // Convert Object to Key Value Array
@@ -365,7 +399,7 @@ export default {
             // Remove item from Key Value pairs
             keyValues.splice(idx, 1);
 
-            if (up){
+            if (up) {
                 idx -= 1
                 if (idx < 0)
                     idx = Object.keys(this.objectToEdit).length
@@ -379,20 +413,20 @@ export default {
             this.objectToEdit = Object.fromEntries(keyValues)
             this.updateObject()
         },
-        getSelectLabel(subItemKey){
+        getSelectLabel(subItemKey) {
             if (typeof this.valueChoices[subItemKey] !== 'object') return undefined
             if ('label' in this.valueChoices[subItemKey])
                 return this.valueChoices[subItemKey]['label']
             return this.$t('words.value')
         },
-        getSelectIcon(subItemKey, iconType){
+        getSelectIcon(subItemKey, iconType) {
             const selectIconTypes = ['append', 'prepend']
             if (!selectIconTypes.includes(iconType)) return undefined
             if (typeof this.valueChoices[subItemKey] !== 'object') return undefined
             if (`${iconType}-icon` in this.valueChoices[subItemKey])
                 return this.valueChoices[subItemKey][`${iconType}-icon`]
         },
-        isChoicesField(subItemKey){
+        isChoicesField(subItemKey) {
             if (typeof this.valueChoices !== 'object') return false
             return subItemKey in this.valueChoices
         },
