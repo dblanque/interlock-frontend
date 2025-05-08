@@ -104,9 +104,20 @@ export default {
 
 			if (deleteConfirm == true) {
 				if (this.multipleUsers) {
-					await new this.userClass({}).bulkDelete(this.userObjectList)
-						.then(() => { })
-						.catch(error => { console.error(error) })
+					let _filtered_map = this.userObjectList.map(({ distinguished_name, username }) => ({
+						distinguished_name,
+						username,
+					}));
+					await new this.userClass({}).bulkDelete(_filtered_map)
+						.then(() => {
+							this.$emit('closeDialog', this.dialogKey, true);
+						})
+						.catch(error => {
+							this.$emit('closeDialog', this.dialogKey, true, {
+								message: this.getMessageForCode(error),
+								type: 'error'
+							});
+						})
 				} else {
 					await new this.userClass({}).delete(user)
 						.then(response => {
