@@ -1,21 +1,6 @@
 <!----------------- INTERLOCK IS LICENSED UNDER GNU AGPLv3 -------------------->
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------ File: UserImport.vue ------------------------>
-
-<!-- TODO
-Allow to Choose field association
-Allow to use placeholder password (if no placeholder then require column)
-
-Choose target OU for bulk import
-
-username
-password
-email
-fname
-lname
-initials
-webpage
--->
 <template>
 	<v-card>
 		<v-card-title class="ma-0 pa-0 card-title">
@@ -72,9 +57,16 @@ webpage
 						</v-btn>
 					</v-row>
 
-					<v-row class="ma-0 pa-0" justify="center">
-						<v-col cols="12" lg="8">
-							<v-expansion-panels v-model="userPathExpansionPanel" flat hover
+					<v-row
+						class="ma-0 pa-0"
+						justify="center">
+						<v-col
+							cols="12"
+							lg="8">
+							<v-expansion-panels
+								v-model="userPathExpansionPanel"
+								flat
+								hover
 								style="border: 1px solid var(--v-primary-base);">
 								<v-expansion-panel>
 									<v-expansion-panel-header>
@@ -89,9 +81,14 @@ webpage
 									</v-expansion-panel-header>
 
 									<v-expansion-panel-content>
-										<v-card flat outlined style="max-height: 300px; overflow: auto !important;">
+										<v-card
+											flat
+											outlined
+											style="max-height: 300px; overflow: auto !important;">
 											<!-- Dirtree OU List Component -->
-											<DirtreeOUList ref="DirtreeOUList" @selectedDestination="setDestination" />
+											<DirtreeOUList
+												ref="DirtreeOUList"
+												@selectedDestination="setDestination" />
 										</v-card>
 									</v-expansion-panel-content>
 								</v-expansion-panel>
@@ -99,38 +96,98 @@ webpage
 						</v-col>
 					</v-row>
 
-					<v-row class="ma-0 pa-0 mb-2" justify="center">
-						<v-col class="ma-0 pa-0" cols="12" md="6">
-							<v-form ref="importPlaceholderPassword" @submit.prevent>
-								<v-checkbox @change="resetPlaceholderPassword" v-model="usePlaceholderPassword"
+					<v-row
+						class="ma-0 pa-0 mb-2"
+						align="center"
+						justify="center">
+						<v-icon class="mr-2">
+							mdi-information
+						</v-icon>
+						<a @click="showCountries = !showCountries">
+							{{ $t("section.users.import.showCountries") }}
+						</a>
+					</v-row>
+
+					<v-expand-transition>
+						<v-row
+							v-if="showCountries"
+							class="ma-0 pa-0 mb-2"
+							justify="center">
+							<v-alert
+								dense
+								type="info"
+								hide-details
+								:icon="false"
+								class="ma-0 px-6 py-2">
+								<v-autocomplete
+									:label="$t('section.users.import.countryList')"
+									:items="LDAPCountries"
+									v-model="countryInfo">
+								</v-autocomplete>
+							</v-alert>
+						</v-row>
+					</v-expand-transition>
+
+					<v-row
+						class="ma-0 pa-0 mb-2"
+						justify="center">
+						<v-col
+							class="ma-0 pa-0"
+							cols="12"
+							md="6">
+							<v-form
+								ref="importPlaceholderPassword"
+								@submit.prevent>
+								<v-checkbox
+									@change="resetPlaceholderPassword"
+									v-model="usePlaceholderPassword"
 									:label="$t('section.users.import.usePlaceholderPassword')" />
 								<v-expand-transition>
-									<v-text-field v-show="usePlaceholderPassword" ref="importPlaceholderPasswordField"
-										:type="passwordHidden ? 'password' : 'text'" :required="usePlaceholderPassword"
+									<v-text-field
+										v-show="usePlaceholderPassword"
+										ref="importPlaceholderPasswordField"
+										:type="passwordHidden ? 'password' : 'text'"
+										:required="usePlaceholderPassword"
 										@keydown.enter="nextStep"
 										:append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
-										@click:append="() => (passwordHidden = !passwordHidden)" dense
-										:label="$t('attribute.password')" v-model="placeholderPassword"
+										@click:append="() => (passwordHidden = !passwordHidden)"
+										dense
+										:label="$t('attribute.password')"
+										v-model="placeholderPassword"
 										:rules="[this.fieldRules(placeholderPassword, 'ge_password', usePlaceholderPassword ? true : false)]"></v-text-field>
 								</v-expand-transition>
 							</v-form>
 						</v-col>
 					</v-row>
 					<v-expand-transition>
-						<v-row justify="center" class="pa-0 ma-0 mb-4" v-show="showUserMappings">
-							<ObjectEditor :value="this.import_fields"
+						<v-row
+							justify="center"
+							class="pa-0 ma-0 mb-4"
+							v-show="showUserMappings">
+							<ObjectEditor
+								:value="this.import_fields"
 								:label="$t('section.users.import.dataMapping')"
-								ref="importFieldsEditor" @update="v => import_fields = v" dense reorder resettable
-								@reset="setDefaultImportFields" disableAddDelete :required="true"
+								ref="importFieldsEditor"
+								@update="v => import_fields = v"
+								dense
+								reorder
+								resettable
+								@reset="setDefaultImportFields"
+								:required="true"
 								:deletableFields="deletableFields"
 								:disabledFields="usePlaceholderPassword ? ['password'] : []" />
 						</v-row>
 					</v-expand-transition>
 
-					<v-row class="ma-0 pa-0 mb-2" justify="center">
-						<v-btn @click="downloadTemplate" :dark="!isThemeDark($vuetify)"
+					<v-row
+						class="ma-0 pa-0 mb-2"
+						justify="center">
+						<v-btn
+							@click="downloadTemplate"
+							:dark="!isThemeDark($vuetify)"
 							:light="isThemeDark($vuetify)"
-							color="primary" class="ma-0 pa-0 pa-2 ma-1">
+							color="primary"
+							class="ma-0 pa-0 pa-2 ma-1">
 							<v-icon class="mr-1">
 								mdi-download
 							</v-icon>
@@ -138,7 +195,9 @@ webpage
 								{{ $t("section.users.import.downloadTemplate") }}
 							</span>
 						</v-btn>
-						<v-btn @click="showUserMappings = !showUserMappings" color="primary"
+						<v-btn
+							@click="showUserMappings = !showUserMappings"
+							color="primary"
 							class="ma-0 pa-0 pa-2 ma-1">
 							<v-icon class="mr-1">
 								mdi-cog
@@ -151,26 +210,49 @@ webpage
 				</v-tab-item>
 
 				<v-tab-item :key="1">
-					<v-row class="ma-0 pa-0" justify="center">
+					<v-row
+						class="ma-0 pa-0"
+						justify="center">
 						<v-col cols="6">
-							<v-file-input :label="$t('section.users.import.fileToUpload')" outlined
+							<v-file-input
+								:label="$t('section.users.import.fileToUpload')"
+								outlined
 								ref="importFileInput"
-								@change="previewFile" @click:clear="clearFile()" v-model="inputFile" clearable
-								prepend-icon="" prepend-inner-icon="mdi-upload" show-size class="ma-0 pa-0"
+								@change="previewFile"
+								@click:clear="clearFile()"
+								v-model="inputFile"
+								clearable
+								prepend-icon=""
+								prepend-inner-icon="mdi-upload"
+								show-size
+								class="ma-0 pa-0"
 								accept=".csv,.tsv,.txt" />
-							<v-progress-linear class="ma-0 pa-0 my-1"
+							<v-progress-linear
+								class="ma-0 pa-0 my-1"
 								:color="json_loaded ? (error == true ? 'red' : 'green') : 'primary'"
 								:indeterminate="loading" />
 							<v-fade-transition>
-								<v-alert :icon="false" v-if="json_loaded != true" type="warning" dense>
+								<v-alert
+									:icon="false"
+									v-if="json_loaded != true"
+									type="warning"
+									dense>
 									<span v-html="$t('section.users.import.supportedExtensions').toUpperCase()" />
 								</v-alert>
-								<v-alert v-else-if="json_loaded && !error" icon="mdi-check-circle" dense
+								<v-alert
+									v-else-if="json_loaded && !error"
+									icon="mdi-check-circle"
+									dense
 									type="success"
 									close-icon="text-uppercase">
 									{{ $t("section.users.import.readyToImport").toUpperCase() }}
 								</v-alert>
-								<v-alert v-else icon="mdi-close-circle" dense type="error" color="red"
+								<v-alert
+									v-else
+									icon="mdi-close-circle"
+									dense
+									type="error"
+									color="red"
 									close-icon="text-uppercase">
 									{{ errorMsg.toUpperCase() }}
 								</v-alert>
@@ -180,24 +262,47 @@ webpage
 				</v-tab-item>
 
 				<v-tab-item :key="2">
-					<v-row class="pa-0 ma-0" justify="center">
-						<v-alert v-if="!showResult" class="ma-4" dense type="info" close-icon="text-uppercase">
+					<v-row
+						class="pa-0 ma-0"
+						justify="center">
+						<v-alert
+							v-if="!showResult"
+							class="ma-4"
+							dense
+							type="info"
+							close-icon="text-uppercase">
 							{{ $t("section.users.import.previewMode").toUpperCase() }}
 						</v-alert>
-						<v-alert v-else-if="!error && showResult" class="ma-4" icon="mdi-check-circle" dense
-							type="success" close-icon="text-uppercase">
+						<v-alert
+							v-else-if="!error && showResult"
+							class="ma-4"
+							icon="mdi-check-circle"
+							dense
+							type="success"
+							close-icon="text-uppercase">
 							{{ $t("section.users.import.bulkImportSuccess").toUpperCase() }}
 						</v-alert>
-						<v-alert v-else class="ma-4" icon="mdi-alert-circle" dense type="warning"
+						<v-alert
+							v-else
+							class="ma-4"
+							icon="mdi-alert-circle"
+							dense
+							type="warning"
 							close-icon="text-uppercase">
 							{{ $t("section.users.import.bulkImportPartial").toUpperCase() }}
 						</v-alert>
 					</v-row>
-					<v-row class="pa-0 ma-0" justify="center">
-						<v-data-table :headers="this.tableData.headers" :items="this.tableData.items"
-							:loading="this.loading" :footer-props="{
+					<v-row
+						class="pa-0 ma-0"
+						justify="center">
+						<v-data-table
+							:headers="this.tableData.headers"
+							:items="this.tableData.items"
+							:loading="this.loading"
+							:footer-props="{
 								'items-per-page-options': [10, 25, 50, 100, -1]
-							}" class="py-3 px-2 mt-2 mb-2">
+							}"
+							class="py-3 px-2 mt-2 mb-2">
 							<template v-slot:[`item.status`]="{ item }">
 								<!-- Failed -->
 								<v-icon color="orange"
@@ -235,20 +340,43 @@ webpage
 		</v-card-text>
 		<!-- Actions -->
 		<v-card-actions class="card-actions">
-			<v-row class="ma-1 pa-0" align="center" align-content="center" justify="center">
-				<v-btn @click="prevStep" :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
-					class="ma-0 pa-0 pa-2 ma-1" rounded>
+			<v-row
+				class="ma-1 pa-0"
+				align="center"
+				align-content="center"
+				justify="center">
+				<v-btn
+					@click="prevStep"
+					:dark="!isThemeDark($vuetify)"
+					:light="isThemeDark($vuetify)"
+					class="ma-0 pa-0 pa-2 ma-1"
+					rounded>
 					<v-icon class="mr-1">
-						{{ import_tab < 1 || showResult && import_tab > 1 ? 'mdi-close-circle' :
+						{{ import_tab <
+							1
+							||
+							showResult
+							&&
+							import_tab > 1 ? 'mdi-close-circle' :
 							'mdi-chevron-left' }}
 					</v-icon>
 					<span class="pr-1">
-						{{ import_tab < 1 || showResult && import_tab > 1 ? $t("actions.close") :
+						{{ import_tab <
+							1
+							||
+							showResult
+							&&
+							import_tab > 1 ? $t("actions.close") :
 							$t("actions.back") }}
 					</span>
 				</v-btn>
-				<v-btn @click="importUsers()" :disabled="loading || json_loaded != true || error"
-					v-if="import_tab > 1 && !showResult" class="ma-0 pa-0 pa-2 ma-1" color="primary" rounded>
+				<v-btn
+					@click="importUsers()"
+					:disabled="loading || json_loaded != true || error"
+					v-if="import_tab > 1 && !showResult"
+					class="ma-0 pa-0 pa-2 ma-1"
+					color="primary"
+					rounded>
 					<v-icon class="mr-1">
 						mdi-check-circle
 					</v-icon>
@@ -257,9 +385,14 @@ webpage
 							|| 1) }}
 					</span>
 				</v-btn>
-				<v-btn @click="nextStep" v-else-if="import_tab < 2" :disabled="!isStepValid()"
+				<v-btn
+					@click="nextStep"
+					v-else-if="import_tab < 2"
+					:disabled="!isStepValid()"
 					:dark="!isThemeDark($vuetify) && isStepValid()"
-					:light="isThemeDark($vuetify) && isStepValid()" class="ma-0 pa-0 pa-2 ma-1" rounded>
+					:light="isThemeDark($vuetify) && isStepValid()"
+					class="ma-0 pa-0 pa-2 ma-1"
+					rounded>
 					<span class="pl-2">
 						{{ $t("actions.next") }}
 					</span>
@@ -282,6 +415,7 @@ import User from '@/include/User.js'
 import { getDomainDetails } from '@/include/utils.js';
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList.vue'
 import ObjectEditor from '@/components/Settings/ObjectEditor.vue'
+import LDAPCountries from '@/include/constants/LDAPCountries';
 
 export default {
 	name: "UserImport",
@@ -292,6 +426,7 @@ export default {
 	],
 	data() {
 		return {
+			LDAPCountries: LDAPCountries,
 			loading: false,
 			showResult: false,
 			error: false,
@@ -302,14 +437,15 @@ export default {
 			status_color: 'blue',
 			allowRefresh: true,
 			deletableFields: [
+				"password",
 				"initials",
-				"telephoneNumber",
-				"wWWHomePage",
-				"streetAddress",
-				"postalCode",
-				"l",
-				"st",
-				"co"
+				"phone",
+				"website",
+				"street_address",
+				"postal_code",
+				"city",
+				"state_province",
+				"country_name",
 			],
 			showUserMappings: false,
 			userPathExpansionPanel: false,
@@ -321,6 +457,8 @@ export default {
 			placeholderPassword_idx: 1,
 			passwordHidden: true,
 			userDestination: '',
+			countryInfo: '',
+			showCountries: false,
 			tableData: {
 				headers: [],
 				items: []
@@ -432,13 +570,20 @@ export default {
 		refreshDataTable() {
 			this.tableData.headers = []
 			for (let i = 0; i < this.json_result.headers.length; i++) {
+				let local_alias = this.getKeyByValue(
+					this.import_fields,
+					this.json_result.headers[i]
+				)
 				this.tableData.headers.push({
-					text: this.json_result.headers[i],
+					text: this.$t(`attribute.${local_alias}`),
 					align: 'center',
 					value: this.json_result.headers[i],
 				})
 			}
 			this.tableData.items = this.json_result.data
+		},
+		getKeyByValue(object, value) {
+			return Object.keys(object).find(key => object[key] === value);
 		},
 		clearDataTable() {
 			this.tableData.headers = []
