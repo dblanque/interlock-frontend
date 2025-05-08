@@ -316,7 +316,7 @@ export default {
 			let filteredPerms = Object.filter(this.permissions, v => v.value === true)
 			filteredPerms = Object.keys(filteredPerms)
 			let data = {
-				users: this.selectedUsers.map(v => v[domainDetails['user_selector']]),
+				users: this.selectedUsers.map(v => v.username),
 				values: filteredFields,
 				permissions: filteredPerms
 			}
