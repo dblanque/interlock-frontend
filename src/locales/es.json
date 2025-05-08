@@ -728,7 +728,10 @@
         "downloadTemplate":"Descargar Plantilla CSV",
         "bulkImportSuccess":"Usuarios Importados Exitosamente",
         "bulkImportPartial":"Usuarios Importados con Errores",
+        "showCountries":"Mostrar lista de países",
+        "countryList":"Lista de Países LDAP",
         "error":{
+          "serializer_validation":"Serializer Validation Error",
           "validation":"Error de Validación de Campo",
           "permission":"Error de Parseo (Permisos)",
           "country":"Error de Parseo (País), ver ISO-3166",

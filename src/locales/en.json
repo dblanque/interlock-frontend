@@ -720,7 +720,10 @@
         "downloadTemplate":"Download Template CSV",
         "bulkImportSuccess":"Users Imported Successfully",
         "bulkImportPartial":"Users Imported with Errors",
+        "showCountries":"Show countries list",
+        "countryList":"LDAP Country List",
         "error":{
+          "serializer_validation":"Serializer Validation Error",
           "validation":"Field Validation Error",
           "permission":"Permission Parsing Error",
           "country":"Country Parsing Error, see ISO-3166",
