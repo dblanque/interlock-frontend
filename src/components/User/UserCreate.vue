@@ -75,9 +75,17 @@
 									</v-btn>
 								</v-row>
 
-								<v-row class="ma-0 pa-0" justify="center" v-if="isLDAPView">
-									<v-col cols="12" lg="8">
-										<v-expansion-panels v-model="userPathExpansionPanel" flat hover
+								<v-row
+									class="ma-0 pa-0"
+									justify="center"
+									v-if="isLDAPView">
+									<v-col
+										cols="12"
+										lg="8">
+										<v-expansion-panels
+											v-model="userPathExpansionPanel"
+											flat
+											hover
 											style="border: 1px solid var(--v-primary-base);">
 											<v-expansion-panel>
 												<v-expansion-panel-header>
@@ -92,10 +100,13 @@
 												</v-expansion-panel-header>
 
 												<v-expansion-panel-content>
-													<v-card flat outlined
+													<v-card
+														flat
+														outlined
 														style="max-height: 300px; overflow: auto !important;">
 														<!-- Dirtree OU List Component -->
-														<DirtreeOUList ref="DirtreeOUList"
+														<DirtreeOUList
+															ref="DirtreeOUList"
 															@selectedDestination="setDestination" />
 													</v-card>
 												</v-expansion-panel-content>
@@ -105,44 +116,78 @@
 								</v-row>
 								<!-- LDAP User Attributes -->
 								<div v-if="isLDAPView">
-									<v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-										<v-col cols="12" lg="4">
-											<v-text-field dense @keydown.enter="nextStep"
+									<v-row
+										justify="center"
+										class="pa-0 ma-0 font-weight-medium">
+										<v-col
+											cols="12"
+											lg="4">
+											<v-text-field
+												dense
+												@keydown.enter="nextStep"
 												:label="$t('attribute.first_name')"
 												v-model="userToCreate.first_name"
 												:rules="[this.fieldRules(userToCreate.first_name, 'ge_name')]"></v-text-field>
 										</v-col>
-										<v-col cols="12" lg="4">
-											<v-text-field dense @keydown.enter="nextStep" :label="$t('attribute.last_name')"
+										<v-col
+											cols="12"
+											lg="4">
+											<v-text-field
+												dense
+												@keydown.enter="nextStep"
+												:label="$t('attribute.last_name')"
 												v-model="userToCreate.last_name"
 												:rules="[this.fieldRules(userToCreate.last_name, 'ge_name')]"></v-text-field>
 										</v-col>
 									</v-row>
-									<v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-										<v-col cols="12" lg="6">
-											<v-text-field dense @keydown.enter="nextStep"
+									<v-row
+										justify="center"
+										class="pa-0 ma-0 font-weight-medium">
+										<v-col
+											cols="12"
+											lg="6">
+											<v-text-field
+												dense
+												@keydown.enter="nextStep"
 												:label="$t('attribute.full_name')"
 												v-model="getDisplayName"
 												:rules="[this.fieldRules(getDisplayName, 'ge_topic')]"></v-text-field>
 										</v-col>
-										<v-col cols="12" lg="2">
-											<v-text-field dense @keydown.enter="nextStep"
+										<v-col
+											cols="12"
+											lg="2">
+											<v-text-field
+												dense
+												@keydown.enter="nextStep"
 												:label="$t('attribute.initials')"
 												v-model="userToCreate.initials"
 												:rules="[this.fieldRules(userToCreate.initials, 'ge_topic')]"></v-text-field>
 										</v-col>
 									</v-row>
-									<v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-										<v-col cols="12" lg="4">
-											<v-text-field dense @keydown.enter="nextStep"
+									<v-row
+										justify="center"
+										class="pa-0 ma-0 font-weight-medium">
+										<v-col
+											cols="12"
+											lg="4">
+											<v-text-field
+												dense
+												@keydown.enter="nextStep"
 												:hint="$t('misc.autocomputedField')"
-												persistent-hint :label="$t('attribute.user_principal_name')" readonly
+												persistent-hint
+												:label="$t('attribute.user_principal_name')"
+												readonly
 												v-model="getUSN"></v-text-field>
 										</v-col>
-										<v-col cols="12" lg="4">
-											<v-text-field dense @keydown.enter="nextStep"
+										<v-col
+											cols="12"
+											lg="4">
+											<v-text-field
+												dense
+												@keydown.enter="nextStep"
 												:hint="$t('misc.autocomputedField')"
-												persistent-hint :label="$t('attribute.user_principal_name_pre2000')"
+												persistent-hint
+												:label="$t('attribute.user_principal_name_pre2000')"
 												readonly
 												v-model="getUSN_2000"></v-text-field>
 										</v-col>
@@ -151,13 +196,23 @@
 								<!-- Django User Attributes -->
 								<div v-else>
 									<v-row class="pa-0 ma-0 font-weight-medium">
-										<v-col cols="12" lg="6">
-											<v-text-field dense id="first_name" :label="$t('attribute.first_name')"
+										<v-col
+											cols="12"
+											lg="6">
+											<v-text-field
+												dense
+												id="first_name"
+												:label="$t('attribute.first_name')"
 												v-model="userToCreate.first_name"
 												:rules="[this.fieldRules(userToCreate.first_name, 'ge_name')]"></v-text-field>
 										</v-col>
-										<v-col cols="12" lg="6">
-											<v-text-field dense id="last_name" :label="$t('attribute.last_name')"
+										<v-col
+											cols="12"
+											lg="6">
+											<v-text-field
+												dense
+												id="last_name"
+												:label="$t('attribute.last_name')"
 												v-model="userToCreate.last_name"
 												:rules="[this.fieldRules(userToCreate.last_name, 'ge_name')]"></v-text-field>
 										</v-col>
@@ -169,28 +224,50 @@
 								</v-row>
 
 								<!-- Optionals -->
-								<v-row justify="center" class="mb-1">
-									<span class="text-overline" style="font-size: .95em !important;">
+								<v-row
+									justify="center"
+									class="mb-1">
+									<span
+										class="text-overline"
+										style="font-size: .95em !important;">
 										{{ $t("section.users.userCreate.optionalsHeader") }}
 									</span>
 								</v-row>
-								<v-row justify="center" class="pa-0 ma-0 font-weight-medium" v-if="isLDAPView">
-									<v-col cols="12" lg="4">
-										<v-text-field dense @keydown.enter="nextStep"
+								<v-row
+									justify="center"
+									class="pa-0 ma-0 font-weight-medium"
+									v-if="isLDAPView">
+									<v-col
+										cols="12"
+										lg="4">
+										<v-text-field
+											dense
+											@keydown.enter="nextStep"
 											:label="$t('attribute.user.email')"
 											v-model="userToCreate.email"
 											:rules="[this.fieldRules(userToCreate.email, 'ge_mail')]"></v-text-field>
 									</v-col>
-									<v-col cols="12" lg="4">
-										<v-text-field dense @keydown.enter="nextStep"
+									<v-col
+										cols="12"
+										lg="4">
+										<v-text-field
+											dense
+											@keydown.enter="nextStep"
 											:label="$t('attribute.website')"
 											v-model="userToCreate.website"
 											:rules="[this.fieldRules(userToCreate.website, 'ge_website')]"></v-text-field>
 									</v-col>
 								</v-row>
-								<v-row justify="center" class="pa-0 ma-0 font-weight-medium" v-else>
-									<v-col cols="12" lg="4">
-										<v-text-field dense @keydown.enter="nextStep"
+								<v-row
+									justify="center"
+									class="pa-0 ma-0 font-weight-medium"
+									v-else>
+									<v-col
+										cols="12"
+										lg="4">
+										<v-text-field
+											dense
+											@keydown.enter="nextStep"
 											:label="$t('attribute.user.email')"
 											v-model="userToCreate.email"
 											:rules="[this.fieldRules(userToCreate.email, 'ge_mail')]"></v-text-field>
@@ -201,28 +278,51 @@
 						<!-- Password -->
 						<v-stepper-content step="2">
 
-							<v-form ref="userCreateForm2" @submit.prevent>
-								<v-row justify="center" class="pa-0 ma-0 font-weight-medium">
-									<v-col cols="12" lg="4">
-										<v-text-field :type="passwordHidden ? 'password' : 'text'" required
+							<v-form
+								ref="userCreateForm2"
+								@submit.prevent>
+								<v-row
+									justify="center"
+									class="pa-0 ma-0 font-weight-medium">
+									<v-col
+										cols="12"
+										lg="4">
+										<v-text-field
+											id="password"
+											ref="password"
+											:type="passwordHidden ? 'password' : 'text'"
+											required
 											@keydown.enter="nextStep"
 											:append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
-											@click:append="() => (passwordHidden = !passwordHidden)" dense
-											:label="$t('attribute.password')" v-model="userToCreate.password"
-											:rules="[this.fieldRules(userToCreate.password, 'ge_password', true)]"></v-text-field>
+											@click:append="() => (passwordHidden = !passwordHidden)"
+											dense
+											:label="$t('attribute.password')"
+											v-model="userToCreate.password"
+											:rules="[this.fieldRules(userToCreate.password, 'ge_password')]"></v-text-field>
 									</v-col>
-									<v-col cols="12" lg="4">
-										<v-text-field :type="passwordHidden ? 'password' : 'text'" dense
+									<v-col
+										cols="12"
+										lg="4">
+										<v-text-field
+											id="password_confirm"
+											ref="password_confirm"
+											:type="passwordHidden ? 'password' : 'text'"
+											dense
 											@keydown.enter="nextStep"
-											:label="$t('attribute.password_confirm')"
 											v-model="userToCreate.password_confirm"
-											:rules="[userToCreate.password_confirm == userToCreate.password ? true : this.$t('error.validation.passwordNotSame')]"></v-text-field>
+											:label="$t('attribute.password_confirm')"
+											:rules="[(v) => v == this.userToCreate.password ? true : this.$t('error.validation.passwordNotSame')]"></v-text-field>
 									</v-col>
 								</v-row>
 								<v-list v-if="isLDAPView">
 									<!-- Items -->
-									<v-list-item two-line @keydown.enter="nextStep" @click="onClickPermission(key)"
-										:value="permissions[key].value" v-for="(value, key) in permissions" :key="key">
+									<v-list-item
+										two-line
+										@keydown.enter="nextStep"
+										@click="onClickPermission(key)"
+										:value="permissions[key].value"
+										v-for="(value, key) in permissions"
+										:key="key">
 										<v-list-item-content class="pl-10">
 											<!-- Title -->
 											<v-list-item-title class="font-weight-bold">
@@ -233,7 +333,10 @@
 											</v-list-item-subtitle>
 										</v-list-item-content>
 										<v-list-item-action>
-											<v-checkbox @keypress="false" @keydown="false" @click="onClickPermission(key)"
+											<v-checkbox
+												@keypress="false"
+												@keydown="false"
+												@click="onClickPermission(key)"
 												v-model="permissions[key].value" />
 										</v-list-item-action>
 									</v-list-item>
@@ -242,17 +345,29 @@
 						</v-stepper-content>
 						<!-- Check if user exists - loader -->
 						<v-stepper-content step="3">
-							<v-row class="pa-12 ma-12" justify="center" align-content="center" align="center">
+							<v-row
+								class="pa-12 ma-12"
+								justify="center"
+								align-content="center"
+								align="center">
 								<v-col cols="12">
 									<v-fab-transition>
-										<v-progress-circular value="100"
+										<v-progress-circular
+											value="100"
 											:color="(this.error === false) ? (loading ? 'primary' : 'green') : 'red'"
-											:indeterminate="loading" size="100" width="10">
+											:indeterminate="loading"
+											size="100"
+											width="10">
 											<v-fab-transition>
 												<div v-show="loading == false">
-													<v-icon v-if="error == true" size="82"
+													<v-icon
+														v-if="error == true"
+														size="82"
 														color="red">mdi-close-circle</v-icon>
-													<v-icon v-else size="82" color="green">mdi-check-circle</v-icon>
+													<v-icon
+														v-else
+														size="82"
+														color="green">mdi-check-circle</v-icon>
 												</div>
 											</v-fab-transition>
 										</v-progress-circular>
@@ -277,8 +392,13 @@
 			</div>
 		</v-expand-transition>
 
-		<v-snackbar text color="red" timeout="1500" v-if="$vuetify.breakpoint.smAndDown"
-			v-model="showSnackbar" centered>
+		<v-snackbar
+			text
+			color="red"
+			timeout="1500"
+			v-if="$vuetify.breakpoint.smAndDown"
+			v-model="showSnackbar"
+			centered>
 			<v-row justify="center">
 				{{ this.errorMsg }}
 			</v-row>
@@ -286,22 +406,33 @@
 
 		<!-- Actions -->
 		<v-card-actions class="card-actions">
-			<v-row class="ma-1 pa-0"
+			<v-row
+				class="ma-1 pa-0"
 				:justify="this.$vuetify.breakpoint.smAndDown ? 'space-around' : 'end'">
 				<!-- Back and Next buttons -->
 				<div>
 					<v-slide-x-reverse-transition>
-						<v-chip class="mx-2" color="red" v-if="this.error && $vuetify.breakpoint.mdAndUp"
+						<v-chip
+							class="mx-2"
+							color="red"
+							v-if="this.error && $vuetify.breakpoint.mdAndUp"
 							text-color="white">
 							{{ this.errorMsg }}
 						</v-chip>
 					</v-slide-x-reverse-transition>
 
 					<v-slide-x-reverse-transition>
-						<v-btn elevation="0" @click="newUser" v-if="this.createStage < 2"
-							:dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
-							class="ma-0 pa-0 pa-2 ma-1 pr-4" rounded>
-							<v-icon class="ma-0 mr-1" color="primary">
+						<v-btn
+							elevation="0"
+							@click="newUser"
+							v-if="this.createStage < 2"
+							:dark="!isThemeDark($vuetify)"
+							:light="isThemeDark($vuetify)"
+							class="ma-0 pa-0 pa-2 ma-1 pr-4"
+							rounded>
+							<v-icon
+								class="ma-0 mr-1"
+								color="primary">
 								mdi-cached
 							</v-icon>
 							{{ $t("actions.reset") }}
@@ -309,33 +440,56 @@
 					</v-slide-x-reverse-transition>
 
 					<v-slide-x-reverse-transition>
-						<v-btn elevation="0" @click="prevStep" v-if="createStage > 1 && createStage < 4"
-							@keydown.enter="prevStep" :dark="!isThemeDark($vuetify)"
+						<v-btn
+							elevation="0"
+							@click="prevStep"
+							v-if="createStage > 1 && createStage < 4"
+							@keydown.enter="prevStep"
+							:dark="!isThemeDark($vuetify)"
 							:light="isThemeDark($vuetify)"
-							class="ma-0 pa-0 pa-2 pr-4 ma-1" rounded>
-							<v-icon class="ma-0" color="primary">
+							class="ma-0 pa-0 pa-2 pr-4 ma-1"
+							rounded>
+							<v-icon
+								class="ma-0"
+								color="primary">
 								mdi-chevron-double-left
 							</v-icon>
 							{{ $t("actions.back_short") }}
 						</v-btn>
 					</v-slide-x-reverse-transition>
 					<v-slide-x-reverse-transition>
-						<v-btn elevation="0" @click="nextStep" v-if="this.createStage < 3"
+						<v-btn
+							elevation="0"
+							@click="nextStep"
+							v-if="this.createStage < 3"
 							@keydown.enter="nextStep"
-							:dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
-							class="ma-0 pa-0 pa-2 ma-1 pl-4" rounded>
-							{{ this.createStage > 1 && this.userToCreate.password.length === 0 ? $t("actions.skip") : $t("actions.next")}}
-							<v-icon class="ma-0" color="primary">
+							:dark="!isThemeDark($vuetify)"
+							:light="isThemeDark($vuetify)"
+							class="ma-0 pa-0 pa-2 ma-1 pl-4"
+							rounded>
+							{{ this.createStage > 1 && this.userToCreate.password.length === 0 ?
+								$t("actions.skip") :
+								$t("actions.next")}}
+							<v-icon
+								class="ma-0"
+								color="primary">
 								mdi-chevron-double-right
 							</v-icon>
 						</v-btn>
 					</v-slide-x-reverse-transition>
 					<v-slide-x-reverse-transition>
-						<v-btn elevation="0" @click="closeDialog(true)"
-							v-if="this.createStage > 2 && this.error === false" @keydown.enter="closeDialog(true)"
-							:dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)"
-							class="ma-0 pa-0 pa-2 ma-1 pr-4" rounded>
-							<v-icon class="ma-0 mr-1" color="primary">
+						<v-btn
+							elevation="0"
+							@click="closeDialog(true)"
+							v-if="this.createStage > 2 && this.error === false"
+							@keydown.enter="closeDialog(true)"
+							:dark="!isThemeDark($vuetify)"
+							:light="isThemeDark($vuetify)"
+							class="ma-0 pa-0 pa-2 ma-1 pr-4"
+							rounded>
+							<v-icon
+								class="ma-0 mr-1"
+								color="primary">
 								mdi-checkbox-marked-circle-outline
 							</v-icon>
 							{{ $t("actions.done") }}
@@ -442,7 +596,7 @@ export default {
 				return this.realm + "\\"
 		},
 		getDisplayName() {
-			if (this.userToCreate.first_name != undefined && this.userToCreate.first_name != "" || 
+			if (this.userToCreate.first_name != undefined && this.userToCreate.first_name != "" ||
 				this.userToCreate.last_name != undefined && this.userToCreate.last_name != ""
 			)
 				return (this.userToCreate.first_name || "") + " " + (this.userToCreate.last_name || "").trim()
