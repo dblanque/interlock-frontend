@@ -45,9 +45,9 @@ const actions = {
         })
     },
 
-    bulkStatusChange: (data)=>{
+    bulkChangeStatus: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.user.bulkStatusChange, data).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.user.bulkChangeStatus, data).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)

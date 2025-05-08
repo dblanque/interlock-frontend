@@ -185,8 +185,8 @@ class User extends ApiModel {
 		return await interlock_backend.call('user/bulkUpdate', data)
 	}
 
-	async bulkStatusChange(data) {
-		return await interlock_backend.call('user/bulkStatusChange', data)
+	async bulkChangeStatus(data) {
+		return await interlock_backend.call('user/bulkChangeStatus', data)
 	}
 
 	async bulkUnlock(data) {

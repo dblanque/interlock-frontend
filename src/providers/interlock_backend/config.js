@@ -81,7 +81,7 @@ const urls = {
         bulkInsert: `${apiPrefix}/ldap/users/bulk_insert/`,
         bulkDelete: `${apiPrefix}/ldap/users/bulk_delete/`,
         bulkUpdate: `${apiPrefix}/ldap/users/bulk_update/`,
-        bulkStatusChange: `${apiPrefix}/ldap/users/bulk_status_change/`,
+        bulkChangeStatus: `${apiPrefix}/ldap/users/bulk_change_status/`,
         bulkUnlock: `${apiPrefix}/ldap/users/bulk_unlock/`,
         update: `${apiPrefix}/ldap/users/update/`,
         delete: `${apiPrefix}/ldap/users/delete/`,
@@ -109,7 +109,7 @@ const urls = {
         bulkInsert: `${apiPrefix}/users/bulk_insert/`,
         bulkDelete: `${apiPrefix}/users/bulk_delete/`,
         bulkUpdate: `${apiPrefix}/users/bulk_update/`,
-        bulkStatusChange: `${apiPrefix}/users/bulk_change_status/`,
+        bulkChangeStatus: `${apiPrefix}/users/bulk_change_status/`,
     },
     group: {
         base: `${apiPrefix}/ldap/groups/`,
