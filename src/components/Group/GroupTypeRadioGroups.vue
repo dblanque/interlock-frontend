@@ -8,15 +8,16 @@
 				<v-row class="ma-2">
 					{{ $t('section.groups.groupDialog.groupType') }}
 				</v-row>
-				<v-radio-group @change="updateType"
+				<v-radio-group
 				mandatory
 				:readonly="!editFlag"
 				:disabled="!editFlag"
-				v-model="selectedType" class="ma-0 pa-0">
-					<v-radio v-for="key, gt in groupTypes"
-					:value="key"
+				:value="currentType" class="ma-0 pa-0">
+					<v-radio v-for="value, key in LDAPGroupTypes"
+					@change="updateType(value)"
+					:value="value"
 					:key="key"
-					:label="$t('section.groups.types.' + gt)"
+					:label="$t('section.groups.types.' + key)"
 					/>
 				</v-radio-group>
 			</v-card>
@@ -26,15 +27,16 @@
 				<v-row class="ma-2">
 					{{ $t('section.groups.groupDialog.groupScope') }}
 				</v-row>
-				<v-radio-group @change="updateScope"
+				<v-radio-group
 				mandatory
 				:readonly="!editFlag"
 				:disabled="!editFlag"
-				v-model="selectedScope" class="ma-0 pa-0">
-					<v-radio v-for="key, gs in groupScopes"
-					:value="key"
+				:value="currentScope" class="ma-0 pa-0">
+					<v-radio v-for="value, key in LDAPGroupScopes"
+					@change="updateScope(value)"
+					:value="value"
 					:key="key"
-					:label="$t('section.groups.scopes.' + gs)"
+					:label="$t('section.groups.scopes.' + key)"
 					/>
 				</v-radio-group>
 			</v-card>
@@ -43,6 +45,7 @@
 </template>
 
 <script>
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 import {
 	GROUP_SCOPE_DEFAULT,
 	GROUP_TYPE_DEFAULT,
@@ -53,77 +56,73 @@ import {
 
 export default {
 	name: 'GroupTypeRadioGroups',
+	mixins: [utilsMixin],
 	props: {
 		editFlag: Boolean,
-		group: {
-			type: Object,
-			default: () => { return {} },
+		groupTypes: {
+			type: Array,
+			default: () => {return [GROUP_TYPE_DEFAULT]}
 		},
+		groupScopes: {
+			type: Array,
+			default: () => {return [GROUP_SCOPE_DEFAULT]}
+		}
 	},
 	data() {
 		return {
-			logWatch: false,
-			selectedType: GROUP_TYPE_DEFAULT,
-			selectedScope: GROUP_SCOPE_DEFAULT,
-			groupTypes: LDAPGroupTypes,
-			groupScopes: LDAPGroupScopes,
+			log: false,
+			currentType: GROUP_TYPE_DEFAULT,
+			currentScope: GROUP_SCOPE_DEFAULT,
+			LDAPGroupTypes: LDAPGroupTypes,
+			LDAPGroupScopes: LDAPGroupScopes,
 		}
 	},
 	watch: {
-		group: {
-			deep: true,
-			handler: function () {
-				this.reloadRadioValues()
-			}
-		},
-		selectedType: {
-			handler: function (newValue) {
-				if (this.logWatch === true)
-					console.log(newValue)
-			}
-		},
-		selectedScope: {
-			handler: function (newValue) {
-				if (this.logWatch === true)
-					console.log(newValue)
-			}
-		},
-	},
-	mounted () {
-		this.reloadRadioValues();
-	},
-	methods: {
-		getScope(){
-			if (this.group)
-				if (this.group.group_scopes && this.group.group_scopes.length > 0)
-					return this.group.group_scopes[0]
-			return GROUP_SCOPE_DEFAULT
-		},
-		getTypes(){
-			if (this.group) {
-				if (this.group.group_types && this.group.group_types.length > 0) {
-					for (let i = 0; i < this.group.group_types.length; i++) {
-						const t = this.group.group_types[i]
-						if (t != GROUP_TYPE_SYSTEM)
-							return t;
-					}
+		groupTypes: {
+			handler: function (val, oldVal) {
+				this.setCurrentType()
+				if (this.log === true) {
+					console.log(val)
+					console.log(this.currentType)
 				}
 			}
-			return GROUP_TYPE_DEFAULT
 		},
-		reloadRadioValues(){
-			this.selectedType = this.getTypes();
-			this.selectedScope = this.getScope();
+		groupScopes: {
+			handler: function (val, oldVal) {
+				this.setCurrentScope()
+				if (this.log === true) {
+					console.log(val)
+					console.log(this.currentScope)
+				}
+			}
 		},
-		updateType(){
-			let v = this.selectedType
-			this.$emit("update-type", v)
-			this.$emit("updateType", v)
+	},
+	methods: {
+		setCurrentScope() {
+			this.currentScope = this.groupScopes[0]
 		},
-		updateScope(){
-			let v = this.selectedScope
-			this.$emit("update-scope", v)
-			this.$emit("updateScope", v)
+		setCurrentType() {
+			for (let i = 0; i < this.groupTypes.length; i++) {
+				const t = this.groupTypes[i]
+				if (t != GROUP_TYPE_SYSTEM)
+					this.currentType = t;
+			}
+		},
+		update(){
+			this.updateScope();
+			this.updateType();
+		},
+		updateType(v){
+			let result = [v]
+			if (this.groupTypes.includes(GROUP_TYPE_SYSTEM))
+				result.push(GROUP_TYPE_SYSTEM)
+			this.$emit("update-type", result)
+			this.$emit("updateType", result)
+		},
+		updateScope(v){
+			let result = [v]
+			this.$emit("update-scope", result)
+			this.$emit("updateScope", result)
 		}
 	},
 }

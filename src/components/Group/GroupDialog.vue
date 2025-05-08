@@ -90,9 +90,11 @@
 						</v-row>
 
 						<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
-							<GroupTypeRadioGroups :editFlag="editFlag" :group="groupcopy"
-								@update-type="(v) => radioGroupType = v"
-								@update-scope="(v) => radioGroupScope = v"/>
+							<GroupTypeRadioGroups :editFlag="editFlag" 
+								:group-types="groupcopy.group_types"
+								:group-scopes="groupcopy.group_scopes"
+								@update-type="(v) => groupcopy.group_types = v"
+								@update-scope="(v) => groupcopy.group_scopes = v"/>
 						</v-row>
 
 						<!-- MEMBER BUTTONS -->
@@ -352,8 +354,6 @@ export default {
 			memberPanelExpanded: 0,
 			members_to_add: [],
 			members_to_remove: [],
-			radioGroupType: GROUP_TYPE_DEFAULT,
-			radioGroupScope: GROUP_SCOPE_DEFAULT,
 			// Dialog States
 			dialogs: {
 				addToGroup: false
@@ -496,39 +496,6 @@ export default {
 			}
 			return array
 		},
-		setGroupTypeAndScope() {
-			if (this.group.group_types != undefined) {
-				this.group.group_types.forEach(k => {
-					switch (k) {
-						case "GROUP_TYPE_DISTRIBUTION":
-							this.radioGroupType = GROUP_TYPE_DISTRIBUTION;
-							break;
-						case "GROUP_TYPE_SECURITY":
-							this.radioGroupType = GROUP_TYPE_SECURITY;
-							break;
-						default:
-							break;
-					}
-				});
-			}
-			if (this.group.group_scopes != undefined) {
-				this.group.group_scopes.forEach(k => {
-					switch (k) {
-						case 'GROUP_SCOPE_GLOBAL':
-							this.radioGroupScope = GROUP_SCOPE_GLOBAL;
-							break;
-						case 'GROUP_SCOPE_DOMAIN_LOCAL':
-							this.radioGroupScope = GROUP_SCOPE_DOMAIN_LOCAL;
-							break;
-						case 'GROUP_SCOPE_UNIVERSAL':
-							this.radioGroupScope = GROUP_SCOPE_UNIVERSAL;
-							break;
-						default:
-							break;
-					}
-				});
-			}
-		},
 		// Sync the groupcopy object to the parent view group object on the
 		// next tick to avoid mutation errors
 		syncGroup() {
@@ -540,7 +507,6 @@ export default {
 			this.showAlert = false
 			this.$nextTick(() => {
 				this.groupcopy = Object.assign({}, this.group)
-				this.setGroupTypeAndScope()
 				this.getMembersLength()
 				this.setupExclude()
 				this.loading = false
@@ -571,13 +537,6 @@ export default {
 			this.loading = true
 			this.loadingColor = 'primary'
 
-			// Set Group Type and Scope
-			let isSystemGroup = this.group.group_types.includes(GROUP_TYPE_SYSTEM)
-			this.groupcopy.group_types = [this.radioGroupType]
-			if (isSystemGroup === true)
-				this.groupcopy.group_types.push(GROUP_TYPE_SYSTEM)
-			this.groupcopy.group_scopes = [this.radioGroupScope]
-
 			// Set members
 			// Members to Add
 			if (this.members_to_add.length > 0)
@@ -590,22 +549,32 @@ export default {
 			else
 				delete this.groupcopy.members_to_remove
 
-			const excludeKeys = ["object_relative_id", "object_security_id"]
-			const keysToCheck = ["name", "group_scopes", "group_types"]
+			// Deep copy data and modify for delivery
+			const excludeKeys = [
+				"object_relative_id",
+				"object_security_id",
+				"members",
+				"type"
+			]
+			let scopes_and_types = ["group_scopes", "group_types"]
+			const keysToCheck = ["name", "email"]
 			let newDistinguishedName
 			let data = Object.assign({}, this.groupcopy)
+
 			excludeKeys.forEach(k => {
 				delete data[k]
 			});
 			// Remove unchanged keys or do something on change
 			keysToCheck.forEach(k => {
-				if (this.group[k] === data[k]) {
+				let _origVal = this.group[k]
+				let _val = data[k]
+				if (_origVal === _val) {
 					delete data[k]
 				}
 				else {
 					switch (k) {
 						case "name":
-							const v = data[k]
+							const v = _val
 							newDistinguishedName = data["distinguished_name"].split(",")
 							// Remove relative distinguished name to get superior ldap path.
 							newDistinguishedName.shift()
