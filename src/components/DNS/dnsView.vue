@@ -181,9 +181,8 @@
 			<template v-slot:header="props">
 				<thead>
 					<tr>
-						<template v-for="header in props.props.headers">
-							<th :class="($vuetify.breakpoint.mdAndUp ? '' : 'text-center') + ' py-2 px-0'"
-								:key="header.value">
+						<template>
+							<th v-for="header in props.props.headers" :key="header.value" :class="($vuetify.breakpoint.mdAndUp ? '' : 'text-center') + ' py-2 px-0'">
 								<v-btn class="py-4"
 									x-small text color="primary" v-if="header.groupable == true"
 									@click.stop="props.on.group(header.value)">
@@ -249,15 +248,13 @@
 
 			<!-- ZONE IS TOMBSTONED STATUS -->
 			<template v-slot:[`item.ts`]="{ item }">
-
 				<!-- Enable Record Button -->
-				<v-tooltip color="primary" bottom v-if="item.ts == true">
+				<v-tooltip color="primary" bottom v-if="item.ts === true">
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
 							rounded
 							v-bind="attrs"
-							v-on="on"
-							:disabled="loading || true">
+							v-on="allowTombstoning ? on : undefined">
 							<v-icon color="valid-40">
 								mdi-check
 							</v-icon>
@@ -274,8 +271,7 @@
 						<v-btn icon
 							rounded
 							v-bind="attrs"
-							v-on="on"
-							:disabled="loading || true">
+							v-on="allowTombstoning ? on : undefined">
 							<v-icon color="error">
 								mdi-close
 							</v-icon>
@@ -405,6 +401,7 @@ export default {
 	},
 	data() {
 		return {
+			allowTombstoning: false,
 			selectedRecords: [],
 			currentRecord: {
 				name: "",
@@ -594,7 +591,7 @@ export default {
 				"nameNode",
 				"address",
 				"ipv6Address",
-				"displayName"
+				"displayName",
 			]
 			DEFAULT_ON.forEach(key => {
 				if (key == 'actions')
