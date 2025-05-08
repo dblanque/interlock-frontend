@@ -115,11 +115,11 @@
 									</v-col>
 								</v-row>
 
-								<GroupTypeRadioGroups
-									:group="groupToCreate"
-									:edit-flag="true"
-									@update-type="(v) => radioGroupType = v"
-									@update-scope="(v) => radioGroupScope = v" />
+								<GroupTypeRadioGroups :editFlag="true" 
+									:group-types="groupToCreate.group_types"
+									:group-scopes="groupToCreate.group_scopes"
+									@update-type="(v) => groupToCreate.group_types = v"
+									@update-scope="(v) => groupToCreate.group_scopes = v"/>
 								<v-row class="ma-0 pa-0">
 									<v-divider class="mx-12 my-3 mt-6"></v-divider>
 								</v-row>
@@ -354,8 +354,6 @@ export default {
 			groupPathExpansionPanel: false,
 			groupDestination: '',
 			groupToCreate: {},
-			radioGroupScope: GROUP_SCOPE_DEFAULT,
-			radioGroupType: GROUP_TYPE_DEFAULT,
 			ouList: [],
 			createStage: 1,
 		}
@@ -446,8 +444,6 @@ export default {
 				case 2:
 					this.$refs.AddToGroup.addDNs()
 					if (!this.error) {
-						this.groupToCreate.group_types = [this.radioGroupType]
-						this.groupToCreate.group_scopes = [this.radioGroupScope]
 						Object.keys(this.groupToCreate).forEach(key => {
 							if (this.groupToCreate[key] === undefined) {
 								delete this.groupToCreate[key];
@@ -480,8 +476,6 @@ export default {
 			this.members_to_add = []
 			this.createStage = 1
 			this.error = false
-			this.radioGroupScope = GROUP_SCOPE_DEFAULT
-			this.radioGroupType = GROUP_TYPE_DEFAULT
 			this.errorMsg = ""
 			this.$refs.groupCreateForm1.resetValidation()
 			let domainDetails = getDomainDetails()
