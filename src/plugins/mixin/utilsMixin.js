@@ -4,6 +4,9 @@
 
 const utilsMixin = {
     methods: {
+        getKeyByValue(object, value) {
+            return Object.keys(object).find(key => object[key] === value);
+        },
         toCamelCase(e) {
             return e.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
         },

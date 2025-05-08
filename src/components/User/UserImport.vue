@@ -582,9 +582,6 @@ export default {
 			}
 			this.tableData.items = this.json_result.data
 		},
-		getKeyByValue(object, value) {
-			return Object.keys(object).find(key => object[key] === value);
-		},
 		clearDataTable() {
 			this.tableData.headers = []
 			this.tableData.items = []
