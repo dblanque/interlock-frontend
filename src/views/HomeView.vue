@@ -140,8 +140,8 @@
       :getVisibleTabsInGroup="getVisibleTabsInGroup"
       @updateSelectedTab="updateSelectedTab"
       mobile />
-    <v-row
-      class="ma-0 pa-0 align-stretch pb-10"
+    <v-row no-gutters
+      class="justify-center align-stretch flex-nowrap pb-10"
       style="position: relative; height: 100%;">
       <NavigationDrawer
         ref="navigationDrawerDesktop"
@@ -155,9 +155,7 @@
         :bottomTabs="getVisibleTabsInGroup('_bot')"
         :getVisibleTabsInGroup="getVisibleTabsInGroup"
         @updateSelectedTab="updateSelectedTab" />
-      <v-col
-        cols="min"
-        class="ma-0 pa-0">
+      <v-col class="ma-0 pa-0">
         <v-tabs-items
           v-model="activeTab"
           class="transparent-body">
