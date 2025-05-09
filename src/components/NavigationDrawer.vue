@@ -52,7 +52,7 @@
 						right
 						color="primary">
 						<template v-slot:activator="{ on, attrs }">
-							<v-list-item v-bind="attrs" v-on="on">
+							<v-list-item class="ma-0 pa-0" dense v-bind="attrs" v-on="on">
 								<v-list-item-icon>
 									<v-icon>
 										{{ navGroupSettings.icon }}
@@ -65,6 +65,7 @@
 					</v-tooltip>
 				</template>
 				<v-list-item
+					dense
 					v-for="tab in getVisibleTabsInGroup(navGroup)"
 					:key="tab.index"
 					:color="componentColor"
