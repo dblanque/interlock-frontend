@@ -592,7 +592,6 @@ export default {
 			testError: false,
 			testFinished: false,
 			readonly: true,
-			saveTimerId: 0,
 			invalid: false,
 			loading: true,
 			resetDialog: false,
@@ -744,9 +743,8 @@ export default {
 					}, 500)
 				})
 		},
-		async sleep(time_in_milliseconds) {
-			clearTimeout(this.saveTimerId)
-			await new Promise(r => this.saveTimerId = setTimeout(r, time_in_milliseconds));
+		async sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
 		},
 		async checkBackendStatus() {
 			if (this.backend_offline == true && this.checking_backend == true) return
@@ -1051,10 +1049,18 @@ export default {
 		},
 		async requestLDAPUserSync() {
 			await new Settings({}).sync_users()
-				.then(response => {
+				.then(async response => {
+					let synced_count = response.data.synced_users
+					let updated_count = response.data.updated_users
 					this.createSnackbar({
-						message: (`${response.data.count} ${this.$tc('classes.user', response.data.count)} ${this.$t('words.synchronized.m')}`).toUpperCase(),
+						message: (`${synced_count} ${this.$tc('classes.user', synced_count)} ${this.$t('words.synchronized.m')}`).toUpperCase(),
 						type: 'success'
+					})
+					this.sleep(2e3).then(() => {
+						this.createSnackbar({
+							message: (`${updated_count} ${this.$tc('classes.user', updated_count)} ${this.$t('words.updated.m')}`).toUpperCase(),
+							type: 'info'
+						})
 					})
 				})
 				.catch(e => {
