@@ -610,7 +610,8 @@ export default {
         this.navGroups.ldap.tooltip = this.$t("navgroup.ldap_hint")
         if (this.selectedTabTitle.startsWith("ldap-"))
           this.updateSelectedTab(this.getTabIndex("home"))
-        this.$refs.navigationDrawerDesktop.closeAllNavGroups()
+        if (this.$refs?.navigationDrawerDesktop)
+          this.$refs.navigationDrawerDesktop.closeAllNavGroups()
       } else {
         this.navGroups["ldap"].enabled = true
         delete this.navGroups.ldap.tooltip
