@@ -7,7 +7,7 @@
 	border: 0 !important;
 	-webkit-box-sizing: border-box !important;
     box-sizing: border-box !important;
-	transition: all var(--trans-speed) ease !important;
+	transition: all var(--base-transition-speed) ease !important;
 	vertical-align: baseline !important;
 }
 
