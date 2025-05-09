@@ -294,6 +294,44 @@
 					</v-row>
 				</v-expansion-panel-header>
 				<v-expansion-panel-content class="mt-6 mb-2 pa-0" eager>
+					<v-row v-if="clsKey == 'ldap'"
+						class="pa-0 ma-0"
+						justify="center"
+						align="center">
+						<v-btn
+							:disabled="!settingClsEnabled(clsKey)"
+							@click="requestLDAPUserSync"
+							class="mx-1 mb-4"
+							color="primary"
+							elevation="0">
+							<v-icon class="mr-2">
+								mdi-account-sync
+							</v-icon>
+							{{ `${$t("actions.synchronize")} ${$tc("classes.user", 2)}` }}
+						</v-btn>
+						<v-btn
+							:disabled="!settingClsEnabled(clsKey)"
+							@click="requestLDAPUserPrune"
+							class="mx-1 mb-4"
+							color="primary"
+							elevation="0">
+							<v-icon class="mr-2">
+								mdi-account-wrench
+							</v-icon>
+							{{ `${$t("actions.prune")} ${$tc("classes.user", 2)}` }}
+						</v-btn>
+						<v-btn
+							:disabled="!settingClsEnabled(clsKey)"
+							@click="requestLDAPUserPurge"
+							class="mx-1 mb-4"
+							color="secondary"
+							elevation="0">
+							<v-icon class="mr-2">
+								mdi-account-off
+							</v-icon>
+							{{ `${$t("actions.purge")} ${$tc("classes.user", 2)}` }}
+						</v-btn>
+					</v-row>
 					<v-form
 						:disabled="!settingClsEnabled(clsKey)"
 						:ref="`${clsKey}SettingsForm`"
@@ -1010,6 +1048,47 @@ export default {
 			}
 			return object.value
 		},
+		async requestLDAPUserSync() {
+			await new Settings({}).sync_users()
+				.then(response => {
+					this.createSnackbar({
+						message: (`${response.data.count} ${this.$tc('classes.user', response.data.count)} ${this.$t('words.synchronized.m')}`).toUpperCase(),
+						type: 'success'
+					})
+					this.refreshSettings(false)
+				})
+				.catch(e => {
+					this.createSnackbar({ message: this.getMessageForCode(e), type: 'error' })
+					console.error(e)
+				})
+		},
+		async requestLDAPUserPrune() {
+			await new Settings({}).prune_users()
+				.then(response => {
+					this.createSnackbar({
+						message: (`${response.data.count} ${this.$tc('classes.user', response.data.count)} ${this.$t('words.pruned.m')}`).toUpperCase(),
+						type: 'info'
+					})
+					this.refreshSettings(false)
+				})
+				.catch(e => {
+					this.createSnackbar({ message: this.getMessageForCode(e), type: 'error' })
+					console.error(e)
+				})
+		},
+		async requestLDAPUserPurge() {
+			await new Settings({}).purge_users()
+				.then(response => {
+					this.createSnackbar({
+						message: (`${response.data.count} ${this.$tc('classes.user', response.data.count)} ${this.$t('words.purged.m')}`).toUpperCase(),
+					})
+					this.refreshSettings(false)
+				})
+				.catch(e => {
+					this.createSnackbar({ message: this.getMessageForCode(e), type: 'error' })
+					console.error(e)
+				})
+		}
 	}
 }
 </script>

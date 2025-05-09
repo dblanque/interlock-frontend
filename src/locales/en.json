@@ -37,6 +37,9 @@
     }
   },
   "actions":{
+    "synchronize":"Synchronize",
+    "purge":"Purge",
+    "prune":"Prune",
     "skip":"Skip",
     "copy":"Copy",
     "copiedToClipboard":"Copied to Clipboard",
@@ -136,6 +139,21 @@
     "passwordChanged": "Password Changed"
   },
   "words":{
+    "purged":{
+      "m": "Purged",
+      "f": "Purged",
+      "n": "Purged"
+    },
+    "pruned":{
+      "m": "Pruned",
+      "f": "Pruned",
+      "n": "Pruned"
+    },
+    "synchronized":{
+      "m": "Synchronized",
+      "f": "Synchronized",
+      "n": "Synchronized"
+    },
     "recommended":"Recommended",
     "default":"Default",
     "created":{
@@ -328,8 +346,10 @@
         "user_group_fetch_error":"User Group Memberships could not be fetched",
         "user_group_primary_err":"Primary Group for User cannot be Deleted",
         "user_group_bad":"Bad User Group Member Operations",
-        "user_email_exists":"A User with that Email exists",
-        "user_exists":"User already exists"
+        "user_email_exists":"A User with that email exists",
+        "user_exists":"A User with that username exists",
+        "user_ldap_email_exists":"An LDAP User with that email exists",
+        "user_ldap_exists":"An LDAP User with that username exists"
       },
       "ldap":{
         "ldap_backend_disabled":"Please enable the LDAP Back-end",

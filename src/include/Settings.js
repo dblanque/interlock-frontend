@@ -37,6 +37,18 @@ class Settings extends ApiModel{
         return await interlock_backend.call('settings/save', data)
     }
 
+    async sync_users(){
+        return await interlock_backend.call('settings/sync_users')
+    }
+
+    async prune_users(){
+        return await interlock_backend.call('settings/prune_users')
+    }
+
+    async purge_users(){
+        return await interlock_backend.call('settings/purge_users')
+    }
+
     async preset_create(data){
         return await interlock_backend.call('settings/preset_create', data)
     }

@@ -50,6 +50,33 @@ const actions = {
         })
     },
 
+    sync_users: ()=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.get(interlock_backend.urls.settings.sync_users)
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
+    },
+
+    prune_users: ()=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.get(interlock_backend.urls.settings.prune_users)
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
+    },
+
+    purge_users: ()=>{
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.get(interlock_backend.urls.settings.purge_users)
+            .then(response => {
+                resolve(response);
+            }).catch((e) => reject(e))
+        })
+    },
+
     preset_create: (data)=>{
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.settings.preset_create, data)

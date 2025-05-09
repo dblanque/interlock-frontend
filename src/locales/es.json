@@ -37,6 +37,9 @@
     }
   },
   "actions": {
+    "synchronize":"Sincronizar",
+    "purge":"Purgar",
+    "prune":"Limpiar",
     "skip":"Saltear",
     "copy":"Copiar",
     "copiedToClipboard":"Copiado al Portapapeles",
@@ -136,6 +139,21 @@
     "passwordChanged": "Contraseña Modificada"
   },
   "words": {
+    "purged":{
+      "m": "Purgado | Purgados",
+      "f": "Purgada | Purgadas",
+      "n": "Purgado | Purgados"
+    },
+    "pruned":{
+      "m": "Limpiado | Limpiados",
+      "f": "Limpiada | Limpiadas",
+      "n": "Limpiado | Limpiados"
+    },
+    "synchronized":{
+      "m": "Sincronizado | Sincronizados",
+      "f": "Sincronizada | Sincronizadas",
+      "n": "Sincronizado | Sincronizados"
+    },
     "recommended":"Recomendado",
     "default":"Pre-determinado",
     "created":{
@@ -339,7 +357,9 @@
         "user_group_primary_err":"No se puede eliminar el Grupo Primario del Usuario",
         "user_group_bad":"Operación de Miembro de Grupo Inválida",
         "user_email_exists":"Ya existe otro usuario con ese Email",
-        "user_exists":"El usuario ya existe"
+        "user_exists":"El usuario ya existe",
+        "user_ldap_email_exists":"An LDAP User with that email exists",
+        "user_ldap_exists":"An LDAP User with that username exists"
       },
       "ldap":{
         "ldap_backend_disabled":"Por favor habilite el Back-end de LDAP",
