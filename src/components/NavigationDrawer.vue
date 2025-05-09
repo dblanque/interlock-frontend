@@ -116,7 +116,7 @@
 		<!-- Nav Collapse -->
 		<template v-slot:prepend>
 			<v-list dense nav expand v-if="!mobile">
-				<v-list-item @click="navDrawerKeepOpen = !navDrawerKeepOpen">
+				<v-list-item @click="setNavDrawerKeepOpen">
 					<v-list-item-icon class="align-self-center justify-center">
 						<v-slide-x-reverse-transition>
 							<v-icon small v-if="!navDrawerKeepOpen">mdi-arrow-expand-right</v-icon>
@@ -162,13 +162,26 @@ export default {
 		lockNavTabs: Boolean,
 		getVisibleTabsInGroup: Function
 	},
+	computed: {
+		cookieNavDrawerKeepOpen: () => {
+			let _v = localStorage.getItem("nav")
+			if (_v !== "true" && _v !== "false")
+				return undefined
+			return localStorage.getItem("nav") === "true"
+		}
+	},
 	created() {
-		if (this.expandedOnCreate === true)
+		console.log(this.cookieNavDrawerKeepOpen !== false)
+		if (this.expandedOnCreate === true && this.cookieNavDrawerKeepOpen !== false)
 			this.navDrawerKeepOpen = true;
 		if (!this.mobile)
 			this.navDrawerOpen = true;
 	},
 	methods: {
+		setNavDrawerKeepOpen() {
+			this.navDrawerKeepOpen = !this.navDrawerKeepOpen
+			localStorage.setItem("nav", this.navDrawerKeepOpen)
+		},
 		updateSelectedTab(tabIndex) {
 			this.$emit("updateSelectedTab", tabIndex);
 		},
