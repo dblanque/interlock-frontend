@@ -1056,7 +1056,6 @@ export default {
 						message: (`${response.data.count} ${this.$tc('classes.user', response.data.count)} ${this.$t('words.synchronized.m')}`).toUpperCase(),
 						type: 'success'
 					})
-					this.refreshSettings(false)
 				})
 				.catch(e => {
 					this.createSnackbar({ message: this.getMessageForCode(e), type: 'error' })
@@ -1070,7 +1069,6 @@ export default {
 						message: (`${response.data.count} ${this.$tc('classes.user', response.data.count)} ${this.$t('words.pruned.m')}`).toUpperCase(),
 						type: 'info'
 					})
-					this.refreshSettings(false)
 				})
 				.catch(e => {
 					this.createSnackbar({ message: this.getMessageForCode(e), type: 'error' })
@@ -1083,7 +1081,6 @@ export default {
 					this.createSnackbar({
 						message: (`${response.data.count} ${this.$tc('classes.user', response.data.count)} ${this.$t('words.purged.m')}`).toUpperCase(),
 					})
-					this.refreshSettings(false)
 				})
 				.catch(e => {
 					this.createSnackbar({ message: this.getMessageForCode(e), type: 'error' })
