@@ -2,7 +2,7 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!---------------------------- File: dnsView.vue ------------------------------>
 <template>
-	<v-card>
+	<div>
 		<v-data-table
 			:headers="dns.headers"
 			:items="filteredData"
@@ -376,7 +376,7 @@
 				@closeDialog="closeDialog" @refresh="getDNSData" ref="RecordMassAction" />
 		</v-dialog>
 
-	</v-card>
+	</div>
 </template>
 
 <script>
