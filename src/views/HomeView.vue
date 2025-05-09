@@ -608,6 +608,9 @@ export default {
       if (this.ldapBackendDisabled) {
         this.navGroups["ldap"].enabled = false
         this.navGroups.ldap.tooltip = this.$t("navgroup.ldap_hint")
+        if (this.selectedTabTitle.startsWith("ldap-"))
+          this.updateSelectedTab(this.getTabIndex("home"))
+        this.$refs.navigationDrawerDesktop.closeAllNavGroups()
       } else {
         this.navGroups["ldap"].enabled = true
         delete this.navGroups.ldap.tooltip

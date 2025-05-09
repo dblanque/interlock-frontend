@@ -36,10 +36,11 @@
 			</v-list-item>
 			<!-- Grouped Tabs -->
 			<v-list-group
-				v-for="navGroupSettings, navGroup in navGroups" :key="navGroup"
+				v-for="navGroupSettings, navGroup in navGroups"
+				v-model="openedGroup[navGroup]"
+				:key="navGroup"
 				:group="navGroup"
 				:color="componentColor"
-				:value="navDrawerOpenGroups.group"
 				:disabled="!navGroupSettings.enabled"
 				:append-icon="!navGroupSettings.enabled ? 'mdi-minus' : undefined"
 				multiple>
@@ -144,7 +145,7 @@ export default {
 		return {
 			navDrawerOpen: false,
 			navDrawerKeepOpen: false,
-			navDrawerOpenGroups: {},
+			openedGroup: {},
 			componentColor: "primary-45",
 		}
 	},
@@ -171,13 +172,15 @@ export default {
 		}
 	},
 	created() {
-		console.log(this.cookieNavDrawerKeepOpen !== false)
 		if (this.expandedOnCreate === true && this.cookieNavDrawerKeepOpen !== false)
 			this.navDrawerKeepOpen = true;
 		if (!this.mobile)
 			this.navDrawerOpen = true;
 	},
 	methods: {
+		closeAllNavGroups(){
+			this.openedGroup = {}
+		},
 		setNavDrawerKeepOpen() {
 			this.navDrawerKeepOpen = !this.navDrawerKeepOpen
 			localStorage.setItem("nav", this.navDrawerKeepOpen)
