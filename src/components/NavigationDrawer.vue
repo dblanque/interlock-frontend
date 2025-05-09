@@ -3,6 +3,7 @@
 	<v-navigation-drawer
 		id="main-nav-drawer"
 		ref="mainNavDrawer"
+		class="ma-0 pa-0"
 		v-model="navDrawerOpen"
 		:expand-on-hover="!navDrawerKeepOpen && !mobile"
 		:absolute="!navDrawerKeepOpen && !mobile"
@@ -11,7 +12,7 @@
 		:temporary="mobile"
 		:fixed="mobile"
 		:bottom="mobile"
-		:width="320">
+		:width="$vuetify.breakpoint.lgAndUp ? 380 : 280">
 		<v-list dense nav expand>
 			<!-- Top Tabs -->
 			<v-list-item
