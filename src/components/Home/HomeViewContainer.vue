@@ -155,13 +155,13 @@ import { notificationBus } from '@/main.js';
 export default {
 	name: 'HomeViewContainer',
 	props: {
+		initLoad: Boolean,
 		viewTitle: String,
-		snackbarTimeout: Number
+		snackbarTimeout: Number,
 	},
 	data() {
 		return {
 			data: new HomeInfo({}),
-			initLoad: true,
 			loading: false,
 			error: false,
 			errorMsg: "",
@@ -236,8 +236,6 @@ export default {
 			this.errorMsg = ""
 		},
 		stopLoading(clearErrors = false) {
-			if (this.initLoad === true)
-				this.initLoad = false
 			this.loading = false
 			if (clearErrors === true) {
 				this.error = false
@@ -261,6 +259,7 @@ export default {
 				.catch(error => {
 					console.error(error)
 				})
+			this.$emit("done")
 		}
 	},
 }

@@ -614,6 +614,7 @@ export default {
 						{ message: this.errorMsg.toUpperCase(), type: 'error' }
 					)
 				})
+			this.$emit('done')
 		},
 		async unlockUser(userObject) {
 			await new User({}).unlock(userObject.username)

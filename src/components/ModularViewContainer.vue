@@ -10,10 +10,12 @@
 		</v-row>
 
 		<!-- HOME -->
-		<v-container v-if="viewTitle == 'home' && initLoad == true" :class="getContainerClasses()">
+		<v-container v-if="viewTitle == 'home'" :class="getContainerClasses()">
 			<HomeViewContainer
 				ref="HomeViewContainer"
 				:viewTitle="viewTitle"
+				:init-load="initLoad"
+				@done="emitDone"
 				:requestRefresh="undefined"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction" />
@@ -24,6 +26,7 @@
 			<ApplicationView
 				ref="ApplicationView"
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				:requestRefresh="undefined"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction" />
@@ -34,6 +37,7 @@
 			<DirtreeView
 				ref="DirtreeView"
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction"
 				@goToUser="goToUser"
@@ -44,6 +48,7 @@
 		<v-container v-if="viewTitle == 'django-users'" :class="getContainerClasses()">
 			<UserView ref="DjangoUserView"
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction"
 				@goToGroup="goToGroup" />
@@ -53,6 +58,7 @@
 		<v-container v-if="viewTitle == 'application-groups'" :class="getContainerClasses()">
 			<GroupView ref="ApplicationGroupView"
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction" />
 		</v-container>
@@ -61,6 +67,7 @@
 		<v-container v-if="viewTitle == 'ldap-users'" :class="getContainerClasses()">
 			<UserView ref="LdapUserView"
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction"
 				@goToGroup="goToGroup" />
@@ -70,6 +77,7 @@
 		<v-container v-if="viewTitle == 'ldap-groups'" :class="getContainerClasses()">
 			<GroupView ref="LdapGroupView"
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction" />
 		</v-container>
@@ -78,6 +86,7 @@
 		<v-container v-if="viewTitle == 'ldap-dns'" :class="getContainerClasses()">
 			<dnsView ref="dnsView"
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				:snackbarTimeout="this.snackbarTimeout"
 				@refresh="refreshAction" />
 		</v-container>
@@ -86,6 +95,7 @@
 		<v-container v-if="viewTitle == 'ldap-gpo'" :class="getContainerClasses()">
 			<GpoView
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				class="my-2 mb-4"
 				ref="gpoView" />
 		</v-container>
@@ -94,6 +104,7 @@
 		<v-container v-if="viewTitle == 'settings'" :class="getContainerClasses()">
 			<SettingsCard
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				class="my-2 mb-4"
 				ref="SettingsView"
 				@refreshDomain="refreshDomainAction()" />
@@ -103,6 +114,7 @@
 		<v-container v-if="viewTitle == 'logs'" :class="getContainerClasses()">
 			<LogView
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				class="my-2 mb-4"
 				ref="LogView" />
 		</v-container>
@@ -111,6 +123,7 @@
 		<v-container v-if="viewTitle == 'debug'" :class="getContainerClasses()">
 			<DebugView
 				:viewTitle="viewTitle"
+				@done="emitDone"
 				class="my-2 mb-4"
 				ref="DebugView" />
 		</v-container>
@@ -166,7 +179,7 @@ export default {
 			snackbarColor: "",
 			snackbarClasses: "",
 			snackbar: false,
-			snackbarTimeout: 2500,
+			snackbarTimeout: 2e3,
 		}
 	},
 	watch: {
@@ -207,7 +220,7 @@ export default {
 				case 'applications':
 					if (this.$refs.ApplicationView != undefined) {
 						console.log("Requested refresh for view component " + newValue)
-						this.$refs.ApplicationView.listApplicationItems()
+						this.$refs.ApplicationView.listApplicationItems(true)
 					}
 					break;
 				case 'ldap-dirtree':
@@ -221,21 +234,21 @@ export default {
 					if (this.$refs.LdapUserView != undefined) {
 						console.log("Requested refresh for component " + newValue)
 						this.$refs.LdapUserView.resetSearch()
-						this.$refs.LdapUserView.listUserItems()
+						this.$refs.LdapUserView.listUserItems(true)
 					}
 					break;
 				case 'django-users':
 					if (this.$refs.DjangoUserView != undefined) {
 						console.log("Requested refresh for component " + newValue)
 						this.$refs.DjangoUserView.resetSearch()
-						this.$refs.DjangoUserView.listUserItems()
+						this.$refs.DjangoUserView.listUserItems(true)
 					}
 					break;
 				case 'ldap-groups':
 					if (this.$refs.LdapGroupView != undefined) {
 						console.log("Requested refresh for component " + newValue)
 						this.$refs.LdapGroupView.resetSearch()
-						this.$refs.LdapGroupView.listGroupItems()
+						this.$refs.LdapGroupView.listGroupItems(true)
 					}
 					break;
 				case 'settings':
@@ -248,7 +261,7 @@ export default {
 					if (this.$refs.LogView != undefined) {
 						console.log("Requested refresh for component " + newValue)
 						this.$refs.LogView.resetSearch()
-						this.$refs.LogView.listLogs()
+						this.$refs.LogView.listLogs(true)
 					}
 					break;
 				case 'ldap-dns':
@@ -268,12 +281,13 @@ export default {
 						console.log("Requested refresh for component " + newValue)
 					break;
 			}
-			this.$emit('done')
+			this.emitDone()
 		},
 	},
-	computed: {
-	},
 	methods: {
+		emitDone() {
+			this.$emit('done')
+		},
 		getContainerClasses() {
 			let _c = [...this.containerClasses]
 			// Add classes to desktop

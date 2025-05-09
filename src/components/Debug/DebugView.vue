@@ -129,6 +129,7 @@ export default {
                     }
                 );
 			})
+			this.$emit('done')
 		},
 		refreshAction() {
 			this.getLDAPOperations()

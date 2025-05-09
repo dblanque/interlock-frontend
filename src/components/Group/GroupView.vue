@@ -416,8 +416,7 @@ export default {
 		},
 		getMessage() {
 			if (this.data.selectedGroup === undefined ||
-				this.data.selectedGroup === null ||
-				this.data.selectedGroup === {})
+				this.data.selectedGroup === null)
 				return ""
 			if (this.data.selectedGroup.enabled)
 				return this.$t('section.applicationGroups.dialog.statusChange.disable_warning')
@@ -636,6 +635,7 @@ export default {
 							message: this.getMessageForCode(error), type: 'error'
 						})
 				})
+			this.$emit('done')
 		},
 		openDeleteDialog(groupObject) {
 			this.data.selectedGroup = {}

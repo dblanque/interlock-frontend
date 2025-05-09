@@ -331,7 +331,7 @@ export default {
       this.tableData.items = []
     },
     // Log Actions
-    async listLogs(){
+    async listLogs(emitNotif = true){
       this.loading = true
       this.error = false
       this.tableData.headers = []
@@ -362,7 +362,11 @@ export default {
         this.tableData.items = logs
         this.loading = false
         this.error = false
-        this.createSnackbar({message: (this.$tc("classes.log", logs.length) + " " + this.$tc("words.loaded.m", logs.length)).toUpperCase(), type: 'success'})
+        if (emitNotif)
+          this.createSnackbar({
+            message: (this.$tc("classes.log", logs.length) + " " + this.$tc("words.loaded.m", logs.length)).toUpperCase(),
+            type: 'success'
+          })
         this.logTruncateRange = [ this.getLogTruncateMin, this.getLogTruncateMax ]
       })
       .catch(error => {
@@ -371,6 +375,7 @@ export default {
         this.error = true
         this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
       })
+      this.$emit('done')
     },
     openResetLogsDialog(){
       this.resetDialog = true

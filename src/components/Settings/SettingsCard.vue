@@ -874,6 +874,7 @@ export default {
 					this.error = true
 					this.readonly = false
 				})
+			this.$emit('done')
 		},
 		async restoreDefaultValues() {
 			this.resetDialog = false

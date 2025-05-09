@@ -172,6 +172,7 @@
               @refreshDomain="fetchDomainDetails()"
               @goToUser="goToUser"
               @goToGroup="goToGroup"
+              @done="setInitLoad"
               :langChanged="langChanged"
               :requestRefresh="requestRefresh" />
           </v-tab-item>
@@ -330,7 +331,7 @@ export default {
       logoDark: 'logo/interlock-logo-wt-light.svg',
       username: "",
       first_name: "",
-      initLoad: false,
+      initLoad: true,
       last_name: "",
       email: "",
       domain: "",
@@ -506,10 +507,8 @@ export default {
       }
     }
 
-    getDomainDetails()
+    getDomainDetails();
     this.activeTab = this.selectedTab;
-    if (this.selectedTab == 0)
-      this.initLoad = true
     this.selectedTabTitle = this.navTabs[this.selectedTab].title;
     // ! This refresh is redundant, commented it just in case
     // this.requestRefresh = this.selectedTabTitle
@@ -545,6 +544,12 @@ export default {
     ////////////////////////////////////////////////////////////////////////////
     // General Component Methods
     ////////////////////////////////////////////////////////////////////////////
+    setInitLoad(){
+      if (this.initLoad !== true)
+        return
+      this.initLoad = false
+      console.log("Initial Load Flag Set.")
+    },
     toggleDrawerState() {
       if (this.drawerIsDesktop)
         this.$refs.navigationDrawerDesktop.toggle()
@@ -661,8 +666,6 @@ export default {
     async updateSelectedTab(index) {
       if (this.selectedTab != index)
         this.selectedTab = index;
-      if (this.selectedTab == 0)
-        this.initLoad = true
       this.activeTab = index;
       this.selectedTabTitle = this.navTabs[this.selectedTab].title;
       this.requestRefresh = this.selectedTabTitle;

@@ -257,6 +257,11 @@ export default {
 					this.loading = false
 					this.error = false
 					this.errorMsg = ""
+					if (emitNotif == true)
+						notificationBus.$emit("createNotification", {
+							message: (`${this.$tc("classes.application", response.applications.length)} ${this.$tc("words.loaded.m", response.applications.length)}`).toUpperCase(),
+							type: 'success'
+						})
 				})
 				.catch(error => {
 					console.error(error)
@@ -267,6 +272,7 @@ export default {
 						{ message: this.errorMsg.toUpperCase(), type: 'error' }
 					)
 				})
+			this.$emit('done')
 		},
 		async deleteApplication(selectedApplication) {
 			this.selectedApplication = {}

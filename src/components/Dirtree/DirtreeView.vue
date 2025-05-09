@@ -784,6 +784,7 @@ export default {
           this.error = true;
           this.createSnackbar({ message: this.getMessageForCode(error), type: 'error' })
         })
+      this.$emit('done')
     },
   },
 }

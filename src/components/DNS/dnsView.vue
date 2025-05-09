@@ -756,6 +756,7 @@ export default {
 					this.reloadDataTableHeaders()
 					this.loadFinished(error, "")
 				})
+			this.$emit('done')
 		},
 		// Reload Data Table Header Labels
 		reloadDataTableHeaders() {
