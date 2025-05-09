@@ -952,6 +952,7 @@ export default {
 						this.createSnackbar({ message: this.getMessageForCode(e), type: 'error' })
 						console.error(e)
 					})
+			this.newPresetLabel = ""
 		},
 		async settingsPresetEnable() {
 			this.loading = true;
