@@ -50,6 +50,7 @@
 							<v-col cols="12" class="ma-0 pa-0 mt-4 mb-4" v-if="selectedType != 6">
 								<v-text-field
 									v-model="recordCopy.serial"
+									@keydown.enter="confirmAction()"
 									clearable
 									:hint="$t('dns.hints.serial' + (updateFlag ? '_edit' : '_create'))"
 									persistent-hint
@@ -68,6 +69,7 @@
 							<v-col v-if="selectedType != 6" cols="12" class="ma-0 pa-0 mt-0">
 								<v-text-field
 									v-model="recordCopy.name"
+									@keydown.enter="confirmAction()"
 									:hint="$t('dns.hints.name')"
 									persistent-hint
 									:label="$t('dns.attributes.name')"
@@ -81,6 +83,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.address"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.ipv4Address')"
 									:rules="[this.fieldRules(recordCopy.address, 'net_ipv4', true)]"
 									class="mx-2"></v-text-field>
@@ -92,6 +95,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.ipv6Address"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.ipv6Address')"
 									:rules="[this.fieldRules(recordCopy.ipv6Address, 'net_ipv6', true)]"
 									class="mx-2"></v-text-field>
@@ -103,6 +107,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.nameNode"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.nameNode')"
 									:rules="[this.fieldRules(recordCopy.nameNode, 'net_domain_canonical', true)]"
 									class="mx-2"></v-text-field>
@@ -114,6 +119,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.nameExchange"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.nameExchange')"
 									:rules="[this.fieldRules(recordCopy.nameExchange, 'net_domain_canonical', true)]"
 									class="mx-2"></v-text-field>
@@ -121,6 +127,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.wPreference"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.wPreference')"
 									:rules="[this.fieldRules(recordCopy.wPreference, 'ge_numbers', true)]"
 									class="mx-2"></v-text-field>
@@ -150,6 +157,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.namePrimaryServer"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.namePrimaryServer')"
 									:rules="[this.fieldRules(recordCopy.namePrimaryServer, 'net_domain_canonical', true)]"
 									class="mx-2"></v-text-field>
@@ -157,6 +165,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.zoneAdminEmail"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.zoneAdminEmail')"
 									:rules="[this.fieldRules(recordCopy.zoneAdminEmail, 'net_domain_canonical', true)]"
 									class="mx-2"></v-text-field>
@@ -164,6 +173,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.dwSerialNo"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.dwSerialNo')"
 									:rules="[this.fieldRules(recordCopy.dwSerialNo, 'ge_numbers', true)]"
 									class="mx-2"></v-text-field>
@@ -171,6 +181,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.dwRefresh"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.dwRefresh')"
 									:hint="`${$t('words.recommended')}: 900`"
 									:rules="[this.fieldRules(recordCopy.dwRefresh, 'ge_numbers', true)]"
@@ -179,6 +190,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.dwRetry"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.dwRetry')"
 									:hint="`${$t('words.recommended')}: 600`"
 									:rules="[this.fieldRules(recordCopy.dwRetry, 'ge_numbers', true)]"
@@ -187,6 +199,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.dwExpire"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.dwExpire')"
 									:hint="`${$t('words.recommended')}: 86400`"
 									:rules="[this.fieldRules(recordCopy.dwExpire, 'ge_numbers', true)]"
@@ -195,6 +208,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.dwMinimumTtl"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.dwMinimumTtl')"
 									:hint="`${$t('words.recommended')}: 900`"
 									:rules="[this.fieldRules(recordCopy.dwMinimumTtl, 'ge_numbers', true)]"
@@ -207,6 +221,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.wPriority"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.wPriority')"
 									:rules="[this.fieldRules(recordCopy.wPriority, 'ge_numbers', true)]"
 									class="mx-2"></v-text-field>
@@ -214,6 +229,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.wWeight"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.wWeight')"
 									:rules="[this.fieldRules(recordCopy.wWeight, 'ge_numbers', true)]"
 									class="mx-2"></v-text-field>
@@ -221,6 +237,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.wPort"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.wPort')"
 									:rules="[this.fieldRules(recordCopy.wPort, 'ge_numbers', true)]"
 									class="mx-2"></v-text-field>
@@ -228,6 +245,7 @@
 							<v-col cols="12" class="ma-0 pa-0">
 								<v-text-field
 									v-model="recordCopy.nameTarget"
+									@keydown.enter="confirmAction()"
 									:label="$t('dns.attributes.nameTarget')"
 									:rules="[this.fieldRules(recordCopy.nameTarget, 'net_domain_canonical', true)]"
 									class="mx-2"></v-text-field>
@@ -283,8 +301,8 @@
 
 					<v-slide-x-reverse-transition>
 						<v-btn elevation="0"
-							@click="updateFlag == true ? updateRecord() : createRecord()"
-							@keydown.enter="updateFlag == true ? updateRecord() : createRecord()"
+							@click="confirmAction()"
+							@keydown.enter="confirmAction()"
 							:dark="!isThemeDark($vuetify)"
 							:light="isThemeDark($vuetify)"
 							class="ma-0 pa-0 pa-2 ma-1 pr-4"
@@ -474,6 +492,9 @@ export default {
 		this.syncRecord();
 	},
 	methods: {
+		confirmAction(){
+			this.updateFlag == true ? this.updateRecord() : this.createRecord()
+		},
 		isNodeNameRecord(type) {
 			if (this.nodeNameRecordTypes.includes(type))
 				return true
