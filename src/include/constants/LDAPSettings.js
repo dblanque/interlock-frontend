@@ -153,7 +153,7 @@ const config = {
 			}
 		},
 		row3: {
-			LDAP_AUTH_USER_FIELDS: {
+			LDAP_FIELD_MAP: {
 				value: {},
 				keyToAdd: "",
 				valueToAdd: "",
