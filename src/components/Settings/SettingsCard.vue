@@ -293,15 +293,15 @@
 						{{ $t(`section.settings.headers.${clsKey}.title`) }}
 					</v-row>
 				</v-expansion-panel-header>
-				<v-expansion-panel-content class="mt-6 mb-2 pa-0" eager>
+				<v-expansion-panel-content class="mt-6 mb-1 pa-0" eager>
 					<v-row v-if="clsKey == 'ldap'"
 						class="pa-0 ma-0"
 						justify="center"
 						align="center">
 						<v-btn
-							:disabled="!settingClsEnabled(clsKey)"
+							:disabled="!settingClsEnabled(clsKey) || (readonly || loading)"
 							@click="requestLDAPUserSync"
-							class="mx-1 mb-4"
+							class="mx-1 mb-6"
 							color="primary"
 							elevation="0">
 							<v-icon class="mr-2">
@@ -310,9 +310,9 @@
 							{{ `${$t("actions.synchronize")} ${$tc("classes.user", 2)}` }}
 						</v-btn>
 						<v-btn
-							:disabled="!settingClsEnabled(clsKey)"
+							:disabled="!settingClsEnabled(clsKey) || (readonly || loading)"
 							@click="requestLDAPUserPrune"
-							class="mx-1 mb-4"
+							class="mx-1 mb-6"
 							color="primary"
 							elevation="0">
 							<v-icon class="mr-2">
@@ -321,10 +321,11 @@
 							{{ `${$t("actions.prune")} ${$tc("classes.user", 2)}` }}
 						</v-btn>
 						<v-btn
-							:disabled="!settingClsEnabled(clsKey)"
+							:disabled="!settingClsEnabled(clsKey) || (readonly || loading)"
 							@click="requestLDAPUserPurge"
-							class="mx-1 mb-4"
-							color="secondary"
+							class="mx-1 mb-6"
+							:dark="!isThemeDark($vuetify) && !(readonly || loading)"
+							:light="isThemeDark($vuetify) && !(readonly || loading)"
 							elevation="0">
 							<v-icon class="mr-2">
 								mdi-account-off
@@ -333,7 +334,7 @@
 						</v-btn>
 					</v-row>
 					<v-form
-						:disabled="!settingClsEnabled(clsKey)"
+						:disabled="!settingClsEnabled(clsKey) || (readonly || loading)"
 						:ref="`${clsKey}SettingsForm`"
 						@submit.prevent>
 						<v-row>
@@ -711,6 +712,7 @@ export default {
 			}
 		},
 		async testSettings() {
+			this.testing = true
 			this.loading = true
 			this.invalid = false
 			if (!this.validateSettings() ||
