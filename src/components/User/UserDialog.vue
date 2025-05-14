@@ -341,7 +341,9 @@
 												</v-col>
 												<v-col cols="12" lg="6">
 													<v-autocomplete dense id="country_name" :label="$t('attribute.country_name')"
-													:readonly="editFlag != true" v-model="usercopy.country_name"
+														:clearable="editFlag === true"
+														:readonly="editFlag != true"
+														v-model="usercopy.country_name"
 														:items="LDAPCountries"
 														:rules="[this.fieldRules(usercopy.country_name, 'ge_country')]">
 													</v-autocomplete>
