@@ -6,9 +6,23 @@
 	"configurations": [
 		{
 			"type": "node-terminal",
-			"name": "Run Script: dev",
+			"name": "Start Development Server",
 			"request": "launch",
 			"command": "npm run dev",
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"type": "node-terminal",
+			"name": "Compile Project",
+			"request": "launch",
+			"command": "npm run build",
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"type": "node-terminal",
+			"name": "Serve Compiled Project",
+			"request": "launch",
+			"command": "npm run start",
 			"cwd": "${workspaceFolder}"
 		}
 	]
