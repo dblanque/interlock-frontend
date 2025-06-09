@@ -282,22 +282,16 @@
       "406": "HTTP 406: Inaceptable",
       "409": "HTTP 409: Conflicto",
       "500": "HTTP 500: Error de Servidor",
-      "ldapGwError": "Servidor de LDAP Inalcanzable",
-      "invalidCSV": "Archivo CSV Inválido",
-      "invalidCSVHeaders": "Cabecera de CSV Inválida",
-      "fileReader": "Excepción del Lector de Archivos",
-      "networkError": "AXIOS: Error de Red",
-      "oidc":{
-        "oidc_invalid_request":"Pedido OIDC Inválido",
-        "oidc_application_fetch":"No se pudo obtener la Aplicación OIDC"
-      },
       "applications":{
         "application_exists": "La Aplicación SSO ya existe",
         "application_does_not_exist": "La Aplicación SSO no existe",
-        "application_field_does_not_exist": "Campo Inexistente para Aplicación SSO"
+        "application_could_not_be_fetched":"No se pudo obtener la Aplicación SSO",
+        "application_field_does_not_exist": "Campo Inexistente para Aplicación SSO",
+        "application_oidc_client_does_not_exist":"El Cliente de OIDC para la Aplicación no existe"
       },
       "application_groups":{
-        "application_group_exists": "El Grupo de Aplicación ya existe"
+        "application_group_exists": "El Grupo de Aplicación ya existe",
+        "application_group_does_not_exist": "El Grupo de Aplicación no existe"
       },
       "auth": {
         "invalid_credentials": "Credenciales Incorrectos",
@@ -305,49 +299,72 @@
         "verified_successfully": "Verificado Exitosamente",
         "verification_expired": "Intentos de Verificación acabados, contacte un administrador"
       },
-      "otp":{
-        "otp_invalid_code":"Código OTP inválido",
-        "otp_invalid_recovery_code":"Código de Respaldo inválido",
-        "otp_invalid_data":"Datos OTP inválidos",
-        "otp_required":"Se requiere el Código OTP",
-        "otp_no_device_registered":"No se registró el Dispositivo OTP"
+      "base":{
+        "access_token_invalid":"Token de Acceso inválido",
+        "refresh_token_expired":"Token de Renovación expirado",
+        "internal_server_error":"Error Interno",
+        "bad_request":"Pedido Erróneo",
+        "unauthorized":"Sin Autorización",
+        "permission_denied":"Permiso Denegado",
+        "not_acceptable":"Inaceptable",
+        "data_key_missing":"Clave de Dato Faltante",
+        "ldap_unreachable":"Servidor de LDAP Inalcanzable",
+        "ldap_backend_disabled":"Back-end de LDAP Back-end des-habilitado",
+        "ldap_backend_exception":"Excepción de LDAP desconocida"
+      },
+      "dirtree":{
+        "dirtree_filt_err":"No se pudo procesar el filtro del Árbol de Directorio",
+        "dirtree_dn_conflict":"Los DN Absoluto y Relativo no pueden ser iguales",
+        "dirtree_move_error":"No se pudo mover el Objeto LDAP",
+        "dirtree_rename_error":"No se pudo renombrar el Objeto LDAP",
+        "dirtree_name_not_changed":"El nombre del Objeto LDAP no ha cambiado"
       },
       "dns":{
         "dns_zone_missing":"Valor de Zona DNS Inválido",
+        "dns_zone_foreign":"La Zona de DNS es foránea y no pertenece a este Servidor LDAP",
         "dns_zone_in_record":"El Registro no debe incluir la Zona",
         "dns_zone_not_deletable":"Esta Zona DNS no puede ser borrada",
         "dns_zone_exists":"La Zona ya existe",
         "dns_zone_does_not_exist":"La Zona no existe",
+        "dns_record_create":"No se pudo crear el Registro DNS",
         "dns_record_not_in_request":"El Registro DNS no se encuentra en el Request",
+        "dns_record_data_malformed":"El Registro de DNS está mal formado",
         "dns_record_dn_missing":"No existe el Nombre Distinguido en ese Registro",
         "dns_record_type_conflict":"La Inserción o Modificación genera un conflicto",
+        "dns_record_type_mismatch":"Conflicto de Tipo de Registro",
+        "dns_record_zone_mismatch":"Conflicto de Zona de Registro",
+        "dns_record_self_reference_conflict":"El Registro no puede auto-referenciarse",
+        "dns_record_operation_conflict":"Las operaciones del Registro tienen un conflicto",
         "dns_record_exists_conflict":"Este Registro DNS ya existe",
+        "dns_record_does_not_exist":"Este Registro DNS no existe",
         "dns_record_type_unsupported":"Tipo de Registro DNS no soportado",
         "dns_record_attr_missing":"Falta un atributo requerido en el Request",
         "dns_record_type_missing":"Falta el tipo de Registro DNS en el Request",
         "dns_record_data_does_not_match":"Los datos del Registro no coinciden con los datos del servidor",
         "dns_record_entry_does_not_exist":"La Entrada LDAP del Registro no existe",
-        "dns_record_data_malformed":"El Registro de DNS está mal formado",
         "dns_record_serial":"No se pudo establecer el Serial del Registro",
         "dns_soa_fetch":"No se pudo obtener el Registro SOA de la Zona",
         "dns_soa_serial_increment":"No se pudo Incrementar el Serial del SOA",
         "dns_soa_record_root_only":"Solo puede configurar un SOA para la raíz de su zona",
         "dns_root_servers_only_cli":"Los Servidores DNS de Raíz solo pueden ser modificados desde la consola",
         "dns_field_validator_failed":"Un campo no fue validado correctamente",
-        "dns_list_response_empty":"La Respuesta del LDAP no contiene Zonas de DNS",
         "dns_field_validator_exception":"Excepción de Validación de Campos DNS",
-        "dns_record_create":"No se pudo crear el Registro DNS"
+        "dns_list_response_empty":"La Respuesta del LDAP no contiene Zonas de DNS",
+        "dns_string_data_limit":"String Data no puede contener más de 255 caracteres",
+        "dns_value_not_canonical":"El valor dado no es un hostname canónico (debe tener un punto final)"
       },
       "users":{
         "noUsersInImport":"No hay usuarios en el archivo",
         "user_permission_malformed":"Permisos de Usuario mal-formados",
         "user_passwords_dont_match":"No coinciden las contraseñas del Usuario",
+        "user_old_password_required": "Se requiere la contraseña anterior",
         "user_create_error":"No se pudo crear el Usuario",
         "user_bulk_create_error":"No se pudo crear un Usuario",
         "user_bulk_mapping_error":"Falta o es inválida una relación de los cabezales",
         "user_bulk_length_error":"Una fila no tiene la cantidad de campos o delimitadores correcta",
         "user_update_error":"No se pudo modificar el Usuario",
         "user_field_validator_error":"No se pudo validar el Usuario",
+        "user_does_not_exist": "El Usuario no existe",
         "user_dn_does_not_exist":"No existe un Usuario con ese Nombre Distinguido",
         "user_dn_path_exception":"Excepción de Parseo de DN de Usuario",
         "user_anti_lockout":"Excepción de Anti-bloqueo de Usuario",
@@ -357,20 +374,13 @@
         "user_group_primary_err":"No se puede eliminar el Grupo Primario del Usuario",
         "user_group_bad":"Operación de Miembro de Grupo Inválida",
         "user_email_exists":"Ya existe otro usuario con ese Email",
+        "user_entry_not_found":"No se encontró la Entrada de Usuario LDAP",
         "user_exists":"El usuario ya existe",
+        "user_not_synced":"No hay un usuario sincronizado con ese nombre",
+        "user_not_ldap_type":"El Usuario no es de tipo LDAP",
+        "user_not_local_type":"El Usuario no es de tipo Local",
         "user_ldap_email_exists":"An LDAP User with that email exists",
         "user_ldap_exists":"An LDAP User with that username exists"
-      },
-      "ldap":{
-        "ldap_backend_disabled":"Por favor habilite el Back-end de LDAP",
-        "ldap_obj_exists":"Ya existe un objeto con este Nombre Común",
-        "ldap_connection_not_open":"No se abrió una Conexión LDAP previo a esta Operación",
-        "ldap_perm_insufficient":"Permisos de LDAP Insuficientes",
-        "ldap_obj_doesnt_exist":"No existe un Objeto LDAP con este Nombre",
-        "ldap_bind_err":"No se pudo emparejar con el Servidor LDAP",
-        "ldap_tree_err":"No se pudo obtener el Directorio del Servidor LDAP",
-        "ldap_port_err":"Puerto de LDAP Inalcanzable",
-        "ldap_bind_test_failed":"Conexión de Emparejamiento Fallida"
       },
       "groups":{
         "group_does_not_exist":"El Grupo no existe",
@@ -382,10 +392,12 @@
         "group_scope_or_type":"Falta el Alcance o Tipo del Grupo en el Request",
         "group_dn_missing":"Falta el Nombre Distinguido en el Request",
         "group_builtin_protect":"El Grupo especificado es integrado a LDAP y no puede ser eliminado",
-        "group_members_bad":"Los mismos miembros estan siendo eliminados y añadidos"
+        "group_members_bad":"Los mismos miembros estan siendo eliminados y añadidos",
+        "group_type_missing_field":"Actualizar el tipo de Grupo requiere el alcance y el tipo"
       },
       "settings":{
         "setting_type_malformed":"Tipo de Parámetro Malformado",
+        "setting_choice_invalid":"El valor del Parámetro no es una opción válida",
         "setting_not_in_list":"Parámetro Requerido no encontrado",
         "setting_max_log":"Violación de Límite de Eventos",
         "setting_reset_fail":"No se pudieron restaurar los valores por defecto",
@@ -395,6 +407,38 @@
         "settings_preset_serializer_error":"Error de Serialización de Grupo de Parámetros",
         "settings_preset_must_be_disabled":"El Grupo de Parámetros debe estar des-habilitado"
       },
+      "ldap":{
+        "ldap_obj_exists":"Ya existe un objeto con este Nombre Común",
+        "ldap_connection_not_open":"No se abrió una Conexión LDAP previo a esta Operación",
+        "ldap_perm_insufficient":"Permisos de LDAP Insuficientes",
+        "ldap_obj_doesnt_exist":"No existe un Objeto LDAP con este Nombre",
+        "ldap_bind_err":"No se pudo emparejar con el Servidor LDAP",
+        "ldap_tree_err":"No se pudo obtener el Directorio del Servidor LDAP",
+        "ldap_port_err":"Puerto de LDAP Inalcanzable",
+        "ldap_bind_test_failed":"Conexión de Emparejamiento Fallida",
+        "ldap_dn_validation_error":"Error de validación de DN LDAP",
+        "ldap_backend_disabled":"Por favor habilite el Back-end de LDAP",
+        "ldif_bad_field":"Fallo de validación de campo LDIF"
+      },
+      "logs":{
+        "log_trunc_minmax":"Falta el mínimo o máximo a truncar en el pedido"
+      },
+      "oidc":{
+        "oidc_invalid_request":"Pedido OIDC Inválido",
+        "oidc_application_fetch":"No se pudo obtener la Aplicación OIDC"
+      },
+      "otp":{
+        "otp_invalid_code":"Código OTP inválido",
+        "otp_invalid_recovery_code":"Código de Respaldo inválido",
+        "otp_invalid_data":"Datos OTP inválidos",
+        "otp_required":"Se requiere el Código OTP",
+        "otp_no_device_registered":"No se registró el Dispositivo OTP"
+      },
+      "ldapGwError": "Servidor de LDAP Inalcanzable",
+      "invalidCSV": "Archivo CSV Inválido",
+      "invalidCSVHeaders": "Cabecera de CSV Inválida",
+      "fileReader": "Excepción del Lector de Archivos",
+      "networkError": "AXIOS: Error de Red",
       "ldapObjectExists":"Un Objeto LDAP con ese Identificador ya existe",
       "namingViolation":"Excepción de Violación de Nombre (Naming Violation)",
       "unwillingToPerform":"El Servidor LDAP no está dispuesto a realizar la acción",
