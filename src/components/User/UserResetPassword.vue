@@ -155,11 +155,10 @@ export default {
 							}, 100)
 							this.error = false
 							this.errorMsg = ""
-							if (response.data.username == user.username)
-								notificationBus.$emit('createNotification', {
-									message: this.$t('section.logs.extras.changed_password'),
-									type: "success"
-								});
+							notificationBus.$emit('createNotification', {
+								message: this.$t('section.logs.extras.changed_password'),
+								type: "success"
+							});
 							this.$emit('closeDialog', this.dialogKey, resetConfirm);
 						})
 						.catch(error => {
@@ -191,14 +190,14 @@ export default {
 							}, 100)
 							this.error = false
 							this.errorMsg = ""
-							if (response.data.username == user.username)
-								notificationBus.$emit('createNotification', {
-									message: this.$t('section.logs.extras.changed_password'),
-									type: "success"
-								});
+							notificationBus.$emit('createNotification', {
+								message: this.$t('section.logs.extras.changed_password'),
+								type: "success"
+							});
 							this.$emit('closeDialog', this.dialogKey, true);
 						})
 						.catch(error => {
+							console.error(error)
 							setTimeout(() => {
 								this.loading = false
 							}, 100)
