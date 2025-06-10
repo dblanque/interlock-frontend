@@ -89,14 +89,6 @@ class User extends ApiModel {
 				else {
 					Object.keys(response.data).forEach(key => {
 						switch (key) {
-							case 'created_at':
-							case 'modified_at':
-								this[key] = dateLdapToString(response.data[key]);
-								break;
-							case 'last_login_win32':
-							case 'password_set_at':
-								this[key] = dateFromFiletime(response.data[key]);
-								break;
 							default:
 								this[key] = response.data[key];
 								break;

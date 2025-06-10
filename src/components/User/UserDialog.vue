@@ -532,7 +532,7 @@
 												<v-col cols="12"
 													v-if="user.last_login != undefined && user.last_login != ''">
 													{{ $t('attribute.last_login') + ": " +
-														truncateDate(user.last_login) }}
+														user.last_login }}
 												</v-col>
 											</v-row>
 										</v-card>
@@ -564,11 +564,11 @@
 													</v-col>
 													<v-col cols="12" lg="6" class="px-2">
 														<v-text-field dense id="dn" :label="$t('attribute.created_at')"
-															:value="truncateDate(user.created_at)" readonly></v-text-field>
+															:value="user.created_at" readonly></v-text-field>
 													</v-col>
 													<v-col cols="12" lg="6" class="px-2">
 														<v-text-field dense id="dn" :label="$t('attribute.modified_at')"
-															:value="truncateDate(user.modified_at)" readonly></v-text-field>
+															:value="user.modified_at" readonly></v-text-field>
 													</v-col>
 												</v-row>
 											</v-row>
