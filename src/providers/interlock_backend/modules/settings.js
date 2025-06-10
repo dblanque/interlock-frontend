@@ -7,7 +7,7 @@ import interlock_backend from "@/providers/interlock_backend/config";
 const actions = {
     list: ()=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.settings.list)
+            interlock_backend.request.get(interlock_backend.urls.settings.base)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
@@ -16,7 +16,7 @@ const actions = {
 
     fetch: (presetId)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.settings.fetch + `${presetId}/`)
+            interlock_backend.request.get(interlock_backend.urls.settings.detail.replace("{pk}", presetId))
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
@@ -79,7 +79,7 @@ const actions = {
 
     preset_create: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.settings.preset_create, data)
+            interlock_backend.request.post(interlock_backend.urls.settings.base, data)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
@@ -87,8 +87,10 @@ const actions = {
     },
 
     preset_rename: (data)=>{
+        let id = data.id
+        delete data.id
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.settings.preset_rename, data)
+            interlock_backend.request.post(interlock_backend.urls.settings.preset_rename.replace("{pk}", id), data)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
@@ -96,8 +98,10 @@ const actions = {
     },
 
     preset_delete: (data)=>{
+        let id = data.id
+        delete data.id
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.settings.preset_delete, data)
+            interlock_backend.request.delete(interlock_backend.urls.settings.detail.replace("{pk}", id), data)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
@@ -105,8 +109,10 @@ const actions = {
     },
 
     preset_enable: (data)=>{
+        let id = data.id
+        delete data.id
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.settings.preset_enable, data)
+            interlock_backend.request.post(interlock_backend.urls.settings.preset_enable.replace("{pk}", id), data)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))

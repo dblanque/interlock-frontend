@@ -5,9 +5,19 @@
 import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
+	list: ()=>{
+		return new Promise((resolve, reject) => {
+			interlock_backend.request.get(interlock_backend.urls.application.base).then(response => {
+				resolve(response.data)
+			}).catch((e) => {
+				reject(e)
+			})
+		})
+	},
+
 	insert: (data)=>{
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.application.insert, data).then(response => {
+			interlock_backend.request.post(interlock_backend.urls.application.base, data).then(response => {
 				resolve(response)
 			}).catch((e) => {
 				reject(e)
@@ -15,31 +25,33 @@ const actions = {
 		})
 	},
 
-	update: (data)=>{
+	fetch: (id)=>{
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.put(interlock_backend.urls.application.update, data)
-			.then(response => {
-				resolve(response.data);
-			}).catch((e) => reject(e))
+			interlock_backend.request.get(interlock_backend.urls.application.detail.replace("{pk}", id)).then(response => {
+				resolve(response.data)
+			}).catch((e) => {
+				reject(e)
+			})
+		})
+	},
+
+	update: (data)=>{
+		let id = data.id
+		return new Promise((resolve, reject) => {
+			interlock_backend.request.put(interlock_backend.urls.application.detail.replace("{pk}", id), data).then(response => {
+				resolve(response.data)
+			}).catch((e) => {
+				reject(e)
+			})
 		})
 	},
 
 	delete: (id)=>{
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.delete(interlock_backend.urls.application.delete.replace("{pk}", id))
+			interlock_backend.request.delete(interlock_backend.urls.application.detail.replace("{pk}", id))
 			.then(response => {
 				resolve(response.data);
 			}).catch((e) => reject(e))
-		})
-	},
-
-	list: ()=>{
-		return new Promise((resolve, reject) => {
-			interlock_backend.request.get(interlock_backend.urls.application.list).then(response => {
-				resolve(response.data)
-			}).catch((e) => {
-				reject(e)
-			})
 		})
 	},
 
@@ -52,27 +64,6 @@ const actions = {
 			})
 		})
 	},
-
-	fetch: (id)=>{
-		return new Promise((resolve, reject) => {
-			interlock_backend.request.get(interlock_backend.urls.application.fetch.replace("{pk}", id)).then(response => {
-				resolve(response.data)
-			}).catch((e) => {
-				reject(e)
-			})
-		})
-	},
-
-	update: (data)=>{
-		let id = data.id
-		return new Promise((resolve, reject) => {
-			interlock_backend.request.put(interlock_backend.urls.application.update.replace("{pk}", id), data).then(response => {
-				resolve(response.data)
-			}).catch((e) => {
-				reject(e)
-			})
-		})
-	}
 }
 
 export default actions

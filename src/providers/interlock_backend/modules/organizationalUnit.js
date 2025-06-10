@@ -7,16 +7,7 @@ import interlock_backend from "@/providers/interlock_backend/config";
 const actions = {
     list: ()=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.ou.list)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
-        })
-    },
-
-    filter: (objectArray)=>{
-        return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.filter, objectArray)
+            interlock_backend.request.get(interlock_backend.urls.dirtree.organizational_units)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
@@ -25,7 +16,7 @@ const actions = {
 
     dirtree: (filter)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.dirtree, {filter: filter})
+            interlock_backend.request.put(interlock_backend.urls.dirtree.base, {filter: filter})
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
@@ -34,7 +25,7 @@ const actions = {
 
     move: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.move, data)
+            interlock_backend.request.post(interlock_backend.urls.dirtree.move, data)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
@@ -43,7 +34,7 @@ const actions = {
 
     rename: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.rename, data)
+            interlock_backend.request.post(interlock_backend.urls.dirtree.rename, data)
             .then(response => {
                 resolve(response);
             }).catch((e) => reject(e))
@@ -52,7 +43,7 @@ const actions = {
 
     insert: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.insert, data).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.dirtree.base, data).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)
@@ -62,7 +53,7 @@ const actions = {
 
     delete: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.delete, data).then(response => {
+            interlock_backend.request.patch(interlock_backend.urls.dirtree.base, data).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)

@@ -10,7 +10,7 @@ const actions = {
             "debug"
         ]
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.domain.details)
+            interlock_backend.request.get(interlock_backend.urls.domain.base)
             .then(response => {
                 resolve(response);
                 for (const key in response.data.details)
@@ -25,7 +25,7 @@ const actions = {
 
     zones: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.domain.zones, data).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.domain.zone, data).then(response => {
                 resolve(response.data)
             }).catch((e) => {
                 reject(e)
@@ -35,7 +35,7 @@ const actions = {
 
     insert: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.domain.insert, data).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.domain.base, data).then(response => {
                 resolve(response.data)
             }).catch((e) => {
                 reject(e)
@@ -45,7 +45,7 @@ const actions = {
 
     delete: (data)=>{
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.domain.delete, data).then(response => {
+            interlock_backend.request.patch(interlock_backend.urls.domain.base, data).then(response => {
                 resolve(response.data)
             }).catch((e) => {
                 reject(e)

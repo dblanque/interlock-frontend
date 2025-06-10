@@ -7,7 +7,7 @@ import interlock_backend from "@/providers/interlock_backend/config";
 const actions = {
 	list: () => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.get(interlock_backend.urls.djangoUser.list).then(response => {
+			interlock_backend.request.get(interlock_backend.urls.djangoUser.base).then(response => {
 				resolve(response.data)
 			}).catch((e) => {
 				reject(e)
@@ -17,7 +17,7 @@ const actions = {
 
 	fetch: (id) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.get(interlock_backend.urls.djangoUser.fetch.replace("{pk}", id)).then(response => {
+			interlock_backend.request.get(interlock_backend.urls.djangoUser.detail.replace("{pk}", id)).then(response => {
 				resolve(response.data)
 			}).catch((e) => {
 				reject(e)
@@ -27,7 +27,7 @@ const actions = {
 
 	insert: (data) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.djangoUser.insert, data).then(response => {
+			interlock_backend.request.post(interlock_backend.urls.djangoUser.base, data).then(response => {
 				resolve(response)
 			}).catch((e) => {
 				reject(e)
@@ -37,10 +37,19 @@ const actions = {
 
 	delete: (data) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.delete(interlock_backend.urls.djangoUser.delete.replace("{pk}", data.id))
+			interlock_backend.request.delete(interlock_backend.urls.djangoUser.detail.replace("{pk}", data.id))
 				.then(response => {
 					resolve(response.data);
 				}).catch((e) => reject(e))
+		})
+	},
+	
+	update: (data) => {
+		return new Promise((resolve, reject) => {
+			interlock_backend.request.put(interlock_backend.urls.djangoUser.detail.replace("{pk}", data.id), data)
+			.then(response => {
+				resolve(response.data);
+			}).catch((e) => reject(e))
 		})
 	},
 
@@ -54,18 +63,18 @@ const actions = {
 		})
 	},
 
-	update: (data) => {
-		return new Promise((resolve, reject) => {
-			interlock_backend.request.put(interlock_backend.urls.djangoUser.update.replace("{pk}", data.id), data)
-				.then(response => {
-					resolve(response.data);
-				}).catch((e) => reject(e))
-		})
-	},
-
 	changePassword: (data) => {
+		let id = structuredClone(data.id)
+		try {
+			["id","username"].forEach(k => {
+				if (k in data)
+					delete data[k]
+			});
+		} catch (error) {
+			console.error(error)
+		}
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.post(interlock_backend.urls.djangoUser.changePassword.replace("{pk}", data.id), data)
+			interlock_backend.request.post(interlock_backend.urls.djangoUser.changePassword.replace("{pk}", id), data)
 				.then(response => {
 					resolve(response.data);
 				}).catch((e) => reject(e))
