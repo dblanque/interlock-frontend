@@ -72,7 +72,7 @@
 					<!-- Details Row -->
 					<v-row align-content="center" class="ma-2 mt-0" v-if="isLDAPUser">
 						<!-- User Basic Data Panel -->
-						<v-col class="ma-0 pa-0" cols="12" md="6">
+						<v-col class="ma-0 pa-0" cols="12" :md="userClass == user ? 6 : 12">
 							<v-card outlined height="100%" class="ma-1 pa-4">
 								<v-row
 									:justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'start'"
@@ -114,11 +114,11 @@
 											:rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"></v-text-field>
 									</v-col>
 									<v-col cols="12"
-										v-if="user.last_login != undefined && user.last_login != ''">
-										{{ $t('attribute.last_login') + ": " + user.last_login
+										v-if="user.last_login_win32 != undefined && user.last_login_win32 != ''">
+										{{ $t('attribute.last_login') + ": " + user.last_login_win32
 										}}
 									</v-col>
-									<v-col cols="12" lg="6">
+									<v-col cols="12" lg="6" v-if="userClass == user">
 										<v-text-field
 											dense
 											id="phone"
@@ -126,7 +126,7 @@
 											v-model="usercopy.phone"
 											:rules="[this.fieldRules(usercopy.phone, 'ge_phone_intl')]"></v-text-field>
 									</v-col>
-									<v-col cols="12" lg="6">
+									<v-col cols="12" lg="6" v-if="userClass == user">
 										<v-text-field
 											dense
 											id="website"
@@ -138,7 +138,7 @@
 							</v-card>
 						</v-col>
 						<!-- Location Panel -->
-						<v-col class="ma-0 pa-0" cols="12" md="6">
+						<v-col class="ma-0 pa-0" cols="12" md="6" v-if="userClass == user">
 							<v-card outlined height="100%" class="ma-1 pa-4">
 								<v-row
 									:justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'end'"
@@ -175,14 +175,14 @@
 										<v-card v-ripple outlined class="pa-1 py-2">
 											<div
 												v-if="user.country_code_dcc != undefined && user.country_code_dcc != '' && user.country_code_dcc != 0">
-												{{ $t('attribute.countryCodeCombined') }}
+												{{ $t('attribute.country_codes') }}
 												<div elevation="0">
 													{{ user.country_code_dcc }}
 													{{ "(" + user.country_code_iso + ")" }}
 												</div>
 											</div>
 											<div v-else>
-												{{ $t('attribute.countryCodeCombined') }}
+												{{ $t('attribute.country_codes') }}
 												<div>
 													{{ $t('error.data.noCountryCode') }}
 												</div>
@@ -225,7 +225,7 @@
 										$t("words.readOnly") + ")" }}
 								</v-expansion-panel-header>
 								<v-expansion-panel-content>
-									<v-row>
+									<v-row v-if="userClass == user">
 										<v-col cols="12" lg="8">
 											<v-text-field
 												dense
@@ -263,7 +263,7 @@
 												v-model="usercopy.modified_at"></v-text-field>
 										</v-col>
 									</v-row>
-									<v-row>
+									<v-row v-if="userClass == user">
 										<v-col cols="12" lg="6">
 											<v-text-field
 												dense
