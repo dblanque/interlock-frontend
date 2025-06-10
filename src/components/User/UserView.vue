@@ -247,7 +247,7 @@
 								v-bind="attrs"
 								v-on="on"
 								small
-								:disabled="loading || !isUserEditable(item)"
+								:disabled="loading"
 								@click="openBulkOperationDialog('userDelete', item)"
 								v-if="!isLoggedInUser(item.username)">
 								<v-icon small color="red">
@@ -421,12 +421,12 @@ export default {
 				case "django-users":
 					switch (action) {
 						case "import":
-						case "bulkEnable":
-						case "bulkDisable":
-						case "bulkDelete":
 						case "bulkUnlock":
 						case "bulkEdit":
 							return false
+						case "bulkDelete":
+						case "bulkEnable":
+						case "bulkDisable":
 						default:
 							return true
 					}
@@ -715,12 +715,19 @@ export default {
 				throw new Error("Current user cannot change their own status.");
 			}
 			else {
-				let _filtered_map = this.tableData.selected.map(
-					({ distinguished_name, username }) => ({ distinguished_name, username })
-				);
-				await new User({}).bulkChangeStatus({
-					"disable": disable,
-					"users": _filtered_map
+				let _filtered_data
+				if (this.userClass == DjangoUser) {
+					_filtered_data = this.tableData.selected.map(
+						({ id }) => id
+					);
+				} else {
+					_filtered_data = this.tableData.selected.map(
+						({ distinguished_name, username }) => ({ distinguished_name, username })
+					);
+				}
+				await new this.userClass({}).bulkChangeStatus({
+					"enabled": !disable,
+					"users": _filtered_data
 				})
 					.then(() => {
 						this.loading = false
@@ -729,7 +736,7 @@ export default {
 						this.listUserItems(false);
 						notificationBus.$emit('createNotification',
 							{
-								message: (this.$tc("classes.user", _filtered_map.length) + " " + actionMsg).toUpperCase(),
+								message: (this.$tc("classes.user", _filtered_data.length) + " " + actionMsg).toUpperCase(),
 								type: actionType
 							}
 						);
@@ -752,10 +759,10 @@ export default {
 			this.loading = true
 			this.error = false
 			this.errorMsg = false
-			let _filtered_map = this.tableData.selected.map(
+			let _filtered_data = this.tableData.selected.map(
 				({ distinguished_name, username }) => ({ distinguished_name, username })
 			);
-			await new User({}).bulkUnlock(_filtered_map)
+			await new User({}).bulkUnlock(_filtered_data)
 				.then(() => {
 					this.loading = false
 					this.error = false
