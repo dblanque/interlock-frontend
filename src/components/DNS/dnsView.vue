@@ -690,7 +690,7 @@ export default {
 			}
 		},
 		async getDNSData(zoneToQuery = undefined, refresh = false) {
-			if (refresh == true)
+			if (refresh === true)
 				this.lastOperation = ""
 
 			// Set DNS Zone Query
