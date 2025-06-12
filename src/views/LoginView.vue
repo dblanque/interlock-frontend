@@ -392,10 +392,11 @@ export default {
 			return;
 		},
 		totp_code(v) {
+			if (v == "") return
 			if (!isNaN(v) && this.fieldRules(this.totp_code, 'auth_totp') === true)
 				setTimeout(() => {
 					this.submit()
-				}, 100)
+				}, 1e2)
 		},
 	},
 	methods: {
@@ -450,6 +451,7 @@ export default {
 			}, 300)
 		},
 		goBack() {
+			this.totp_code = "";
 			this.viewModes.totp = false;
 			this.viewModes.login = true;
 		},
