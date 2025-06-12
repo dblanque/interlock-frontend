@@ -64,114 +64,115 @@ export const ignoreErrorCodes = [
 ]
 
 // LIST OF URL PATTERNS.
-const apiPrefix = "api"
 const urls = {
     home: {
-        fetch: `${apiPrefix}/home/`
+        fetch: `api/home/`
     },
     auth: {
-        token: `${apiPrefix}/token/`,
-        tokenRefresh: `${apiPrefix}/token/refresh/`,
-        logout: `${apiPrefix}/token/revoke/`
+        token: `api/token/`,
+        tokenRefresh: `api/token/refresh/`,
+        logout: `api/token/revoke/`
     },
     user: {
-        base: `${apiPrefix}/ldap/users/`,
-        fetch: `${apiPrefix}/ldap/users/retrieve/`,
-        deleteTotp: `${apiPrefix}/totp/delete-for-user/`,
-        lock: `${apiPrefix}/ldap/users/lock/`,
-        unlock: `${apiPrefix}/ldap/users/unlock/`,
-        changeAccountStatus: `${apiPrefix}/ldap/users/change-status/`,
-        changePassword: `${apiPrefix}/ldap/users/change-password/`,
-        bulkInsert: `${apiPrefix}/ldap/users/bulk/create/`,
-        bulkDelete: `${apiPrefix}/ldap/users/bulk/destroy/`,
-        bulkUpdate: `${apiPrefix}/ldap/users/bulk/update/`,
-        bulkUnlock: `${apiPrefix}/ldap/users/bulk/unlock/`,
-        bulkChangeStatus: `${apiPrefix}/ldap/users/bulk/change-status/`,
-        selfChangePassword: `${apiPrefix}/ldap/users/self/change-password/`,
-        selfUpdate: `${apiPrefix}/ldap/users/self/update/`,
-        selfFetch: `${apiPrefix}/ldap/users/self/fetch/`,
-        selfInfo: `${apiPrefix}/ldap/users/self/info/`,
+        base: `api/ldap/users/`,
+        fetch: `api/ldap/users/retrieve/`,
+        deleteTotp: `api/totp/delete-for-user/`,
+        lock: `api/ldap/users/lock/`,
+        unlock: `api/ldap/users/unlock/`,
+        changeAccountStatus: `api/ldap/users/change-status/`,
+        changePassword: `api/ldap/users/change-password/`,
+        bulkInsert: `api/ldap/users/bulk/create/`,
+        bulkDelete: `api/ldap/users/bulk/destroy/`,
+        bulkUpdate: `api/ldap/users/bulk/update/`,
+        bulkUnlock: `api/ldap/users/bulk/unlock/`,
+        bulkChangeStatus: `api/ldap/users/bulk/change-status/`,
+        bulkExport: `api/ldap/users/bulk/export/`,
+        selfChangePassword: `api/ldap/users/self/change-password/`,
+        selfUpdate: `api/ldap/users/self/update/`,
+        selfFetch: `api/ldap/users/self/fetch/`,
+        selfInfo: `api/ldap/users/self/info/`,
     },
     djangoUser: {
-        base: `${apiPrefix}/users/`,
-        detail: `${apiPrefix}/users/{pk}/`,
-        changeAccountStatus: `${apiPrefix}/users/{pk}/change-status/`,
-        changePassword: `${apiPrefix}/users/{pk}/change-password/`,
-        selfUpdate: `${apiPrefix}/users/self/update/`,
-        selfChangePassword: `${apiPrefix}/users/self/change-password/`,
-        bulkInsert: `${apiPrefix}/users/bulk/create/`,
-        bulkDelete: `${apiPrefix}/users/bulk/destroy/`,
-        bulkUpdate: `${apiPrefix}/users/bulk/update/`,
-        bulkChangeStatus: `${apiPrefix}/users/bulk/change-status/`,
+        base: `api/users/`,
+        detail: `api/users/{pk}/`,
+        changeAccountStatus: `api/users/{pk}/change-status/`,
+        changePassword: `api/users/{pk}/change-password/`,
+        selfUpdate: `api/users/self/update/`,
+        selfChangePassword: `api/users/self/change-password/`,
+        bulkInsert: `api/users/bulk/create/`,
+        bulkDelete: `api/users/bulk/destroy/`,
+        bulkUpdate: `api/users/bulk/update/`,
+        bulkChangeStatus: `api/users/bulk/change-status/`,
+        bulkExport: `api/users/bulk/export/`,
     },
     group: {
-        base: `${apiPrefix}/ldap/groups/`,
-        fetch: `${apiPrefix}/ldap/groups/retrieve-dn/`,
+        base: `api/ldap/groups/`,
+        fetch: `api/ldap/groups/retrieve-dn/`,
     },
     log: {
-        base: `${apiPrefix}/logs/`,
-        list: `${apiPrefix}/logs/`,
-        reset: `${apiPrefix}/logs/reset/`,
-        truncate: `${apiPrefix}/logs/truncate/`
+        base: `api/logs/`,
+        list: `api/logs/`,
+        reset: `api/logs/reset/`,
+        truncate: `api/logs/truncate/`
     },
     domain: {
-        base: `${apiPrefix}/ldap/domain/`,
-        zone: `${apiPrefix}/ldap/domain/zone/`,
+        base: `api/ldap/domain/`,
+        zone: `api/ldap/domain/zone/`,
     },
     dnsr: {
-        base: `${apiPrefix}/ldap/record/`,
+        base: `api/ldap/record/`,
     },
     gpo: {
-        list: `${apiPrefix}/ldap/gpo/`,
+        list: `api/ldap/gpo/`,
     },
     settings: {
-        base: `${apiPrefix}/settings/`,
-        detail: `${apiPrefix}/settings/{pk}/`,
-        preset_enable: `${apiPrefix}/settings/{pk}/enable/`,
-        preset_rename: `${apiPrefix}/settings/{pk}/rename/`,
-        save: `${apiPrefix}/settings/save/`,
-        reset: `${apiPrefix}/settings/reset/`,
-        test: `${apiPrefix}/settings/test/`,
-        sync_users: `${apiPrefix}/settings/sync-users/`,
-        prune_users: `${apiPrefix}/settings/prune-users/`,
-        purge_users: `${apiPrefix}/settings/purge-users/`,
+        base: `api/settings/`,
+        detail: `api/settings/{pk}/`,
+        preset_enable: `api/settings/{pk}/enable/`,
+        preset_rename: `api/settings/{pk}/rename/`,
+        save: `api/settings/save/`,
+        reset: `api/settings/reset/`,
+        test: `api/settings/test/`,
+        sync_users: `api/settings/sync-users/`,
+        prune_users: `api/settings/prune-users/`,
+        purge_users: `api/settings/purge-users/`,
     },
     dirtree: {
-        base: `${apiPrefix}/ldap/dirtree/`,
-        organizational_units: `${apiPrefix}/ldap/dirtree/organizational-units/`,
-        move: `${apiPrefix}/ldap/dirtree/move/`,
-        rename: `${apiPrefix}/ldap/dirtree/rename/`,
+        base: `api/ldap/dirtree/`,
+        organizational_units: `api/ldap/dirtree/organizational-units/`,
+        move: `api/ldap/dirtree/move/`,
+        rename: `api/ldap/dirtree/rename/`,
     },
     totp: {
-        list: `${apiPrefix}/totp/`,
-        create: `${apiPrefix}/totp/create-device/`,
-        validate: `${apiPrefix}/totp/validate-device/`,
-        delete: `${apiPrefix}/totp/delete-device/`,
+        list: `api/totp/`,
+        create: `api/totp/create-device/`,
+        validate: `api/totp/validate-device/`,
+        delete: `api/totp/delete-device/`,
     },
     test: {
-        get: `${apiPrefix}/test/`,
-        post: `${apiPrefix}/test/post/`,
-        put: `${apiPrefix}/test/put/`,
-        delete: `${apiPrefix}/test/delete/`,
-        options: `${apiPrefix}/test/options/`
+        get: `api/test/`,
+        post: `api/test/post/`,
+        put: `api/test/put/`,
+        delete: `api/test/delete/`,
+        options: `api/test/options/`
     },
     liveness: {
-        check: `${apiPrefix}/liveness/check/`
+        check: `api/liveness/check/`
     },
     debug: {
-        list: `${apiPrefix}/debug/`,
-        action: `${apiPrefix}/debug/action/`,
+        list: `api/debug/`,
+        action: `api/debug/action/`,
     },
     application: {
-        base: `${apiPrefix}/application/`,
-        detail: `${apiPrefix}/application/{pk}/`,
+        base: `api/application/`,
+        detail: `api/application/{pk}/`,
         oidc_well_known: "openid/.well-known/openid-configuration/",
     },
     applicationGroup: {
-        base: `${apiPrefix}/application/group/`,
-        detail: `${apiPrefix}/application/group/{pk}/`,
-        change_status: `${apiPrefix}/application/group/{pk}/change-status/`,
-        create_info: `${apiPrefix}/application/group/create-info/`,
+        base: `api/application/group/`,
+        detail: `api/application/group/{pk}/`,
+        change_status: `api/application/group/{pk}/change-status/`,
+        create_info: `api/application/group/create-info/`,
     },
     oidc: {
         consent: `openid/consent/`,
@@ -279,6 +280,7 @@ request.interceptors.response.use(
 )// End of Interceptor.
 
 export default {
+    base_url: base_url,
     urls: urls,
     request: request
 };
