@@ -282,6 +282,18 @@
       "406": "HTTP 406: Inaceptable",
       "409": "HTTP 409: Conflicto",
       "500": "HTTP 500: Error de Servidor",
+      "access_token_invalid":"Token de Acceso inválido",
+      "refresh_token_expired":"Token de Renovación expirado",
+      "internal_server_error":"Error Interno",
+      "bad_request":"Pedido Erróneo",
+      "unauthorized":"Sin Autorización",
+      "permission_denied":"Permiso Denegado",
+      "not_acceptable":"Inaceptable",
+      "data_key_missing":"Clave de Dato Faltante",
+      "ldap_unreachable":"Servidor de LDAP Inalcanzable",
+      "ldap_backend_disabled":"Back-end de LDAP Back-end des-habilitado",
+      "ldap_backend_exception":"Excepción de LDAP desconocida",
+      "improperly_configured":"Configuración Inapropiada",
       "applications":{
         "application_exists": "La Aplicación SSO ya existe",
         "application_does_not_exist": "La Aplicación SSO no existe",
@@ -298,19 +310,6 @@
         "verification_code": "Codigo Incorrecto, Intente nuevamente",
         "verified_successfully": "Verificado Exitosamente",
         "verification_expired": "Intentos de Verificación acabados, contacte un administrador"
-      },
-      "base":{
-        "access_token_invalid":"Token de Acceso inválido",
-        "refresh_token_expired":"Token de Renovación expirado",
-        "internal_server_error":"Error Interno",
-        "bad_request":"Pedido Erróneo",
-        "unauthorized":"Sin Autorización",
-        "permission_denied":"Permiso Denegado",
-        "not_acceptable":"Inaceptable",
-        "data_key_missing":"Clave de Dato Faltante",
-        "ldap_unreachable":"Servidor de LDAP Inalcanzable",
-        "ldap_backend_disabled":"Back-end de LDAP Back-end des-habilitado",
-        "ldap_backend_exception":"Excepción de LDAP desconocida"
       },
       "dirtree":{
         "dirtree_filt_err":"No se pudo procesar el filtro del Árbol de Directorio",

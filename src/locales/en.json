@@ -272,6 +272,18 @@
       "406": "HTTP 406: Not Acceptable",
       "409": "HTTP 409: Conflict",
       "500": "HTTP 500: Server Error",
+      "access_token_invalid":"Access Token is invalid",
+      "refresh_token_expired":"Refresh Token has expired",
+      "internal_server_error":"Internal Server Error",
+      "bad_request":"Bad Request",
+      "unauthorized":"Unauthorized",
+      "permission_denied":"Permission Denied",
+      "not_acceptable":"Not Acceptable",
+      "data_key_missing":"Data Key Missing",
+      "ldap_unreachable":"LDAP Server Unreachable",
+      "ldap_backend_disabled":"LDAP Back-end is Disabled",
+      "ldap_backend_exception":"Unhandled LDAP Back-end Exception",
+      "improperly_configured":"Improperly Configured",
       "applications":{
         "application_exists": "SSO Application already exists",
         "application_does_not_exist": "SSO Application does not exist",
@@ -288,19 +300,6 @@
         "verification_code": "Incorrect Code, Please try again",
         "verified_successfully": "Verified Successfully",
         "verification_expired": "Verification codes have been exhausted, contact an admin"
-      },
-      "base":{
-        "access_token_invalid":"Access Token is invalid",
-        "refresh_token_expired":"Refresh Token has expired",
-        "internal_server_error":"Internal Server Error",
-        "bad_request":"Bad Request",
-        "unauthorized":"Unauthorized",
-        "permission_denied":"Permission Denied",
-        "not_acceptable":"Not Acceptable",
-        "data_key_missing":"Data Key Missing",
-        "ldap_unreachable":"LDAP Server Unreachable",
-        "ldap_backend_disabled":"LDAP Back-end is Disabled",
-        "ldap_backend_exception":"Unhandled LDAP Back-end Exception"
       },
       "dirtree":{
         "dirtree_filt_err":"Could not process Directory Tree Filter",
