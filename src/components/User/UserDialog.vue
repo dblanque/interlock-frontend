@@ -1036,7 +1036,7 @@ export default {
 				})
 		},
 		async deleteTotp(closeDialog = false) {
-			await new User({}).deleteTotp({ username: ident })
+			await new User({}).deleteTotp({ username: this.usercopy.username })
 				.then(() => {
 					if (closeDialog == true)
 						this.closeDialog();
