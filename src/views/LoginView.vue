@@ -6,7 +6,7 @@
 		class="ma-0 pa-0 justify-center align-items-center"
 		fluid
 		fill-height>
-		<v-card id="login-card" :width="$vuetify.breakpoint.mdAndUp ? '800px' : ''"
+		<v-card id="login-card" :width="$vuetify.breakpoint.mdAndUp ? '800px' : '60vw'"
 			class="pa-12" :dark="isThemeDark($vuetify)" :light="!isThemeDark($vuetify)">
 			<v-row class="my-2" justify="center" align="center">
 				<v-img contain max-width="450px" :aspect-ratio="14 / 3"
@@ -367,9 +367,10 @@ export default {
 					}
 				})
 				.catch(e => {
-					if (!ignoreErrorCodes.includes(e.status))
+					if (!ignoreErrorCodes.includes(e.status)){
 						console.error(e)
-					else {
+						this.viewModes.login = true
+					} else {
 						this.viewModes.login = true
 						if (this.next !== "")
 							this.errorMsg = this.$t("section.login.loginForOidc")
