@@ -34,7 +34,11 @@
 		<v-card-text class="pa-0 ma-0">
 			<v-tabs-items v-model="import_tab">
 				<v-tab-item :key="0">
-					<v-row class="ma-0 pa-0 mt-4" align="center" justify="space-around">
+					<v-row
+						v-if="isLdapUser"
+						class="ma-0 pa-0 mt-4"
+						align="center"
+						justify="space-around">
 						<v-btn small text color="primary" class="ma-1"
 							@click="userDestination = basedn">
 							{{ $t('section.dirtree.move.setToRoot') }}
@@ -58,6 +62,7 @@
 					</v-row>
 
 					<v-row
+						v-if="isLdapUser"
 						class="ma-0 pa-0"
 						justify="center">
 						<v-col
@@ -97,6 +102,7 @@
 					</v-row>
 
 					<v-row
+						v-if="isLdapUser"
 						class="ma-0 pa-0 mb-2"
 						align="center"
 						justify="center">
@@ -110,7 +116,7 @@
 
 					<v-expand-transition>
 						<v-row
-							v-if="showCountries"
+							v-if="showCountries && isLdapUser"
 							class="ma-0 pa-0 mb-2"
 							justify="center">
 							<v-alert
@@ -412,6 +418,7 @@ import csvMixin from '@/plugins/mixin/csvMixin';
 import CSV from '@/include/csv.js';
 import { notificationBus } from '@/main.js'
 import User from '@/include/User.js'
+import DjangoUser from '@/include/DjangoUser.js'
 import { getDomainDetails } from '@/include/utils.js';
 import DirtreeOUList from '@/components/Dirtree/DirtreeOUList.vue'
 import ObjectEditor from '@/components/Settings/ObjectEditor.vue'
@@ -456,7 +463,7 @@ export default {
 			placeholderPassword: "",
 			placeholderPassword_idx: 1,
 			passwordHidden: true,
-			userDestination: '',
+			userDestination: undefined,
 			countryInfo: '',
 			showCountries: false,
 			tableData: {
@@ -467,6 +474,7 @@ export default {
 	},
 	props: {
 		userObject: Object,
+		userClass: Function,
 		dialogKey: String
 	},
 	mounted() {
@@ -483,9 +491,12 @@ export default {
 				delete this.import_fields['password'];
 			}
 			else {
-				let keyValues = Object.entries(this.import_fields); //convert object to keyValues ["key1", "value1"] ["key2", "value2"]
-				keyValues.splice(this.placeholderPassword_idx, 0, ["password", "password"]); // insert key value at the index you want like 1.
-				this.import_fields = Object.fromEntries(keyValues) // convert key values to obj {key1: "value1", newKey: "newValue", key2: "value2"}
+				// convert object to keyValues ["key1", "value1"] ["key2", "value2"]
+				let keyValues = Object.entries(this.import_fields);
+				// insert key value at index
+				keyValues.splice(this.placeholderPassword_idx, 0, ["password", "password"]);
+				// convert key values to obj {key1: "value1", newKey: "newValue", key2: "value2"}
+				this.import_fields = Object.fromEntries(keyValues)
 			}
 
 			this.$refs.importFieldsEditor.setObject()
@@ -499,12 +510,25 @@ export default {
 			}
 		}
 	},
+	computed: {
+		isLocalUser() {
+			if (!this.userClass)
+				return false
+			return (this.userClass == DjangoUser)
+		},
+		isLdapUser() {
+			if (!this.userClass)
+				return false
+			return (this.userClass == User)
+		}
+	},
 	methods: {
 		isStepValid() {
 			switch (this.import_tab) {
 				case 0:
-					if (this.userDestination.length == 0 || !this.userDestination)
-						return false
+					if (this.isLdapUser)
+						if (!this.userDestination || this.userDestination.length == 0)
+							return false
 					break;
 				case 1:
 					if (!this.json_loaded || this.json_result == false || this.error)
@@ -693,7 +717,10 @@ export default {
 			this.realm = domainDetails.realm
 			this.basedn = domainDetails.basedn
 			this.fetchOUs()
-			this.userDestination = "CN=Users," + this.basedn
+			if (this.isLdapUser)
+				this.userDestination = "CN=Users," + this.basedn
+			else
+				this.userDestination = undefined
 			this.import_tab = 0
 			this.completed_tab = 0
 			this.usePlaceholderPassword = false
@@ -708,21 +735,30 @@ export default {
 					this.$refs.importTabs.callSlider()
 		},
 		setDefaultImportFields() {
-			this.import_fields = {
-				"username": "username",
-				"password": "password",
-				"email": "email",
-				"first_name": "first_name",
-				"last_name": "last_name",
-				"initials": "initials",
-				"phone": "phone",
-				"website": "website",
-				"street_address": "street_address",
-				"postal_code": "postal_code",
-				"city": "city",
-				"state_province": "state_province",
-				"country_name": "country_name"
-			}
+			if (this.isLdapUser)
+				this.import_fields = {
+					"username": "username",
+					"password": "password",
+					"email": "email",
+					"first_name": "first_name",
+					"last_name": "last_name",
+					"initials": "initials",
+					"phone": "phone",
+					"website": "website",
+					"street_address": "street_address",
+					"postal_code": "postal_code",
+					"city": "city",
+					"state_province": "state_province",
+					"country_name": "country_name"
+				}
+			else
+				this.import_fields = {
+					"username": "username",
+					"password": "password",
+					"email": "email",
+					"first_name": "first_name",
+					"last_name": "last_name",
+				}
 		},
 		async fetchOUs(refresh = false) {
 			if (refresh == true)
@@ -742,14 +778,19 @@ export default {
 			}
 		},
 		setDestination(destination = undefined) {
-			// Set default destination if undefined
-			if (destination == undefined || !destination) {
-				this.userDestination = this.basedn
-				this.userPathExpansionPanel = 0
-			}
-			// Set destination from arg
-			else {
-				this.userDestination = destination
+			if (this.isLdapUser) {
+				// Set default destination if undefined
+				if (destination == undefined || !destination) {
+					this.userDestination = this.basedn
+					this.userPathExpansionPanel = 0 // Enable Panel ID 0
+				}
+				// Set destination from arg
+				else {
+					this.userDestination = destination
+					this.userPathExpansionPanel = false
+				}
+			} else {
+				this.userDestination = undefined
 				this.userPathExpansionPanel = false
 			}
 		},
@@ -770,13 +811,14 @@ export default {
 		},
 		async importUsers() {
 			this.loading = true
-			await new User({}).bulkInsert({
+			let send_data = {
 				headers: this.json_result.headers,
 				placeholder_password: this.placeholderPassword,
 				mapping: this.import_fields,
 				users: this.json_result.data,
 				path: this.userDestination
-			})
+			}
+			await new this.userClass({}).bulkInsert(send_data)
 				.then(response => {
 					setTimeout(() => {
 						this.loading = false
@@ -836,10 +878,6 @@ export default {
 								"error": "none"
 							})
 						})
-					// notificationBus.$emit('createNotification', {
-					//     message: this.$t('section.users.import.bulkImportSuccess'),
-					//     type: "success"
-					// });
 				})
 				.catch(e => {
 					console.error(e)
