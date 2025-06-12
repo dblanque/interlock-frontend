@@ -580,7 +580,7 @@ export default {
 					value: this.json_result.headers[i],
 				})
 			}
-			this.tableData.items = this.json_result.data
+			this.tableData.items = this.json_result.preview_data
 		},
 		clearDataTable() {
 			this.tableData.headers = []
@@ -593,13 +593,13 @@ export default {
 			this.loading = true
 			const t_headers = this.getLocalUserImportHeaders()
 
-			var reader = new FileReader();
+			let reader = new FileReader();
 			reader.readAsText(file, "UTF-8");
 			reader.onload = async (event) => {
 				// notificationBus.$emit('send', {type: "success", text:"File Uploaded Successfully!"});
-				var csv_file = event.target.result
+				let csv_file = event.target.result
 				csv_file = csv_file.replace(/\r\n/g, '\n'); // Replaces windows new line to linux.
-				var csv_delimiter = CSV.guessDelimiters(csv_file, [",", "\t"])
+				let csv_delimiter = CSV.guessDelimiters(csv_file, [",", "\t"])
 
 				this.json_result = await this.csvToJSON(csv_file, csv_delimiter)
 
@@ -828,8 +828,8 @@ export default {
 								"error": "none"
 							})
 						})
-					if (response.data.imported_users.length > 0)
-						response.data.imported_users.forEach(u => {
+					if (response.data.created_users.length > 0)
+						response.data.created_users.forEach(u => {
 							this.tableData.items.push({
 								"username": u,
 								"status": 0,
