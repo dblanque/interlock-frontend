@@ -46,6 +46,14 @@
 						<v-icon small class="ma-0 pa-0 mr-1">mdi-file-import</v-icon>
 						{{ $t('actions.import') }}
 					</v-btn>
+					<!-- Export Button -->
+					<v-btn class="pa-2 mx-2" small :href="getExportLink()" download
+						:dark="!loading && !isThemeDark($vuetify) && isImplemented('export')"
+						:light="!loading && isThemeDark($vuetify) && isImplemented('export')"
+						:disabled="loading || !isImplemented('export')">
+						<v-icon small class="ma-0 pa-0 mr-1">mdi-file-export</v-icon>
+						{{ $t('actions.export') }}
+					</v-btn>
 					<!-- Mass Enable Button -->
 					<v-btn class="pa-2 mx-2" small
 						:dark="!actionButtonsDisabled && isImplemented('bulkEnable')"
@@ -307,19 +315,20 @@
 		<!-- USER IMPORT DIALOG -->
 		<v-dialog eager persistent max-width="1600px" v-model="dialogs['userImport']">
 			<UserImport :dialogKey="'userImport'" ref="UserImport" @closeDialog="closeDialog"
-				:parentTitle="viewTitle" />
+				:parentTitle="viewTitle" :userClass="userClass"/>
 		</v-dialog>
 
 		<!-- USER EDIT DIALOG -->
 		<v-dialog eager max-width="1600px" v-model="dialogs['userBulkUpdate']">
 			<UserBulkUpdate :selectedUsers="this.tableData.selected" :dialogKey="'userBulkUpdate'"
 				ref="UserBulkUpdate" @closeDialog="closeDialog" @refresh="listUserItems"
-				:parentTitle="viewTitle" />
+				:parentTitle="viewTitle" :userClass="userClass" />
 		</v-dialog>
 	</div>
 </template>
 
 <script>
+import backend_config from '@/providers/interlock_backend/config.js';
 import User from '@/include/User.js';
 import DjangoUser from '@/include/DjangoUser.js';
 import UserCreate from '@/components/User/UserCreate.vue';
@@ -420,10 +429,11 @@ export default {
 			switch (this.viewTitle) {
 				case "django-users":
 					switch (action) {
-						case "import":
 						case "bulkUnlock":
-						case "bulkEdit":
 							return false
+						case "import":
+						case "export":
+						case "bulkEdit":
 						case "bulkDelete":
 						case "bulkEnable":
 						case "bulkDisable":
@@ -440,6 +450,15 @@ export default {
 		goToGroup(groupDn) {
 			this.$emit('goToGroup', groupDn)
 			this.closeDialog('userDialog')
+		},
+		getExportLink() {
+			let _cfg = backend_config
+			// Local Users
+			if (this.userClass == DjangoUser)
+				return `${_cfg.base_url}${_cfg.urls.djangoUser.bulkExport}`
+			// LDAP Users
+			else if (this.userClass == User)
+				return `${_cfg.base_url}${_cfg.urls.user.bulkExport}`
 		},
 		openDialog(key) {
 			this.dialogs[key] = true;
