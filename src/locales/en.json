@@ -768,7 +768,9 @@
       },
       "userBulkUpdate":{
         "title": "User Bulk Update",
-        "modifiedAttributes": "Modified Attributes"
+        "modifiedAttributes": "Modified Attributes",
+        "step1":"Data",
+        "step2":"Summary"
       },
       "import":{
         "title":"User Bulk Import",

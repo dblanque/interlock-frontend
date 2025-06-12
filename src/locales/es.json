@@ -772,7 +772,9 @@
       },
       "userBulkUpdate":{
         "title": "Actualización Múltiple de Usuarios",
-        "modifiedAttributes": "Atributos Modificados"
+        "modifiedAttributes": "Atributos Modificados",
+        "step1":"Datos",
+        "step2":"Resumen"
       },
       "import":{
         "title":"Importación de Usuarios",
