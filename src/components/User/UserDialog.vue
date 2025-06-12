@@ -927,7 +927,8 @@ export default {
 			navigator.clipboard.writeText(textString);
 		},
 		getNameForPID(item) {
-			return `${item.name} (${item.object_relative_id.toString()})`
+			if (item && item?.name && item?.object_relative_id)
+				return `${item.name} (${item.object_relative_id.toString()})`
 		},
 		setDomainDetails() {
 			let domainDetails = getDomainDetails()
