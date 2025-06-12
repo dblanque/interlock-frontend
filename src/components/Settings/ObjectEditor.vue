@@ -268,9 +268,7 @@ export default {
     data() {
         return {
             LDAPCountries: LDAPCountries,
-            objectToEdit: {},
-            keyToAdd: "",
-            valueToAdd: "",
+            ...this.getInitialData()
         }
     },
     props: {
@@ -340,12 +338,20 @@ export default {
         // }
     },
     methods: {
+        getInitialData(){
+            return {
+                objectToEdit: {},
+                keyToAdd: "",
+                valueToAdd: "",
+            }
+        },
         forceUpdate() {
             this.$nextTick(() => {
                 this.$forceUpdate()
             })
         },
         setObject() {
+            this.data = { ...this.data, ...this.getInitialData() }
             if (this.value != undefined)
                 this.objectToEdit = this.value
             this.forceUpdate()
