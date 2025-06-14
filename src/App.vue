@@ -71,14 +71,17 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  height: min-content;
+  background-color: var(--v-gray-90-base);
+}
 #app {
   height: 100%;
   font-family: Montserrat !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background: var(--v-gray-90-base);
-  // background-color: var(--body-bg);
+  background: transparent;
   transition: background-color var(--base-transition-speed-5);
 }
 
