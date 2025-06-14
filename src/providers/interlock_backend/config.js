@@ -87,18 +87,22 @@ const urls = {
         bulkUnlock: `api/ldap/users/bulk/unlock/`,
         bulkChangeStatus: `api/ldap/users/bulk/change-status/`,
         bulkExport: `api/ldap/users/bulk/export/`,
+        // These endpoints will be moved to a separate viewset
         selfChangePassword: `api/ldap/users/self/change-password/`,
         selfUpdate: `api/ldap/users/self/update/`,
         selfFetch: `api/ldap/users/self/fetch/`,
         selfInfo: `api/ldap/users/self/info/`,
+        //
     },
     djangoUser: {
         base: `api/users/`,
         detail: `api/users/{pk}/`,
         changeAccountStatus: `api/users/{pk}/change-status/`,
         changePassword: `api/users/{pk}/change-password/`,
+        // These endpoints will be moved to a separate viewset
         selfUpdate: `api/users/self/update/`,
         selfChangePassword: `api/users/self/change-password/`,
+        //
         bulkInsert: `api/users/bulk/create/`,
         bulkDelete: `api/users/bulk/destroy/`,
         bulkUpdate: `api/users/bulk/update/`,
