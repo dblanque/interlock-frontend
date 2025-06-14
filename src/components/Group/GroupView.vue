@@ -463,6 +463,8 @@ export default {
 				})
 		},
 		isLDAPGroupCritical(item) {
+			if (!this.isLDAPGroup)
+				return
 			let _r = item.group_types.includes(GROUP_TYPE_SYSTEM) ||
 				item.name.toLowerCase().startsWith('domain ')
 			if ("group_types" in item && "name" in item)
