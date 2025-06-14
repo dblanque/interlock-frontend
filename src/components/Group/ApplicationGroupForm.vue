@@ -57,7 +57,7 @@
 		<v-row>
 			<v-col cols="12" class="ma-0 pa-0">
 				<CNObjectList :dialogKey="'addLDAPGroup'" ref="AddLDAPGroup" :add-button="false"
-					valueKey="distinguishedName" v-model="ldap_objects" :enableUsers="false"
+					value-key="distinguished_name" v-model="ldap_objects" :enableUsers="false"
 					:disabled="actionDisabled" content-class="ma-0 pa-0" :showHeader="false" />
 			</v-col>
 		</v-row>
