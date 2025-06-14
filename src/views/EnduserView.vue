@@ -51,7 +51,7 @@
 		</v-row>
 
 		<v-container>
-			<v-card>
+			<v-card class="ma-0 pa-0">
 				<v-progress-linear :color="error ? 'red' : 'primary'" :indeterminate="loading" />
 				<v-card-title>
 					<v-row justify="center" class="pa-0 ma-0 text-uppercase">
@@ -60,279 +60,280 @@
 							$t('section.enduser.title') + ' ' + username }}
 					</v-row>
 				</v-card-title>
-
-				<v-row justify="center" class="pa-0 ma-0">
-					<v-alert type="info" dismissible close-icon="mdi-close"
-						@input="disableEnduserHelpMessage()" v-if="showEnduserHelpMessage">
-						{{ $t("section.enduser.helpMessage") }}
-					</v-alert>
-				</v-row>
-
-				<v-form ref="endUserForm" @submit.prevent>
-					<!-- Details Row -->
-					<v-row align-content="center" class="ma-2 mt-0" v-if="isLDAPUser">
-						<!-- User Basic Data Panel -->
-						<v-col class="ma-0 pa-0" cols="12" :md="userClass == user ? 6 : 12">
-							<v-card outlined height="100%" class="ma-1 pa-4">
-								<v-row
-									:justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'start'"
-									class="pa-0 ma-0 text-h6 mx-3 mb-5">
-									{{ $t('section.users.basicDetails') }}
-								</v-row>
-								<v-row class="pa-0 ma-0 font-weight-medium">
-									<v-col cols="12" lg="6">
-										<v-text-field
-											dense
-											id="first_name"
-											:label="$t('attribute.first_name')"
-											v-model="usercopy.first_name"
-											:rules="[this.fieldRules(usercopy.first_name, 'ge_name')]"></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="6">
-										<v-text-field
-											dense
-											id="last_name"
-											:label="$t('attribute.last_name')"
-											v-model="usercopy.last_name"
-											:rules="[this.fieldRules(usercopy.last_name, 'ge_name')]"></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="6">
-										<v-text-field
-											dense
-											id="username"
-											:label="$t('attribute.user.username')"
-											v-model="usercopy.username"
-											:hint="$t('words.readOnly')"
-											readonly></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="6">
-										<v-text-field
-											dense
-											id="mail"
-											:label="$t('attribute.user.email')"
-											v-model="usercopy.mail"
-											:rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"></v-text-field>
-									</v-col>
-									<v-col cols="12"
-										v-if="user.last_login_win32 != undefined && user.last_login_win32 != ''">
-										{{ $t('attribute.last_login') + ": " + user.last_login_win32
-										}}
-									</v-col>
-									<v-col cols="12" lg="6" v-if="userClass == user">
-										<v-text-field
-											dense
-											id="phone"
-											:label="$t('attribute.phone')"
-											v-model="usercopy.phone"
-											:rules="[this.fieldRules(usercopy.phone, 'ge_phone_intl')]"></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="6" v-if="userClass == user">
-										<v-text-field
-											dense
-											id="website"
-											:label="$t('attribute.website')"
-											v-model="usercopy.website"
-											:rules="[this.fieldRules(usercopy.website, 'ge_website')]"></v-text-field>
-									</v-col>
-								</v-row>
-							</v-card>
-						</v-col>
-						<!-- Location Panel -->
-						<v-col class="ma-0 pa-0" cols="12" md="6" v-if="userClass == user">
-							<v-card outlined height="100%" class="ma-1 pa-4">
-								<v-row
-									:justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'end'"
-									class="pa-0 ma-0 text-h6 mx-4 mb-5">
-									{{ $t('section.users.location') }}
-								</v-row>
-								<v-row class="pa-0 ma-0 font-weight-medium">
-									<v-col cols="12" lg="6">
-										<v-text-field
-											dense
-											id="street_address"
-											:label="$t('attribute.street_address')"
-											v-model="usercopy.street_address"
-											:rules="[this.fieldRules(usercopy.street_address, 'ge_address_street')]"></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="6">
-										<v-text-field
-											dense
-											id="postal_code"
-											:label="$t('attribute.postal_code')"
-											v-model="usercopy.postal_code"
-											:rules="[this.fieldRules(usercopy.postal_code, 'ge_address_postal_code')]"></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="6"
-										:class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
-										<v-text-field
-											dense
-											id="city"
-											:label="$t('attribute.city')"
-											v-model="usercopy.city"
-											:rules="[this.fieldRules(usercopy.city, 'ge_address_city')]"></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="6">
-										<v-card v-ripple outlined class="pa-1 py-2">
-											<div
-												v-if="user.country_code_dcc != undefined && user.country_code_dcc != '' && user.country_code_dcc != 0">
-												{{ $t('attribute.country_codes') }}
-												<div elevation="0">
-													{{ user.country_code_dcc }}
-													{{ "(" + user.country_code_iso + ")" }}
-												</div>
-											</div>
-											<div v-else>
-												{{ $t('attribute.country_codes') }}
-												<div>
-													{{ $t('error.data.noCountryCode') }}
-												</div>
-											</div>
-										</v-card>
-									</v-col>
-									<v-col cols="12"
-										v-if="user.last_login != undefined && user.last_login != ''">
-										{{ $t('attribute.last_login') + ": " + user.last_login
-										}}
-									</v-col>
-									<v-col cols="12" lg="6">
-										<v-text-field
-											dense
-											id="state_province"
-											:label="$t('attribute.state_province')"
-											v-model="usercopy.st"
-											:rules="[this.fieldRules(usercopy.state_province, 'ge_state')]"></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="6">
-										<v-autocomplete
-											dense
-											id="country_name"
-											:label="$t('attribute.country_name')"
-											v-model="usercopy.country_name"
-											:items="LDAPCountries"
-											:rules="[this.fieldRules(usercopy.country_name, 'ge_country')]">
-										</v-autocomplete>
-									</v-col>
-								</v-row>
-							</v-card>
-						</v-col>
+				<v-card-text class="pa-0 ma-0">
+					<v-row justify="center" class="pa-0 ma-0">
+						<v-alert type="info" dismissible close-icon="mdi-close"
+							@input="disableEnduserHelpMessage()" v-if="showEnduserHelpMessage">
+							{{ $t("section.enduser.helpMessage") }}
+						</v-alert>
 					</v-row>
-					<!-- Advanced Details Row -->
-					<v-row class="ma-2" v-if="isLDAPUser">
-						<v-expansion-panels flat class="ma-1">
-							<v-expansion-panel class="outlined">
-								<v-expansion-panel-header class="font-weight-medium">
-									{{ $t("section.users.advancedDetails") + " (" +
-										$t("words.readOnly") + ")" }}
-								</v-expansion-panel-header>
-								<v-expansion-panel-content>
-									<v-row v-if="userClass == user">
-										<v-col cols="12" lg="8">
+	
+					<v-form ref="endUserForm" @submit.prevent>
+						<!-- Details Row -->
+						<v-row align-content="center" class="ma-2 mt-0" v-if="isLDAPUser">
+							<!-- User Basic Data Panel -->
+							<v-col class="ma-0 pa-0" cols="12" :md="userClass == user ? 6 : 12">
+								<v-card outlined height="100%" class="ma-1 pa-4">
+									<v-row
+										:justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'start'"
+										class="pa-0 ma-0 text-h6 mx-3 mb-5">
+										{{ $t('section.users.basicDetails') }}
+									</v-row>
+									<v-row class="pa-0 ma-0 font-weight-medium">
+										<v-col cols="12" lg="6">
 											<v-text-field
 												dense
-												id="distinguished_name"
-												:label="$t('attribute.distinguished_name')"
-												readonly
-												v-model="usercopy.distinguished_name"
-												:rules="[this.fieldRules(usercopy.distinguished_name, 'ldap_dn')]"></v-text-field>
+												id="first_name"
+												:label="$t('attribute.first_name')"
+												v-model="usercopy.first_name"
+												:rules="[this.fieldRules(usercopy.first_name, 'ge_name')]"></v-text-field>
+										</v-col>
+										<v-col cols="12" lg="6">
+											<v-text-field
+												dense
+												id="last_name"
+												:label="$t('attribute.last_name')"
+												v-model="usercopy.last_name"
+												:rules="[this.fieldRules(usercopy.last_name, 'ge_name')]"></v-text-field>
+										</v-col>
+										<v-col cols="12" lg="6">
+											<v-text-field
+												dense
+												id="username"
+												:label="$t('attribute.user.username')"
+												v-model="usercopy.username"
+												:hint="$t('words.readOnly')"
+												readonly></v-text-field>
+										</v-col>
+										<v-col cols="12" lg="6">
+											<v-text-field
+												dense
+												id="mail"
+												:label="$t('attribute.user.email')"
+												v-model="usercopy.mail"
+												:rules="[this.fieldRules(usercopy.mail, 'ge_mail')]"></v-text-field>
+										</v-col>
+										<v-col cols="12"
+											v-if="user.last_login_win32 != undefined && user.last_login_win32 != ''">
+											{{ $t('attribute.last_login') + ": " + user.last_login_win32
+											}}
+										</v-col>
+										<v-col cols="12" lg="6" v-if="userClass == user">
+											<v-text-field
+												dense
+												id="phone"
+												:label="$t('attribute.phone')"
+												v-model="usercopy.phone"
+												:rules="[this.fieldRules(usercopy.phone, 'ge_phone_intl')]"></v-text-field>
+										</v-col>
+										<v-col cols="12" lg="6" v-if="userClass == user">
+											<v-text-field
+												dense
+												id="website"
+												:label="$t('attribute.website')"
+												v-model="usercopy.website"
+												:rules="[this.fieldRules(usercopy.website, 'ge_website')]"></v-text-field>
+										</v-col>
+									</v-row>
+								</v-card>
+							</v-col>
+							<!-- Location Panel -->
+							<v-col class="ma-0 pa-0" cols="12" md="6" v-if="userClass == user">
+								<v-card outlined height="100%" class="ma-1 pa-4">
+									<v-row
+										:justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'end'"
+										class="pa-0 ma-0 text-h6 mx-4 mb-5">
+										{{ $t('section.users.location') }}
+									</v-row>
+									<v-row class="pa-0 ma-0 font-weight-medium">
+										<v-col cols="12" lg="6">
+											<v-text-field
+												dense
+												id="street_address"
+												:label="$t('attribute.street_address')"
+												v-model="usercopy.street_address"
+												:rules="[this.fieldRules(usercopy.street_address, 'ge_address_street')]"></v-text-field>
+										</v-col>
+										<v-col cols="12" lg="6">
+											<v-text-field
+												dense
+												id="postal_code"
+												:label="$t('attribute.postal_code')"
+												v-model="usercopy.postal_code"
+												:rules="[this.fieldRules(usercopy.postal_code, 'ge_address_postal_code')]"></v-text-field>
+										</v-col>
+										<v-col cols="12" lg="6"
+											:class="this.$vuetify.breakpoint.smAndUp ? 'mt-3' : ''">
+											<v-text-field
+												dense
+												id="city"
+												:label="$t('attribute.city')"
+												v-model="usercopy.city"
+												:rules="[this.fieldRules(usercopy.city, 'ge_address_city')]"></v-text-field>
+										</v-col>
+										<v-col cols="12" lg="6">
+											<v-card v-ripple outlined class="pa-1 py-2">
+												<div
+													v-if="user.country_code_dcc != undefined && user.country_code_dcc != '' && user.country_code_dcc != 0">
+													{{ $t('attribute.country_codes') }}
+													<div elevation="0">
+														{{ user.country_code_dcc }}
+														{{ "(" + user.country_code_iso + ")" }}
+													</div>
+												</div>
+												<div v-else>
+													{{ $t('attribute.country_codes') }}
+													<div>
+														{{ $t('error.data.noCountryCode') }}
+													</div>
+												</div>
+											</v-card>
+										</v-col>
+										<v-col cols="12"
+											v-if="user.last_login != undefined && user.last_login != ''">
+											{{ $t('attribute.last_login') + ": " + user.last_login
+											}}
+										</v-col>
+										<v-col cols="12" lg="6">
+											<v-text-field
+												dense
+												id="state_province"
+												:label="$t('attribute.state_province')"
+												v-model="usercopy.st"
+												:rules="[this.fieldRules(usercopy.state_province, 'ge_state')]"></v-text-field>
+										</v-col>
+										<v-col cols="12" lg="6">
+											<v-autocomplete
+												dense
+												id="country_name"
+												:label="$t('attribute.country_name')"
+												v-model="usercopy.country_name"
+												:items="LDAPCountries"
+												:rules="[this.fieldRules(usercopy.country_name, 'ge_country')]">
+											</v-autocomplete>
+										</v-col>
+									</v-row>
+								</v-card>
+							</v-col>
+						</v-row>
+						<!-- Advanced Details Row -->
+						<v-row class="ma-2" v-if="isLDAPUser">
+							<v-expansion-panels flat class="ma-1">
+								<v-expansion-panel class="outlined">
+									<v-expansion-panel-header class="font-weight-medium">
+										{{ $t("section.users.advancedDetails") + " (" +
+											$t("words.readOnly") + ")" }}
+									</v-expansion-panel-header>
+									<v-expansion-panel-content>
+										<v-row v-if="userClass == user">
+											<v-col cols="12" lg="8">
+												<v-text-field
+													dense
+													id="distinguished_name"
+													:label="$t('attribute.distinguished_name')"
+													readonly
+													v-model="usercopy.distinguished_name"
+													:rules="[this.fieldRules(usercopy.distinguished_name, 'ldap_dn')]"></v-text-field>
+											</v-col>
+											<v-col cols="12" lg="4">
+												<v-text-field
+													dense
+													id="user_principal_name"
+													:label="$t('attribute.user_principal_name')"
+													readonly
+													v-model="getUSN"
+													:rules="[this.fieldRules(usercopy.user_principal_name, 'ldap_usn')]"></v-text-field>
+											</v-col>
+										</v-row>
+										<v-row>
+											<v-col cols="12" lg="6">
+												<v-text-field
+													dense
+													id="created_at"
+													:label="$t('attribute.created_at')"
+													readonly
+													v-model="usercopy.created_at"></v-text-field>
+											</v-col>
+											<v-col cols="12" lg="6">
+												<v-text-field
+													dense
+													id="modified_at"
+													:label="$t('attribute.modified_at')"
+													readonly
+													v-model="usercopy.modified_at"></v-text-field>
+											</v-col>
+										</v-row>
+										<v-row v-if="userClass == user">
+											<v-col cols="12" lg="6">
+												<v-text-field
+													dense
+													id="last_login_win32"
+													:label="$t('attribute.last_login_win32')"
+													readonly
+													v-model="usercopy.last_login_win32"></v-text-field>
+											</v-col>
+											<v-col cols="12" lg="6">
+												<v-text-field
+													dense
+													id="password_set_at"
+													:label="$t('attribute.password_set_at')"
+													readonly
+													v-model="usercopy.password_set_at"></v-text-field>
+											</v-col>
+										</v-row>
+									</v-expansion-panel-content>
+								</v-expansion-panel>
+							</v-expansion-panels>
+						</v-row>
+	
+						<!-- DJANGO USER DATA -->
+						<v-row align-content="center" class="ma-2 mt-0" v-else>
+							<v-col class="ma-0 pa-0" cols="12">
+								<v-card outlined height="100%" class="ma-1 pa-4">
+									<v-row class="pa-0 ma-0 font-weight-medium">
+										<v-col cols="12" lg="4">
+											<v-text-field dense id="first_name"
+												:label="$t('attribute.first_name')"
+												v-model="usercopy.first_name"
+												:rules="[this.fieldRules(usercopy.first_name, 'ge_name')]"></v-text-field>
 										</v-col>
 										<v-col cols="12" lg="4">
-											<v-text-field
-												dense
-												id="user_principal_name"
-												:label="$t('attribute.user_principal_name')"
-												readonly
-												v-model="getUSN"
-												:rules="[this.fieldRules(usercopy.user_principal_name, 'ldap_usn')]"></v-text-field>
+											<v-text-field dense id="last_name" :label="$t('attribute.last_name')"
+												v-model="usercopy.last_name"
+												:rules="[this.fieldRules(usercopy.last_name, 'ge_name')]"></v-text-field>
+										</v-col>
+										<v-col cols="12" lg="4">
+											<v-text-field dense id="email" :label="$t('attribute.user.email')"
+												v-model="usercopy.email"
+												:rules="[this.fieldRules(usercopy.email, 'ge_mail')]"></v-text-field>
+										</v-col>
+										<v-col cols="12"
+											v-if="user.last_login != undefined && user.last_login != ''">
+											{{ $t('attribute.last_login') + ": " +
+												user.last_login }}
 										</v-col>
 									</v-row>
-									<v-row>
-										<v-col cols="12" lg="6">
-											<v-text-field
-												dense
-												id="created_at"
-												:label="$t('attribute.created_at')"
-												readonly
-												v-model="usercopy.created_at"></v-text-field>
+									<v-row justify="center" no-gutters>
+										<v-col cols="12" lg="6" class="px-2 my-2">
+											<v-text-field dense id="dn" :label="$t('attribute.created_at')"
+												:value="user.created_at" readonly></v-text-field>
 										</v-col>
-										<v-col cols="12" lg="6">
-											<v-text-field
-												dense
-												id="modified_at"
-												:label="$t('attribute.modified_at')"
-												readonly
-												v-model="usercopy.modified_at"></v-text-field>
+										<v-col cols="12" lg="6" class="px-2 my-2">
+											<v-text-field dense id="dn" :label="$t('attribute.modified_at')"
+												:value="user.modified_at" readonly></v-text-field>
 										</v-col>
 									</v-row>
-									<v-row v-if="userClass == user">
-										<v-col cols="12" lg="6">
-											<v-text-field
-												dense
-												id="last_login_win32"
-												:label="$t('attribute.last_login_win32')"
-												readonly
-												v-model="usercopy.last_login_win32"></v-text-field>
-										</v-col>
-										<v-col cols="12" lg="6">
-											<v-text-field
-												dense
-												id="password_set_at"
-												:label="$t('attribute.password_set_at')"
-												readonly
-												v-model="usercopy.password_set_at"></v-text-field>
-										</v-col>
-									</v-row>
-								</v-expansion-panel-content>
-							</v-expansion-panel>
-						</v-expansion-panels>
-					</v-row>
-
-					<!-- DJANGO USER DATA -->
-					<v-row align-content="center" class="ma-2 mt-0" v-else>
-						<v-col class="ma-0 pa-0" cols="12">
-							<v-card outlined height="100%" class="ma-1 pa-4">
-								<v-row class="pa-0 ma-0 font-weight-medium">
-									<v-col cols="12" lg="4">
-										<v-text-field dense id="first_name"
-											:label="$t('attribute.first_name')"
-											v-model="usercopy.first_name"
-											:rules="[this.fieldRules(usercopy.first_name, 'ge_name')]"></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="4">
-										<v-text-field dense id="last_name" :label="$t('attribute.last_name')"
-											v-model="usercopy.last_name"
-											:rules="[this.fieldRules(usercopy.last_name, 'ge_name')]"></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="4">
-										<v-text-field dense id="email" :label="$t('attribute.user.email')"
-											v-model="usercopy.email"
-											:rules="[this.fieldRules(usercopy.email, 'ge_mail')]"></v-text-field>
-									</v-col>
-									<v-col cols="12"
-										v-if="user.last_login != undefined && user.last_login != ''">
-										{{ $t('attribute.last_login') + ": " +
-											truncateDate(user.last_login) }}
-									</v-col>
-								</v-row>
-								<v-row justify="center" no-gutters>
-									<v-col cols="12" lg="6" class="px-2 my-2">
-										<v-text-field dense id="dn" :label="$t('attribute.created_at')"
-											:value="truncateDate(user.created_at)" readonly></v-text-field>
-									</v-col>
-									<v-col cols="12" lg="6" class="px-2 my-2">
-										<v-text-field dense id="dn" :label="$t('attribute.modified_at')"
-											:value="truncateDate(user.modified_at)" readonly></v-text-field>
-									</v-col>
-								</v-row>
-							</v-card>
-						</v-col>
-					</v-row>
-				</v-form>
+								</v-card>
+							</v-col>
+						</v-row>
+					</v-form>
+				</v-card-text>
 
 				<v-card-actions>
 					<v-row justify="center" class="pa-0 ma-0" align="center">
 						<!-- Reset Password Button -->
 						<v-btn color="primary" @click="openDialog('userResetPassword')"
-							:disabled="!user.can_change_pwd && user_type == 'ldap'"
+							:disabled="allowPasswordChange"
 							class="ma-0 pa-0 pa-4 ma-1"
 							rounded>
 							<v-icon class="mr-1">
@@ -430,7 +431,7 @@ import RefreshButton from '@/components/RefreshButton.vue'
 import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
 import utilsMixin from '@/plugins/mixin/utilsMixin.js'
-import { getDomainDetails, truncateDate } from '@/include/utils.js';
+import { getDomainDetails } from '@/include/utils.js';
 import LDAPCountries from '@/include/constants/LDAPCountries.js'
 
 export default {
@@ -477,12 +478,8 @@ export default {
 		}
 	},
 	async created() {
-		let user_type = localStorage.getItem("user.user_type")
-		if (user_type == "local")
-			this.userClass = DjangoUser
-		else if (user_type == "ldap")
-			this.userClass = User
-		this.user = new this.userClass({})
+		this.loading = true
+		this.user = new DjangoUser({})
 		this.user.selfInfo().then(response => {
 			let responseStatus = response.status
 			let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
@@ -495,7 +492,9 @@ export default {
 				this.last_name = localStorage.getItem('user.last_name')
 				this.email = localStorage.getItem('user.email')
 				this.user_type = localStorage.getItem('user.user_type')
+				this.getUserType()
 				this.refreshTokenExpiryData()
+				this.setupTimers()
 
 				new Domain({}).getDetails().then(() => {
 					let domainData = getDomainDetails()
@@ -504,6 +503,7 @@ export default {
 					this.basedn = domainData['basedn']
 					this.showView = true
 				})
+				this.refreshUser()
 			}
 			// If response code is an HTTP error code
 			else {
@@ -511,18 +511,23 @@ export default {
 				this.showLogoutDialog = true;
 			}
 
-			if (admin_allowed == true)
+			if (admin_allowed === true)
 				this.$router.push("/home");
 		})
-		this.setupTimers()
 	},
 	async mounted() {
-		this.loading = true
-		this.refreshUser()
 	},
 	computed: {
-		async isLDAPUser() {
-			return await this.getUserType() === 'ldap'
+		isLDAPUser() {
+			return this.user_type === "ldap"
+		},
+		isLocalUser() {
+			return this.user_type === "local"
+		},
+		allowPasswordChange(){
+			if (this.isLDAPUser)
+				return this.user.can_change_pwd === true
+			return true
 		},
 		getUSN() {
 			return `${this.user.username}@${this.domain}`
@@ -539,20 +544,12 @@ export default {
 		}
 	},
 	methods: {
-		truncateDate,
-		async getUserType() {
+		getUserType() {
 			let user_type = localStorage.getItem("user.user_type")
-			return new Promise((resolve, reject) => {
-				if (user_type == "local") {
-					this.userClass = DjangoUser
-					resolve();
-				}
-				else if (user_type == "ldap") {
-					this.userClass = User
-					resolve();
-				} else
-					reject()
-			});
+			if (user_type == "local")
+				this.userClass = DjangoUser
+			else if (user_type == "ldap")
+				this.userClass = User
 		},
 		getModifiedValues() {
 			let v = []
