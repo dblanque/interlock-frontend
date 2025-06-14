@@ -44,7 +44,7 @@
 									<v-col cols="12" lg="5">
 										<v-text-field
 											dense
-											@keydown.enter="nextStep"
+											@keydown.enter="nextStep()"
 											:label="$t('attribute.user.username')"
 											v-model="userToCreate.username"
 											:rules="[this.fieldRules(userToCreate.username, 'ge_username', true)]"></v-text-field>
@@ -124,7 +124,7 @@
 											lg="4">
 											<v-text-field
 												dense
-												@keydown.enter="nextStep"
+												@keydown.enter="nextStep()"
 												:label="$t('attribute.first_name')"
 												v-model="userToCreate.first_name"
 												:rules="[this.fieldRules(userToCreate.first_name, 'ge_name')]"></v-text-field>
@@ -134,7 +134,7 @@
 											lg="4">
 											<v-text-field
 												dense
-												@keydown.enter="nextStep"
+												@keydown.enter="nextStep()"
 												:label="$t('attribute.last_name')"
 												v-model="userToCreate.last_name"
 												:rules="[this.fieldRules(userToCreate.last_name, 'ge_name')]"></v-text-field>
@@ -148,7 +148,7 @@
 											lg="6">
 											<v-text-field
 												dense
-												@keydown.enter="nextStep"
+												@keydown.enter="nextStep()"
 												:label="$t('attribute.full_name')"
 												v-model="getDisplayName"
 												:rules="[this.fieldRules(getDisplayName, 'ge_topic')]"></v-text-field>
@@ -158,7 +158,7 @@
 											lg="2">
 											<v-text-field
 												dense
-												@keydown.enter="nextStep"
+												@keydown.enter="nextStep()"
 												:label="$t('attribute.initials')"
 												v-model="userToCreate.initials"
 												:rules="[this.fieldRules(userToCreate.initials, 'ge_topic')]"></v-text-field>
@@ -172,7 +172,7 @@
 											lg="4">
 											<v-text-field
 												dense
-												@keydown.enter="nextStep"
+												@keydown.enter="nextStep()"
 												:hint="$t('misc.autocomputedField')"
 												persistent-hint
 												:label="$t('attribute.user_principal_name')"
@@ -184,7 +184,7 @@
 											lg="4">
 											<v-text-field
 												dense
-												@keydown.enter="nextStep"
+												@keydown.enter="nextStep()"
 												:hint="$t('misc.autocomputedField')"
 												persistent-hint
 												:label="$t('attribute.user_principal_name_pre2000')"
@@ -242,7 +242,7 @@
 										lg="4">
 										<v-text-field
 											dense
-											@keydown.enter="nextStep"
+											@keydown.enter="nextStep()"
 											:label="$t('attribute.user.email')"
 											v-model="userToCreate.email"
 											:rules="[this.fieldRules(userToCreate.email, 'ge_mail')]"></v-text-field>
@@ -252,7 +252,7 @@
 										lg="4">
 										<v-text-field
 											dense
-											@keydown.enter="nextStep"
+											@keydown.enter="nextStep()"
 											:label="$t('attribute.website')"
 											v-model="userToCreate.website"
 											:rules="[this.fieldRules(userToCreate.website, 'ge_website')]"></v-text-field>
@@ -267,7 +267,7 @@
 										lg="4">
 										<v-text-field
 											dense
-											@keydown.enter="nextStep"
+											@keydown.enter="nextStep()"
 											:label="$t('attribute.user.email')"
 											v-model="userToCreate.email"
 											:rules="[this.fieldRules(userToCreate.email, 'ge_mail')]"></v-text-field>
@@ -292,7 +292,7 @@
 											ref="password"
 											:type="passwordHidden ? 'password' : 'text'"
 											required
-											@keydown.enter="nextStep"
+											@keydown.enter="nextStep()"
 											:append-icon="passwordHidden ? 'mdi-eye' : 'mdi-eye-off'"
 											@click:append="() => (passwordHidden = !passwordHidden)"
 											dense
@@ -308,7 +308,7 @@
 											ref="password_confirm"
 											:type="passwordHidden ? 'password' : 'text'"
 											dense
-											@keydown.enter="nextStep"
+											@keydown.enter="nextStep()"
 											v-model="userToCreate.password_confirm"
 											:label="$t('attribute.password_confirm')"
 											:rules="[(v) => v == this.userToCreate.password ? true : this.$t('error.validation.passwordNotSame')]"></v-text-field>
@@ -318,7 +318,7 @@
 									<!-- Items -->
 									<v-list-item
 										two-line
-										@keydown.enter="nextStep"
+										@keydown.enter="nextStep()"
 										@click="onClickPermission(key)"
 										:value="permissions[key].value"
 										v-for="(value, key) in permissions"
@@ -460,9 +460,9 @@
 					<v-slide-x-reverse-transition>
 						<v-btn
 							elevation="0"
-							@click="nextStep"
+							@click="nextStep()"
 							v-if="this.createStage < 3"
-							@keydown.enter="nextStep"
+							@keydown.enter="nextStep()"
 							:dark="!isThemeDark($vuetify)"
 							:light="isThemeDark($vuetify)"
 							class="ma-0 pa-0 pa-2 ma-1 pl-4"
@@ -640,6 +640,7 @@ export default {
 			this.errorMsg = ""
 		},
 		nextStep() {
+			console.log(this.$refs.userCreateForm1.validate())
 			switch (this.createStage) {
 				case 1:
 					if (this.$refs.userCreateForm1.validate()) {
