@@ -109,9 +109,11 @@ export default {
 		},
 	},
 	methods: {
-		init() {
-			this.$refs.AddLDAPGroup.fetchLists()
-			this.$refs.UserObjectList.clearData()
+		init(options={}) {
+			if (options?.fetch_lists !== false)
+				this.$refs.AddLDAPGroup.fetchLists()
+			if (options?.clear_data !== false)
+				this.$refs.UserObjectList.clearData()
 		},
 		validate() {
 			return this.$refs.form.validate()
