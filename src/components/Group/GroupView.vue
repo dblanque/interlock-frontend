@@ -645,12 +645,7 @@ export default {
 			this.openDialog('groupDelete')
 		},
 		async refreshGroup(item) {
-			await this.fetchGroup(item, this.editableForm, true).then(() => {
-				if (this.$refs.GroupDialog != undefined)
-					this.$refs.GroupDialog.syncGroup()
-				if (this.$refs.ApplicationGroupUpdate != undefined)
-					this.$refs.ApplicationGroupUpdate.syncApplicationGroup()
-			});
+			await this.fetchGroup(item, this.editableForm, true);
 		},
 		// Fetch individual Group
 		async fetchGroup(item, isEditable = false, openedDialogLoading = false) {
