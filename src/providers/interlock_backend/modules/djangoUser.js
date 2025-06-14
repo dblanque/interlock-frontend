@@ -91,6 +91,22 @@ const actions = {
 		})
 	},
 
+	selfInfo: () => {
+		const authKeys = []
+		return new Promise((resolve, reject) => {
+			interlock_backend.request.get(interlock_backend.urls.user.selfInfo)
+				.then(response => {
+					for (const key in response.data.user) {
+						if (authKeys.includes(key))
+							localStorage.setItem(`auth.${key}`, response.data.user[key])
+						else
+							localStorage.setItem(`user.${key}`, response.data.user[key])
+					}
+					resolve(response);
+				}).catch((e) => reject(e))
+		})
+	},
+
 	selfUpdate: (data) => {
 		return new Promise((resolve, reject) => {
 			interlock_backend.request.put(interlock_backend.urls.djangoUser.selfUpdate, data)
@@ -105,22 +121,6 @@ const actions = {
 			interlock_backend.request.put(interlock_backend.urls.djangoUser.selfChangePassword, data)
 				.then(response => {
 					resolve(response.data);
-				}).catch((e) => reject(e))
-		})
-	},
-
-	selfInfo: () => {
-		const authKeys = []
-		return new Promise((resolve, reject) => {
-			interlock_backend.request.get(interlock_backend.urls.user.selfInfo)
-				.then(response => {
-					for (const key in response.data.user) {
-						if (authKeys.includes(key))
-							localStorage.setItem(`auth.${key}`, response.data.user[key])
-						else
-							localStorage.setItem(`user.${key}`, response.data.user[key])
-					}
-					resolve(response);
 				}).catch((e) => reject(e))
 		})
 	},

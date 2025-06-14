@@ -65,8 +65,8 @@ class DjangoUser extends ApiModel {
 		return await interlock_backend.call(`${callsPrefix}/changePassword`, data)
 	}
 
-	async selfChangePassword(data) {
-		return await interlock_backend.call(`${callsPrefix}/selfChangePassword`, data)
+	async selfInfo() {
+		return await interlock_backend.call(`${callsPrefix}/selfInfo`)
 	}
 
 	async selfFetch() {
@@ -91,8 +91,8 @@ class DjangoUser extends ApiModel {
 		return await interlock_backend.call(`${callsPrefix}/selfUpdate`, data)
 	}
 
-	async selfInfo() {
-		return await interlock_backend.call(`${callsPrefix}/selfInfo`)
+	async selfChangePassword(data) {
+		return await interlock_backend.call(`${callsPrefix}/selfChangePassword`, data)
 	}
 
 	async bulkInsert(data) {
