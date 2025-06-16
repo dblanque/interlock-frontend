@@ -687,8 +687,8 @@
         "DELETE":"Baja",
         "LOGIN":"Inicio de Sesión",
         "LOGOUT":"Cierre de Sesión",
-        "OPEN":"Apertura",
-        "CLOSE":"Cierre"
+        "OPEN_LDAP_CONNECTION":"Apertura",
+        "CLOSE_LDAP_CONNECTION":"Cierre"
       }
     },
     "enduser":{
@@ -905,11 +905,11 @@
       "settingFailedValidation":"Un parámetro ha fallado la validación",
       "headers":{
         "local":{
-          "title":"Configuración de Interlock"
+          "title":"Configuración de Interlock",
+          "log":"Historial"
         },
         "ldap":{
           "title":"Configuración de LDAP",
-          "log":"Historial",
           "domain":"Dominio",
           "bindUser":"Usuario de Conexión",
           "connection":"Conexión",
@@ -918,15 +918,15 @@
       },
       "fields":{
         "ILCK_ENABLE_LDAP":"Habilitar Back-End de LDAP",
-        "LDAP_LOG_MAX":"Cantidad Máxima de Eventos Registrados",
-        "LDAP_LOG_READ":"Registrar Eventos de LECTURA",
-        "LDAP_LOG_CREATE":"Registrar Eventos de ALTA",
-        "LDAP_LOG_UPDATE":"Registrar Eventos de MODIFICACIÓN",
-        "LDAP_LOG_DELETE":"Registrar Eventos de BAJA",
-        "LDAP_LOG_OPEN_CONNECTION":"Registrar Eventos al ABRIR CONEXIÓN LDAP",
-        "LDAP_LOG_CLOSE_CONNECTION":"Registrar Evento al CERRAR CONEXIÓN LDAP",
-        "LDAP_LOG_LOGIN":"Registrar Inicios de Sesión en Interlock",
-        "LDAP_LOG_LOGOUT":"Registrar Cierres de Sesión en Interlock",
+        "ILCK_LOG_MAX":"Cantidad Máxima de Eventos Registrados",
+        "ILCK_LOG_READ":"Registrar Eventos de LECTURA",
+        "ILCK_LOG_CREATE":"Registrar Eventos de ALTA",
+        "ILCK_LOG_UPDATE":"Registrar Eventos de MODIFICACIÓN",
+        "ILCK_LOG_DELETE":"Registrar Eventos de BAJA",
+        "ILCK_LOG_OPEN_LDAP_CONNECTION":"Registrar Eventos al ABRIR CONEXIÓN LDAP",
+        "ILCK_LOG_CLOSE_LDAP_CONNECTION":"Registrar Evento al CERRAR CONEXIÓN LDAP",
+        "ILCK_LOG_LOGIN":"Registrar Inicios de Sesión en Interlock",
+        "ILCK_LOG_LOGOUT":"Registrar Cierres de Sesión en Interlock",
         "LDAP_URI_PREFIX":"Prefijo LDAP",
         "LDAP_URI_IP":"Dirección IP del Servidor",
         "LDAP_URI_PORT":"Puerto del Servidor",

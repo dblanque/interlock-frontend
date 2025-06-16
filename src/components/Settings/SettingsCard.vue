@@ -576,6 +576,7 @@ import Liveness from '@/include/Liveness.js';
 import SettingsResetDialog from '@/components/Settings/SettingsResetDialog.vue'
 import ObjectEditor from '@/components/Settings/ObjectEditor.vue'
 import { notificationBus } from '@/main.js'
+import LocalSettings from '@/include/constants/LocalSettings.js'
 import LDAPSettings from '@/include/constants/LDAPSettings.js'
 
 export default {
@@ -605,16 +606,7 @@ export default {
 			addingProfile: false,
 			renamingProfile: false,
 			config: {
-				local: {
-					general: {
-						row1: {
-							ILCK_ENABLE_LDAP: {
-								value: false,
-								type: "boolean",
-							}
-						}
-					}
-				},
+				local: LocalSettings,
 				ldap: LDAPSettings
 			}
 		}
@@ -785,8 +777,14 @@ export default {
 			this.loading = true
 			var dataToSend = {}
 			dataToSend = this.getConfigValues()
-			dataToSend['DEFAULT_ADMIN_ENABLED'] = this.defaultAdminEnabled
-			dataToSend['DEFAULT_ADMIN_PWD'] = this.defaultAdminPwd
+			dataToSend.local.DEFAULT_ADMIN_ENABLED = {
+				type: "boolean",
+				value: this.defaultAdminEnabled
+			}
+			dataToSend.local.DEFAULT_ADMIN_PWD = {
+				type: "string",
+				value: this.defaultAdminPwd,
+			}
 			let preset = {}
 			preset["id"] = this.presetId
 			if (this.renamingProfile === true && this.newPresetLabel.length > 0)
@@ -887,7 +885,7 @@ export default {
 			await new Settings({}).fetch(this.presetId)
 				.then(response => {
 					const data = response.data.settings
-					this.defaultAdminEnabled = data.ldap['DEFAULT_ADMIN_ENABLED']
+					this.defaultAdminEnabled = data.local.DEFAULT_ADMIN_ENABLED.value
 					this.defaultAdminPwd = ""
 					this.defaultAdminPwdConfirm = ""
 

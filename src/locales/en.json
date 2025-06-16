@@ -683,8 +683,8 @@
         "DELETE":"Delete",
         "LOGIN":"Login",
         "LOGOUT":"Logout",
-        "OPEN":"Opened",
-        "CLOSE":"Closed"
+        "OPEN_LDAP_CONNECTION":"Opened",
+        "CLOSE_LDAP_CONNECTION":"Closed"
       }
     },
     "enduser":{
@@ -902,11 +902,11 @@
       "headers":{
         "local":{
           "title":"Interlock Settings",
-          "general":"General"
+          "general":"General",
+          "log":"Logging"
         },
         "ldap":{
           "title":"LDAP Back-End Settings",
-          "log":"Logging",
           "domain":"Domain",
           "bindUser":"Bind User",
           "connection":"Connection",
@@ -915,15 +915,15 @@
       },
       "fields":{
         "ILCK_ENABLE_LDAP":"Enable LDAP Back-End",
-        "LDAP_LOG_MAX":"Maximum Logs in Rotation",
-        "LDAP_LOG_READ":"Log READ Events",
-        "LDAP_LOG_CREATE":"Log CREATE Events",
-        "LDAP_LOG_UPDATE":"Log UPDATE Events",
-        "LDAP_LOG_DELETE":"Log DELETE Events",
-        "LDAP_LOG_OPEN_CONNECTION":"Log OPEN LDAP CONNECTION Events",
-        "LDAP_LOG_CLOSE_CONNECTION":"Log CLOSE LDAP CONNECTION Events",
-        "LDAP_LOG_LOGIN":"Log Interlock LOGIN Events",
-        "LDAP_LOG_LOGOUT":"Log Interlock LOGOUT Events",
+        "ILCK_LOG_MAX":"Maximum Logs in Rotation",
+        "ILCK_LOG_READ":"Log READ Events",
+        "ILCK_LOG_CREATE":"Log CREATE Events",
+        "ILCK_LOG_UPDATE":"Log UPDATE Events",
+        "ILCK_LOG_DELETE":"Log DELETE Events",
+        "ILCK_LOG_OPEN_LDAP_CONNECTION":"Log OPEN LDAP CONNECTION Events",
+        "ILCK_LOG_CLOSE_LDAP_CONNECTION":"Log CLOSE LDAP CONNECTION Events",
+        "ILCK_LOG_LOGIN":"Log Interlock LOGIN Events",
+        "ILCK_LOG_LOGOUT":"Log Interlock LOGOUT Events",
         "LDAP_URI_PREFIX":"LDAP Prefix",
         "LDAP_URI_IP":"Server IP",
         "LDAP_URI_PORT":"Server Port",

@@ -1,47 +1,4 @@
 const config = {
-	log: {
-		row1: {
-			// Log parameters
-			LDAP_LOG_MAX: {
-				value: 0,
-				validator: 'set_log_max',
-				type: "integer",
-				extraClasses: "mb-4"
-			},
-			LDAP_LOG_CREATE: {
-				value: false,
-				type: "boolean",
-			},
-			LDAP_LOG_READ: {
-				value: false,
-				type: "boolean",
-			},
-			LDAP_LOG_UPDATE: {
-				value: false,
-				type: "boolean",
-			},
-			LDAP_LOG_DELETE: {
-				value: false,
-				type: "boolean",
-			},
-			LDAP_LOG_OPEN_CONNECTION: {
-				value: false,
-				type: "boolean",
-			},
-			LDAP_LOG_CLOSE_CONNECTION: {
-				value: false,
-				type: "boolean",
-			},
-			LDAP_LOG_LOGIN: {
-				value: false,
-				type: "boolean",
-			},
-			LDAP_LOG_LOGOUT: {
-				value: false,
-				type: "boolean",
-			},
-		}
-	},
 	domain: {
 		row1: {
 			// Domain Parameters
