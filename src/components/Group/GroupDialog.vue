@@ -90,11 +90,18 @@
 						</v-row>
 
 						<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
-							<GroupTypeRadioGroups :editFlag="editFlag" 
-								:group-types="groupcopy.group_types"
-								:group-scopes="groupcopy.group_scopes"
-								@update-type="(v) => groupcopy.group_types = v"
-								@update-scope="(v) => groupcopy.group_scopes = v"/>
+							<v-col cols="8" class="ma-0 pa-0">
+								<v-alert color="accent-75-s" type="info" text v-if="isBuiltIn()">
+									{{ $t("section.groups.groupDialog.typeInBuiltinReadOnly") }}
+								</v-alert>
+							</v-col>
+							<v-col cols="12" class="ma-0 pa-0">
+								<GroupTypeRadioGroups :editFlag="editFlag && !isBuiltIn()"
+									:group-types="groupcopy.group_types"
+									:group-scopes="groupcopy.group_scopes"
+									@update-type="(v) => groupcopy.group_types = v"
+									@update-scope="(v) => groupcopy.group_scopes = v"/>
+							</v-col>
 						</v-row>
 
 						<!-- MEMBER BUTTONS -->
@@ -384,6 +391,13 @@ export default {
 		parentTitle: String,
 	},
 	methods: {
+		isBuiltIn() {
+			if (!this.groupcopy?.distinguished_name || this.groupcopy?.distinguished_name.length < 1)
+				return false
+			return this.groupcopy.distinguished_name
+							.toLowerCase()
+							.includes("cn=builtin");
+		},
 		exit() {
 			this.showAlert = false
 		},

@@ -688,6 +688,8 @@
         "DELETE":"Baja",
         "LOGIN":"Inicio de Sesión",
         "LOGOUT":"Cierre de Sesión",
+        "RENAME": "Renombrar",
+        "MOVE": "Mover",
         "OPEN_LDAP_CONNECTION":"Apertura",
         "CLOSE_LDAP_CONNECTION":"Cierre"
       }
@@ -885,7 +887,8 @@
         "groupType":"Tipo de Grupo",
         "groupScope":"Alcance del Grupo",
         "members":"Miembros del grupo",
-        "copyDistinguishedName":"Copiar Nombre Distinguido"
+        "copyDistinguishedName":"Copiar Nombre Distinguido",
+        "typeInBuiltinReadOnly":"El Tipo y Alcance de un Grupo Integrado es de solo lectura"
       },
       "deleteGroup":{
         "title":"Borrar Grupo",

@@ -684,6 +684,8 @@
         "DELETE":"Delete",
         "LOGIN":"Login",
         "LOGOUT":"Logout",
+        "RENAME": "Rename",
+        "MOVE": "Move",
         "OPEN_LDAP_CONNECTION":"Opened",
         "CLOSE_LDAP_CONNECTION":"Closed"
       }
@@ -881,7 +883,8 @@
         "groupType":"Group Type",
         "groupScope":"Group Scope",
         "members":"Group Members",
-        "copyDistinguishedName":"Copy Distinguished Name"
+        "copyDistinguishedName":"Copy Distinguished Name",
+        "typeInBuiltinReadOnly":"Group Type and Scope are Read-Only for Built-ins"
       },
       "deleteGroup":{
         "title":"Delete Group",
