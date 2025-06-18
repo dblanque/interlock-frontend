@@ -745,6 +745,7 @@ export default {
 			changingGroups: false,
 			usercopy: {},
 			addObjectClass: "",
+			deleted_groups: [],
 			groups_to_remove: [],
 			groups_to_add: [],
 			excludeGroups: [],
@@ -877,7 +878,13 @@ export default {
 				this.usercopy.groups = []
 			groups.forEach(g => {
 				if (this.usercopy.groups.filter(e => e.distinguished_name == g.distinguished_name).length == 0) {
-					this.usercopy.groups.push(g)
+					let deleted_group_dns = this.deleted_groups.map(dg => dg.distinguished_name)
+					if (deleted_group_dns.includes(g.distinguished_name)) {
+						let index_in_deleted = deleted_group_dns.indexOf(g.distinguished_name)
+						this.usercopy.groups.push(this.deleted_groups[index_in_deleted])
+					} else {
+						this.usercopy.groups.push(g)
+					}
 				}
 
 				if (this.groups_to_remove != undefined) {
@@ -909,6 +916,8 @@ export default {
 				if (this.excludeGroups.includes(groupDn))
 					this.excludeGroups = this.excludeGroups.filter(e => e != groupDn)
 
+				if (this.deleted_groups.filter(e => e.distinguished_name == groupDn).length < 1)
+					this.deleted_groups.push(currentGroup)
 				this.usercopy.groups = this.usercopy.groups.filter(e => e.distinguished_name != groupDn)
 				// this.logGroups()
 				this.setupExclude()
