@@ -91,7 +91,7 @@
 
 						<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
 							<v-col cols="8" class="ma-0 pa-0">
-								<v-alert color="accent-75-s" type="info" text v-if="isBuiltIn()">
+								<v-alert :color="isThemeDark($vuetify) ? 'accent-75-s':'primary-55-s'" type="info" text v-if="isBuiltIn()">
 									{{ $t("section.groups.groupDialog.typeInBuiltinReadOnly") }}
 								</v-alert>
 							</v-col>
