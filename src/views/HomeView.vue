@@ -586,11 +586,11 @@ export default {
       await this.updateSelectedTab(this.getTabIndex("ldap-users")); // Index for Users Tab is 1
       setTimeout(() => {
         this.$refs.ModularViewContainerRef.forEach(refObj => {
-          // console.log(refObj.$refs)
-          if (Object.hasOwnProperty.call(refObj.$refs, 'UserView'))
-            refObj.$refs.UserView.fetchUser(user);
+          console.log(refObj.$refs)
+          if (Object.hasOwnProperty.call(refObj.$refs, 'LdapUserView'))
+            refObj.$refs.LdapUserView.fetchUser(user);
         });
-      }, 0.1)
+      }, 1e1)
     },
     async goToGroup(group) {
       // Don't remove this await or the first time the ModularViewContainer
@@ -598,10 +598,10 @@ export default {
       await this.updateSelectedTab(this.getTabIndex("ldap-groups")); // Index for Groups Tab is 2
       setTimeout(() => {
         this.$refs.ModularViewContainerRef.forEach(refObj => {
-          if (Object.hasOwnProperty.call(refObj.$refs, 'GroupView'))
-            refObj.$refs.GroupView.fetchGroup(group);
+          if (Object.hasOwnProperty.call(refObj.$refs, 'LdapGroupView'))
+            refObj.$refs.LdapGroupView.fetchGroup(group);
         });
-      }, 0.1)
+      }, 1e1)
     },
     async setDomainDetails() {
       let domainData = getDomainDetails()
