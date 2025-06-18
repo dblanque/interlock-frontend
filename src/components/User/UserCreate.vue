@@ -640,7 +640,6 @@ export default {
 			this.errorMsg = ""
 		},
 		nextStep() {
-			console.log(this.$refs.userCreateForm1.validate())
 			switch (this.createStage) {
 				case 1:
 					if (this.$refs.userCreateForm1.validate()) {
