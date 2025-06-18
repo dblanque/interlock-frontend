@@ -109,7 +109,7 @@
                   </v-icon>
                 </v-btn>
               </template>
-              <span> {{ $t("actions.copyToClipboard") }} </span>
+              <span> {{ $t("actions.copy") }} </span>
             </v-tooltip>
           </v-row>
           <v-row
