@@ -355,6 +355,7 @@
       "users":{
         "noUsersInImport":"No hay usuarios en el archivo",
         "user_permission_malformed":"Permisos de Usuario mal-formados",
+        "user_password_over_plain_ldap": "Se requiere LDAPS para cambiar Contraseñas en Microsoft ADDS",
         "user_passwords_dont_match":"No coinciden las contraseñas del Usuario",
         "user_old_password_required": "Se requiere la contraseña anterior",
         "user_create_error":"No se pudo crear el Usuario",

@@ -345,6 +345,7 @@
       "users":{
         "noUsersInImport":"No Users detected in File",
         "user_permission_malformed":"User permissions in request are malformed",
+        "user_password_over_plain_ldap": "LDAPS is required to change Passwords in Microsoft ADDS",
         "user_passwords_dont_match":"User passwords do not match",
         "user_old_password_required": "User's old password is required",
         "user_create_error":"User could not be created",
