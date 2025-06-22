@@ -283,7 +283,7 @@
 							:color="error == true ? 'red' : 'green'">
 							{{
 								errorMsg == "" ?
-								$t(`section.dns.${updateFlag ? 'update' : 'create'}Success`) : errorMsg
+									$t(`section.dns.${updateFlag ? 'update' : 'create'}Success`) : errorMsg
 							}}
 						</v-chip>
 					</v-slide-x-reverse-transition>

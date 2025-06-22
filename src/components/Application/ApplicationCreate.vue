@@ -24,25 +24,25 @@
 					<v-stepper-header class="px-16">
 						<!-- Basics -->
 						<v-stepper-step :complete="createStage > 1" step="1">
-							{{ 
-									$vuetify.breakpoint.mdAndUp ?
-										$t('section.applications.dialog.create.step1') : ''
+							{{
+								$vuetify.breakpoint.mdAndUp ?
+									$t('section.applications.dialog.create.step1') : ''
 							}}
 						</v-stepper-step>
 						<v-divider class="mx-3"
 							:style="createStage > 1 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
 						<v-stepper-step :complete="createStage > 2" step="2">
 							{{
-									$vuetify.breakpoint.mdAndUp ?
-										$t('section.applications.dialog.create.step2') : ''
+								$vuetify.breakpoint.mdAndUp ?
+									$t('section.applications.dialog.create.step2') : ''
 							}}
 						</v-stepper-step>
 						<v-divider class="mx-3"
 							:style="createStage > 2 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
 						<v-stepper-step :complete="!loading && success" step="3">
 							{{
-									$vuetify.breakpoint.mdAndUp ?
-										$t('section.applications.dialog.create.step3') : ''
+								$vuetify.breakpoint.mdAndUp ?
+									$t('section.applications.dialog.create.step3') : ''
 							}}
 						</v-stepper-step>
 					</v-stepper-header>

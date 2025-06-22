@@ -38,7 +38,7 @@
                     :disabled="!allowRefresh"
                     rounded
                     @click="refreshAccessToken">
-                        {{ $t('actions.refreshToken') }}
+                    {{ $t('actions.refreshToken') }}
                 </v-btn>
             </v-row>
         </v-card-actions>

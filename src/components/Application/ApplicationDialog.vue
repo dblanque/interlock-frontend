@@ -8,7 +8,7 @@
 					<v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
 						<h3 class="ma-2">
 							{{
-									`${editFlag ? $t('actions.edit') : $t('actions.view')} ${$tc("classes.application", 1)}`
+								`${editFlag ? $t('actions.edit') : $t('actions.view')} ${$tc("classes.application", 1)}`
 							}}
 						</h3>
 						<v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4" />

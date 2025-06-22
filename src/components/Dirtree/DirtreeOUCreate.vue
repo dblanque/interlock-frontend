@@ -81,8 +81,7 @@
 													<span>
 														<span>
 															{{
-																$t('section.dirtree.'+createType+'Create.'+createType+'CreatedIn')
-															+ ': '
+																$t('section.dirtree.' + createType + 'Create.' + createType + 'CreatedIn') + ': '
 															}}
 														</span>
 														<span class="font-weight-bold">
@@ -143,7 +142,7 @@
 									<v-slide-y-transition>
 										<v-col v-if="!this.loading && this.loading == false">
 											{{ this.error ? '' :
-												$t('section.dirtree.'+createType+'Create.step2_success')
+												$t('section.dirtree.' + createType + 'Create.step2_success')
 											}}
 										</v-col>
 									</v-slide-y-transition>
