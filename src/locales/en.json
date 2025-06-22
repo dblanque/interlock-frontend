@@ -501,6 +501,7 @@
       "index": "Record Index",
       "infiniteTtl": "Infinite TTL",
       "ttl": "Time To Live",
+      "ttl_short": "TTL",
       "value": "Record Value",
       "displayName": "Display Name",
       "name": "Record Name",
@@ -621,6 +622,11 @@
       "deleteZone": {
         "message": "Are you sure you wish to delete the DNS Zone",
         "confirmZone": "Please confirm by writing the Zone name again"
+      },
+      "ttlDisclaimer": {
+        "title": "DNS Management Disclaimer",
+        "messageTtl": "You might need to wait until your Start of Authority TTL expires to see changes effectively applied in your Microsoft ADDS / Samba LDAP server",
+        "messageLegacyDns": "If you use an older Active Directory or your DNS does not seem to fetch any records/zones, try using the Legacy DNS Option in your Settings."
       }
     },
     "login": {

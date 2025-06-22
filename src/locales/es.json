@@ -626,6 +626,11 @@
       "deleteZone": {
         "message": "¿Está seguro de borrar la Zona de DNS",
         "confirmZone": "Por favor confirme re-escribiendo el nombre de la Zona"
+      },
+      "ttlDisclaimer": {
+        "title": "Nota sobre la Administración de DNS",
+        "messageTtl": "Quizás necesite esperar a que expire el TTL de su Inicio de Autoridad para ver cambios efectivos",
+        "messageLegacyDns": "Si utiliza una versión vieja de Active DIrectory o su DNS no parece obtener ningún registro/zona, intente utilizar la opción de DNS modo Legado en sus preferencias."
       }
     },
     "login": {

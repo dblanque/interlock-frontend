@@ -4,7 +4,7 @@
 <template>
 	<div>
 		<v-data-table
-			:headers="dns.headers"
+			:headers="computedTableHeaders"
 			:items="filteredData"
 			:custom-sort="sortNullLast"
 			:loading="loading"
@@ -39,6 +39,12 @@
 						color="red">
 						<v-icon class="ma-0 pa-0">mdi-delete</v-icon>
 						{{ $t('actions.delete') + ' ' + $tc('classes.dns.zone', 1) }}
+					</v-btn>
+					<v-btn
+						icon
+						:color="disclaimerWasClosed() ? undefined : 'primary'"
+						@click="openTtlDisclaimer()">
+						<v-icon>mdi-information</v-icon>
 					</v-btn>
 				</v-row>
 				<v-form ref="zoneCreateForm" @submit.prevent>
@@ -271,8 +277,8 @@
 				</td>
 			</template>
 
-			<template v-slot:[`item.nameTarget`]="{ item }">
-				{{ item.nameTarget == '' || !item.nameTarget ? '@' : item.nameTarget }}
+			<template v-slot:[`item.displayName`]="{ item }">
+				{{ parseDisplayName(item) }}
 			</template>
 
 			<template v-slot:[`item.ttl`]="{ item }">
@@ -394,7 +400,7 @@
 							mdi-menu-right
 						</v-icon>
 						<span v-if="key == 'distinguishedName'">
-							{{ $t("attribute.ldap." + key) + ": " + attribute + " " }}
+							{{ $t("attribute.distinguished_name") + ": " + attribute + " " }}
 						</span>
 						<span v-else-if="key == 'ts'">
 							{{ $t("dns.attributes." + key) + ": " }}
@@ -460,19 +466,33 @@
 				ref="RecordMassAction" />
 		</v-dialog>
 
+		<!-- TTL AND OTHERS DISCLAIMER DIALOG -->
+		<v-dialog
+			persistent
+			eager
+			max-width="800px"
+			v-model="dialogs['ttlDisclaimer']">
+			<TtlDisclaimer
+				@closeDialog="closeDialog"
+				:dialogKey="'ttlDisclaimer'"
+				ref="TtlDisclaimer" />
+		</v-dialog>
+
 	</div>
 </template>
 
 <script>
-import { notificationBus } from '@/main.js'
-import { getDomainDetails } from '@/include/utils.js'
-import Domain, { default as DNS } from '@/include/Domain.js'
-import RecordDialog from '@/components/DNS/RecordDialog.vue'
-import RecordDelete from '@/components/DNS/RecordDelete.vue'
-import RecordMassAction from '@/components/DNS/RecordMassAction.vue'
-import RefreshButton from '@/components/RefreshButton.vue'
-import validationMixin from '@/plugins/mixin/validationMixin.js'
-import utilsMixin from '@/plugins/mixin/utilsMixin.js'
+import { notificationBus } from '@/main.js';
+import { getDomainDetails } from '@/include/utils.js';
+import Domain, { default as DNS } from '@/include/Domain.js';
+import RecordDialog from '@/components/DNS/RecordDialog.vue';
+import RecordDelete from '@/components/DNS/RecordDelete.vue';
+import RecordMassAction from '@/components/DNS/RecordMassAction.vue';
+import RefreshButton from '@/components/RefreshButton.vue';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
+import utilsMixin from '@/plugins/mixin/utilsMixin.js';
+import TtlDisclaimer from '@/components/DNS/TtlDisclaimer.vue';
+const disclaimer_stor_key = "misc.dns.disclaimer_closed";
 
 export default {
 	name: 'dnsView',
@@ -524,7 +544,8 @@ export default {
 			dialogs: {
 				recordDialog: false,
 				recordDelete: false,
-				recordMassAction: false
+				recordMassAction: false,
+				ttlDisclaimer: false,
 			},
 			dns: {
 				headers: [],
@@ -540,7 +561,16 @@ export default {
 		this.ldap = getDomainDetails()
 		this.getDNSData()
 	},
+	mounted() {
+		if (localStorage.getItem(disclaimer_stor_key) !== "true")
+			this.dialogs['ttlDisclaimer'] = true;
+	},
 	watch: {
+		'breakpoint': {
+			handler: function () {
+				this.reloadDataTableHeaders()
+			},
+		},
 		'enabledRecordTypes': {
 			handler: function (newValue) {
 				this.filterData(newValue)
@@ -557,7 +587,36 @@ export default {
 			deep: true
 		}
 	},
+	computed: {
+		breakpoint() {
+			return this.$vuetify.breakpoint.name
+		},
+		computedTableHeaders() {
+			const excluded = [
+				"serial",
+			]
+			if (this.$vuetify.breakpoint.lgAndDown)
+				return this.dns.headers.filter(d => !excluded.includes(d.value))
+			return this.dns.headers
+		}
+	},
 	methods: {
+		openTtlDisclaimer() {
+			this.dialogs['ttlDisclaimer'] = true
+		},
+		disclaimerWasClosed() {
+			let _stor_value = localStorage.getItem(disclaimer_stor_key)
+			console.log(_stor_value)
+			return _stor_value === "true"
+		},
+		parseDisplayName(item) {
+			let v = item?.displayName
+			if (!v || typeof v !== "string")
+				return ""
+			if (v.startsWith("@") && this.$vuetify.breakpoint.lgAndDown)
+				return "@"
+			return v
+		},
 		createSnackbar(notifObj) {
 			notificationBus.$emit('createNotification', notifObj);
 		},
@@ -773,6 +832,58 @@ export default {
 				this.getDNSData(this.zoneFilter['dnsZone'])
 			}
 		},
+		setHeaderProperties() {
+			for (const idx in this.dns.headers) {
+				let headerDict = this.dns.headers[idx];
+				if (headerDict?.value == "actions")
+					headerDict.text = this.$t('actions.label');
+				else
+					headerDict.text = this.$t('dns.attributes.' + headerDict.value);
+				headerDict.groupable = false;
+				headerDict.sortable = false;
+				// Set width
+				switch (headerDict.value) {
+					case "value":
+						headerDict.width = (headerDict.text.length + 2) + "ch";
+						headerDict.sortable = true;
+						break;
+					case "serial":
+						headerDict.width = '10ch';
+						break;
+					case "ts":
+						headerDict.align = 'center';
+						headerDict.sortable = false;
+						break;
+					case "actions":
+						headerDict.groupable = false;
+						headerDict.width = '6rem';
+						headerDict.align = 'center';
+						headerDict.sortable = false;
+						break;
+					case "displayName":
+					case "typeName":
+						headerDict.groupable = true;
+						headerDict.sortable = true;
+						headerDict.width = (headerDict.text.length + 2) + "ch";
+						break;
+					case "ttl":
+							if (this.$vuetify.breakpoint.lgAndDown) {
+								headerDict.text = this.$t(`dns.attributes.${headerDict.value}_short`);
+								headerDict.width = (headerDict.text.length + 6) + "ch";
+							}
+							else
+								headerDict.width = (headerDict.text.length + 4) + "ch";
+							headerDict.sortable = true;
+						break;
+					default:
+						if (headerDict.sortable)
+							headerDict.width = (headerDict.text.length + 4) + "ch";
+						else
+							headerDict.width = (headerDict.text.length + 2) + "ch";
+						break;
+				}
+			}
+		},
 		async getDNSData(zoneToQuery = undefined, refresh = false) {
 			if (refresh === true)
 				this.lastOperation = ""
@@ -800,29 +911,15 @@ export default {
 					dnsHeaders.forEach(header => {
 						headerDict = {}
 						headerDict.text = this.$t('dns.attributes.' + header)
-						headerDict.width = (headerDict.text.length + 1) + "ch"
 						headerDict.value = header
-						if (header == 'ts') {
-							headerDict.align = 'center'
-							headerDict.sortable = false
-						}
-						if (header == 'address' || header == 'nameTarget')
-							headerDict.width = '35ch'
-
-						if (header == 'displayName' || header == 'typeName')
-							headerDict.groupable = true
-
 						this.dns.headers.push(headerDict)
 					});
 					// Add actions last
-					headerDict = {}
-					headerDict.text = this.$t('actions.label')
-					headerDict.value = 'actions'
-					headerDict.groupable = false
-					headerDict.width = '6rem'
-					headerDict.align = 'center'
-					headerDict.sortable = false
-					this.dns.headers.push(headerDict)
+					this.dns.headers.push({
+						text: this.$t('actions.label'),
+						value: 'actions',
+					})
+					this.setHeaderProperties();
 					this.loadFinished()
 
 					if (response.data.legacy == true) {
@@ -844,16 +941,7 @@ export default {
 		},
 		// Reload Data Table Header Labels
 		reloadDataTableHeaders() {
-			this.dns.headers.forEach(tableHeader => {
-				if (tableHeader.value == "actions") {
-					tableHeader.text = this.$t('actions.label')
-					tableHeader.width = (tableHeader.text.length + 1) + "ch"
-				}
-				else {
-					tableHeader.text = this.$t('dns.attributes.' + tableHeader.value)
-					tableHeader.width = (tableHeader.text.length + 1) + "ch"
-				}
-			});
+			this.setHeaderProperties()
 		},
 		// Reset Data Table variables
 		resetDataTable() {
