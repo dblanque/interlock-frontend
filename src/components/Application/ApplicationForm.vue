@@ -11,7 +11,7 @@
 							:readonly="!isBeingEdited && !isBeingCreated"
 							dense
 							@keydown.enter="nextStep"
-							:rules="[this.fieldRules(localData.name, 'ge_lettersStrict', true)]"
+							:rules="[this.fieldRules(localData.name, 'ge_app_name', true)]"
 							:label="$tc('section.applications.attribute.name')" />
 					</v-col>
 					<!-- Redirect URIs -->

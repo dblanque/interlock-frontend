@@ -374,6 +374,8 @@ const validationMixin = {
         case "auth_recovery":
           rules.push(this.inputRulesalphaNumericSpecialCN)
           break;
+        case "ge_app_name":
+          rules.push(this.inputRulesalphaNumericSpecialName)
         default:
           break;
       }

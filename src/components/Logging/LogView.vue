@@ -371,6 +371,12 @@ export default {
           return 'dns.zone'
         case 'DNSR':
           return 'dns.record'
+        case 'SSO_APP':
+          return 'application'
+        case 'SSO_ASG':
+          return 'application-group'
+        case 'SSO_CLIENT':
+          return 'client'
         default:
           return 'ldap'
       }
@@ -410,6 +416,12 @@ export default {
           return ['mdi-google-circles', 'orange']
         case 'DNSR':
           return ['mdi-google-circles-group', 'orange']
+        case 'SSO_APP':
+          return ['mdi-application', 'primary']
+        case 'SSO_ASG':
+          return ['mdi-application-parentheses', 'secondary']
+        case 'SSO_CLIENT':
+          return ['mdi-transit-connection-horizontal']
         default:
           return ['mdi-group']
       }

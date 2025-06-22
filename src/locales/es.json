@@ -265,6 +265,7 @@
     "totp-device": "Dispositivo TOTP | Dispositivos TOTP",
     "application": "Aplicación | Aplicaciones",
     "application-group": "Grupo de Aplicación | Grupos de Aplicaciones",
+    "client": "Cliente | Clientes",
     "dns": {
       "zone": "Zona de DNS | Zonas de DNS",
       "record": "Registro de DNS | Registros de DNS"
