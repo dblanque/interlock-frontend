@@ -25,7 +25,7 @@
 					{{ $t("section.users.userBulkUpdate.step1") }}
 				</v-stepper-step>
 				<v-divider class="mx-3"
-				:style="stage > 1 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
+					:style="stage > 1 ? 'border-color: var(--v-primary-base) !important' : ''"></v-divider>
 				<v-stepper-step :complete="stage > 2" step="2" v-if="isLdapUser">
 					{{ $t("section.users.userBulkUpdate.step2") }}
 				</v-stepper-step>

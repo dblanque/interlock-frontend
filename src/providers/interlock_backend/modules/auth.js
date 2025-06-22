@@ -5,10 +5,10 @@
 import backend from "@/providers/interlock_backend/config";
 
 const calls = {
-    login: (data)=>{
+    login: (data) => {
         return new Promise((resolve, reject) => {
             backend.request.post(backend.urls.auth.token, data).then(response => {
-                if(!response || response.status == 401) {
+                if (!response || response.status == 401) {
                     reject(response)
                     console.log('Authentication Rejected')
                 }
@@ -33,7 +33,7 @@ const calls = {
             })
         })
     },
-    logout: (timeout=false) => {
+    logout: (timeout = false) => {
         const removeKeys = [
             "refreshClock",
             "username",

@@ -1,7 +1,7 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
 
-class DNSRecord extends ApiModel{
+class DNSRecord extends ApiModel {
 
     name;
     nameExchange;
@@ -24,27 +24,27 @@ class DNSRecord extends ApiModel{
     dwMinimumTtl;
     namePrimaryServer;
     zoneAdminEmail;
-    
+
     /**
      * Fetches model instance from API by id.
      * @param {Number} id 
      */
-     constructor(data){
+    constructor(data) {
         super(data)
         Object.keys(data).forEach(key => {
             this[key] = data[key];
         });
     }
 
-    async insert(data){
+    async insert(data) {
         return await interlock_backend.call('dnsr/insert', data)
     }
 
-    async update(data){
+    async update(data) {
         return await interlock_backend.call('dnsr/update', data)
     }
 
-    async delete(data){
+    async delete(data) {
         return await interlock_backend.call('dnsr/delete', data)
     }
 }

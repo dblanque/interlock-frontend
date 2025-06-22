@@ -2,31 +2,29 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------- File: ThemeChanger.vue ---------------------------->
 <template>
-<v-btn v-if="!buttonIsSwitch"
-    icon
-    v-model="darkMode"
-    :dark="dark"
-    :light="light"
-    @click="darkMode = !darkMode"
-    class="ma-0 pa-0"
-    :small="buttonIsSmall"
-    >
-    <v-icon id="toggler-input">mdi-contrast-circle</v-icon>
-</v-btn>
-<v-switch v-else
-    v-model="darkMode"
-    :dark="dark"
-    :light="light"
-    class="ma-0 pa-0"
-    hide-details
-    :label="$t('misc.darkMode')"
-></v-switch>
+    <v-btn v-if="!buttonIsSwitch"
+        icon
+        v-model="darkMode"
+        :dark="dark"
+        :light="light"
+        @click="darkMode = !darkMode"
+        class="ma-0 pa-0"
+        :small="buttonIsSmall">
+        <v-icon id="toggler-input">mdi-contrast-circle</v-icon>
+    </v-btn>
+    <v-switch v-else
+        v-model="darkMode"
+        :dark="dark"
+        :light="light"
+        class="ma-0 pa-0"
+        hide-details
+        :label="$t('misc.darkMode')"></v-switch>
 </template>
 
 <script>
 export default {
     name: 'ThemeChanger',
-    props:{
+    props: {
         dark: Boolean,
         light: Boolean,
         buttonIsSmall: Boolean,
@@ -71,5 +69,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

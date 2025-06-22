@@ -288,13 +288,20 @@
 				v-for="(cls, clsKey) in config"
 				:disabled="!settingClsEnabled(clsKey)"
 				:key="clsKey">
-				<v-expansion-panel-header ripple class="settings-category-header">
-					<v-row no-gutters justify="center">
+				<v-expansion-panel-header
+					ripple
+					class="settings-category-header">
+					<v-row
+						no-gutters
+						justify="center">
 						{{ $t(`section.settings.headers.${clsKey}.title`) }}
 					</v-row>
 				</v-expansion-panel-header>
-				<v-expansion-panel-content class="mt-6 mb-1 pa-0" eager>
-					<v-row v-if="clsKey == 'ldap'"
+				<v-expansion-panel-content
+					class="mt-6 mb-1 pa-0"
+					eager>
+					<v-row
+						v-if="clsKey == 'ldap'"
 						class="pa-0 ma-0"
 						justify="center"
 						align="center">
@@ -1106,9 +1113,11 @@ export default {
 	border-top: solid var(--v-gray-75-base) 1px;
 	border-bottom: 0;
 }
+
 .settings-category {
 	border-bottom: solid var(--v-gray-75-base) 1px;
 }
+
 .settings-category-header {
 	--border-width: 0em;
 	--border-color: var(--v-gray-75-base);
@@ -1116,10 +1125,12 @@ export default {
 	border-right: solid var(--border-color) var(--border-width);
 	transition: all 50ms ease-in-out !important;
 }
+
 .settings-category-header.v-expansion-panel-header--active {
 	--border-width: 0.75em;
 	--border-color: var(--v-primary-60-50-base);
 }
+
 .settings-category-header:hover {
 	--border-width: 1.5em;
 }

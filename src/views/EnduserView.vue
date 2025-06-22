@@ -67,7 +67,7 @@
 							{{ $t("section.enduser.helpMessage") }}
 						</v-alert>
 					</v-row>
-	
+
 					<v-form ref="endUserForm" @submit.prevent>
 						<!-- Details Row -->
 						<v-row align-content="center" class="ma-2 mt-0" v-if="isLDAPUser">
@@ -285,7 +285,7 @@
 								</v-expansion-panel>
 							</v-expansion-panels>
 						</v-row>
-	
+
 						<!-- DJANGO USER DATA -->
 						<v-row align-content="center" class="ma-2 mt-0" v-else>
 							<v-col class="ma-0 pa-0" cols="12">
@@ -524,7 +524,7 @@ export default {
 		isLocalUser() {
 			return this.user_type === "local"
 		},
-		allowPasswordChange(){
+		allowPasswordChange() {
 			if (this.isLDAPUser)
 				return this.user.can_change_pwd === true
 			return true

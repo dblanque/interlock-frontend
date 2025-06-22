@@ -4,7 +4,7 @@ export function dateFromFiletime(date) {
 	}
 	if (date == 0)
 		return date
-	var result = new Date(date/1e4 - 1.16444736e13)
+	var result = new Date(date / 1e4 - 1.16444736e13)
 	return result;
 }
 
@@ -23,20 +23,20 @@ export function dateLdapToString(date) {
 		console.log("Invalid timezone, must be Timezone Z (Zulu Time Zone, UTC/GMT)")
 	}
 	let dateString = date.toString()
-	let year = dateString.substring(0,4)
-	let month = dateString.substring(4,6)
-	let day = dateString.substring(6,8)
-	let hour = dateString.substring(8,10)
-	let min = dateString.substring(10,12)
-	let sec = dateString.substring(12,14)
+	let year = dateString.substring(0, 4)
+	let month = dateString.substring(4, 6)
+	let day = dateString.substring(6, 8)
+	let hour = dateString.substring(8, 10)
+	let min = dateString.substring(10, 12)
+	let sec = dateString.substring(12, 14)
 	let result = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
 	return result
 }
 
-export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch=undefined, childrenKey='children', searchResult=undefined){
+export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch = undefined, childrenKey = 'children', searchResult = undefined) {
 	// console.log(targetEntity.distinguishedName)
 	// If ID matches with current object
-	if (idToSearch == targetEntity.id){
+	if (idToSearch == targetEntity.id) {
 		if (targetEntity[keyToSearch] != undefined) {
 			searchResult = targetEntity[keyToSearch]
 			return searchResult
@@ -55,7 +55,7 @@ export function objectRecursiveSearch(targetEntity, idToSearch, keyToSearch=unde
 		targetEntity[childrenKey].forEach(child => {
 			if (!searchResult) {
 				searchResult = objectRecursiveSearch(child, idToSearch, keyToSearch, childrenKey, searchResult)
-				if (searchResult && searchResult != false && searchResult != undefined){
+				if (searchResult && searchResult != false && searchResult != undefined) {
 					return searchResult
 				}
 			}
@@ -76,9 +76,9 @@ const asyncLocalStorage = {
 	}
 };
 
-export function getDomainDetails(){
+export function getDomainDetails() {
 	let domainData = {}
-	for (let i = 0; i < localStorage.length; i++){
+	for (let i = 0; i < localStorage.length; i++) {
 		const key = localStorage.key(i)
 		if (key.startsWith("ldap.")) {
 			const val = localStorage.getItem(key)

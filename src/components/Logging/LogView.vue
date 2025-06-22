@@ -8,7 +8,7 @@
       :items="tableData.items"
       :custom-sort="sortNullLast"
       :loading="loading"
-			:show-expand="compactTable"
+      :show-expand="compactTable"
       :expanded.sync="expanded"
       :search="searchString"
       :footer-props="{
@@ -24,56 +24,55 @@
             v-model="searchString"
             clearable
             :label="$t('actions.search')"
-            class="mx-2"
-          ></v-text-field>
+            class="mx-2"></v-text-field>
           <v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end" align="center">
-              <refresh-button dense
-                :loading="loading"
-                @refresh="listLogs"/>
-              <v-btn class="pa-2 mx-2" :disabled="loading" color="primary" @click="openResetLogsDialog()">
-                <v-icon class="ma-0 pa-0 mr-1">mdi-fire</v-icon>
-                {{ $t('actions.delete') + ' ' + $tc('classes.log', 5) }}
-              </v-btn>
-            </v-row>
+            <refresh-button dense
+              :loading="loading"
+              @refresh="listLogs" />
+            <v-btn class="pa-2 mx-2" :disabled="loading" color="primary"
+              @click="openResetLogsDialog()">
+              <v-icon class="ma-0 pa-0 mr-1">mdi-fire</v-icon>
+              {{ $t('actions.delete') + ' ' + $tc('classes.log', 5) }}
+            </v-btn>
+          </v-row>
         </v-row>
         <!-- Log Truncate Actions -->
         <v-row class="ma-0 pa-0 px-4 mt-4" justify="center" align="center">
           <v-col cols="12" lg="6" class="ma-0 pa-0">
             <v-range-slider v-model="logTruncateRange"
-            :disabled="getLogTruncateMax<1"
-            :label="$t('section.logs.viewAction.truncate.slider')"
-            class="mx-4"
-            :min="getLogTruncateMin"
-            :max="getLogTruncateMax"
-            />
+              :disabled="getLogTruncateMax < 1"
+              :label="$t('section.logs.viewAction.truncate.slider')"
+              class="mx-4"
+              :min="getLogTruncateMin"
+              :max="getLogTruncateMax" />
           </v-col>
           <v-col cols="10" lg="3" class="ma-0 pa-0">
             <v-row class="ma-0 pa-0">
               <v-col class="ma-0 pa-0" cols="6">
-              <v-text-field class="mx-4"
-              :disabled="getLogTruncateMax<1"
-              @keypress="isNumber($event)"
-              :rules="[validMinimumLog]"
-              :label="$t('section.logs.viewAction.truncate.min')"
-              v-model="logTruncateRange[0]">
-              </v-text-field>
+                <v-text-field class="mx-4"
+                  :disabled="getLogTruncateMax < 1"
+                  @keypress="isNumber($event)"
+                  :rules="[validMinimumLog]"
+                  :label="$t('section.logs.viewAction.truncate.min')"
+                  v-model="logTruncateRange[0]">
+                </v-text-field>
               </v-col>
               <v-col class="ma-0 pa-0" cols="6">
-              <v-text-field class="mx-4"
-              :disabled="getLogTruncateMax<1"
-              @keypress="isNumber($event)"
-              :rules="[validMaximumLog]"
-              :label="$t('section.logs.viewAction.truncate.max')"
-              v-model="logTruncateRange[1]">
-              </v-text-field>
+                <v-text-field class="mx-4"
+                  :disabled="getLogTruncateMax < 1"
+                  @keypress="isNumber($event)"
+                  :rules="[validMaximumLog]"
+                  :label="$t('section.logs.viewAction.truncate.max')"
+                  v-model="logTruncateRange[1]">
+                </v-text-field>
               </v-col>
             </v-row>
           </v-col>
           <v-col cols="12" lg="3" xl="2" class="ma-0 my-4 pa-0">
             <v-btn @click="openTruncateLogsDialog"
-            outlined 
-            class="mx-4 pa-0 px-2" 
-            color="primary">
+              outlined
+              class="mx-4 pa-0 px-2"
+              color="primary">
               <v-icon class="mr-2">
                 mdi-content-cut
               </v-icon>
@@ -83,8 +82,8 @@
         </v-row>
       </template>
 
-			<template v-slot:expanded-item="{ headers, item }">
-				<td :colspan="headers.length">
+      <template v-slot:expanded-item="{ headers, item }">
+        <td :colspan="headers.length">
           <v-row
             justify="start"
             class="ma-0 pa-0 my-3 mx-2"
@@ -122,93 +121,110 @@
             justify="start"
             class="ma-0 pa-0 my-3 mx-2"
             v-if="item.extraMessage && item.extraMessage.length >= 1">
-            {{ $t('section.logs.extras.'+ (item.extraMessage.toLowerCase()) ) }}
+            {{ $t('section.logs.extras.' + (item.extraMessage.toLowerCase())) }}
           </v-row>
-				</td>
-			</template>
+        </td>
+      </template>
 
       <template v-slot:[`item.actionType`]="{ item }">
-          <v-chip :color="getColorForActionType(item.actionType)[0]" :class="'text-' + (getColorForActionType(item.actionType)[1] || 'inverted')" :text-color="getColorForActionType(item.actionType)[1] || undefined">
-              {{ $t("section.logs.actionType." + item.actionType) }}
-          </v-chip>
+        <v-chip :color="getColorForActionType(item.actionType)[0]"
+          :class="'text-' + (getColorForActionType(item.actionType)[1] || 'inverted')"
+          :text-color="getColorForActionType(item.actionType)[1] || undefined">
+          {{ $t("section.logs.actionType." + item.actionType) }}
+        </v-chip>
       </template>
 
       <template v-slot:[`item.date`]="{ item }">
-            {{ parseDateToLocalTZ(item.date) }}
+        {{ parseDateToLocalTZ(item.date) }}
       </template>
 
       <template v-slot:[`item.objectClass`]="{ item }">
-          <v-row justify="center" align="center" class="px-6 my-2">
-              <v-icon class="mr-2" :small="$vuetify.breakpoint.mdAndDown" :color="getIconForObjectClass(item.objectClass)[1] || undefined">
-                  {{ getIconForObjectClass(item.objectClass)[0] }}
-              </v-icon>
-              <span>
-                  {{ $tc('classes.' + getObjectClassTranslationKey(item.objectClass), 1) }}
-              </span>
-          </v-row>
+        <v-row justify="center" align="center" class="px-6 my-2">
+          <v-icon class="mr-2" :small="$vuetify.breakpoint.mdAndDown"
+            :color="getIconForObjectClass(item.objectClass)[1] || undefined">
+            {{ getIconForObjectClass(item.objectClass)[0] }}
+          </v-icon>
+          <span>
+            {{ $tc('classes.' + getObjectClassTranslationKey(item.objectClass), 1) }}
+          </span>
+        </v-row>
       </template>
 
       <template v-slot:[`item.affectedObject`]="{ item }">
         <div class="py-2">
-          <v-menu :close-on-content-click="false" 
-          top v-if="item.affectedObject && Array.isArray(item.affectedObject) && item.affectedObject.length > 0">
+          <v-menu :close-on-content-click="false"
+            top
+            v-if="item.affectedObject && Array.isArray(item.affectedObject) && item.affectedObject.length > 0">
             <template v-slot:activator="{ on, attrs }">
               <v-btn v-bind="attrs" v-on="on"
-              style="min-width: 32px;" elevation="0" text class="pa-0 px-2 pr-3" color="primary">
-              <v-icon class="mr-2">
-                mdi-information
-              </v-icon>
-              {{ $t('section.logs.seeDetails') }}
+                style="min-width: 32px;" elevation="0" text class="pa-0 px-2 pr-3" color="primary">
+                <v-icon class="mr-2">
+                  mdi-information
+                </v-icon>
+                {{ $t('section.logs.seeDetails') }}
               </v-btn>
             </template>
             <v-list class="pa-2">
-              <span v-for="i, k in item.affectedObject" :key="k">
+              <span
+                v-for="i, k in item.affectedObject"
+                :key="k">
                 <v-list-item-title>
                   {{ typeof i === 'object' ? i.name : i }}
                 </v-list-item-title>
-                <v-list-item-subtitle class="my-2" v-if="typeof i === 'object' && i.old_value">
-                  <v-chip outlined class="ml-4">
+                <v-list-item-subtitle
+                  class="my-2"
+                  v-if="typeof i === 'object' && i.old_value">
+                  <v-chip
+                    outlined
+                    class="ml-4">
                     {{ $t("section.logs.prevValue") + ": " + i.old_value }}
                   </v-chip>
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="my-2" v-if="typeof i === 'object' && i.new_value">
-                  <v-chip outlined class="ml-4">
+                <v-list-item-subtitle
+                  class="my-2"
+                  v-if="typeof i === 'object' && i.new_value">
+                  <v-chip
+                    outlined
+                    class="ml-4">
                     {{ $t("section.logs.newValue") + ": " + i.new_value }}
                   </v-chip>
                 </v-list-item-subtitle>
               </span>
             </v-list>
           </v-menu>
-          <v-tooltip bottom v-else-if="item.affectedObject && item.affectedObject.length > 0">
-              <template v-slot:activator="{ on, attrs }">
-                  <v-chip
-                    @click="copyToClipboard(item.affectedObject)"
-                    v-on="on"
-                    v-bind="attrs"
-                    class="mx-1"
-                    outlined>
-                    {{ truncateString(item.affectedObject) }}
-                  </v-chip>
-              </template>
-              <span>{{ item.affectedObject }}</span>
+          <v-tooltip
+            bottom
+            v-else-if="item.affectedObject && item.affectedObject.length > 0">
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip
+                @click="copyToClipboard(item.affectedObject)"
+                v-on="on"
+                v-bind="attrs"
+                class="mx-1"
+                outlined>
+                {{ truncateString(item.affectedObject) }}
+              </v-chip>
+            </template>
+            <span>{{ item.affectedObject }}</span>
           </v-tooltip>
         </div>
       </template>
 
       <template v-slot:[`item.extraMessage`]="{ item }">
         <v-chip class="ma-0 pa-0 hide-chip" color="transparent" v-if="item.extraMessage">
-          {{ $t('section.logs.extras.'+ (item.extraMessage.toLowerCase()) ) }}
+          {{ $t('section.logs.extras.' + (item.extraMessage.toLowerCase())) }}
         </v-chip>
       </template>
     </v-data-table>
 
-    <v-dialog v-model="resetDialog" max-width="650px">
-        <LogResetDialog
+    <v-dialog
+      v-model="resetDialog"
+      max-width="650px">
+      <LogResetDialog
         :logAction="logAction"
         @resetConfirm="resetLogs"
         @truncateConfirm="truncateLogs"
-        @closeDialog="resetDialog = false"
-        />
+        @closeDialog="resetDialog = false" />
     </v-dialog>
   </div>
 </template>
@@ -223,7 +239,7 @@ import utilsMixin from '@/plugins/mixin/utilsMixin.js'
 
 export default {
   name: 'LogView',
-  mixins: [ validationMixin, utilsMixin ],
+  mixins: [validationMixin, utilsMixin],
   components: {
     LogResetDialog,
     RefreshButton
@@ -251,7 +267,7 @@ export default {
     }
   },
   computed: {
-    getLogTruncateMin(){
+    getLogTruncateMin() {
       if (this.tableData.items.length < 1)
         return 0
       let ids = this.tableData.items.map(log => {
@@ -259,7 +275,7 @@ export default {
       });
       return ids.sort((a, b) => a > b)[0]
     },
-    getLogTruncateMax(){
+    getLogTruncateMax() {
       if (this.tableData.items.length < 1)
         return 0
       let ids = this.tableData.items.map(log => {
@@ -268,16 +284,16 @@ export default {
       ids = ids.sort((a, b) => a > b)
       return ids[ids.length - 1]
     },
-    compactTable(){
+    compactTable() {
       return this.$vuetify.breakpoint.lgAndDown
     },
-    dynamicTableHeaders(){
+    dynamicTableHeaders() {
       let _excluded = [
         "affectedObject",
         "extraMessage",
       ]
       if (this.compactTable) {
-        return this.tableData.headers.filter( h => (!(_excluded.includes(h.value))) )
+        return this.tableData.headers.filter(h => (!(_excluded.includes(h.value))))
       }
       else {
         this.expanded = [];
@@ -292,7 +308,7 @@ export default {
     viewTitle: String
   },
   methods: {
-    copyToClipboard(v){
+    copyToClipboard(v) {
       if (typeof v !== 'string') {
         console.error("Cannot copy non-string value to clipboard")
         return
@@ -303,7 +319,7 @@ export default {
         type: 'info',
       });
     },
-    truncateString(s, len=32){
+    truncateString(s, len = 32) {
       if (typeof s !== 'string') {
         console.error(`s must be of type String (type: ${typeof s})`);
         return ""
@@ -311,193 +327,193 @@ export default {
       if (s.length <= len) return s
       return s.slice(0, len) + " (...)"
     },
-    validMinimumLog(v){
+    validMinimumLog(v) {
       if (isNaN(v)) return false
       return v >= this.getLogTruncateMin
     },
-    validMaximumLog(v){
+    validMaximumLog(v) {
       if (isNaN(v)) return false
       return v <= this.getLogTruncateMax
     },
-    parseDateToLocalTZ(dateStr){
+    parseDateToLocalTZ(dateStr) {
       var dateObject = new Date(dateStr)
       var dateString = ""
-      dateString += dateObject.toLocaleDateString(this.$i18n.locale, {day: 'numeric'}).padStart(2, '0') + "-"
-      dateString += dateObject.toLocaleDateString(this.$i18n.locale, {month: 'numeric'}).padStart(2, '0') + "-"
-      dateString += dateObject.toLocaleDateString(this.$i18n.locale, {year: 'numeric'}) + " "
-      dateString += dateObject.toLocaleTimeString(this.$i18n.locale, {hour12: false})
+      dateString += dateObject.toLocaleDateString(this.$i18n.locale, { day: 'numeric' }).padStart(2, '0') + "-"
+      dateString += dateObject.toLocaleDateString(this.$i18n.locale, { month: 'numeric' }).padStart(2, '0') + "-"
+      dateString += dateObject.toLocaleDateString(this.$i18n.locale, { year: 'numeric' }) + " "
+      dateString += dateObject.toLocaleTimeString(this.$i18n.locale, { hour12: false })
       dateString += " UTC" + (dateObject.getTimezoneOffset() / 60) * -1
       return dateString
     },
-    createSnackbar(notifObj){
+    createSnackbar(notifObj) {
       notificationBus.$emit('createNotification', notifObj);
     },
-    resetSearch(){
+    resetSearch() {
       this.searchString = ""
     },
-    getObjectClassTranslationKey(objectClass){
-        switch (objectClass) {
-            case 'USER':
-                return 'user'
-            case 'GROUP':
-                return 'group'
-            case 'OU':
-                return 'organizational-unit'
-            case 'DOM':
-                return 'domain-entry'
-            case 'GPO':
-                return 'group-policy-object'
-            case 'CONN':
-                return 'connection'
-            case 'SET':
-                return 'setting'
-            case 'DNSZ':
-                return 'dns.zone'
-            case 'DNSR':
-                return 'dns.record'
-            default:
-                return 'ldap'
-        }
+    getObjectClassTranslationKey(objectClass) {
+      switch (objectClass) {
+        case 'USER':
+          return 'user'
+        case 'GROUP':
+          return 'group'
+        case 'OU':
+          return 'organizational-unit'
+        case 'DOM':
+          return 'domain-entry'
+        case 'GPO':
+          return 'group-policy-object'
+        case 'CONN':
+          return 'connection'
+        case 'SET':
+          return 'setting'
+        case 'DNSZ':
+          return 'dns.zone'
+        case 'DNSR':
+          return 'dns.record'
+        default:
+          return 'ldap'
+      }
     },
-    getColorForActionType(actionType){
-        switch (actionType) {
-            // First color is Chip BG, second is text color
-            case 'CREATE':
-                return ['green','white']
-            case 'READ':
-                return ['primary','white']
-            case 'UPDATE':
-                return ['orange','white']
-            case 'DELETE':
-                return ['secondary-s','white']
-            default:
-                return ['secondary-s','white']
-        }
+    getColorForActionType(actionType) {
+      switch (actionType) {
+        // First color is Chip BG, second is text color
+        case 'CREATE':
+          return ['green', 'white']
+        case 'READ':
+          return ['primary', 'white']
+        case 'UPDATE':
+          return ['orange', 'white']
+        case 'DELETE':
+          return ['secondary-s', 'white']
+        default:
+          return ['secondary-s', 'white']
+      }
     },
-    getIconForObjectClass(objectClass){
-        switch (objectClass) {
-            case 'USER':
-                return ['mdi-account', 'primary']
-            case 'GROUP':
-                return ['mdi-account-multiple', 'primary-30']
-            case 'OU':
-                return ['mdi-folder', 'secondary']
-            case 'DOM':
-                return ['mdi-dns']
-            case 'GPO':
-                return ['mdi-google-circles-extended']
-            case 'CONN':
-                return ['mdi-web', 'orange']
-            case 'SET':
-                return ['mdi-cog', 'orange']
-            case 'DNSZ':
-                return ['mdi-google-circles', 'orange']
-            case 'DNSR':
-                return ['mdi-google-circles-group', 'orange']
-            default:
-                return ['mdi-group']
-        }
+    getIconForObjectClass(objectClass) {
+      switch (objectClass) {
+        case 'USER':
+          return ['mdi-account', 'primary']
+        case 'GROUP':
+          return ['mdi-account-multiple', 'primary-30']
+        case 'OU':
+          return ['mdi-folder', 'secondary']
+        case 'DOM':
+          return ['mdi-dns']
+        case 'GPO':
+          return ['mdi-google-circles-extended']
+        case 'CONN':
+          return ['mdi-web', 'orange']
+        case 'SET':
+          return ['mdi-cog', 'orange']
+        case 'DNSZ':
+          return ['mdi-google-circles', 'orange']
+        case 'DNSR':
+          return ['mdi-google-circles-group', 'orange']
+        default:
+          return ['mdi-group']
+      }
     },
-    openDialog(key){
+    openDialog(key) {
       this.dialogs[key] = true;
       switch (key) {
         default:
           break;
       }
     },
-    async closeDialog(key, refresh=false){
+    async closeDialog(key, refresh = false) {
       this.dialogs[key] = false;
       if (refresh)
         this.listLogs()
     },
     // Reload Data Table Header Labels
-    reloadDataTableHeaders(){
+    reloadDataTableHeaders() {
       this.tableData.headers.forEach(tableHeader => {
         if (tableHeader.value != undefined)
           tableHeader.text = this.$t('section.logs.headers.' + tableHeader.value)
       });
     },
     // Reset Data Table variables
-    resetDataTable(){
+    resetDataTable() {
       this.tableData.headers = []
       this.tableData.items = []
     },
     // Log Actions
-    async listLogs(emitNotif = true){
+    async listLogs(emitNotif = true) {
       this.loading = true
       this.error = false
       this.tableData.headers = []
       this.tableData.items = []
       await new Log({}).list()
-      .then(response => {
-        let logHeaders = response.headers
-        let logs = response.logs
-        // Reset Headers Array every time you list to avoid infinite header multiplication
-        this.resetDataTable()
-        let headerDict = {}
-        logHeaders.forEach(header => {
-          headerDict = {}
-          headerDict.text = this.$t('section.logs.headers.' + header)
-          headerDict.value = header
-          if (header == 'actionType' || header == 'objectClass') {
-            headerDict.align = 'center'
-          }
-          this.tableData.headers.push(headerDict)
-        });
-        this.tableData.items = logs
-        this.loading = false
-        this.error = false
-        if (emitNotif)
-          this.createSnackbar({
-            message: (this.$tc("classes.log", logs.length) + " " + this.$tc("words.loaded.m", logs.length)).toUpperCase(),
-            type: 'success'
-          })
-        this.logTruncateRange = [ this.getLogTruncateMin, this.getLogTruncateMax ]
-      })
-      .catch(error => {
-        console.error(error)
-        this.loading = false
-        this.error = true
-        this.createSnackbar({message: this.getMessageForCode(error), type: 'error'})
-      })
+        .then(response => {
+          let logHeaders = response.headers
+          let logs = response.logs
+          // Reset Headers Array every time you list to avoid infinite header multiplication
+          this.resetDataTable()
+          let headerDict = {}
+          logHeaders.forEach(header => {
+            headerDict = {}
+            headerDict.text = this.$t('section.logs.headers.' + header)
+            headerDict.value = header
+            if (header == 'actionType' || header == 'objectClass') {
+              headerDict.align = 'center'
+            }
+            this.tableData.headers.push(headerDict)
+          });
+          this.tableData.items = logs
+          this.loading = false
+          this.error = false
+          if (emitNotif)
+            this.createSnackbar({
+              message: (this.$tc("classes.log", logs.length) + " " + this.$tc("words.loaded.m", logs.length)).toUpperCase(),
+              type: 'success'
+            })
+          this.logTruncateRange = [this.getLogTruncateMin, this.getLogTruncateMax]
+        })
+        .catch(error => {
+          console.error(error)
+          this.loading = false
+          this.error = true
+          this.createSnackbar({ message: this.getMessageForCode(error), type: 'error' })
+        })
       this.$emit('done')
     },
-    openResetLogsDialog(){
+    openResetLogsDialog() {
       this.resetDialog = true
       this.logAction = 'reset'
     },
-    openTruncateLogsDialog(){
+    openTruncateLogsDialog() {
       this.resetDialog = true
       this.logAction = 'truncate'
     },
-    async resetLogs(){
+    async resetLogs() {
       await new Log({}).reset()
-      .then(() => {
-        this.resetDialog = false
-        this.logAction = ""
-        this.listLogs()
-      })
-      .catch(error => {
-        console.error(error)
-        this.resetDialog = false
-        this.logAction = ""
-      })
+        .then(() => {
+          this.resetDialog = false
+          this.logAction = ""
+          this.listLogs()
+        })
+        .catch(error => {
+          console.error(error)
+          this.resetDialog = false
+          this.logAction = ""
+        })
     },
     async truncateLogs() {
       var data = {}
       data['min'] = this.logTruncateRange[0]
       data['max'] = this.logTruncateRange[1]
       await new Log({}).truncate(data)
-      .then(() => {
-        this.resetDialog = false
-        this.logAction = ""
-        this.listLogs()
-      })
-      .catch(error => {
-        console.error(error)
-        this.resetDialog = false
-        this.logAction = ""
-      })
+        .then(() => {
+          this.resetDialog = false
+          this.logAction = ""
+          this.listLogs()
+        })
+        .catch(error => {
+          console.error(error)
+          this.resetDialog = false
+          this.logAction = ""
+        })
     }
   },
 }

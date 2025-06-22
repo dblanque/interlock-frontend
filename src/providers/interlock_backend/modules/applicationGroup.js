@@ -65,7 +65,7 @@ const actions = {
 
 	change_status: (data) => {
 		return new Promise((resolve, reject) => {
-			interlock_backend.request.patch(interlock_backend.urls.applicationGroup.change_status.replace("{pk}", data.id), {enabled: data.enabled}).then(response => {
+			interlock_backend.request.patch(interlock_backend.urls.applicationGroup.change_status.replace("{pk}", data.id), { enabled: data.enabled }).then(response => {
 				resolve(response.data)
 			}).catch((e) => {
 				reject(e)

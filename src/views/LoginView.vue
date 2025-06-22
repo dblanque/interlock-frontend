@@ -367,7 +367,7 @@ export default {
 					}
 				})
 				.catch(e => {
-					if (!ignoreErrorCodes.includes(e.status)){
+					if (!ignoreErrorCodes.includes(e.status)) {
 						console.error(e)
 						this.viewModes.login = true
 					} else {

@@ -6,7 +6,7 @@ import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
 
-    list: ()=>{
+    list: () => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.totp.list).then(response => {
                 resolve(response.data)
@@ -16,7 +16,7 @@ const actions = {
         })
     },
 
-    create: ()=>{
+    create: () => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.totp.create).then(response => {
                 resolve(response.data)
@@ -26,7 +26,7 @@ const actions = {
         })
     },
 
-    validate: (data)=>{
+    validate: (data) => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.put(interlock_backend.urls.totp.validate, data).then(response => {
                 resolve(response.data)
@@ -36,7 +36,7 @@ const actions = {
         })
     },
 
-    delete: ()=>{
+    delete: () => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.delete(interlock_backend.urls.totp.delete).then(response => {
                 resolve(response.data)

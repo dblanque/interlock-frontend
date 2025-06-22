@@ -1,20 +1,20 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
 
-class TOTPDevice extends ApiModel{
+class TOTPDevice extends ApiModel {
 
-	device_name;
+    device_name;
     config_url;
-	label;
-	// tolerance;
-	// drift;
-	// digits;
+    label;
+    // tolerance;
+    // drift;
+    // digits;
 
     /**
      * Fetches model instance from API by id.
      * @param {Number} id 
      */
-     constructor(data){
+    constructor(data) {
         super(data)
         Object.keys(data).forEach(key => {
             this[key] = data[key];
@@ -25,7 +25,7 @@ class TOTPDevice extends ApiModel{
      * Creates TOTP Device with URI for User, Standard Call.
      * @returns Response Promise, Exception on Failure.
      */
-    async create(){
+    async create() {
         return await interlock_backend.call('totp/create')
     }
 
@@ -33,15 +33,15 @@ class TOTPDevice extends ApiModel{
      * Validates TOTP Device with TOTP Code from User, Standard Call.
      * @returns Response Promise, Exception on Failure.
      */
-    async validate(data){
+    async validate(data) {
         return await interlock_backend.call('totp/validate', data)
     }
 
-    async delete(){
+    async delete() {
         return await interlock_backend.call('totp/delete')
     }
 
-    async list(){
+    async list() {
         return await interlock_backend.call('totp/list')
     }
 }

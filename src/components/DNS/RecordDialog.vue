@@ -281,8 +281,10 @@
 					<v-slide-x-reverse-transition>
 						<v-chip text-color="white" class="mr-2" v-if="submitted == true"
 							:color="error == true ? 'red' : 'green'">
-							{{ errorMsg == "" ? $t('section.dns.' + (updateFlag ? 'update' : 'create'
-							) +'Success') : errorMsg }}
+							{{
+								errorMsg == "" ?
+								$t(`section.dns.${updateFlag ? 'update' : 'create'}Success`) : errorMsg
+							}}
 						</v-chip>
 					</v-slide-x-reverse-transition>
 
@@ -492,7 +494,7 @@ export default {
 		this.syncRecord();
 	},
 	methods: {
-		confirmAction(){
+		confirmAction() {
 			this.updateFlag == true ? this.updateRecord() : this.createRecord()
 		},
 		isNodeNameRecord(type) {

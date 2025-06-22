@@ -724,7 +724,7 @@ export default {
             objectClassFilter.splice(objectClassFilter.indexOf(i), 1)
         }
       }
-      if (objectClassFilter.length==0)
+      if (objectClassFilter.length == 0)
         delete this.filters['exclude']['objectClass']
       return this.fetchDirtree()
     },

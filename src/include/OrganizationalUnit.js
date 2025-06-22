@@ -1,8 +1,8 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
 
-class OrganizationalUnit extends ApiModel{
-    
+class OrganizationalUnit extends ApiModel {
+
     distinguishedName;
     attributes;
 
@@ -10,38 +10,38 @@ class OrganizationalUnit extends ApiModel{
      * Fetches model instance from API by id.
      * @param {Number} id 
      */
-     constructor(data){
+    constructor(data) {
         super(data)
         Object.keys(data).forEach(key => {
             this[key] = data[key];
         });
     }
 
-    async list(){
+    async list() {
         return await interlock_backend.call('ou/list')
     }
 
-    async filter(objectArray){
+    async filter(objectArray) {
         return await interlock_backend.call('ou/filter', objectArray)
     }
 
-    async dirtree(filter){
+    async dirtree(filter) {
         return await interlock_backend.call('ou/dirtree', filter)
     }
 
-    async move(data){
+    async move(data) {
         return await interlock_backend.call('ou/move', data)
     }
 
-    async rename(data){
+    async rename(data) {
         return await interlock_backend.call('ou/rename', data)
     }
 
-    async insert(data){
+    async insert(data) {
         return await interlock_backend.call('ou/insert', data)
     }
 
-    async delete(data){
+    async delete(data) {
         return await interlock_backend.call('ou/delete', data)
     }
 }

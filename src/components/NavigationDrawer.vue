@@ -178,7 +178,7 @@ export default {
 			this.navDrawerOpen = true;
 	},
 	methods: {
-		closeAllNavGroups(){
+		closeAllNavGroups() {
 			this.openedGroup = {}
 		},
 		setNavDrawerKeepOpen() {

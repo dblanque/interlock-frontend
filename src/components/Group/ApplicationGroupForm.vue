@@ -109,7 +109,7 @@ export default {
 		},
 	},
 	methods: {
-		init(options={}) {
+		init(options = {}) {
 			if (options?.fetch_lists !== false)
 				this.$refs.AddLDAPGroup.fetchLists()
 			if (options?.clear_data !== false)

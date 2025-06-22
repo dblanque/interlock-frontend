@@ -91,7 +91,8 @@
 
 						<v-row align-content="center" justify="center" class="ma-0 pa-0 mt-4 px-1">
 							<v-col cols="8" class="ma-0 pa-0">
-								<v-alert :color="isThemeDark($vuetify) ? 'accent-75-s':'primary-55-s'" type="info" text v-if="isBuiltIn()">
+								<v-alert :color="isThemeDark($vuetify) ? 'accent-75-s' : 'primary-55-s'" type="info"
+									text v-if="isBuiltIn()">
 									{{ $t("section.groups.groupDialog.typeInBuiltinReadOnly") }}
 								</v-alert>
 							</v-col>
@@ -100,7 +101,7 @@
 									:group-types="groupcopy.group_types"
 									:group-scopes="groupcopy.group_scopes"
 									@update-type="(v) => groupcopy.group_types = v"
-									@update-scope="(v) => groupcopy.group_scopes = v"/>
+									@update-scope="(v) => groupcopy.group_scopes = v" />
 							</v-col>
 						</v-row>
 
@@ -395,8 +396,8 @@ export default {
 			if (!this.groupcopy?.distinguished_name || this.groupcopy?.distinguished_name.length < 1)
 				return false
 			return this.groupcopy.distinguished_name
-							.toLowerCase()
-							.includes("cn=builtin");
+				.toLowerCase()
+				.includes("cn=builtin");
 		},
 		exit() {
 			this.showAlert = false

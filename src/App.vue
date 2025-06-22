@@ -75,6 +75,7 @@ body {
   height: min-content;
   background-color: var(--v-gray-90-base);
 }
+
 #app {
   height: 100%;
   font-family: Montserrat !important;
@@ -87,13 +88,14 @@ body {
 
 nav {
   padding: 30px;
+
   a {
     font-weight: bold;
     color: #2c3e50;
+
     &.router-link-exact-active {
       color: #42b983;
     }
   }
 }
-
 </style>

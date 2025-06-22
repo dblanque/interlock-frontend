@@ -14,14 +14,14 @@ export const getRuntimeConfig = async () => {
 }
 
 const local_config = await getRuntimeConfig()
-.then(function(json) {
-    return {
-        backend_url: json.backend_url,
-        ssl: json.ssl,
-        reject_unauthorized: json.reject_unauthorized,
-        version: json.version
-    }
-})
+    .then(function (json) {
+        return {
+            backend_url: json.backend_url,
+            ssl: json.ssl,
+            reject_unauthorized: json.reject_unauthorized,
+            version: json.version
+        }
+    })
 
 // Sets content type to json utf-8 default.
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
@@ -36,7 +36,7 @@ if (local_config.ssl == true) {
 else {
     urlPrefix = "http://"
 }
-const base_url =  urlPrefix + local_config.backend_url + "/";
+const base_url = urlPrefix + local_config.backend_url + "/";
 // const base_url =  "http://127.0.0.1:8000/";
 
 var request
@@ -191,7 +191,7 @@ const eraseLocalUserData = () => {
         "email",
         "admin_allowed",
     ]
-    localUserKeys.forEach(v=>{
+    localUserKeys.forEach(v => {
         localStorage.removeItem(`user.${v}`)
     })
     return
@@ -221,7 +221,7 @@ request.interceptors.request.use(
     function (error) {
         // Do something with request error
         return Promise.reject(error);
-});
+    });
 
 // Adds Axios Response Interceptor.
 request.interceptors.response.use(
@@ -229,7 +229,7 @@ request.interceptors.response.use(
     (response) => {
         // do nothing.
         return response
-    }, 
+    },
     // On Request Error...
     async (error) => {
         // Get Configuration of failed request.
@@ -252,31 +252,31 @@ request.interceptors.response.use(
             originalRequest._retry = true;
             // Send refresh token request.
             let tokenRefreshAxios = axios.create(axios_opts)
-            return tokenRefreshAxios.post(base_url+urls.auth.tokenRefresh)
-            // then, if refresh request succeeds.
-            .then(response => {
-                tokenIsRefreshing = false
-                var date = new Date()
-                // 1) Set tokens on LocalStorage.
-                localStorage.setItem('auth.refreshClock', date)
-                localStorage.setItem('auth.access_expire', response.data.access_expire)
-                localStorage.setItem('auth.refresh_expire', response.data.refresh_expire)
-                // 2) Return re-sent request through new axios.
-                return axios(originalRequest);
-            // on refresh request error catch
-            }).catch((e)=>{
-                tokenIsRefreshing = false
-                if (e.status != undefined && !ignoreErrorCodes.includes(e.status))
-                    console.error(e)
-                if (e?.response?.status == 401) {
-                    // erase local storage and go to Index Login.
-                    eraseLocalUserData()
-                    if (router.app.$route.path != "/login")
-                        router.push('/login')
-                }
-                return Promise.reject(error.response)
-            })
-        // Else, if the error is other than Unauthorized...
+            return tokenRefreshAxios.post(base_url + urls.auth.tokenRefresh)
+                // then, if refresh request succeeds.
+                .then(response => {
+                    tokenIsRefreshing = false
+                    var date = new Date()
+                    // 1) Set tokens on LocalStorage.
+                    localStorage.setItem('auth.refreshClock', date)
+                    localStorage.setItem('auth.access_expire', response.data.access_expire)
+                    localStorage.setItem('auth.refresh_expire', response.data.refresh_expire)
+                    // 2) Return re-sent request through new axios.
+                    return axios(originalRequest);
+                    // on refresh request error catch
+                }).catch((e) => {
+                    tokenIsRefreshing = false
+                    if (e.status != undefined && !ignoreErrorCodes.includes(e.status))
+                        console.error(e)
+                    if (e?.response?.status == 401) {
+                        // erase local storage and go to Index Login.
+                        eraseLocalUserData()
+                        if (router.app.$route.path != "/login")
+                            router.push('/login')
+                    }
+                    return Promise.reject(error.response)
+                })
+            // Else, if the error is other than Unauthorized...
         } else
             // Return error response.
             return Promise.reject(error)

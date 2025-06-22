@@ -22,22 +22,37 @@
 			</v-btn>
 		</template>
 		<!-- Inner Content -->
-		<v-list flat class="px-2" :dense="denseMenu">
+		<v-list
+			flat
+			class="px-2"
+			:dense="denseMenu">
 			<v-list-item-group>
 				<v-list-item>
 					{{ username }}
 				</v-list-item>
 			</v-list-item-group>
-			<v-divider style="border-color: var(--v-primary-base)" class="my-1 mx-4" />
+			<v-divider
+				style="border-color: var(--v-primary-base)"
+				class="my-1 mx-4" />
 			<v-list-item-group>
-				<v-list-item v-for="v, k in entries" :key="k" link @click="doFn(v.action)">
+				<v-list-item
+					v-for="v, k in entries"
+					:key="k"
+					link
+					@click="doFn(v.action)">
 					<v-list-item-action class="ma-0 pa-0">
 						<v-row>
-							<v-icon color="primary" v-if="v.prepend_icon.length > 0" class="mr-2">
+							<v-icon
+								color="primary"
+								v-if="v.prepend_icon.length > 0"
+								class="mr-2">
 								{{ v.prepend_icon }}
 							</v-icon>
 							{{ $t(v.i18n_string) }}
-							<v-icon color="primary" v-if="v.append_icon.length > 0" class="ml-2">
+							<v-icon
+								color="primary"
+								v-if="v.append_icon.length > 0"
+								class="ml-2">
 								{{ v.append_icon }}
 							</v-icon>
 						</v-row>

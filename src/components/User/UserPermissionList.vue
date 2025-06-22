@@ -45,7 +45,9 @@
 								</v-list-item-subtitle>
 							</v-list-item-content>
 							<v-list-item-action>
-								<v-checkbox :disabled="!editFlag" @click="togglePermission(p_key)"
+								<v-checkbox
+									:disabled="!editFlag"
+									@click="togglePermission(p_key)"
 									v-model="permissions[p_key].value"></v-checkbox>
 							</v-list-item-action>
 						</v-list-item>
@@ -54,16 +56,29 @@
 			</v-card>
 		</v-col>
 		<!-- Enabled Permissions Panel -->
-		<v-col class="ma-0 pa-0" cols="12" md="4" v-if="!hideSidebar">
-			<v-card height="100%" :class="'ma-0 pa-0 ' + marginRawOutputCol" flat
+		<v-col
+			class="ma-0 pa-0"
+			cols="12"
+			md="4"
+			v-if="!hideSidebar">
+			<v-card
+				height="100%"
+				:class="'ma-0 pa-0 ' + marginRawOutputCol"
+				flat
 				:outlined="!hideOutlines">
-				<v-row height="100%" class="ma-1 pa-4">
-					<v-row justify="center" class="pa-0 ma-0 text-h6 mx-4 mb-5">
+				<v-row
+					height="100%"
+					class="ma-1 pa-4">
+					<v-row
+						justify="center"
+						class="pa-0 ma-0 text-h6 mx-4 mb-5">
 						{{ $t('section.users.permsRaw') }}
 					</v-row>
 					<v-row class="pa-0 ma-0 font-weight-medium">
-						<a href="https://docs.microsoft.com/en-US/troubleshoot/windows-server/identity/useraccountcontrol-manipulate-account-properties"
-							target="_blank" class="text-white">
+						<a
+							href="https://docs.microsoft.com/en-US/troubleshoot/windows-server/identity/useraccountcontrol-manipulate-account-properties"
+							target="_blank"
+							class="text-white">
 							<v-alert type="info">
 								{{ $t('section.users.permsRawHint') }}
 							</v-alert>
@@ -71,13 +86,22 @@
 					</v-row>
 					<v-row>
 						<v-col cols="12">
-							<v-textarea hide-details :label="$t('section.users.permsOutputArray')"
-								:outlined="!hideOutlines" readonly v-model="enabledPermList" auto-grow>
+							<v-textarea
+								hide-details
+								:label="$t('section.users.permsOutputArray')"
+								:outlined="!hideOutlines"
+								readonly
+								v-model="enabledPermList"
+								auto-grow>
 							</v-textarea>
 						</v-col>
 						<v-col cols="12">
-							<v-text-field hide-details :label="$t('section.users.permsCalc')"
-								:outlined="!hideOutlines" readonly v-model="enabledPermInts">
+							<v-text-field
+								hide-details
+								:label="$t('section.users.permsCalc')"
+								:outlined="!hideOutlines"
+								readonly
+								v-model="enabledPermInts">
 							</v-text-field>
 						</v-col>
 					</v-row>

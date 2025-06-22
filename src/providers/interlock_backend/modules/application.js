@@ -5,7 +5,7 @@
 import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
-	list: ()=>{
+	list: () => {
 		return new Promise((resolve, reject) => {
 			interlock_backend.request.get(interlock_backend.urls.application.base).then(response => {
 				resolve(response.data)
@@ -15,7 +15,7 @@ const actions = {
 		})
 	},
 
-	insert: (data)=>{
+	insert: (data) => {
 		return new Promise((resolve, reject) => {
 			interlock_backend.request.post(interlock_backend.urls.application.base, data).then(response => {
 				resolve(response)
@@ -25,7 +25,7 @@ const actions = {
 		})
 	},
 
-	fetch: (id)=>{
+	fetch: (id) => {
 		return new Promise((resolve, reject) => {
 			interlock_backend.request.get(interlock_backend.urls.application.detail.replace("{pk}", id)).then(response => {
 				resolve(response.data)
@@ -35,7 +35,7 @@ const actions = {
 		})
 	},
 
-	update: (data)=>{
+	update: (data) => {
 		let id = data.id
 		return new Promise((resolve, reject) => {
 			interlock_backend.request.put(interlock_backend.urls.application.detail.replace("{pk}", id), data).then(response => {
@@ -46,16 +46,16 @@ const actions = {
 		})
 	},
 
-	delete: (id)=>{
+	delete: (id) => {
 		return new Promise((resolve, reject) => {
 			interlock_backend.request.delete(interlock_backend.urls.application.detail.replace("{pk}", id))
-			.then(response => {
-				resolve(response.data);
-			}).catch((e) => reject(e))
+				.then(response => {
+					resolve(response.data);
+				}).catch((e) => reject(e))
 		})
 	},
 
-	oidc_well_known: ()=>{
+	oidc_well_known: () => {
 		return new Promise((resolve, reject) => {
 			interlock_backend.request.get(interlock_backend.urls.application.oidc_well_known).then(response => {
 				resolve(response.data)

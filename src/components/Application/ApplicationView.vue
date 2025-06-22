@@ -314,7 +314,7 @@ export default {
 					this.fetchingData = false
 					this.error = true;
 				})
-				this.syncApplication()
+			this.syncApplication()
 		},
 		async toggleApplicationStatus(item, state) {
 			this.loading = true

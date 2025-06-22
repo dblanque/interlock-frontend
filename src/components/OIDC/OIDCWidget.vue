@@ -4,7 +4,7 @@
 	<!-- @change OK without TOTP -->
 	<!-- @change OK with TOTP -->
 	<!-- @change cancel -->
-	 <v-row>
+	<v-row>
 		<v-col cols="12" class="ma-0 pa-0 my-4">
 			<h1>
 				{{ applicationName }}
@@ -13,7 +13,7 @@
 		<v-col cols="12" class="ma-0 pa-0 mb-6">
 			<p class="ma-0 pa-0">{{ $t("section.login.oidcRequestedByApp") }}</p>
 		</v-col>
-	 </v-row>
+	</v-row>
 </template>
 
 <script>

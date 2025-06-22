@@ -137,7 +137,10 @@
 				</v-tooltip>
 
 				<!-- Disable User Button -->
-				<v-tooltip color="red" bottom v-else-if="item.is_enabled">
+				<v-tooltip
+					color="red"
+					bottom
+					v-else-if="item.is_enabled">
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
 							rounded
@@ -156,7 +159,10 @@
 				</v-tooltip>
 
 				<!-- Enable User Button -->
-				<v-tooltip color="green" bottom v-else-if="!item.is_enabled">
+				<v-tooltip
+					color="green"
+					bottom
+					v-else-if="!item.is_enabled">
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
 							rounded
@@ -231,7 +237,9 @@
 					</v-tooltip>
 
 					<!-- UNLOCK USER BUTTON -->
-					<v-tooltip bottom v-if="viewTitle == 'ldap-users'">
+					<v-tooltip
+						bottom
+						v-if="viewTitle == 'ldap-users'">
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn icon color="secondary-20"
 								rounded
@@ -280,49 +288,98 @@
 		</v-data-table>
 
 		<!-- USER VIEW/EDIT DIALOG -->
-		<v-dialog eager max-width="1200px" v-model="dialogs['userDialog']">
-			<UserDialog :user="data.userdata" :editFlag="this.editableForm" :dialogKey="'userDialog'"
-				ref="UserDialog" :refreshLoading="loading" :disable-actions="fetchingData"
-				:fetchingData="fetchingData" @closeDialog="closeDialog" @save="userSaved"
+		<v-dialog
+			eager
+			max-width="1200px"
+			v-model="dialogs['userDialog']">
+			<UserDialog
+				:user="data.userdata"
+				:editFlag="this.editableForm"
+				:dialogKey="'userDialog'"
+				ref="UserDialog"
+				:refreshLoading="loading"
+				:disable-actions="fetchingData"
+				:fetchingData="fetchingData"
+				@closeDialog="closeDialog"
+				@save="userSaved"
 				@goToGroup="goToGroup"
-				:userClass="userClass" :parentTitle="viewTitle" @editToggle="setViewToEdit"
-				@refreshUser="refreshUser" @refreshUserList="listUserItems(false)" />
+				:userClass="userClass"
+				:parentTitle="viewTitle"
+				@editToggle="setViewToEdit"
+				@refreshUser="refreshUser"
+				@refreshUserList="listUserItems(false)" />
 		</v-dialog>
 
 		<!-- USER DELETE CONFIRM DIALOG -->
-		<v-dialog eager max-width="800px" v-model="dialogs['userDelete']">
-			<UserDelete :userObject="this.data.selectedUser" :userObjectList="tableData.selected"
-				:dialogKey="'userDelete'" ref="UserDelete" @closeDialog="closeDialog"
-				@refresh="listUserItems" :userClass="userClass"
+		<v-dialog
+			eager
+			max-width="800px"
+			v-model="dialogs['userDelete']">
+			<UserDelete
+				:userObject="this.data.selectedUser"
+				:userObjectList="tableData.selected"
+				:dialogKey="'userDelete'"
+				ref="UserDelete"
+				@closeDialog="closeDialog"
+				@refresh="listUserItems"
+				:userClass="userClass"
 				:parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER RESET PASSWORD DIALOG -->
-		<v-dialog eager max-width="800px" v-model="dialogs['userResetPassword']">
-			<UserResetPassword :userObject="this.data.selectedUser" :dialogKey="'userResetPassword'"
-				ref="UserResetPassword" @closeDialog="closeDialog" :parentTitle="viewTitle"
-				:userClass="userClass"
-				/>
+		<v-dialog
+			eager
+			max-width="800px"
+			v-model="dialogs['userResetPassword']">
+			<UserResetPassword
+				:userObject="this.data.selectedUser"
+				:dialogKey="'userResetPassword'"
+				ref="UserResetPassword"
+				@closeDialog="closeDialog"
+				:parentTitle="viewTitle"
+				:userClass="userClass" />
 		</v-dialog>
 
 		<!-- USER CREATE DIALOG -->
-		<v-dialog eager max-width="1200px" v-model="dialogs['userCreate']">
-			<UserCreate :dialogKey="'userCreate'" ref="UserCreate" @closeDialog="closeDialog"
+		<v-dialog
+			eager
+			max-width="1200px"
+			v-model="dialogs['userCreate']">
+			<UserCreate
+				:dialogKey="'userCreate'"
+				ref="UserCreate"
+				@closeDialog="closeDialog"
 				:userClass="userClass"
 				:parentTitle="viewTitle" />
 		</v-dialog>
 
 		<!-- USER IMPORT DIALOG -->
-		<v-dialog eager persistent max-width="1600px" v-model="dialogs['userImport']">
-			<UserImport :dialogKey="'userImport'" ref="UserImport" @closeDialog="closeDialog"
-				:parentTitle="viewTitle" :userClass="userClass"/>
+		<v-dialog
+			eager
+			persistent
+			max-width="1600px"
+			v-model="dialogs['userImport']">
+			<UserImport
+				:dialogKey="'userImport'"
+				ref="UserImport"
+				@closeDialog="closeDialog"
+				:parentTitle="viewTitle"
+				:userClass="userClass" />
 		</v-dialog>
 
 		<!-- USER EDIT DIALOG -->
-		<v-dialog eager max-width="1600px" v-model="dialogs['userBulkUpdate']">
-			<UserBulkUpdate :selectedUsers="this.tableData.selected" :dialogKey="'userBulkUpdate'"
-				ref="UserBulkUpdate" @closeDialog="closeDialog" @refresh="listUserItems"
-				:parentTitle="viewTitle" :userClass="userClass" />
+		<v-dialog
+			eager
+			max-width="1600px"
+			v-model="dialogs['userBulkUpdate']">
+			<UserBulkUpdate
+				:selectedUsers="this.tableData.selected"
+				:dialogKey="'userBulkUpdate'"
+				ref="UserBulkUpdate"
+				@closeDialog="closeDialog"
+				@refresh="listUserItems"
+				:parentTitle="viewTitle"
+				:userClass="userClass" />
 		</v-dialog>
 	</div>
 </template>
@@ -487,7 +544,7 @@ export default {
 					break;
 			}
 		},
-		async closeDialog(key, refresh = false, emitData=undefined) {
+		async closeDialog(key, refresh = false, emitData = undefined) {
 			this.dialogs[key] = false;
 			if (refresh) {
 				let emitNotif

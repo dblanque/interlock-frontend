@@ -229,7 +229,10 @@
 									<v-col
 										cols="12"
 										class="ma-0 pa-0">
-										<v-list flat dense outlined>
+										<v-list
+											flat
+											dense
+											outlined>
 											<v-list-item-group>
 												<v-list-item
 													:disabled="!isBeingEdited && !isBeingCreated"

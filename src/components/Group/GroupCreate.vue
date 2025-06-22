@@ -115,11 +115,12 @@
 									</v-col>
 								</v-row>
 
-								<GroupTypeRadioGroups :editFlag="true" 
+								<GroupTypeRadioGroups
+									:editFlag="true"
 									:group-types="groupToCreate.group_types"
 									:group-scopes="groupToCreate.group_scopes"
 									@update-type="(v) => groupToCreate.group_types = v"
-									@update-scope="(v) => groupToCreate.group_scopes = v"/>
+									@update-scope="(v) => groupToCreate.group_scopes = v" />
 								<v-row class="ma-0 pa-0">
 									<v-divider class="mx-12 my-3 mt-6"></v-divider>
 								</v-row>

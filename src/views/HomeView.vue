@@ -2,7 +2,8 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------- File: HomeView.vue -------------------------------->
 <template>
-  <div class="home ma-0 pa-0 align-stretch flex-column d-flex" style="height: 100%;" v-if="showView">
+  <div class="home ma-0 pa-0 align-stretch flex-column d-flex" style="height: 100%;"
+    v-if="showView">
     <!------------------>
     <v-system-bar
       height="min"
@@ -140,7 +141,8 @@
       :getVisibleTabsInGroup="getVisibleTabsInGroup"
       @updateSelectedTab="updateSelectedTab"
       mobile />
-    <v-row no-gutters
+    <v-row
+      no-gutters
       class="justify-center align-stretch flex-nowrap pb-10"
       style="position: relative; height: 100%;">
       <NavigationDrawer
@@ -544,7 +546,7 @@ export default {
     ////////////////////////////////////////////////////////////////////////////
     // General Component Methods
     ////////////////////////////////////////////////////////////////////////////
-    setInitLoad(){
+    setInitLoad() {
       if (this.initLoad !== true)
         return
       this.initLoad = false

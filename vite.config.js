@@ -29,7 +29,7 @@ export default defineConfig({
         }),
         Components({
             resolvers: [
-              VuetifyResolver(),
+                VuetifyResolver(),
             ],
             // Needed if we ever use TS and require VueRouter
             types: [{
@@ -44,11 +44,11 @@ export default defineConfig({
         {
             name: "singleHMR",
             handleHotUpdate({ modules }) {
-              modules.map((m) => {
-                m.importedModules = new Set();
-                m.importers = new Set();
-              });
-              return modules;
+                modules.map((m) => {
+                    m.importedModules = new Set();
+                    m.importers = new Set();
+                });
+                return modules;
             },
         },
     ],

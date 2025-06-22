@@ -6,10 +6,11 @@
 				<v-card-title class="ma-0 pa-0 card-title">
 					<v-progress-linear :color="loadingColor" :indeterminate="refreshLoading || loading" />
 					<v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-						<h3 class="ma-2">{{
-							`${editFlag ? $t('actions.edit') : $t('actions.view')} ${$tc("classes.application",
-								1)}`
-							}}</h3>
+						<h3 class="ma-2">
+							{{
+									`${editFlag ? $t('actions.edit') : $t('actions.view')} ${$tc("classes.application", 1)}`
+							}}
+						</h3>
 						<v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4" />
 						<v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
 							<v-icon>

@@ -95,7 +95,7 @@ export default new VueRouter({
   mode: 'history',
   base: import.meta.env.BASE_URL,
   routes: routes,
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     // return desired position
     return { top: 0 }
   }

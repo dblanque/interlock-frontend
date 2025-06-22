@@ -338,7 +338,7 @@ export default {
         // }
     },
     methods: {
-        getInitialData(){
+        getInitialData() {
             return {
                 objectToEdit: {},
                 keyToAdd: "",

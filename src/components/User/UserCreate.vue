@@ -469,7 +469,7 @@
 							rounded>
 							{{ this.createStage > 1 && this.userToCreate.password.length === 0 ?
 								$t("actions.skip") :
-								$t("actions.next")}}
+								$t("actions.next") }}
 							<v-icon
 								class="ma-0"
 								color="primary">

@@ -30,7 +30,7 @@
 													{{ value }}
 												</v-list-item-subtitle>
 											</v-list-item-content>
-	
+
 											<v-list-item-action>
 												<v-tooltip bottom>
 													<template v-slot:activator="{ on, attrs }">
@@ -55,11 +55,16 @@
 						</v-card-text>
 					</v-card>
 				</v-col>
-				<v-col cols="12" md="6">
-					<v-card height="100%"
+				<v-col
+					cols="12"
+					md="6">
+					<v-card
+						height="100%"
 						outlined
 						color="gray-95">
-						<v-progress-linear :color="getLoadingColor()" :indeterminate="loading">
+						<v-progress-linear
+							:color="getLoadingColor()"
+							:indeterminate="loading">
 						</v-progress-linear>
 						<v-card-title class="mt-2">
 							<v-row justify="center">
@@ -68,7 +73,11 @@
 						</v-card-title>
 						<v-card-text>
 							<v-expand-transition>
-								<v-list disabled dense color="transparent" v-if="loading !== true">
+								<v-list
+									disabled
+									dense
+									color="transparent"
+									v-if="loading !== true">
 									<v-list-item-group>
 										<v-list-item
 											two-line
@@ -89,11 +98,17 @@
 						</v-card-text>
 					</v-card>
 				</v-col>
-				<v-col cols="12" md="6">
-					<v-card height="100%" class="d-flex flex-column"
+				<v-col
+					cols="12"
+					md="6">
+					<v-card
+						height="100%"
+						class="d-flex flex-column"
 						outlined
 						color="gray-95">
-						<v-progress-linear :color="getLoadingColor()" :indeterminate="loading">
+						<v-progress-linear
+							:color="getLoadingColor()"
+							:indeterminate="loading">
 						</v-progress-linear>
 						<v-card-title class="mt-2">
 							<v-row justify="center">
@@ -102,7 +117,11 @@
 						</v-card-title>
 						<v-card-text>
 							<v-expand-transition>
-								<v-list disabled dense color="transparent" v-if="loading !== true">
+								<v-list
+									disabled
+									dense
+									color="transparent"
+									v-if="loading !== true">
 									<v-list-item-group>
 										<v-list-item
 											:two-line="isTwoLine(key)"

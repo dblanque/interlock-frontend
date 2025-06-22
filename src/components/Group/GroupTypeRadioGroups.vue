@@ -9,16 +9,15 @@
 					{{ $t('section.groups.groupDialog.groupType') }}
 				</v-row>
 				<v-radio-group
-				mandatory
-				:readonly="!editFlag"
-				:disabled="!editFlag"
-				:value="currentType" class="ma-0 pa-0">
+					mandatory
+					:readonly="!editFlag"
+					:disabled="!editFlag"
+					:value="currentType" class="ma-0 pa-0">
 					<v-radio v-for="value, key in LDAPGroupTypes"
-					@change="updateType(value)"
-					:value="value"
-					:key="key"
-					:label="$t('section.groups.types.' + key)"
-					/>
+						@change="updateType(value)"
+						:value="value"
+						:key="key"
+						:label="$t('section.groups.types.' + key)" />
 				</v-radio-group>
 			</v-card>
 		</v-col>
@@ -28,16 +27,15 @@
 					{{ $t('section.groups.groupDialog.groupScope') }}
 				</v-row>
 				<v-radio-group
-				mandatory
-				:readonly="!editFlag"
-				:disabled="!editFlag"
-				:value="currentScope" class="ma-0 pa-0">
+					mandatory
+					:readonly="!editFlag"
+					:disabled="!editFlag"
+					:value="currentScope" class="ma-0 pa-0">
 					<v-radio v-for="value, key in LDAPGroupScopes"
-					@change="updateScope(value)"
-					:value="value"
-					:key="key"
-					:label="$t('section.groups.scopes.' + key)"
-					/>
+						@change="updateScope(value)"
+						:value="value"
+						:key="key"
+						:label="$t('section.groups.scopes.' + key)" />
 				</v-radio-group>
 			</v-card>
 		</v-col>
@@ -61,11 +59,11 @@ export default {
 		editFlag: Boolean,
 		groupTypes: {
 			type: Array,
-			default: () => {return [GROUP_TYPE_DEFAULT]}
+			default: () => { return [GROUP_TYPE_DEFAULT] }
 		},
 		groupScopes: {
 			type: Array,
-			default: () => {return [GROUP_SCOPE_DEFAULT]}
+			default: () => { return [GROUP_SCOPE_DEFAULT] }
 		}
 	},
 	data() {
@@ -108,18 +106,18 @@ export default {
 					this.currentType = t;
 			}
 		},
-		update(){
+		update() {
 			this.updateScope();
 			this.updateType();
 		},
-		updateType(v){
+		updateType(v) {
 			let result = [v]
 			if (this.groupTypes.includes(GROUP_TYPE_SYSTEM))
 				result.push(GROUP_TYPE_SYSTEM)
 			this.$emit("update-type", result)
 			this.$emit("updateType", result)
 		},
-		updateScope(v){
+		updateScope(v) {
 			let result = [v]
 			this.$emit("update-scope", result)
 			this.$emit("updateScope", result)

@@ -2,21 +2,21 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------- File: BackendStatus.vue ---------------------------->
 <template>
-<v-tooltip bottom>
-    <template v-slot:activator="{ on, attrs }">
-        <v-btn @click="checkStatus" icon v-on="on" v-bind="attrs">
-        <v-avatar :color="backendAlive == true ? 'green':'red'" size="1em"/>
-        </v-btn>
-    </template>
-    <span>{{ $t('misc.clickToRefreshBackendStatus') }}</span>
-</v-tooltip>
+    <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+            <v-btn @click="checkStatus" icon v-on="on" v-bind="attrs">
+                <v-avatar :color="backendAlive == true ? 'green' : 'red'" size="1em" />
+            </v-btn>
+        </template>
+        <span>{{ $t('misc.clickToRefreshBackendStatus') }}</span>
+    </v-tooltip>
 </template>
 
 <script>
 import Liveness from '@/include/Liveness.js'
 export default {
     name: 'BackendStatus',
-    props:{
+    props: {
         showText: Boolean
     },
     data() {
@@ -26,11 +26,11 @@ export default {
             timerId: 0
         }
     },
-    async created(){
+    async created() {
         await this.loopCheck()
     },
     methods: {
-        async loopCheck(){
+        async loopCheck() {
             if (this.backendAlive != true)
                 this.checkInterval = 1000
             else
@@ -45,20 +45,20 @@ export default {
         },
         async checkStatus() {
             await new Liveness({}).check()
-            .then(() => {
-                this.backendAlive = true
-            })
-            .catch(e => {
-                console.error(e)
-                this.backendAlive = false
-            })
+                .then(() => {
+                    this.backendAlive = true
+                })
+                .catch(e => {
+                    console.error(e)
+                    this.backendAlive = false
+                })
         }
     }
 }
 </script>
 
 <style>
-.be-status-indicator{
+.be-status-indicator {
     --size: 0.8em;
     display: inline-flex;
     width: var(--size);

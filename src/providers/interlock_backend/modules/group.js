@@ -5,7 +5,7 @@
 import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
-    insert: (data)=>{
+    insert: (data) => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.group.base, data).then(response => {
                 resolve(response)
@@ -15,25 +15,25 @@ const actions = {
         })
     },
 
-    update: (data)=>{
+    update: (data) => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.put(interlock_backend.urls.group.base, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    delete: (data)=>{
+    delete: (data) => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.patch(interlock_backend.urls.group.base, data)
-            .then(response => {
-                resolve(response.data);
-            }).catch((e) => reject(e))
+                .then(response => {
+                    resolve(response.data);
+                }).catch((e) => reject(e))
         })
     },
 
-    list: ()=>{
+    list: () => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.group.base).then(response => {
                 resolve(response.data)
@@ -43,7 +43,7 @@ const actions = {
         })
     },
 
-    fetch: (data)=>{
+    fetch: (data) => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.group.fetch, data).then(response => {
                 resolve(response.data)

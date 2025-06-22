@@ -6,8 +6,8 @@
 		<!-- Title Bar -->
 		<v-card-title class="ma-0 pa-0 card-title">
 			<v-row class="ma-0 pa-0 ma-1" align="center" justify="space-between">
-				<h3 class="ma-2">{{$t("section.dirtree.move.title")}}</h3>
-				<v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
+				<h3 class="ma-2">{{ $t("section.dirtree.move.title") }}</h3>
+				<v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4" />
 				<v-btn icon color="red" class="ma-2" rounded @click="closeDialog">
 					<v-icon>
 						mdi-close
@@ -25,38 +25,41 @@
 			</v-col>
 		</v-row>
 
-		<v-divider class="mx-16 mt-2"/>
+		<v-divider class="mx-16 mt-2" />
 
 		<v-row class="ma-0 pa-0 mt-4" align="center" justify="space-around">
 			<v-btn small text color="primary" class="ma-1" @click="setDestination()">
-				{{ $t('section.dirtree.move.setToRoot')}}
+				{{ $t('section.dirtree.move.setToRoot') }}
 			</v-btn>
 			<v-btn small
 				class="ma-1"
 				text
 				:disabled="!allowRefresh"
 				elevation="0"
-				@click="refreshOUList"
-				>
+				@click="refreshOUList">
 				{{ $t('actions.refresh') }}
 				<v-icon>
-				mdi-refresh
+					mdi-refresh
 				</v-icon>
 				<template v-slot:loader>
-				<span class="custom-loader">
-					<v-icon color="white">mdi-cached</v-icon>
-				</span>
+					<span class="custom-loader">
+						<v-icon color="white">mdi-cached</v-icon>
+					</span>
 				</template>
 			</v-btn>
 		</v-row>
 
-		<v-row class="ma-0 pa-0" justify="center">
-			<v-col cols="12" lg="10">
+		<v-row
+			class="ma-0 pa-0"
+			justify="center">
+			<v-col
+				cols="12"
+				lg="10">
 				<v-expansion-panels
-				v-model="userPathExpansionPanel"
-				flat
-				hover 
-				style="border: 1px solid var(--v-primary-base);">
+					v-model="userPathExpansionPanel"
+					flat
+					hover
+					style="border: 1px solid var(--v-primary-base);">
 					<v-expansion-panel :key="0">
 						<v-expansion-panel-header>
 							<span>
@@ -73,13 +76,15 @@
 						</v-expansion-panel-header>
 
 						<v-expansion-panel-content>
-							<v-card flat outlined style="max-height: 300px; overflow: auto !important;">
+							<v-card
+								flat
+								outlined
+								style="max-height: 300px; overflow: auto !important;">
 								<DirtreeOUList
-								ref="DirtreeOUList"
-								:fetchOnCreated="false"
-								:excludeObjects="objectDn"
-								@selectedDestination="setDestination"
-								/>
+									ref="DirtreeOUList"
+									:fetchOnCreated="false"
+									:excludeObjects="objectDn"
+									@selectedDestination="setDestination" />
 							</v-card>
 						</v-expansion-panel-content>
 					</v-expansion-panel>
@@ -89,39 +94,52 @@
 
 		<!-- Actions -->
 		<v-card-actions class="card-actions">
-			<v-row class="ma-1 pa-0" justify="center">
+			<v-row
+				class="ma-1 pa-0"
+				justify="center">
 				<!-- Back and Next buttons -->
 				<div>
 					<v-slide-x-reverse-transition>
-						<v-chip class="mx-2" color="red" v-if="this.error && $vuetify.breakpoint.mdAndUp" text-color="white">
+						<v-chip
+							class="mx-2"
+							color="red"
+							v-if="this.error && $vuetify.breakpoint.mdAndUp"
+							text-color="white">
 							{{ this.errorMsg }}
 						</v-chip>
 					</v-slide-x-reverse-transition>
 
 					<v-slide-y-reverse-transition>
-						<v-btn elevation="0" @click="confirmMove"
-						@keydown.enter="confirmMove" color="primary"
-						class="ma-0 pa-0 pa-2 ma-1 pr-4" 
-						rounded>
+						<v-btn
+							elevation="0"
+							@click="confirmMove"
+							@keydown.enter="confirmMove"
+							color="primary"
+							class="ma-0 pa-0 pa-2 ma-1 pr-4"
+							rounded>
 							<v-icon class="ma-0 mx-1">
 								mdi-folder-move
 							</v-icon>
-							{{ $t("actions.move" )}}
+							{{ $t("actions.move") }}
 						</v-btn>
 					</v-slide-y-reverse-transition>
 
 					<v-slide-y-reverse-transition>
-						<v-btn elevation="0" @click="closeDialog"
-						@keydown.enter="closeDialog"
-						class="ma-0 pa-0 pa-2 ma-1 pr-4" 
-						:dark="!isThemeDark($vuetify)"
-						:light="isThemeDark($vuetify)"
-						rounded>
-							<v-icon class="ma-0 mr-1" color="red">
+						<v-btn
+							elevation="0"
+							@click="closeDialog"
+							@keydown.enter="closeDialog"
+							class="ma-0 pa-0 pa-2 ma-1 pr-4"
+							:dark="!isThemeDark($vuetify)"
+							:light="isThemeDark($vuetify)"
+							rounded>
+							<v-icon
+								class="ma-0 mr-1"
+								color="red">
 								mdi-close-circle
 							</v-icon>
 							<span class="text-white">
-								{{ $t("actions.cancel" )}}
+								{{ $t("actions.cancel") }}
 							</span>
 						</v-btn>
 					</v-slide-y-reverse-transition>
@@ -137,13 +155,13 @@ import { getDomainDetails } from '@/include/utils.js';
 import utilsMixin from '@/plugins/mixin/utilsMixin.js';
 
 let defaultFilter = {
-	"include":{},
-	"exclude":{},
+	"include": {},
+	"exclude": {},
 	"use_defaults": false,
 }
 export default {
 	name: 'DirtreeMove',
-	mixins: [ utilsMixin ],
+	mixins: [utilsMixin],
 	components: {
 		DirtreeOUList
 	},
@@ -177,48 +195,48 @@ export default {
 		}
 	},
 	methods: {
-		resetFilter(){
+		resetFilter() {
 			this.filter = defaultFilter
 		},
-		setExcludeFilter(){
+		setExcludeFilter() {
 			// 2nd argument is exclude
-			if (this.objectDn && this.objectDn != undefined && this.objectDn != null){
+			if (this.objectDn && this.objectDn != undefined && this.objectDn != null) {
 				this.filter['include']['objectCategory'] = ['organizationalUnit', 'container']
 				this.filter['exclude']['distinguishedName'] = this.objectDn
 			}
 		},
-		clearList(){
+		clearList() {
 			this.resetFilter()
 			this.$refs.DirtreeOUList.clearList()
 		},
-		async refreshOUList(){
+		async refreshOUList() {
 			if (this.allowRefresh == true) {
 				this.allowRefresh = false
 				this.setExcludeFilter()
-				await this.$refs.DirtreeOUList.fetchOUs(this.filter).then(()=>{
+				await this.$refs.DirtreeOUList.fetchOUs(this.filter).then(() => {
 					this.allowRefresh = true
 				})
 			}
 		},
-		async resetDialog(){
+		async resetDialog() {
 			let domainDetails = getDomainDetails()
 			this.domain = domainDetails.name
 			this.realm = domainDetails.realm
 			this.basedn = domainDetails.basedn
 			this.allowRefresh = false
 			if (this.$refs.DirtreeOUList) {
-				this.$nextTick(()=>{
+				this.$nextTick(() => {
 					this.setDestination();
 					this.setExcludeFilter()
 					this.$refs.DirtreeOUList.fetchOUs(this.filter)
-					.then(() => {
-						this.allowRefresh = true
-					})
+						.then(() => {
+							this.allowRefresh = true
+						})
 				})
 			}
 			return
 		},
-		setDestination(destination=undefined){
+		setDestination(destination = undefined) {
 			// Set default destination if undefined
 			if (destination == undefined || !destination)
 				this.objectDestination = this.basedn
@@ -226,16 +244,14 @@ export default {
 			else
 				this.objectDestination = destination
 		},
-		closeDialog(){
+		closeDialog() {
 			this.$emit('closeDialog', this.dialogKey);
 		},
-		confirmMove(){
+		confirmMove() {
 			this.$emit('confirm', this.objectDestination);
 		},
 	},
 }
 </script>
 
-<style>
-	
-</style>
+<style></style>

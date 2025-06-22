@@ -78,16 +78,28 @@
 										</v-icon>
 									</v-btn>
 								</template>
-								<v-list class="ma-0 pa-0" dense :dark="!isThemeDark($vuetify)"
+								<v-list
+									class="ma-0 pa-0"
+									dense
+									:dark="!isThemeDark($vuetify)"
 									:light="isThemeDark($vuetify)">
-									<v-list-item class="ma-0 pa-0 mx-2" dense>
-										<v-btn @click="allColumnFilters(true)" class="mx-1" small color="primary">
+									<v-list-item
+										class="ma-0 pa-0 mx-2"
+										dense>
+										<v-btn
+											@click="allColumnFilters(true)"
+											class="mx-1"
+											small
+											color="primary">
 											<v-icon small>
 												mdi-filter
 											</v-icon>
 											{{ $tc('words.all.m', 1) }}
 										</v-btn>
-										<v-btn @click="allColumnFilters(false)" class="mx-1" small
+										<v-btn
+											@click="allColumnFilters(false)"
+											class="mx-1"
+											small
 											:dark="isThemeDark($vuetify)"
 											:light="!isThemeDark($vuetify)">
 											<v-icon small>
@@ -96,19 +108,31 @@
 											{{ $tc('words.none.m', 1) }}
 										</v-btn>
 									</v-list-item>
-									<v-list-item class="ma-0 pa-0 mx-2" v-for="v, k in searchFilterColumns" :key="k"
+									<v-list-item
+										class="ma-0 pa-0 mx-2"
+										v-for="v, k in searchFilterColumns"
+										:key="k"
 										dense
 										@click="searchFilterColumns[k] = !searchFilterColumns[k]">
 										<v-list-item-action class="ma-0 pa-0 mr-2">
-											<v-checkbox on-icon="mdi-checkbox-marked" color="green"
+											<v-checkbox
+												on-icon="mdi-checkbox-marked"
+												color="green"
 												v-model="searchFilterColumns[k]"
-												class="ma-0 pa-0" dense />
+												class="ma-0 pa-0"
+												dense />
 										</v-list-item-action>
 										<v-list-item-title class="font-weight-medium">
-											<v-row class="ma-0 pa-0" align="center" v-if="k == 'address'">
+											<v-row
+												class="ma-0 pa-0"
+												align="center"
+												v-if="k == 'address'">
 												{{ $t('dns.attributes.ipv4Address') }}
 											</v-row>
-											<v-row class="ma-0 pa-0" align="center" v-else>
+											<v-row
+												class="ma-0 pa-0"
+												align="center"
+												v-else>
 												{{ $t('dns.attributes.' + k) }}
 											</v-row>
 										</v-list-item-title>
@@ -117,20 +141,36 @@
 							</v-menu>
 						</template>
 					</v-text-field>
-					<v-row style="max-width: fit-content;" class="pa-0 px-4" justify="end">
-						<refresh-button dense :loading="loading" @refresh="getDNSData(undefined, true)" />
-						<v-btn @click="openDialog('recordDialog')" class="pa-2 mx-2"
-							:disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'" color="primary">
+					<v-row
+						style="max-width: fit-content;"
+						class="pa-0 px-4"
+						justify="end">
+						<refresh-button
+							dense
+							:loading="loading"
+							@refresh="getDNSData(undefined, true)" />
+						<v-btn
+							@click="openDialog('recordDialog')"
+							class="pa-2 mx-2"
+							:disabled="loading || zoneFilter['dnsZone'] == 'Root DNS Servers'"
+							color="primary">
 							<v-icon class="ma-0 pa-0">mdi-plus</v-icon>
 							{{ $t('actions.addN') + ' ' + $tc('classes.dns.record', 1) }}
 						</v-btn>
-						<v-btn @click="openDialog('recordMassAction')" class="pa-2 mr-2" color="red"
+						<v-btn
+							@click="openDialog('recordMassAction')"
+							class="pa-2 mr-2"
+							color="red"
 							:dark="!(selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers')"
 							:disabled="selectedRecords.length < 1 || loading || zoneFilter['dnsZone'] == 'Root DNS Servers'">
 							<v-icon class="ma-0 pa-0">mdi-delete</v-icon>
 							{{ $t('actions.delete') + ' ' + $t('words.selected') }}
 						</v-btn>
-						<v-menu offset-y left nudge-bottom="1rem" :close-on-content-click="false"
+						<v-menu
+							offset-y
+							left
+							nudge-bottom="1rem"
+							:close-on-content-click="false"
 							v-model="filterListOpen">
 							<template v-slot:activator="{ on, attrs }">
 								<v-btn v-bind="attrs" v-on="on"
@@ -143,15 +183,24 @@
 									</v-icon>
 								</v-btn>
 							</template>
-							<v-list dense :dark="!isThemeDark($vuetify)" :light="isThemeDark($vuetify)">
+							<v-list
+								dense
+								:dark="!isThemeDark($vuetify)"
+								:light="isThemeDark($vuetify)">
 								<v-list-item>
-									<v-btn @click="filterAllRecordTypes" class="mx-1" color="primary">
+									<v-btn
+										@click="filterAllRecordTypes"
+										class="mx-1"
+										color="primary">
 										<v-icon>
 											mdi-filter
 										</v-icon>
 										{{ $tc('words.all.m', 1) }}
 									</v-btn>
-									<v-btn @click="filterNoRecordTypes" class="mx-1" :dark="isThemeDark($vuetify)"
+									<v-btn
+										@click="filterNoRecordTypes"
+										class="mx-1"
+										:dark="isThemeDark($vuetify)"
 										:light="!isThemeDark($vuetify)">
 										<v-icon>
 											mdi-filter-outline
@@ -159,14 +208,21 @@
 										{{ $tc('words.none.m', 1) }}
 									</v-btn>
 								</v-list-item>
-								<v-list-item v-for="enabled, key in enabledRecordTypes" :key="key">
+								<v-list-item
+									v-for="enabled, key in enabledRecordTypes"
+									:key="key">
 									<v-list-item-action class="ma-0 pa-0 mr-2">
-										<v-checkbox on-icon="mdi-checkbox-marked" color="green"
+										<v-checkbox
+											on-icon="mdi-checkbox-marked"
+											color="green"
 											v-model="enabledRecordTypes[key]"
-											class="ma-0 pa-0" dense />
+											class="ma-0 pa-0"
+											dense />
 									</v-list-item-action>
 									<v-list-item-title class="font-weight-medium">
-										<v-row class="ma-0 pa-0" align="center">
+										<v-row
+											class="ma-0 pa-0"
+											align="center">
 											{{ key }}
 										</v-row>
 									</v-list-item-title>
@@ -182,7 +238,8 @@
 				<thead>
 					<tr>
 						<template>
-							<th v-for="header in props.props.headers" :key="header.value" :class="($vuetify.breakpoint.mdAndUp ? '' : 'text-center') + ' py-2 px-0'">
+							<th v-for="header in props.props.headers" :key="header.value"
+								:class="($vuetify.breakpoint.mdAndUp ? '' : 'text-center') + ' py-2 px-0'">
 								<v-btn class="py-4"
 									x-small text color="primary" v-if="header.groupable == true"
 									@click.stop="props.on.group(header.value)">
@@ -266,7 +323,10 @@
 				</v-tooltip>
 
 				<!-- Disable Record Button -->
-				<v-tooltip color="red" bottom v-else>
+				<v-tooltip
+					color="red"
+					bottom
+					v-else>
 					<template v-slot:activator="{ on, attrs }">
 						<v-btn icon
 							rounded
@@ -355,25 +415,49 @@
 		</v-data-table>
 
 		<!-- RECORD VIEW/EDIT DIALOG -->
-		<v-dialog eager :max-width="this.updateFlag ? '800px' : '1200px'"
+		<v-dialog
+			eager
+			:max-width="this.updateFlag ? '800px' : '1200px'"
 			v-model="dialogs['recordDialog']">
-			<RecordDialog :zoneHasSOA="zoneHasSOA()" :currentZone="this.zoneFilter.dnsZone"
-				:recordObject="this.currentRecord" :updateFlag="this.updateFlag" :dialogKey="'recordDialog'"
-				@closeDialog="closeDialog" @refresh="getDNSData" ref="RecordDialog" />
+			<RecordDialog
+				:zoneHasSOA="zoneHasSOA()"
+				:currentZone="this.zoneFilter.dnsZone"
+				:recordObject="this.currentRecord"
+				:updateFlag="this.updateFlag"
+				:dialogKey="'recordDialog'"
+				@closeDialog="closeDialog"
+				@refresh="getDNSData"
+				ref="RecordDialog" />
 		</v-dialog>
 
 		<!-- RECORD DELETE DIALOG -->
-		<v-dialog eager max-width="800px" v-model="dialogs['recordDelete']">
-			<RecordDelete :deleteMode="this.deleteMode" :currentZone="this.zoneFilter.dnsZone"
-				:recordObject="this.currentRecord" :dialogKey="'recordDelete'" @closeDialog="closeDialog"
-				@refresh="getDNSData" ref="RecordDelete" />
+		<v-dialog
+			eager
+			max-width="800px"
+			v-model="dialogs['recordDelete']">
+			<RecordDelete
+				:deleteMode="this.deleteMode"
+				:currentZone="this.zoneFilter.dnsZone"
+				:recordObject="this.currentRecord"
+				:dialogKey="'recordDelete'"
+				@closeDialog="closeDialog"
+				@refresh="getDNSData"
+				ref="RecordDelete" />
 		</v-dialog>
 
 		<!-- RECORD MASS ACTION DIALOG -->
-		<v-dialog eager max-width="800px" v-model="dialogs['recordMassAction']">
-			<RecordMassAction :actionType="'delete'" :selectedRecords="selectedRecords"
-				:currentZone="this.zoneFilter.dnsZone" :dialogKey="'recordMassAction'"
-				@closeDialog="closeDialog" @refresh="getDNSData" ref="RecordMassAction" />
+		<v-dialog
+			eager
+			max-width="800px"
+			v-model="dialogs['recordMassAction']">
+			<RecordMassAction
+				:actionType="'delete'"
+				:selectedRecords="selectedRecords"
+				:currentZone="this.zoneFilter.dnsZone"
+				:dialogKey="'recordMassAction'"
+				@closeDialog="closeDialog"
+				@refresh="getDNSData"
+				ref="RecordMassAction" />
 		</v-dialog>
 
 	</div>

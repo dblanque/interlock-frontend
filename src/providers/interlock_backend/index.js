@@ -47,16 +47,16 @@ const modules = {
 
 const interlock_backend = {
     call: (moduleCallLinkString, data) => {
-        if(!moduleCallLinkString)
+        if (!moduleCallLinkString)
             throw Error("Missing Link String Parameters. Linking String provided is undefined.")
         const links = moduleCallLinkString.split('/')
-        if(links.length == 1)
+        if (links.length == 1)
             throw Error("Missing Link String Parameters. Linking String Example 'module/call'.")
         else if (!(links[0] in modules))
-            throw Error("Module `" +links[0]+ "` not registered in provider modules.")
+            throw Error("Module `" + links[0] + "` not registered in provider modules.")
         else if (!(links[1] in modules[links[0]]))
-            throw Error("Function `" +links[1]+ "` was not found in `"+links[0]+"` module.")
-        else{
+            throw Error("Function `" + links[1] + "` was not found in `" + links[0] + "` module.")
+        else {
             return modules[links[0]][links[1]](data)
         }
     }

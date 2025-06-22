@@ -24,12 +24,12 @@ class HomeInfo extends ApiModel {
 
 	async fetch() {
 		return await interlock_backend.call('home/fetch')
-		.then(response => {
-			const data = response.data.data
-			Object.keys(data).forEach(key => {
-				this[key] = data[key];
+			.then(response => {
+				const data = response.data.data
+				Object.keys(data).forEach(key => {
+					this[key] = data[key];
+				})
 			})
-		})
 	}
 }
 

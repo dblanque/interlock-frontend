@@ -21,10 +21,11 @@
 			<v-row class="pa-0 ma-8 text-subtitle-1" justify="center">
 				{{ !multipleUsers ? $t('section.users.deleteUser.message') : '' }}
 				<span v-if="!multipleUsers" class="font-weight-medium" style="padding-left: 0.5ch;">
-					{{(
-							userObject.first_name && userObject.last_name ?
-							`${userObject.first_name} ${userObject.last_name} (${userObject.username})` : userObject.username
-						) + "?"
+					{{ (
+						userObject.first_name && userObject.last_name ?
+							`${userObject.first_name} ${userObject.last_name} (${userObject.username})` :
+							userObject.username
+					) + "?"
 					}}
 				</span>
 				<span v-else-if="multipleUsers" class="font-weight-medium"
@@ -32,10 +33,10 @@
 					{{ $t('section.users.deleteUser.mass') + "?" }}
 					<span v-for="user in userObjectList" :key="user.username">
 						<br>
-						{{(
+						{{ (
 							user.first_name && user.last_name ?
-							`${user.first_name} ${user.last_name} (${user.username})` : user.username
-						)}}
+								`${user.first_name} ${user.last_name} (${user.username})` : user.username
+						) }}
 					</span>
 				</span>
 			</v-row>
@@ -114,7 +115,7 @@ export default {
 				if (this.multipleUsers) {
 					let _filtered_data
 					if (this.userClass == DjangoUser) {
-						_filtered_data = {"users": this.userObjectList.map(({ id }) => id)};
+						_filtered_data = { "users": this.userObjectList.map(({ id }) => id) };
 					} else {
 						_filtered_data = this.userObjectList.map(({ distinguished_name, username }) => ({
 							distinguished_name,

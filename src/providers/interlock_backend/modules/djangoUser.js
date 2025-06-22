@@ -43,13 +43,13 @@ const actions = {
 				}).catch((e) => reject(e))
 		})
 	},
-	
+
 	update: (data) => {
 		return new Promise((resolve, reject) => {
 			interlock_backend.request.put(interlock_backend.urls.djangoUser.detail.replace("{pk}", data.id), data)
-			.then(response => {
-				resolve(response.data);
-			}).catch((e) => reject(e))
+				.then(response => {
+					resolve(response.data);
+				}).catch((e) => reject(e))
 		})
 	},
 
@@ -66,7 +66,7 @@ const actions = {
 	changePassword: (data) => {
 		let id = structuredClone(data.id)
 		try {
-			["id","username"].forEach(k => {
+			["id", "username"].forEach(k => {
 				if (k in data)
 					delete data[k]
 			});
