@@ -72,7 +72,7 @@
 						<!-- Details Row -->
 						<v-row align-content="center" class="ma-2 mt-0" v-if="isLDAPUser">
 							<!-- User Basic Data Panel -->
-							<v-col class="ma-0 pa-0" cols="12" :md="userClass == user ? 6 : 12">
+							<v-col class="ma-0 pa-0" cols="12" :md="isLDAPUser ? 6 : 12">
 								<v-card outlined height="100%" class="ma-1 pa-4">
 									<v-row
 										:justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'start'"
@@ -138,7 +138,7 @@
 								</v-card>
 							</v-col>
 							<!-- Location Panel -->
-							<v-col class="ma-0 pa-0" cols="12" md="6" v-if="userClass == user">
+							<v-col class="ma-0 pa-0" cols="12" md="6" v-if="isLDAPUser">
 								<v-card outlined height="100%" class="ma-1 pa-4">
 									<v-row
 										:justify="this.$vuetify.breakpoint.smAndDown ? 'center' : 'end'"
@@ -199,7 +199,7 @@
 												dense
 												id="state_province"
 												:label="$t('attribute.state_province')"
-												v-model="usercopy.st"
+												v-model="usercopy.state_province"
 												:rules="[this.fieldRules(usercopy.state_province, 'ge_state')]"></v-text-field>
 										</v-col>
 										<v-col cols="12" lg="6">
@@ -333,7 +333,7 @@
 					<v-row justify="center" class="pa-0 ma-0" align="center">
 						<!-- Reset Password Button -->
 						<v-btn color="primary" @click="openDialog('userResetPassword')"
-							:disabled="allowPasswordChange"
+							:disabled="!allowPasswordChange"
 							class="ma-0 pa-0 pa-4 ma-1"
 							rounded>
 							<v-icon class="mr-1">
@@ -467,6 +467,7 @@ export default {
 			last_name: "",
 			email: "",
 			user_type: "local",
+			initialUser: {},
 			user: {},
 			usercopy: {},
 			domain: "",
@@ -479,8 +480,8 @@ export default {
 	},
 	async created() {
 		this.loading = true
-		this.user = new DjangoUser({})
-		this.user.selfInfo().then(response => {
+		this.initialUser = new DjangoUser({})
+		this.initialUser.selfInfo().then(response => {
 			let responseStatus = response.status
 			let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
 			response = response.data
@@ -519,15 +520,23 @@ export default {
 	},
 	computed: {
 		isLDAPUser() {
-			return this.user_type === "ldap"
+			if (this.user_type !== undefined && typeof this.user_type == "string")
+				return this.user_type.toLowerCase().trim() === "ldap"
+			return false
 		},
 		isLocalUser() {
-			return this.user_type === "local"
+			if (this.user_type !== undefined && typeof this.user_type == "string")
+				return this.user_type.toLowerCase().trim() === "local"
+			return true
 		},
 		allowPasswordChange() {
-			if (this.isLDAPUser)
-				return this.user.can_change_pwd === true
-			return true
+			let _v = true
+			if (this.isLDAPUser) {
+				if (this.user?.can_change_pwd === true || this.user?.can_change_pwd === false)
+					_v = this.user.can_change_pwd
+				console.log(`LDAP Change Password Allowance: ${_v}`)
+			}
+			return _v
 		},
 		getUSN() {
 			return `${this.user.username}@${this.domain}`
@@ -558,8 +567,8 @@ export default {
 			]
 			for (const key in this.user) {
 				if (IGNORE_KEYS.includes(key)) continue
-				if (!(key in this.user) ||
-					!(key in this.usercopy)) {
+				if ( (!(key in this.user)) || (!(key in this.usercopy)) ) {
+					console.log(`Key mismatch in model: ${key}`)
 					continue
 				}
 				if (Array.isArray(this.user[key])) {
@@ -570,7 +579,7 @@ export default {
 					if (JSON.stringify(orig_list) !== JSON.stringify(this.usercopy[key]))
 						v.push(key)
 				}
-				else if (this.usercopy[key] != this.user[key]) {
+				else if (this.usercopy[key] !== this.user[key]) {
 					v.push(key)
 				}
 			}
@@ -648,6 +657,7 @@ export default {
 		async refreshUser() {
 			this.loading = true
 			this.error = false
+			this.user = new this.userClass({})
 			await this.user.selfFetch().then(() => {
 				this.syncUser()
 				setTimeout(() => {
