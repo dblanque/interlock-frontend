@@ -435,7 +435,8 @@
       "fileReader": "File Reader Exception",
       "networkError": "AXIOS: Network Error",
       "ldapObjectExists": "An LDAP Object with that Identifier Exists",
-      "namingViolation": "Naming Violation Exception",
+      "namingViolation": "LDAP Naming Violation Exception",
+      "constraintViolation": "LDAP Constraint Violation Exception",
       "unwillingToPerform": "LDAP Server is Unwilling to Perform Action",
       "unwillingToPerformPwd": "Active Directory requires LDAP with SSL to Modify Passwords"
     },
@@ -801,7 +802,8 @@
         "showCountries": "Show countries list",
         "countryList": "LDAP Country List",
         "error": {
-          "serializer_validation": "Serializer Validation Error",
+          "save": "Save Error",
+          "serialization": "Serializer Validation Error",
           "validation": "Field Validation Error",
           "permission": "Permission Parsing Error",
           "country": "Country Parsing Error, see ISO-3166",
