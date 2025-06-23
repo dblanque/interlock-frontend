@@ -544,8 +544,7 @@ export default {
 		activeUserName() {
 			if (this.last_name && this.last_name.length > 0 &&
 				this.first_name && this.first_name.length > 0)
-				return this.last_name + ", " + this.first_name + " | " + this.username
-			// return this.last_name + ", " + this.first_name + " | " + this.realm.toUpperCase() + "@" + this.username
+				return `${this.last_name}, ${this.first_name} | ${this.username}`
 			return this.realm.toUpperCase() + "@" + this.username
 		},
 		showEnduserHelpMessage() {
