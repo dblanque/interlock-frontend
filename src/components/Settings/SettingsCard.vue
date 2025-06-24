@@ -834,6 +834,8 @@ export default {
 			const configKeys = Object.keys(this.config)
 			for (let i = 0; i < configKeys.length; i++) {
 				const clsKey = configKeys[i];
+				if (!settingClsEnabled(clsKey))
+					continue
 				const ref = `${clsKey}SettingsForm`
 				const refLen = this.$refs[ref] ? this.$refs[ref].length : 0
 				if (this.$refs[ref][refLen - 1] !== undefined)
