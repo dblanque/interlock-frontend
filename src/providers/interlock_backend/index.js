@@ -18,6 +18,11 @@ import totpCalls from '@/providers/interlock_backend/modules/totp.js'
 import testCalls from '@/providers/interlock_backend/modules/test.js'
 import livenessCalls from '@/providers/interlock_backend/modules/liveness.js'
 import debugCalls from '@/providers/interlock_backend/modules/debug.js'
+import applicationCalls from '@/providers/interlock_backend/modules/application.js'
+import djangoUserCalls from '@/providers/interlock_backend/modules/djangoUser.js'
+import applicationGroupCalls from '@/providers/interlock_backend/modules/applicationGroup.js'
+import oidcCalls from '@/providers/interlock_backend/modules/oidc.js'
+import homeCalls from '@/providers/interlock_backend/modules/homeInfo.js'
 
 const modules = {
     auth: authCalls,
@@ -33,21 +38,26 @@ const modules = {
     test: testCalls,
     liveness: livenessCalls,
     debug: debugCalls,
+    application: applicationCalls,
+    djangoUser: djangoUserCalls,
+    applicationGroup: applicationGroupCalls,
+    oidc: oidcCalls,
+    home: homeCalls
 }
 
 const interlock_backend = {
-    call: (moduleCallLinkString, params) => {
-        if(!moduleCallLinkString)
+    call: (moduleCallLinkString, data) => {
+        if (!moduleCallLinkString)
             throw Error("Missing Link String Parameters. Linking String provided is undefined.")
-        var links = moduleCallLinkString.split('/')
-        if(links.length == 1)
+        const links = moduleCallLinkString.split('/')
+        if (links.length == 1)
             throw Error("Missing Link String Parameters. Linking String Example 'module/call'.")
         else if (!(links[0] in modules))
-            throw Error("Module `" +links[0]+ "` not registered in provider modules.")
+            throw Error("Module `" + links[0] + "` not registered in provider modules.")
         else if (!(links[1] in modules[links[0]]))
-            throw Error("Function `" +links[1]+ "` was not found in `"+links[0]+"` module.")
-        else{
-            return modules[links[0]][links[1]](params)
+            throw Error("Function `" + links[1] + "` was not found in `" + links[0] + "` module.")
+        else {
+            return modules[links[0]][links[1]](data)
         }
     }
 }

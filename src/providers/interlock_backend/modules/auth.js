@@ -5,10 +5,10 @@
 import backend from "@/providers/interlock_backend/config";
 
 const calls = {
-    login: (data)=>{
+    login: (data) => {
         return new Promise((resolve, reject) => {
             backend.request.post(backend.urls.auth.token, data).then(response => {
-                if(!response || response.status == 401) {
+                if (!response || response.status == 401) {
                     reject(response)
                     console.log('Authentication Rejected')
                 }
@@ -18,6 +18,7 @@ const calls = {
                 localStorage.setItem('auth.access_expire', response.data.access_expire)
                 localStorage.setItem('auth.refresh_expire', response.data.refresh_expire)
                 localStorage.setItem("user.username", response.data.username)
+                localStorage.setItem("user.user_type", response.data.user_type)
                 if (Object.keys(response.data).includes('admin_allowed'))
                     localStorage.setItem("user.admin_allowed", response.data.admin_allowed)
                 else
@@ -32,12 +33,13 @@ const calls = {
             })
         })
     },
-    logout: (timeout=false) => {
+    logout: (timeout = false) => {
         const removeKeys = [
             "refreshClock",
             "username",
             "first_name",
             "last_name",
+            "user_type",
             "email",
             "admin_allowed"
         ]

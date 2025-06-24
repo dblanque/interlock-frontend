@@ -1,75 +1,95 @@
 {
   "indexTitle": "Interlock - Administrador de LDAP",
+  "navgroup": {
+    "local": "Base de Datos Local",
+    "ldap": "Back-end de LDAP",
+    "ldap_hint": "Habilitar en Configuración"
+  },
   "category": {
     "home": "Inicio",
-    "users": "Usuarios",
-    "groups": "Grupos de Seguridad",
-    "dns": "DNS",
-    "gpo": "GPO",
-    "dns_short": "DNS",
-    "gpo_short": "GPO",
+    "ldap-dirtree": "Árbol de Directorio",
+    "applications": "Aplicaciones de SSO",
+    "django-users": "Usuarios",
+    "application-groups": "Grupos",
+    "ldap-users": "Usuarios",
+    "ldap-groups": "Grupos de Seguridad",
+    "ldap-dns": "DNS",
+    "ldap-gpo": "GPO",
+    "ldap-dns_short": "DNS",
+    "ldap-gpo_short": "GPO",
     "server": "Servidor",
     "settings": "Configuración",
-    "logs":"Registro de Eventos",
-    "debug":"Debugging",
+    "logs": "Registro de Eventos",
+    "debug": "Debugging",
     "header": {
-      "home":"Árbol de Directorio",
-      "users":"Usuarios",
-      "groups":"Grupos de Seguridad",
-      "dns":"Servidor de Nombre de Dominio",
-      "gpo":"Objetos de Política de Grupo",
-      "server":"Administración de Servidor",
+      "home": "Inicio",
+      "django-users": "Usuarios Locales",
+      "application-groups": "Grupos de Aplicación",
+      "ldap-dirtree": "Árbol de Directorio",
+      "ldap-users": "Usuarios",
+      "ldap-groups": "Grupos de Seguridad",
+      "ldap-dns": "Servidor de Nombre de Dominio",
+      "ldap-gpo": "Objetos de Política de Grupo",
+      "server": "Administración de Servidor",
       "settings": "Configuración",
-      "logs":"Registro de Eventos",
-      "debug":"Debugging para Desarrolladores"
+      "logs": "Registro de Eventos",
+      "debug": "Debugging para Desarrolladores"
     }
   },
   "actions": {
-    "commonlyUsed":"Comúnmente Utilizado",
-    "ldap":{
-      "configPreset":"Grupo de Parámetros",
-      "newConfigPreset":"Nombre de Parámetros Nuevo",
-      "defaultPreset":"Parámetros Pre-determinados",
-      "manual_command":"Comando LDAP Manual",
-      "operation":"Operación LDAP",
-      "operation_list":{
-        "ADD":"Añadir (Add)",
-        "DELETE":"Eliminar (Delete)",
-        "MODIFY":"Modificar (Modify)",
-        "MODIFYDN":"Modificar DN (Modify-dn)",
-        "SEARCH":"Buscar (Search)",
-        "COMPARE":"Comparar (Compare)",
-        "EXTENDED":"Extendida (Extended)"
+    "synchronize": "Sincronizar",
+    "purge": "Purgar",
+    "prune": "Limpiar",
+    "skip": "Saltear",
+    "copy": "Copiar",
+    "copiedToClipboard": "Copiado al Portapapeles",
+    "commonlyUsed": "Comúnmente Utilizado",
+    "ldap": {
+      "configPreset": "Grupo de Parámetros",
+      "newConfigPreset": "Nombre de Parámetros Nuevo",
+      "defaultPreset": "Parámetros Pre-determinados",
+      "manual_command": "Comando LDAP Manual",
+      "operation": "Operación LDAP",
+      "operation_list": {
+        "ADD": "Añadir (Add)",
+        "DELETE": "Eliminar (Delete)",
+        "MODIFY": "Modificar (Modify)",
+        "MODIFYDN": "Modificar DN (Modify-dn)",
+        "SEARCH": "Buscar (Search)",
+        "COMPARE": "Comparar (Compare)",
+        "EXTENDED": "Extendida (Extended)"
       },
-      "filter":"Filtro LDAP"
+      "filter": "Filtro LDAP"
     },
-    "runExecute":"Ejecutar",
-    "expirePwd":"Expirar Contraseña",
-    "extra":"Extra",
-    "moreActions":"Más Acciones",
-    "refreshToken":"Refrescar Token de Acceso",
-    "import":"Importar",
-    "export":"Exportar",
-    "groupBy":"Agrupar por",
-    "filter":"Filtrar",
-    "rename":"Renombrar",
-    "openAll":"Abrir todos",
-    "closeAll":"Cerrar todos",
-    "unlock":"Desbloquear",
-    "resetFilters":"Borrar Filtros",
-    "backToLogin":"Volver a iniciar sesión",
-    "testSettings":"Probar Configuración",
-    "restoreDefaultValues":"Restaurar Valores Originales",
-    "areYouSure":"¿Esta seguro de querer",
+    "accept": "Aceptar",
+    "decline": "Declinar",
+    "runExecute": "Ejecutar",
+    "expirePwd": "Expirar Contraseña",
+    "extra": "Extra",
+    "moreActions": "Más Acciones",
+    "refreshToken": "Refrescar Token de Acceso",
+    "import": "Importar",
+    "export": "Exportar",
+    "groupBy": "Agrupar por",
+    "filter": "Filtrar",
+    "rename": "Renombrar",
+    "openAll": "Abrir todos",
+    "closeAll": "Cerrar todos",
+    "unlock": "Desbloquear",
+    "resetFilters": "Borrar Filtros",
+    "backToLogin": "Volver a iniciar sesión",
+    "testSettings": "Probar Configuración LDAP",
+    "restoreDefaultValues": "Restaurar Valores Originales",
+    "areYouSure": "¿Esta seguro de querer",
     "label": "Acciones",
     "revert": "Revertir",
-    "done":"Listo",
-    "enable":"Habilitar",
-    "disable":"Des-habilitar",
-    "clickTo":"Clickee para",
-    "move":"Mover",
-    "changePassword":"Cambiar Contraseña",
-    "changeEnduserPassword":"Cambiar su Contraseña",
+    "done": "Listo",
+    "enable": "Habilitar",
+    "disable": "Des-habilitar",
+    "clickTo": "Clickee para",
+    "move": "Mover",
+    "changePassword": "Cambiar Contraseña",
+    "changeEnduserPassword": "Cambiar su Contraseña",
     "goToLink": "Ir a Enlace",
     "goTo": "Ir a",
     "search": "Buscar",
@@ -79,7 +99,7 @@
     "addF": "Nueva",
     "addM": "Nuevo",
     "addN": "Añadir",
-    "previous":"Anterior",
+    "previous": "Anterior",
     "back": "Volver",
     "back_short": "Volver",
     "confirm": "Confirmar",
@@ -113,71 +133,92 @@
     "download": "Descargar",
     "downloadLatest": "Descargar Último",
     "changeUserPerms": "Ver Permisos",
-    "massChangeUserPerms":"Cambiar Permisos",
-    "changeUserGroups":"Ver Grupos",
+    "massChangeUserPerms": "Cambiar Permisos",
+    "changeUserGroups": "Ver Grupos",
     "addObjectClass": "Añadir Clase de Objeto",
     "passwordChanged": "Contraseña Modificada"
   },
   "words": {
-    "created":{
-      "m":"Creado | Creados",
-      "f":"Creada | Creadas",
-      "n":"Creado | Creados"
+    "purged": {
+      "m": "Purgado | Purgados",
+      "f": "Purgada | Purgadas",
+      "n": "Purgado | Purgados"
     },
-    "updated":{
-      "m":"Modificado | Modificados",
-      "f":"Modificada | Modificadas",
-      "n":"Modificado | Modificados"
+    "pruned": {
+      "m": "Limpiado | Limpiados",
+      "f": "Limpiada | Limpiadas",
+      "n": "Limpiado | Limpiados"
     },
-    "deleted":{
-      "m":"Eliminado | Eliminados",
-      "f":"Eliminada | Eliminadas",
-      "n":"Eliminado | Eliminados"
+    "synchronized": {
+      "m": "Sincronizado | Sincronizados",
+      "f": "Sincronizada | Sincronizadas",
+      "n": "Sincronizado | Sincronizados"
     },
-    "saved":{
-      "m":"Guardado | Guardados",
-      "f":"Guardada | Guardadas",
-      "n":"Guardado | Guardados"
+    "recommended": "Recomendado",
+    "default": "Pre-determinado",
+    "created": {
+      "m": "Creado | Creados",
+      "f": "Creada | Creadas",
+      "n": "Creado | Creados"
     },
-    "renamed":{
-      "m":"Renombrado | Renombrados",
-      "f":"Renombrada | Renombradas",
-      "n":"Renombrados | Renombrados"
+    "updated": {
+      "m": "Modificado | Modificados",
+      "f": "Modificada | Modificadas",
+      "n": "Modificado | Modificados"
     },
-    "all":{
-      "m":"Todo | Todos",
-      "f":"Toda | Todas",
-      "n":"Todo | Todos"
+    "deleted": {
+      "m": "Eliminado | Eliminados",
+      "f": "Eliminada | Eliminadas",
+      "n": "Eliminado | Eliminados"
     },
-    "none":{
-      "m":"Ninguno",
-      "f":"Ninguna",
-      "n":"Ninguno"
+    "saved": {
+      "m": "Guardado | Guardados",
+      "f": "Guardada | Guardadas",
+      "n": "Guardado | Guardados"
+    },
+    "renamed": {
+      "m": "Renombrado | Renombrados",
+      "f": "Renombrada | Renombradas",
+      "n": "Renombrados | Renombrados"
+    },
+    "all": {
+      "m": "Todo | Todos",
+      "f": "Toda | Todas",
+      "n": "Todo | Todos"
+    },
+    "none": {
+      "m": "Ninguno",
+      "f": "Ninguna",
+      "n": "Ninguno"
     },
     "loaded": {
-      "m":"Cargado | Cargados",
-      "f":"Cargada | Cargadas",
-      "n":"Cargado | Cargados"
+      "m": "Cargado | Cargados",
+      "f": "Cargada | Cargadas",
+      "n": "Cargado | Cargados",
+      "oidc": {
+        "issuer": "Issuer",
+        "authorization_endpoint": "Authorization Endpoint"
+      }
     },
     "unlocked": {
-      "m":"Desbloqueado | Desbloqueados",
-      "f":"Desbloqueada | Desbloqueadas",
-      "n":"Desbloqueado | Desbloqueados"
+      "m": "Desbloqueado | Desbloqueados",
+      "f": "Desbloqueada | Desbloqueadas",
+      "n": "Desbloqueado | Desbloqueados"
     },
-    "success":"Éxito",
-    "skipped":"Omitido",
-    "status":"Estado",
-    "selected":"Seleccionados",
-    "readOnly":"Solo Lectura",
-    "member":"Miembro",
-    "enabled":"Activado",
-    "disabled":"Des-activado",
-    "seconds":"Segundos",
-    "minutes":"Minutos",
-    "hours":"Horas",
-    "key":"Clave",
-    "value":"Valor",
-    "error":"Error",
+    "success": "Éxito",
+    "skipped": "Omitido",
+    "status": "Estado",
+    "selected": "Seleccionados",
+    "readOnly": "Solo Lectura",
+    "member": "Miembro",
+    "enabled": "Activado",
+    "disabled": "Des-activado",
+    "seconds": "Segundos",
+    "minutes": "Minutos",
+    "hours": "Horas",
+    "key": "Clave",
+    "value": "Valor",
+    "error": "Error",
     "today": "Hoy",
     "filter": "Filtro",
     "legend": "Leyenda",
@@ -205,33 +246,36 @@
     "date": "Fecha",
     "total": "Total"
   },
-  "classes":{
-    "log":"Evento | Eventos",
-    "connection":"Conexión | Conexiones",
-    "user":"Usuario | Usuarios",
-    "contact":"Contacto | Contactos",
-    "builtin-domain":"Objeto Integrado | Objetos Integrados",
-    "container":"Contenedor | Contenedores",
-    "person":"Persona | Personas",
-    "group":"Grupo | Grupos",
-    "computer":"Computadora | Computadoras",
-    "printer":"Impresora | Impresoras",
-    "organizational-unit":"Unidad Organizacional | Unidades Organizacionales",
-    "ou":"OU | OUs",
-    "setting":"Parámetro | Parámetros",
-	  "setting-preset":"Grupo de Parámetros | Grupos de Parámetros",
-    "ldap":"Objeto LDAP | Objetos LDAP",
-    "totp-device":"Dispositivo TOTP | Dispositivos TOTP",
-    "dns":{
-        "zone":"Zona de DNS | Zonas de DNS",
-        "record":"Registro de DNS | Registros de DNS"
+  "classes": {
+    "log": "Evento | Eventos",
+    "connection": "Conexión | Conexiones",
+    "user": "Usuario | Usuarios",
+    "contact": "Contacto | Contactos",
+    "builtin-domain": "Objeto Integrado | Objetos Integrados",
+    "container": "Contenedor | Contenedores",
+    "person": "Persona | Personas",
+    "group": "Grupo | Grupos",
+    "computer": "Computadora | Computadoras",
+    "printer": "Impresora | Impresoras",
+    "organizational-unit": "Unidad Organizacional | Unidades Organizacionales",
+    "ou": "OU | OUs",
+    "setting": "Parámetro | Parámetros",
+    "setting-preset": "Grupo de Parámetros | Grupos de Parámetros",
+    "ldap": "Objeto LDAP | Objetos LDAP",
+    "totp-device": "Dispositivo TOTP | Dispositivos TOTP",
+    "application": "Aplicación | Aplicaciones",
+    "application-group": "Grupo de Aplicación | Grupos de Aplicaciones",
+    "client": "Cliente | Clientes",
+    "dns": {
+      "zone": "Zona de DNS | Zonas de DNS",
+      "record": "Registro de DNS | Registros de DNS"
     },
     "gpo": {
-      "normal":"Objetos de Políticas de Grupo | Objeto de Políticas de Grupo",
-      "short":"GPO | GPOs"
+      "normal": "Objetos de Políticas de Grupo | Objeto de Políticas de Grupo",
+      "short": "GPO | GPOs"
     }
   },
-  "error":{
+  "error": {
     "codes": {
       "400": "HTTP 400: Pedido Erróneo",
       "401": "HTTP 401: No Autorizado",
@@ -239,126 +283,187 @@
       "406": "HTTP 406: Inaceptable",
       "409": "HTTP 409: Conflicto",
       "500": "HTTP 500: Error de Servidor",
-      "ldapGwError": "Servidor de LDAP Inalcanzable",
-      "invalidCSV": "Archivo CSV Inválido",
-      "invalidCSVHeaders": "Cabecera de CSV Inválida",
-      "fileReader": "Excepción del Lector de Archivos",
-      "networkError": "AXIOS: Error de Red",
+      "access_token_invalid": "Token de Acceso inválido",
+      "refresh_token_expired": "Token de Renovación expirado",
+      "internal_server_error": "Error Interno",
+      "bad_request": "Pedido Erróneo",
+      "unauthorized": "Sin Autorización",
+      "permission_denied": "Permiso Denegado",
+      "not_acceptable": "Inaceptable",
+      "data_key_missing": "Clave de Dato Faltante",
+      "ldap_unreachable": "Servidor de LDAP Inalcanzable",
+      "ldap_backend_disabled": "Back-end de LDAP Back-end des-habilitado",
+      "ldap_backend_exception": "Excepción de LDAP desconocida",
+      "improperly_configured": "Configuración Inapropiada",
+      "applications": {
+        "application_exists": "La Aplicación SSO ya existe",
+        "application_does_not_exist": "La Aplicación SSO no existe",
+        "application_could_not_be_fetched": "No se pudo obtener la Aplicación SSO",
+        "application_field_does_not_exist": "Campo Inexistente para Aplicación SSO",
+        "application_oidc_client_does_not_exist": "El Cliente de OIDC para la Aplicación no existe"
+      },
+      "application_groups": {
+        "application_group_exists": "El Grupo de Aplicación ya existe",
+        "application_group_does_not_exist": "El Grupo de Aplicación no existe"
+      },
       "auth": {
         "invalid_credentials": "Credenciales Incorrectos",
         "verification_code": "Codigo Incorrecto, Intente nuevamente",
         "verified_successfully": "Verificado Exitosamente",
         "verification_expired": "Intentos de Verificación acabados, contacte un administrador"
       },
-      "otp":{
-        "otp_invalid_code":"Código OTP inválido",
-        "otp_invalid_recovery_code":"Código de Respaldo inválido",
-        "otp_invalid_data":"Datos OTP inválidos",
-        "otp_required":"Se requiere el Código OTP",
-        "otp_no_device_registered":"No se registró el Dispositivo OTP"
+      "dirtree": {
+        "dirtree_filt_err": "No se pudo procesar el filtro del Árbol de Directorio",
+        "dirtree_dn_conflict": "Los DN Absoluto y Relativo no pueden ser iguales",
+        "dirtree_move_error": "No se pudo mover el Objeto LDAP",
+        "dirtree_rename_error": "No se pudo renombrar el Objeto LDAP",
+        "dirtree_name_not_changed": "El nombre del Objeto LDAP no ha cambiado"
       },
-      "dns":{
-        "dns_zone_missing":"Valor de Zona DNS Inválido",
-        "dns_zone_in_record":"El Registro no debe incluir la Zona",
-        "dns_zone_not_deletable":"Esta Zona DNS no puede ser borrada",
-        "dns_zone_exists":"La Zona ya existe",
-        "dns_zone_does_not_exist":"La Zona no existe",
-        "dns_record_not_in_request":"El Registro DNS no se encuentra en el Request",
-        "dns_record_dn_missing":"No existe el Nombre Distinguido en ese Registro",
-        "dns_record_type_conflict":"La Inserción o Modificación genera un conflicto",
-        "dns_record_exists_conflict":"Este Registro DNS ya existe",
-        "dns_record_type_unsupported":"Tipo de Registro DNS no soportado",
-        "dns_record_attr_missing":"Falta un atributo requerido en el Request",
-        "dns_record_type_missing":"Falta el tipo de Registro DNS en el Request",
-        "dns_record_data_does_not_match":"Los datos del Registro no coinciden con los datos del servidor",
-        "dns_record_entry_does_not_exist":"La Entrada LDAP del Registro no existe",
-        "dns_record_data_malformed":"El Registro de DNS está mal formado",
-        "dns_record_serial":"No se pudo establecer el Serial del Registro",
-        "dns_soa_fetch":"No se pudo obtener el Registro SOA de la Zona",
-        "dns_soa_serial_increment":"No se pudo Incrementar el Serial del SOA",
-        "dns_soa_record_root_only":"Solo puede configurar un SOA para la raíz de su zona",
-        "dns_root_servers_only_cli":"Los Servidores DNS de Raíz solo pueden ser modificados desde la consola",
-        "dns_field_validator_failed":"Un campo no fue validado correctamente",
-        "dns_list_response_empty":"La Respuesta del LDAP no contiene Zonas de DNS",
-        "dns_field_validator_exception":"Excepción de Validación de Campos DNS",
-        "dns_record_create":"No se pudo crear el Registro DNS"
+      "dns": {
+        "dns_zone_missing": "Valor de Zona DNS Inválido",
+        "dns_zone_foreign": "La Zona de DNS es foránea y no pertenece a este Servidor LDAP",
+        "dns_zone_in_record": "El Registro no debe incluir la Zona",
+        "dns_zone_not_deletable": "Esta Zona DNS no puede ser borrada",
+        "dns_zone_exists": "La Zona ya existe",
+        "dns_zone_does_not_exist": "La Zona no existe",
+        "dns_record_create": "No se pudo crear el Registro DNS",
+        "dns_record_not_in_request": "El Registro DNS no se encuentra en el Request",
+        "dns_record_data_malformed": "El Registro de DNS está mal formado",
+        "dns_record_dn_missing": "No existe el Nombre Distinguido en ese Registro",
+        "dns_record_type_conflict": "La Inserción o Modificación genera un conflicto",
+        "dns_record_type_mismatch": "Conflicto de Tipo de Registro",
+        "dns_record_zone_mismatch": "Conflicto de Zona de Registro",
+        "dns_record_self_reference_conflict": "El Registro no puede auto-referenciarse",
+        "dns_record_operation_conflict": "Las operaciones del Registro tienen un conflicto",
+        "dns_record_exists_conflict": "Este Registro DNS ya existe",
+        "dns_record_does_not_exist": "Este Registro DNS no existe",
+        "dns_record_type_unsupported": "Tipo de Registro DNS no soportado",
+        "dns_record_attr_missing": "Falta un atributo requerido en el Request",
+        "dns_record_type_missing": "Falta el tipo de Registro DNS en el Request",
+        "dns_record_data_does_not_match": "Los datos del Registro no coinciden con los datos del servidor",
+        "dns_record_entry_does_not_exist": "La Entrada LDAP del Registro no existe",
+        "dns_record_serial": "No se pudo establecer el Serial del Registro",
+        "dns_soa_fetch": "No se pudo obtener el Registro SOA de la Zona",
+        "dns_soa_serial_increment": "No se pudo Incrementar el Serial del SOA",
+        "dns_soa_record_root_only": "Solo puede configurar un SOA para la raíz de su zona",
+        "dns_root_servers_only_cli": "Los Servidores DNS de Raíz solo pueden ser modificados desde la consola",
+        "dns_field_validator_failed": "Un campo no fue validado correctamente",
+        "dns_field_validator_exception": "Excepción de Validación de Campos DNS",
+        "dns_list_response_empty": "La Respuesta del LDAP no contiene Zonas de DNS",
+        "dns_string_data_limit": "String Data no puede contener más de 255 caracteres",
+        "dns_value_not_canonical": "El valor dado no es un hostname canónico (debe tener un punto final)"
       },
-      "users":{
-        "noUsersInImport":"No hay usuarios en el archivo",
-        "user_permission_malformed":"Permisos de Usuario mal-formados",
-        "user_passwords_dont_match":"No coinciden las contraseñas del Usuario",
-        "user_create_error":"No se pudo crear el Usuario",
-        "user_bulk_create_error":"No se pudo crear un Usuario",
-        "user_bulk_mapping_error":"Falta o es inválida una relación de los cabezales",
-        "user_bulk_length_error":"Una fila no tiene la cantidad de campos o delimitadores correcta",
-        "user_update_error":"No se pudo modificar el Usuario",
-        "user_field_validator_error":"No se pudo validar el Usuario",
-        "user_dn_does_not_exist":"No existe un Usuario con ese Nombre Distinguido",
-        "user_dn_path_exception":"Excepción de Parseo de DN de Usuario",
-        "user_anti_lockout":"Excepción de Anti-bloqueo de Usuario",
-        "user_unlock_error":"No se pudo des-bloquear el Usuario",
-        "user_country_error":"No se pudo actualizar el país del Usuario",
-        "user_group_fetch_error":"No se pudieron obtener las membresías de Grupo",
-        "user_group_primary_err":"No se puede eliminar el Grupo Primario del Usuario",
-        "user_group_bad":"Operación de Miembro de Grupo Inválida",
-        "user_email_exists":"Ya existe otro Usuario con ese Email"
+      "users": {
+        "noUsersInImport": "No hay usuarios en el archivo",
+        "user_permission_malformed": "Permisos de Usuario mal-formados",
+        "user_password_over_plain_ldap": "Se requiere LDAPS para cambiar Contraseñas en Microsoft ADDS",
+        "user_passwords_dont_match": "No coinciden las contraseñas del Usuario",
+        "user_old_password_required": "Se requiere la contraseña anterior",
+        "user_create_error": "No se pudo crear el Usuario",
+        "user_bulk_create_error": "No se pudo crear un Usuario",
+        "user_bulk_mapping_error": "Falta o es inválida una relación de los cabezales",
+        "user_bulk_length_error": "Una fila no tiene la cantidad de campos o delimitadores correcta",
+        "user_update_error": "No se pudo modificar el Usuario",
+        "user_field_validator_error": "No se pudo validar el Usuario",
+        "user_does_not_exist": "El Usuario no existe",
+        "user_dn_does_not_exist": "No existe un Usuario con ese Nombre Distinguido",
+        "user_dn_path_exception": "Excepción de Parseo de DN de Usuario",
+        "user_anti_lockout": "Excepción de Anti-bloqueo de Usuario",
+        "user_unlock_error": "No se pudo des-bloquear el Usuario",
+        "user_country_error": "No se pudo actualizar el país del Usuario",
+        "user_group_fetch_error": "No se pudieron obtener las membresías de Grupo",
+        "user_group_primary_err": "No se puede eliminar el Grupo Primario del Usuario",
+        "user_group_bad": "Operación de Miembro de Grupo Inválida",
+        "user_email_exists": "Ya existe otro usuario con ese Email",
+        "user_entry_not_found": "No se encontró la Entrada de Usuario LDAP",
+        "user_exists": "El usuario ya existe",
+        "user_not_synced": "No hay un usuario sincronizado con ese nombre",
+        "user_not_ldap_type": "El Usuario no es de tipo LDAP",
+        "user_not_local_type": "El Usuario no es de tipo Local",
+        "user_ldap_email_exists": "An LDAP User with that email exists",
+        "user_ldap_exists": "An LDAP User with that username exists"
       },
-      "ldap":{
-        "ldap_obj_exists":"Ya existe un objeto con este Nombre Común",
-        "ldap_connection_not_open":"No se abrió una Conexión LDAP previo a esta Operación",
-        "ldap_perm_insufficient":"Permisos de LDAP Insuficientes",
-        "ldap_obj_doesnt_exist":"No existe un Objeto LDAP con este Nombre",
-        "ldap_bind_err":"No se pudo emparejar con el Servidor LDAP",
-        "ldap_tree_err":"No se pudo obtener el Directorio del Servidor LDAP",
-        "ldap_port_err":"Puerto de LDAP Inalcanzable",
-        "ldap_bind_test_failed":"Conexión de Emparejamiento Fallida"
+      "groups": {
+        "group_does_not_exist": "El Grupo no existe",
+        "group_create": "No se pudo el crear Grupo",
+        "group_delete": "No se pudo el eliminar Grupo",
+        "group_update": "No se pudo el modificar Grupo",
+        "group_member_add": "No se pudieron añadir miembros al Grupo",
+        "group_member_remove": "No se pudieron eliminar miembros del Grupo",
+        "group_scope_or_type": "Falta el Alcance o Tipo del Grupo en el Request",
+        "group_dn_missing": "Falta el Nombre Distinguido en el Request",
+        "group_builtin_protect": "El Grupo especificado es integrado a LDAP y no puede ser eliminado",
+        "group_members_bad": "Los mismos miembros estan siendo eliminados y añadidos",
+        "group_type_missing_field": "Actualizar el tipo de Grupo requiere el alcance y el tipo"
       },
-      "groups":{
-        "group_does_not_exist":"El Grupo no existe",
-        "group_create":"No se pudo el crear Grupo",
-        "group_delete":"No se pudo el eliminar Grupo",
-        "group_update":"No se pudo el modificar Grupo",
-        "group_member_add":"No se pudieron añadir miembros al Grupo",
-        "group_member_remove":"No se pudieron eliminar miembros del Grupo",
-        "group_scope_or_type":"Falta el Alcance o Tipo del Grupo en el Request",
-        "group_dn_missing":"Falta el Nombre Distinguido en el Request",
-        "group_builtin_protect":"El Grupo especificado es integrado a LDAP y no puede ser eliminado",
-        "group_members_bad":"Los mismos miembros estan siendo eliminados y añadidos"
+      "settings": {
+        "setting_type_malformed": "Tipo de Parámetro Malformado",
+        "setting_choice_invalid": "El valor del Parámetro no es una opción válida",
+        "setting_not_in_list": "Parámetro Requerido no encontrado",
+        "setting_max_log": "Violación de Límite de Eventos",
+        "setting_reset_fail": "No se pudieron restaurar los valores por defecto",
+        "setting_preset_not_exists": "Grupo de Parámetros Inexistente",
+        "setting_preset_exists": "Ese Grupo de Parámetros ya existe",
+        "settings_serializer_error": "Error de serialización de Parámetros",
+        "settings_preset_serializer_error": "Error de Serialización de Grupo de Parámetros",
+        "settings_preset_must_be_disabled": "El Grupo de Parámetros debe estar des-habilitado"
       },
-      "settings":{
-        "setting_type_malformed":"Tipo de Parámetro Malformado",
-        "setting_not_in_list":"Parámetro Requerido no encontrado",
-        "setting_max_log":"Violación de Límite de Eventos",
-        "setting_reset_fail":"No se pudieron restaurar los valores por defecto",
-        "setting_preset_not_exists":"Grupo de Parámetros Inexistente",
-        "setting_preset_exists":"Ese Grupo de Parámetros ya existe",
-        "settings_serializer_error":"Error de serialización de Parámetros",
-        "settings_preset_serializer_error":"Error de Serialización de Grupo de Parámetros",
-        "settings_preset_must_be_disabled":"El Grupo de Parámetros debe estar des-habilitado"
+      "ldap": {
+        "ldap_obj_exists": "Ya existe un objeto con este Nombre Común",
+        "ldap_connection_not_open": "No se abrió una Conexión LDAP previo a esta Operación",
+        "ldap_perm_insufficient": "Permisos de LDAP Insuficientes",
+        "ldap_obj_doesnt_exist": "No existe un Objeto LDAP con este Nombre",
+        "ldap_bind_err": "No se pudo emparejar con el Servidor LDAP",
+        "ldap_tree_err": "No se pudo obtener el Directorio del Servidor LDAP",
+        "ldap_port_err": "Puerto de LDAP Inalcanzable",
+        "ldap_bind_test_failed": "Conexión de Emparejamiento Fallida",
+        "ldap_dn_validation_error": "Error de validación de DN LDAP",
+        "ldap_backend_disabled": "Por favor habilite el Back-end de LDAP",
+        "ldif_bad_field": "Fallo de validación de campo LDIF"
       },
-      "ldapObjectExists":"Un Objeto LDAP con ese Identificador ya existe",
-      "namingViolation":"Excepción de Violación de Nombre (Naming Violation)",
-      "unwillingToPerform":"El Servidor LDAP no está dispuesto a realizar la acción",
-      "unwillingToPerformPwd":"Active Directory requiere LDAP con SSL para Modificar Contraseñas"
+      "logs": {
+        "log_trunc_minmax": "Falta el mínimo o máximo a truncar en el pedido"
+      },
+      "oidc": {
+        "oidc_invalid_request": "Pedido OIDC Inválido",
+        "oidc_application_fetch": "No se pudo obtener la Aplicación OIDC"
+      },
+      "otp": {
+        "otp_invalid_code": "Código OTP inválido",
+        "otp_invalid_recovery_code": "Código de Respaldo inválido",
+        "otp_invalid_data": "Datos OTP inválidos",
+        "otp_required": "Se requiere el Código OTP",
+        "otp_no_device_registered": "No se registró el Dispositivo OTP"
+      },
+      "ldapGwError": "Servidor de LDAP Inalcanzable",
+      "invalidCSV": "Archivo CSV Inválido",
+      "invalidCSVHeaders": "Cabecera de CSV Inválida",
+      "fileReader": "Excepción del Lector de Archivos",
+      "networkError": "AXIOS: Error de Red",
+      "ldapObjectExists": "Un Objeto LDAP con ese Identificador ya existe",
+      "namingViolation": "Excepción LDAP de Violación de Nombre",
+      "constraintViolation": "Excepción LDAP de violación de Restricción",
+      "unwillingToPerform": "El Servidor LDAP no está dispuesto a realizar la acción",
+      "unwillingToPerformPwd": "Active Directory requiere LDAP con SSL para Modificar Contraseñas"
     },
     "settings": {
-      "testInvalid":"Prueba de Conexión LDAP Fallida",
-      "serverUnreachable":"Servidor LDAP Inalcanzable"
+      "testInvalid": "Prueba de Conexión LDAP Fallida",
+      "serverUnreachable": "Servidor LDAP Inalcanzable"
     },
-    "data":{
-      "noCountryCode":"Sin código configurado"
+    "data": {
+      "noCountryCode": "Sin código configurado"
     },
     "validation": {
-      "int32":"Debe ser un número entero de 32 bits",
-      "below10000":"El valor numérico debe ser menor a 10000",
-      "aboveZero":"El valor numérico debe ser mayor a 0",
-      "doubleQuotes":"No se permiten las comillas dobles",
-      "singleQuotes":"No se permiten las comillas simples",
-      "domainRoot":"Debe ser un Nombre de Dominio válido (excluir la zona, se permite @ para la raíz)",
+      "int32": "Debe ser un número entero de 32 bits",
+      "below10000": "El valor numérico debe ser menor a 10000",
+      "aboveZero": "El valor numérico debe ser mayor a 0",
+      "doubleQuotes": "No se permiten las comillas dobles",
+      "singleQuotes": "No se permiten las comillas simples",
+      "domainRoot": "Debe ser un Nombre de Dominio válido (excluir la zona, se permite @ para la raíz)",
       "ascii": "Los Datos del String deben contener solo Caracteres ASCII",
       "fieldinvalid": "Uno o mas campos son invalidos",
       "fieldRequired": "Este campo es requerido",
-      "passwordNotSame":"Las contraseñas no coinciden",
+      "passwordNotSame": "Las contraseñas no coinciden",
       "alphabetic": "Debe contener solo letras (2 caracteres mínimo)",
       "numeric": "Debe contener solo números",
       "max4": "Máximo de 4 caracteres",
@@ -370,565 +475,635 @@
       "alphaNumericPassword": "8 caracteres mín., caracteres especiales permitidos: !@#$%&*()",
       "alphaNumericSpaces": "a-z A-Z 0-9 y Espacios, 2 car. min",
       "alphaNumericSpecial": "a-z A-Z 0-9 -_ y Espacios, 2 car. min",
-      "domain": "Debe ser un Dominio de NSG válido ( ejemplo.tld | dominio.com )",
+      "domain": "Debe ser un Dominio de NSG válido ( ejemplo.tld )",
+      "endpoint": "Debe ser endpoint válido ( https://ejemplo.tld/endpoint )",
       "email": "Debe ser un E-Mail válido (Ej.: juan@dominio.com)",
       "phone": "Debe ser un Teléfono válido",
       "date": "Fecha inválida",
       "dayDate": "Fecha de Día inválida",
-      "ipv4Address":"Dirección IPv4 inválida",
-      "ipv6Address":"Dirección IPv6 inválida [0-9a-fA-F]",
-      "ipv6AddressUri":"La URI IPv6 debe estar encapsulada por corchetes",
-      "ipv6AddressLength":"Longitud de Dirección IPv6 Inválida",
-      "ipv6AddressAmbiguous":"Dirección IPv6 Ambigua",
-      "distinguishedName":"Nombre Distinguido inválido",
-      "realm":"Reino NT inválido",
-      "domainCanonical":"Debe ser un Dominio en formato Canónico (con un punto al final)",
-      "totpLength":"El Código TOTP debe tener 6 dígitos"
+      "ipv4Address": "Dirección IPv4 inválida",
+      "ipv6Address": "Dirección IPv6 inválida [0-9a-fA-F]",
+      "ipv6AddressUri": "La URI IPv6 debe estar encapsulada por corchetes",
+      "ipv6AddressLength": "Longitud de Dirección IPv6 Inválida",
+      "ipv6AddressAmbiguous": "Dirección IPv6 Ambigua",
+      "distinguishedName": "Nombre Distinguido inválido",
+      "realm": "Reino NT inválido",
+      "domainCanonical": "Debe ser un Dominio en formato Canónico (con un punto al final)",
+      "totpLength": "El Código TOTP debe tener 6 dígitos"
     },
-    "unableToLoad":"No se pudo cargar la sección",
+    "unableToLoad": "No se pudo cargar la sección",
     "notDisplayedCorrectly": "No se pudo obtener un código de error",
     "notFound": "no encontrado",
     "unknown_short": "Un error desconocido ha ocurrido",
     "unknown": "Un error desconocido ha ocurrido, por favor inténtelo nuevamente"
   },
-  "dns":{
-    "hints":{
-      "name":"Utilice el caracter @ para identificar su zona raíz",
-      "serial_create":"Deje el campo vacío para auto-generar el serial",
-      "serial_edit":"Si el serial no es modificado, este será auto-incrementado",
-      "stringData":"Inserte el registro sin doble comilla",
-      "quotesNotRequired":"Las comillas dobles no son requeridas, son puestas en forma automática"
+  "dns": {
+    "hints": {
+      "name": "Utilice el caracter @ para identificar su zona raíz",
+      "serial_create": "Deje el campo vacío para auto-generar el serial",
+      "serial_edit": "Si el serial no es modificado, este será auto-incrementado",
+      "stringData": "Inserte el registro sin doble comilla",
+      "quotesNotRequired": "Las comillas dobles no son requeridas, son puestas en forma automática"
     },
-    "attributes":{
+    "attributes": {
       "index": "Indice del Registro",
-      "infiniteTtl":"TTL Infinito",
-      "ttl":"Tiempo de Vida",
+      "infiniteTtl": "TTL Infinito",
+      "ttl": "Tiempo de Vida",
       "value": "Valor del Registro",
-      "displayName":"Nombre a Mostrar",
-      "name":"Nombre del Registro",
-      "nameNode":"Nombre del Nodo",
-      "nameTarget":"Nombre del Objetivo",
-      "ipv4Address":"Dirección IPv4",
-      "ipv6Address":"Dirección IPv6",
-      "address":"Dirección",
-      "type":"Tipo de Registro (Interno)",
-      "typeName":"Tipo de Registro",
-      "serial":"Serial",
-      "ts":"Lapidado",
-      "tstime":"Fecha de Lapidación",
-      "wPriority":"Prioridad",
-      "wWeight":"Peso",
-      "wPort":"Puerto",
-      "dwSerialNo":"Nro. Serial",
-      "dwRefresh":"Refresco",
-      "dwRetry":"Reintento",
-      "dwExpire":"Expiración",
-      "dwMinimumTtl":"Tiempo de Vida Mínimo (TTL)",
-      "namePrimaryServer":"Servidor Primario del Nombre",
-      "zoneAdminEmail":"E-mail del Admin de Zona",
-      "nameExchange":"Nombre del MX",
-      "stringData":"Datos del String",
-      "wPreference":"Prioridad"
+      "displayName": "Nombre a Mostrar",
+      "name": "Nombre del Registro",
+      "nameNode": "Nombre del Nodo",
+      "nameTarget": "Nombre del Objetivo",
+      "ipv4Address": "Dirección IPv4",
+      "ipv6Address": "Dirección IPv6",
+      "address": "Dirección",
+      "type": "Tipo de Registro (Interno)",
+      "typeName": "Tipo de Registro",
+      "serial": "Serial",
+      "ts": "Lapidado",
+      "tstime": "Fecha de Lapidación",
+      "wPriority": "Prioridad",
+      "wWeight": "Peso",
+      "wPort": "Puerto",
+      "dwSerialNo": "Nro. Serial",
+      "dwRefresh": "Refresco",
+      "dwRetry": "Reintento",
+      "dwExpire": "Expiración",
+      "dwMinimumTtl": "Tiempo de Vida Mínimo (TTL)",
+      "namePrimaryServer": "Servidor Primario del Nombre",
+      "zoneAdminEmail": "E-mail del Admin de Zona",
+      "nameExchange": "Nombre del MX",
+      "stringData": "Datos del String",
+      "wPreference": "Prioridad"
     }
   },
-  "ldap":{
-    "attributes":{
-      "realm":"Reino NT",
-      "domain":"Dominio",
-      "name":"Nombre",
-      "objectRid":"Identificador Relativo del Objeto (RID)",
-      "objectSid":"Identificador de Seguridad del Objeto (SID)",
-      "hasMembers":"Tiene Miembros",
-      "sAMAccountName":"Nombre de Cuenta",
-      "username":"Nombre de Usuario",
-      "givenName":"Nombre",
-      "sn":"Apellido",
-      "cn":"Nombre Común",
-      "groupType": "Tipo de Grupo",
-      "password":"Contraseña",
-      "passwordConfirm":"Confirmar Contraseña",
-      "initials":"Iniciales",
-      "mail":"Email",
-      "displayName":"Nombre Completo",
-      "is_enabled":"Usuario Habilitado",
-      "is_disabled":"Usuario Des-habilitado",
-      "last_login":"Ultima vez activo",
-      "role":"Rol",
-      "is_staff":"Es Empleado",
-      "telephoneNumber":"Teléfono",
-      "streetAddress":"Dirección",
-      "postalCode":"Código Postal",
-      "l":"Ciudad",
-      "st":"Estado / Provincia",
-      "countryCode":"País (Código INT)",
-      "countryCodeCombined":"País (Códigos INT / ISO)",
-      "c":"País (Código ISO)",
-      "co":"País",
-      "wWWHomePage":"Página Web",
-      "distinguishedName":"Nombre Distinguido",
-      "userPrincipalName":"Nombre Principal del Usuario",
-      "userPrincipalName_pre2000":"Nombre del Usuario (pre-Windows 2000)",
-      "userAccountControl":"Permisos del Usuario (INT Crudo)",
-      "whenCreated":"Cuenta creada el",
-      "whenChanged":"Cuenta modificada el",
-      "lastLogon":"Último inicio de sesión",
-      "badPwdCount":"Contador de Contraseñas Incorrectas",
-      "pwdLastSet":"Contraseña cambiada por última vez",
-      "primaryGroupID":"ID Primario de Grupo",
-      "objectClass":"Clase del Objeto",
-      "objectCategory":"Categoría del Objeto",
-      "sAMAccountType":"Tipo de Cuenta"
-    }
+  "components": {
+    "objectEditor": "Editor de Objeto"
   },
-  "components":{
-    "objectEditor":"Editor de Objeto"
-  },
-  "nav":{
-    "tooltip":{
-      "fetchDomainDetails":"Refrescar Datos de Dominio",
-      "debugAction":"Acción de Debugging"
+  "nav": {
+    "collapse": "Colapsar",
+    "keepOpen": "Mantener Abierto",
+    "menu": "Menú",
+    "tooltip": {
+      "fetchDomainDetails": "Refrescar Datos de Dominio",
+      "debugAction": "Acción de Debugging"
     }
   },
   "section": {
-    "dns":{
-      "zoneToAddName":"Nombre de la nueva Zona de DNS",
-      "confirmZoneCreation":"Confirmar Creación de Zona",
-      "legacyMode":"Utilizando DNS en Modo Legado",
-      "legacyMode_hint":"¿Intentó el Modo Legado de DNS?",
-      "createSuccess":"Registro Creado",
-      "updateSuccess":"Registro Modificado",
-      "deleteSuccess":"Registro Eliminado",
-      "deleteRecord":{
-        "message":"¿Está seguro de borrar el Registro de DNS"
+    "home": {
+      "welcomeMessage": "Bienvenido a Interlock",
+      "oidc": {
+        "title": "Información de OpenID",
+        "issuer": "Proveedor",
+        "authorization_endpoint": "Endpoint de Autorización"
       },
-      "massAction":{
-        "delete":"Los siguientes registros de DNS serán eliminados"
+      "local": {
+        "title": "Información de Usuarios",
+        "local_user_count": "Usuarios Locales",
+        "ldap_user_count": "Usuarios de LDAP Sincronizados"
       },
-      "deleteZone":{
-        "message":"¿Está seguro de borrar la Zona de DNS",
-        "confirmZone":"Por favor confirme re-escribiendo el nombre de la Zona"
+      "ldap": {
+        "title": "Información de LDAP",
+        "ldap_enabled": "Back-end de LDAP Configurado",
+        "ldap_tls": "LDAP con TLS",
+        "ldap_ssl": "LDAP con SSL",
+        "ldap_ok": "Estado de Back-end LDAP",
+        "ldap_active_server": "Servidor LDAP Activo"
+      }
+    },
+    "applicationGroups": {
+      "dialog": {
+        "create": {
+          "header": "Crear Grupo de Aplicación"
+        },
+        "statusChange": {
+          "question": "{action} Filtrado por Grupo de Aplicación",
+          "enable_warning": "Esto puede bloquear el acceso a su aplicación a otros usuarios accidentalmente",
+          "disable_warning": "Esto permitirá el acceso a su aplicación por parte de CUALQUIERA con acceso a Interlock"
+        }
+      }
+    },
+    "applications": {
+      "dialog": {
+        "create": {
+          "header": "Crear Aplicación",
+          "step1": "Configurar Aplicación",
+          "step2": "Creando Aplicación",
+          "step3": "Aplicación Creada",
+          "redirectUriPlaceholder": "https://<url_de_servicio>/oidc/callback",
+          "success": "Aplicación Creada Exitosamente"
+        },
+        "update": {
+          "copyId": "Copiar ID de Cliente",
+          "copySecret": "Copiar Secreto de Cliente"
+        },
+        "delete": {
+          "message": "¿Está seguro de borrar la Aplicación SSO"
+        }
+      },
+      "attribute": {
+        "name": "Nombre de Aplicación | Nombres de Aplicación",
+        "redirect_uris": "URI de Redirección | URIs de Redirección",
+        "require_consent": "Requerir Consentimiento",
+        "client_secret": "Secreto del Cliente",
+        "client_id": "ID del Cliente",
+        "reuse_consent": "Re-utilizar Consentimiento",
+        "addScope": "Añadir Alcance / Scope"
+      }
+    },
+    "dns": {
+      "zoneToAddName": "Nombre de la nueva Zona de DNS",
+      "confirmZoneCreation": "Confirmar Creación de Zona",
+      "legacyMode": "Utilizando DNS en Modo Legado",
+      "legacyMode_hint": "¿Intentó el Modo Legado de DNS?",
+      "createSuccess": "Registro Creado",
+      "updateSuccess": "Registro Modificado",
+      "deleteSuccess": "Registro Eliminado",
+      "deleteRecord": {
+        "message": "¿Está seguro de borrar el Registro de DNS"
+      },
+      "massAction": {
+        "delete": "Los siguientes registros de DNS serán eliminados"
+      },
+      "deleteZone": {
+        "message": "¿Está seguro de borrar la Zona de DNS",
+        "confirmZone": "Por favor confirme re-escribiendo el nombre de la Zona"
+      },
+      "ttlDisclaimer": {
+        "title": "Nota sobre la Administración de DNS",
+        "messageTtl": "Quizás necesite esperar a que expire el TTL de su Inicio de Autoridad para ver cambios efectivos",
+        "messageLegacyDns": "Si utiliza una versión vieja de Active DIrectory o su DNS no parece obtener ningún registro/zona, intente utilizar la opción de DNS modo Legado en sus preferencias."
       }
     },
     "login": {
-      "title": "Inicie Sesión en su Servidor LDAP",
-      "account": "Usuario LDAP",
-      "useEmail":"Usar E-Mail",
-      "useLDAPUser":"Usar Cuenta LDAP",
+      "useEmail": "Usar E-Mail",
+      "useLDAPUser": "Usar Cuenta LDAP",
       "loginBtn": "Iniciar Sesión",
-      "useRecoveryCode":"Usar Código de Respaldo",
+      "invalidCredentials": "Credenciales Inválidos",
+      "useRecoveryCode": "Usar Código de Respaldo",
       "forgotMyPassword": "Olvidé mi Contraseña",
       "tooManyLogins": "Ha sido deshabilitado",
       "tryAgain": "Inténtelo nuevamente",
       "oneRetryLeft": "intento restante",
-      "retriesLeft": "intentos restantes"
+      "retriesLeft": "intentos restantes",
+      "loginForOidc": "OIDC Requiere Autenticación",
+      "oidcRequestedByApp": "solicita usar sus Credenciales de Interlock"
     },
-    "logs":{
-      "resetDialog":{
-        "header":"Borrar Registros de Eventos",
-        "message":"¿Está seguro de borrar <b>todos</b> los registros de evento?"
+    "logs": {
+      "resetDialog": {
+        "header": "Borrar Registros de Eventos",
+        "message": "¿Está seguro de borrar <b>todos</b> los registros de evento?"
       },
-      "truncateDialog":{
-        "header":"Truncar Registros de Eventos",
-        "message":"¿Está seguro de truncar los registros de evento?"
+      "truncateDialog": {
+        "header": "Truncar Registros de Eventos",
+        "message": "¿Está seguro de truncar los registros de evento?"
       },
-      "extras":{
-        "totp_delete":"Se eliminó el Dispositivo TOTP",
-        "move":"El objeto fue movido",
-        "rename":"El objeto fue renombrado",
-        "end_user_updated":"El usuario modificó sus detalles",
-        "changed_password":"La contraseña del Usuario cambió",
-        "disable":"El usuario fue des-habilitado",
-        "enable":"El usuario fue habilitado",
-        "unlock":"El usuario fue des-bloqueado"
+      "extras": {
+        "totp_delete": "Se eliminó el Dispositivo TOTP",
+        "move": "El objeto fue movido",
+        "rename": "El objeto fue renombrado",
+        "end_user_updated": "El usuario modificó sus detalles",
+        "changed_password": "La contraseña del Usuario cambió",
+        "disable": "El usuario fue des-habilitado",
+        "enable": "El usuario fue habilitado",
+        "unlock": "El usuario fue des-bloqueado"
       },
-      "headers":{
-        "date":"Fecha de Evento",
-        "user":"Usuario Responsable",
-        "affectedObject":"Objeto(s) Afectado(s)",
-        "actionType":"Tipo de Acción",
-        "objectClass":"Clase del Objeto",
-        "extraMessage":"Detalles Extra",
-        "id":"ID de Evento"
+      "headers": {
+        "date": "Fecha de Evento",
+        "user": "Usuario Responsable",
+        "affectedObject": "Objeto(s) Afectado(s)",
+        "actionType": "Tipo de Acción",
+        "objectClass": "Clase del Objeto",
+        "extraMessage": "Detalles Extra",
+        "id": "ID de Evento"
       },
-      "prevValue":"Valor Anterior",
-      "newValue":"Nuevo Valor",
-      "seeDetails":"Ver Detalles",
-      "viewAction":{
-        "truncate":{
-          "slider":"Rango a Truncar",
-          "button":"Truncar Registros",
-          "max":"Máx",
-          "min":"Mín"
+      "prevValue": "Valor Anterior",
+      "newValue": "Nuevo Valor",
+      "seeDetails": "Ver Detalles",
+      "viewAction": {
+        "truncate": {
+          "slider": "Rango a Truncar",
+          "button": "Truncar Registros",
+          "max": "Máx",
+          "min": "Mín"
         }
       },
-      "actionType":{
-        "CREATE":"Creación",
-        "READ":"Lectura",
-        "UPDATE":"Modificación",
-        "DELETE":"Baja",
-        "LOGIN":"Inicio de Sesión",
-        "LOGOUT":"Cierre de Sesión",
-        "OPEN":"Apertura",
-        "CLOSE":"Cierre"
+      "actionType": {
+        "CREATE": "Creación",
+        "READ": "Lectura",
+        "UPDATE": "Modificación",
+        "DELETE": "Baja",
+        "LOGIN": "Inicio de Sesión",
+        "LOGOUT": "Cierre de Sesión",
+        "RENAME": "Renombrar",
+        "MOVE": "Mover",
+        "OPEN_LDAP_CONNECTION": "Apertura",
+        "CLOSE_LDAP_CONNECTION": "Cierre"
       }
     },
-    "enduser":{
-      "title":"Bienvenido",
-      "helpMessage":"Debajo puede modificar su contraseña y detalles de usuario de Active Directory / LDAP"
+    "enduser": {
+      "title": "Bienvenido",
+      "helpMessage": "Debajo puede modificar su contraseña y detalles de usuario de Active Directory / LDAP"
     },
-    "dirtree":{
-      "deleteObject":{
-        "title":"Borrar Objeto LDAP",
-        "message":"¿Está seguro de borrar el objeto"
+    "dirtree": {
+      "deleteObject": {
+        "title": "Borrar Objeto LDAP",
+        "message": "¿Está seguro de borrar el objeto"
       },
-      "ouCreate":{
-        "step1":"Detalles de la Unidad Organizacional",
-        "step2":"Unidad Organizacional Creada",
-        "step2_success":"Unidad Organizacional Creada Exitosamente",
-        "ouCreatedIn":"La Unidad será creada en"
+      "ouCreate": {
+        "step1": "Detalles de la Unidad Organizacional",
+        "step2": "Unidad Organizacional Creada",
+        "step2_success": "Unidad Organizacional Creada Exitosamente",
+        "ouCreatedIn": "La Unidad será creada en"
       },
-      "computerCreate":{
-        "step1":"Detalles de la Computadora",
-        "step2":"Computadora Creada",
-        "step2_success":"Computadora Creada Exitosamente",
-        "computerCreatedIn":"La Computadora será creada en"
+      "computerCreate": {
+        "step1": "Detalles de la Computadora",
+        "step2": "Computadora Creada",
+        "step2_success": "Computadora Creada Exitosamente",
+        "computerCreatedIn": "La Computadora será creada en"
       },
-      "printerCreate":{
-        "step1":"Detalles de la Impresora",
-        "step2":"Impresora Creada",
-        "step2_success":"Impresora Creada Exitosamente",
-        "printerCreatedIn":"La Impresora será creada en"
+      "printerCreate": {
+        "step1": "Detalles de la Impresora",
+        "step2": "Impresora Creada",
+        "step2_success": "Impresora Creada Exitosamente",
+        "printerCreatedIn": "La Impresora será creada en"
       },
-      "filterHint":"Clickee los chips azules para filtrarlos",
-      "rename":{
-        "title":"Renombrar Objeto LDAP",
-        "originalDistinguishedName":"Nombre Distinguido Original",
-        "success":"Objeto LDAP renombrado exitosamente"
+      "filterHint": "Clickee los chips azules para filtrarlos",
+      "rename": {
+        "title": "Renombrar Objeto LDAP",
+        "originalDistinguishedName": "Nombre Distinguido Original",
+        "success": "Objeto LDAP renombrado exitosamente"
       },
-      "move":{
-        "setToRoot":"Seleccionar Raíz de Dominio",
-        "title":"Mover Objeto de Dominio",
-        "willBeMovedTo":"Será movido a",
-        "originalRelativePath":"Camino Relativo Original",
-        "success":"Objeto LDAP movido exitosamente"
+      "move": {
+        "setToRoot": "Seleccionar Raíz de Dominio",
+        "title": "Mover Objeto de Dominio",
+        "willBeMovedTo": "Será movido a",
+        "originalRelativePath": "Camino Relativo Original",
+        "success": "Objeto LDAP movido exitosamente"
       }
     },
-    "users":{
-      "userCreate":{
-        "header":"Crear Usuario",
-        "optionalsHeader":"Detalles Opcionales",
-        "validationError":"Error de Validación",
+    "users": {
+      "userCreate": {
+        "header": "Crear Usuario",
+        "optionalsHeader": "Detalles Opcionales",
+        "validationError": "Error de Validación",
         "domainRealmError": "Error de parámetros de dominio, por favor re-abra este componente",
-        "userCreatedIn":"El usuario será creado en",
-        "step1":"Detalles del Usuario",
-        "step2":"Contraseña y Permisos",
-        "step3":"Usuario Creado",
-        "step3_success":"Usuario Creado Exitosamente"
+        "userCreatedIn": "El usuario será creado en",
+        "step1": "Detalles del Usuario",
+        "step2": "Contraseña y Permisos",
+        "step3": "Usuario Creado",
+        "step3_success": "Usuario Creado Exitosamente"
       },
-      "resetPasswordDialog":{
-          "title":"Blanqueo de Contraseña",
-          "changePasswordForUser":"Cambiará la contraseña del usuario",
-          "complexity":{
-            "title":"Recomendaciones de Complejidad de Contraseña",
-            "letters":"Letras mayúscula o minúsucla (A-Z / a-z)",
-            "numbers":"Caracteres Numéricos (0-9)",
-            "symbols":"Caracteres No-Alfanuméricos como $, # o %",
-            "dontMatchUser":"No más que dos símbolos del nombre de usuario o nombre visible"
-          }
+      "resetPasswordDialog": {
+        "title": "Blanqueo de Contraseña",
+        "changePasswordForUser": "Cambiará la contraseña del usuario",
+        "complexity": {
+          "title": "Recomendaciones de Complejidad de Contraseña",
+          "letters": "Letras mayúscula o minúsucla (A-Z / a-z)",
+          "numbers": "Caracteres Numéricos (0-9)",
+          "symbols": "Caracteres No-Alfanuméricos como $, # o %",
+          "dontMatchUser": "No más que dos símbolos del nombre de usuario o nombre visible"
+        }
       },
-      "userDialog":{
-        "deleteTotp":"Eliminar Dispositivo TOTP",
-        "noLastLogon":"El usuario aún no ha iniciado sesión",
-        "userDetails":"Detalles de Usuario",
+      "userDialog": {
+        "extraDetails": "Detalles Extra",
+        "deleteTotp": "Eliminar Dispositivo TOTP",
+        "noLastLogon": "El usuario aún no ha iniciado sesión",
+        "userDetails": "Detalles de Usuario",
         "addToGroup": "Añadir a Grupo",
         "removeFromGroup": "Remover del Grupo",
         "primaryGroupRemoveDisabled": "El grupo primario no puede ser removido",
-        "containsGroups":"Contiene Grupos",
-        "doesNotContainGroups":"No contiene Grupos",
-        "hint":{
-          "addObjectClass":"Mejor que sepa lo que hace",
-          "primaryGroupID":"Solo modifique este valor si tiene Clientes Macintosh o Aplicaciones que utilicen POSIX"
+        "containsGroups": "Contiene Grupos",
+        "doesNotContainGroups": "No contiene Grupos",
+        "hint": {
+          "addObjectClass": "Mejor que sepa lo que hace",
+          "primary_group_id": "Solo modifique este valor si tiene Clientes Macintosh o Aplicaciones que utilicen POSIX"
         }
       },
-      "userBulkUpdate":{
+      "userBulkUpdate": {
         "title": "Actualización Múltiple de Usuarios",
-        "modifiedAttributes": "Atributos Modificados"
+        "modifiedAttributes": "Atributos Modificados",
+        "step1": "Datos",
+        "step2": "Resumen"
       },
-      "import":{
-        "title":"Importación de Usuarios",
-        "fileToUpload":"Cargar Listado de Usuarios",
-        "supportedExtensions":"<b>.csv</b>, <b>.tsv</b>, o <b>.txt</b> separado por <b>comas</b> o <b>tabs</b><br> no borre la cabecera",
-        "fileReady":"Archivo listo para importar",
-        "fileCleared":"Archivo Eliminado",
-        "importOptions":"Opciones de Importación",
-        "usePlaceholderPassword":"Usar Password Temporaria",
-        "dataMapping":"Mappeo de Campos de Usuario",
-        "editUserMappings":"Editar Mappeo de Campos",
-        "uploadFile":"Cargar Archivo",
-        "previewData":"Pre-visualizar Datos",
-        "previewMode":"Pre-visualizacion de Usuarios a Importar",
-        "readyToImport":"Archivo listo para Importar",
-        "downloadTemplate":"Descargar Plantilla CSV",
-        "bulkImportSuccess":"Usuarios Importados Exitosamente",
-        "bulkImportPartial":"Usuarios Importados con Errores",
-        "error":{
-          "validation":"Error de Validación de Campo",
-          "permission":"Error de Parseo (Permisos)",
-          "country":"Error de Parseo (País), ver ISO-3166",
-          "create":"No se pudo crear el Usuario LDAP",
-          "password":"No se pudo modificar la Contraseña LDAP"
+      "import": {
+        "title": "Importación de Usuarios",
+        "fileToUpload": "Cargar Listado de Usuarios",
+        "supportedExtensions": "<b>.csv</b>, <b>.tsv</b>, o <b>.txt</b> separado por <b>comas</b> o <b>tabs</b><br> no borre la cabecera",
+        "fileReady": "Archivo listo para importar",
+        "fileCleared": "Archivo Eliminado",
+        "importOptions": "Opciones de Importación",
+        "usePlaceholderPassword": "Usar Password Temporaria",
+        "dataMapping": "Mappeo de Campos de Usuario",
+        "editUserMappings": "Editar Mappeo de Campos",
+        "uploadFile": "Cargar Archivo",
+        "previewData": "Pre-visualizar Datos",
+        "previewMode": "Pre-visualizacion de Usuarios a Importar",
+        "readyToImport": "Archivo listo para Importar",
+        "downloadTemplate": "Descargar Plantilla CSV",
+        "bulkImportSuccess": "Usuarios Importados Exitosamente",
+        "bulkImportPartial": "Usuarios Importados con Errores",
+        "showCountries": "Mostrar lista de países",
+        "countryList": "Lista de Países LDAP",
+        "error": {
+          "save": "Error al Guardar",
+          "serialization": "Error de Validación de Serializador",
+          "validation": "Error de Validación de Campo",
+          "permission": "Error de Parseo (Permisos)",
+          "country": "Error de Parseo (País), ver ISO-3166",
+          "create": "No se pudo crear el Usuario LDAP",
+          "password": "No se pudo modificar la Contraseña LDAP"
         }
       },
-      "export":{
-        "title":"Exportación de Usuarios"
+      "export": {
+        "title": "Exportación de Usuarios"
       },
-      "youAreHere":"Usted está aquí",
+      "youAreHere": "Usted está aquí",
       "userUnlocked": "Usuario desbloqueado Exitosamente",
       "errorUserUnlock": "Error al desbloquear el Usuario",
       "tryingToDisable": "Está intentando des-habilitar",
       "disablingOwnUser": "No puede des-habilitar su propio usuario",
-      "antiLockoutWarning":"Alerta Anti-bloqueo",
-      "basicDetails":"Detalles Básicos",
-      "location":"Ubicación",
-      "perms":"Permisos del Usuario",
-      "groups":"Grupos del Usuario",
-      "editFlagWarning":"Está editando el usuario",
-      "viewFlagWarning":"Está viendo el usuario",
-      "permsRaw":"Salida en Crudo",
-      "permsRawHint":"Clickee aquí para abrir documentación de Microsoft sobre Permisos de LDAP",
-      "permsCalc":"Número Int. de Permisos Calculado",
-      "permsOutputArray":"Lista/Array a enviar",
-      "advancedDetails":"Detalles Avanzados",
-      "deleteUser":{
-        "title":"Borrar Usuario",
-        "message":"¿Está seguro de borrar el usuario",
-        "mass":"¿Está seguro de borrar en masa los usuarios seleccionados",
-        "success":"Operación de Borrado Completa"
+      "antiLockoutWarning": "Alerta Anti-bloqueo",
+      "basicDetails": "Detalles Básicos",
+      "location": "Ubicación",
+      "perms": "Permisos del Usuario",
+      "groups": "Grupos del Usuario",
+      "editFlagWarning": "Está editando el usuario",
+      "viewFlagWarning": "Está viendo el usuario",
+      "permsRaw": "Salida en Crudo",
+      "permsRawHint": "Clickee aquí para abrir documentación de Microsoft sobre Permisos de LDAP",
+      "permsCalc": "Número Int. de Permisos Calculado",
+      "permsOutputArray": "Lista/Array a enviar",
+      "advancedDetails": "Detalles Avanzados",
+      "deleteUser": {
+        "title": "Borrar Usuario",
+        "message": "¿Está seguro de borrar el usuario",
+        "mass": "¿Está seguro de borrar en masa los usuarios seleccionados",
+        "success": "Operación de Borrado Completa"
       },
-      "permissions":{
-        "LDAP_UF_SCRIPT" : "Usuario de Script",
-        "LDAP_UF_ACCOUNT_DISABLE" : "Des-habilitar Cuenta de Usuario",
-        "LDAP_UF_HOMEDIR_REQUIRED" : "Directorio Base Requerido",
-        "LDAP_UF_LOCKOUT" : "Cuenta Bloqueada",
-        "LDAP_UF_PASSWD_NOTREQD" : "El Usuario no requiere Contraseña",
-        "LDAP_UF_PASSWD_CANT_CHANGE" : "El Usuario no puede cambiar la Contraseña",
-        "LDAP_UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED" : "Permitir texto encriptado en la Contraseña",
-        "LDAP_UF_NORMAL_ACCOUNT" : "Cuenta Normal",
-        "LDAP_UF_INTERDOMAIN_TRUST_ACCOUNT" : "Cuenta Inter-dominio Confiable",
-        "LDAP_UF_WORKSTATION_TRUST_ACCOUNT" : "Cuenta de Estación de Trabajo Confiable",
-        "LDAP_UF_SERVER_TRUST_ACCOUNT" : "Cuenta de Servidor Confiable",
-        "LDAP_UF_DONT_EXPIRE_PASSWD" : "Contraseña sin expiración",
-        "LDAP_UF_MNS_LOGON_ACCOUNT" : "Cuenta de Inicio con MNS",
-        "LDAP_UF_SMARTCARD_REQUIRED" : "Requiere Tarjeta Inteligente (Smart-Card)",
-        "LDAP_UF_TRUSTED_FOR_DELEGATION" : "Confiable para delegar",
-        "LDAP_UF_NOT_DELEGATED" : "Cuenta no delegada",
-        "LDAP_UF_USE_DES_KEY_ONLY" : "Usa Clave DES exclusivamente",
-        "LDAP_UF_DONT_REQUIRE_PREAUTH" : "No requiere Pre-Autenticación",
-        "LDAP_UF_PASSWORD_EXPIRED" : "Contraseña Expirada",
-        "LDAP_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION" : "Confiable para Autenticar Delegados",
-        "LDAP_UF_NO_AUTH_DATA_REQUIRED" : "No requiere Datos de Autenticación",
-        "LDAP_UF_PARTIAL_SECRETS_ACCOUNT" : "Cuenta de Secretos Parciales"
+      "permissions": {
+        "LDAP_UF_SCRIPT": "Usuario de Script",
+        "LDAP_UF_ACCOUNT_DISABLE": "Des-habilitar Cuenta de Usuario",
+        "LDAP_UF_HOMEDIR_REQUIRED": "Directorio Base Requerido",
+        "LDAP_UF_LOCKOUT": "Cuenta Bloqueada",
+        "LDAP_UF_PASSWD_NOTREQD": "El Usuario no requiere Contraseña",
+        "LDAP_UF_PASSWD_CANT_CHANGE": "El Usuario no puede cambiar la Contraseña",
+        "LDAP_UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED": "Permitir texto encriptado en la Contraseña",
+        "LDAP_UF_NORMAL_ACCOUNT": "Cuenta Normal",
+        "LDAP_UF_INTERDOMAIN_TRUST_ACCOUNT": "Cuenta Inter-dominio Confiable",
+        "LDAP_UF_WORKSTATION_TRUST_ACCOUNT": "Cuenta de Estación de Trabajo Confiable",
+        "LDAP_UF_SERVER_TRUST_ACCOUNT": "Cuenta de Servidor Confiable",
+        "LDAP_UF_DONT_EXPIRE_PASSWD": "Contraseña sin expiración",
+        "LDAP_UF_MNS_LOGON_ACCOUNT": "Cuenta de Inicio con MNS",
+        "LDAP_UF_SMARTCARD_REQUIRED": "Requiere Tarjeta Inteligente (Smart-Card)",
+        "LDAP_UF_TRUSTED_FOR_DELEGATION": "Confiable para delegar",
+        "LDAP_UF_NOT_DELEGATED": "Cuenta no delegada",
+        "LDAP_UF_USE_DES_KEY_ONLY": "Usa Clave DES exclusivamente",
+        "LDAP_UF_DONT_REQUIRE_PREAUTH": "No requiere Pre-Autenticación",
+        "LDAP_UF_PASSWORD_EXPIRED": "Contraseña Expirada",
+        "LDAP_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION": "Confiable para Autenticar Delegados",
+        "LDAP_UF_NO_AUTH_DATA_REQUIRED": "No requiere Datos de Autenticación",
+        "LDAP_UF_PARTIAL_SECRETS_ACCOUNT": "Cuenta de Secretos Parciales"
       }
     },
-    "groups":{
-      "groupBuiltinCannotDelete":"Este grupo es del sistema o está protegido",
-      "editFlagWarning":"Está editando el grupo",
-      "isPopulated":"El grupo tiene miembros",
-      "isNotPopulated":"El grupo no tiene miembros",
-      "types":{
-        "GROUP_DISTRIBUTION": "Grupo de Distribución",
-        "GROUP_SYSTEM": "Creado por el Sistema",
-        "GROUP_GLOBAL": "Alcance Global",
-        "GROUP_DOMAIN_LOCAL": "Alcance Local de Dominio",
-        "GROUP_UNIVERSAL": "Alcance Universal",
-        "GROUP_SECURITY": "Grupo de Seguridad"
+    "groups": {
+      "groupBuiltinCannotDelete": "Este grupo es del sistema o está protegido",
+      "editFlagWarning": "Está editando el grupo",
+      "isPopulated": "El grupo tiene miembros",
+      "isNotPopulated": "El grupo no tiene miembros",
+      "types": {
+        "GROUP_TYPE_DISTRIBUTION": "Grupo de Distribución",
+        "GROUP_TYPE_SYSTEM": "Creado por el Sistema",
+        "GROUP_TYPE_SECURITY": "Grupo de Seguridad"
       },
-      "groupCreate":{
-        "header":"Crear Grupo",
-        "step1":"Detalles del Grupo",
-        "step2":"Miembros del Grupo",
-        "step3":"Grupo Creado",
-        "step3_success":"Grupo Creado Exitosamente",
-        "optionalsHeader":"Detalles Opcionales",
-        "groupCreatedIn":"El Grupo será creado en",
-        "memberAddError":"Error al añadir el miembro, por favor intente nuevamente"
+      "scopes": {
+        "GROUP_SCOPE_GLOBAL": "Alcance Global",
+        "GROUP_SCOPE_DOMAIN_LOCAL": "Alcance Local de Dominio",
+        "GROUP_SCOPE_UNIVERSAL": "Alcance Universal"
       },
-      "groupDialog":{
-        "groupType":"Tipo de Grupo",
-        "groupScope":"Alcance del Grupo",
-        "members":"Miembros del grupo",
-        "copyDistinguishedName":"Copiar Nombre Distinguido"
+      "groupCreate": {
+        "header": "Crear Grupo",
+        "step1": "Detalles del Grupo",
+        "step2": "Miembros del Grupo",
+        "step3": "Grupo Creado",
+        "step3_success": "Grupo Creado Exitosamente",
+        "optionalsHeader": "Detalles Opcionales",
+        "groupCreatedIn": "El Grupo será creado en",
+        "memberAddError": "Error al añadir el miembro, por favor intente nuevamente"
       },
-      "deleteGroup":{
-        "title":"Borrar Grupo",
-        "message":"¿Está seguro de borrar el grupo"
+      "groupDialog": {
+        "groupType": "Tipo de Grupo",
+        "groupScope": "Alcance del Grupo",
+        "members": "Miembros del grupo",
+        "copyDistinguishedName": "Copiar Nombre Distinguido",
+        "typeInBuiltinReadOnly": "El Tipo y Alcance de un Grupo Integrado es de solo lectura"
+      },
+      "deleteGroup": {
+        "title": "Borrar Grupo",
+        "message": "¿Está seguro de borrar el grupo"
       }
     },
-    "settings":{
-      "superAdminIs":"Súper-Administrador",
-      "superAdminPwd":"Cambiar Contraseña de Admin. Local",
-      "superAdminPwdConfirm":"Confirmar nueva Contraseña",
+    "settings": {
+      "superAdminIs": "Súper-Administrador",
+      "superAdminPwd": "Cambiar Contraseña de Admin. Local",
+      "superAdminPwdConfirm": "Confirmar nueva Contraseña",
       "configLabelFieldHint": "Clickee Guardar para Renombrar",
-      "activePreset":"Grupo de Parámetros Activo",
-      "resetDialog":{
-        "header":"Re-establecer Configuración",
-        "message":"¿Está seguro de re-establecer <b>todos</b> los parámetros?"
+      "activePreset": "Grupo de Parámetros Activo",
+      "resetDialog": {
+        "header": "Re-establecer Configuración",
+        "message": "¿Está seguro de re-establecer <b>todos</b> los parámetros?"
       },
-      "testSuccess":"Conexión LDAP exitosa",
-      "settingFailedValidation":"Un parámetro ha fallado la validación",
-      "headers":{
-        "log":"Historial",
-        "domain":"Dominio",
-        "bindUser":"Usuario de Conexión",
-        "connection":"Conexión",
-        "filters":"Filtros"
+      "testSuccess": "Conexión LDAP exitosa",
+      "settingFailedValidation": "Un parámetro ha fallado la validación",
+      "headers": {
+        "local": {
+          "title": "Configuración de Interlock",
+          "log": "Historial"
+        },
+        "ldap": {
+          "title": "Configuración de LDAP",
+          "domain": "Dominio",
+          "bindUser": "Usuario de Conexión",
+          "connection": "Conexión",
+          "filters": "Filtros"
+        }
       },
-      "fields":{
-        "LDAP_LOG_MAX":"Cantidad Máxima de Eventos Registrados",
-        "LDAP_LOG_READ":"Registrar Eventos de LECTURA",
-        "LDAP_LOG_CREATE":"Registrar Eventos de ALTA",
-        "LDAP_LOG_UPDATE":"Registrar Eventos de MODIFICACIÓN",
-        "LDAP_LOG_DELETE":"Registrar Eventos de BAJA",
-        "LDAP_LOG_OPEN_CONNECTION":"Registrar Eventos al ABRIR CONEXIÓN LDAP",
-        "LDAP_LOG_CLOSE_CONNECTION":"Registrar Evento al CERRAR CONEXIÓN LDAP",
-        "LDAP_LOG_LOGIN":"Registrar Inicios de Sesión en Interlock",
-        "LDAP_LOG_LOGOUT":"Registrar Cierres de Sesión en Interlock",
-        "LDAP_URI_PREFIX":"Prefijo LDAP",
-        "LDAP_URI_IP":"Dirección IP del Servidor",
-        "LDAP_URI_PORT":"Puerto del Servidor",
-        "LDAP_URI_PORT_HINT":"Rango Válido: 1-65535",
-        "LDAP_AUTH_URL":"Servidores LDAP",
-        "LDAP_AUTH_URL_HINT":"Añadir un servidor a lista",
-        "LDAP_DOMAIN":"Dominio LDAP",
-        "LDAP_DOMAIN_HINT":"Ejemplo: dominio.com",
-        "LDAP_PORT":"Puerto del Servidor LDAP",
-        "LDAP_PORT_HINT":"Pre-determinado: 389 (Non-TLS), 636 (TLS)",
-        "LDAP_DNS_LEGACY":"DNS Modo Legacy",
-        "LDAP_DNS_LEGACY_HINT":"Pruebe este parámetro si su sección de DNS no funciona correctamente",
-        "LDAP_AUTH_SEARCH_BASE":"Base de Búsqueda de LDAP/AD",
-        "LDAP_AUTH_SEARCH_BASE_HINT":"Ejemplo: dc=dominio,dc=com",
-        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN":"Reino / Dominio de Autenticación de AD",
-        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN_HINT":"Ejemplo: DOMINIO",
-        "LDAP_AUTH_CONNECTION_USER_DN":"DN de Usuario de Conexión",
-        "LDAP_AUTH_CONNECTION_PASSWORD":"Contraseña de Usuario de Conexión",
-        "LDAP_AUTH_CONNECT_TIMEOUT":"Tiempo de Espera para la Conexión de Autenticación LDAP",
-        "LDAP_AUTH_RECEIVE_TIMEOUT":"Tiempo de Espera para recibir la respuesta de Autenticación LDAP",
-        "LDAP_AUTH_USE_SSL":"Usar SSL",
-        "LDAP_USE_SSL_HINT":"Requiere utilizar el prefijo ldaps://",
-        "LDAP_AUTH_USE_SASL":"Usar SASL (GSSAPI)",
-        "LDAP_AUTH_USE_TLS":"Usar TLS",
-        "LDAP_AUTH_TLS_VERSION":"Versión de TLS",
-        "LDAP_AUTH_TLS_VERSION_HINT":"El valor Pre-determinado es PROTOCOL_TLSv1_2",
-        "ADMIN_GROUP_TO_SEARCH":"Filtro DN de Grupo Administrador",
-        "LDAP_AUTH_OBJECT_CLASS":"Clase de Objeto de Autenticación",
-        "EXCLUDE_COMPUTER_ACCOUNTS":"Excluir Objetos de Computadoras",
-        "LDAP_AUTH_USER_FIELDS":"Mappeo de Campos de LDAP",
-        "LDAP_AUTH_USER_LOOKUP_FIELDS":"Campos de Búsqueda del Usuario"
+      "fields": {
+        "ILCK_ENABLE_LDAP": "Habilitar Back-End de LDAP",
+        "ILCK_LOG_MAX": "Cantidad Máxima de Eventos Registrados",
+        "ILCK_LOG_READ": "Registrar Eventos de LECTURA",
+        "ILCK_LOG_CREATE": "Registrar Eventos de ALTA",
+        "ILCK_LOG_UPDATE": "Registrar Eventos de MODIFICACIÓN",
+        "ILCK_LOG_DELETE": "Registrar Eventos de BAJA",
+        "ILCK_LOG_OPEN_LDAP_CONNECTION": "Registrar Eventos al ABRIR CONEXIÓN LDAP",
+        "ILCK_LOG_CLOSE_LDAP_CONNECTION": "Registrar Evento al CERRAR CONEXIÓN LDAP",
+        "ILCK_LOG_LOGIN": "Registrar Inicios de Sesión en Interlock",
+        "ILCK_LOG_LOGOUT": "Registrar Cierres de Sesión en Interlock",
+        "LDAP_URI_PREFIX": "Prefijo LDAP",
+        "LDAP_URI_IP": "Dirección IP del Servidor",
+        "LDAP_URI_PORT": "Puerto del Servidor",
+        "LDAP_URI_PORT_HINT": "Rango Válido: 1-65535",
+        "LDAP_AUTH_URL": "Servidores LDAP",
+        "LDAP_AUTH_URL_HINT": "Añadir un servidor a lista",
+        "LDAP_DOMAIN": "Dominio LDAP",
+        "LDAP_DOMAIN_HINT": "Ejemplo: dominio.com",
+        "LDAP_PORT": "Puerto del Servidor LDAP",
+        "LDAP_PORT_HINT": "Pre-determinado: 389 (Non-TLS), 636 (TLS)",
+        "LDAP_DNS_LEGACY": "DNS Modo Legacy",
+        "LDAP_DNS_LEGACY_HINT": "Pruebe este parámetro si su sección de DNS no funciona correctamente",
+        "LDAP_AUTH_SEARCH_BASE": "Base de Búsqueda de LDAP/AD",
+        "LDAP_AUTH_SEARCH_BASE_HINT": "Ejemplo: dc=dominio,dc=com",
+        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN": "Reino / Dominio de Autenticación de AD",
+        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN_HINT": "Ejemplo: DOMINIO",
+        "LDAP_AUTH_CONNECTION_USER_DN": "DN de Usuario de Conexión",
+        "LDAP_AUTH_CONNECTION_PASSWORD": "Contraseña de Usuario de Conexión",
+        "LDAP_AUTH_CONNECT_TIMEOUT": "Tiempo de Espera para la Conexión de Autenticación LDAP",
+        "LDAP_AUTH_RECEIVE_TIMEOUT": "Tiempo de Espera para recibir la respuesta de Autenticación LDAP",
+        "LDAP_AUTH_USE_SSL": "Usar SSL",
+        "LDAP_USE_SSL_HINT": "Requiere utilizar el prefijo ldaps://",
+        "LDAP_AUTH_USE_SASL": "Usar SASL (GSSAPI)",
+        "LDAP_AUTH_USE_TLS": "Usar TLS",
+        "LDAP_AUTH_TLS_VERSION": "Versión de TLS",
+        "LDAP_AUTH_TLS_VERSION_HINT": "El valor Pre-determinado es PROTOCOL_TLSv1_2",
+        "ADMIN_GROUP_TO_SEARCH": "Filtro DN de Grupo Administrador",
+        "LDAP_AUTH_OBJECT_CLASS": "Clase de Objeto de Autenticación",
+        "EXCLUDE_COMPUTER_ACCOUNTS": "Excluir Objetos de Computadoras",
+        "LDAP_AUTH_USER_FIELDS": "Mappeo de Campos de LDAP",
+        "LDAP_AUTH_USER_LOOKUP_FIELDS": "Campos de Búsqueda del Usuario"
       }
     },
-    "debug":{
-      "ldapOperation":"Operación de LDAP | Operaciones de LDAP",
-      "asAdmin":"Ejecutar como Usuario Raíz de Conexión LDAP",
-      "asUser":"Ejecutar como Usuario Actual"
+    "debug": {
+      "ldapOperation": "Operación de LDAP | Operaciones de LDAP",
+      "asAdmin": "Ejecutar como Usuario Raíz de Conexión LDAP",
+      "asUser": "Ejecutar como Usuario Actual"
     }
   },
   "attribute": {
-    "fname": "Nombre",
-    "lname": "Apellido",
-    "name": "Nombre",
-    "fullName": "Nombre Completo",
-    "email": "E-Mail",
-    "country": "País",
+    "username": "Nombre de Usuario",
+    "password": "Contraseña",
+    "password_confirm": "Confirmar Contraseña",
+    "first_name": "Nombre",
+    "last_name": "Apellido",
+    "full_name": "Nombre Completo",
+    "initials": "Iniciales",
+    "phone": "Número Telefónico",
+    "email": "Email",
+    "distinguished_name": "Nombre Distinguido",
+    "object_relative_id": "Identificador Relativo",
+    "object_security_id": "Identificador de Seguridad",
+    "street_address": "Dirección",
+    "postal_code": "Código Postal",
+    "city": "Ciudad",
+    "state_province": "Estado / Provincia",
+    "country_name": "País",
+    "country_code_dcc": "País (DCC)",
+    "country_code_iso": "País (ISO)",
+    "country_codes": "Código de País (DCC/ISO)",
+    "website": "Sitio Web",
+    "user_principal_name": "Nombre Principal",
+    "user_principal_name_pre2000": "Nombre Principal (Pre-2000)",
+    "user_account_control": "Permisos",
+    "created_at": "Creado el",
+    "modified_at": "Modificado el",
+    "last_login": "Último Inicio de Sesión",
+    "last_login_win32": "Último Inicio de Sesión (LDAP)",
+    "bad_password_count": "Contraseñas Incorrectas",
+    "password_set_at": "Contraseña Cambiada el",
+    "primary_group_id": "Id. de Grupo Primario",
+    "object_class": "Clase de Objeto",
+    "object_category": "Categoría de Objeto",
+    "account_type": "Tipo de Cuenta",
+    "groups": "Grupos",
+    "members": "Miembros",
+    "group_type": "Tipo de Grupo",
+    "group_scope": "Alcance de Grupo",
+    "is_enabled": "Habilitado",
     "type": "Tipo",
-    "optional": "Opcional",
-    "sexes": {
-      "female": "Femenino",
-      "male": "Masculino",
-      "other": "Otro",
-      "unspecified": "No especificado"
-    },
-    "users": {
+    "name": "Nombre",
+    "builtin": "Integrado",
+    "user": {
+      "username": "Usuario",
+      "is_local": "Usuario Local",
       "permissionsProfile": "Perfil de Permisos",
       "password": "Contraseña",
       "passwordConfirm": "Confirmar Contraseña",
       "role": "Permisos",
-	    "totp_code":"Código TOTP",
-      "totp_code_opt":"Requerido si se habilitó en las Preferencias de Cuenta",
-      "recovery_code":"Código de Respaldo"
+      "email": "Email",
+      "user_type": "Tipo de Usuario",
+      "totp_code": "Código TOTP",
+      "totp_code_opt": "Requerido si se habilitó en las Preferencias de Cuenta",
+      "recovery_code": "Código de Respaldo",
+      "is_enabled": "Usuario Habilitado",
+      "is_disabled": "Usuario Des-habilitado",
+      "is_staff": "Es Empleado"
     },
-    "phone": "Teléfono",
-    "phoneNumber": "Número Telefónico",
-    "secondaryPhone": "Teléfono Secundario",
-    "address": "Dirección",
-    "addressStreet": "Calle",
-    "addressNumber": "Altura",
-    "betweenStreets": "Entre Calles",
-    "addressVerified": "Dirección Verificada",
-    "addressCity": "Ciudad",
-    "addressPostalCode": "Código Postal",
-    "addressFloor": "Piso",
-    "addressApartment": "Apartamento",
-    "addressState": "Estado / Provincia",
-    "role": "Rol",
-    "featureWIP": "Característica en desarrollo",
-    "notEnoughPerms": "Permisos insuficientes",
-    "featureNotAvailable": "Característica no disponible"
+    "application": {
+      "group": {
+        "ldap_objects": "Objetos de LDAP"
+      }
+    },
+    "ldap": {
+      "realm": "Reino NT",
+      "domain": "Dominio"
+    }
   },
   "footer": {
-    "copyright": "Derechos de Autor (C) 2022-2024 | BR Consulting S.R.L.",
+    "copyright": "Derechos de Autor (C) 2022-2025 | BR Consulting S.R.L.",
     "about": "Más Información",
     "donate": "Donar"
   },
-  "userAccountDropdown":{
-    "title":"Cuenta",
-    "title_long":"Preferencias de la Cuenta",
-    "logout":"Cerrar Sesión",
-    "changePreferences":"Cambiar Preferencias",
-    "two_factor_title":"Autenticación de Doble Factor",
-    "auto_refresh_token":"Auto-Refrescar Token",
-    "enable_two_factor":"Habilitar 2FA TOTP",
-    "showQR":"Ver Código QR de TOTP",
-    "hideQR":"Esconder Código QR",
-    "validateTOTP":"Validar Código QR TOTP",
-    "TOTPnotConfirmed":"Por favor confirme su 2FA TOTP",
-    "recoveryCodes":"Códigos de Respaldo Consumibles",
-    "copyRecoveryCodes":"Copiar Códigos",
-    "totpCodeFieldLabel":"Código TOTP de 6 dígitos",
-    "totpValidated":"Código TOTP Validado",
-    "qrIsEnabled":"TOTP 2FA está habilitado",
-    "qrInfo":"Escanee el Código QR con una App de Autenticación TOTP"
+  "userAccountDropdown": {
+    "title": "Cuenta",
+    "title_long": "Preferencias de la Cuenta",
+    "logout": "Cerrar Sesión",
+    "changePreferences": "Cambiar Preferencias",
+    "two_factor_title": "Autenticación de Doble Factor",
+    "auto_refresh_token": "Auto-Refrescar Token",
+    "enable_two_factor": "Habilitar 2FA TOTP",
+    "showQR": "Ver Código QR de TOTP",
+    "hideQR": "Esconder Código QR",
+    "validateTOTP": "Validar Código QR TOTP",
+    "TOTPnotConfirmed": "Por favor confirme su 2FA TOTP",
+    "recoveryCodes": "Códigos de Respaldo Consumibles",
+    "copyRecoveryCodes": "Copiar Códigos",
+    "totpUri": "URI TOTP",
+    "copyTotpUri": "Copiar URI TOTP",
+    "totpCodeFieldLabel": "Código TOTP de 6 dígitos",
+    "totpValidated": "Código TOTP Validado",
+    "qrIsEnabled": "TOTP 2FA está habilitado",
+    "qrInfo": "Escanee el Código QR con una App de Autenticación TOTP"
   },
   "misc": {
-    "version":"Versión",
-    "clickToRefreshBackendStatus":"Haga click para refrescar el estado del Back-end",
-    "autocomputedField":"Campo con computado automático",
+    "version": "Versión",
+    "clickToRefreshBackendStatus": "Haga click para refrescar el estado del Back-end",
+    "autocomputedField": "Campo con computado automático",
     "darkMode": "Activar Modo Oscuro",
-    "logoutMsg":"¿Está seguro de cerrar su sesión?",
-    "loggedOut":"Sesión cerrada exitosamente",
-    "logoutForbiddenMsg":"Por favor Inicie Sesión nuevamente",
-    "themerTooltip":"Cambiar Tema",
-    "tokenRefreshed":"Token de Acceso Refrescado",
-    "actionRequired":"Acción Requerida",
-    "refreshTokenTimer":"El Token de Refresco expirará en"
+    "logoutMsg": "¿Está seguro de cerrar su sesión?",
+    "loggedOut": "Sesión cerrada exitosamente",
+    "logoutForbiddenMsg": "Por favor Inicie Sesión nuevamente",
+    "themerTooltip": "Cambiar Tema",
+    "tokenRefreshed": "Token de Acceso Refrescado",
+    "actionRequired": "Acción Requerida",
+    "refreshTokenTimer": "El Token de Refresco expirará en"
   },
-  "contrib":{
-    "title":"Sobre Interlock",
-    "subTitle":"Otros Contribuyentes",
-    "mainMsg":"Interlock fue desarrollado originalmente por <a target=\"_blank\" href=\"https://dylan.blanque.com.ar\">Dylan Blanqué</a> como una herramienta interna para <b>BR Consulting S.R.L.</b> y luego se publicó como producto Open-Source, con la intención de compartir una herramienta dinámica y responsive de administración LDAP con la comunidad.",
+  "contrib": {
+    "title": "Sobre Interlock",
+    "subTitle": "Otros Contribuyentes",
+    "mainMsg": "Interlock fue desarrollado originalmente por <a target=\"_blank\" href=\"https://dylan.blanque.com.ar\">Dylan Blanqué</a> como una herramienta interna para <b>BR Consulting S.R.L.</b> y luego se publicó como producto Open-Source, con la intención de compartir una herramienta dinámica y responsive de administración LDAP con la comunidad.",
     "jblanque": "Acreditado por su asistencia con el Parsing de Permisos Binarios de Samba",
     "mvilche": {
-      "1":"Acreditado por el Módulo de Llamadas y los Constructores del Front-end de Interlock",
-      "2":"Acreditado por ayudar con la implementación del Notification Bus",
-      "3":"Otros cambios y arreglos menores"
+      "1": "Acreditado por el Módulo de Llamadas y los Constructores del Front-end de Interlock",
+      "2": "Acreditado por ayudar con la implementación del Notification Bus",
+      "3": "Otros cambios y arreglos menores"
     },
-    "etianen":"Acreditado por crear el módulo original de Django-python3-ldap",
-    "dirkjanm":"Acreditado por su <b>increíble</b> repo krbrelayx y sus scripts"
+    "etianen": "Acreditado por crear el módulo original de Django-python3-ldap",
+    "dirkjanm": "Acreditado por su <b>increíble</b> repo krbrelayx y sus scripts"
   },
-  "locale":{
-    "incomplete":{
-      "en":"Translation not complete yet",
-      "es":"Traducción aún no completada",
-      "fr":"Traduction pas encore terminée"
+  "locale": {
+    "incomplete": {
+      "en": "Translation not complete yet",
+      "es": "Traducción aún no completada",
+      "fr": "Traduction pas encore terminée"
     }
-}
+  }
 }

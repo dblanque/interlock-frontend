@@ -5,54 +5,45 @@
 import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
-    list: ()=>{
+    list: () => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.ou.list)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.get(interlock_backend.urls.dirtree.organizational_units)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    filter: (objectArray)=>{
+    dirtree: (filter) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.filter, objectArray)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.put(interlock_backend.urls.dirtree.base, { filter: filter })
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    dirtree: (filter)=>{
+    move: (data) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.dirtree, {filter: filter})
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.post(interlock_backend.urls.dirtree.move, data)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    move: (data)=>{
+    rename: (data) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.move, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.post(interlock_backend.urls.dirtree.rename, data)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    rename: (data)=>{
+    insert: (data) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.rename, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
-        })
-    },
-
-    insert: (data)=>{
-        return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.insert, data).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.dirtree.base, data).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)
@@ -60,9 +51,9 @@ const actions = {
         })
     },
 
-    delete: (data)=>{
+    delete: (data) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.ou.delete, data).then(response => {
+            interlock_backend.request.patch(interlock_backend.urls.dirtree.base, data).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)

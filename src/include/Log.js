@@ -1,7 +1,7 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
 
-class Log extends ApiModel{
+class Log extends ApiModel {
 
     id;
     user;
@@ -14,20 +14,20 @@ class Log extends ApiModel{
      * Fetches model instance from API by id.
      * @param {Number} id 
      */
-     constructor(data){
+    constructor(data) {
         super(data)
         Object.keys(data).forEach(key => {
             this[key] = data[key];
         });
     }
 
-    async list(){
+    async list() {
         return await interlock_backend.call('log/list')
     }
-    async reset(){
+    async reset() {
         return await interlock_backend.call('log/reset')
     }
-    async truncate(data){
+    async truncate(data) {
         return await interlock_backend.call('log/truncate', data)
     }
 }

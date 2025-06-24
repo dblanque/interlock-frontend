@@ -13,7 +13,7 @@ export const incomplete_locales = [
   "fr" // FRENCH
 ]
 
-function loadLocaleMessages_webpack () {
+function loadLocaleMessages_webpack() {
   const locales = require.context('./locales', true, /[A-Za-z0-9-_,\s]+\.json$/i)
   const messages = {}
   locales.keys().forEach(key => {

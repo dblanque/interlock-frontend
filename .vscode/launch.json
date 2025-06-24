@@ -1,0 +1,49 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "Firefox",
+      "url": "http://127.0.0.1:3000",
+      "webRoot": "${workspaceFolder}",
+			"reAttach": true,
+      "pathMappings": [
+        {
+          "url": "http://127.0.0.1:3000",
+          "path": "${workspaceFolder}/src"
+        }
+      ],
+    },
+		{
+			"type": "node-terminal",
+			"name": "Start Development Server",
+			"request": "launch",
+			"command": "npm run dev",
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"type": "node-terminal",
+			"name": "Compile Project",
+			"request": "launch",
+			"command": "npm run build",
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"type": "node-terminal",
+			"name": "Serve Compiled Project",
+			"request": "launch",
+			"command": "npm run start",
+			"cwd": "${workspaceFolder}"
+		}
+	],
+  "compounds": [
+    {
+      "name": "Full Debug (Client+Server)",
+      "configurations": ["Start Development Server", "Firefox"]
+    }
+  ]
+}

@@ -14,14 +14,14 @@ export const getRuntimeConfig = async () => {
 }
 
 const local_config = await getRuntimeConfig()
-.then(function(json) {
-    return {
-        backend_url: json.backend_url,
-        ssl: json.ssl,
-        reject_unauthorized: json.reject_unauthorized,
-        version: json.version
-    }
-})
+    .then(function (json) {
+        return {
+            backend_url: json.backend_url,
+            ssl: json.ssl,
+            reject_unauthorized: json.reject_unauthorized,
+            version: json.version
+        }
+    })
 
 // Sets content type to json utf-8 default.
 axios.defaults.headers.common["content-type"] = "application/json;charset=utf-8";
@@ -36,7 +36,7 @@ if (local_config.ssl == true) {
 else {
     urlPrefix = "http://"
 }
-const base_url =  urlPrefix + local_config.backend_url + "/";
+const base_url = urlPrefix + local_config.backend_url + "/";
 // const base_url =  "http://127.0.0.1:8000/";
 
 var request
@@ -65,105 +65,123 @@ export const ignoreErrorCodes = [
 
 // LIST OF URL PATTERNS.
 const urls = {
+    home: {
+        fetch: `api/home/`
+    },
     auth: {
-        token: 'api/token/',
-        tokenRefresh: 'api/token/refresh/',
-        logout: 'api/token/revoke/'
+        token: `api/token/`,
+        tokenRefresh: `api/token/refresh/`,
+        logout: `api/token/revoke/`
     },
     user: {
-        base: 'api/users/',
-        list: 'api/users/',
-        fetch: 'api/users/fetch/',
-        fetchme: 'api/users/fetchme/',
-        insert: 'api/users/insert/',
-        bulkInsert: 'api/users/bulkInsert/',
-        bulkDelete: 'api/users/bulkDelete/',
-        bulkUpdate: 'api/users/bulkUpdate/',
-        bulkAccountStatusChange: 'api/users/bulkAccountStatusChange/',
-        bulkUnlock: 'api/users/bulkUnlock/',
-        update: 'api/users/update/',
-        updateSelf: 'api/users/updateSelf/',
-        delete: 'api/users/delete/',
-        deleteTotp: 'api/totp/delete_for_user/',
-        enable: 'api/users/enable/',
-        disable: 'api/users/disable/',
-        lock: 'api/users/lock/',
-        unlock: 'api/users/unlock/',
-        changePassword: 'api/users/changePassword/',
-        changePasswordSelf: 'api/users/changePasswordSelf/',
+        base: `api/ldap/users/`,
+        fetch: `api/ldap/users/retrieve/`,
+        deleteTotp: `api/totp/delete-for-user/`,
+        lock: `api/ldap/users/lock/`,
+        unlock: `api/ldap/users/unlock/`,
+        changeAccountStatus: `api/ldap/users/change-status/`,
+        changePassword: `api/ldap/users/change-password/`,
+        bulkInsert: `api/ldap/users/bulk/create/`,
+        bulkDelete: `api/ldap/users/bulk/destroy/`,
+        bulkUpdate: `api/ldap/users/bulk/update/`,
+        bulkUnlock: `api/ldap/users/bulk/unlock/`,
+        bulkChangeStatus: `api/ldap/users/bulk/change-status/`,
+        bulkExport: `api/ldap/users/bulk/export/`,
+        // These endpoints will be moved to a separate viewset
+        selfChangePassword: `api/ldap/users/self/change-password/`,
+        selfUpdate: `api/ldap/users/self/update/`,
+        selfFetch: `api/ldap/users/self/fetch/`,
+        selfInfo: `api/ldap/users/self/info/`,
+        //
+    },
+    djangoUser: {
+        base: `api/users/`,
+        detail: `api/users/{pk}/`,
+        changeAccountStatus: `api/users/{pk}/change-status/`,
+        changePassword: `api/users/{pk}/change-password/`,
+        // These endpoints will be moved to a separate viewset
+        selfUpdate: `api/users/self/update/`,
+        selfChangePassword: `api/users/self/change-password/`,
+        //
+        bulkInsert: `api/users/bulk/create/`,
+        bulkDelete: `api/users/bulk/destroy/`,
+        bulkUpdate: `api/users/bulk/update/`,
+        bulkChangeStatus: `api/users/bulk/change-status/`,
+        bulkExport: `api/users/bulk/export/`,
     },
     group: {
-        base: 'api/groups/',
-        list: 'api/groups/',
-        fetch: 'api/groups/fetch/',
-        save: 'api/groups/save/',
-        insert: 'api/groups/insert/',
-        update: 'api/groups/update/',
-        delete: 'api/groups/delete/',
+        base: `api/ldap/groups/`,
+        fetch: `api/ldap/groups/retrieve-dn/`,
     },
     log: {
-        base: 'api/logs/',
-        list: 'api/logs/',
-        reset: 'api/logs/reset/',
-        truncate: 'api/logs/truncate/'
+        base: `api/logs/`,
+        list: `api/logs/`,
+        reset: `api/logs/reset/`,
+        truncate: `api/logs/truncate/`
     },
     domain: {
-        base: "api/domain/",
-        details: "api/domain/details/",
-        zones: "api/domain/zones/",
-        insert: "api/domain/insert/",
-        delete: "api/domain/delete/",
+        base: `api/ldap/domain/`,
+        zone: `api/ldap/domain/zone/`,
     },
     dnsr: {
-        insert: "api/record/insert/",
-        update: "api/record/update/",
-        delete: "api/record/delete/"
+        base: `api/ldap/record/`,
     },
     gpo: {
-        list: 'api/gpo/',
+        list: `api/ldap/gpo/`,
     },
     settings: {
-        base: "api/settings/",
-        list: "api/settings/",
-        fetch: "api/settings/fetch/",
-        save: "api/settings/save/",
-        reset: "api/settings/reset/",
-        test: "api/settings/test/",
-        preset_create: "api/settings/preset_create/",
-        preset_delete: "api/settings/preset_delete/",
-        preset_rename: "api/settings/preset_rename/",
-        preset_enable: "api/settings/preset_enable/"
+        base: `api/settings/`,
+        detail: `api/settings/{pk}/`,
+        preset_enable: `api/settings/{pk}/enable/`,
+        preset_rename: `api/settings/{pk}/rename/`,
+        save: `api/settings/save/`,
+        reset: `api/settings/reset/`,
+        test: `api/settings/test/`,
+        sync_users: `api/settings/sync-users/`,
+        prune_users: `api/settings/prune-users/`,
+        purge_users: `api/settings/purge-users/`,
     },
-    ou: {
-        base: "api/ou/",
-        list: "api/ou/",
-        insert: "api/ou/insert/",
-        delete: "api/ou/delete/",
-        filter: "api/ou/filter/",
-        dirtree: "api/ou/dirtree/",
-        move: "api/ou/move/",
-        rename: "api/ou/rename/"
+    dirtree: {
+        base: `api/ldap/dirtree/`,
+        organizational_units: `api/ldap/dirtree/organizational-units/`,
+        move: `api/ldap/dirtree/move/`,
+        rename: `api/ldap/dirtree/rename/`,
     },
     totp: {
-        list: "api/totp/",
-        create: "api/totp/create_device/",
-        validate: "api/totp/validate_device/",
-        delete: "api/totp/delete_device/",
+        list: `api/totp/`,
+        create: `api/totp/create-device/`,
+        validate: `api/totp/validate-device/`,
+        delete: `api/totp/delete-device/`,
     },
     test: {
-        get: "api/test/",
-        post: "api/test/post/",
-        put: "api/test/put/",
-        delete: "api/test/delete/",
-        options: "api/test/options/"
+        get: `api/test/`,
+        post: `api/test/post/`,
+        put: `api/test/put/`,
+        delete: `api/test/delete/`,
+        options: `api/test/options/`
     },
     liveness: {
-        check: "api/liveness/check/"
+        check: `api/liveness/check/`
     },
     debug: {
-        list: "api/debug/",
-        action: "api/debug/action/",
+        list: `api/debug/`,
+        action: `api/debug/action/`,
     },
+    application: {
+        base: `api/application/`,
+        detail: `api/application/{pk}/`,
+        oidc_well_known: "openid/.well-known/openid-configuration/",
+    },
+    applicationGroup: {
+        base: `api/application/group/`,
+        detail: `api/application/group/{pk}/`,
+        change_status: `api/application/group/{pk}/change-status/`,
+        create_info: `api/application/group/create-info/`,
+    },
+    oidc: {
+        consent: `openid/consent/`,
+        end_session: `openid/end-session/`
+    }
 }
 const eraseLocalUserData = () => {
     const localUserKeys = [
@@ -173,7 +191,7 @@ const eraseLocalUserData = () => {
         "email",
         "admin_allowed",
     ]
-    localUserKeys.forEach(v=>{
+    localUserKeys.forEach(v => {
         localStorage.removeItem(`user.${v}`)
     })
     return
@@ -203,7 +221,7 @@ request.interceptors.request.use(
     function (error) {
         // Do something with request error
         return Promise.reject(error);
-});
+    });
 
 // Adds Axios Response Interceptor.
 request.interceptors.response.use(
@@ -211,7 +229,7 @@ request.interceptors.response.use(
     (response) => {
         // do nothing.
         return response
-    }, 
+    },
     // On Request Error...
     async (error) => {
         // Get Configuration of failed request.
@@ -234,31 +252,31 @@ request.interceptors.response.use(
             originalRequest._retry = true;
             // Send refresh token request.
             let tokenRefreshAxios = axios.create(axios_opts)
-            return tokenRefreshAxios.post(base_url+urls.auth.tokenRefresh)
-            // then, if refresh request succeeds.
-            .then(response => {
-                tokenIsRefreshing = false
-                var date = new Date()
-                // 1) Set tokens on LocalStorage.
-                localStorage.setItem('auth.refreshClock', date)
-                localStorage.setItem('auth.access_expire', response.data.access_expire)
-                localStorage.setItem('auth.refresh_expire', response.data.refresh_expire)
-                // 2) Return re-sent request through new axios.
-                return axios(originalRequest);
-            // on refresh request error catch
-            }).catch((e)=>{
-                tokenIsRefreshing = false
-                if (e.status != undefined && !ignoreErrorCodes.includes(e.status))
-                    console.error(e)
-                if (e?.response?.status == 401) {
-                    // erase local storage and go to Index Login.
-                    eraseLocalUserData()
-                    if (router.app.$route.path != "/login")
-                        router.push('/login')
-                }
-                return Promise.reject(error.response)
-            })
-        // Else, if the error is other than Unauthorized...
+            return tokenRefreshAxios.post(base_url + urls.auth.tokenRefresh)
+                // then, if refresh request succeeds.
+                .then(response => {
+                    tokenIsRefreshing = false
+                    var date = new Date()
+                    // 1) Set tokens on LocalStorage.
+                    localStorage.setItem('auth.refreshClock', date)
+                    localStorage.setItem('auth.access_expire', response.data.access_expire)
+                    localStorage.setItem('auth.refresh_expire', response.data.refresh_expire)
+                    // 2) Return re-sent request through new axios.
+                    return axios(originalRequest);
+                    // on refresh request error catch
+                }).catch((e) => {
+                    tokenIsRefreshing = false
+                    if (e.status != undefined && !ignoreErrorCodes.includes(e.status))
+                        console.error(e)
+                    if (e?.response?.status == 401) {
+                        // erase local storage and go to Index Login.
+                        eraseLocalUserData()
+                        if (router.app.$route.path != "/login")
+                            router.push('/login')
+                    }
+                    return Promise.reject(error.response)
+                })
+            // Else, if the error is other than Unauthorized...
         } else
             // Return error response.
             return Promise.reject(error)
@@ -266,6 +284,7 @@ request.interceptors.response.use(
 )// End of Interceptor.
 
 export default {
+    base_url: base_url,
     urls: urls,
     request: request
 };

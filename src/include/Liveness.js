@@ -1,8 +1,8 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
 
-class Liveness extends ApiModel{
-    
+class Liveness extends ApiModel {
+
     key;
     value;
 
@@ -10,14 +10,14 @@ class Liveness extends ApiModel{
      * Fetches model instance from API by id.
      * @param {Number} id 
      */
-     constructor(data){
+    constructor(data) {
         super(data)
         Object.keys(data).forEach(key => {
             this[key] = data[key];
         });
     }
 
-    async check(){
+    async check() {
         return await interlock_backend.call('liveness/check')
     }
 }

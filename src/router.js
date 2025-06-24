@@ -22,23 +22,43 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/users',
-    name: 'users',
+    path: '/applications',
+    name: 'applications',
     component: HomeView
   },
   {
-    path: '/groups',
-    name: 'groups',
+    path: '/django-users',
+    name: 'django-users',
     component: HomeView
   },
   {
-    path: '/dns',
-    name: 'dns',
+    path: '/application-groups',
+    name: 'application-groups',
     component: HomeView
   },
   {
-    path: '/gpo',
-    name: 'gpo',
+    path: '/ldap-dirtree',
+    name: 'ldap-dirtree',
+    component: HomeView
+  },
+  {
+    path: '/ldap-users',
+    name: 'ldap-users',
+    component: HomeView
+  },
+  {
+    path: '/ldap-groups',
+    name: 'ldap-groups',
+    component: HomeView
+  },
+  {
+    path: '/ldap-dns',
+    name: 'ldap-dns',
+    component: HomeView
+  },
+  {
+    path: '/ldap-gpo',
+    name: 'ldap-gpo',
     component: HomeView
   },
   {
@@ -75,7 +95,7 @@ export default new VueRouter({
   mode: 'history',
   base: import.meta.env.BASE_URL,
   routes: routes,
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     // return desired position
     return { top: 0 }
   }

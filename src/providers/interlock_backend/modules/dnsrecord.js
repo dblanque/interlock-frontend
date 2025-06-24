@@ -5,9 +5,9 @@
 import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
-    insert: (data)=>{
+    insert: (data) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.dnsr.insert, {record: data}).then(response => {
+            interlock_backend.request.post(interlock_backend.urls.dnsr.base, { record: data }).then(response => {
                 resolve(response)
             }).catch((e) => {
                 reject(e)
@@ -15,21 +15,21 @@ const actions = {
         })
     },
 
-    update: (data)=>{
+    update: (data) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.put(interlock_backend.urls.dnsr.update, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.put(interlock_backend.urls.dnsr.base, data)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    delete: (data)=>{
+    delete: (data) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.dnsr.delete, data)
-            .then(response => {
-                resolve(response.data);
-            }).catch((e) => reject(e))
+            interlock_backend.request.patch(interlock_backend.urls.dnsr.base, data)
+                .then(response => {
+                    resolve(response.data);
+                }).catch((e) => reject(e))
         })
     },
 }

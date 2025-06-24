@@ -5,84 +5,117 @@
 import interlock_backend from "@/providers/interlock_backend/config";
 
 const actions = {
-    list: ()=>{
+    list: () => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.settings.list)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.get(interlock_backend.urls.settings.base)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    fetch: (presetId)=>{
+    fetch: (presetId) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.get(interlock_backend.urls.settings.fetch + `${presetId}/`)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.get(interlock_backend.urls.settings.detail.replace("{pk}", presetId))
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    reset: ()=>{
+    reset: () => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.get(interlock_backend.urls.settings.reset)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    test: (data)=>{
+    test: (data) => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.settings.test, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    save: (data)=>{
+    save: (data) => {
         return new Promise((resolve, reject) => {
             interlock_backend.request.post(interlock_backend.urls.settings.save, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    preset_create: (data)=>{
+    sync_users: () => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.settings.preset_create, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.get(interlock_backend.urls.settings.sync_users)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    preset_rename: (data)=>{
+    prune_users: () => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.settings.preset_rename, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.get(interlock_backend.urls.settings.prune_users)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    preset_delete: (data)=>{
+    purge_users: () => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.settings.preset_delete, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.get(interlock_backend.urls.settings.purge_users)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     },
 
-    preset_enable: (data)=>{
+    preset_create: (data) => {
         return new Promise((resolve, reject) => {
-            interlock_backend.request.post(interlock_backend.urls.settings.preset_enable, data)
-            .then(response => {
-                resolve(response);
-            }).catch((e) => reject(e))
+            interlock_backend.request.post(interlock_backend.urls.settings.base, data)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
+        })
+    },
+
+    preset_rename: (data) => {
+        let id = data.id
+        delete data.id
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.settings.preset_rename.replace("{pk}", id), data)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
+        })
+    },
+
+    preset_delete: (data) => {
+        let id = data.id
+        delete data.id
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.delete(interlock_backend.urls.settings.detail.replace("{pk}", id), data)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
+        })
+    },
+
+    preset_enable: (data) => {
+        let id = data.id
+        delete data.id
+        return new Promise((resolve, reject) => {
+            interlock_backend.request.post(interlock_backend.urls.settings.preset_enable.replace("{pk}", id), data)
+                .then(response => {
+                    resolve(response);
+                }).catch((e) => reject(e))
         })
     }
 }

@@ -1,13 +1,12 @@
-
-*, 
-*::before, 
+*,
+*::before,
 *::after {
 	margin: 0 !important;
 	padding: 0 !important;
 	border: 0 !important;
 	-webkit-box-sizing: border-box !important;
-    box-sizing: border-box !important;
-	transition: all var(--trans-speed) ease !important;
+	box-sizing: border-box !important;
+	transition: all var(--base-transition-speed) ease !important;
 	vertical-align: baseline !important;
 }
 

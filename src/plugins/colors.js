@@ -8,9 +8,9 @@ function hslToHex(h, s, l) {
 	l /= 100;
 	const a = s * Math.min(l, 1 - l) / 100;
 	const f = n => {
-	  const k = (n + h / 30) % 12;
-	  const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-	  return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
+		const k = (n + h / 30) % 12;
+		const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+		return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
 	};
 	let r = `#${f(0)}${f(8)}${f(4)}`;
 	if (r == "#NaNNaNNaN")
@@ -19,25 +19,25 @@ function hslToHex(h, s, l) {
 }
 
 const default_theme_colors = {
-	light:{
-		"white-d":"#FFFFFF",
-		"black-d":"#000000",
-		"background":hslToHex(0,0,94.5),
-		"text-background":hslToHex(0,0,100),
-		"text-inverted":hslToHex(0,0,0)
+	light: {
+		"white-d": "#FFFFFF",
+		"black-d": "#000000",
+		"background": hslToHex(0, 0, 94.5),
+		"text-background": hslToHex(0, 0, 100),
+		"text-inverted": hslToHex(0, 0, 0)
 	},
-	dark:{
-		"white-d":"#000000",
-		"black-d":"#FFFFFF",
-		"background":hslToHex(210, 7.4, 21.2),
-		"text-background":hslToHex(0,0,0),
-		"text-inverted":hslToHex(0,0,100)
+	dark: {
+		"white-d": "#000000",
+		"black-d": "#FFFFFF",
+		"background": hslToHex(210, 7.4, 21.2),
+		"text-background": hslToHex(0, 0, 0),
+		"text-inverted": hslToHex(0, 0, 100)
 	},
 }
 
 const vueColorList = {
 	// color_name: [h, s, v]
-	default_themes:{
+	default_themes: {
 		primary: [211, 54.5, 56.1],
 		accent: [29.5, 100, 76.9],
 		secondary: [210, 7.4, 21.2],
@@ -45,7 +45,7 @@ const vueColorList = {
 		error: [0, 85.9, 45.5],
 		gray: [0, 0, 50]
 	},
-	custom_themes:{
+	custom_themes: {
 		// raven: {
 		// 	colors:{
 		// 		primary: [0, 54.5, 56.1],
@@ -60,7 +60,7 @@ function generateDefaultColorVariants(color_key, hsv_array, colors, parser_optio
 	const default_sat = hsv_array[1]
 	const default_lig = hsv_array[2]
 	let default_color_light = hslToHex(default_hue, default_sat, default_lig)
-	let default_color_dark = hslToHex(default_hue, default_sat, 100-default_lig)
+	let default_color_dark = hslToHex(default_hue, default_sat, 100 - default_lig)
 	// light
 	colors.light[color_key] = default_color_light
 	colors.light[`${color_key}-s`] = default_color_light
@@ -68,14 +68,14 @@ function generateDefaultColorVariants(color_key, hsv_array, colors, parser_optio
 	colors.dark[color_key] = default_color_dark
 	colors.dark[`${color_key}-s`] = default_color_light
 	// Step saturation and lightness
-	for (let lig = parser_options.lig_steps; lig < parser_options.limit; lig +=parser_options.lig_steps){
+	for (let lig = parser_options.lig_steps; lig < parser_options.limit; lig += parser_options.lig_steps) {
 		let cur_clr_default_sat = hslToHex(default_hue, default_sat, lig)
 		// Varying Lightness, default saturation, static
 		colors.light[`${color_key}-${lig}-s`] = cur_clr_default_sat
 		colors.dark[`${color_key}-${lig}-s`] = cur_clr_default_sat
 		// Varying Lightness, default Saturation, dynamic
 		colors.light[`${color_key}-${lig}`] = cur_clr_default_sat
-		colors.dark[`${color_key}-${lig}`] = hslToHex(default_hue, default_sat, 100-lig)
+		colors.dark[`${color_key}-${lig}`] = hslToHex(default_hue, default_sat, 100 - lig)
 		if (parser_options.add_saturation_variants && default_sat != 0) {
 			for (let sat = parser_options.sat_steps; sat <= parser_options.limit; sat += parser_options.sat_steps) {
 				let cur_clr_light = hslToHex(default_hue, sat, lig)
@@ -99,7 +99,7 @@ function generateCustomColorVariants(color_key, hsv_array, colors, parser_option
 	let default_color = hslToHex(default_hue, default_sat, default_lig)
 	colors[theme_name][color_key] = default_color
 	// Step saturation and lightness
-	for (let lig = parser_options.lig_steps; lig < parser_options.limit; lig +=parser_options.lig_steps){
+	for (let lig = parser_options.lig_steps; lig < parser_options.limit; lig += parser_options.lig_steps) {
 		let cur_clr_default_sat = hslToHex(default_hue, default_sat, lig)
 		// Varying Lightness, default saturation, static
 		colors[theme_name][`${color_key}-${lig}-s`] = cur_clr_default_sat

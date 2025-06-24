@@ -1,55 +1,58 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
 
-class Group extends ApiModel{
-    
-    cn;
-    displayName;
-    mail;
-    member;
-    distinguishedName;
-    sAMAccountName;
+class Group extends ApiModel {
 
-    /**
-     * Fetches model instance from API by id.
-     * @param {Number} id 
-     */
-     constructor(data){
-        super(data)
-        Object.keys(data).forEach(key => {
-            this[key] = data[key];
-        });
-    }
+	name;
+	full_name;
+	email;
+	members;
+	distinguished_name;
+	username;
+	has_members;
+	group_types;
+	group_scopes;
 
-    async list(){
-        return await interlock_backend.call('group/list')
-    }
+	/**
+	 * Fetches model instance from API by id.
+	 * @param {Number} id 
+	 */
+	constructor(data) {
+		super(data)
+		Object.keys(data).forEach(key => {
+			this[key] = data[key];
+		});
+	}
 
-    async fetch(groupdn){
-        return await interlock_backend.call('group/fetch', {group: groupdn}).then(
-            response => {
-                if(!response)
-                        throw Error("Error fetching user data. Provider returned: " + response);
-                else{
-                    Object.keys(response.data).forEach(key => {
-                        this[key] = response.data[key];
-                    });
-                }
-            }
-        )
-    }
+	async list() {
+		return await interlock_backend.call("group/list")
+	}
 
-    async insert(group){
-        return await interlock_backend.call('group/insert', group)
-    }
+	async fetch(distinguishedName) {
+		return await interlock_backend.call("group/fetch", { group: distinguishedName }).then(
+			response => {
+				if (!response)
+					throw Error("Error fetching user data. Provider returned: " + response);
+				else {
+					Object.keys(response.data).forEach(key => {
+						this[key] = response.data[key];
+					});
+				}
+			}
+		)
+	}
 
-    async update(group){
-        return await interlock_backend.call('group/update', group)
-    }
+	async insert(data) {
+		return await interlock_backend.call("group/insert", data)
+	}
 
-    async delete(group){
-        return await interlock_backend.call('group/delete', group)
-    }
+	async update(data) {
+		return await interlock_backend.call("group/update", data)
+	}
+
+	async delete(data) {
+		return await interlock_backend.call("group/delete", data)
+	}
 }
 
 export default Group

@@ -2,98 +2,137 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!----------------------- File: ModularViewContainer.vue ---------------------->
 <template>
-<v-container class="my-4 max-width-change">
-	<v-row class="ma-2" justify="center" align="center">
-		<v-divider class="mx-6"/>
-		<h1>{{ $t("category.header." + viewTitle) }}</h1>
-		<v-divider class="mx-6"/>
-	</v-row>
+	<div class="my-4">
+		<v-row class="ma-2" justify="center" align="center">
+			<v-divider class="mx-6" />
+			<h1>{{ getViewTitle() }}</h1>
+			<v-divider class="mx-6" />
+		</v-row>
 
-	<!-- HOME -->
-	<v-container v-if="viewTitle == 'home' && initLoad == true" class="max-width-change">
-		<DirtreeView
-			ref="DirtreeView"
-			:requestRefresh="this.refreshUserDataTable"
-			:viewTitle="viewTitle"
-			:snackbarTimeout="this.snackbarTimeout"
-			@refresh="refreshAction"
-			@goToUser="goToUser"
-			@goToGroup="goToGroup"
-		/>
-	</v-container>
+		<!-- HOME -->
+		<v-container v-if="viewTitle == 'home'" :class="getContainerClasses()">
+			<HomeViewContainer
+				ref="HomeViewContainer"
+				:viewTitle="viewTitle"
+				:init-load="initLoad"
+				@done="emitDone"
+				:requestRefresh="undefined"
+				:snackbarTimeout="this.snackbarTimeout"
+				@refresh="refreshAction" />
+		</v-container>
 
-	<!-- USERS -->
+		<!-- APPLICATION -->
+		<v-container v-if="viewTitle == 'applications'" :class="getContainerClasses()">
+			<ApplicationView
+				ref="ApplicationView"
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				:requestRefresh="undefined"
+				:snackbarTimeout="this.snackbarTimeout"
+				@refresh="refreshAction" />
+		</v-container>
 
-	<v-container v-if="viewTitle == 'users'" class="max-width-change">
-		<UserView ref="UserView"
-			:requestRefresh="this.refreshUserDataTable"
-			:viewTitle="viewTitle"
-			:snackbarTimeout="this.snackbarTimeout"
-			@refresh="refreshAction"
-			@goToGroup="goToGroup"
-		/>
-	</v-container>
+		<!-- DIRTREE -->
+		<v-container v-if="viewTitle == 'ldap-dirtree'" :class="getContainerClasses()">
+			<DirtreeView
+				ref="DirtreeView"
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				:snackbarTimeout="this.snackbarTimeout"
+				@refresh="refreshAction"
+				@goToUser="goToUser"
+				@goToGroup="goToGroup" />
+		</v-container>
 
-	<!-- Groups -->
-	<v-container v-if="viewTitle == 'groups'" class="max-width-change">
-		<GroupView ref="GroupView"
-			:requestRefresh="this.refreshGroupDataTable"
-			:viewTitle="viewTitle"
-			:snackbarTimeout="this.snackbarTimeout"
-			@refresh="refreshAction"
-		/>
-	</v-container>
+		<!-- USERS -->
+		<v-container v-if="viewTitle == 'django-users'" :class="getContainerClasses()">
+			<UserView ref="DjangoUserView"
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				:snackbarTimeout="this.snackbarTimeout"
+				@refresh="refreshAction"
+				@goToGroup="goToGroup" />
+		</v-container>
 
-	<!-- DNS -->
-	<v-container v-if="viewTitle == 'dns'" class="max-width-change">
-		<dnsView ref="dnsView"
-			:requestRefresh="this.refreshDNSData"
-			:viewTitle="viewTitle"
-			:snackbarTimeout="this.snackbarTimeout"
-			@refresh="refreshAction"
-		/>
-	</v-container>
+		<!-- GROUPS -->
+		<v-container v-if="viewTitle == 'application-groups'" :class="getContainerClasses()">
+			<GroupView ref="ApplicationGroupView"
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				:snackbarTimeout="this.snackbarTimeout"
+				@refresh="refreshAction" />
+		</v-container>
 
-	<!-- GPO -->
-	<v-container v-if="viewTitle == 'gpo'" class="max-width-change">
-		<GpoView
-			:viewTitle="viewTitle"
-			class="my-2 mb-4"
-			ref="gpoView"
-		/>
-	</v-container>
+		<!-- USERS -->
+		<v-container v-if="viewTitle == 'ldap-users'" :class="getContainerClasses()">
+			<UserView ref="LdapUserView"
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				:snackbarTimeout="this.snackbarTimeout"
+				@refresh="refreshAction"
+				@goToGroup="goToGroup" />
+		</v-container>
 
-	<!-- Settings -->
-	<v-container v-if="viewTitle == 'settings'" class="max-width-change">
-		<SettingsCard
-			:viewTitle="viewTitle"
-			class="my-2 mb-4"
-			ref="SettingsView"
-			@refreshDomain="refreshDomainAction()"
-		/>
-	</v-container>
+		<!-- GROUPS -->
+		<v-container v-if="viewTitle == 'ldap-groups'" :class="getContainerClasses()">
+			<GroupView ref="LdapGroupView"
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				:snackbarTimeout="this.snackbarTimeout"
+				@refresh="refreshAction" />
+		</v-container>
 
-	<!-- Logs -->
-	<v-container v-if="viewTitle == 'logs'" class="max-width-change">
-		<LogView
-			:viewTitle="viewTitle"
-			class="my-2 mb-4"
-			ref="LogView"
-		/>
-	</v-container>
+		<!-- DNS -->
+		<v-container v-if="viewTitle == 'ldap-dns'" :class="getContainerClasses()">
+			<dnsView ref="dnsView"
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				:snackbarTimeout="this.snackbarTimeout"
+				@refresh="refreshAction" />
+		</v-container>
 
-	<!-- Debugging -->
-	<v-container v-if="viewTitle == 'debug'" class="max-width-change">
-		<DebugView
-			:viewTitle="viewTitle"
-			class="my-2 mb-4"
-			ref="DebugView"
-		/>
-	</v-container>
-</v-container>
+		<!-- GPO -->
+		<v-container v-if="viewTitle == 'ldap-gpo'" :class="getContainerClasses()">
+			<GpoView
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				class="my-2 mb-4"
+				ref="gpoView" />
+		</v-container>
+
+		<!-- Settings -->
+		<v-container v-if="viewTitle == 'settings'" :class="getContainerClasses()">
+			<SettingsCard
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				class="my-2 mb-4"
+				ref="SettingsView"
+				@refreshDomain="refreshDomainAction()" />
+		</v-container>
+
+		<!-- Logs -->
+		<v-container v-if="viewTitle == 'logs'" :class="getContainerClasses()">
+			<LogView
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				class="my-2 mb-4"
+				ref="LogView" />
+		</v-container>
+
+		<!-- Debugging -->
+		<v-container v-if="viewTitle == 'debug'" :class="getContainerClasses()">
+			<DebugView
+				:viewTitle="viewTitle"
+				@done="emitDone"
+				class="my-2 mb-4"
+				ref="DebugView" />
+		</v-container>
+	</div>
 </template>
 
 <script>
+import HomeViewContainer from '@/components/Home/HomeViewContainer.vue';
+import ApplicationView from '@/components/Application/ApplicationView.vue';
 import UserView from '@/components/User/UserView.vue';
 import GroupView from '@/components/Group/GroupView.vue';
 import DirtreeView from '@/components/Dirtree/DirtreeView.vue';
@@ -101,13 +140,15 @@ import dnsView from '@/components/DNS/dnsView.vue';
 import SettingsCard from '@/components/Settings/SettingsCard.vue';
 import LogView from '@/components/Logging/LogView.vue';
 import DebugView from '@/components/Debug/DebugView.vue';
-import validationMixin from '@/plugins/mixin/validationMixin.js';
 import GpoView from '@/components/GPO/GPOView.vue';
+import validationMixin from '@/plugins/mixin/validationMixin.js';
 
 export default {
 	name: 'ModularViewContainer',
-	mixins: [ validationMixin ],
-	components:{
+	mixins: [validationMixin],
+	components: {
+		HomeViewContainer,
+		ApplicationView,
 		UserView,
 		GroupView,
 		DirtreeView,
@@ -122,13 +163,14 @@ export default {
 		viewIndex: Number,
 		langChanged: Boolean,
 		requestRefresh: String,
-		initLoad: Boolean
+		initLoad: Boolean,
+		mobile: Boolean,
 	},
-	data () {
+	data() {
 		return {
-			refreshUserDataTable: false,
-			refreshGroupDataTable: false,
-			refreshDNSData: false,
+			containerClasses: [
+				"max-width-change"
+			],
 			refreshOnClose: false,
 			userRefreshLoading: false,
 			error: false,
@@ -137,23 +179,28 @@ export default {
 			snackbarColor: "",
 			snackbarClasses: "",
 			snackbar: false,
-			snackbarTimeout: 2500,
+			snackbarTimeout: 2e3,
 		}
 	},
-	watch:{
+	watch: {
 		langChanged: {
 			handler: function () {
 				switch (this.viewTitle) {
-					case 'users':
+					case 'applications':
+						this.$refs.ApplicationView.reloadDataTableHeaders()
+						break;
+					case 'ldap-users':
+					case 'django-users':
 						this.$refs.UserView.reloadDataTableHeaders()
 						break;
-					case 'groups':
+					case 'ldap-groups':
+					case 'application-groups':
 						this.$refs.GroupView.reloadDataTableHeaders()
 						break;
 					case 'logs':
 						this.$refs.LogView.reloadDataTableHeaders()
 						break;
-					case 'dns':
+					case 'ldap-dns':
 						this.$refs.dnsView.reloadDataTableHeaders()
 						break;
 					default:
@@ -162,70 +209,105 @@ export default {
 			}
 		},
 		requestRefresh(newValue) {
+			this.$emit('loading')
 			switch (newValue) {
 				case 'home':
+					if (this.$refs.HomeViewContainer != undefined) {
+						console.log("Requested refresh for view component " + newValue)
+						this.$refs.HomeViewContainer.fetchHomeInfo()
+					}
+					break;
+				case 'applications':
+					if (this.$refs.ApplicationView != undefined) {
+						console.log("Requested refresh for view component " + newValue)
+						this.$refs.ApplicationView.listApplicationItems(true)
+					}
+					break;
+				case 'ldap-dirtree':
 					if (this.$refs.DirtreeView != undefined) {
-						console.log("Requested refresh for view component "+ newValue)
+						console.log("Requested refresh for view component " + newValue)
 						this.$refs.DirtreeView.resetSearch()
 						this.$refs.DirtreeView.resetDirtree(true)
 					}
 					break;
-				case 'users':
-					if (this.$refs.UserView != undefined) {
-						console.log("Requested refresh for component "+ newValue)
-						this.$refs.UserView.resetSearch()
-						this.$refs.UserView.listUserItems()
+				case 'ldap-users':
+					if (this.$refs.LdapUserView != undefined) {
+						console.log("Requested refresh for component " + newValue)
+						this.$refs.LdapUserView.resetSearch()
+						this.$refs.LdapUserView.listUserItems(true)
 					}
 					break;
-				case 'groups':
-					if (this.$refs.GroupView != undefined) {
-						console.log("Requested refresh for component "+ newValue)
-						this.$refs.GroupView.resetSearch()
-						this.$refs.GroupView.listGroupItems()
+				case 'django-users':
+					if (this.$refs.DjangoUserView != undefined) {
+						console.log("Requested refresh for component " + newValue)
+						this.$refs.DjangoUserView.resetSearch()
+						this.$refs.DjangoUserView.listUserItems(true)
+					}
+					break;
+				case 'ldap-groups':
+					if (this.$refs.LdapGroupView != undefined) {
+						console.log("Requested refresh for component " + newValue)
+						this.$refs.LdapGroupView.resetSearch()
+						this.$refs.LdapGroupView.listGroupItems(true)
 					}
 					break;
 				case 'settings':
 					if (this.$refs.SettingsView != undefined) {
-						console.log("Requested refresh for component "+ newValue)
+						console.log("Requested refresh for component " + newValue)
 						this.$refs.SettingsView.refreshSettings(true, true)
 					}
 					break;
 				case 'logs':
 					if (this.$refs.LogView != undefined) {
-						console.log("Requested refresh for component "+ newValue)
+						console.log("Requested refresh for component " + newValue)
 						this.$refs.LogView.resetSearch()
-						this.$refs.LogView.listLogs()
+						this.$refs.LogView.listLogs(true)
 					}
 					break;
-				case 'dns':
+				case 'ldap-dns':
 					if (this.$refs.dnsView != undefined) {
-						console.log("Requested refresh for component "+ newValue)
+						console.log("Requested refresh for component " + newValue)
 						this.$refs.dnsView.getDNSData()
 					}
 					break;
 				case 'debug':
 					if (this.$refs.DebugView != undefined) {
-						console.log("Requested refresh for component "+ newValue)
+						console.log("Requested refresh for component " + newValue)
 						this.$refs.DebugView.refreshAction()
 					}
 					break;
 				default:
 					if (newValue)
-						console.log("Requested refresh for component "+ newValue)
+						console.log("Requested refresh for component " + newValue)
 					break;
 			}
+			this.emitDone()
 		},
-	},
-	computed: {
 	},
 	methods: {
-		goToUser(user){
+		emitDone() {
+			this.$emit('done')
+		},
+		getContainerClasses() {
+			let _c = [...this.containerClasses]
+			// Add classes to desktop
+			// if (!this.mobile) {
+			// }
+			return _c.join(" ");
+		},
+		getViewTitle() {
+			let translation_key = "category.header." + this.viewTitle
+			if (translation_key == this.$t(translation_key))
+				return this.$t("category." + this.viewTitle)
+			return this.$t(translation_key)
+		},
+		goToUser(user) {
 			this.$emit('goToUser', user)
 		},
-		goToGroup(group){
+		goToGroup(group) {
 			this.$emit('goToGroup', group)
 		},
-		async saveData(key, data){
+		async saveData(key, data) {
 			switch (key) {
 				case 'userDialog':
 					this.refreshOnClose = true
@@ -241,7 +323,7 @@ export default {
 		},
 		refreshAction() {
 			// Reset all filters if refreshing dirtree view
-			if (this.viewTitle == 'home')
+			if (this.viewTitle == 'ldap-dirtree')
 				Object.keys(this.itemTypes).forEach(key => {
 					this.itemTypes[key]['filtered'] = false
 				});

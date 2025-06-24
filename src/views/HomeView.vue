@@ -2,224 +2,201 @@
 <!---- ORIGINAL PROJECT CREATED BY DYLAN BLANQUÉ AND BR CONSULTING S.R.L. ----->
 <!------------------------- File: HomeView.vue -------------------------------->
 <template>
-  <div class="home">
+  <div class="home ma-0 pa-0 align-stretch flex-column d-flex" style="height: 100%;"
+    v-if="showView">
     <!------------------>
-    <v-row align="center"
-      justify="space-between"
+    <v-system-bar
+      height="min"
+      id="main-system-bar"
+      ref="mainSystemBar"
       style="background: var(--v-secondary-15-base)"
       class="ma-0 pa-0 px-4 transition-speed-fix">
-      <v-img
-        max-width="30ch"
-        max-height="5em"
-        class="my-3"
-        contain
-        :aspect-ratio="32/9"
-        :src="!isThemeDark($vuetify) ? logoLight : logoDark"/>
-      <h2 style="color: var(--v-text-background-base)" class="ma-2 my-4 font-weight-medium">{{ domain.toUpperCase() }}</h2>
-    </v-row>
-    <v-row
+      <v-row align="center" justify="space-between">
+        <v-img
+          max-width="30ch"
+          max-height="5em"
+          class="my-3"
+          contain
+          :aspect-ratio="32 / 9"
+          :src="!isThemeDark($vuetify) ? logoLight : logoDark" />
+        <h2 style="color: var(--v-text-background-base)" class="ma-2 my-4 font-weight-medium">{{
+          domain.toUpperCase() }}</h2>
+      </v-row>
+    </v-system-bar>
+    <v-app-bar
+      id="main-app-bar"
+      ref="mainAppBar"
+      flat
+      height="min"
+      clipped-left
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
-      align="center"
-      justify="space-between"
       class="ma-0 pa-2 transition-speed-fix"
       style="background: var(--v-secondary-15-base); height: fit-content">
-      <v-col cols="12" md="auto">
-        <LanguageSelector
-          :dark="!isThemeDark($vuetify)"
-          :light="isThemeDark($vuetify)"
-          class=""
-          @updateTabSliders="refreshOnLanguageChange"
-        />
-      </v-col>
-      <v-divider style="border-color: var(--v-primary-base)" class="ma-6" v-if="this.$vuetify.breakpoint.lgAndUp" />
-      <v-col
-        class="ma-0 pa-0 my-3"
-        v-if="!this.$vuetify.breakpoint.mdAndUp && realm && realm != ''">
-        <span style="color: var(--v-white-d-base)"
-          v-if="last_name && last_name != '' && first_name && first_name != ''">
-          {{ last_name + ", " + first_name + " | " + realm.toUpperCase() + "@" + username }}
-        </span>
-        <span v-else>
-          {{ realm.toUpperCase() + "@" + username }}
-        </span>
-      </v-col>
-      <v-col class="ma-0 pa-0" cols="12" md="auto">
-        <div class="mt-2 mr-4">
-          <UserAccountDropdown 
-            extra-classes="mr-3 px-2"
-            icon="mdi-account-cog"
-            color="primary"
-            show-preferences-menu
-            @logout="logoutAction"
-            @openSettings="openSettings"
-            :username="activeUserName"/>
-          <ThemeChanger
+      <v-row class="ma-0 pa-0" align="center" justify="space-between">
+        <v-col cols="12" md="auto">
+          <LanguageSelector
             :dark="!isThemeDark($vuetify)"
             :light="isThemeDark($vuetify)"
-            :buttonIsSmall="true"
-          />
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                :dark="!isThemeDark($vuetify)"
-                :disabled="disableDomainDetailsButton"
-                :light="isThemeDark($vuetify)"
-                @click="fetchDomainDetails()"
-                class="ml-2"
-                icon
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon>
-                  mdi-cog-sync
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>{{$t("nav.tooltip.fetchDomainDetails")}}</span>
-          </v-tooltip>
+            class=""
+            @updateTabSliders="refreshOnLanguageChange" />
+        </v-col>
+        <v-divider style="border-color: var(--v-primary-base)" class="ma-6"
+          v-if="this.$vuetify.breakpoint.lgAndUp" />
+        <v-col
+          class="ma-0 pa-0 my-3"
+          v-if="!this.$vuetify.breakpoint.mdAndUp && realm !== null && realm !== undefined && realm !== ''">
+          <span class="text--white">
+            {{ activeUserName }}
+          </span>
+        </v-col>
+        <v-col class="ma-0 pa-0" cols="12" md="auto">
+          <div class="mt-2 mr-4">
+            <UserAccountDropdown
+              extra-classes="mr-3 px-2"
+              icon="mdi-account-cog"
+              color="primary"
+              show-preferences-menu
+              @logout="logoutAction"
+              @openSettings="openSettings"
+              :username="activeUserName" />
+            <ThemeChanger
+              :dark="!isThemeDark($vuetify)"
+              :light="isThemeDark($vuetify)"
+              :buttonIsSmall="true" />
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  small
+                  :dark="!isThemeDark($vuetify)"
+                  :disabled="disableDomainDetailsButton"
+                  :light="isThemeDark($vuetify)"
+                  @click="fetchDomainDetails()"
+                  class="ml-3"
+                  icon
+                  v-bind="attrs"
+                  v-on="on">
+                  <v-icon>
+                    mdi-cog-sync
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t("nav.tooltip.fetchDomainDetails") }}</span>
+            </v-tooltip>
+            <!-- Open NavDrawer -->
+            <v-tooltip
+              bottom
+              v-if="drawerIsMobile">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  small
+                  :dark="!isThemeDark($vuetify)"
+                  :light="isThemeDark($vuetify)"
+                  class="ml-3"
+                  @click="toggleDrawerState()"
+                  icon
+                  v-bind="attrs"
+                  v-on="on">
+                  <v-icon>
+                    mdi-menu
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t("nav.menu") }}</span>
+            </v-tooltip>
 
-          <!-- This does not appear in production -->
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="accent-60-s" class="ml-1"
-                v-show="initLoad && enableDebug"
-                :dark="!isThemeDark($vuetify)"
-                :light="isThemeDark($vuetify)"
-                :disabled="!enableDebug"
-                @click="debugAction()"
-                icon
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon>
-                  mdi-code-brackets
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>{{$t("nav.tooltip.debugAction")}}</span>
-          </v-tooltip>
-        </div>
+            <!-- This does not appear in production -->
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn color="accent-60-s" class="ml-1"
+                  v-show="initLoad && enableDebug"
+                  :dark="!isThemeDark($vuetify)"
+                  :light="isThemeDark($vuetify)"
+                  :disabled="!enableDebug"
+                  @click="debugAction()"
+                  icon
+                  v-bind="attrs"
+                  v-on="on">
+                  <v-icon>
+                    mdi-code-brackets
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t("nav.tooltip.debugAction") }}</span>
+            </v-tooltip>
+          </div>
+        </v-col>
+      </v-row>
+    </v-app-bar>
+
+    <NavigationDrawer
+      ref="navigationDrawerMobile"
+      v-if="drawerIsMobile"
+      :lockNavTabs="lockNavTabs"
+      :selectedTabTitle="selectedTabTitle"
+      :selectedTab="selectedTab"
+      :navGroups="navGroups"
+      :topTabs="getVisibleTabsInGroup('_top')"
+      :bottomTabs="getVisibleTabsInGroup('_bot')"
+      :getVisibleTabsInGroup="getVisibleTabsInGroup"
+      @updateSelectedTab="updateSelectedTab"
+      mobile />
+    <v-row
+      no-gutters
+      class="justify-center align-stretch flex-nowrap pb-10"
+      style="position: relative; height: 100%;">
+      <NavigationDrawer
+        ref="navigationDrawerDesktop"
+        v-if="drawerIsDesktop"
+        :lockNavTabs="lockNavTabs"
+        expanded-on-create
+        :selectedTabTitle="selectedTabTitle"
+        :selectedTab="selectedTab"
+        :navGroups="navGroups"
+        :topTabs="getVisibleTabsInGroup('_top')"
+        :bottomTabs="getVisibleTabsInGroup('_bot')"
+        :getVisibleTabsInGroup="getVisibleTabsInGroup"
+        @updateSelectedTab="updateSelectedTab" />
+      <v-col class="ma-0 pa-0">
+        <v-tabs-items
+          v-model="activeTab"
+          class="transparent-body">
+          <v-tab-item
+            v-for="tab in navTabs"
+            :key="tab.index">
+            <ModularViewContainer
+              :mobile="drawerIsMobile"
+              :initLoad="initLoad"
+              :viewTitle="tab.title"
+              :viewIndex="tab.index"
+              ref="ModularViewContainerRef"
+              @refresh="setDomainDetails()"
+              @refreshDomain="fetchDomainDetails()"
+              @goToUser="goToUser"
+              @goToGroup="goToGroup"
+              @done="setInitLoad"
+              :langChanged="langChanged"
+              :requestRefresh="requestRefresh" />
+          </v-tab-item>
+        </v-tabs-items>
       </v-col>
     </v-row>
 
-    <!-- Tabs Bar -->
-    <v-toolbar
-      color="secondary-15"
-      v-if="this.$vuetify.breakpoint.mdAndUp"
-      dense
-      id="tabs-nav-bar"
-      :dark="!isThemeDark($vuetify)"
-      :light="isThemeDark($vuetify)"
-      style="z-index: 1"
-      :class="'sticky-top transition-speed-fix'">
-      <v-fade-transition>
-        <v-tabs
-          v-model="active_tab"
-          v-if="showNavTabs"
-          color="primary"
-          slider-size="4"
-          center-active
-          centered
-          show-arrows
-        >
-          <v-tab
-            class="px-4"
-            v-for="tab in getVisibleTabs"
-            :key="tab.index"
-            @click="updateSelectedTab(tab.index)"
-            :disabled="!tab.enabled || lockNavTabs"
-          >
-            <v-icon class="hidden-md-and-down mr-2">{{ tab.icon }}</v-icon>
-            <span v-if="$vuetify.breakpoint.lg && tab.enableShortName == true">
-              {{ $t("category." + tab.title + "_short") }}
-            </span>
-            <span v-else>
-              {{ $t("category." + tab.title) }}
-            </span>
-          </v-tab>
-        </v-tabs>
-      </v-fade-transition>
-    </v-toolbar>
-
-    <!-- Mobile Nav -->
-    <v-toolbar
-      v-else
-      dense
-      id="tabs-nav-bar"
-      color="bg-secondary-10"
-      :dark="!isThemeDark($vuetify)"
-      :light="isThemeDark($vuetify)"
-      style="z-index: 1"
-      class="sticky-top"
-    >
-      <v-row justify="space-between" :class="$vuetify.breakpoint.xs ? 'mx-0':'mx-12'" align="center">
-        <v-btn
-          text
-          color="primary"
-          @click="goToPrevTab"
-          :disabled="active_tab == 0 || lockNavTabs">
-          <v-icon> mdi-chevron-double-left </v-icon>
-          <span v-if="$vuetify.breakpoint.smAndUp">
-            {{ $t("actions.back_short") }}
-          </span>
-        </v-btn>
-        <span>
-          <span
-            v-if="getVisibleTabs[active_tab].enableShortName == true"
-            color="primary"
-            class="font-weight-medium">
-            {{ $t("category." + getVisibleTabs[active_tab].title + "_short").toUpperCase() }}
-          </span>
-          <span v-else color="primary" class="font-weight-medium">
-            {{ $t("category." + getVisibleTabs[active_tab].title).toUpperCase() }}
-          </span>
-        </span>
-        <v-btn
-          text
-          color="primary"
-          @click="goToNextTab"
-          :disabled="active_tab == getVisibleEnabledTabs.length || lockNavTabs">
-          <span v-if="$vuetify.breakpoint.smAndUp">
-            {{ $t("actions.next") }}
-          </span>
-          <v-icon> mdi-chevron-double-right </v-icon>
-        </v-btn>
-      </v-row>
-    </v-toolbar>
-
-    <v-tabs-items v-model="active_tab" class="transparent-body">
-      <v-tab-item v-for="tab in getVisibleTabs" :key="tab.index">
-        <ModularViewContainer
-          :initLoad="initLoad"
-          :viewTitle="tab.title"
-          :viewIndex="tab.index"
-          ref="ModularViewContainerRef"
-          @refresh="setDomainDetails()"
-          @refreshDomain="fetchDomainDetails(false)"
-          @goToUser="goToUser"
-          @goToGroup="goToGroup"
-          :langChanged="langChanged"
-          :requestRefresh="requestRefresh"
-        />
-      </v-tab-item>
-    </v-tabs-items>
-
     <!-- SNACKBAR / NOTIF. BUS -->
-    <NotificationBusContainer/>
+    <NotificationBusContainer />
 
     <!-- ABOUT DIALOG  -->
     <v-dialog
       max-width="48rem"
       v-model="showAboutDialog">
-        <AboutDialog @close='closeAbout'/>
+      <AboutDialog @close='closeAbout' />
     </v-dialog>
 
     <!-- SETTINGS DIALOG  -->
     <v-dialog
       max-width="48rem"
       v-model="showSettingsDialog">
-        <UserSettings
+      <UserSettings
         ref="UserSettings"
         :username="username"
         :first-name="first_name"
@@ -227,17 +204,16 @@
         admin-mode
         :domain="domain"
         :realm="realm"
-        @close='showSettingsDialog = !showSettingsDialog'/>
+        @close='showSettingsDialog = !showSettingsDialog' />
     </v-dialog>
-  
+
     <!-- LOGOUT DIALOG  -->
     <v-dialog
       persistent
       content-class=""
       max-width="40rem"
       v-model="showLogoutDialog">
-        <LogoutDialog
-        @logoutAction="logoutAction()"/>
+      <LogoutDialog @logoutAction="logoutAction()" />
     </v-dialog>
 
     <!-- REFRESH TOKEN DIALOG  -->
@@ -247,11 +223,11 @@
       content-class=""
       max-width="40rem"
       v-model="showRefreshTokenDialog">
-        <RefreshTokenDialog 
-          ref="RefreshTokenDialog"
-          :countdown="showRefreshTokenDialog"
-          @closeDialog="closeRefreshDialog"
-          @logoutAction="logoutAction()"/>
+      <RefreshTokenDialog
+        ref="RefreshTokenDialog"
+        :countdown="showRefreshTokenDialog"
+        @closeDialog="closeRefreshDialog"
+        @logoutAction="logoutAction()" />
     </v-dialog>
 
     <!----- ABOUT AND DONATE BUTTONS ------>
@@ -265,23 +241,26 @@
       id="home-footer"
       :dark="!isThemeDark($vuetify)"
       :light="isThemeDark($vuetify)"
-      class="py-1"
-    >
-      <v-row align="center"
+      class="py-1">
+      <v-row
+        align="center"
         justify="center"
         :class="'mx-4 my-1 ' + ($vuetify.breakpoint.mdAndDown ? '' : 'text-caption')">
         <!-- <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4 mt-2"/> -->
         {{ $t("footer.copyright") }}
-        <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mx-4"/>
+        <v-divider
+          v-if="$vuetify.breakpoint.mdAndUp"
+          class="mx-4" />
         <!-- Donate -->
-        <v-btn color="primary"
+        <v-btn
+          color="primary"
           small
           id="donateBtn"
           outlined
           href="https://www.paypal.com/donate/?hosted_button_id=FFR7CG7X477NL"
           target="_blank"
-          :dark="isThemeDark($vuetify)" 
-          :light="!isThemeDark($vuetify)" 
+          :dark="isThemeDark($vuetify)"
+          :light="!isThemeDark($vuetify)"
           class="mx-2 mr-1 px-3">
           <v-icon class="mr-1">
             mdi-heart-outline
@@ -290,17 +269,18 @@
         </v-btn>
 
         <!-- About -->
-        <v-tooltip top color="primary">
+        <v-tooltip
+          top
+          color="primary">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-              @click="showAboutDialog = true" 
-              small 
+              @click="showAboutDialog = true"
+              small
               class="ma-0 mx-2"
               color="primary"
               v-bind="attrs"
               v-on="on"
-              icon
-            >
+              icon>
               <v-icon>
                 mdi-information
               </v-icon>
@@ -316,6 +296,7 @@
 <script>
 // @ is an alias to /src
 import ModularViewContainer from "@/components/ModularViewContainer.vue"
+import NavigationDrawer from "@/components/NavigationDrawer.vue"
 import LanguageSelector from "@/components/LanguageSelector.vue"
 import UserAccountDropdown from "@/components/User/UserAccountDropdown.vue"
 import UserSettings from "@/components/User/UserSettings.vue"
@@ -333,7 +314,7 @@ import { getDomainDetails } from '@/include/utils.js';
 
 export default {
   name: "HomeView",
-  mixins: [ validationMixin, utilsMixin ],
+  mixins: [validationMixin, utilsMixin],
   components: {
     ModularViewContainer,
     LanguageSelector,
@@ -347,11 +328,12 @@ export default {
   },
   data() {
     return {
+      showView: false,
       logoLight: 'logo/interlock-logo-wt-dark.svg',
       logoDark: 'logo/interlock-logo-wt-light.svg',
       username: "",
       first_name: "",
-      initLoad: false,
+      initLoad: true,
       last_name: "",
       email: "",
       domain: "",
@@ -367,82 +349,126 @@ export default {
       requestRefresh: "",
       selectedTab: 0,
       selectedTabTitle: "",
-      showNavTabs: false,
       lockNavTabs: false,
       langChanged: false,
       enableDebug: false,
-      active_tab: 0,
+      activeTab: 0,
       tableData: {
         headers: [],
         items: [],
       },
       timeoutId: 0,
+      navGroups: {
+        "local": {
+          enabled: true,
+          icon: "mdi-database",
+        },
+        "ldap": {
+          enabled: true,
+          icon: "mdi-server-security",
+        },
+      },
       navTabs: [
         {
-          index: 0,
           title: "home",
           enabled: true,
           icon: "mdi-home",
           route: "home",
+          group: "_top",
         },
         {
-          index: 1,
-          title: "users",
+          title: "applications",
+          enabled: true,
+          icon: "mdi-application-cog",
+          route: "applications",
+          group: "_top",
+        },
+        {
+          title: "django-users",
           enabled: true,
           icon: "mdi-account",
-          route: "users",
+          route: "django-users",
+          group: "local",
         },
         {
-          index: 2,
-          title: "groups",
+          title: "application-groups",
           enabled: true,
           icon: "mdi-google-circles-communities",
-          route: "groups",
+          route: "application-groups",
+          group: "local",
         },
         {
-          index: 3,
-          title: "dns",
+          title: "ldap-dirtree",
+          enabled: true,
+          icon: "mdi-family-tree",
+          route: "ldap-dirtree",
+          group: "ldap",
+        },
+        {
+          title: "ldap-users",
+          enabled: true,
+          icon: "mdi-account-network",
+          route: "ldap-users",
+          group: "ldap",
+        },
+        {
+          title: "ldap-groups",
+          enabled: true,
+          icon: "mdi-google-circles-group",
+          route: "ldap-groups",
+          group: "ldap",
+        },
+        {
+          title: "ldap-dns",
           enabled: true,
           enableShortName: true,
           icon: "mdi-dns",
-          route: "dns",
+          route: "ldap-dns",
+          group: "ldap",
         },
         {
-          index: 4,
-          title: "gpo",
+          title: "ldap-gpo",
           enabled: false,
-          hidden: false,
+          hidden: true,
           enableShortName: true,
           icon: "mdi-google-circles-extended",
-          route: "gpo",
+          route: "ldap-gpo",
+          group: "ldap",
         },
         {
-          index: 5,
           title: "settings",
           enabled: true,
           icon: "mdi-cog",
           route: "settings",
+          group: "_bot",
         },
         {
-          index: 6,
           title: "logs",
           enabled: true,
           icon: "mdi-flag-outline",
           route: "logs",
+          group: "_bot",
         },
         {
-          index: 7,
           title: "debug",
           enabled: false,
           hidden: true,
           icon: "mdi-xml",
           route: "debug",
+          group: "_bot",
         },
       ],
     };
   },
   async created() {
-    await new User({}).getCurrentUserData().then((response) => {
+    let tabIndex = 0
+    if (this.$vuetify.breakpoint.mdAndUp)
+      this.navDrawerKeepOpen = true;
+    this.navTabs.forEach(t => {
+      t.index = tabIndex
+      tabIndex++
+    })
+    await new User({}).selfInfo().then((response) => {
       let responseStatus = response.status;
       let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
       response = response.data;
@@ -454,8 +480,8 @@ export default {
         this.last_name = localStorage.getItem("user.last_name");
         this.email = localStorage.getItem("user.email");
         this.refreshTokenExpiryData()
-
         this.fetchDomainDetails()
+        this.showView = true
       }
       // If response code is an HTTP error code
       else {
@@ -463,7 +489,7 @@ export default {
         this.showLogoutDialog = true;
       }
 
-      if (!admin_allowed || admin_allowed == false){
+      if (!admin_allowed || admin_allowed == false) {
         this.logoutAction();
         this.showLogoutDialog = true;
       }
@@ -477,110 +503,107 @@ export default {
       let validRoute = this.navTabs.filter(item => "/" + item.route == currentPath && item.enabled == true)[0]
       if (validRoute) {
         this.selectedTab = validRoute.index;
-        this.active_tab = validRoute.index;
+        this.activeTab = validRoute.index;
       } else {
         this.$router.push("/home")
       }
     }
-    setTimeout(() => {
-      this.showNavTabs = true;
-    }, 250);
-    getDomainDetails()
-    this.active_tab = this.selectedTab;
-    if (this.selectedTab == 0)
-      this.initLoad = true
+
+    getDomainDetails();
+    this.activeTab = this.selectedTab;
     this.selectedTabTitle = this.navTabs[this.selectedTab].title;
     // ! This refresh is redundant, commented it just in case
     // this.requestRefresh = this.selectedTabTitle
   },
   computed: {
-    getVisibleTabs(){
-      return this.navTabs.filter(x => !x.hidden)
+    ldapBackendDisabled() {
+      return [this.domain, this.realm, this.basedn].some(
+        v => v === undefined || v === null || v.length <= 0
+      )
     },
-    getVisibleEnabledTabs(){
-      return this.getVisibleTabs.filter(x => x.enabled)
+    drawerIsDesktop() {
+      return this.$vuetify.breakpoint.lgAndUp
+    },
+    drawerIsMobile() {
+      return !this.drawerIsDesktop
     },
     breakpointName() {
       return this.$vuetify.breakpoint.name;
     },
+    getRealmDisplayName() {
+      if (this.realm !== undefined && this.realm !== null && this.realm !== "")
+        return `${this.realm.toUpperCase()}@`
+      return ""
+    },
     activeUserName() {
-        if(	this.last_name && this.last_name.length > 0 &&
-            this.first_name && this.first_name.length > 0)
-            return this.last_name + ", " + this.first_name + " | " + this.username
-            // return this.last_name + ", " + this.first_name + " | " + this.realm.toUpperCase() + "@" + this.username
-        return this.realm.toUpperCase() + "@" + this.username
-    }
-  },
-  watch: {
-    breakpointName() {
-      this.showNavTabs = false;
-      setTimeout(() => {
-        this.showNavTabs = true;
-      }, 250);
+      if (this.last_name && this.last_name.length > 0 &&
+        this.first_name && this.first_name.length > 0)
+        return `${this.last_name}, ${this.first_name} | ${this.username}`
+      return this.getRealmDisplayName + this.username
     },
   },
   methods: {
     ////////////////////////////////////////////////////////////////////////////
     // General Component Methods
     ////////////////////////////////////////////////////////////////////////////
-    openSettings(){
+    setInitLoad() {
+      if (this.initLoad !== true)
+        return
+      this.initLoad = false
+      console.log("Initial Load Flag Set.")
+    },
+    toggleDrawerState() {
+      if (this.drawerIsDesktop)
+        this.$refs.navigationDrawerDesktop.toggle()
+      else
+        this.$refs.navigationDrawerMobile.toggle()
+    },
+    getTabIndex(name) {
+      return this.navTabs.findIndex(v => name == v.title)
+    },
+    getVisibleTabsInGroup(group = null) {
+      if (group !== null)
+        return this.navTabs.filter(x => x.group == group && !x.hidden)
+      return this.navTabs.filter(x => (!("group" in x) || x.group === null) && !x.hidden)
+    },
+    openSettings() {
       this.showSettingsDialog = true
       if (this.$refs.UserSettings)
         this.$refs.UserSettings.loadSettings()
     },
-    closeAbout(){
+    closeAbout() {
       this.showAboutDialog = false
     },
-    closeRefreshDialog(){
+    closeRefreshDialog() {
       this.showRefreshTokenDialog = false
       this.resetTimer()
     },
-    refreshTokenExpiryData(){
+    refreshTokenExpiryData() {
       this.access_expire = parseInt(localStorage.getItem("auth.access_expire"));
       this.refresh_expire = parseInt(localStorage.getItem("auth.refresh_expire"));
-    },
-    goToPrevTab(){
-      let counter = this.selectedTab - 1
-      this.navTabs.forEach(() => {
-        if (this.navTabs[counter].enabled)
-          return this.updateSelectedTab(counter)
-        else {
-          counter -= 1
-        }
-      });
-    },
-    goToNextTab(){
-      let counter = this.selectedTab + 1
-      this.navTabs.forEach(() => {
-        if (this.navTabs[counter].enabled)
-          return this.updateSelectedTab(counter)
-        else {
-          counter += 1
-        }
-      });
     },
     async goToUser(user) {
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
-      await this.updateSelectedTab(1); // Index for Users Tab is 1
-      setTimeout(()=>{
+      await this.updateSelectedTab(this.getTabIndex("ldap-users")); // Index for Users Tab is 1
+      setTimeout(() => {
         this.$refs.ModularViewContainerRef.forEach(refObj => {
           console.log(refObj.$refs)
-          if (Object.hasOwnProperty.call(refObj.$refs, 'UserView'))
-            refObj.$refs.UserView.fetchUser(user);
+          if (Object.hasOwnProperty.call(refObj.$refs, 'LdapUserView'))
+            refObj.$refs.LdapUserView.fetchUser(user);
         });
-      }, 0.1)
+      }, 1e1)
     },
     async goToGroup(group) {
       // Don't remove this await or the first time the ModularViewContainer
       // mounts it'll break
-      await this.updateSelectedTab(2); // Index for Groups Tab is 2
-      setTimeout(()=>{
+      await this.updateSelectedTab(this.getTabIndex("ldap-groups")); // Index for Groups Tab is 2
+      setTimeout(() => {
         this.$refs.ModularViewContainerRef.forEach(refObj => {
-          if (Object.hasOwnProperty.call(refObj.$refs, 'GroupView'))
-            refObj.$refs.GroupView.fetchGroup(group);
+          if (Object.hasOwnProperty.call(refObj.$refs, 'LdapGroupView'))
+            refObj.$refs.LdapGroupView.fetchGroup(group);
         });
-      }, 0.1)
+      }, 1e1)
     },
     async setDomainDetails() {
       let domainData = getDomainDetails()
@@ -588,27 +611,39 @@ export default {
       this.realm = domainData["realm"];
       this.basedn = domainData["basedn"];
     },
-    async fetchDomainDetails(default_redirect=true){
-        this.fetchingDomainDetails = true
-        this.disableDomainDetailsButton = true
-        await new Domain({}).getDetails().then(() => {
-          let domainData = getDomainDetails()
-          this.domain = domainData['name']
-          this.realm = domainData['realm']
-          this.basedn = domainData['basedn']
-          if (this.domain.toLowerCase() == "example.com" && default_redirect === true) {
-            this.updateSelectedTab(5)
-          }
-          this.fetchingDomainDetails = false
-          if ('debug' in domainData)
-            this.enableDebug = (domainData['debug'] === "true")
-          else this.enableDebug = false
-          setTimeout(()=>{ this.disableDomainDetailsButton = false }, 0.5e3)
-        })
+    setLDAPBackendStatus() {
+      if (this.ldapBackendDisabled) {
+        this.navGroups["ldap"].enabled = false
+        this.navGroups.ldap.tooltip = this.$t("navgroup.ldap_hint")
+        if (this.selectedTabTitle.startsWith("ldap-"))
+          this.updateSelectedTab(this.getTabIndex("home"))
+        if (this.$refs?.navigationDrawerDesktop)
+          this.$refs.navigationDrawerDesktop.closeAllNavGroups()
+      } else {
+        this.navGroups["ldap"].enabled = true
+        delete this.navGroups.ldap.tooltip
+      }
+    },
+    async fetchDomainDetails() {
+      this.fetchingDomainDetails = true
+      this.disableDomainDetailsButton = true
+      await new Domain({}).getDetails().then(() => {
+        let domainData = getDomainDetails()
+        this.domain = domainData['name']
+        this.realm = domainData['realm']
+        this.basedn = domainData['basedn']
+        this.setLDAPBackendStatus()
+        this.fetchingDomainDetails = false
+        if ('debug' in domainData)
+          this.enableDebug = (domainData['debug'] === "true")
+        else this.enableDebug = false
+        setTimeout(() => { this.disableDomainDetailsButton = false }, 0.5e3)
+      })
         .catch(e => {
+          this.setLDAPBackendStatus()
           console.error(e)
           this.fetchingDomainDetails = false
-          setTimeout(()=>{ this.disableDomainDetailsButton = false }, 0.5e3)
+          setTimeout(() => { this.disableDomainDetailsButton = false }, 0.5e3)
         })
     },
     ////////////////////////////////////////////////////////////////////////////
@@ -616,28 +651,24 @@ export default {
     ////////////////////////////////////////////////////////////////////////////
     async logoutAction() {
       await new User({}).logout()
-      .then(() => {
-        localStorage.setItem("auth.logoutMessage", true);
-        this.$router.push("/login");
-      })
-      .catch(e => {
-        console.error(e)
-      });
+        .then(() => {
+          localStorage.setItem("auth.logoutMessage", true);
+          this.$router.push("/login");
+        })
+        .catch(e => {
+          console.error(e)
+        });
     },
     refreshOnLanguageChange() {
-      this.showNavTabs = false;
       this.langChanged = true;
       setTimeout(() => {
-        this.showNavTabs = true;
         this.langChanged = false;
       }, 300);
     },
     async updateSelectedTab(index) {
       if (this.selectedTab != index)
         this.selectedTab = index;
-      if (this.selectedTab == 0)
-        this.initLoad = true
-      this.active_tab = index;
+      this.activeTab = index;
       this.selectedTabTitle = this.navTabs[this.selectedTab].title;
       this.requestRefresh = this.selectedTabTitle;
       this.lockNavTabs = true;
@@ -656,7 +687,7 @@ export default {
         this.$router.push("/" + routeToPush);
       }
       // Wait for watch to register requestRefresh prop change
-      setTimeout(()=>{
+      setTimeout(() => {
         this.requestRefresh = "";
         this.lockNavTabs = false;
       }, 1e2)
@@ -672,7 +703,7 @@ export default {
       const clockDifference = refreshClockLimit - accessClockLimit;
       if (Date.now() >= accessClockLimit && Date.now() < refreshClockLimit) {
         if (localStorage.getItem('auth.auto_refresh_token') == 'true') {
-            await new User({}).getCurrentUserData()
+          await new User({}).selfInfo()
             .then(() => { this.resetTimer() })
             .catch((error) => { console.error(error) })
         } else if (!this.showRefreshTokenDialog) {
@@ -707,30 +738,34 @@ export default {
     async debugAction() {
       console.log('This button should be removed and/or disabled in production')
       await new Test({}).get()
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.error(error)
-      })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.error(error)
+        })
     }
   },
 };
 </script>
 
-<style>
+<style lang="scss">
+:root {
+  --home-footer-z-index: 6;
+}
+
 #home-footer {
   min-width: 100%;
   position: fixed;
   bottom: 0;
-  z-index: 2;
+  z-index: var(--home-footer-z-index);
 }
 
 #home-footer-buttons {
   min-width: 100%;
   position: fixed;
   bottom: 2.5rem;
-  z-index: 2;
+  z-index: var(--home-footer-z-index);
 }
 
 .transparent-body {
@@ -766,11 +801,19 @@ export default {
 
 #donateBtn .v-icon::before {
   transition: color 75ms ease-in-out,
-  content 200ms ease-in-out;
+    content 200ms ease-in-out;
 }
 
 #donateBtn:hover .v-icon::before {
   content: "\F02D1";
   color: var(--v-error-60-s-base);
+}
+
+.v-list-group--disabled:before {
+  opacity: 0 !important;
+}
+
+.v-list-group--disabled .v-ripple__container {
+  opacity: 0 !important;
 }
 </style>

@@ -13,6 +13,7 @@ const random_hash = Math.floor(Math.random() * 90000) + 10000;
 export default defineConfig({
     plugins: [
         createVuePlugin({
+            compilerOptions: { whitespace: 'preserve' }, // Better Debugging
             transpileDependencies: [
                 'vuetify'
             ],
@@ -28,8 +29,7 @@ export default defineConfig({
         }),
         Components({
             resolvers: [
-              // Vuetify
-              VuetifyResolver(),
+                VuetifyResolver(),
             ],
             // Needed if we ever use TS and require VueRouter
             types: [{
@@ -44,20 +44,32 @@ export default defineConfig({
         {
             name: "singleHMR",
             handleHotUpdate({ modules }) {
-              modules.map((m) => {
-                m.importedModules = new Set();
-                m.importers = new Set();
-              });
-              return modules;
+                modules.map((m) => {
+                    m.importedModules = new Set();
+                    m.importers = new Set();
+                });
+                return modules;
             },
         },
     ],
+    server: {
+        hmr: {
+            // protocol: 'ws',
+            // host: 'localhost',
+            clientPort: 443,
+        }
+    },
+    watch: {
+        usePolling: true
+    },
     resolve: {
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
         alias: { "@": path.resolve(__dirname, "./src") },
     },
     build: {
         target: 'esnext',
+        sourcemap: true,
+        minify: false,
         // rollupOptions: {
         //     output: {
         //         entryFileNames: `[name]` + random_hash + `.js`,
