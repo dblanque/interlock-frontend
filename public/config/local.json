@@ -1,6 +1,6 @@
 {
-    "backend_url": "127.0.0.1:8000",
-    "ssl": false,
+    "backend_url": "interlock-test.brconsulting.info",
+    "ssl": true,
     "reject_unauthorized": true,
     "version": "Not shown in Development Mode"
 }
