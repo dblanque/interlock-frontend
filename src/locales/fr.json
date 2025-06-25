@@ -420,16 +420,7 @@
       },
       "oidc": {
         "oidc_invalid_request": "Requête OIDC Invalide",
-        "oidc_application_fetch": "Impossible de récupérer l'Application OIDC",
-        "token_endpoint": "Point de terminaison de jeton",
-        "userinfo_endpoint": "Point de terminaison des informations utilisateur",
-        "end_session_endpoint": "Point de terminaison de fin de session",
-        "introspection_endpoint": "Point de terminaison d'introspection",
-        "response_types_supported": "Types de réponse pris en charge",
-        "jwks_uri": "URI JWKs",
-        "id_token_signing_alg_values_supported": "Algorithmes de signature de jeton pris en charge",
-        "subject_types_supported": "Types de sujet pris en charge",
-        "token_endpoint_auth_methods_supported": "Méthodes d'authentification du point de terminaison de jeton prises en charge"        
+        "oidc_application_fetch": "Impossible de récupérer l'Application OIDC"   
       },
       "otp": {
         "otp_invalid_code": "Code OTP invalide",
@@ -560,7 +551,16 @@
       "oidc": {
         "title": "Informations OpenID",
         "issuer": "Émetteur",
-        "authorization_endpoint": "Point de Terminaison d'Autorisation"
+        "authorization_endpoint": "Point de Terminaison d'Autorisation",
+        "token_endpoint": "Point de terminaison de Jeton",
+        "userinfo_endpoint": "Point de terminaison des Informations Utilisateur",
+        "end_session_endpoint": "Point de terminaison de fin de session",
+        "introspection_endpoint": "Point de terminaison d'introspection",
+        "response_types_supported": "Types de Réponse pris en charge",
+        "jwks_uri": "URI JWKs",
+        "id_token_signing_alg_values_supported": "Algorithmes de signature de jeton pris en charge",
+        "subject_types_supported": "Types de sujet pris en charge",
+        "token_endpoint_auth_methods_supported": "Méthodes d'authentification du point de terminaison de jeton prises en charge"
       },
       "local": {
         "title": "Informations Utilisateur",
