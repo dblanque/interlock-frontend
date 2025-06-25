@@ -27,38 +27,14 @@
 			</h3>
 			<v-row class="my-2 mx-1" justify="start">
 				<ul class="contrib-list">
-					<li>
-						Javier Blanqué -
-						<a href="https://javier.blanque.com.ar"
-							target="_blank">(https://javier.blanque.com.ar)</a>
+					<li v-for="value, key in contributors">
+						{{ value.display_name }} -
+						<a :href="value.website"
+							target="_blank">({{ value.website }})</a>
 						<ul>
-							<li v-html="$t('contrib.jblanque')" />
-						</ul>
-					</li>
-					<li>
-						Martín Vilche -
-						<a href="https://martinvsolutions.com"
-							target="_blank">(https://martinvsolutions.com)</a>
-						<ul>
-							<li v-for="v, k in $t('contrib.mvilche')" :key="k">
-								<span v-html="$t('contrib.mvilche.' + k)" />
+							<li v-for="k in value.items" :key="k">
+								<span v-html="$t(k)" />
 							</li>
-						</ul>
-					</li>
-					<li>
-						Etianen -
-						<a href="https://github.com/etianen/django-python3-ldap"
-							target="_blank">(https://github.com/etianen/django-python3-ldap)</a>
-						<ul>
-							<li v-html="$t('contrib.etianen')" />
-						</ul>
-					</li>
-					<li>
-						Dirk Jan M. -
-						<a href="https://github.com/dirkjanm/krbrelayx"
-							target="_blank">(https://github.com/dirkjanm/krbrelayx)</a>
-						<ul>
-							<li v-html="$t('contrib.dirkjanm')" />
 						</ul>
 					</li>
 				</ul>
@@ -78,7 +54,43 @@ export default {
 	name: 'AboutDialog',
 	data() {
 		return {
-			version: {}
+			version: {},
+			contributors: {
+				"jblanque":{
+					"display_name":"Javier Blanqué",
+					"website":"https://javier.blanque.com.ar",
+					"items":["contrib.jblanque"],
+				},
+				"mvilche":{
+					"display_name":"Martín Vilche",
+					"website":"https://martinvsolutions.com",
+					"items":[
+						"contrib.mvilche.1",
+						"contrib.mvilche.2",
+						"contrib.mvilche.3",
+					],
+				},
+				"bblanque":{
+					"display_name":"Brian Blanqué",
+					"website":"https://brian.blanque.com.ar",
+					"items":["contrib.bblanque"],
+				},
+				"etianen":{
+					"display_name":"Dave Hall",
+					"website":"https://github.com/etianen/django-python3-ldap",
+					"items":["contrib.etianen"],
+				},
+				"dirkjanm":{
+					"display_name":"Dirk-jan M.",
+					"website":"https://github.com/dirkjanm/krbrelayx",
+					"items":["contrib.dirkjanm"],
+				},
+				"juanifioren":{
+					"display_name":"Juan Ignacio Fiorentino",
+					"website":"https://github.com/juanifioren/django-oidc-provider",
+					"items":["contrib.juanifioren"],
+				},
+			}
 		}
 	},
 	created() {

@@ -1097,14 +1097,16 @@
     "title": "À propos d'Interlock",
     "subTitle": "Autres contributeurs",
     "mainMsg": "Interlock a été initialement développé par <a target=\"_blank\" href=\"https://dylan.blanque.com.ar\">Dylan Blanqué</a> comme outil interne pour <b>BR Consulting S.R.L.</b> et ensuite rendu open source, dans le but de partager avec la communauté un outil de gestion LDAP dynamique et réactif.",
-    "jblanque": "Crédité pour l'assistance avec l'analyse des permissions binaires Samba",
+    "jblanque": "Crédité pour son aide dans l'analyse des permissions binaires Samba",
+    "bblanque": "Crédité pour son aide dans les recommandations et tutoriels Pytest pour le Backend",
     "mvilche": {
-      "1": "Crédité pour le module d'appels et les constructeurs dans le front-end d'Interlock",
+      "1": "Crédité pour le module d'appels et les constructeurs dans le Front-end d'Interlock",
       "2": "Crédité pour le bus de notifications : assistance à l'implémentation",
       "3": "Autres corrections mineures et assistance"
     },
-    "etianen": "Crédité pour la création du module original Django-python3-ldap",
-    "dirkjanm": "Crédité pour son <b>incroyable</b> dépôt krbrelayx et ses scripts"
+    "etianen": "Crédité pour la création du module original <b>django-python3-ldap</b>",
+    "dirkjanm": "Crédité pour son <b>excellent</b> dépôt krbrelayx et ses scripts",
+    "juanifioren": "Crédité pour sa bibliothèque Python <b>django-oidc-provider</b>."
   },
   "locale": {
     "incomplete": {
