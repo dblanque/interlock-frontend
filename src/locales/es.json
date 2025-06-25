@@ -1,5 +1,5 @@
 {
-  "indexTitle": "Interlock - Administrador de LDAP",
+  "indexTitle": "Interlock",
   "navgroup": {
     "local": "Base de Datos Local",
     "ldap": "Back-end de LDAP",
