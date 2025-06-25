@@ -187,21 +187,26 @@ export default {
 			handler: function () {
 				switch (this.viewTitle) {
 					case 'applications':
-						this.$refs.ApplicationView.reloadDataTableHeaders()
+						if (this.$refs.ApplicationView !== undefined)
+							this.$refs.ApplicationView.reloadDataTableHeaders()
 						break;
 					case 'ldap-users':
 					case 'django-users':
-						this.$refs.UserView.reloadDataTableHeaders()
+						if (this.$refs.UserView !== undefined)
+							this.$refs.UserView.reloadDataTableHeaders()
 						break;
 					case 'ldap-groups':
 					case 'application-groups':
-						this.$refs.GroupView.reloadDataTableHeaders()
+						if (this.$refs.GroupView !== undefined)
+							this.$refs.GroupView.reloadDataTableHeaders()
 						break;
 					case 'logs':
-						this.$refs.LogView.reloadDataTableHeaders()
+						if (this.$refs.LogView !== undefined)
+							this.$refs.LogView.reloadDataTableHeaders()
 						break;
 					case 'ldap-dns':
-						this.$refs.dnsView.reloadDataTableHeaders()
+						if (this.$refs.dnsView !== undefined)
+							this.$refs.dnsView.reloadDataTableHeaders()
 						break;
 					default:
 						break;
