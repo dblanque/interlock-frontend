@@ -606,7 +606,6 @@ export default {
 		},
 		disclaimerWasClosed() {
 			let _stor_value = localStorage.getItem(disclaimer_stor_key)
-			console.log(_stor_value)
 			return _stor_value === "true"
 		},
 		parseDisplayName(item) {
