@@ -10,7 +10,6 @@ export const supported_locales = [
 ]
 
 export const incomplete_locales = [
-  "fr" // FRENCH
 ]
 
 function loadLocaleMessages_webpack() {
