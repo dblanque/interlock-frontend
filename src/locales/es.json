@@ -555,7 +555,16 @@
       "oidc": {
         "title": "Información de OpenID",
         "issuer": "Proveedor",
-        "authorization_endpoint": "Endpoint de Autorización"
+        "authorization_endpoint": "Endpoint de Autorización",
+        "token_endpoint": "Endpoint de token",
+        "userinfo_endpoint": "Endpoint de información de usuario",
+        "end_session_endpoint": "Endpoint de cierre de sesión",
+        "introspection_endpoint": "Endpoint de introspección",
+        "response_types_supported": "Tipos de respuesta admitidos",
+        "jwks_uri": "URI JWKs",
+        "id_token_signing_alg_values_supported": "Algoritmos de firma de token admitidos",
+        "subject_types_supported": "Tipos de sujeto admitidos",
+        "token_endpoint_auth_methods_supported": "Métodos de autenticación del punto final de token admitidos"
       },
       "local": {
         "title": "Información de Usuarios",

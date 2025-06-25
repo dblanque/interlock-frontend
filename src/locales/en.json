@@ -551,7 +551,16 @@
       "oidc": {
         "title": "OpenID Information",
         "issuer": "Issuer",
-        "authorization_endpoint": "Authorization Endpoint"
+        "authorization_endpoint": "Authorization Endpoint",
+        "token_endpoint":"Token Endpoint",
+        "userinfo_endpoint":"User Information Endpoint",
+        "end_session_endpoint":"End Session Endpoint",
+        "introspection_endpoint":"Introspection Endpoint",
+        "response_types_supported":"Supported Response Types",
+        "jwks_uri":"JWKs URI",
+        "id_token_signing_alg_values_supported":"Supported Token Signing Algorithms",
+        "subject_types_supported":"Supported Subject Types",
+        "token_endpoint_auth_methods_supported":"Supported Token Endpoint Auth. Methods"
       },
       "local": {
         "title": "User Information",

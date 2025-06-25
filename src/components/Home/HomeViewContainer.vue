@@ -10,47 +10,35 @@
 						<v-progress-linear :color="getLoadingColor()" :indeterminate="loading">
 						</v-progress-linear>
 						<v-card-title class="mt-2">
-							<v-row justify="center">
-								{{ $t("section.home.oidc.title") }}
+							<v-row align="center" justify="center" no-gutters>
+								<v-col class="ma-0 pa-0" cols="2">
+								</v-col>
+								<v-col class="ma-0 pa-0" cols="8">
+									{{ $t("section.home.oidc.title") }}
+								</v-col>
+								<v-col class="ma-0 pa-0" cols="2">
+									<v-row justify="end" no-gutters>
+										<v-btn icon @click="showFullOidcData = !showFullOidcData">
+											<v-icon>
+												mdi-information
+											</v-icon>
+										</v-btn>
+									</v-row>
+								</v-col>
 							</v-row>
 						</v-card-title>
 						<v-card-text>
 							<v-expand-transition>
-								<v-list dense color="transparent" v-if="loading !== true">
-									<v-list-item-group>
-										<v-list-item two-line
-											v-for="value, key in data.oidc_well_known"
-											v-if="displayedOidcData.includes(key)"
-											:key="key">
-											<v-list-item-content>
-												<v-list-item-title>
-													{{ $t(`section.home.oidc.${key}`) }}
-												</v-list-item-title>
-												<v-list-item-subtitle>
-													{{ value }}
-												</v-list-item-subtitle>
-											</v-list-item-content>
-
-											<v-list-item-action>
-												<v-tooltip bottom>
-													<template v-slot:activator="{ on, attrs }">
-														<v-btn
-															v-bind="attrs" v-on="on"
-															class="ml-2"
-															@click="copyValueToClipboard(value)"
-															icon
-															small>
-															<v-icon small>
-																mdi-content-copy
-															</v-icon>
-														</v-btn>
-													</template>
-													<span>{{ $t("actions.copy") }}</span>
-												</v-tooltip>
-											</v-list-item-action>
-										</v-list-item>
-									</v-list-item-group>
-								</v-list>
+								<OidcInfoList
+									v-if="loading !== true"
+									:oidc-values="getOidcInfo(true)">
+								</OidcInfoList>
+							</v-expand-transition>
+							<v-expand-transition>
+								<OidcInfoList
+									v-if="loading !== true && showFullOidcData == true"
+									:oidc-values="getOidcInfo(false)">
+								</OidcInfoList>
 							</v-expand-transition>
 						</v-card-text>
 					</v-card>
@@ -169,10 +157,14 @@
 
 <script>
 import HomeInfo from '@/include/HomeInfo.js';
+import OidcInfoList from '@/components/Home/OidcInfoList.vue';
 import { notificationBus } from '@/main.js';
 
 export default {
 	name: 'HomeViewContainer',
+	components: {
+		OidcInfoList
+	},
 	props: {
 		initLoad: Boolean,
 		viewTitle: String,
@@ -184,6 +176,7 @@ export default {
 			loading: false,
 			error: false,
 			errorMsg: "",
+			showFullOidcData: false,
 			displayedOidcData: [
 				"issuer",
 				"authorization_endpoint"
@@ -220,6 +213,22 @@ export default {
 		this.fetchHomeInfo()
 	},
 	methods: {
+		getOidcInfo(normallyDisplayed=true){
+			if (!this.data?.oidc_well_known || this.data.oidc_well_known === undefined)
+				return {}
+
+			let result = {}
+			for (const key in this.data.oidc_well_known) {
+				const element = this.data.oidc_well_known[key];
+				if (normallyDisplayed === true) {
+					if (this.displayedOidcData.includes(key))
+						result[key] = element
+				}
+				else if (!normallyDisplayed && !this.displayedOidcData.includes(key))
+						result[key] = element
+			}
+			return result
+		},
 		getLoadingColor() {
 			if (this.error)
 				return "error"
@@ -240,14 +249,6 @@ export default {
 				return true
 			}
 			return false
-		},
-		copyValueToClipboard(value) {
-			navigator.clipboard.writeText(value)
-			notificationBus.$emit("createNotification", {
-				message: this.$t("actions.copiedToClipboard"),
-				type: 'info',
-				timeout: 1e3
-			})
 		},
 		startLoading() {
 			this.loading = true
