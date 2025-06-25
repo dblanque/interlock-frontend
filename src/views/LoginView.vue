@@ -324,7 +324,7 @@ export default {
 				"reuse_consent",
 			]
 			bool_values.forEach(b => {
-				this.oidc[b] = this.oidc[b] === "true"
+				this.oidc[b] = this.oidc[b] === "true" || this.oidc[b] === true
 			});
 		}
 		let errInStorage = parseInt(localStorage.getItem('auth.loginForbiddenCount'))
@@ -405,6 +405,8 @@ export default {
 			this.errorMsg = this.getMessageForCode(`${this.oidc.error_detail}`)
 		},
 		goToNextURI() {
+			if (this.next === "true" || this.next === true)
+				console.error("Authorization Flow Exception.")
 			let decodedURL = decodeURIComponent(this.next)
 			window.location.href = decodedURL;
 		},
@@ -413,7 +415,7 @@ export default {
 			if (consent !== true)
 				window.location.href = decodeURIComponent(this.oidc.redirect_uri)
 			this.oidc.accepted_consent = consent
-			await new Oidc({}).consent(Object.assign({ allow: consent }, this.oidc))
+			await new Oidc({}).consent(Object.assign({}, this.oidc))
 				.then(response => {
 					let data = response.data.data
 					this.submitted = false
@@ -440,7 +442,7 @@ export default {
 				if (this.error !== true)
 					this.errorMsg = ""
 			} else {
-				this.goToNextURI()
+				this.consentResponse(true)
 			}
 		},
 		toggleRCM() {
