@@ -13,7 +13,7 @@ const random_hash = Math.floor(Math.random() * 90000) + 10000;
 export default defineConfig({
     plugins: [
         createVuePlugin({
-            compilerOptions: { whitespace: 'preserve' }, // Better Debugging
+            // compilerOptions: { whitespace: 'preserve' }, // Better Debugging
             transpileDependencies: [
                 'vuetify'
             ],
@@ -68,8 +68,8 @@ export default defineConfig({
     },
     build: {
         target: 'esnext',
-        sourcemap: true,
-        minify: false,
+        // sourcemap: true,
+        // minify: false,
         // rollupOptions: {
         //     output: {
         //         entryFileNames: `[name]` + random_hash + `.js`,
