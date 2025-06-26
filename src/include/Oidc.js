@@ -18,6 +18,10 @@ class Oidc extends ApiModel {
 	async consent(data) {
 		return await interlock_backend.call('oidc/consent', data)
 	}
+
+	async reject(data) {
+		return await interlock_backend.call('oidc/reject', data)
+	}
 }
 
 export default Oidc

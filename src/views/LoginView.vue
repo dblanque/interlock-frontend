@@ -306,6 +306,7 @@ export default {
 				error_detail: "",
 				client_id: "",
 				redirect_uri: "",
+				reject_uri: "",
 				require_consent: false,
 				reuse_consent: false,
 				accepted_consent: false
@@ -412,26 +413,41 @@ export default {
 		},
 		async consentResponse(consent) {
 			this.submitted = true
-			if (consent !== true)
-				window.location.href = decodeURIComponent(this.oidc.redirect_uri)
-			this.oidc.accepted_consent = consent
-			await new Oidc({}).consent(Object.assign({}, this.oidc))
-				.then(response => {
-					let data = response.data.data
-					this.submitted = false
-					this.next = data.redirect_uri
-					this.goToNextURI()
-				})
-				.catch(e => {
-					if (e?.code == 401) {
-						this.viewModes.login = true
-						this.viewModes.oidc = false
-					}
-					console.error(e)
-					this.errorMsg = this.getMessageForCode(e)
-					this.error = true
-					this.submitted = false
-				})
+			if (consent !== true) {
+				await new Oidc({}).reject(Object.assign({}, this.oidc))
+					.then(() => {
+						window.location.href = decodeURIComponent(this.oidc.reject_uri)
+					})
+					.catch(e => {
+						if (e?.code == 401) {
+							this.viewModes.login = true
+							this.viewModes.oidc = false
+						}
+						console.error(e)
+						this.errorMsg = this.getMessageForCode(e)
+						this.error = true
+						this.submitted = false
+					})
+			} else {
+				this.oidc.accepted_consent = consent
+				await new Oidc({}).consent(Object.assign({}, this.oidc))
+					.then(response => {
+						let data = response.data.data
+						this.submitted = false
+						this.next = data.redirect_uri
+						this.goToNextURI()
+					})
+					.catch(e => {
+						if (e?.code == 401) {
+							this.viewModes.login = true
+							this.viewModes.oidc = false
+						}
+						console.error(e)
+						this.errorMsg = this.getMessageForCode(e)
+						this.error = true
+						this.submitted = false
+					})
+			}
 		},
 		redirectOIDC() {
 			if (this.oidc.require_consent == true) {

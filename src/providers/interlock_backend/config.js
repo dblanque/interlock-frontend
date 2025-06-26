@@ -180,6 +180,7 @@ const urls = {
     },
     oidc: {
         consent: `openid/consent/`,
+        reject: `openid/reject/`,
         end_session: `openid/end-session/`
     }
 }

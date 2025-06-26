@@ -13,6 +13,16 @@ const actions = {
 				reject(e)
 			})
 		})
+	},
+
+	reject: (data) => {
+		return new Promise((resolve, reject) => {
+			interlock_backend.request.post(interlock_backend.urls.oidc.reject, data).then(response => {
+				resolve(response)
+			}).catch((e) => {
+				reject(e)
+			})
+		})
 	}
 }
 
