@@ -53,7 +53,7 @@
 			<v-row cols="12" class="ma-0 pa-0" justify="center"
 				v-if="domain && domain !== undefined && domain !== null">
 				<h4>
-					{{ $t("attribute.domain") }}
+					{{ $t("attribute.ldap.domain") }}
 				</h4>
 			</v-row>
 
