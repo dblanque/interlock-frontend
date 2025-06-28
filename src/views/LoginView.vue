@@ -251,27 +251,6 @@ export default {
 				localStorage.setItem("interlock.version", json.version)
 			})
 	},
-	computed: {
-		userIdentifierKey() {
-			return this.loginWithUsername ? "username" : "email"
-		},
-		userIdentifier() {
-			return this.loginWithUsername ? this.username : this.email
-		},
-		disableLoginBtn() {
-			if (this.submitted)
-				return true
-			if (this.userIdentifier.length == 0 || this.password.length == 0)
-				return true
-			if (!this.valid)
-				return true
-			if (this.viewModes.totp) {
-				if (!this.recovery_mode && this.totp_code.length <= 0) return true
-				if (this.recovery_mode && this.recovery_code.length <= 0) return true
-			}
-			return false
-		}
-	},
 	data() {
 		return {
 			viewModes: {
@@ -279,6 +258,7 @@ export default {
 				totp: false,
 				oidc: false
 			},
+			transitionDelay: 3e2,
 			rcm_animation: false,
 			recovery_mode: false,
 			recovery_code: "",
@@ -314,6 +294,27 @@ export default {
 			},
 			hidePassword: true,
 		};
+	},
+	computed: {
+		userIdentifierKey() {
+			return this.loginWithUsername ? "username" : "email"
+		},
+		userIdentifier() {
+			return this.loginWithUsername ? this.username : this.email
+		},
+		disableLoginBtn() {
+			if (this.submitted)
+				return true
+			if (this.userIdentifier.length == 0 || this.password.length == 0)
+				return true
+			if (!this.valid)
+				return true
+			if (this.viewModes.totp) {
+				if (!this.recovery_mode && this.totp_code.length <= 0) return true
+				if (this.recovery_mode && this.recovery_code.length <= 0) return true
+			}
+			return false
+		}
 	},
 	mounted() {
 		this.next = this.$route.query.next || "";
@@ -355,7 +356,7 @@ export default {
 			this.logoutSnackbar = true;
 			localStorage.removeItem('auth.logoutMessage')
 		} else {
-			this.alternateTabLoginCheck()
+			this.checkUserIsLoggedIn()
 		}
 
 		this.clearAlternateTabLoginCheckTimer()
@@ -386,19 +387,18 @@ export default {
 	},
 	methods: {
 		userLoggedInAnotherTab() {
-			if (this.viewModes.oidc === true || this.viewModes.totp === true) {
+			if (this.viewModes.oidc === true || this.viewModes.totp === true)
 				return
-			} else {
-				let logged_in = localStorage.getItem("user.logged_in")
-				if (logged_in === "true" || logged_in === true)
-					this.alternateTabLoginCheck()
-			}
+
+			let logged_in = localStorage.getItem("user.logged_in")
+			if (logged_in === "true" || logged_in === true)
+				this.checkUserIsLoggedIn()
 		},
 		clearAlternateTabLoginCheckTimer() {
 			if (this.alternateTabLoginTimerId !== undefined)
 				clearInterval(this.alternateTabLoginTimerId)
 		},
-		alternateTabLoginCheck() {
+		checkUserIsLoggedIn() {
 			console.log("User has apparently logged in from another tab, checking...")
 			let admin_allowed = localStorage.getItem('user.admin_allowed')
 			new User({}).selfFetch()
@@ -494,7 +494,9 @@ export default {
 		goBack() {
 			this.totp_code = "";
 			this.viewModes.totp = false;
-			this.viewModes.login = true;
+			this.setTimeout(() => {
+				this.viewModes.login = true;
+			}, this.transitionDelay)
 		},
 		setLoginTimeout() {
 			this.timedOut = true
@@ -579,9 +581,11 @@ export default {
 						localStorage.removeItem("user.logged_in")
 						if (e?.response?.data?.code == "otp_required") {
 							this.viewModes.login = false;
-							this.viewModes.totp = true;
 							this.submitted = false;
 							this.error = false;
+							setTimeout(() => {
+								this.viewModes.totp = true;
+							}, this.transitionDelay)
 							return
 						}
 						this.submitted = false;
