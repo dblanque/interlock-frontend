@@ -35,7 +35,7 @@
 											<v-icon class="mr-1">
 												mdi-account
 											</v-icon>
-											{{ $t("section.login.useLDAPUser") }}
+											{{ $t("section.login.useUsername") }}
 										</span>
 									</v-btn>
 								</v-row>

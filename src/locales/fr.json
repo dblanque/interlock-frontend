@@ -641,8 +641,8 @@
       }
     },
     "login": {
-      "useEmail": "Utiliser E-Mail",
-      "useLDAPUser": "Utiliser un Compte LDAP",
+      "useEmail": "Se connecter avec l'e-mail",  
+      "useUsername": "Se connecter avec le nom d'utilisateur",
       "loginBtn": "Connexion",
       "invalidCredentials": "Identifiants Invalides",
       "useRecoveryCode": "Utiliser un Code de Récupération",
