@@ -298,6 +298,7 @@ export default {
 			totp_code: "",
 			submitted: false,
 			logoutSnackbar: false,
+			alternateTabLoginTimerId: undefined,
 			snackbarMessage: "",
 			next: "",
 			oidc: {
@@ -354,30 +355,13 @@ export default {
 			this.logoutSnackbar = true;
 			localStorage.removeItem('auth.logoutMessage')
 		} else {
-			let admin_allowed = localStorage.getItem('user.admin_allowed')
-			new User({}).selfFetch()
-				.then(() => {
-					console.log("User is already logged in.")
-					if (this.next !== "")
-						this.redirectOIDC()
-					else if (!this.error) {
-						if (admin_allowed === 'true')
-							this.$router.push("/home")
-						else
-							this.$router.push("/enduser")
-					}
-				})
-				.catch(e => {
-					if (!ignoreErrorCodes.includes(e.status)) {
-						console.error(e)
-						this.viewModes.login = true
-					} else {
-						this.viewModes.login = true
-						if (this.next !== "")
-							this.errorMsg = this.$t("section.login.loginForOidc")
-					}
-				})
+			this.alternateTabLoginCheck()
 		}
+
+		this.clearAlternateTabLoginCheckTimer()
+		this.alternateTabLoginTimerId = setInterval(() => {
+			this.userLoggedInAnotherTab()
+		}, 5e3) // Every 5s
 	},
 	watch: {
 		recovery_mode(v) {
@@ -401,6 +385,45 @@ export default {
 		},
 	},
 	methods: {
+		userLoggedInAnotherTab() {
+			if (this.viewModes.oidc === true || this.viewModes.totp === true) {
+				return
+			} else {
+				let logged_in = localStorage.getItem("user.logged_in")
+				if (logged_in === "true" || logged_in === true)
+					this.alternateTabLoginCheck()
+			}
+		},
+		clearAlternateTabLoginCheckTimer() {
+			if (this.alternateTabLoginTimerId !== undefined)
+				clearInterval(this.alternateTabLoginTimerId)
+		},
+		alternateTabLoginCheck() {
+			console.log("User has apparently logged in from another tab, checking...")
+			let admin_allowed = localStorage.getItem('user.admin_allowed')
+			new User({}).selfFetch()
+				.then(() => {
+					console.log("User is already logged in.")
+					this.clearAlternateTabLoginCheckTimer()
+
+					if (this.next !== "")
+						this.redirectOIDC()
+					else if (!this.error) {
+						this.pushToIndex(admin_allowed)
+					}
+				})
+				.catch(e => {
+					localStorage.removeItem("user.logged_in")
+					if (!ignoreErrorCodes.includes(e.status)) {
+						console.error(e)
+						this.viewModes.login = true
+					} else {
+						this.viewModes.login = true
+						if (this.next !== "")
+							this.errorMsg = this.$t("section.login.loginForOidc")
+					}
+				})
+		},
 		adviseFailedOIDC() {
 			this.error = true
 			this.errorMsg = this.getMessageForCode(`${this.oidc.error_detail}`)
@@ -509,6 +532,12 @@ export default {
 			this.timeoutCounter = 30
 			this.loginForbiddenCount = 0
 		},
+		pushToIndex(admin) {
+			if (admin === true || admin === "true")
+				this.$router.push("/home")
+			else
+				this.$router.push("/enduser")
+		},
 		async submit() {
 			if (!this.$refs.loginform.validate())
 				return
@@ -519,12 +548,12 @@ export default {
 			else {
 				this.submitted = true;
 				setTimeout(() => {
-					if (this.submitted && !this.error) {
+					if (this.submitted && !this.error && this.viewModes.login === true) {
 						this.submitted = false
 						this.error = true
-						this.errorMsg = this.getMessageForCode("ERR_LDAP_GW")
+						this.errorMsg = this.getMessageForCode(502)
 					}
-				}, 10000)
+				}, 10e3) // wait for 15 seconds
 				let user = new User({})
 				let data = { username: this.userIdentifier, password: this.password }
 				if (this.totp_code.length > 0 && !this.recovery_mode)
@@ -538,17 +567,16 @@ export default {
 							this.errorMsg = "";
 							localStorage.removeItem('auth.loginForbiddenCount')
 							this.clearLoginTimeout()
+							this.clearAlternateTabLoginCheckTimer()
 							if (this.next !== "")
 								this.redirectOIDC()
 							else if (!this.error) {
-								if (response.data.admin_allowed === true)
-									this.$router.push("/home")
-								else
-									this.$router.push("/enduser")
+								this.pushToIndex(response.data.admin_allowed)
 							}
 						}
 					})
 					.catch(e => {
+						localStorage.removeItem("user.logged_in")
 						if (e?.response?.data?.code == "otp_required") {
 							this.viewModes.login = false;
 							this.viewModes.totp = true;
@@ -576,7 +604,6 @@ export default {
 					});
 			}
 		},
-		gotoPasswRecovery: function () { },
 	},
 };
 </script>
