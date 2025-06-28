@@ -722,7 +722,7 @@ export default {
     },
     startTimer() {
       this.refreshTokenExpiryData()
-      const refreshClock = Date.parse(localStorage.getItem("auth.refreshClock"));
+      const refreshClock = Date.parse(localStorage.getItem("auth.refresh_clock"));
       const accessClockLimit = this.access_expire;
       const clockDifference = accessClockLimit - refreshClock;
       // setTimeout returns an ID (can be used to start or clear a timer)

@@ -259,7 +259,7 @@ request.interceptors.response.use(
                     tokenIsRefreshing = false
                     var date = new Date()
                     // 1) Set tokens on LocalStorage.
-                    localStorage.setItem('auth.refreshClock', date)
+                    localStorage.setItem('auth.refresh_clock', date)
                     localStorage.setItem('auth.access_expire', response.data.access_expire)
                     localStorage.setItem('auth.refresh_expire', response.data.refresh_expire)
                     // 2) Return re-sent request through new axios.

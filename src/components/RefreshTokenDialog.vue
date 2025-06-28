@@ -68,7 +68,7 @@ export default {
 	},
 	computed: {
 		threshold() {
-			const refreshClock = Date.parse(localStorage.getItem("auth.refreshClock"));
+			const refreshClock = Date.parse(localStorage.getItem("auth.refresh_clock"));
 			const accessClockLimit = localStorage.getItem("auth.access_expire");
 			return (accessClockLimit - refreshClock) / 1000
 		}
