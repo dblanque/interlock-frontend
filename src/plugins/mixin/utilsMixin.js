@@ -166,6 +166,9 @@ const utilsMixin = {
                     case 'ERR_SERV_ERROR':
                     case 'ERR_BAD_RESPONSE':
                         return this.$t('error.codes.500')
+                    case 502:
+                    case 'ERR_BAD_GATEWAY':
+                        return this.$t('error.codes.502')
                     case 'access_token_invalid':
                     case 'refresh_token_expired':
                     case 'unauthorized':
@@ -204,8 +207,12 @@ const utilsMixin = {
 
         // Check if theme is dark
         isThemeDark(vuetify) {
-            if (vuetify.theme.dark === true)
+            let dark = localStorage.getItem("user.theme") === "dark"
+            if (vuetify.theme.dark === true || dark){
+                if (vuetify.theme.dark !== true)
+                    vuetify.theme.dark = true;
                 return true;
+            }
             return false;
         },
         sortNullLast(items, index, isDesc) {
