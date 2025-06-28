@@ -399,7 +399,7 @@ export default {
 				clearInterval(this.alternateTabLoginTimerId)
 		},
 		checkUserIsLoggedIn() {
-			console.log("User has apparently logged in from another tab, checking...")
+			console.log("Checking if user logged in from another tab...")
 			let admin_allowed = localStorage.getItem('user.admin_allowed')
 			new User({}).selfFetch()
 				.then(() => {
