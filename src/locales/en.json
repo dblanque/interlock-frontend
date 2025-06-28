@@ -273,6 +273,7 @@
       "406": "HTTP 406: Not Acceptable",
       "409": "HTTP 409: Conflict",
       "500": "HTTP 500: Server Error",
+      "502": "HTTP 502: Bad Gateway",
       "access_token_invalid": "Access Token is invalid",
       "refresh_token_expired": "Refresh Token has expired",
       "internal_server_error": "Internal Server Error",

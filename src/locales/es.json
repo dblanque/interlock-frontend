@@ -283,6 +283,7 @@
       "406": "HTTP 406: Inaceptable",
       "409": "HTTP 409: Conflicto",
       "500": "HTTP 500: Error de Servidor",
+      "502": "HTTP 502: Puerta de enlace no válida",
       "access_token_invalid": "Token de Acceso inválido",
       "refresh_token_expired": "Token de Renovación expirado",
       "internal_server_error": "Error Interno",
