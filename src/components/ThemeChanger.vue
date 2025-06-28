@@ -41,10 +41,10 @@ export default {
 		let theme = localStorage.getItem("user.theme");
 
 		if (theme === 'dark') {
-			htmlElement.setAttribute('user.theme', 'dark')
+			htmlElement.setAttribute('theme', 'dark')
 			this.darkMode = true
 		} else {
-			htmlElement.setAttribute('user.theme', 'light');
+			htmlElement.setAttribute('theme', 'light');
 			this.darkMode = false
 		}
 	},
