@@ -83,7 +83,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 * Why does the front-end use Vue 2 / Vuetify 2, isn't it EOL?
 > Yes, Vue 2 is EOL but due to the scope of the project and the fact that
-only one person working on it actively, it was decided a functional product
+only one person is working on it actively, it was decided a functional product
 is more important than boasting the newest framework and technologies.
 It is also a robust and proven framework in spite of being EOL, and
 validation is/should be done by the back-end anyways.
