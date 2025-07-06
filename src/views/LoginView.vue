@@ -13,6 +13,15 @@
 					:src="isThemeDark($vuetify) ? logoLight : logoDark" />
 			</v-row>
 			<v-row class="pa-0 ma-0" justify="center">
+				<!-- Initial Loading Component -->
+				<v-col class="my-6" cols="12" v-if="init_loading">
+					<v-progress-circular
+						indeterminate
+						color="primary"
+						size="60"
+						width="7"
+						/>
+				</v-col>
 				<v-form @submit.prevent
 					id="login-form-container"
 					v-model="valid"
@@ -20,6 +29,7 @@
 					ripple
 					ref="loginform">
 					<v-col align="center">
+						<!-- LOGIN MODE FORM -->
 						<v-expand-transition>
 							<div v-if="viewModes.login">
 								<v-row class="ma-0 pa-0 my-4" justify="center" align="center">
@@ -96,6 +106,7 @@
 							</div>
 						</v-expand-transition>
 
+						<!-- TOTP MODE FORM -->
 						<v-expand-transition>
 							<div v-if="viewModes.totp">
 								<!-- TOTP FIELD -->
@@ -141,30 +152,45 @@
 							</div>
 						</v-expand-transition>
 
-						<OIDCWidget v-if="viewModes.oidc" :application-name="oidc.application" />
+						<!-- OIDC CONSENT MODE FORM -->
+						<v-expand-transition>
+							<OIDCWidget
+								v-if="viewModes.oidc"
+								:application-name="oidc.application"
+								:disable-actions="submitted"
+								:accepted-consent="oidc.accepted_consent"
+								@accept="consentResponse(true)"
+								@decline="consentResponse(false)"
+								/>
+						</v-expand-transition>
+
 						<!-- ERROR MESSAGE -->
 						<v-row justify="center" class="mt-2">
 							<v-expand-transition>
 								<v-alert
 									:type="loginForbiddenCount > 2 && error ? (loginForbiddenCount > 4 ? 'error' : 'warning') : 'info'"
-									v-if="error == true || errorMsg != ''">
+									v-if="!init_loading && (error == true || errorMsg != '')">
 									{{ this.errorMsg }}
 								</v-alert>
 							</v-expand-transition>
 						</v-row>
+
 						<!-- LOGIN BUTTONS -->
-						<v-row justify="center" class="pa-2 mt-4">
-							<v-expand-x-transition>
-								<v-col class="ma-0 pa-0" v-if="viewModes.totp">
-									<v-btn
-										:disabled="submitted || (userIdentifier.length == 0 || this.password.length == 0) || !valid"
-										@click="goBack"
-										class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
-										{{ $t("actions.back") }}
-									</v-btn>
-								</v-col>
-							</v-expand-x-transition>
-							<v-expand-x-transition>
+						<v-expand-transition>
+							<v-row
+								v-if="viewModes.login || viewModes.totp"
+								justify="center"
+								class="pa-2 mt-4">
+								<v-expand-x-transition>
+									<v-col class="ma-0 pa-0" v-if="viewModes.totp">
+										<v-btn
+											:disabled="submitted || (userIdentifier.length == 0 || this.password.length == 0) || !valid"
+											@click="goBack"
+											class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
+											{{ $t("actions.back") }}
+										</v-btn>
+									</v-col>
+								</v-expand-x-transition>
 								<v-col class="ma-0 pa-0" v-if="viewModes.login || viewModes.totp">
 									<v-btn
 										:loading="submitted"
@@ -174,31 +200,8 @@
 										{{ $t("section.login.loginBtn") }}
 									</v-btn>
 								</v-col>
-							</v-expand-x-transition>
-							<v-expand-x-transition>
-								<v-col class="ma-0 pa-0" v-if="viewModes.oidc">
-									<v-btn
-										:loading="submitted && oidc.accepted_consent"
-										:disabled="submitted"
-										@click="consentResponse(true)"
-										class="primary white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
-										{{ $t("actions.accept") }}
-									</v-btn>
-								</v-col>
-							</v-expand-x-transition>
-							<v-expand-x-transition>
-								<v-col class="ma-0 pa-0" v-if="viewModes.oidc">
-									<v-btn
-										:loading="submitted && !oidc.accepted_consent"
-										:disabled="submitted"
-										@click="consentResponse(false)"
-										color="error-65"
-										class="white--text elevation-0 pa-0 ma-0 px-3 py-2 ma-3">
-										{{ $t("actions.decline") }}
-									</v-btn>
-								</v-col>
-							</v-expand-x-transition>
-						</v-row>
+							</v-row>
+						</v-expand-transition>
 					</v-col>
 				</v-form>
 			</v-row>
@@ -253,6 +256,7 @@ export default {
 	},
 	data() {
 		return {
+			init_loading: true,
 			viewModes: {
 				login: false,
 				totp: false,
@@ -352,7 +356,7 @@ export default {
 		let userJustLoggedOut = localStorage.getItem('auth.logoutMessage')
 		if (userJustLoggedOut) {
 			this.snackbarMessage = this.$t("misc.loggedOut").toUpperCase()
-			this.viewModes.login = true
+			this.enableViewmode("login");
 			this.logoutSnackbar = true;
 			localStorage.removeItem('auth.logoutMessage')
 		} else {
@@ -386,6 +390,33 @@ export default {
 		},
 	},
 	methods: {
+		anyViewmodeEnabled(){
+			for (const key in this.viewModes) {
+				if (this.viewModes[key])
+					return true;
+			}
+			return false
+		},
+		disableAllViewmodes() {
+			this.viewModes.login = false;
+			this.viewModes.totp = false;
+			this.viewModes.oidc = false;
+		},
+		enableViewmode(viewmode, transition=true) {
+			if (this.viewModes !== undefined && !(viewmode in this.viewModes))
+				return;
+			this.disableAllViewmodes();
+
+			if (transition === true) {
+				setTimeout(() => {
+					this.init_loading = false;
+					this.viewModes[viewmode] = true;
+				}, this.transitionDelay)
+			} else {
+				this.init_loading = false;
+				this.viewModes[viewmode] = true;
+			}
+		},
 		userLoggedInAnotherTab() {
 			if (this.viewModes.oidc === true || this.viewModes.totp === true)
 				return
@@ -404,6 +435,9 @@ export default {
 			new User({}).selfFetch()
 				.then(() => {
 					console.log("User is already logged in.")
+					this.error = false;
+					this.errorMsg = "";
+					this.clearLoginTimeout()
 					this.clearAlternateTabLoginCheckTimer()
 
 					if (this.next !== "")
@@ -416,9 +450,9 @@ export default {
 					localStorage.removeItem("user.logged_in")
 					if (!ignoreErrorCodes.includes(e.status)) {
 						console.error(e)
-						this.viewModes.login = true
+						this.enableViewmode("login");
 					} else {
-						this.viewModes.login = true
+						this.enableViewmode("login");
 						if (this.next !== "")
 							this.errorMsg = this.$t("section.login.loginForOidc")
 					}
@@ -443,8 +477,7 @@ export default {
 					})
 					.catch(e => {
 						if (e?.code == 401) {
-							this.viewModes.login = true
-							this.viewModes.oidc = false
+							this.enableViewmode("login")
 						}
 						console.error(e)
 						this.errorMsg = this.getMessageForCode(e)
@@ -462,8 +495,7 @@ export default {
 					})
 					.catch(e => {
 						if (e?.code == 401) {
-							this.viewModes.login = true
-							this.viewModes.oidc = false
+							this.enableViewmode("login");
 						}
 						console.error(e)
 						this.errorMsg = this.getMessageForCode(e)
@@ -474,12 +506,10 @@ export default {
 		},
 		redirectOIDC() {
 			if (this.oidc.require_consent == true) {
-				this.viewModes.login = false
-				this.viewModes.totp = false
 				this.submitted = false
-				this.viewModes.oidc = true
-				if (this.error !== true)
-					this.errorMsg = ""
+				setTimeout(() => {
+					this.enableViewmode("oidc");
+				}, 250)
 			} else {
 				this.consentResponse(true)
 			}
@@ -489,14 +519,11 @@ export default {
 			this.recovery_mode = !this.recovery_mode
 			setTimeout(() => {
 				this.rcm_animation = false
-			}, 300)
+			}, this.transitionDelay + 1e2)
 		},
 		goBack() {
 			this.totp_code = "";
-			this.viewModes.totp = false;
-			this.setTimeout(() => {
-				this.viewModes.login = true;
-			}, this.transitionDelay)
+			this.enableViewmode("login");
 		},
 		setLoginTimeout() {
 			this.timedOut = true
@@ -535,10 +562,14 @@ export default {
 			this.loginForbiddenCount = 0
 		},
 		pushToIndex(admin) {
-			if (admin === true || admin === "true")
-				this.$router.push("/home")
-			else
-				this.$router.push("/enduser")
+			try {
+				if (admin === true || admin === "true")
+					this.$router.push("/home")
+				else
+					this.$router.push("/enduser")
+			} catch (error) {
+				console.error(error)
+			}
 		},
 		async submit() {
 			if (!this.$refs.loginform.validate())
@@ -564,28 +595,23 @@ export default {
 					data.recovery_code = this.recovery_code
 				await user.login(data)
 					.then(response => {
-						if (response.data != undefined) {
-							this.error = false
-							this.errorMsg = "";
-							localStorage.removeItem('auth.loginForbiddenCount')
-							this.clearLoginTimeout()
-							this.clearAlternateTabLoginCheckTimer()
-							if (this.next !== "")
-								this.redirectOIDC()
-							else if (!this.error) {
-								this.pushToIndex(response.data.admin_allowed)
-							}
+						this.error = false;
+						this.errorMsg = "";
+						this.clearLoginTimeout()
+						this.clearAlternateTabLoginCheckTimer()
+
+						if (this.next !== "")
+							this.redirectOIDC()
+						else if (!this.error) {
+							this.pushToIndex(response.data.admin_allowed)
 						}
 					})
 					.catch(e => {
 						localStorage.removeItem("user.logged_in")
 						if (e?.response?.data?.code == "otp_required") {
-							this.viewModes.login = false;
 							this.submitted = false;
 							this.error = false;
-							setTimeout(() => {
-								this.viewModes.totp = true;
-							}, this.transitionDelay)
+							this.enableViewmode("totp");
 							return
 						}
 						this.submitted = false;
@@ -598,7 +624,7 @@ export default {
 							if (!Number.isInteger(retriesLeft))
 								this.errorMsg = this.$t('error.codes.auth.invalid_credentials')
 							else if (retriesLeft > 0)
-								this.errorMsg = this.$t('error.codes.auth.invalid_credentials') + " (" + retriesLeft + " " + retriesLeftMsg + ")"
+								this.errorMsg = this.$t('error.codes.auth.invalid_credentials') + ` (${retriesLeft} ${retriesLeftMsg})`
 							else
 								this.setLoginTimeout()
 						}
