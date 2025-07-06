@@ -33,7 +33,6 @@
 								:readonly="!isBeingEdited && !isBeingCreated"
 								dense
 								@keydown.enter="nextStep"
-								readonly
 								:label="$tc('section.applications.attribute.client_id')" />
 							<v-tooltip bottom>
 								<template v-slot:activator="{ on, attrs }">
@@ -299,7 +298,7 @@ export default {
 	watch: {
 		localData: {
 			deep: true,
-			handler: function (v) {
+			handler: function () {
 				this.update()
 			},
 		}
