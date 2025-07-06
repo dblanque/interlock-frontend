@@ -44,8 +44,7 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true,
-      "es2022": true
+      "node": true
     },
     "extends": [
       "plugin:vue/essential",
