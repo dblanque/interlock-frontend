@@ -1,5 +1,5 @@
 <template>
-	<v-container id="login-container"
+	<v-container id="logout-container"
 		class="ma-0 pa-0 justify-center align-items-center"
 		fluid
 		fill-height>
