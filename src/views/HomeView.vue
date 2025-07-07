@@ -469,32 +469,8 @@ export default {
       t.index = tabIndex
       tabIndex++
     })
-    await new User({}).selfInfo().then((response) => {
-      let responseStatus = response.status;
-      let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
-      response = response.data;
-
-      // If response code is valid
-      if (/^20[0-8]|226/.test(responseStatus)) {
-        this.username = localStorage.getItem("user.username");
-        this.first_name = localStorage.getItem("user.first_name");
-        this.last_name = localStorage.getItem("user.last_name");
-        this.email = localStorage.getItem("user.email");
-        this.refreshTokenExpiryData()
-        this.fetchDomainDetails()
-        this.showView = true
-      }
-      // If response code is an HTTP error code
-      else {
-        this.logoutAction();
-        this.showLogoutDialog = true;
-      }
-
-      if (!admin_allowed || admin_allowed == false) {
-        this.logoutAction();
-        this.showLogoutDialog = true;
-      }
-    });
+    await new User({}).selfInfo()
+    .then((response) => { this.handleSelfInfoResponse(response); });
 
     this.setupTimers();
   },
@@ -547,6 +523,34 @@ export default {
     ////////////////////////////////////////////////////////////////////////////
     // General Component Methods
     ////////////////////////////////////////////////////////////////////////////
+    handleSelfInfoResponse(response) {
+			if (!response)
+				return;
+      let responseStatus = response.status;
+      let admin_allowed = (localStorage.getItem('user.admin_allowed') === 'true')
+      response = response.data;
+
+      // If response code is valid
+      if (/^20[0-8]|226/.test(responseStatus)) {
+        this.username = localStorage.getItem("user.username");
+        this.first_name = localStorage.getItem("user.first_name");
+        this.last_name = localStorage.getItem("user.last_name");
+        this.email = localStorage.getItem("user.email");
+        this.refreshTokenExpiryData()
+        this.fetchDomainDetails()
+        this.showView = true
+      }
+      // If response code is an HTTP error code
+      else {
+        this.logoutAction();
+        this.showLogoutDialog = true;
+      }
+
+      if (!admin_allowed || admin_allowed == false) {
+        this.logoutAction();
+        this.showLogoutDialog = true;
+      }
+    },
     setInitLoad() {
       if (this.initLoad !== true)
         return
@@ -698,7 +702,10 @@ export default {
       if (Date.now() >= accessClockLimit && Date.now() < refreshClockLimit) {
         if (localStorage.getItem('auth.auto_refresh_token') == 'true') {
           await new User({}).selfInfo()
-            .then(() => { this.resetTimer() })
+            .then(response => {
+              this.handleSelfInfoResponse(response)
+              this.resetTimer();
+            })
             .catch((error) => { console.error(error) })
         } else if (!this.showRefreshTokenDialog) {
           this.timeoutId = setTimeout(this.handleInactive, clockDifference)
