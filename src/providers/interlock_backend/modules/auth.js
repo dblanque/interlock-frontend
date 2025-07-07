@@ -48,17 +48,21 @@ const calls = {
 		]
 		if (!timeout)
 			return new Promise(resolve => {
-				backend.request.post(backend.urls.auth.logout).then(() => {
+				backend.request.post(backend.urls.auth.logout).then(response => {
 					removeKeys.forEach(element => {
 						localStorage.removeItem(element)
 					});
-					resolve()
+					// OIDC End-Session Trigger.
+					backend.request.post(backend.urls.oidc.end_session)
+						.catch(e => {console.error(e)})
+					resolve(response)
 				}).catch(error => {
-					console.error(error)
+					if (error?.status !== 401)
+						console.error(error)
 					removeKeys.forEach(element => {
 						localStorage.removeItem(element)
 					});
-					resolve()
+					resolve(error)
 				})
 			})
 		else {

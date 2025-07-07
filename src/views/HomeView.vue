@@ -317,6 +317,7 @@ export default {
   mixins: [validationMixin, utilsMixin],
   components: {
     ModularViewContainer,
+    NavigationDrawer,
     LanguageSelector,
     UserAccountDropdown,
     UserSettings,
@@ -324,7 +325,7 @@ export default {
     RefreshTokenDialog,
     ThemeChanger,
     NotificationBusContainer,
-    AboutDialog
+    AboutDialog,
   },
   data() {
     return {
@@ -650,14 +651,7 @@ export default {
     // Logout Actions
     ////////////////////////////////////////////////////////////////////////////
     async logoutAction() {
-      await new User({}).logout()
-        .then(() => {
-          localStorage.setItem("auth.logoutMessage", true);
-          this.$router.push("/login");
-        })
-        .catch(e => {
-          console.error(e)
-        });
+      this.$router.push("/logout")
     },
     refreshOnLanguageChange() {
       this.langChanged = true;

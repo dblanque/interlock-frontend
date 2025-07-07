@@ -684,14 +684,7 @@ export default {
 		// Logout Actions
 		////////////////////////////////////////////////////////////////////////
 		async logoutAction() {
-			await new User({}).logout()
-				.then(() => {
-					localStorage.setItem("auth.logoutMessage", true);
-					this.$router.push("/login");
-				})
-				.catch(e => {
-					console.error(e)
-				});
+			this.$router.push("/logout")
 		},
 		////////////////////////////////////////////////////////////////////////
 		// Refresh Token Timers
