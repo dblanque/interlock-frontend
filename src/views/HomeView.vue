@@ -655,7 +655,8 @@ export default {
     // Logout Actions
     ////////////////////////////////////////////////////////////////////////////
     async logoutAction() {
-      this.$router.push("/logout")
+      clearTimeout(this.timeoutId);
+      this.$router.push("/logout");
     },
     refreshOnLanguageChange() {
       this.langChanged = true;
