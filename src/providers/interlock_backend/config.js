@@ -161,7 +161,7 @@ const urls = {
         options: `api/test/options/`
     },
     liveness: {
-        check: `api/liveness/check/`
+        check: `api/liveness/`
     },
     debug: {
         list: `api/debug/`,
