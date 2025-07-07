@@ -419,7 +419,7 @@ export default {
 		},
 		userLoggedInAnotherTab() {
 			if (this.viewModes.oidc === true || this.viewModes.totp === true)
-				return
+				return;
 
 			let logged_in = localStorage.getItem("user.logged_in")
 			if (logged_in === "true" || logged_in === true)
@@ -430,6 +430,14 @@ export default {
 				clearInterval(this.alternateTabLoginTimerId)
 		},
 		checkUserIsLoggedIn() {
+			if (this.error || this.errorMsg !== "") {
+				if (!this.anyViewmodeEnabled()) {
+					this.enableViewmode("login");
+					return;
+				}
+				return;
+			}
+
 			console.log("Checking if user logged in from another tab...")
 			let admin_allowed = localStorage.getItem('user.admin_allowed')
 			new User({}).selfFetch()
@@ -440,10 +448,12 @@ export default {
 					this.clearLoginTimeout()
 					this.clearAlternateTabLoginCheckTimer()
 
-					if (this.next !== "")
-						this.redirectOIDC()
-					else if (!this.error) {
-						this.pushToIndex(admin_allowed)
+					if (!this.error) {
+						if (this.next !== "")
+							this.redirectOIDC()
+						else {
+							this.pushToIndex(admin_allowed)
+						}
 					}
 				})
 				.catch(e => {
