@@ -62,7 +62,7 @@
 					:members="value.ldap_objects"
 					flat-data
 					:show-members="value.ldap_objects && value.ldap_objects.length >= 1"
-					:edit-flag="editFlag"
+					:edit-flag="editFlag || createFlag"
 					@remove="removeMember"
 					@open-add-member="openDialog('addLDAPGroup')"
 					/>
