@@ -41,7 +41,8 @@
 		<v-row>
 			<v-col cols="12">
 				<v-expand-transition>
-					<v-card max-height="400" width="100%" height="100%" outlined>
+					<v-card max-height="400" width="100%" height="100%" outlined
+						v-if="user_choices && user_choices.length >= 1">
 						<UserObjectList :user-choices="user_choices" ref="UserObjectList"
 							:return-keys="['id']" :disabled="actionDisabled"
 							show-name v-model="users" dense user-type="local" />
@@ -56,11 +57,35 @@
 		</v-row>
 		<v-row>
 			<v-col cols="12" class="ma-0 pa-0">
-				<CNObjectList :dialogKey="'addLDAPGroup'" ref="AddLDAPGroup" :add-button="false"
-					value-key="distinguished_name" v-model="ldap_objects" :enableUsers="false"
-					:disabled="actionDisabled" content-class="ma-0 pa-0" :showHeader="false" />
+				<!-- MemberList -->
+				<MemberList v-if="!createFlag"
+					:members="value.ldap_objects"
+					flat-data
+					:show-members="value.ldap_objects && value.ldap_objects.length >= 1"
+					:edit-flag="editFlag"
+					@remove="removeMember"
+					@open-add-member="openDialog('addLDAPGroup')"
+					/>
 			</v-col>
 		</v-row>
+		
+		<!-- ADD TO GROUP DIALOG -->
+		<v-dialog
+			eager
+			max-width="1200px"
+			v-model="dialogs['addLDAPGroup']">
+				<CNObjectList
+					:dialogKey="'addLDAPGroup'"
+					ref="AddLDAPGroup"
+					value-key="distinguished_name"
+					v-model="ldap_objects"
+					:enable-users="false"
+					:disabled="actionDisabled"
+					:add-button="false"
+					@addDNs="dialogs['addLDAPGroup'] = false"
+					@closeDialog="dialogs['addLDAPGroup'] = false"
+					content-class="ma-0 pa-0"/>
+		</v-dialog>
 	</v-form>
 </template>
 
@@ -68,9 +93,22 @@
 import CNObjectList from '@/components/CNObjectList.vue';
 import UserObjectList from '@/components/User/UserObjectList.vue';
 import validationMixin from '@/plugins/mixin/validationMixin';
+import MemberList from '@/components/Group/MemberList.vue';
 
 export default {
 	name: 'ApplicationGroupForm',
+	components: {
+		CNObjectList,
+		UserObjectList,
+		MemberList,
+	},
+	data() {
+		return {
+			dialogs:{
+				addLDAPGroup: false,
+			}
+		};
+	},
 	mixins: [validationMixin],
 	props: {
 		disabled: Boolean,
@@ -89,7 +127,7 @@ export default {
 			return this.value.application
 		},
 		actionDisabled() {
-			return !this.editFlag && !this.createFlag || this.disabled
+			return (!this.editFlag && !this.createFlag) || this.disabled
 		},
 		application: {
 			get() { return this.value.application; },
@@ -110,16 +148,42 @@ export default {
 	},
 	methods: {
 		init(options = {}) {
-			if (options?.fetch_lists !== false)
-				this.$refs.AddLDAPGroup.fetchLists()
-			if (options?.clear_data !== false)
-				this.$refs.UserObjectList.clearData()
+			if (options?.fetch_lists !== false) {
+				if (this.$refs.AddLDAPGroup)
+					this.$refs.AddLDAPGroup.fetchLists()
+			}
+			if (options?.clear_data !== false) {
+				if (this.$refs.UserObjectList)
+					this.$refs.UserObjectList.clearData()
+			}
 		},
 		validate() {
 			return this.$refs.form.validate()
 		},
 		resetValidation() {
 			return this.$refs.form.resetValidation()
+		},
+		removeMember(distinguished_name){
+			if (this.value?.ldap_objects === undefined)
+				return
+			if (!Array.isArray(this.value?.ldap_objects))
+				return
+			if (this.value?.ldap_objects.includes(distinguished_name)) {
+				const _index = this.value?.ldap_objects.indexOf(distinguished_name)
+				const _new_ldap_objects = structuredClone(this.value?.ldap_objects)
+				_new_ldap_objects.splice(_index, 1)
+				this.$emit('input', { ...this.value, ldap_objects: _new_ldap_objects })
+			}
+		},
+		openDialog(key) {
+			this.dialogs[key] = true;
+			switch (key) {
+				case 'addLDAPGroup':
+					this.$refs.AddLDAPGroup.fetchLists(this.excludeDNs)
+					break;
+				default:
+					break;
+			}
 		},
 	}
 }
