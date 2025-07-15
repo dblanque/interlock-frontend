@@ -58,7 +58,7 @@
 		<v-row>
 			<v-col cols="12" class="ma-0 pa-0">
 				<!-- MemberList -->
-				<MemberList v-if="!createFlag"
+				<MemberList
 					:members="value.ldap_objects"
 					flat-data
 					:show-members="value.ldap_objects && value.ldap_objects.length >= 1"
