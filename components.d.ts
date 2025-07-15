@@ -37,6 +37,7 @@ declare module 'vue' {
     LogoutDialog: typeof import('./src/components/LogoutDialog.vue')['default']
     LogResetDialog: typeof import('./src/components/Logging/LogResetDialog.vue')['default']
     LogView: typeof import('./src/components/Logging/LogView.vue')['default']
+    MemberList: typeof import('./src/components/Group/MemberList.vue')['default']
     ModularViewContainer: typeof import('./src/components/ModularViewContainer.vue')['default']
     NavigationDrawer: typeof import('./src/components/NavigationDrawer.vue')['default']
     NotificationBusContainer: typeof import('./src/components/NotificationBusContainer.vue')['default']
