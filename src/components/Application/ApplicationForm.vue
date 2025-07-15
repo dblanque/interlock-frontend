@@ -88,6 +88,7 @@
 				</v-row>
 				<!-- Application State Toggle -->
 				<v-row
+					v-if="!isBeingCreated"
 					justify="center"
 					align="center"
 					no-gutters>
