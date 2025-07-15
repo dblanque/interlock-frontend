@@ -7,7 +7,7 @@
 					:key="item[usernameKey]" :value="item.id" @change="updateSelected(item)">
 					<template v-slot:default="{ active }">
 						<v-list-item-avatar class="my-0 pa-0">
-							<v-icon v-if="!active">
+							<v-icon v-if="!active" :color="disabled ? 'gray' : undefined">
 								mdi-checkbox-blank-outline
 							</v-icon>
 							<v-icon v-else color="primary">
@@ -56,6 +56,9 @@ export default {
 		minHeight: { type: String | Number },
 		maxWidth: { type: String | Number },
 		maxHeight: { type: String | Number, default: "400px" },
+	},
+	mounted() {
+		this.clearData()
 	},
 	methods: {
 		getSelectedValue(item) {
