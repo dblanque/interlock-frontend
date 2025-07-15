@@ -22,7 +22,7 @@
 		</v-row>
 
 		<v-row align-content="center" justify="center" v-if="!createFlag">
-			<v-col class="ma-0 pa-0 mx-2" cols="10" md="5">
+			<v-col class="ma-0 pa-0 mx-2" cols="auto">
 				<v-checkbox
 					dense
 					id="enabled"
@@ -148,14 +148,12 @@ export default {
 	},
 	methods: {
 		init(options = {}) {
-			if (options?.fetch_lists !== false) {
-				if (this.$refs.AddLDAPGroup)
-					this.$refs.AddLDAPGroup.fetchLists()
-			}
-			if (options?.clear_data !== false) {
-				if (this.$refs.UserObjectList)
-					this.$refs.UserObjectList.clearData()
-			}
+			// if (options?.fetch_lists !== false) {
+			// 	this.$refs.AddLDAPGroup.fetchLists()
+			// }
+			// if (options?.clear_data !== false) {
+			// 	this.$refs.UserObjectList.clearData()
+			// }
 		},
 		validate() {
 			return this.$refs.form.validate()
