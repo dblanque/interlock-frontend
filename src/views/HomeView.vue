@@ -109,7 +109,7 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn color="accent-60-s" class="ml-1"
-                  v-show="initLoad && enableDebug"
+                  v-show="!initLoad && enableDebug"
                   :dark="!isThemeDark($vuetify)"
                   :light="isThemeDark($vuetify)"
                   :disabled="!enableDebug"
@@ -305,7 +305,7 @@ import LogoutDialog from "@/components/LogoutDialog.vue"
 import RefreshTokenDialog from "@/components/RefreshTokenDialog.vue"
 import AboutDialog from "@/components/AboutDialog.vue"
 import User from "@/include/User"
-import Test from "@/include/Test"
+import Debug from "@/include/Debug"
 import Domain from "@/include/Domain"
 import NotificationBusContainer from '@/components/NotificationBusContainer.vue'
 import validationMixin from '@/plugins/mixin/validationMixin.js'
@@ -739,7 +739,7 @@ export default {
     },
     async debugAction() {
       console.log('This button should be removed and/or disabled in production')
-      await new Test({}).get()
+      await new Debug({}).list()
         .then(response => {
           console.log(response)
         })
