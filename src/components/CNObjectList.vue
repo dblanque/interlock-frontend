@@ -45,9 +45,8 @@
 						</v-fab-transition>
 						{{ listOpenAll ? $t("actions.closeAll") : $t("actions.openAll") }}
 					</v-btn>
-					<v-btn
-						:disabled="this.ldapList && this.ldapList.length < 1 || selectedDNsLength < 1"
-						v-if="addButton"
+					<v-btn v-if="addButton"
+						:disabled="this.ldapList && this.ldapList.length <= 0 || selectedDNsLength <= 0"
 						@click="addDNs" color="primary" class="ma-0 pa-0 mx-2 px-2">
 						<v-icon class="ma-0 pa-0 mr-1">
 							mdi-plus
@@ -263,10 +262,7 @@ export default {
 		isTypeValid(type) {
 			if (this.disabled)
 				return false
-			let types = [
-				...this.userClasses,
-				'group'
-			]
+			let types = [ ...this.userClasses, 'group' ]
 			if (types.includes(type))
 				return true
 			return false
