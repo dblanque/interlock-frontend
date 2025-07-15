@@ -65,7 +65,7 @@
 								</v-row>
 							</v-list-item-content>
 
-							<v-list-item-action class="pa-0 ma-0">
+							<v-list-item-action class="pa-0 ma-0" v-if="!flatData">
 								<v-tooltip bottom color="primary">
 									<template v-slot:activator="{ on, attrs }">
 										<v-btn small icon
