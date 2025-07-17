@@ -82,7 +82,8 @@
 					:enable-users="false"
 					:disabled="actionDisabled"
 					:add-button="false"
-					@addDNs="dialogs['addLDAPGroup'] = false"
+					done-button
+					@done="dialogs['addLDAPGroup'] = false"
 					@closeDialog="dialogs['addLDAPGroup'] = false"
 					content-class="ma-0 pa-0"/>
 		</v-dialog>
