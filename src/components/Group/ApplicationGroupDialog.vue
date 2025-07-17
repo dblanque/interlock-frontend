@@ -189,6 +189,8 @@ export default {
 			if (this.$refs.ApplicationGroupForm.validate()) {
 				await new ApplicationGroup({}).update(finalData)
 					.then(() => {
+						if (closeDialog === true)
+							this.closeDialog()
 						this.$emit('save', this.requestData, closeDialog == true);
 						this.loading = false
 						this.loadingColor = 'primary'
@@ -214,7 +216,7 @@ export default {
 			this.errorMsg = ""
 			if (this.$refs.ApplicationGroupForm.validate()) {
 				await new ApplicationGroup({}).insert(this.requestData)
-					.then(response => {
+					.then(() => {
 						this.loading = false
 						this.closeDialog();
 						this.$emit('refresh');
