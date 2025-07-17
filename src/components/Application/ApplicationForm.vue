@@ -30,7 +30,7 @@
 						<v-row no-gutters>
 							<v-text-field
 								v-model="localData.client_id"
-								:readonly="!isBeingEdited && !isBeingCreated"
+								readonly
 								dense
 								@keydown.enter="nextStep"
 								:label="$tc('section.applications.attribute.client_id')" />
