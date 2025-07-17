@@ -960,7 +960,7 @@
         "LDAP_DNS_LEGACY_HINT": "Testez ceci si votre section DNS ne fonctionne pas",
         "LDAP_AUTH_SEARCH_BASE": "Base de Recherche LDAP/AD",
         "LDAP_AUTH_SEARCH_BASE_HINT": "Exemple : dc=domaine,dc=com",
-        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN": "Domaine/Royaume Active Directory",
+        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN": "Royaume NT",
         "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN_HINT": "Exemple : DOMAINE",
         "LDAP_AUTH_CONNECTION_USER_DN": "DN de l'Utilisateur de Liaison",
         "LDAP_AUTH_CONNECTION_PASSWORD": "Mot de Passe de l'Utilisateur de Liaison",

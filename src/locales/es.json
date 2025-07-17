@@ -963,7 +963,7 @@
         "LDAP_DNS_LEGACY_HINT": "Pruebe este parámetro si su sección de DNS no funciona correctamente",
         "LDAP_AUTH_SEARCH_BASE": "Base de Búsqueda de LDAP/AD",
         "LDAP_AUTH_SEARCH_BASE_HINT": "Ejemplo: dc=dominio,dc=com",
-        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN": "Reino / Dominio de Autenticación de AD",
+        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN": "Reino NT",
         "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN_HINT": "Ejemplo: DOMINIO",
         "LDAP_AUTH_CONNECTION_USER_DN": "DN de Usuario de Conexión",
         "LDAP_AUTH_CONNECTION_PASSWORD": "Contraseña de Usuario de Conexión",

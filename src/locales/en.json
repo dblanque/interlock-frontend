@@ -960,7 +960,7 @@
         "LDAP_DNS_LEGACY_HINT": "Test this if your DNS Section is not working",
         "LDAP_AUTH_SEARCH_BASE": "LDAP/AD Search Base",
         "LDAP_AUTH_SEARCH_BASE_HINT": "Example: dc=domain,dc=com",
-        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN": "Active Directory Domain / Realm",
+        "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN": "NT Realm",
         "LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN_HINT": "Example: DOMAIN",
         "LDAP_AUTH_CONNECTION_USER_DN": "Bind User DN",
         "LDAP_AUTH_CONNECTION_PASSWORD": "Bind User Password",
