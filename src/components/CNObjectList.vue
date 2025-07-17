@@ -53,6 +53,13 @@
 						</v-icon>
 						{{ $t('actions.addN') }}
 					</v-btn>
+					<v-btn v-if="doneButton"
+						@click="emitDone" color="primary" class="ma-0 pa-0 mx-2 px-2">
+						<v-icon class="ma-0 pa-0 mr-1">
+							mdi-check-circle
+						</v-icon>
+						{{ $t('actions.done') }}
+					</v-btn>
 					<refresh-button
 						:loading="loading"
 						button-class="ma-1"
@@ -177,7 +184,11 @@ export default {
 		},
 		addButton: {
 			type: Boolean,
-			default: true
+			default: true,
+		},
+		doneButton: {
+			type: Boolean,
+			default: false,
 		},
 		openAllButton: {
 			type: Boolean,
@@ -203,6 +214,9 @@ export default {
 		}
 	},
 	methods: {
+		emitDone() {
+			this.$emit("done")
+		},
 		getIsSelected(item) {
 			if (this.value !== undefined && this.value !== null && Array.isArray(this.value)) {
 				return this.value.includes(item[this.valueKey])
