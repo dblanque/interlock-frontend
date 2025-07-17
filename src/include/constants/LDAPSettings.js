@@ -16,17 +16,20 @@ const config = {
 			LDAP_DOMAIN: {
 				value: "",
 				hint: 'section.settings.fields.LDAP_DOMAIN_HINT',
-				validator: 'ldap_website'
+				validator: 'ldap_website',
+				required: true
 			},
 			LDAP_AUTH_SEARCH_BASE: {
 				value: "",
 				hint: 'section.settings.fields.LDAP_AUTH_SEARCH_BASE_HINT',
-				validator: 'ldap_dn'
+				validator: 'ldap_dn',
+				required: true
 			},
 			LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN: {
 				value: "",
 				hint: 'section.settings.fields.LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN_HINT',
-				validator: "ldap_realm"
+				validator: "ldap_realm",
+				required: true
 			},
 			LDAP_DNS_LEGACY: {
 				value: false,
