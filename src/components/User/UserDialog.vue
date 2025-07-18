@@ -824,8 +824,14 @@
 
 												</v-row>
 												<!-- Superuser status -->
-												<v-row justify="center" no-gutters class="ma-4">
-													<v-col cols="12" lg="6" class="px-2">
+												<v-row
+													justify="center"
+													no-gutters
+													class="ma-4">
+													<v-col
+														cols="12"
+														lg="6"
+														class="px-2">
 														<v-checkbox
 															on-icon="mdi-checkbox-marked"
 															color="primary"
@@ -835,7 +841,10 @@
 															:label="$t('attribute.is_superuser')"
 															dense />
 													</v-col>
-													<v-col cols="12" lg="6" class="px-2">
+													<v-col
+														cols="12"
+														lg="6"
+														class="px-2">
 														<v-checkbox
 															on-icon="mdi-checkbox-marked"
 															color="primary"
@@ -1391,189 +1400,191 @@ export default {
 						this.closeDialog();
 					else
 						this.refreshUser();
-		  notificationBus.$emit('createNotification',
-			{
-			  message: (this.$tc("classes.totp-device", 1) + " " + this.$t("words.deleted.m")).toUpperCase(),
-			  type: 'success'
+					notificationBus.$emit('createNotification',
+						{
+							message: (this.$tc("classes.totp-device", 1) + " " + this.$t("words.deleted.m")).toUpperCase(),
+							type: 'success'
+						}
+					);
+					this.loading = false
+					this.loadingColor = 'primary'
+				})
+				.catch(error => {
+					console.error(error)
+					this.loading = false
+					this.loadingColor = 'error'
+					this.error = true;
+					this.errorMsg = this.getMessageForCode(error)
+					notificationBus.$emit('createNotification',
+						{ message: this.errorMsg.toUpperCase(), type: 'error' }
+					)
+				})
+		},
+		editUser() {
+			this.showAlert = false
+			this.$emit('editToggle', true);
+			setTimeout(() => {
+				this.setShowAlert()
+			}, this.alertDelay)
+		},
+		viewUser() {
+			this.showAlert = false
+			this.$emit('editToggle', false);
+			this.refreshUser();
+			setTimeout(() => {
+				this.setShowAlert()
+			}, this.alertDelay)
+		},
+		closeDialog() {
+			this.$emit('closeDialog', this.dialogKey);
+		},
+		async saveUser(closeDialog = false) {
+			if (this.getIsUserModified() != true) {
+				console.log("User was not modified, ignoring user save request.")
+				return
 			}
-		  );
-		  this.loading = false
-		  this.loadingColor = 'primary'
-		})
-		.catch(error => {
-		  console.error(error)
-		  this.loading = false
-		  this.loadingColor = 'error'
-		  this.error = true;
-		  this.errorMsg = this.getMessageForCode(error)
-		  notificationBus.$emit('createNotification',
-			{ message: this.errorMsg.toUpperCase(), type: 'error' }
-		  )
-		})
-	},
-	editUser() {
-	  this.showAlert = false
-	  this.$emit('editToggle', true);
-	  setTimeout(() => {
-		this.setShowAlert()
-	  }, this.alertDelay)
-	},
-	viewUser() {
-	  this.showAlert = false
-	  this.$emit('editToggle', false);
-	  this.refreshUser();
-	  setTimeout(() => {
-		this.setShowAlert()
-	  }, this.alertDelay)
-	},
-	closeDialog() {
-	  this.$emit('closeDialog', this.dialogKey);
-	},
-	async saveUser(closeDialog = false) {
-	  if (this.getIsUserModified() != true) {
-		console.log("User was not modified, ignoring user save request.")
-		return
-	  }
-	  switch (this.parentTitle) {
-		case "django-users":
-		  if (this.$refs.userForm.validate()) {
-			await new this.userClass({}).update(this.usercopy)
-			  .then(() => {
-				if (closeDialog == true)
-				  this.closeDialog();
-				else
-				  this.refreshUser();
-				this.$emit('save');
+			let modifiedValues
+			let partialUpdateData
+			switch (this.parentTitle) {
+				case "django-users":
+					if (this.$refs.userForm.validate()) {
+						await new this.userClass({}).update(this.usercopy)
+							.then(() => {
+								if (closeDialog == true)
+									this.closeDialog();
+								else
+									this.refreshUser();
+								this.$emit('save');
+								this.loading = false
+								this.loadingColor = 'primary'
+							})
+							.catch(error => {
+								console.error(error)
+								this.loading = false
+								this.loadingColor = 'error'
+								this.error = true;
+								this.errorMsg = this.getMessageForCode(error)
+								notificationBus.$emit('createNotification',
+									{ message: this.errorMsg.toUpperCase(), type: 'error' }
+								)
+							})
+					} else {
+						this.loading = false
+						this.loadingColor = 'error'
+						this.error = true;
+					}
+					break;
+				default:
+					this.loading = true
+					this.loadingColor = 'primary'
+					// Set permissions array properly
+					this.usercopy.permissions = []
+					for (const [key] of Object.entries(this.permissions)) {
+						if (this.permissions[key].value == true)
+							this.usercopy.permissions.push(key)
+					}
+
+					modifiedValues = this.getModifiedValues()
+					partialUpdateData = {
+						username: this.usercopy.username,
+						distinguished_name: this.usercopy.distinguished_name,
+					}
+					modifiedValues.forEach(k => {
+						partialUpdateData[k] = this.usercopy[k]
+					})
+					if (this.groups_to_add.length > 0)
+						partialUpdateData.groups_to_add = this.groups_to_add
+					else
+						delete partialUpdateData.groups_to_add
+					// Groups to Remove
+					if (this.groups_to_remove.length > 0)
+						partialUpdateData.groups_to_remove = this.groups_to_remove
+					else
+						delete partialUpdateData.groups_to_remove
+
+					// Uncomment below to debug permissions list
+					// console.log(this.usercopy.permissions)
+					if (this.$refs.userForm.validate()) {
+						await new this.userClass({}).update(partialUpdateData)
+							.then(() => {
+								if (closeDialog == true)
+									this.closeDialog();
+								else
+									this.refreshUser();
+								this.$emit('save');
+								this.loading = false
+								this.loadingColor = 'primary'
+							})
+							.catch(error => {
+								console.error(error)
+								this.loading = false
+								this.loadingColor = 'error'
+								this.error = true;
+								this.errorMsg = this.getMessageForCode(error)
+								notificationBus.$emit('createNotification',
+									{ message: this.errorMsg.toUpperCase(), type: 'error' }
+								)
+							})
+					} else {
+						this.loading = false
+						this.loadingColor = 'error'
+						this.error = true;
+					}
+					break;
+			}
+		},
+		isLoggedInUser(username) {
+			if (username == localStorage.getItem('user.username'))
+				return true
+			return false
+		},
+
+		setUserGroups() {
+			this.groups_to_remove = []
+			this.groups_to_add = []
+		},
+		setShowAlert() {
+			if (this.isLDAPUser() && this.isLDAPView() || !this.isLDAPUser() && !this.isLDAPView())
+				this.showAlert = true
+		},
+		// Sync the usercopy object to the parent view user object on the
+		// next tick to avoid mutation errors
+		syncUser() {
+			this.tab = this.TABS.DEFAULT
+			this.changingPerms = false
+			this.changingGroups = false
+			this.excludeGroups = []
+			this.setDomainDetails()
+			this.usercopy = new this.userClass({})
+			this.extraListOpen = false
+			this.$nextTick(() => {
+				this.usercopy = Object.assign({}, this.user)
+				this.setUserGroups()
+				this.setObjectClassToArray()
+				this.setupExclude()
+				if (this.usercopy.last_login_win32 == 0)
+					this.usercopy.last_login_win32 = this.$t('section.users.userDialog.noLastLogon')
+				this.setPermissions()
 				this.loading = false
 				this.loadingColor = 'primary'
-			  })
-			  .catch(error => {
-				console.error(error)
-				this.loading = false
-				this.loadingColor = 'error'
-				this.error = true;
-				this.errorMsg = this.getMessageForCode(error)
-				notificationBus.$emit('createNotification',
-				  { message: this.errorMsg.toUpperCase(), type: 'error' }
-				)
-			  })
-		  } else {
+				if (Object.keys(this.user).length != 0)
+					setTimeout(() => {
+						this.setShowAlert()
+					}, this.alertDelay)
+			})
+		},
+		// Tells the parent view to refresh/fetch the user again
+		async refreshUser() {
+			this.loading = true
+			this.$emit('refreshUser', this.user);
+			this.setupExclude()
 			this.loading = false
-			this.loadingColor = 'error'
-			this.error = true;
-		  }
-		  break;
-		default:
-		  this.loading = true
-		  this.loadingColor = 'primary'
-		  // Set permissions array properly
-		  this.usercopy.permissions = []
-		  for (const [key] of Object.entries(this.permissions)) {
-			if (this.permissions[key].value == true)
-			  this.usercopy.permissions.push(key)
-		  }
-
-		  let modifiedValues = this.getModifiedValues()
-		  let partialUpdateData = {
-			username: this.usercopy.username,
-			distinguished_name: this.usercopy.distinguished_name,
-		  }
-		  modifiedValues.forEach(k => {
-			partialUpdateData[k] = this.usercopy[k]
-		  })
-		  if (this.groups_to_add.length > 0)
-			partialUpdateData.groups_to_add = this.groups_to_add
-		  else
-			delete partialUpdateData.groups_to_add
-		  // Groups to Remove
-		  if (this.groups_to_remove.length > 0)
-			partialUpdateData.groups_to_remove = this.groups_to_remove
-		  else
-			delete partialUpdateData.groups_to_remove
-
-		  // Uncomment below to debug permissions list
-		  // console.log(this.usercopy.permissions)
-		  if (this.$refs.userForm.validate()) {
-			await new this.userClass({}).update(partialUpdateData)
-			  .then(() => {
-				if (closeDialog == true)
-				  this.closeDialog();
-				else
-				  this.refreshUser();
-				this.$emit('save');
-				this.loading = false
-				this.loadingColor = 'primary'
-			  })
-			  .catch(error => {
-				console.error(error)
-				this.loading = false
-				this.loadingColor = 'error'
-				this.error = true;
-				this.errorMsg = this.getMessageForCode(error)
-				notificationBus.$emit('createNotification',
-				  { message: this.errorMsg.toUpperCase(), type: 'error' }
-				)
-			  })
-		  } else {
-			this.loading = false
-			this.loadingColor = 'error'
-			this.error = true;
-		  }
-		  break;
-	  }
-	},
-	isLoggedInUser(username) {
-	  if (username == localStorage.getItem('user.username'))
-		return true
-	  return false
-	},
-
-	setUserGroups() {
-	  this.groups_to_remove = []
-	  this.groups_to_add = []
-	},
-	setShowAlert() {
-	  if (this.isLDAPUser() && this.isLDAPView() || !this.isLDAPUser() && !this.isLDAPView())
-		this.showAlert = true
-	},
-	// Sync the usercopy object to the parent view user object on the
-	// next tick to avoid mutation errors
-	syncUser() {
-	  this.tab = this.TABS.DEFAULT
-	  this.changingPerms = false
-	  this.changingGroups = false
-	  this.excludeGroups = []
-	  this.setDomainDetails()
-	  this.usercopy = new this.userClass({})
-	  this.extraListOpen = false
-	  this.$nextTick(() => {
-		this.usercopy = Object.assign({}, this.user)
-		this.setUserGroups()
-		this.setObjectClassToArray()
-		this.setupExclude()
-		if (this.usercopy.last_login_win32 == 0)
-		  this.usercopy.last_login_win32 = this.$t('section.users.userDialog.noLastLogon')
-		this.setPermissions()
-		this.loading = false
-		this.loadingColor = 'primary'
-		if (Object.keys(this.user).length != 0)
-		  setTimeout(() => {
-			this.setShowAlert()
-		  }, this.alertDelay)
-	  })
-	},
-	// Tells the parent view to refresh/fetch the user again
-	async refreshUser() {
-	  this.loading = true
-	  this.$emit('refreshUser', this.user);
-	  this.setupExclude()
-	  this.loading = false
-	  this.loadingColor = 'primary'
-	},
-	exit() {
-	  this.showAlert = false
-	  this.tab = this.TABS.DEFAULT
+			this.loadingColor = 'primary'
+		},
+		exit() {
+			this.showAlert = false
+			this.tab = this.TABS.DEFAULT
+		}
 	}
-  }
 }
 </script>
