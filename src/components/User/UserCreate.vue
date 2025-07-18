@@ -640,7 +640,6 @@ export default {
 					this.userToCreate.is_staff = true;
 			},
 		},
-		
 	},
 	methods: {
 		setDestination(destination = undefined) {
