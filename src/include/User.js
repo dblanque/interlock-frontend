@@ -1,6 +1,5 @@
 import interlock_backend from '@/providers/interlock_backend'
 import ApiModel from '@/include/super/ApiModel'
-import { dateLdapToString, dateFromFiletime } from '@/include/utils.js'
 
 class User extends ApiModel {
 
@@ -8,7 +7,6 @@ class User extends ApiModel {
 	last_name;
 	username;
 	password;
-	last_login;
 	role;
 	is_staff;
 	full_name;
