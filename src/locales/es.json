@@ -990,6 +990,8 @@
   },
   "attribute": {
     "username": "Nombre de Usuario",
+    "is_superuser": "Es Superusuario",
+    "is_staff": "Es Personal",
     "password": "Contraseña",
     "password_confirm": "Confirmar Contraseña",
     "first_name": "Nombre",

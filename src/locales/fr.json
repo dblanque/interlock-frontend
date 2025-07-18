@@ -985,8 +985,10 @@
       "asUser": "Exécuter en tant qu'Utilisateur Actuel"
     }
   },
-	  "attribute": {
+  "attribute": {
     "username": "Nom d'utilisateur",
+    "is_superuser":"Est superutilisateur",
+    "is_staff":"Est membre du staff",
     "password": "Mot de passe",
     "password_confirm": "Confirmer le mot de passe",
     "first_name": "Prénom",

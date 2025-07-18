@@ -987,6 +987,8 @@
   },
   "attribute": {
     "username": "Username",
+    "is_superuser": "Is Superuser",
+    "is_staff": "Is Staff",
     "password": "Password",
     "password_confirm": "Confirm Password",
     "first_name": "First Name",

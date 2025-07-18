@@ -821,6 +821,30 @@
 															:value="user.modified_at"
 															readonly></v-text-field>
 													</v-col>
+
+												</v-row>
+												<!-- Superuser status -->
+												<v-row justify="center" no-gutters class="ma-4">
+													<v-col cols="12" lg="6" class="px-2">
+														<v-checkbox
+															on-icon="mdi-checkbox-marked"
+															color="primary"
+															v-model="usercopy.is_superuser"
+															:disabled="editFlag != true"
+															class="ma-0 pa-0 mx-2"
+															:label="$t('attribute.is_superuser')"
+															dense />
+													</v-col>
+													<v-col cols="12" lg="6" class="px-2">
+														<v-checkbox
+															on-icon="mdi-checkbox-marked"
+															color="primary"
+															v-model="usercopy.is_staff"
+															:disabled="editFlag != true"
+															class="ma-0 pa-0 mx-2"
+															:label="$t('attribute.is_staff')"
+															dense />
+													</v-col>
 												</v-row>
 											</v-row>
 										</v-card>
@@ -1094,6 +1118,13 @@ export default {
 					this.$refs.UserAddToGroup.clearList();
 			},
 			deep: true
+		},
+		"usercopy.is_superuser": {
+			deep: true,
+			handler(newValue) {
+				if (newValue === true)
+					this.usercopy.is_staff = true;
+			},
 		},
 	},
 	methods: {

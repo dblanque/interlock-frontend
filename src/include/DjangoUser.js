@@ -11,6 +11,8 @@ class DjangoUser extends ApiModel {
 	user_type;
 	is_enabled;
 	email;
+	is_superuser;
+	is_staff;
 
 	/**
 	 * Fetches model instance from API by id.

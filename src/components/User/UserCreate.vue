@@ -201,6 +201,7 @@
 											lg="6">
 											<v-text-field
 												dense
+												@keydown.enter="nextStep()"
 												id="first_name"
 												:label="$t('attribute.first_name')"
 												v-model="userToCreate.first_name"
@@ -211,6 +212,7 @@
 											lg="6">
 											<v-text-field
 												dense
+												@keydown.enter="nextStep()"
 												id="last_name"
 												:label="$t('attribute.last_name')"
 												v-model="userToCreate.last_name"
@@ -341,6 +343,28 @@
 										</v-list-item-action>
 									</v-list-item>
 								</v-list>
+								<div v-else>
+									<v-row no-gutters align="center" justify="center">
+										<v-col cols="auto">
+											<v-checkbox
+												on-icon="mdi-checkbox-marked"
+												color="primary"
+												v-model="userToCreate.is_superuser"
+												class="ma-0 pa-0 mx-2"
+												:label="$t('attribute.is_superuser')"
+												dense />
+										</v-col>
+										<v-col cols="auto">
+											<v-checkbox
+												on-icon="mdi-checkbox-marked"
+												color="primary"
+												v-model="userToCreate.is_staff"
+												class="ma-0 pa-0 mx-2"
+												:label="$t('attribute.is_staff')"
+												dense />
+										</v-col>
+									</v-row>
+								</div>
 							</v-form>
 						</v-stepper-content>
 						<!-- Check if user exists - loader -->
@@ -467,9 +491,13 @@
 							:light="isThemeDark($vuetify)"
 							class="ma-0 pa-0 pa-2 ma-1 pl-4"
 							rounded>
-							{{ this.createStage > 1 && this.userToCreate.password.length === 0 ?
-								$t("actions.skip") :
-								$t("actions.next") }}
+							{{ 
+							this.createStage > 1 && 
+								(
+									!this.userToCreate.password ||
+									this.userToCreate.password.length === 0
+								) ? $t("actions.skip") : $t("actions.next") 
+							}}
 							<v-icon
 								class="ma-0"
 								color="primary">
@@ -604,6 +632,16 @@ export default {
 				return ""
 		}
 	},
+	watch: {
+		"userToCreate.is_superuser": {
+			deep: true,
+			handler(newValue) {
+				if (newValue === true)
+					this.userToCreate.is_staff = true;
+			},
+		},
+		
+	},
 	methods: {
 		setDestination(destination = undefined) {
 			// Set default destination if undefined
@@ -618,9 +656,10 @@ export default {
 			}
 		},
 		prevStep() {
+			let domainDetails
 			switch (this.createStage) {
 				case 2:
-					let domainDetails = getDomainDetails()
+					domainDetails = getDomainDetails()
 					this.domain = domainDetails.name
 					this.realm = domainDetails.realm
 					this.basedn = domainDetails.basedn
