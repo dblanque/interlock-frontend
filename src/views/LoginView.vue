@@ -429,7 +429,7 @@ export default {
 			if (this.alternateTabLoginTimerId !== undefined)
 				clearInterval(this.alternateTabLoginTimerId)
 		},
-		checkUserIsLoggedIn() {
+		async checkUserIsLoggedIn() {
 			if (this.error || this.errorMsg !== "") {
 				if (!this.anyViewmodeEnabled()) {
 					this.enableViewmode("login");
@@ -440,7 +440,7 @@ export default {
 
 			console.log("Checking if user logged in from another tab...")
 			let admin_allowed = localStorage.getItem('user.admin_allowed')
-			new User({}).selfFetch()
+			await new User({}).selfFetch()
 				.then(() => {
 					console.log("User is already logged in.")
 					this.error = false;
