@@ -22,6 +22,12 @@
 				</span>
 			</v-col>
 		</v-row>
+		<v-row cols="12" class="ma-0 pa-0" justify="center">
+			<v-checkbox class="ma-0 pa-0"
+				v-model="enableRefreshValue"
+				hide-details
+				:label="`${$t('userAccountDropdown.auto_refresh_token')} ${enableRefreshValue ? $t('words.enabled') : $t('words.disabled')}`" />
+		</v-row>
 		<v-card-actions class="">
 			<v-row class="ma-1 pa-0" justify="center">
 				<v-btn
@@ -60,7 +66,8 @@ export default {
 			intervalId: 0,
 			allowRefresh: true,
 			alertType: "info",
-			alertIcon: "mdi-information"
+			alertIcon: "mdi-information",
+			enableRefreshValue: false,
 		}
 	},
 	props: {
@@ -74,14 +81,20 @@ export default {
 		}
 	},
 	methods: {
+		setAutoRefresh() {
+			let v = localStorage.getItem('auth.auto_refresh_token') === 'true'
+			if (this.enableRefreshValue === true && v !== true)
+				localStorage.setItem('auth.auto_refresh_token', true)
+		},
 		getTimeInMinutes() {
 			const minutes = Math.floor(this.timeRemaining / 60);
-			const seconds = this.timeRemaining - minutes * 60;
+			const seconds = Math.floor(this.timeRemaining - minutes * 60);
 			this.timer = String(String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0'))
 		},
 		clearCountdown() {
 			clearInterval(this.intervalId)
 			this.allowRefresh = true
+			this.enableRefreshValue = localStorage.getItem('auth.auto_refresh_token') === 'true'
 			this.alertType = 'info'
 			this.alertIcon = 'mdi-information'
 			const accessClockLimit = localStorage.getItem("auth.access_expire") / 1000;
@@ -108,6 +121,7 @@ export default {
 			this.$emit('logoutAction')
 		},
 		async refreshAccessToken() {
+			this.setAutoRefresh()
 			await new User({}).selfInfo()
 				.then(() => {
 					notificationBus.$emit('createNotification', {
